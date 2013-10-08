@@ -11,7 +11,7 @@ param.points_angle      = repmat([1/2, 3/4, 1]*pi +1e-3, length(param.energy_dev
 param.points_radius     = repmat([1, 2.5,  5]*1e-3,     length(param.energy_deviation), 1);
 
 
-x = zeros(length(storage_ring),length(param.points_angle))
+x = zeros(length(storage_ring),length(param.points_angle));
 for ii = 1:length(storage_ring)
     r = lnls_dynapt(storage_ring{ii},param);
     x(ii,:) = r.points_x(en0,:);
