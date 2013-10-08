@@ -1,0 +1,23 @@
+#**************************************************************************
+# Script to set the vacuum chamber 
+#
+# Comments:
+#  1) Line start with "#" is comment
+#  2) The format of the vacuum chamber definition is 
+#     start element, end element, minimum x, maximum x,
+#     minimum y, maximum y.  
+#  3) The first line is to define the global 
+#     vacuum chamber limit around the ring, and 
+#     the key words should be "Start","All".
+#  4) To set the vacuum chamber, it is better to add two markers
+#     in the lattice, one is before the first element, and the other
+#     is after the end element for the vacuum chamber limit.
+#  5) the units are meters for minimum x, maximum x, minimum y, maximum y  
+#****************************************************************************
+#
+# start_element end_element  dxmin  dxmax  dymin   dymax  (Apertures in meters)
+#Start  All   	-20e-3  20e-3	-20e-3	20e-3
+Start  All   	-20e-3  20e-3	-14e-3	14e-3
+#VCDB	VCDE	-20e-3	20e03	-14e-3	14e-3
+
+
