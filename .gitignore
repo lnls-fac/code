@@ -1,0 +1,32 @@
+## extensions of files not to be tracked
+
+*.o
+*.a
+*~
+*.mex4
+*.mexlx
+*.mexsol
+*.mexa32
+*.mexa64
+*.mexw32
+*.mexw64
+*.mexs32
+*.mexs64
+*.mexglx
+*.lib
+*.mexglx
+*.dll
+*.llb
+*.exe
+*.asv
+
+
+## directories not to be tracked
+
+lnls-mml-data/
+likewise/
+MatlabMiddleLayer-SVN-2013-10-08/
+
+
+
+
