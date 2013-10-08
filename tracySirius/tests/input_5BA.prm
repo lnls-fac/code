@@ -1,0 +1,53 @@
+ in_dir ./
+ lat_file Sirius_5ba_14_orbcor
+ 
+
+# multipole error file
+# multipole_file multipole_SiriusB1.dat
+
+#bpm_name	mon
+#h_corr		ch
+#v_corr		cv
+#qt		cs
+
+
+#hcorr_file	hcorr_nom.state
+#vcorr_file	vcorr_nom.state
+
+#IBSFlag		1e-9 0.01
+
+#n_stat		5
+#n_scale		1
+#n_orbit		5
+#n_coupl		2
+#nwh		40
+#nwv		20
+
+
+#ReadaefileFlag	sirius_5ba.ae
+
+#ReadChamberFlag chamber.txt
+
+
+
+# nr_cpus	10
+
+# ReadMultipoleFlag  
+
+# TuneTracFlag   
+# ChromTracFlag   
+
+#FitChromFlag	sd	sf	0.0	0.0
+
+# CouplingFlag 
+ 
+#CorrectCouplingFlag
+
+# AmplitudeTuneShiftFlag	30	30	1026	0.03	0.010	0.0
+# EnergyTuneShiftFlag	30	1026	0.04 
+
+FmapFlag	12	12	996	-0.020	0.020	 0.000	0.005	0.000	true
+FmapdpFlag	12	12	996	-0.050	0.050	-0.025	0.025	0.001	true
+
+# MomentumAccFlag	6D	1	321	0.02	0.05	40	-0.02	-0.05	40
+# PhaseSpaceFlag	6D	1e-6	0.0	1e-6	0.0	0.05	0.0	1000	true
