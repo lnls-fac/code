@@ -85,17 +85,25 @@ elseif strcmpi(mode_version,'AC10_3')
     %%% SEXTUPOLOS
     %  ==========
     
-    sa2_strength   =    25.873;
-    sa1_strength   =   -65.972;
-    sd1_strength   =  -182.338526;
-    sf1_strength   =   190.196570;
-    sd2_strength   =  -60.293;
-    sd3_strength   =  -133.453;
-    sf2_strength   =   150.920;
-    
-    sb1_strength   =  -96.6447;
-    sb2_strength   =   50.622;
-
+%     sa2_strength   =    25.873;
+%     sa1_strength   =   -65.972;
+%     sd1_strength   =  -182.338526;
+%     sf1_strength   =   190.196570;
+%     sd2_strength   =  -60.293;
+%     sd3_strength   =  -133.453;
+%     sf2_strength   =   150.920;
+%     
+%     sb1_strength   =  -96.6447;
+%     sb2_strength   =   50.622;
+    sa1_strength       =   -60.0563;
+    sa2_strength       =    27.4663;
+    sb1_strength       =  -102.4798;
+    sb2_strength       =    59.9428;
+    sd2_strength       =   -81.1457;
+    sd3_strength       =  -146.8153;
+    sf2_strength       =   154.3260;
+    sd1_strength       =  -155.0830;
+    sf1_strength       =   191.5520;
 
 %% Antigo Moga0473modif-0512
 % Um pouco de historia: esse modo eh o resultado de duas otimizacoes do
@@ -199,7 +207,6 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %     
 %     %%% SEXTUPOLOS
 %     %  ========== (obtidos com o script do matlab)
-%     
 %     % boa solucao para injecao 4k
 %     sa1_strength       =  -58.9405;
 %     sa2_strength       =   25.1813;
@@ -214,35 +221,62 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %tentativa de aumentar tune com opa mantendo os mesmos sexts: 2da
-    %%% QUADRUPOLOS
-    %  =========== (quads obtidos com o opa)
-    qaf_strength       = 2.536961 ;
-    qad_strength       = -2.729805;
-    qbd2_strength      = -3.960473;
-    qbf_strength       = 3.902663 ;
-    qbd1_strength      = -2.967653;
-    qf1_strength       = 2.357389 ;
-    qf2_strength       = 3.363276 ;
-    qf3_strength       = 3.079729 ;
-    qf4_strength       = 2.713552 ;
-    
-    
-    %%% SEXTUPOLOS
-    %  ========== (os mesmos do AC10_5)
-    
-    % boa solucao para injecao 4k
-    sa1_strength       = -115.7829759411277/2;
-    sa2_strength       =   49.50386128829739/2;
-    sb1_strength       = -214.5386552515188/2;
-    sb2_strength       =  133.1252391065637/2;
-    sd1_strength       = -302.6188062085843/2;
-    sf1_strength       =  369.5045185071228/2;
-    sd2_strength       = -164.3042864671946/2;
-    sd3_strength       = -289.9270429064217/2;
-    sf2_strength       =  333.7039740852999/2;
+%     %%% QUADRUPOLOS
+%     %  =========== (quads obtidos com o opa)
+%     qaf_strength       = 2.536961 ;
+%     qad_strength       = -2.729805;
+%     qbd2_strength      = -3.960473;
+%     qbf_strength       = 3.902663 ;
+%     qbd1_strength      = -2.967653;
+%     qf1_strength       = 2.357389 ;
+%     qf2_strength       = 3.363276 ;
+%     qf3_strength       = 3.079729 ;
+%     qf4_strength       = 2.713552 ;
+%     
+%     
+%     %%% SEXTUPOLOS
+%     %  ========== (os mesmos do AC10_5)
+%     sa1_strength       = -115.7829759411277/2;
+%     sa2_strength       =   49.50386128829739/2;
+%     sb1_strength       = -214.5386552515188/2;
+%     sb2_strength       =  133.1252391065637/2;
+%     sd1_strength       = -302.6188062085843/2;
+%     sf1_strength       =  369.5045185071228/2;
+%     sd2_strength       = -164.3042864671946/2;
+%     sd3_strength       = -289.9270429064217/2;
+%     sf2_strength       =  333.7039740852999/2;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%tentativa mudar o tuneshift com amplitude mexendo so os sexts: 3ra
+    %%% QUADRUPOLOS
+    %  =========== (os mesmos do AC10_5)
+    qaf_strength       =  2.53696119948142;
+    qad_strength       = -2.729804812331968;
+    qbd2_strength      = -3.960473342625189;
+    qbf_strength       =  3.902662679038675;
+    qbd1_strength      = -2.9676529175558;
+    qf1_strength       =  2.367868077341835;
+    qf2_strength       =  3.353792310991718;
+    qf3_strength       =  3.079729385929515;
+    qf4_strength       =  2.708114601216968;
+    
+    
+    %%% SEXTUPOLOS
+    %  ========== (obtidos com o script do matlab)
+    % boa solucao para injecao 4k
+    sa1_strength       =  -58.9405;
+    sa2_strength       =   25.1813;
+    sb1_strength       = -107.7365;
+    sb2_strength       =   65.8960;
+    sd1_strength       = -155.8518;
+    sf1_strength       =  186.8334;
+    sd2_strength       = -80.1791;
+    sd3_strength       = -143.6776;
+    sf2_strength       =  162.9090;
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % outra boa solucao para injecao 4k, mas essa muda muito o tune shift com a
 % amplitude, tomar cuidado.

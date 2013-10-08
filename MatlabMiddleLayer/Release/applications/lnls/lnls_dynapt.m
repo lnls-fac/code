@@ -1,28 +1,31 @@
-function r = lnls_dynapt(varargin)
+function r = lnls_dynapt(the_ring, varargin)
 % r = lnls_dynapt(varargin)
 %
-% Cálculo de separatriz da abertura din�mica
+% Calculo de separatriz da abertura dinamica
 %
-% Input (struct):
+% Inputs 
 %
-% 'energy_deviation'  : vector com valores de desvio de anergia para c�lculo de abertura din�mica. Uma separatriz para cada elemento deste vetor;
-% 'radius_resolution' : resolu��o radial para cálculo da separatriz.
-% 'nr_turns'          : n�mero de voltas no tracking.
-% 'points_angle'      : matriz com ângulos no espaço XY para cálculo da separatriz (uma linha para cada desvio de energia)
-% 'points_radius'     : matriz com raios iniciais no espa�o XY para c�lculo da separatriz (uma linha para cada desvio de energia)
+% the_ring            : modelo da rede para o calculo da abertura dinamica
+%  
+% (struct):
+% 'energy_deviation'  : vector com valores de desvio de anergia para calculo de abertura dinamica. Uma separatriz para cada elemento deste vetor;
+% 'radius_resolution' : resolucao radial para calculo da separatriz.
+% 'nr_turns'          : numero de voltas no tracking.
+% 'points_angle'      : matriz com angulos no espaco XY para calculo da separatriz (uma linha para cada desvio de energia)
+% 'points_radius'     : matriz com raios iniciais no espaco XY para calculo da separatriz (uma linha para cada desvio de energia)
+% 'quiet_mode'        : caso seja true, nenhum display dos calculos sera feito.
 %
 % Output:
 %
-% 'radius' : matriz com raio limite da separatriz em cada �ngulo.
-% 'points_radius'    : matrix com raios finais no espa�o XY para c�lculo da separatriz (uma linha para cada desvio de energia)
-% 'points_x'         : matrix com posi��o horizontal dos pontos da separatriz no espa�o XY para c�lculo da separatriz (uma linha para cada desvio de energia)
-% 'points_y'         : matrix com posi��o vertical dos pontos da separatriz no espa�o XY para c�lculo da separatriz (uma linha para cada desvio de energia)
-% 'da_area'          : vetor com areas das aberturas din�micas (um elemento por valor de desvio de energia).
+% 'points_radius'    : matrix com raios finais no espaco XY para calculo da separatriz (uma linha para cada desvio de energia)
+% 'points_x'         : matrix com posicao horizontal dos pontos da separatriz no espaco XY (uma linha para cada desvio de energia)
+% 'points_y'         : matrix com posicao vertical dos pontos da separatriz no espaco XY (uma linha para cada desvio de energia)
+% 'da_area'          : vetor com areas das aberturas dinamicas (um elemento por valor de desvio de energia).
 %
-% Hist�ria:
+% Historia:
 %
 % 2012-01-24 Corrigido problema com valores default de points_angle points_radius (X.R.R.)
-% 2011-08-26 Primeira vers�o organizada e comentada (X.R.R.)
+% 2011-08-26 Primeira versao organizada e comentada (X.R.R.)
 
 %dbstop in lnls_dynapt at 106
 
@@ -53,7 +56,7 @@ if ~isfield(r, 'points_radius')
     r.points_radius = repmat((15/1000) * ones(size(r.points_angle)), length(r.energy_deviation), 1);
 end
 
-if isfield(r, 'quiet_mode') && (r.quiet_mode == true)
+if isfield(r, 'quiet_mode') && r.quiet_mode 
     quiet_mode = true;
 else
     quiet_mode = false;
@@ -79,7 +82,7 @@ end
 
 for i=1:length(r.energy_deviation)
     if ~quiet_mode, fprintf('Energy Deviation %f %%\n', 100*r.energy_deviation(i)); end;
-    r.points_radius(i,:) = update_radius(r.points_angle(i,:), r.points_radius(i,:), r.radius_resolution, r.energy_deviation(i), r.nr_turns, quiet_mode);
+    r.points_radius(i,:) = update_radius(the_ring, r.points_angle(i,:), r.points_radius(i,:), r.radius_resolution, r.energy_deviation(i), r.nr_turns, quiet_mode);
     r.da_area(i) = get_dynapt_area(r.points_angle(i,:), r.points_radius(i,:));
     xy = get_points(r.points_angle(i,:), r.points_radius(i,:),r.energy_deviation(i));
     r.points_x(i,:) = xy(1,:);
@@ -93,9 +96,7 @@ r1 = radius(1:end-1);
 r2 = radius(2:end);
 area = 1e6 * sum(r1(:) .* r2(:) .* sin(dangles(:))/2);
 
-function radius = update_radius(angles, radius0, radius_tol, delta_energy, nr_turns, quiet_mode)
-
-global THERING;
+function radius = update_radius(the_ring, angles, radius0, radius_tol, delta_energy, nr_turns, quiet_mode)
 
 radius = radius0;
 
@@ -124,7 +125,7 @@ while true
     
     idx = idx + 1;
     p = get_points(angles, radius, delta_energy);
-    rf = ringpass(THERING, p(:,selection), nr_turns);
+    rf = ringpass(the_ring, p(:,selection), nr_turns);
     drawnow; sleep(0);
     rf = rf(:,(end - length(selection) + 1):end);
     lossflag = any(~isfinite(rf));
