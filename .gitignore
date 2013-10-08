@@ -19,6 +19,7 @@
 *.llb
 *.exe
 *.asv
+tracy
 
 
 ## directories not to be tracked
@@ -26,6 +27,7 @@
 lnls-mml-data/
 likewise/
 MatlabMiddleLayer-SVN-2013-10-08/
+*cod_matlab/
 
 
 
