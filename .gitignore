@@ -19,6 +19,7 @@
 *.llb
 *.exe
 *.asv
+tracy
 
 
 ## directories not to be tracked
