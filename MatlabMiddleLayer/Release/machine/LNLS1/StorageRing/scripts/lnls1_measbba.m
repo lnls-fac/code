@@ -158,6 +158,8 @@ n=0;
 delta_shunt_global = 3; % Amp
 
 
+%{
+
 %% AMP01B
 n=n+1;
 bba.bpm_x{n}.bpm                  = 'AMP01B';
@@ -327,6 +329,9 @@ bba.bpm_x{n}.corrector            = 'ACH03A';
 %bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.102, +0.098, 5);
 bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.085,+0.091,7);
 bba.bpm_x{n}.power_supply_off     = {};
+
+%}
+
 %% AMP09B
 n=n+1;
 bba.bpm_x{n}.bpm                  = 'AMP09B';
@@ -336,6 +341,9 @@ bba.bpm_x{n}.corrector            = 'ACH03B';
 %bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.111, +0.089, 5);
 bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.073,+0.099,7);
 bba.bpm_x{n}.power_supply_off     = {};
+
+%{
+
 %% AMP10A
 n=n+1;
 bba.bpm_x{n}.bpm                  = 'AMP10A';
@@ -393,12 +401,13 @@ bba.bpm_x{n}.corrector            = 'ACH07A';
 bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.073,+0.109,7);
 bba.bpm_x{n}.power_supply_off     = {};
 
-
+%}
 
 
 %% --- monitores verticais ---
 n=0;
 
+%{
 
 %% AMP01B
 n=n+1;
@@ -577,6 +586,7 @@ bba.bpm_y{n}.corrector            = 'ACV11B';
 bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.039,+0.141,7); 
 bba.bpm_y{n}.power_supply_off     = {};
 
+%}
 
 %% AMP09B
 n=n+1;
@@ -591,6 +601,7 @@ bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.1,0.1,7);
 bba.bpm_y{n}.power_supply_off     = {};
 
 
+%{
 
 %% AMP10A
 n=n+1;
@@ -660,6 +671,7 @@ bba.bpm_y{n}.corrector            = 'ACV07A';
 bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.060,+0.103,7); 
 bba.bpm_y{n}.power_supply_off     = {};
 
+%}
 
 function bba_data = do_bba(corrector_family, original_bba_data, configs)
 
