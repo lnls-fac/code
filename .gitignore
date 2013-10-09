@@ -24,6 +24,7 @@ tracy
 
 ## directories not to be tracked
 
+gitrepo/
 lnls-data/
 likewise/
 MatlabMiddleLayer-SVN-2013-10-08/
