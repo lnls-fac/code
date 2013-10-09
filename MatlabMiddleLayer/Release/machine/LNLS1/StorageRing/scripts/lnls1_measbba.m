@@ -1,14 +1,73 @@
 function bba = lnls1_measbba(varargin)
 %Faz medida BBA (Beam-based alignment)
 %
-%História: 
+%Historia: 
 %
+%2013-10-09: mudada a estrutura de dados com info sobre bba a ser realizado (p/ ficar mais fÃ¡cil selecionar BPMs)
 %2012-10-11: adicionado delta_shunt_global = 3 para tentar melhorar a sensibilidade da medida.(Ximenes e Jefferson) 
 %2011-04-04: adicionada rotina que gera arquivo *.orb para uso no OPR1 (Fernando)
-%2010-09-13: comentários iniciais no código (X.R.R.)
+%2010-09-13: comentarios iniciais no codigo (X.R.R.)
+
+delta_shunt_global = 3;  % [A]
+
+bba_x_data = { ...
+{'AMP01B', 'AQF01B', delta_shunt_global, 'ACH07B', [-0.0825,+0.1025,7]}, ...
+{'AMP02A', 'AQF02A', delta_shunt_global, 'ACH09B', [-0.2675,+0.0937,7]}, ...
+{'AMP02B', 'AQF02B', delta_shunt_global, 'ACH07A', [+0.0272,+0.4184,7]}, ...
+{'AMP03A', 'AQF03A', delta_shunt_global, 'ACH09A', [-0.0770,+0.0910,7]}, ...
+{'AMP03B', 'AQF03B', delta_shunt_global, 'ACH09B', [-0.0870,+0.0830,7]}, ...
+{'AMP03C', 'AQF03B', delta_shunt_global, 'ACH09B', [-0.2190,+0.2190,7]}, ...
+{'AMP04A', 'AQF04A', delta_shunt_global, 'ACH11B', [-0.0480,+0.3390,7]}, ...
+{'AMP04B', 'AQF04B', delta_shunt_global, 'ACH09A', [-0.3100,+0.0470,7]}, ...
+{'AMP05A', 'AQF05A', delta_shunt_global, 'ACH11A', [-0.1090,+0.0790,7]}, ...
+{'AMP05B', 'AQF05B', delta_shunt_global, 'ACH11B', [-0.0850,+0.0990,7]}, ...
+{'AMP06A', 'AQF06A', delta_shunt_global, 'ACH01A', [-0.1930,+0.1830,7]}, ...
+{'AMP06B', 'AQF06B', delta_shunt_global, 'ACH11A', [-0.1350,+0.2580,7]}, ...
+{'AMP07A', 'AQF07A', delta_shunt_global, 'ACH01A', [-0.0690,+0.1050,7]}, ...
+{'AMP07B', 'AQF07B', delta_shunt_global, 'ACH01B', [-0.1200,+0.1200,7]}, ...
+{'AMP08A', 'AQF08A', delta_shunt_global, 'ACH03B', [-0.1700,+0.2210,7]}, ...
+{'AMP08B', 'AQF08B', delta_shunt_global, 'ACH01A', [-0.1490,+0.2170,7]}, ...
+{'AMP09A', 'AQF09A', delta_shunt_global, 'ACH03A', [-0.0850,+0.0910,7]}, ...
+{'AMP09B', 'AQF09B', delta_shunt_global, 'ACH03B', [-0.0730,+0.0990,7]}, ...
+{'AMP10A', 'AQF10A', delta_shunt_global, 'ACH05B', [-0.2250,+0.1870,7]}, ...
+{'AMP10B', 'AQF10B', delta_shunt_global, 'ACH03A', [-0.1340,+0.2410,7]}, ...
+{'AMU11A', 'AQF11A', delta_shunt_global, 'ACH05A', [-0.1160,+0.0780,7]}, ...
+{'AMU11B', 'AQF11B', delta_shunt_global, 'ACH05B', [-0.1250,+0.0640,7]}, ...
+{'AMP12A', 'AQF12A', delta_shunt_global, 'ACH07B', [-0.2030,+0.1820,7]}, ...
+{'AMP12B', 'AQF12B', delta_shunt_global, 'ACH05A', [-0.1780,+0.2380,7]}, ...
+{'AMP01A', 'AQF01A', delta_shunt_global, 'ACH07A', [-0.0730,+0.1090,7]}, ...
+};
+
+bba_y_data = { ...
+{'AMP01B', 'AQF01B', delta_shunt_global, 'ACV11A', [-0.0910,+0.0670,7]}, ...
+{'AMP02A', 'AQF02A', delta_shunt_global, 'ACV07B', [-0.1160,+0.1160,7]}, ...
+{'AMP02B', 'AQF02B', delta_shunt_global, 'ACV09B', [-0.1350,+0.1190,7]}, ...
+{'AMP03A', 'AQF03A', delta_shunt_global, 'ACV09A', [-0.0830,+0.0950,7]}, ...
+{'AMP03B', 'AQF03B', delta_shunt_global, 'ACV09B', [-0.0980,+0.1090,7]}, ...
+{'AMP03C', 'AQF03B', delta_shunt_global, 'ACV01A', [-0.1500,+0.0500,7]}, ...
+{'AMP04A', 'AQF04A', delta_shunt_global, 'ACV03B', [-0.2300,+0.1340,7]}, ...
+{'AMP04B', 'AQF04B', delta_shunt_global, 'ACV11A', [-0.1270,+0.1110,7]}, ...
+{'AMP05A', 'AQF05A', delta_shunt_global, 'ACV11A', [-0.0870,+0.0730,7]}, ...
+{'AMP05B', 'AQF05B', delta_shunt_global, 'ACV11B', [-0.0770,+0.0910,7]}, ...
+{'AMP06A', 'AQF06A', delta_shunt_global, 'ACV11A', [-0.1440,+0.0840,7]}, ...
+{'AMP06B', 'AQF06B', delta_shunt_global, 'ACV07A', [-0.1000,+0.1000,7]}, ...
+{'AMP07A', 'AQF07A', delta_shunt_global, 'ACV09B', [-0.0790,+0.0810,7]}, ...
+{'AMP07B', 'AQF07B', delta_shunt_global, 'ACV01B', [-0.1500,+0.1500,7]}, ...
+{'AMP08A', 'AQF08A', delta_shunt_global, 'ACV07B', [-0.2331,+0.0531,7]}, ...
+{'AMP08B', 'AQF08B', delta_shunt_global, 'ACV03B', [-0.2100,+0.1660,7]}, ...
+{'AMP09A', 'AQF09A', delta_shunt_global, 'ACV11B', [-0.0390,+0.1410,7]}, ...
+{'AMP09B', 'AQF09B', delta_shunt_global, 'ACV07A', [-0.1000,+0.1000,7]}, ...
+{'AMP10A', 'AQF10A', delta_shunt_global, 'ACV09B', [-0.1340,+0.1110,7]}, ...
+{'AMP10B', 'AQF10B', delta_shunt_global, 'ACV11A', [-0.1410,+0.0880,7]}, ...
+{'AMU11A', 'AQF11A', delta_shunt_global, 'ACV11A', [-0.1220,+0.0840,7]}, ...
+{'AMU11B', 'AQF11B', delta_shunt_global, 'ACV11B', [-0.0840,+0.1460,7]}, ...
+{'AMP12A', 'AQF12A', delta_shunt_global, 'ACV11B', [-0.1080,+0.1310,7]}, ...
+{'AMP12B', 'AQF12B', delta_shunt_global, 'ACV07B', [-0.1030,+0.1180,7]}, ...
+{'AMP01A', 'AQF01A', delta_shunt_global, 'ACV07A', [-0.0600,+0.103,7]}, ...
+};
 
 
-%% inicializações básicas 
+%% inicializacoes basicas 
 %if ~strcmpi(getmode('BEND'), 'Online'), switch2online; end
 
 for i=1:length(varargin)
@@ -17,7 +76,7 @@ for i=1:length(varargin)
     end
 end
 
-%% Pede ao usuário, se for o caso, que defina onde os dados da medidas serão gravados
+%% Pede ao usuï¿½rio, se for o caso, que defina onde os dados da medidas serï¿½o gravados
 if ~exist('default_filename', 'var')
     default_dir      = fullfile(getfamilydata('Directory', 'DataRoot'), 'Optics', datestr(now, 'yyyy-mm-dd'));
     if ~exist(default_dir, 'dir')
@@ -33,11 +92,11 @@ if ~exist('default_filename', 'var')
     default_filename = fullfile(PathName, FileName);
 end
 
-%% configurações iniciais
+%% configuracoes iniciais
 if exist(default_filename, 'file')
     load(default_filename); 
 else   
-    bba = load_default_bba_config;
+    bba = load_default_bba_config(bba_x_data, bba_y_data);
 %   bba = load_corrector_range_from_last_measdata(bba);
     bba.configs.shunts.pause         = 1*1;
     bba.configs.shunts.nr_cycles     = 3;
@@ -51,14 +110,14 @@ if ~isfield(bba, 'final_machineconfig')
     
     % ajustes iniciais
     setbpmaverages(bba.configs.bpms.pause, bba.configs.bpms.nr_measurements);
-    fprintf('%s: desligando correção de órbita automática\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
+    fprintf('%s: desligando correï¿½ï¿½o de ï¿½rbita automï¿½tica\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
     lnls1_auto_orb_corr_off;
     fprintf('%s: ligando shunts\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
     lnls1_quad_shunts_on;
     
     % XRR 2012-01-05: codigo de ajuste dos IDs comentado temporariamente.
     
-    % fprintf('%s: abrindo dispositivos de inserção\n', datestr(now,'yyyy-mm-dd_HH-MM-SS')); 
+    % fprintf('%s: abrindo dispositivos de inserï¿½ï¿½o\n', datestr(now,'yyyy-mm-dd_HH-MM-SS')); 
     % init_IDS = lnls1_set_id_configurations({'AON11GAP', 'AWG01GAP','AWG09FIELD'}); 
     % setpv('AON11VGAP_SP', 500);
     % setpv('AON11VFASE_SP', 500);
@@ -69,7 +128,7 @@ if ~isfield(bba, 'final_machineconfig')
     
     % mede bba
     bba.initial_time_stamp    = datestr(now, 'yyyy-mm-dd_HH-MM-SS');
-    fprintf('%s: INÍCIO DE MEDIDAS BBA\n', bba.initial_time_stamp);
+    fprintf('%s: INï¿½CIO DE MEDIDAS BBA\n', bba.initial_time_stamp);
     bba.initial_machineconfig = getmachineconfig;
     if isfield(bba, 'bpm_x'), bba.bpm_x = do_bba('HCM', bba.bpm_x, bba.configs); end
     if isfield(bba, 'bpm_y'), bba.bpm_y = do_bba('VCM', bba.bpm_y, bba.configs); end
@@ -78,8 +137,8 @@ if ~isfield(bba, 'final_machineconfig')
     
     % XRR 2012-01-05: codigo de ajuste dos IDs comentado temporariamente.
     
-    % volta IDs à config original
-    % fprintf('%s: voltando dispositivos de inserção à configuração original\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
+    % volta IDs ï¿½ config original
+    % fprintf('%s: voltando dispositivos de inserï¿½ï¿½o ï¿½ configuraï¿½ï¿½o original\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
     % lnls1_set_id_configurations(init_IDS);
     
     fprintf('%s: FIM DE MEDIDAS BBA\n', bba.initial_time_stamp);
@@ -87,13 +146,13 @@ if ~isfield(bba, 'final_machineconfig')
 end
 
 
-%% faz análise das medidas
-fprintf('\n%s: [ANÁLISE BBA HORIZONTAL]\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
+%% faz anï¿½lise das medidas
+fprintf('\n%s: [ANï¿½LISE BBA HORIZONTAL]\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
 if isfield(bba, 'bpm_x'), bba.bpm_x = analysis_bba('BPMx', bba.bpm_x); end
-fprintf('\n%s: [ANÁLISE BBA VERTICAL]\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
+fprintf('\n%s: [ANï¿½LISE BBA VERTICAL]\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
 if isfield(bba, 'bpm_y'), bba.bpm_y = analysis_bba('BPMy', bba.bpm_y); end
 
-%% salva dados (Fiz alterações aqui e na função analysis_bba)
+%% salva dados (Fiz alteracoes aqui e na funcao analysis_bba)
 fprintf('\n%s: salvando dados\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
 [pathstr namef] = fileparts(default_filename);
 if ~exist(pathstr, 'dir')
@@ -139,539 +198,43 @@ fprintf(idf,['Medida de BBA realizada em ' datestr(now,'yyyy-mm-dd')...
 fclose(idf);
 clear namef idf a orbfile;
 
-%% registra experimento no histórico
+%% registra experimento no histï¿½rico
 registra_historico(bba);
 
-%% remove diretório se vazio
+%% remove diretï¿½rio se vazio
 files = dir(pathstr);
 if (length(files)<3) 
     rmdir(PathName); 
 end
 
-function bba = load_default_bba_config
+function bba = load_default_bba_config(bba_x_data, bba_y_data)
+
+    
+bba.bpm_x = {};
+for i=1:length(bba_x_data)
+    bpm_data = bba_x_data{i};
+    n = length(bba.bpm_x);
+    bba.bpm_x{n+1}.bpm                 = bpm_data{1};
+    bba.bpm_x{n+1}.shunt               = bpm_data{2};
+    bba.bpm_x{n+1}.shunt_delta_amp     = bpm_data{3};
+    bba.bpm_x{n+1}.corrector           = bpm_data{4};
+    bba.bpm_x{n+1}.corrector_grid_mrad = linspace(bpm_data{5}(1), bpm_data{5}(2), bpm_data{5}(3));
+    bba.bpm_x{n+1}.power_supply_off    = {};
+end
+
+bba.bpm_y = {};
+for i=1:length(bba_y_data)
+    bpm_data = bba_y_data{i};
+    n = length(bba.bpm_y);
+    bba.bpm_y{n+1}.bpm                 = bpm_data{1};
+    bba.bpm_y{n+1}.shunt               = bpm_data{2};
+    bba.bpm_y{n+1}.shunt_delta_amp     = bpm_data{3};
+    bba.bpm_y{n+1}.corrector           = bpm_data{4};
+    bba.bpm_y{n+1}.corrector_grid_mrad = linspace(bpm_data{5}(1), bpm_data{5}(2), bpm_data{5}(3));
+    bba.bpm_y{n+1}.power_supply_off    = {};
+end
 
 
-
-%% --- monitores horizontais ---
-
-n=0;
-delta_shunt_global = 3; % Amp
-
-
-%{
-
-%% AMP01B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP01B';
-bba.bpm_x{n}.shunt                = 'AQF01B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH07B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.078, +0.122, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.0825,0.1025,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-
-%% AMP02A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP02A';
-bba.bpm_x{n}.shunt                = 'AQF02A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH09B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(+0.015, +0.215, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.2675,0.0937,7) ;
-bba.bpm_x{n}.power_supply_off     = {};
-
-
-%% AMP02B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP02B';
-bba.bpm_x{n}.shunt                = 'AQF02B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH07A';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(0.0272,0.4184,7);
-
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP03A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP03A';
-bba.bpm_x{n}.shunt                = 'AQF03A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH09A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.117, +0.083, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.077,+0.091,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP03B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP03B';
-bba.bpm_x{n}.shunt                = 'AQF03B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH09B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.109, +0.091, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.087,+0.083,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP03C
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP03C';
-bba.bpm_x{n}.shunt                = 'AQF03B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH09B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.044, +0.156, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.219,+0.219,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-
-
-%% AMP04A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP04A';
-bba.bpm_x{n}.shunt                = 'AQF04A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH11B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.292, -0.092, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.048,+0.339,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP04B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP04B';
-bba.bpm_x{n}.shunt                = 'AQF04B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH09A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(+0.108, +0.308, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.310,+0.047,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-
-
-%% AMP05A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP05A';
-bba.bpm_x{n}.shunt                = 'AQF05A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH11A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.075, +0.125, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.109,+0.079,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP05B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP05B';
-bba.bpm_x{n}.shunt                = 'AQF05B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH11B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.104, +0.096, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.085,+0.099,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP06A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP06A';
-bba.bpm_x{n}.shunt                = 'AQF06A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH01A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.057, +0.143, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.193,+0.183,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP06B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP06B';
-bba.bpm_x{n}.shunt                = 'AQF06B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH11A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.138, +0.062, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.135,+0.258,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP07A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP07A';
-bba.bpm_x{n}.shunt                = 'AQF07A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH01A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.101, +0.099, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.069,+0.105,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-
-%% AMP07B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP07B';
-bba.bpm_x{n}.shunt                = 'AQF07B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH01B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.068, +0.132, 5);
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.095,+0.080,7);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.12,+0.120,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-%% AMP08A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP08A';
-bba.bpm_x{n}.shunt                = 'AQF08A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH03B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.107, +0.093, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.17,+0.221,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-
-%% AMP08B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP08B';
-bba.bpm_x{n}.shunt                = 'AQF08B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH01A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.109, +0.091, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.149,+0.217,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP09A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP09A';
-bba.bpm_x{n}.shunt                = 'AQF09A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH03A';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.102, +0.098, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.085,+0.091,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-%}
-
-%% AMP09B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP09B';
-bba.bpm_x{n}.shunt                = 'AQF09B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH03B';
-%bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.111, +0.089, 5);
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.073,+0.099,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-%{
-
-%% AMP10A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP10A';
-bba.bpm_x{n}.shunt                = 'AQF10A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH05B';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.225,+0.187,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP10B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP10B';
-bba.bpm_x{n}.shunt                = 'AQF10B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH03A';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.134,+0.241,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMU11A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMU11A';
-bba.bpm_x{n}.shunt                = 'AQF11A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH05A';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.116,+0.078,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMU11B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMU11B';
-bba.bpm_x{n}.shunt                = 'AQF11B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH05B';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.125,+0.064,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP12A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP12A';
-bba.bpm_x{n}.shunt                = 'AQF12A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH07B';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.203,+0.182,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP12B
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP12B';
-bba.bpm_x{n}.shunt                = 'AQF12B';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH05A';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.178,+0.238,7);
-bba.bpm_x{n}.power_supply_off     = {};
-%% AMP01A
-n=n+1;
-bba.bpm_x{n}.bpm                  = 'AMP01A';
-bba.bpm_x{n}.shunt                = 'AQF01A';
-bba.bpm_x{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_x{n}.corrector            = 'ACH07A';
-bba.bpm_x{n}.corrector_grid_mrad  = linspace(-0.073,+0.109,7);
-bba.bpm_x{n}.power_supply_off     = {};
-
-%}
-
-
-%% --- monitores verticais ---
-n=0;
-
-%{
-
-%% AMP01B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP01B';
-bba.bpm_y{n}.shunt                = 'AQF01B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11A';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.095, +0.105, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.091,+0.067,7);
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMP02A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP02A';
-bba.bpm_y{n}.shunt                = 'AQF02A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV07B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.109, +0.091, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.116,+0.116,7);
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMP02B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP02B';
-bba.bpm_y{n}.shunt                = 'AQF02B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV09B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.119, +0.081, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.135,+0.119,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP03A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP03A';
-bba.bpm_y{n}.shunt                = 'AQF03A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV09A';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.097, +0.103, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.083,+0.095,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMP03B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP03B';
-bba.bpm_y{n}.shunt                = 'AQF03B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV09B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.106, +0.094, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.098,+0.109,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP03C
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP03C';
-bba.bpm_y{n}.shunt                = 'AQF03B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV01A';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.15,+0.05,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-
-%% AMP04A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP04A';
-bba.bpm_y{n}.shunt                = 'AQF04A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV03B';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.230,+0.134,7);
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-
-%% AMP04B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP04B';
-bba.bpm_y{n}.shunt                = 'AQF04B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11A';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.127,+0.111,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP05A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP05A';
-bba.bpm_y{n}.shunt                = 'AQF05A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11A';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.087,+0.073,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMP05B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP05B';
-bba.bpm_y{n}.shunt                = 'AQF05B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11B';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.077,+0.091,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP06A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP06A';
-bba.bpm_y{n}.shunt                = 'AQF06A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11A';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.144,+0.084,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP06B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP06B';
-bba.bpm_y{n}.shunt                = 'AQF06B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV07A';
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.1,+0.1,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-
-%% AMP07A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP07A';
-bba.bpm_y{n}.shunt                = 'AQF07A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV09B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.102, +0.098, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.079,+0.081,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP07B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP07B';
-bba.bpm_y{n}.shunt                = 'AQF07B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV01B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.100, +0.100, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.15,+0.15,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-
-%% AMP08A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP08A';
-bba.bpm_y{n}.shunt                = 'AQF08A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV07B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.166, +0.034, 5);
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.126,+0.086,7); 
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.070,0.1911,7);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.2331,0.0531,7);
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP08B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP08B';
-bba.bpm_y{n}.shunt                = 'AQF08B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV03B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.091, +0.109, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.210,+0.166,7);
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP09A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP09A';
-bba.bpm_y{n}.shunt                = 'AQF09A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.082, +0.118, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.039,+0.141,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-%}
-
-%% AMP09B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP09B';
-bba.bpm_y{n}.shunt                = 'AQF09B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV07A';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.162, +0.038, 5);
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.044,+0.114,7); 
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.252,-0.061,7);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.1,0.1,7);
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%{
-
-%% AMP10A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP10A';
-bba.bpm_y{n}.shunt                = 'AQF10A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV09B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.127, +0.073, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.134,+0.111,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP10B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP10B';
-bba.bpm_y{n}.shunt                = 'AQF10B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11A';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.087, +0.113, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.141,+0.088,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMU11A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMU11A';
-bba.bpm_y{n}.shunt                = 'AQF11A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11A';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.100, +0.100, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.122,+0.084,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMU11B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMU11B';
-bba.bpm_y{n}.shunt                = 'AQF11B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.109, +0.091, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.084,+0.146,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMP12A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP12A';
-bba.bpm_y{n}.shunt                = 'AQF12A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV11B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.095, +0.105, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.108,+0.131,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-%% AMP12B
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP12B';
-bba.bpm_y{n}.shunt                = 'AQF12B';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV07B';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.077, +0.123, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.103,+0.118,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-
-%% AMP01A
-n=n+1;
-bba.bpm_y{n}.bpm                  = 'AMP01A';
-bba.bpm_y{n}.shunt                = 'AQF01A';
-bba.bpm_y{n}.shunt_delta_amp      = delta_shunt_global;
-bba.bpm_y{n}.corrector            = 'ACV07A';
-%bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.078, +0.122, 5);
-bba.bpm_y{n}.corrector_grid_mrad  = linspace(-0.060,+0.103,7); 
-bba.bpm_y{n}.power_supply_off     = {};
-
-%}
 
 function bba_data = do_bba(corrector_family, original_bba_data, configs)
 
@@ -714,15 +277,15 @@ for i=1:length(bba_data)
     fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': corrente = %f mA\n'], bba.dcct(end));
     
     % zera fontes entre quadrupolo e bpm
-    fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': zerando possíveis fontes entre bpm e quadrupolo\n']);
+    fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': zerando possï¿½veis fontes entre bpm e quadrupolo\n']);
     for j=1:length(bba.power_supply_off)
         setpv(bba.power_supply_off{j}, 0);
     end
     bba.dcct = [bba.dcct getdcct];
     fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': corrente = %f mA\n'], bba.dcct(end));
     
-    % varre posição do feixe no bpm
-    fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': varrendo corretora (órbita) [mrad]: ']);
+    % varre posiï¿½ï¿½o do feixe no bpm
+    fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': varrendo corretora (ï¿½rbita) [mrad]: ']);
     for j=1:length(bba.corrector_grid_mrad)
         
         fprintf('%+6.3f ', bba.corrector_grid_mrad(j));
@@ -731,14 +294,14 @@ for i=1:length(bba_data)
         setpv(corrector_family, initial_value_corrector + bba.corrector_grid_mrad(j)/1000, corrector_device, 'Physics');
         pause(configs.correctors.pause);
         
-        % registra órbita original
+        % registra ï¿½rbita original
         bba.orbit0{j} = [getx gety];
         
         % varia shunt
         steppv('QUADSHUNT','Setpoint', bba.shunt_delta_amp, shunt_device);
         pause(configs.shunts.pause);
         
-        % registra órbita final
+        % registra ï¿½rbita final
         bba.orbit1{j} = [getx gety];
         
         % restaura shunt
@@ -805,8 +368,8 @@ for i=1:length(bba)
     if (rms1 > 50*10^-6), bpm.coeff_determination = -1; end
     if (max(abs(rms2)) < 1*10^-6), bpm.coeff_determination = -2; end
     
-    % A função retorna um flag sobre a credibilidade do ponto de offset
-    %('OK', ou 'nOK'). Foi necessário para a construção do arquivo .orb:
+    % A funï¿½ï¿½o retorna um flag sobre a credibilidade do ponto de offset
+    %('OK', ou 'nOK'). Foi necessï¿½rio para a construï¿½ï¿½o do arquivo .orb:
     bpm.fla = 'OK';
     if ((bpm.coeff_determination < 0.92) || bpm.extrapolation),
         plot_bba(bpm, direction, pos_bpm, rms);
@@ -817,13 +380,13 @@ for i=1:length(bba)
     bpm.rms = rms;
     
     % recalcula janela de kick centrada no offset e que gere desvios de
-    % órbita de +/- 1 mm
+    % ï¿½rbita de +/- 1 mm
     delta = sort(interp1(pos_bpm, bpm.corrector_grid_mrad, bpm.offset + [-1 +1], 'spline', 'extrap'));
     bpm.new_corrector_grid_mrad = linspace(delta(1), delta(2), length(bpm.corrector_grid_mrad));
     
-    % mostra resultado na análise:
-    fprintf('[%s_%s] offset:%+5.0f um (%4.2f), novo_intervalo: [%+6.3f,%+6.3f] mrad, extrapolação:%i\n', family_name, bpm.bpm, 1000*bpm.offset, bpm.coeff_determination, delta(1), delta(2), bpm.extrapolation);
-    % insere dados de análise na estrutura
+    % mostra resultado na anï¿½lise:
+    fprintf('[%s_%s] offset:%+5.0f um (%4.2f), novo_intervalo: [%+6.3f,%+6.3f] mrad, extrapolaï¿½ï¿½o:%i\n', family_name, bpm.bpm, 1000*bpm.offset, bpm.coeff_determination, delta(1), delta(2), bpm.extrapolation);
+    % insere dados de anï¿½lise na estrutura
     bba{i} = bpm;
 end
 
@@ -832,8 +395,8 @@ function plot_bba(bpm, direction, pos_bpm, rms)
 if direction==1, bpm_label = [bpm.bpm '-H']; else bpm_label = [bpm.bpm '-V']; end;
 figure('Name', bpm_label);
 scatter(1e3*pos_bpm, 1e6*rms, 'filled');
-xlabel('Posição [\mum]'); 
-ylabel('RMS da distorção de órbita [\mum^2]');
+xlabel('Posiï¿½ï¿½o [\mum]'); 
+ylabel('RMS da distorï¿½ï¿½o de ï¿½rbita [\mum^2]');
 hold all;
 pc = polyfit(pos_bpm,rms,2);
 x = linspace(pos_bpm(1), pos_bpm(end), 30);
