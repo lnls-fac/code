@@ -4,7 +4,7 @@ RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
 storage_ring_ref = sirius_lattice('AC10_3');
 lattice_errors([pwd '/cod_matlab']);
 machines = load([pwd '/cod_matlab/CONFIG_machines_cod_corrected.mat']);
-storage_ring = machines.machine{1};
+storage_ring = machines.machine{3};
 
 % now, we define which families will be used to optimize the phase space
 % and which will be used to correct chromaticity;
@@ -29,14 +29,12 @@ opt.ind = cell2mat(opt.ind); % transform to vector;
 
 
 % Lets define our initial point:
-% vec = [-115.7829759411277/2,  49.50386128829739/2, -214.5386552515188/2,...
-%     133.1252391065637/2, -164.3042864671946/2, -289.9270429064217/2,...
-%     333.7039740852999/2];
+%vec = [-115.7829759411277/2,  49.50386128829739/2, -214.5386552515188/2,...
+%    133.1252391065637/2, -164.3042864671946/2, -289.9270429064217/2,...
+%    333.7039740852999/2];
 
-% vec = [-67.6329   18.4370 -130.5790   59.2409  -85.2405 -139.4236  169.3679];
-vec = [-58.9405   25.1813 -107.7365   65.8960  -80.1791 -143.6776  162.9090];
 
-% vec = [-60.239229   19.517471 -134.941867   62.009293  -83.880300 -171.306748  203.282027];
+vec =[-54.247438   20.892522 -116.751310   62.081166  -87.985447 -163.532494  190.572736];
 
 
 % what will be our error level:
@@ -45,9 +43,10 @@ err_level = 10/100;
 %% now we begin the optimization:
 
 % first we calculate the initial parameters 
-[res chr.val] = optimize_fun(storage_ring, storage_ring_ref, vec, opt, chr);
+[res chr.val] = optimize_fun(storage_ring, storage_ring_ref, vec, opt, chr)
 
 % and begin the main loop
+fp = fopen('solucoes.txt','w');
 for ii=1:1000000
     err = lnls_generate_random_numbers(err_level, length(opt.fam),'uniform',1,0);
     newvec = vec.*(1+err);
@@ -59,12 +58,19 @@ for ii=1:1000000
         fprintf('%d: %10.6f  vec =  ',ii,res);
         fprintf('%12.6f',vec);
         fprintf('\n');
+        fprintf(fp,'%d: %10.6f  vec =  ',ii,res);
+        fprintf(fp,'%12.6f',vec);
+        fprintf(fp,'\n');
         for jj = 1:length(opt.fam)
             fprintf('    %3s_strength       = %10.4f;\n',opt.fam{jj}, vec(jj));
+            fprintf(fp,'    %3s_strength       = %10.4f;\n',opt.fam{jj}, vec(jj));
         end
         for jj = 1:length(chr.fam)
             fprintf('    %3s_strength       = %10.4f;\n',chr.fam{jj}, chr.val(jj));
+            fprintf(fp,'    %3s_strength       = %10.4f;\n',chr.fam{jj}, chr.val(jj));
         end
+        fprintf(fp,'\n');
+        fprintf('\n');
     end
 end
-    
+fclose(fp);    

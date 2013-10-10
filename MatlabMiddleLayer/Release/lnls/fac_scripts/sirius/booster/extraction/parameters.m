@@ -18,8 +18,8 @@ synchrotron = sirius_booster_lattice;
 %carrega maquinas com erros de orbitas:
 param.boo.simulate_orbit_errors = false;
 % lattice_errors([pwd '/cod_matlab']);
-machines = load('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/booster/extraction/cod_matlab/CONFIG_machines_cod_corrected.mat');
-machines = machines.machine;
+% machines = load('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/booster/extraction/cod_matlab/CONFIG_machines_cod_corrected.mat');
+% machines = machines.machine;
 
 
 % kicker angle
@@ -31,7 +31,7 @@ param.boo.seb_leak= 0e-4;
 %% Definition of the Transport line parameters
 
 % mode of operation
-param.ltba.mode = 'mismatched_pmm_optimum';
+param.ltba.mode = 'mismatched_4k';
 
 % Load the transfer line
 [transfer_line IniCond] = ltba_lattice(param.ltba.mode);
@@ -56,27 +56,27 @@ param.ltba.sef_x = -(  12    +  0.5  +   3    +  0.5    +   2)*1e-3; %position
 %achieved by an angle added to the polynomB of the septum
 param.ltba.sef_xp = 0;%angle
 % septum deflection angle and error 
-param.ltba.sef_dang = -5.05e-3; % additional angle to deflect of the particle.
-% param.ltba.sef_dang = 0.45e-3*1;
+% param.ltba.sef_dang = -5.05e-3; % additional angle to deflect of the particle.
+param.ltba.sef_dang = 0.45e-3*1;
 param.ltba.sef_err  = 1e-4; % tested
 
 
 % THICK SEPTUM's deflection angle, error and leak field 
-param.ltba.seg_dang = 1.14e-3; % additional angle to deflect the particle.
-% param.ltba.seg_dang = -0.45e-3*1;
+% param.ltba.seg_dang = 1.14e-3; % additional angle to deflect the particle.
+param.ltba.seg_dang = -0.45e-3*1;
 param.ltba.seg_err  = 1e-4; %tested
 
 
 %% Definition of the Storage Ring parameters
 
 % Load the sirius lattice;
-storage_ring = sirius_lattice('AC10', 'test_inject_pmm');
+storage_ring = sirius_lattice('AC10_3');
 
 % Simulate injection in the storage ring too?
 param.sr.inject = true;
 
 % Injection mode: with four kickers or multipole?
-param.sr.mode = 'pmm'; % '4kickers' or 'pmm'
+param.sr.mode = '4kickers'; % '4kickers' or 'pmm'
 % Number of turns to track the beam after injection
 param.sr.nturns = 5;
 
