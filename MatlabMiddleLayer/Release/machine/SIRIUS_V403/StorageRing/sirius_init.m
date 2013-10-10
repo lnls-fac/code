@@ -26,7 +26,7 @@ setad(AD);
 
 % Add additional directories with SIRIUS_V200 specific stuff.
 MMLROOT = getmmlroot('IgnoreTheAD');
-addpath(fullfile(MMLROOT,'machine','SIRIUS_V403','StorageRing','scripts'), '-begin');
+%addpath(fullfile(MMLROOT,'machine','SIRIUS_V403','StorageRing','scripts'), '-begin');
 
 % Get the device lists (local function)
 %[OnePerSector, TwoPerSector, ThreePerSector, FourPerSector, FivePerSector, SixPerSector, EightPerSector, TenPerSector, TwelvePerSector, FifteenPerSector, SixteenPerSector, EighteenPerSector, TwentyFourPerSector] = buildthedevicelists;
