@@ -14,7 +14,7 @@ if ~isempty(varargin)
     
 end
 
-default = '/opt/sirius_tracy/';
+default = '/opt/lnls-data/sirius_tracy/';
 
 path = uigetdir(default,'Em qual pasta estao os dados?');
 if (path==0);

@@ -21,7 +21,6 @@
 *.asv
 tracy
 
-
 ## directories not to be tracked
 
 gitrepo/
