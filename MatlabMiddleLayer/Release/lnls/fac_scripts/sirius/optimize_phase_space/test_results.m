@@ -4,22 +4,30 @@ lattice_errors([pwd '/cod_matlab']);
 machines = load([pwd '/cod_matlab/CONFIG_machines_cod_corrected.mat']);
 storage_ring = machines.machine;
 
-param.energy_deviation  = [-4, -2, 0, 2, 4]*1e-2;
-param.radius_resolution = 0.3e-4;
-param.nr_turns          = 1000;
-param.points_angle      = repmat([1/2+1e-3, 4/5, 1-1e-3]*pi, length(param.energy_deviation), 1);
-param.points_radius     = repmat([2, 2.5,  8]*1e-3,     length(param.energy_deviation), 1);
-param.quiet_mode        = true;
+param1.energy_deviation  = 0;
+param1.radius_resolution = 3e-4;
+param1.nr_turns          = 1000;
+param1.points_angle      = repmat([1/2+1e-3, 4/5, 1-1e-3]*pi, length(param1.energy_deviation), 1);
+param1.points_radius     = repmat([4, 6,  8]*1e-3,     length(param1.energy_deviation), 1);
+param1.quiet_mode        = true;
 
-x = zeros(length(storage_ring),length(param.points_angle(1,:)));
-y = zeros(length(storage_ring),length(param.points_angle(1,:)));
-x_en = zeros(length(storage_ring),length(param.energy_deviation));
-en0 = sum(param.energy_deviation <= 0);
+param2.energy_deviation  = [-4, -2, 0, 2, 4]*1e-2;
+param2.radius_resolution = 3e-4;
+param2.nr_turns          = 1000;
+param2.points_angle      = repmat((1-1e-3)*pi, length(param2.energy_deviation), 1);
+param2.points_radius     = repmat(8*1e-3,     length(param2.energy_deviation), 1);
+param2.quiet_mode        = true;
+
+x = zeros(length(storage_ring),length(param1.points_angle(1,:)));
+y = zeros(length(storage_ring),length(param1.points_angle(1,:)));
+x_en = zeros(length(storage_ring),length(param2.energy_deviation));
+en0 = sum(param2.energy_deviation <= 0);
 for ii = 1:length(storage_ring)
-    r = lnls_dynapt(storage_ring{ii},param);
-    x(ii,:) = r.points_x(en0,:);
-    y(ii,:) = r.points_y(en0,:);
-    x_en(ii,:) = r.points_x(:,end)'; 
+    r = lnls_dynapt(storage_ring{ii},param1);
+    x(ii,:) = r.points_x(1,:);
+    y(ii,:) = r.points_y(1,:);
+    r = lnls_dynapt(storage_ring{ii},param2);
+    x_en(ii,:) = r.points_x(:,1)'; 
     fprintf('Ja foi: %d\n', ii);
 end
 
@@ -39,7 +47,7 @@ x_en_ave = mean(x_en,1);
 x_en_rms = std(x_en);
 x_en_plus = x_en_ave - x_en_rms;
 x_en_min = x_en_ave + x_en_rms;
-ener = param.energy_deviation;
+ener = param2.energy_deviation;
 
 
 scrsz = get(0,'ScreenSize');

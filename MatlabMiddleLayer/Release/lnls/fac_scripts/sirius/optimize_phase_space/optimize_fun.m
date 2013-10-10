@@ -20,18 +20,18 @@ end
 
 
 nturns = 1000;
-rin = [-[1,5,9,11]*1e-3;[0,0,0,0];[1,1,1,1]*1e-5;[0,0,0,0];[0,0,0,0];[0,0,0,0]];
+rin = [-[0.1,5,9,0.1,13]*1e-3;[0,0,0,0,0];[1,1,1,300,1]*1e-5;[0,0,0,0,0];[0,0,0,0,0];[0,0,0,0,0]];
 rout = ringpass(storage_ring,rin,nturns);
 
-if any(isnan(rout(end,(end-4):end)))
+if any(isnan(rout(end,(end-5):end)))
     res = inf;
     return
 end
 
 % tentativa de inverter a coxinha:
-% ind = (rout(1,:) < -7e-3) & (rout(1,:) > -8e-3);
-% maxxp = max(rout(2,ind)); minxp = min(rout(2,ind));
-% res = 2 - (maxxp - minxp)*1e3;
+ind = (rout(1,:) < -7e-3) & (rout(1,:) > -8e-3);
+maxxp = max(rout(2,ind)); minxp = min(rout(2,ind));
+res = 1 - (maxxp - minxp)*1e3;
 
 % tentativa de aumentar o tune em altas amplitudes
 % res = 11 + 1e3*(rout(1,1) - rout(1,2));
@@ -45,7 +45,7 @@ coordyl = reshape(rout(4,:),length(rin(1,:)),nturns);
 tunex = lnls_calcnaff(coordx, coordxl);
 tuney = lnls_calcnaff(coordy, coordyl);
 
-diffx = tunex([2,3]) - tunex(1);
-diffy = tuney([2,3]) - tuney(1);
-res = sum(sqrt(diffx.^2 + diffy.^2));
+diffx = tunex(2:4) - tunex(1);
+diffy = tuney(2:4) - tuney(1);
+res = sum(sqrt(diffx.^2 + diffy.^2)) + 3*res;
     
