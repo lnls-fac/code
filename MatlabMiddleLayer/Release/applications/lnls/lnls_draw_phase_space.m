@@ -1,4 +1,4 @@
-function lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns)
+function lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns, resons)
 % lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns)
 %
 % Plota os espacos de fase horizontal e vertical e monta o diagrama de
@@ -140,7 +140,7 @@ plot(coordy_x'*1e3,coordyl_x'*1e3,'b.','Parent',axes12);
 % e por fim o diagrama de sintonias
 axes13 = subplot(1,3,3,'Parent',figure1,'FontSize',16);
 ylabel(axes13,'\nu_y'); xlabel(axes13,'\nu_x');
-tunespaceplot(tunes(1)+[-0.25 +0.25],tunes(2)+[-0.25 +0.25],1:3,axes13);
+tunespaceplot(tunes(1)+[-0.25 +0.25],tunes(2)+[-0.25 +0.25],resons,axes13);
 hold(axes13,'all');
 plot(tunex_y,tuney_y,'r.','Parent',axes13);
 plot(tunex_x,tuney_x,'b.','Parent',axes13);

@@ -1,6 +1,6 @@
 
 % first, we load the lattice
-lattice_errors([pwd '/cod_matlab']);
+% lattice_errors([pwd '/cod_matlab']);
 machines = load([pwd '/cod_matlab/CONFIG_machines_cod_corrected.mat']);
 storage_ring = machines.machine;
 
