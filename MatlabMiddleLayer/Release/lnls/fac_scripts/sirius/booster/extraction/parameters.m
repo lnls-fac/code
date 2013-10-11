@@ -70,7 +70,7 @@ param.ltba.seg_err  = 1e-4; %tested
 %% Definition of the Storage Ring parameters
 
 % Load the sirius lattice;
-storage_ring = sirius_lattice('AC10_3');
+storage_ring = sirius_lattice('test_inject_4k');
 
 % Simulate injection in the storage ring too?
 param.sr.inject = true;

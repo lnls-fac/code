@@ -1,8 +1,8 @@
 clear all;
 RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
 % first, we load the lattice
-storage_ring_ref = sirius_lattice('AC10_3');
-lattice_errors([pwd '/cod_matlab']);
+storage_ring_ref = sirius_lattice('test_inject_4k');
+% lattice_errors([pwd '/cod_matlab']);
 machines = load([pwd '/cod_matlab/CONFIG_machines_cod_corrected.mat']);
 storage_ring = machines.machine{3};
 
@@ -29,12 +29,12 @@ opt.ind = cell2mat(opt.ind); % transform to vector;
 
 
 % Lets define our initial point:
-%vec = [-115.7829759411277/2,  49.50386128829739/2, -214.5386552515188/2,...
+% vec = [-115.7829759411277/2,  49.50386128829739/2, -214.5386552515188/2,...
 %    133.1252391065637/2, -164.3042864671946/2, -289.9270429064217/2,...
 %    333.7039740852999/2];
 
 
-vec =[-54.247438   20.892522 -116.751310   62.081166  -87.985447 -163.532494  190.572736];
+vec =[-58.9405   25.1813 -107.7365   65.8960  -80.1791 -143.6776  162.9090];
 
 
 % what will be our error level:
