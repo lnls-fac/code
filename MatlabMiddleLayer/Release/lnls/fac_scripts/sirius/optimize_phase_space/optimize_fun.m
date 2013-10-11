@@ -20,8 +20,8 @@ end
 
 
 nturns = 1000;
-rin = [-[0.1,5,9,0.1,12.5]*1e-3;[0,0,0,0,0];[1,1,1,300,1]*1e-5;[0,0,0,0,0];[0,0,0,0,0];[0,0,0,0,0]];
-rout = ringpass(storage_ring_ref,rin,nturns);
+rin = [-[0.1,5,9,0.1,13]*1e-3;[0,0,0,0,0];[1,1,1,300,1]*1e-5;[0,0,0,0,0];[0,0,0,0,0];[0,0,0,0,0]];
+rout = ringpass(storage_ring,rin,nturns);
 
 if any(isnan(rout(end,(end-5):end)))
     res = inf;

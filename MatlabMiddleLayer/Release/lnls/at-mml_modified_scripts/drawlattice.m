@@ -1,4 +1,4 @@
-function h = drawlattice(Offset, Scaling, hAxes, Ldraw, thering)
+function h = drawlattice(Offset, Scaling, varargin)
 %DRAWLATTICE - Draws the AT lattice to a figure
 %  h = drawlattice(Offset {0}, Scaling {1}, hAxes {gca}, Ldraw, thering)
 %
@@ -25,29 +25,37 @@ function h = drawlattice(Offset, Scaling, hAxes, Ldraw, thering)
 % Minimum icon width in meters (also in drawquadrupolelocal)
 MinIconWidth = .03;
 
-if nargin < 2
+if nargin < 1
     Offset = 0;
 end
 Offset = Offset(1);
-if nargin < 3
+if nargin < 2
     Scaling = 1;
 end
 Scaling = Scaling(1);
 
-if nargin < 4
-    hAxes = gca;
+for ii=1:length(varargin)
+    if iscell(varargin{ii})
+        thering = varargin{ii};
+    elseif ishandle(varargin{ii})
+        hAxes = varargin{ii};
+    elseif isnumeric(varargin{ii})
+        Ldraw = varargin{ii};
+    end
 end
 
-if nargin < 5
+if ~exist('hAxes','var')
+    hAxes = gca;
+end
+if ~exist('thering','var')
     global THERING;
     thering = THERING;
 end
 
-
 SPositions = findspos(thering, 1:length(thering)+1);
 L = SPositions(end);
 
-if nargin < 5
+if ~exist('Ldraw','var')
     Ldraw = L;
 end
 

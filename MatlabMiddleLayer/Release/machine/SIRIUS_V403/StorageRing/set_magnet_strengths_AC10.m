@@ -181,22 +181,22 @@ elseif strcmpi(mode_version,'AC10_5')
 elseif strcmpi(mode_version,'test_inject_4k')
 
 %tentativa de aumentar tune com opa: 1ra
-    %%% QUADRUPOLOS
-    %  =========== (quads obtidos com o opa)
-    qaf_strength       = 2.536961 ;
-    qad_strength       = -2.729805;
-    qbd2_strength      = -3.960473;
-    qbf_strength       = 3.902663 ;
-    qbd1_strength      = -2.967653;
-    qf1_strength       = 2.357389 ;
-    qf2_strength       = 3.363276 ;
-    qf3_strength       = 3.079729 ;
-    qf4_strength       = 2.713552 ;
-    
-    
-    %%% SEXTUPOLOS
-    %  ========== (obtidos com o script do matlab)
-    % boa solucao para injecao 4k
+%     %%% QUADRUPOLOS
+%     %  =========== (quads obtidos com o opa)
+%     qaf_strength       = 2.536961 ;
+%     qad_strength       = -2.729805;
+%     qbd2_strength      = -3.960473;
+%     qbf_strength       = 3.902663 ;
+%     qbd1_strength      = -2.967653;
+%     qf1_strength       = 2.357389 ;
+%     qf2_strength       = 3.363276 ;
+%     qf3_strength       = 3.079729 ;
+%     qf4_strength       = 2.713552 ;
+%     
+%     
+%     %%% SEXTUPOLOS
+%     %  ========== (obtidos com o script do matlab)
+%     % boa solucao para injecao 4k
 %     sa1_strength       =  -58.9405;
 %     sa2_strength       =   25.1813;
 %     sb1_strength       = -107.7365;
@@ -206,16 +206,8 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %     sd2_strength       = -80.1791;
 %     sd3_strength       = -143.6776;
 %     sf2_strength       =  162.9090;
-    sa1_strength       =   -59.8419;
-    sa2_strength       =    24.5600;
-    sb1_strength       =  -102.9575;
-    sb2_strength       =    58.0159;
-    sd2_strength       =   -83.6376;
-    sd3_strength       =  -147.0914;
-    sf2_strength       =   159.0225;
-    sd1_strength       =  -151.6356;
-    sf1_strength       =   189.5210;
-    
+
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %tentativa de aumentar tune com opa mantendo os mesmos sexts: 2da
@@ -330,6 +322,32 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %     sf1_strength       =   188.1567;    
     
 
+
+%tentativa de aumentar tune com opa: 6ta
+    %%% QUADRUPOLOS
+    %  =========== (quads obtidos com o opa)
+    qaf_strength       = 2.536961 ;
+    qad_strength       = -2.729805;
+    qbd2_strength      = -3.960473;
+    qbf_strength       = 3.902663 ;
+    qbd1_strength      = -2.967653;
+    qf1_strength       = 2.357389 ;
+    qf2_strength       = 3.363276 ;
+    qf3_strength       = 3.079729 ;
+    qf4_strength       = 2.713552 ;
+    
+    
+    %%% SEXTUPOLOS
+    %  ========== (obtidos com o script do matlab)
+    sa1_strength       =   -54.7902;
+    sa2_strength       =    25.8499;
+    sb1_strength       =  -103.2040;
+    sb2_strength       =    68.7064;
+    sd2_strength       =   -83.5312;
+    sd3_strength       =  -152.3963;
+    sf2_strength       =   169.0844;
+    sd1_strength       =  -147.0970;
+    sf1_strength       =   184.4442;
 
 elseif strcmpi(mode_version,'test_inject_pmm')
     
@@ -559,8 +577,6 @@ end
 %     sd1_strength       =  -133.2298;
 %     sf1_strength       =   174.5513;
 
-<<<<<<< HEAD
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % obtido pelo script do matlab tendo por base o ac10_3 : 4ta
@@ -590,8 +606,6 @@ end
 %     sd1_strength       =  -125.6284;
 %     sf1_strength       =   170.1560;
 
-=======
->>>>>>> 3f5247fabe9f5d0152206c8b22c1bd6f0038a0c1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %lncc_v403_ac10_5-first_run-093-000192

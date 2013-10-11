@@ -7,11 +7,11 @@ storage_ring = machines.machine;
 param1.energy_deviation  = 0;
 param1.radius_resolution = 3e-4;
 param1.nr_turns          = 1000;
-param1.points_angle      = repmat([1/2+1e-3, 4/5, 1-1e-3]*pi, length(param1.energy_deviation), 1);
-param1.points_radius     = repmat([4, 6,  8]*1e-3,     length(param1.energy_deviation), 1);
+param1.points_angle      = repmat([1/2+1e-3, 5/8, 6/8, 7/8, 1-1e-3]*pi, length(param1.energy_deviation), 1);
+param1.points_radius     = repmat([3, 4, 5, 6, 8]*1e-3,     length(param1.energy_deviation), 1);
 param1.quiet_mode        = true;
 
-param2.energy_deviation  = [-4, -2, 0, 2, 4]*1e-2;
+param2.energy_deviation  = [-4, -3, -2, -1, 0, 1, 2, 3, 4]*1e-2;
 param2.radius_resolution = 3e-4;
 param2.nr_turns          = 1000;
 param2.points_angle      = repmat((1-1e-3)*pi, length(param2.energy_deviation), 1);
