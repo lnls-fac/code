@@ -3,7 +3,7 @@ function lnls1(varargin)
 %
 % Hist�rico
 % 
-% 2011-04-28: nova vers�o. script transformado em fun��o.
+% 2011-04-28: nova versao. script transformado em fun��o.
 % 2010-09-16: coment�rios iniciais no c�digo
 
 default_SERVER_TYPE = '';
