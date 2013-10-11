@@ -267,58 +267,58 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Partindo do AC10_4, tentei minimizar os tuneshifts: 4ta
-%     %%% QUADRUPOLOS
-%     %  =========== (os mesmos do AC10_4)
-%     
-%     qaf_strength       =  2.53733156985179;
-%     qad_strength       = -2.729928269122092;
-%     qbd2_strength      = -3.960473342625189;
-%     qbf_strength       =  3.902662679038675;
-%     qbd1_strength      = -2.9676529175558;
-%     qf1_strength       =  2.368979188452946;
-%     qf2_strength       =  3.354162681362089;
-%     qf3_strength       =  3.080099756299886;
-%     qf4_strength       =  2.708484971587339;
-% 
-%     %%% SEXTUPOLOS
-%     %  ==========
-%     sa1_strength       =   -64.5501;
-%     sa2_strength       =    28.5005;
-%     sb1_strength       =  -113.8315;
-%     sb2_strength       =    64.6216;
-%     sd2_strength       =   -76.9782;
-%     sd3_strength       =  -142.3458;
-%     sf2_strength       =   154.1521;
-%     sd1_strength       =  -161.1970;
-%     sf1_strength       =   190.8217;
+    %%% QUADRUPOLOS
+    %  =========== (os mesmos do AC10_4)
+    
+    qaf_strength       =  2.53733156985179;
+    qad_strength       = -2.729928269122092;
+    qbd2_strength      = -3.960473342625189;
+    qbf_strength       =  3.902662679038675;
+    qbd1_strength      = -2.9676529175558;
+    qf1_strength       =  2.368979188452946;
+    qf2_strength       =  3.354162681362089;
+    qf3_strength       =  3.080099756299886;
+    qf4_strength       =  2.708484971587339;
+
+    %%% SEXTUPOLOS
+    %  ==========
+    sa1_strength       =   -64.5501;
+    sa2_strength       =    28.5005;
+    sb1_strength       =  -113.8315;
+    sb2_strength       =    64.6216;
+    sd2_strength       =   -76.9782;
+    sd3_strength       =  -142.3458;
+    sf2_strength       =   154.1521;
+    sd1_strength       =  -161.1970;
+    sf1_strength       =   190.8217;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 
 %Partindo do AC10_3, tentei minimizar os tuneshifts: 5ta
-    %%% QUADRUPOLOS
-    %  =========== (os mesmos do AC10_3)
-    qaf_strength   =  2.540801;
-    qad_strength   = -2.744679;
-    qbd2_strength  = -3.966318;
-    qbf_strength   =  3.908091;
-    qbd1_strength  = -2.974256;
-    qf1_strength   =  2.371977;
-    qf2_strength   =  3.353143;
-    qf3_strength   =  3.062984;
-    qf4_strength   =  2.729574;
-    
-    
-    %%% SEXTUPOLOS
-    %  ==========
-    sa1_strength       =   -55.6474;
-    sa2_strength       =    26.8063;
-    sb1_strength       =  -100.7684;
-    sb2_strength       =    62.4106;
-    sd2_strength       =   -77.6551;
-    sd3_strength       =  -143.7601;
-    sf2_strength       =   159.3081;
-    sd1_strength       =  -158.8997;
-    sf1_strength       =   188.1567;    
+%     %%% QUADRUPOLOS
+%     %  =========== (os mesmos do AC10_3)
+%     qaf_strength   =  2.540801;
+%     qad_strength   = -2.744679;
+%     qbd2_strength  = -3.966318;
+%     qbf_strength   =  3.908091;
+%     qbd1_strength  = -2.974256;
+%     qf1_strength   =  2.371977;
+%     qf2_strength   =  3.353143;
+%     qf3_strength   =  3.062984;
+%     qf4_strength   =  2.729574;
+%     
+%     
+%     %%% SEXTUPOLOS
+%     %  ==========
+%     sa1_strength       =   -55.6474;
+%     sa2_strength       =    26.8063;
+%     sb1_strength       =  -100.7684;
+%     sb2_strength       =    62.4106;
+%     sd2_strength       =   -77.6551;
+%     sd3_strength       =  -143.7601;
+%     sf2_strength       =   159.3081;
+%     sd1_strength       =  -158.8997;
+%     sf1_strength       =   188.1567;    
     
 
 
@@ -441,7 +441,7 @@ elseif strcmpi(mode_version,'test_inject_pmm')
 
 % obtido pelo script do matlab tendo por base o ac10_3 : 4ta
 %         %%% QUADRUPOLOS
-%     %  =========== 
+%     %  ===========(os mesmos do ac10_3)
 %     qaf_strength   =  2.540801;
 %     qad_strength   = -2.744679;
 %     qf1_strength   =  2.371977;
