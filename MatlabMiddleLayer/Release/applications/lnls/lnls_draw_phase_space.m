@@ -49,6 +49,10 @@ else
     tunex_x(ind) = lnls_calcnaff(coordx_x(ind,:), coordxl_x(ind,:));
     tuney_x(ind) = lnls_calcnaff(coordy_x(ind,:), coordyl_x(ind,:));
 end
+fprintf('Na varredura x as coordenadas iniciais:  ');
+fprintf('%6.1f',x_amps(~ind,1)*1e3);
+fprintf(' [mm] nao sobreviveram\n');
+
 
 %%
 % a mesma coisa que foi feita para a horizontal eh repetida para vertical
@@ -69,6 +73,10 @@ else
     tunex_y(ind) = lnls_calcnaff(coordx_y(ind,:), coordxl_y(ind,:));
     tuney_y(ind) = lnls_calcnaff(coordy_y(ind,:), coordyl_y(ind,:));
 end
+
+fprintf('Na varredura y as coordenadas iniciais:  ');
+fprintf('%6.1f',y_amps(~ind,1)*1e3);
+fprintf(' [mm] nao sobreviveram\n');
 
 %%
 % e agora para as amplitudes de energia
@@ -92,7 +100,9 @@ else
     tuney_en(ind) = lnls_calcnaff(coordy_en(ind,:), coordyl_en(ind,:));
 end
 
-
+fprintf('Na varredura em energia as coordenadas iniciais:  ');
+fprintf('%6.1f',en_amps(~ind)*1e2);
+fprintf(' %% nao sobreviveram\n');
 %%
 % Agora, temos que determinar a parte inteira da sintonia
 if mod(tunes(1),1)>0.5

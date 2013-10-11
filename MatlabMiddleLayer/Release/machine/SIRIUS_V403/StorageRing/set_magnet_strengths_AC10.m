@@ -311,16 +311,24 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %     
 %     %%% SEXTUPOLOS
 %     %  ==========
-%     sa1_strength       =   -55.6474;
-%     sa2_strength       =    26.8063;
-%     sb1_strength       =  -100.7684;
-%     sb2_strength       =    62.4106;
-%     sd2_strength       =   -77.6551;
-%     sd3_strength       =  -143.7601;
-%     sf2_strength       =   159.3081;
-%     sd1_strength       =  -158.8997;
-%     sf1_strength       =   188.1567;    
-    
+% %     sa1_strength       =   -55.6474;
+% %     sa2_strength       =    26.8063;
+% %     sb1_strength       =  -100.7684;
+% %     sb2_strength       =    62.4106;
+% %     sd2_strength       =   -77.6551;
+% %     sd3_strength       =  -143.7601;
+% %     sf2_strength       =   159.3081;
+% %     sd1_strength       =  -158.8997;
+% %     sf1_strength       =   188.1567;    
+%     sa1_strength       =   -60.9192;
+%     sa2_strength       =    26.3203;
+%     sb1_strength       =  -105.5614;
+%     sb2_strength       =    62.0680;
+%     sd2_strength       =   -69.5216;
+%     sd3_strength       =  -133.7175;
+%     sf2_strength       =   150.2310;
+%     sd1_strength       =  -173.2451;
+%     sf1_strength       =   191.0667;
 
 
 %tentativa de aumentar tune com opa: 6ta
