@@ -1,6 +1,6 @@
-function h = drawlattice(thering, Offset, Scaling, hAxes, Ldraw)
+function h = drawlattice(Offset, Scaling, hAxes, Ldraw, thering)
 %DRAWLATTICE - Draws the AT lattice to a figure
-%  h = drawlattice(thering, Offset {0}, Scaling {1}, hAxes {gca}, Ldraw)
+%  h = drawlattice(Offset {0}, Scaling {1}, hAxes {gca}, Ldraw, thering)
 %
 %  h - handle to each element drawn
 %
@@ -38,6 +38,10 @@ if nargin < 4
     hAxes = gca;
 end
 
+if nargin < 5
+    global THERING;
+    thering = THERING;
+end
 
 
 SPositions = findspos(thering, 1:length(thering)+1);
