@@ -33,7 +33,7 @@ cdir = pwd;
 try
     cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
 catch
-    cd('/opt/MatlabMiddleLayer/Release/mml/');
+    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
 end
 
 if ~exist('versao', 'var')
@@ -49,10 +49,10 @@ if strcmpi(computer, 'PCWIN')
     addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\machine\LTLB_V100'));
     addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\machine\LTBA_V100'));
 else
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/machine/LTLB_V100'));
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/machine/LTBA_V100'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/machine/LTLB_V100'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/machine/LTBA_V100'));
 end
 
 return;

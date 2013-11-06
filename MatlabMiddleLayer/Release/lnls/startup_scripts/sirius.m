@@ -35,7 +35,7 @@ cdir = pwd;
 if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
     cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
 else
-    cd('/opt/MatlabMiddleLayer/Release/mml/');
+    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
 end
 
 setpathsirius(['SIRIUS' default_version], 'StorageRing', 'sirius_link');
@@ -47,9 +47,9 @@ if any(strcmpi(computer, {'PCWIN','PCWIN64'}))
     addpath(fullfile('C:\Arq\MatlabMiddleLayer\Release', 'lnls', 'fac_scripts', 'tracy3'), '-begin');
     addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\machine\LTBA_V100'));
 else
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
-    addpath(genpath('/opt/MatlabMiddleLayer/Release/machine/LTBA_V100'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
+    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/machine/LTBA_V100'));
 end
 
 return;

@@ -211,30 +211,30 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %tentativa de aumentar tune com opa mantendo os mesmos sexts: 2da
-%     %%% QUADRUPOLOS
-%     %  =========== (quads obtidos com o opa)
-%     qaf_strength       = 2.536961 ;
-%     qad_strength       = -2.729805;
-%     qbd2_strength      = -3.960473;
-%     qbf_strength       = 3.902663 ;
-%     qbd1_strength      = -2.967653;
-%     qf1_strength       = 2.357389 ;
-%     qf2_strength       = 3.363276 ;
-%     qf3_strength       = 3.079729 ;
-%     qf4_strength       = 2.713552 ;
-%     
-%     
-%     %%% SEXTUPOLOS
-%     %  ========== (os mesmos do AC10_5)
-%     sa1_strength       = -115.7829759411277/2;
-%     sa2_strength       =   49.50386128829739/2;
-%     sb1_strength       = -214.5386552515188/2;
-%     sb2_strength       =  133.1252391065637/2;
-%     sd1_strength       = -302.6188062085843/2;
-%     sf1_strength       =  369.5045185071228/2;
-%     sd2_strength       = -164.3042864671946/2;
-%     sd3_strength       = -289.9270429064217/2;
-%     sf2_strength       =  333.7039740852999/2;
+    %%% QUADRUPOLOS
+    %  =========== (quads obtidos com o opa)
+    qaf_strength       = 2.536961 ;
+    qad_strength       = -2.729805;
+    qbd2_strength      = -3.960473;
+    qbf_strength       = 3.902663 ;
+    qbd1_strength      = -2.967653;
+    qf1_strength       = 2.357389 ;
+    qf2_strength       = 3.363276 ;
+    qf3_strength       = 3.079729 ;
+    qf4_strength       = 2.713552 ;
+    
+    
+    %%% SEXTUPOLOS
+    %  ========== (os mesmos do AC10_5)
+    sa1_strength       = -115.7829759411277/2;
+    sa2_strength       =   49.50386128829739/2;
+    sb1_strength       = -214.5386552515188/2;
+    sb2_strength       =  133.1252391065637/2;
+    sd1_strength       = -302.6188062085843/2;
+    sf1_strength       =  369.5045185071228/2;
+    sd2_strength       = -164.3042864671946/2;
+    sd3_strength       = -289.9270429064217/2;
+    sf2_strength       =  333.7039740852999/2;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -311,198 +311,77 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %     
 %     %%% SEXTUPOLOS
 %     %  ==========
-% %     sa1_strength       =   -55.6474;
-% %     sa2_strength       =    26.8063;
-% %     sb1_strength       =  -100.7684;
-% %     sb2_strength       =    62.4106;
-% %     sd2_strength       =   -77.6551;
-% %     sd3_strength       =  -143.7601;
-% %     sf2_strength       =   159.3081;
-% %     sd1_strength       =  -158.8997;
-% %     sf1_strength       =   188.1567;    
-%     sa1_strength       =   -60.9192;
-%     sa2_strength       =    26.3203;
-%     sb1_strength       =  -105.5614;
-%     sb2_strength       =    62.0680;
-%     sd2_strength       =   -69.5216;
-%     sd3_strength       =  -133.7175;
-%     sf2_strength       =   150.2310;
-%     sd1_strength       =  -173.2451;
-%     sf1_strength       =   191.0667;
+%     sa1_strength       =   -55.6474;
+%     sa2_strength       =    26.8063;
+%     sb1_strength       =  -100.7684;
+%     sb2_strength       =    62.4106;
+%     sd2_strength       =   -77.6551;
+%     sd3_strength       =  -143.7601;
+%     sf2_strength       =   159.3081;
+%     sd1_strength       =  -158.8997;
+%     sf1_strength       =   188.1567;    
 
 
 %tentativa de aumentar tune com opa: 6ta
-    %%% QUADRUPOLOS
-    %  =========== (quads obtidos com o opa)
-    qaf_strength       = 2.536961 ;
-    qad_strength       = -2.729805;
-    qbd2_strength      = -3.960473;
-    qbf_strength       = 3.902663 ;
-    qbd1_strength      = -2.967653;
-    qf1_strength       = 2.357389 ;
-    qf2_strength       = 3.363276 ;
-    qf3_strength       = 3.079729 ;
-    qf4_strength       = 2.713552 ;
-    
-    
-    %%% SEXTUPOLOS
-    %  ========== (obtidos com o script do matlab)
-    sa1_strength       =   -54.7902;
-    sa2_strength       =    25.8499;
-    sb1_strength       =  -103.2040;
-    sb2_strength       =    68.7064;
-    sd2_strength       =   -83.5312;
-    sd3_strength       =  -152.3963;
-    sf2_strength       =   169.0844;
-    sd1_strength       =  -147.0970;
-    sf1_strength       =   184.4442;
+%     %%% QUADRUPOLOS
+%     %  =========== (quads obtidos com o opa)
+%     qaf_strength       = 2.536961 ;
+%     qad_strength       = -2.729805;
+%     qbd2_strength      = -3.960473;
+%     qbf_strength       = 3.902663 ;
+%     qbd1_strength      = -2.967653;
+%     qf1_strength       = 2.357389 ;
+%     qf2_strength       = 3.363276 ;
+%     qf3_strength       = 3.079729 ;
+%     qf4_strength       = 2.713552 ;
+%     
+%     
+%     %%% SEXTUPOLOS
+%     %  ========== (obtidos com o script do matlab)
+%     sa1_strength       =   -54.7902;
+%     sa2_strength       =    25.8499;
+%     sb1_strength       =  -103.2040;
+%     sb2_strength       =    68.7064;
+%     sd2_strength       =   -83.5312;
+%     sd3_strength       =  -152.3963;
+%     sf2_strength       =   169.0844;
+%     sd1_strength       =  -147.0970;
+%     sf1_strength       =   184.4442;
 
 elseif strcmpi(mode_version,'test_inject_pmm')
+
     
-% obtido pelo script do matlab tendo por base o ac10_3 : 4ta
-%         %%% QUADRUPOLOS
-%     %  =========== 
-%     qaf_strength   =  2.540801;
-%     qad_strength   = -2.744679;
-%     qf1_strength   =  2.371977;
-%     qf2_strength   =  3.353143;
-%     qf3_strength   =  3.062984;
-%     qf4_strength   =  2.729574;
-%     
-%     qbd2_strength  = -3.966318;
-%     qbf_strength   =  3.908091;
-%     qbd1_strength  = -2.974256;
-%     
-%     
-%     %%% SEXTUPOLOS
-%     %  ==========
-%     sa1_strength       =   -55.5090;
-%     sa2_strength       =    21.3190;
-%     sb1_strength       =  -114.5932;
-%     sb2_strength       =    66.5853;
-%     sd2_strength       =   -91.9588;
-%     sd3_strength       =  -167.7603;
-%     sf2_strength       =   200.0567;
-%     sd1_strength       =  -125.6284;
-%     sf1_strength       =   170.1560;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% mudanca de um inteiro no tune que a liu passou
-%     %%% QUADRUPOLOS
-%     %  ===========
-%     qaf_strength       = 2.571553574932 ;
-%     qad_strength       = -2.770772605801;
-%     qbd2_strength      = -3.994995794291;
-%     qbf_strength       = 3.919817799929 ;
-%     qbd1_strength      = -2.93041519174 ;
-%     qf1_strength       = 2.293778164434 ;
-%     qf2_strength       = 3.436532550574 ;
-%     qf3_strength       = 2.898025410423 ;
-%     qf4_strength       = 2.963860108162 ;
-%     
-% 
-%     %%% SEXTUPOLOS
-%     %  ==========
-%     sa1_strength       =   -64.0425;
-%     sa2_strength       =    22.4407;
-%     sb1_strength       =  -102.4604;
-%     sb2_strength       =    65.1553;
-%     sd2_strength       =   -79.0138;
-%     sd3_strength       =  -150.3332;
-%     sf2_strength       =   171.8298;
-%     sd1_strength       =  -145.7502;
-%     sf1_strength       =   173.8931;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%lncc_v403_ac10_5-Moga_000858
-
-     %%% QUADRUPOLOS
-     %  ===========
-    qaf_strength       = 2.537658457662712 ;
-    qad_strength       = -2.737004985263078;
-    qbd2_strength      = -3.957685119288232;
-    qbf_strength       = 3.904570491969777 ;
-    qbd1_strength      = -2.97399429698993 ;
-    qf1_strength       = 2.364973307077406 ;
-    qf2_strength       = 3.355983567160624 ;
-    qf3_strength       = 3.079012939179151 ;
-    qf4_strength       = 2.707699693838884 ;
-
-
-    %%% SEXTUPOLOS
-%      ==========
-    sa1_strength       = -121.8770703095287/2;
-    sa2_strength       = 46.75922686210009 /2;
-    sb1_strength       = -229.2424942716568/2;
-    sb2_strength       = 122.1875937851297 /2;
-    sd1_strength       = -304.7041246102518/2;
-    sf1_strength       = 358.3225430665879 /2;
-    sd2_strength       = -157.3890464079509/2;
-    sd3_strength       = -291.3442333179376/2;
-    sf2_strength       = 353.0546937179435 /2;
-
-else
-    error('Mode_version not implemented');
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%Testes
-%% Tentativas falhas de otimizacao do espaco de fase para injecao
-% tuneshift com amplitude muito grande!
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %lncc_v403_ac10_5-invcox_000093   
-%     %%% QUADRUPOLOS
-%     %  ===========
-%         qaf_strength       =  2.53696119948142 ;
-%         qad_strength       = -2.729804812331968;
-%         qbd2_strength      = -3.960473342625189;
-%         qbf_strength       =  3.902662679038675;
-%         qbd1_strength      = -2.9676529175558  ;
-%         qf1_strength       =  2.367868077341835;
-%         qf2_strength       =  3.353792310991718;
-%         qf3_strength       =  3.079729385929515;
-%         qf4_strength       =  2.708114601216968;
-%     
-%     
-%     %%% SEXTUPOLOS
-%     %  ==========
-%         sa1_strength       =-113.1981086610908/2;
-%         sa2_strength       = 35.41992724561523/2;
-%         sb1_strength       =-258.5626331672489/2;
-%         sb2_strength       = 123.0625698276054/2;
-%         sd1_strength       =-286.9408026023277/2;
-%         sf1_strength       = 334.4933257290978/2;
-%         sd2_strength       =-145.9794373625645/2;
-%         sd3_strength       =-328.864644424823 /2;
-%         sf2_strength       = 396.3103030055146/2;
+    %%% QUADRUPOLOS
+    %  ===========
+        qaf_strength       =  2.53696119948142 ;
+        qad_strength       = -2.729804812331968;
+        qbd2_strength      = -3.960473342625189;
+        qbf_strength       =  3.902662679038675;
+        qbd1_strength      = -2.9676529175558  ;
+        qf1_strength       =  2.367868077341835;
+        qf2_strength       =  3.353792310991718;
+        qf3_strength       =  3.079729385929515;
+        qf4_strength       =  2.708114601216968;
+    
+    
+    %%% SEXTUPOLOS
+    %  ==========
+        sa1_strength       =-113.1981086610908/2;
+        sa2_strength       = 35.41992724561523/2;
+        sb1_strength       =-258.5626331672489/2;
+        sb2_strength       = 123.0625698276054/2;
+        sd1_strength       =-286.9408026023277/2;
+        sf1_strength       = 334.4933257290978/2;
+        sd2_strength       =-145.9794373625645/2;
+        sd3_strength       =-328.864644424823 /2;
+        sf2_strength       = 396.3103030055146/2;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % primeira tentativa real de virar a coxinha: 1ra
-
+% 
 %     %%% QUADRUPOLOS
 %     %  =========== (mesmos quads do AC10_5)
 %     qaf_strength       =  2.53696119948142;
@@ -643,6 +522,92 @@ end
 %     sf2_strength       =  397.6770239380141 /2;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% mudanca de um inteiro no tune que a liu passou
+%     %%% QUADRUPOLOS
+%     %  ===========
+%     qaf_strength       = 2.571553574932 ;
+%     qad_strength       = -2.770772605801;
+%     qbd2_strength      = -3.994995794291;
+%     qbf_strength       = 3.919817799929 ;
+%     qbd1_strength      = -2.93041519174 ;
+%     qf1_strength       = 2.293778164434 ;
+%     qf2_strength       = 3.436532550574 ;
+%     qf3_strength       = 2.898025410423 ;
+%     qf4_strength       = 2.963860108162 ;
+%     
+% 
+%     %%% SEXTUPOLOS
+%     %  ==========
+%     sa1_strength       =   -64.0425;
+%     sa2_strength       =    22.4407;
+%     sb1_strength       =  -102.4604;
+%     sb2_strength       =    65.1553;
+%     sd2_strength       =   -79.0138;
+%     sd3_strength       =  -150.3332;
+%     sf2_strength       =   171.8298;
+%     sd1_strength       =  -145.7502;
+%     sf1_strength       =   173.8931;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%lncc_v403_ac10_5-Moga_000858
+
+%      %%% QUADRUPOLOS
+%      %  ===========
+%     qaf_strength       = 2.537658457662712 ;
+%     qad_strength       = -2.737004985263078;
+%     qbd2_strength      = -3.957685119288232;
+%     qbf_strength       = 3.904570491969777 ;
+%     qbd1_strength      = -2.97399429698993 ;
+%     qf1_strength       = 2.364973307077406 ;
+%     qf2_strength       = 3.355983567160624 ;
+%     qf3_strength       = 3.079012939179151 ;
+%     qf4_strength       = 2.707699693838884 ;
+% 
+% 
+%     %%% SEXTUPOLOS
+% %      ==========
+%     sa1_strength       = -121.8770703095287/2;
+%     sa2_strength       = 46.75922686210009 /2;
+%     sb1_strength       = -229.2424942716568/2;
+%     sb2_strength       = 122.1875937851297 /2;
+%     sd1_strength       = -304.7041246102518/2;
+%     sf1_strength       = 358.3225430665879 /2;
+%     sd2_strength       = -157.3890464079509/2;
+%     sd3_strength       = -291.3442333179376/2;
+%     sf2_strength       = 353.0546937179435 /2;
+
+else
+    error('Mode_version not implemented');
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%Testes
+%% Tentativas falhas de otimizacao do espaco de fase para injecao
+% tuneshift com amplitude muito grande!
+
+
 
 
 

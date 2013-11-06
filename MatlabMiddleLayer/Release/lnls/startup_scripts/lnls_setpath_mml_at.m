@@ -3,7 +3,7 @@ function lnls_setpath_mml_at
 if strcmpi(computer, 'PCWIN') || strcmpi(computer, 'PCWIN64')
     root_folder = ['C:' filesep 'Arq'];
 else
-    root_folder = ['/opt'];
+    root_folder = ['/home/fac_files/code'];
 end
 
 paths = { ...
