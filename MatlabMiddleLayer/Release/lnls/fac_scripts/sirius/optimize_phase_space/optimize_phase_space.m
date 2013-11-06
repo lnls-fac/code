@@ -1,7 +1,7 @@
 clear all;
 RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
 % first, we load the lattice
-storage_ring_ref = sirius_lattice('test_inject_4k');
+storage_ring_ref = sirius_lattice('test_inject_pmm');
 lattice_errors([pwd '/cod_matlab']);
 machines = load([pwd '/cod_matlab/CONFIG_machines_cod_corrected.mat']);
 storage_ring = machines.machine{3};
@@ -33,13 +33,14 @@ opt.ind = cell2mat(opt.ind); % transform to vector;
 %    133.1252391065637/2, -164.3042864671946/2, -289.9270429064217/2,...
 %    333.7039740852999/2];
 
+%4k
+% vec =[-60.9192  26.3203 -105.5614  62.0680 -69.5216 -133.7175  150.2310];
 
-vec =[-60.9192  26.3203 -105.5614  62.0680 -69.5216 -133.7175  150.2310];
-
-    
-    
+vec = [-52.632126  23.963083 -82.087662  67.612541  -95.818807 -163.258854 179.730185];
+ 
+ 
 % what will be our error level:
-err_level = 10/100;
+err_level = 5/100;
 
 %% now we begin the optimization:
 

@@ -1,5 +1,5 @@
 function lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns, resons)
-% lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns)
+% lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns, resons)
 %
 % Plota os espacos de fase horizontal e vertical e monta o diagrama de
 % tuneshifts com as amplitudes horizontal e vertical e com a energia:
@@ -11,7 +11,8 @@ function lnls_draw_phase_space(the_ring,x_amps,y_amps,en_amps,nturns, resons)
 %          realizado [m];
 % en_amps= vetor com os desvios de energia para o calculo dos tuneshifts 
 %          com o momentum;
-% nturns = numero de voltas usado para o calculo.
+% nturns = numero de voltas usado para o calculo;
+% resons = ordens de ressonan para fazer o grafico (ex. 1:3).
 %
 % Como padrao, a funcao usa o algoritmo NAFF para os calculos de sintonia.
 % Por isso, o numero real de voltas usado sera tal que satisfaca a seguinte
@@ -50,7 +51,7 @@ else
     tuney_x(ind) = lnls_calcnaff(coordy_x(ind,:), coordyl_x(ind,:));
 end
 fprintf('Na varredura x as coordenadas iniciais:  ');
-fprintf('%6.1f',x_amps(~ind,1)*1e3);
+fprintf('%6.1f',x_amps(~ind)*1e3);
 fprintf(' [mm] nao sobreviveram\n');
 
 
@@ -75,7 +76,7 @@ else
 end
 
 fprintf('Na varredura y as coordenadas iniciais:  ');
-fprintf('%6.1f',y_amps(~ind,1)*1e3);
+fprintf('%6.1f',y_amps(~ind)*1e3);
 fprintf(' [mm] nao sobreviveram\n');
 
 %%

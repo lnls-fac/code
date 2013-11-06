@@ -9,32 +9,32 @@ void set2zero(double *r6)
 {	int i;
 	
     for(i=1;i<6;i++)
-		r6[i] = 0;
+        r6[i] = 0;
 }
 
 void markaslost(double *r6)
 {	int i;
     
     r6[0] = mxGetNaN();
-	
+
     for(i=1;i<6;i++)
-		r6[i] =0;
+        r6[i] =0;
 }
 
 void AperturePass(double *r_in, double *limitsptr, int num_particles)
 {   /*  Checks X and Y of each input 6-vector and marks the corresponding element in 
     lossflag array with 0 if X,Y are exceed the limits given by limitsptr array
-	limitsptr has 4 elements: (MinX, MaxX, MinY, MaxY) */
+    limitsptr has 4 elements: (MinX, MaxX, MinY, MaxY) */
 	 
-	int i, c, c6;
-	for(c = 0;c<num_particles;c++)
-	{   c6 = c*6;
+    int i, c, c6;
+    for(c = 0;c<num_particles;c++)
+    {   c6 = c*6;
         if(!mxIsNaN(r_in[c6])) /*  check if this particle is already marked as lost			*/
         {   /* check limits for X position */
-			if(r_in[c6+0]<limitsptr[0] || r_in[c6+0]>limitsptr[1] || r_in[c6+2]<limitsptr[2] || r_in[c6+2]>limitsptr[3])
-			    markaslost(r_in+c6);
-			else
-			    for(i=0;i<6;i++)
+            if(r_in[c6+0]<limitsptr[0] || r_in[c6+0]>limitsptr[1] || r_in[c6+2]<limitsptr[2] || r_in[c6+2]>limitsptr[3])
+                markaslost(r_in+c6);
+            else
+                for(i=0;i<6;i++)
                 {    if(!mxIsFinite(r_in[c6+i]))
                         {   markaslost(r_in+c6);
                             break;
