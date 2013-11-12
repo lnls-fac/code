@@ -14,7 +14,7 @@ for i=1:length(varargin)
 end
 
 harmonic_number = 828;
-RFC = rfcavity('CAV', 0, 1.0e+6, 499654000, harmonic_number, 'CavityPass');
+RFC = rfcavity('CAV', 0, 0.95e+6, 499654000, harmonic_number, 'CavityPass');
 
 bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
@@ -30,10 +30,13 @@ B_edge   = (B_angle/2)*(pi/180)*1;
 %carrega as forcas dos magnetos;
 set_magnets_strength_booster;
 
+
+b1 = rbend_sirius('B', B_length, B_angle*(pi/180), B_edge, B_edge, ...
+    B_gap, B_fint1, B_fint2, [0 0 0 0], [0, B_strength, B_sext, 0], bend_pass_method);
+pb = marker('PB', 'IdentityPass');
+b = [pb, b1, pb];
+
 qd   = quadrupole('QD', 0.20, qd_strength, quad_pass_method);
-% hqd   = quadrupole('QD', 0.10, qd_strength, quad_pass_method);
-% mqd   = marker('MQD', 'IdentityPass');
-% qd    = [hqd mqd hqd];
 
 %coef do mapa de campo.
 polB = [[0 2.35824E-01], 1*[0 5.80904E+00 0 -1.10084E+05 0 +8.17767E+08 0 -3.13863E+12 ...
@@ -45,26 +48,13 @@ qf   = quadrupole_sirius('QF', 0.10, polB*0, polB, quad_pass_method);
 mqf   = marker('MQF', 'IdentityPass');
 
 sf = sextupole('SF', 0.20, sf_strength, sext_pass_method);
-% hsf = sextupole('SF', 0.10, sf_strength, sext_pass_method);
-% msf = marker('MSF', 'IdentityPass');
-% sf  = [hsf msf hsf];
 
 sd = sextupole('SD', 0.20, sd_strength, sext_pass_method);
-% hsd = sextupole('SD', 0.10, sd_strength, sext_pass_method);
-% msd = marker('MSD', 'IdentityPass');
-% sd  = [hsd msd hsd];
-
 
 inicio   = marker('INICIO', 'IdentityPass');
 fim      = marker('FIM',    'IdentityPass');
 inj      = marker('INJ', 'IdentityPass');
 mon      = marker('BPM', 'IdentityPass');
-
-           
-b1 = rbend_sirius('B', B_length, B_angle*(pi/180), B_edge, B_edge, ...
-    B_gap, B_fint1, B_fint2, [0 0 0 0], [0, B_strength, B_sext, 0], bend_pass_method);
-pb = marker('PB', 'IdentityPass');
-b = [pb, b1, pb];
 
 
 ch = corrector('HCM', 0, [0 0], 'CorrectorPass');
@@ -79,7 +69,7 @@ lm25     = drift('LM25', 1.896000, 'DriftPass');
 lm30     = drift('LM30', 1.846000, 'DriftPass');
 lm40     = drift('LM40', 1.746000, 'DriftPass');
 lm45     = drift('LM45', 1.696000, 'DriftPass');
-lm75     = drift('LM75', 1.396000, 'DriftPass');
+lm70     = drift('LM70', 1.446000, 'DriftPass');
 lm114    = drift('LM100',1.045419, 'DriftPass');
 
 
@@ -114,7 +104,7 @@ lsd     = [lm45, sd, l25];
 lsf     = [lm40, sf, l20];
 lch     = [lm25, ch, l25];
 lcv     = [lm30, cv, l30];
-lsdcv   = [lm75, cv, l30, sd, l25];
+lsdcv   = [lm70, cv, l25, sd, l25];
 fodo1   = [mqf, qf, lfree, lfree, b, lfree, mon, lsf, qf];
 fodo2   = [mqf, qf, lfree, lqd, b, fliplr(lcv), mon, lch, qf];
 fodo1sd = [mqf, qf, lfree, lfree, b, fliplr(lsd), mon, lsf, qf];
