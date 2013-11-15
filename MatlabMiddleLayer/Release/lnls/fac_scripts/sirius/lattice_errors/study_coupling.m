@@ -1,5 +1,6 @@
 function study_coupling
 
+
 global THERING;
 
 clc;
