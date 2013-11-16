@@ -37,7 +37,7 @@ catch
 end
 
 if ~exist('versao', 'var')
-    versao = 'V701';
+    versao = 'V800';
 end
 setpathlnls(['BOOSTER_' versao],'StorageRing', 'sirius_link');
 cd(cdir);
