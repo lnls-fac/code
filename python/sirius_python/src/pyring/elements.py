@@ -29,33 +29,33 @@ class marker(object):
          **kwargs
          ):
         
-        self.fam_name    = fam_name
-        self.length      = length
-        self.nr_steps    = nr_steps
-        self.pass_method = pass_method
+        if fam_name    is not None: self.fam_name    = fam_name
+        if length      is not None: self.length      = length
+        if nr_steps    is not None: self.nr_steps    = nr_steps
+        if pass_method is not None: self.pass_method = pass_method
         
-        self.angle       = angle
-        self.gap         = gap
-        self.polynom_a   = polynom_a
-        self.polynom_b   = polynom_b
+        if angle       is not None: self.angle       = angle
+        if gap         is not None: self.gap         = gap
+        if polynom_a   is not None: self.polynom_a   = polynom_a
+        if polynom_b   is not None: self.polynom_b   = polynom_b
         
-        self.k           = k
-        self.kl          = kl
-        self.sl          = sl
-        self.kick_angle  = kick_angle
-        self.voltage     = voltage
-        self.frequency   = frequency
-        self.energy      = energy
+        if k           is not None: self.k           = k
+        if kl          is not None: self.kl          = kl
+        if sl          is not None: self.sl          = sl
+        if ikck_angle  is not None: self.kick_angle  = kick_angle
+        if voltage     is not None: self.voltage     = voltage
+        if frequency   is not None: self.frequency   = frequency
+        if energy      is not None: self.energy      = energy
         
-        self.t_in        = t_in
-        self.r_in        = r_in
-        self.angle_in    = angle_in
-        self.fint_in     = fint_in
+        if t_in        is not None: self.t_in        = t_in
+        if r_in        is not None: self.r_in        = r_in
+        if angle_in    is not None: self.angle_in    = angle_in
+        if fint_in     is not None: self.fint_in     = fint_in
         
-        self.t_out       = t_out
-        self.r_out       = r_out
-        self.angle_out   = angle_out 
-        self.fint_out    = fint_out
+        if t_out       is not None: self.t_out       = t_out
+        if r_out       is not None: self.r_out       = r_out
+        if angle_out   is not None: self.angle_out   = angle_out 
+        if fint_out    is not None: self.fint_out    = fint_out
         
     def __str__(self):
         r  = ''
