@@ -10,9 +10,9 @@ clc; close('all'); fclose('all'); drawnow;
 %parms = load_config('BOOSTER_SX_MODELO3');
 %parms = load_config('BOOSTER_QF_MODELO4');
 %parms = load_config('BOOSTER_QF_ERRORS');
-parms = load_config('BOOSTER_QF_ERRORS_SKEW');
+%parms = load_config('BOOSTER_QF_ERRORS_SKEW');
 
-%parms = load_config('SIRIUS_B2_MODELO7');
+parms = load_config('SIRIUS_B2_MODELO7');
 %parms = load_config('SIRIUS_CM_H');
 %parms = load_config('SIRIUS_CM_V');
 %parms = load_config('SIRIUS_QF_ERRORS');
