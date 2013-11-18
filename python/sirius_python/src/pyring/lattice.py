@@ -1,4 +1,5 @@
 import collections
+import passmethods
 
 
 def findspos(lattice, indices):
@@ -44,9 +45,9 @@ def finddict(lattice, attribute_name):
 def setcavity(lattice, state):
     state = state.upper()
     if state == 'ON':
-        pass_method = 'cavity_pass'
+        pass_method = passmethods.cavity_pass
     elif state == 'OFF':
-        pass_method = 'identity_pass'
+        pass_method = passmethods.identity_pass
     else:
         raise Exception('cavity state not defined!')
     indices = findcells(lattice, 'frequency')

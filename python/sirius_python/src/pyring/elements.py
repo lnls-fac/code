@@ -1,13 +1,13 @@
 import passmethods
 
-PassMethods = passmethods.PassMethods
+
 
 class marker(object):
     def __init__(self,     
          fam_name, 
          length      = 0,
          nr_steps    = 1,
-         pass_method = PassMethods.pm_identity_pass,
+         pass_method = passmethods.identity_pass,
          angle       = None,
          gap         = None,
          polynom_a   = None,
@@ -36,28 +36,28 @@ class marker(object):
         if nr_steps    is not None: self.nr_steps    = nr_steps
         if pass_method is not None: self.pass_method = pass_method
         
-        if angle      is not None: self.angle       = angle
-        if gap        is not None: self.gap         = gap
-        if polynom_a  is not None: self.polynom_a   = polynom_a
-        if polynom_b  is not None: self.polynom_b   = polynom_b
+        if angle       is not None: self.angle       = angle
+        if gap         is not None: self.gap         = gap
+        if polynom_a   is not None: self.polynom_a   = polynom_a
+        if polynom_b   is not None: self.polynom_b   = polynom_b
         
-        if k          is not None: self.k           = k
-        if kl         is not None: self.kl          = kl
-        if sl         is not None: self.sl          = sl
-        if kick_angle is not None: self.kick_angle  = kick_angle
-        if voltage    is not None: self.voltage     = voltage
-        if frequency  is not None: self.frequency   = frequency
-        if energy     is not None: self.energy      = energy
+        if k           is not None: self.k           = k
+        if kl          is not None: self.kl          = kl
+        if sl          is not None: self.sl          = sl
+        if kick_angle  is not None: self.kick_angle  = kick_angle
+        if voltage     is not None: self.voltage     = voltage
+        if frequency   is not None: self.frequency   = frequency
+        if energy      is not None: self.energy      = energy
         
-        if t_in       is not None: self.t_in        = t_in
-        if r_in       is not None: self.r_in        = r_in
-        if angle_in   is not None: self.angle_in    = angle_in
-        if fint_in    is not None: self.fint_in     = fint_in
+        if t_in        is not None: self.t_in        = t_in
+        if r_in        is not None: self.r_in        = r_in
+        if angle_in    is not None: self.angle_in    = angle_in
+        if fint_in     is not None: self.fint_in     = fint_in
         
-        if t_out      is not None: self.t_out       = t_out
-        if r_out      is not None: self.r_out       = r_out
-        if angle_out  is not None: self.angle_out   = angle_out 
-        if fint_out   is not None: self.fint_out    = fint_out
+        if t_out       is not None: self.t_out       = t_out
+        if r_out       is not None: self.r_out       = r_out
+        if angle_out   is not None: self.angle_out   = angle_out 
+        if fint_out    is not None: self.fint_out    = fint_out
         
     def __str__(self):
         r  = ''
@@ -65,7 +65,9 @@ class marker(object):
         except: pass
         try: r += '    Length: ' + str(self.length) + '\n'
         except: pass
-        try: r += 'PassMethod: ' + str(self.pass_method) + '\n'
+        try:
+            pm = passmethods.pm_dict[self.pass_method] 
+            r += 'PassMethod: ' + str(pm[0]) + '\n'
         except: pass
         try: r += '     Angle: ' + str(self.angle) + '\n'
         except: pass
@@ -109,51 +111,56 @@ class marker(object):
     
     
 class drift(marker):
-    def __init__(self, pass_method = PassMethods.pm_drift_pass, **kwargs):
+    def __init__(self, pass_method = passmethods.drift_pass, **kwargs):
         marker.__init__(self, pass_method = pass_method, **kwargs)
 
 class corrector(marker):
-    def __init__(self, pass_method = PassMethods.pm_corrector_pass, kick_angle  = None, **kwargs):
+    def __init__(self, pass_method = passmethods.corrector_pass, kick_angle  = None, **kwargs):
         if kick_angle == None: kick_angle = [0,0]
         marker.__init__(self, pass_method = pass_method, kick_angle = kick_angle, **kwargs)
         
 class rfcavity(marker):
-    def __init__(self, voltage, frequency, energy, pass_method = PassMethods.pm_cavity_pass, **kwargs):
+    def __init__(self, voltage, frequency, energy, pass_method = passmethods.cavity_pass, **kwargs):
         marker.__init__(self, pass_method = pass_method, voltage = voltage, frequency = frequency, energy = energy, **kwargs)
 
 class quadrupole(marker):
-    def __init__(self, pass_method = PassMethods.pm_str_mpole_symplectic4_pass, nr_steps = 10, polynom_a = None, polynom_b = None, **kwargs): 
+    def __init__(self, pass_method = passmethods.str_mpole_symplectic4_pass, nr_steps = 10, polynom_a = None, polynom_b = None, **kwargs): 
         if polynom_a == None: polynom_a = [0,0]
         if polynom_b == None: polynom_b = [0,0] 
         if 'k' in kwargs: 
-            if ('kl' in kwargs) or (pass_method == PassMethods.pm_thinquad_pass):
+            if ('kl' in kwargs) or (pass_method == passmethods.thinquad_pass):
                 raise Exception('Inconsistent marker parameters!')
             polynom_b[1] = kwargs['k']
+            del kwargs['k']
         if 'kl' in kwargs:
-            if ('k' in kwargs) or (pass_method != PassMethods.pm_thinquad_pass):
+            if ('k' in kwargs) or (pass_method != passmethods.thinquad_pass):
                 raise Exception('Inconsistent marker parameters!')
         marker.__init__(self, pass_method = pass_method, nr_steps = nr_steps, polynom_a = polynom_a, polynom_b = polynom_b, **kwargs)
 
 class sextupole(marker):
-    def __init__(self, pass_method = 'str_mpole_symplectic4_pass', nr_steps = 5, polynom_a = None, polynom_b = None, **kwargs): 
+    def __init__(self, pass_method = passmethods.str_mpole_symplectic4_pass, nr_steps = 5, polynom_a = None, polynom_b = None, **kwargs): 
         if polynom_a == None: polynom_a = [0,0,0]
         if polynom_b == None: polynom_b = [0,0,0] 
         if 's' in kwargs: 
             if ('sl' in kwargs) or (pass_method == 'thinsext_pass'):
                 raise Exception('Inconsistent marker parameters!')
-            pass_method  = 'str_mpole_symplectic4_pass'
             polynom_b[2] = kwargs['s']
+            del kwargs['s']
         if 'sl' in kwargs:
             if ('s' in kwargs) or (pass_method != 'thinsext_pass'):
                 raise Exception('Inconsistent marker parameters!')
         marker.__init__(self, pass_method = pass_method, nr_steps = nr_steps, polynom_a = polynom_a, polynom_b = polynom_b, **kwargs)
 
 class rbend(marker):
-    def __init__(self, length, angle, pass_method = 'bnd_mpole_symplectic4_pass', nr_steps = 10, polynom_a = None, polynom_b = None, gap = 0, **kwargs):
-        if polynom_a == None: polynom_a = [0,0]
-        if polynom_b == None: polynom_b = [0,0]
+    def __init__(self, length, angle, pass_method = passmethods.bnd_mpole_symplectic4_pass, nr_steps = 10, polynom_a = None, polynom_b = None, gap = 0, **kwargs):
+        if polynom_a == None: polynom_a = [0,0,0]
+        if polynom_b == None: polynom_b = [0,0,0]
         if 'k' in kwargs:
             polynom_b[1] = kwargs['k']
+            del kwargs['k']
+        if 's' in kwargs:
+            polynom_b[2] = kwargs['s']
+            del kwargs['s']
         if 'angle_in' not in kwargs:
             kwargs['angle_in'] = 0.5 * angle
         if 'angle_out' not in kwargs:

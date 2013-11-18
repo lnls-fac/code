@@ -13,8 +13,9 @@ class Tracking:
 
     @staticmethod
     def track1turn_pyring(lattice, pos):
-        for element in latice:
-            (pm_name, pm_map) = passmethods.PassMethod.dict[element.pass_method]
+        for element in lattice:
+            #print(element)
+            (_, pm_map) = passmethods.pm_dict[element.pass_method]
             pm_map(pos, element)
         return pos
 
@@ -23,10 +24,10 @@ class Tracking:
         return trackcpp.track1turn(lattice, pos)
 
 
-def track1turn(latice, pos):
+def track1turn(lattice, pos):
     if default_server == servers['pyring']:
         return Tracking.track1turn_pyring(lattice, pos)
     elif default_server == servers['trackcpp']:
-        return Tracking.track1turn_trackcpp(latice, pos)
+        return Tracking.track1turn_trackcpp(lattice, pos)
     else:
         raise Exception('tracking server not defined!')

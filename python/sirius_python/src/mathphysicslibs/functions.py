@@ -16,3 +16,10 @@ def cos(x):
         return numpy.cos(x)
     else:
         return math.cos(x)
+    
+def tan(x):
+    
+    if type(x) is numpy.ndarray:
+        return numpy.tan(x)
+    else:
+        return math.tan(x)

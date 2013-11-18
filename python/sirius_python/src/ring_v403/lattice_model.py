@@ -12,12 +12,13 @@ def create_lattice(mode = 'AC10', energy = 3e9):
     #%% passmethods
     #%  ===========
     
-    drif_pass_method = PassMethods.pm_drift_pass
-    bend_pass_method = PassMethods.pm_bnd_mpole_symplectic4_pass
-    quad_pass_method = PassMethods.pm_str_mpole_symplectic4_pass
-    sext_pass_method = PassMethods.pm_str_mpole_symplectic4_pass
-    mark_pass_method = PassMethods.pm_identity_pass
-    corr_pass_method = PassMethods.pm_corrector_pass
+    drif_pass_method = passmethods.drift_pass
+    bend_pass_method = passmethods.bnd_mpole_symplectic4_pass
+    quad_pass_method = passmethods.str_mpole_symplectic4_pass
+    sext_pass_method = passmethods.str_mpole_symplectic4_pass
+    mark_pass_method = passmethods.identity_pass
+    corr_pass_method = passmethods.corrector_pass
+    rfca_pass_method = passmethods.cavity_pass
 
     #%% elements
     #%  ========
@@ -136,7 +137,7 @@ def create_lattice(mode = 'AC10', energy = 3e9):
     sf2      = sextupole(fam_name = 'sf2', length = 0.150000, s = sf2_strength, pass_method = sext_pass_method)
            
     #% --- rf cavity ---
-    cav = rfcavity(fam_name = 'cav', length = 0, energy = energy, voltage = 2.5e6, frequency = 500e6, harmonic_number = harmonic_number, pass_method = 'cavity_pass')
+    cav = rfcavity(fam_name = 'cav', length = 0, energy = energy, voltage = 2.5e6, frequency = 500e6, harmonic_number = harmonic_number, pass_method = rfca_pass_method)
     
 
     #%% lines 
