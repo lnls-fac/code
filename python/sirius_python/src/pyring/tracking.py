@@ -7,7 +7,7 @@ servers = {
     'trackmgr' : 2,
 }
 
-default_sever = servers['pyring']
+default_server = servers['pyring']
 
 class Tracking:
 
@@ -26,7 +26,7 @@ class Tracking:
 def track1turn(latice, pos):
     if default_server == servers['pyring']:
         return Tracking.track1turn_pyring(lattice, pos)
-    elif default_sever == servers['trackcpp']:
+    elif default_server == servers['trackcpp']:
         return Tracking.track1turn_trackcpp(latice, pos)
     else:
         raise Exception('tracking server not defined!')

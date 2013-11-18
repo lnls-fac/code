@@ -84,7 +84,7 @@ class marker(object):
         if self.sl is not None:
             r += '        SL: ' + str(self.sl) + '\n'
         if self.kick_angle is not None:
-                    r += ' KickAngle: ' + str(self.kick_angle) + '\n'
+            r += ' KickAngle: ' + str(self.kick_angle) + '\n'
         if self.voltage is not None:
             r += '   Voltage: ' + str(self.voltage) + '\n'
         if self.frequency is not None:
