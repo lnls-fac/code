@@ -9,10 +9,10 @@ if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
     lnls1_comm_disconnect;
     rmpath('C:\Arq\MatlabMiddleLayer\Release\mml\');
 else
-    addpath('/opt/MatlabMiddleLayer/Release/mml/');
-    cd('/opt/MatlabMiddleLayer/Release/links/lnls_link/lnls1_link/');
+    addpath('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
+    cd('/home/fac_files/code/MatlabMiddleLayer/Release/links/lnls_link/lnls1_link/');
     lnls1_comm_disconnect;
-    rmpath('/opt/MatlabMiddleLayer/Release/mml/');
+    rmpath('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
 end
 
 
@@ -20,7 +20,7 @@ end
 if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
     cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
 else
-    cd('/opt/MatlabMiddleLayer/Release/mml/');
+    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
 end
 
 setpathlnls('LNLS1', 'Booster', 'lnls1_link');

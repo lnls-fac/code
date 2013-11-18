@@ -37,7 +37,7 @@ cdir = pwd;
 try
     cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
 catch
-    cd('/opt/MatlabMiddleLayer/Release/mml/');
+    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
 end
 setpathlnls('LNLS1', 'StorageRing', 'lnls1_link');
 cd(cdir);
