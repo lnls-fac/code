@@ -1,4 +1,4 @@
-%% Valores obtidos do modelo1. J?? incluem as contribui????es da borda (e1=e2=0, na definicao de B)
+%% Valores obtidos do modelo1. Ja incluem as contribuicoes da borda (e1=e2=0, na definicao de B)
 % Definido como opt_2 em 2013-05-21 em funcao da aprovacao do modelo1:
 
 B_strength = -0.21755;

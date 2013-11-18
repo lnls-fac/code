@@ -367,7 +367,7 @@ if param.sr.inject
     end
 end
 
-return;
+
 saveas(figure1,'extraction.fig');
 saveas(figure2,'transport.fig');
 

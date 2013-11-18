@@ -2,14 +2,14 @@
 param.Rin = [0;0.0;0;0;0;0];
 
 %Definition of the bunch to be used:
-param.n_part = 1000;
+param.n_part = 10000;
 param.cutoff = 3;
-param.emitx = 3.7e-9;
+param.emitx = 12e-9;
 param.emity = param.emitx*20/100;
-param.sigmae= 8.9e-4;
+param.sigmae= 15e-4;
 param.sigmas= 11.3e-3;
 
-param.number_simu = 10;
+param.number_simu = 50;
 
 %% Definition of Booster's parameters
 
@@ -73,7 +73,7 @@ param.ltba.seg_err  = 1e-4; %tested
 storage_ring = sirius_lattice('test_inject_4k');
 
 % Simulate injection in the storage ring too?
-param.sr.inject = true;
+param.sr.inject = false;
 
 % Injection mode: with four kickers or multipole?
 param.sr.mode = '4kickers'; % '4kickers' or 'pmm'

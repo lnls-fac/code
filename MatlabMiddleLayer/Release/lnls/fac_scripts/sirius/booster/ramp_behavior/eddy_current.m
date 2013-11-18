@@ -11,14 +11,13 @@ rho0 = 1.152*50/2/pi;
 [gamat dgamatdt] =  energy_ramp(gamainf, gama0, freq, dt(1:end));
 
 
-global THERING;
-THERING = sirius_booster_lattice;
+the_ring = sirius_booster_lattice;
 mu0 = 4*pi*1e-7;
 condut = 1.35e6; % aco inox 316L austensitico 
 hgap = 0.028/2;
-a = 30e-3/2; % half width of vacuum chamber
-b = 90e-3/2; % half height 
-d = 1.2e-3; % espessura
+a = 17.5e-3/2; % half width of vacuum chamber
+b = 17.500001e-3/2; % half height 
+d = 1.0e-3; % espessura
 F = 1/2*(1 + b^2*asinh(sqrt(a^2-b^2)/b)/a/sqrt(a^2-b^2));
 B = gamat*0.511e3/0.299792458/rho0;
 dBdt = dgamatdt*0.511e3/0.299792458/rho0;
@@ -28,25 +27,25 @@ deltaK2 = (1/2)*mu0*condut/hgap/rho0*d./B.*dBdt*F;
 deltak_norm = -7/16*mu0*condut*d*0.0175*dgamatdt./gamat;
 
 
-a = findcells(THERING,'FamName','B');
+a = findcells(the_ring,'FamName','B');
 a = a(2:3:end);
-bst = getcellstruct(THERING,'PolynomB',a(1),3);
-%[~, ~, chrom(1,:)] = twissring(THERING, 0, 1:length(THERING)+1, 'chrom', 1e-8);
+bst = getcellstruct(the_ring,'PolynomB',a(1),3);
+%[~, ~, chrom(1,:)] = twissring(the_ring, 0, 1:length(the_ring)+1, 'chrom', 1e-8);
 for i=0:(length(dt)/50)
-    THERING = setcellstruct(THERING,'PolynomB',a,bst + deltaK2(1 + i*50),3);
-    [~, ~, chrom(i+1,:)] = twissring(THERING, 0, 1:length(THERING)+1, 'chrom', 1e-8);
+    the_ring = setcellstruct(the_ring,'PolynomB',a,bst + deltaK2(1 + i*50),3);
+    [~, ~, chrom(i+1,:)] = twissring(the_ring, 0, 1:length(the_ring)+1, 'chrom', 1e-8);
 end
-THERING = setcellstruct(THERING,'PolynomB',a,bst,3);
+the_ring = setcellstruct(the_ring,'PolynomB',a,bst,3);
 
 
-a = findcells(THERING,'FamName','QF');
-kf = getcellstruct(THERING,'PolynomB',a(1),2);
-%[~, ~, chrom(1,:)] = twissring(THERING, 0, 1:length(THERING)+1, 'chrom', 1e-8);
+a = findcells(the_ring,'FamName','QF');
+kf = getcellstruct(the_ring,'PolynomB',a(1),2);
+%[~, ~, chrom(1,:)] = twissring(the_ring, 0, 1:length(the_ring)+1, 'chrom', 1e-8);
 for i=0:(length(dt)/50)
-    THERING = setcellstruct(THERING,'PolynomB',a,kf*(1+ deltak_norm(1 + i*50)),2);
-    [~, tunes(i+1,:), ~] = twissring(THERING, 0, 1:length(THERING)+1, 'chrom', 1e-8);
+    the_ring = setcellstruct(the_ring,'PolynomB',a,kf*(1+ deltak_norm(1 + i*50)),2);
+    [~, tunes(i+1,:), ~] = twissring(the_ring, 0, 1:length(the_ring)+1, 'chrom', 1e-8);
 end
-THERING = setcellstruct(THERING,'PolynomB',a,kf,2);
+the_ring = setcellstruct(the_ring,'PolynomB',a,kf,2);
 
 
 
