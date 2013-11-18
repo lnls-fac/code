@@ -1,4 +1,5 @@
 import mathphysicslibs.functions as mfuncs
+import mathphysicslibs.constants as consts
 
 class PassMethods:
     
@@ -176,7 +177,7 @@ class PassMethods:
             nv = element.voltage / element.energy
             
             if element.length == 0:
-                pos.de +=  -nv * mfuncs.sin(2*math.pi*element.frequency*pos.dl/constants.c)
+                pos.de +=  -nv * mfuncs.sin(2*mfuncs.pi*element.frequency*pos.dl/consts.light_speed)
             else:
                 # drift half length
                 pnorm   = 1.0 / (1.0 + pos.de)
@@ -185,7 +186,7 @@ class PassMethods:
                 pos.ry += norml * pos.py
                 pos.dl += 0.5 * norml * pnorm * (pos.px**2 + pos.py**2)
                 # longitudinal momentum kick 
-                pos.de += -nv * mfuncs.sin(2*math.pi*element.frequency*pos.dl/constants.c)
+                pos.de += -nv * mfuncs.sin(2*mfuncs.pi*element.frequency*pos.dl/consts.light_speed)
                 # drift half length
                 pnorm   = 1.0 / (1.0 + pos.de)
                 norml   = (0.5 * element.length) * pnorm                

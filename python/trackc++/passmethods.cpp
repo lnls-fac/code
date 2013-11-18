@@ -1,3 +1,4 @@
+#include "auxiliary.h"
 #include "passmethods.h"
 
 std::string passmethods[] = {

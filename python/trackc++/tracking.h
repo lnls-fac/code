@@ -1,15 +1,7 @@
 #ifndef _TRACKING_H
 #define _TRACKING_H
 
-#include "trackc++.h"
-//#include <vector>
-//#include "pos.h"
-//#include "elements.h"
-#include "passmethods.h"
-
-//template <typename T>
-//Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> >& pos);
-
+#include "auxiliary.h"
 
 template <typename T>
 Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> >& pos) {

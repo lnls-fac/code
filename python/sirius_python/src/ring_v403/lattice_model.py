@@ -1,4 +1,5 @@
-import mathphysicslibs.constants as mplibs
+import mathphysicslibs.constants as consts
+import mathphysicslibs.functions as mfuncs
 from   pyring.elements import *
 import pyring.lattice as lattice
 from   set_magnet_strength_ac10 import *
@@ -72,7 +73,7 @@ def create_lattice(mode = 'AC10', energy = 3e9):
     qf4      = quadrupole(fam_name = 'qf4',  length = 0.250000, k = qf4_strength,  pass_method = quad_pass_method)
 
     #% --- bending magnets --- 
-    deg_2_rad = (mplibs. math.pi/180)
+    deg_2_rad = (mfuncs.pi/180.0)
 
 
     #% -- b1 --
@@ -254,7 +255,7 @@ def create_lattice(mode = 'AC10', energy = 3e9):
     
     # sets cavity frequency according to lattice length
     C = lattice.findspos(the_ring, len(the_ring))
-    rev_freq = mplibs.light_speed / C
+    rev_freq = consts.light_speed / C
     rf_idx = lattice.findcells(the_ring, 'fam_name', 'cav')
     for idx in rf_idx:
         the_ring[idx].frequency = rev_freq * harmonic_number

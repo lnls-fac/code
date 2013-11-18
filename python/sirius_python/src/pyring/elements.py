@@ -1,4 +1,6 @@
-from passmethods import *
+import passmethods
+
+PassMethods = passmethods.PassMethods
 
 class marker(object):
     def __init__(self,     
@@ -34,76 +36,76 @@ class marker(object):
         self.nr_steps    = nr_steps
         self.pass_method = pass_method
         
-        self.angle       = angle
-        self.gap         = gap
-        self.polynom_a   = polynom_a
-        self.polynom_b   = polynom_b
+        if angle      is not None: self.angle       = angle
+        if gap        is not None: self.gap         = gap
+        if polynom_a  is not None: self.polynom_a   = polynom_a
+        if polynom_b  is not None: self.polynom_b   = polynom_b
         
-        self.k           = k
-        self.kl          = kl
-        self.sl          = sl
-        self.kick_angle  = kick_angle
-        self.voltage     = voltage
-        self.frequency   = frequency
-        self.energy      = energy
+        if k          is not None: self.k           = k
+        if kl         is not None: self.kl          = kl
+        if sl         is not None: self.sl          = sl
+        if kick_angle is not None: self.kick_angle  = kick_angle
+        if voltage    is not None: self.voltage     = voltage
+        if frequency  is not None: self.frequency   = frequency
+        if energy     is not None: self.energy      = energy
         
-        self.t_in        = t_in
-        self.r_in        = r_in
-        self.angle_in    = angle_in
-        self.fint_in     = fint_in
+        if t_in       is not None: self.t_in        = t_in
+        if r_in       is not None: self.r_in        = r_in
+        if angle_in   is not None: self.angle_in    = angle_in
+        if fint_in    is not None: self.fint_in     = fint_in
         
-        self.t_out       = t_out
-        self.r_out       = r_out
-        self.angle_out   = angle_out 
-        self.fint_out    = fint_out
+        if t_out      is not None: self.t_out       = t_out
+        if r_out      is not None: self.r_out       = r_out
+        if angle_out  is not None: self.angle_out   = angle_out 
+        if fint_out   is not None: self.fint_out    = fint_out
         
     def __str__(self):
         r  = ''
-        if self.fam_name is not None:
-            r += '   FamName: ' + self.fam_name + '\n'
-        if self.length is not None:
-            r += '    Length: ' + str(self.length) + '\n'
-        if self.pass_method is not None:
-            r += 'PassMethod: ' + str(self.pass_method) + '\n'
-        if self.angle is not None:
-            r += '     Angle: ' + str(self.angle) + '\n'
-        if self.angle_in is not None:
-            r += '   AngleIn: ' + str(self.angle_in) + '\n'
-        if self.angle_out is not None:
-            r += '  AngleOut: ' + str(self.angle_out) + '\n'
-        if self.gap is not None:
-            r += '       Gap: ' + str(self.gap) + '\n'
-        if self.polynom_a is not None:
-            r += '  PolynomA: ' + str(self.polynom_a) + '\n'
-        if self.polynom_b is not None:
-            r += '  PolynomB: ' + str(self.polynom_b) + '\n'
-        if self.k is not None:
-            r += '         K: ' + str(self.k) + '\n'
-        if self.kl is not None:
-            r += '        KL: ' + str(self.kl) + '\n'
-        if self.sl is not None:
-            r += '        SL: ' + str(self.sl) + '\n'
-        if self.kick_angle is not None:
-                    r += ' KickAngle: ' + str(self.kick_angle) + '\n'
-        if self.voltage is not None:
-            r += '   Voltage: ' + str(self.voltage) + '\n'
-        if self.frequency is not None:
-            r += ' Frequency: ' + str(self.frequency) + '\n'
-        if self.energy is not None:
-            r += '    Energy: ' + str(self.energy) + '\n'
-        if self.t_in is not None:
-            r += '       TIn: ' + str(self.t_in) + '\n'
-        if self.r_in is not None:
-            r += '       RIn: ' + str(self.r_in) + '\n'
-        if self.fint_in is not None:
-            r += '    FIntIn: ' + str(self.fint_in) + '\n'
-        if self.t_out is not None:
-            r += '      TOut: ' + str(self.t_out) + '\n'
-        if self.r_out is not None:
-            r += '      ROut: ' + str(self.r_out) + '\n'
-        if self.fint_out is not None:
-            r += '   FIntOut: ' + str(self.fint_out) + '\n'
-        return r
+        try: r += '   FamName: ' + self.fam_name + '\n' 
+        except: pass
+        try: r += '    Length: ' + str(self.length) + '\n'
+        except: pass
+        try: r += 'PassMethod: ' + str(self.pass_method) + '\n'
+        except: pass
+        try: r += '     Angle: ' + str(self.angle) + '\n'
+        except: pass
+        try: r += '   AngleIn: ' + str(self.angle_in) + '\n'
+        except: pass
+        try: r += '  AngleOut: ' + str(self.angle_out) + '\n'
+        except: pass
+        try: r += '       Gap: ' + str(self.gap) + '\n'
+        except: pass
+        try: r += '  PolynomA: ' + str(self.polynom_a) + '\n'
+        except: pass
+        try: r += '  PolynomB: ' + str(self.polynom_b) + '\n'
+        except: pass
+        try: r += '         K: ' + str(self.k) + '\n'
+        except: pass
+        try: r += '        KL: ' + str(self.kl) + '\n'
+        except: pass
+        try: r += '        SL: ' + str(self.sl) + '\n'
+        except: pass
+        try: r += ' KickAngle: ' + str(self.kick_angle) + '\n'
+        except: pass
+        try: r += '   Voltage: ' + str(self.voltage) + '\n'
+        except: pass
+        try: r += ' Frequency: ' + str(self.frequency) + '\n'
+        except: pass
+        try: r += '    Energy: ' + str(self.energy) + '\n'
+        except: pass
+        try: r += '       TIn: ' + str(self.t_in) + '\n'
+        except: pass
+        try: r += '       RIn: ' + str(self.r_in) + '\n'
+        except: pass
+        try: r += '    FIntIn: ' + str(self.fint_in) + '\n'
+        except: pass
+        try: r += '      TOut: ' + str(self.t_out) + '\n'
+        except: pass
+        try: r += '      ROut: ' + str(self.r_out) + '\n'
+        except: pass
+        try: r += '   FIntOut: ' + str(self.fint_out) + '\n'
+        except: pass
+        return r    
     
     
 class drift(marker):

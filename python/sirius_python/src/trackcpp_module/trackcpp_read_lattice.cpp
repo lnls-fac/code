@@ -35,7 +35,8 @@ void trackcpp_read_lattice(PyObject *py_lattice, std::vector<Element>& v) {
 		Element el = Element(fam_name, length);
 		el.angle = angle;
 		v.push_back(el);
-		std::cout << i << ": " << el << std::endl;
+		std::cout << i+1 << ": " << std::endl;
+		std::cout << el;
 
 	}
 }

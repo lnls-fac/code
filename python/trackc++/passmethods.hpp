@@ -2,8 +2,7 @@
 #define _PASS_METHOD_AT_H
 
 
-#include <cmath>
-#include <vector>
+#include "auxiliary.h"
 #include "pos.h"
 #include "elements.h"
 #include "passmethods.h"

@@ -14,7 +14,6 @@ module1 = Extension('trackcpp',
             '../../../trackc++/elements.cpp',
             '../../../trackc++/lattice.cpp',
             '../../../trackc++/passmethods.cpp',
-            '../../../trackc++/tracking.cpp',
             ]
            )
 

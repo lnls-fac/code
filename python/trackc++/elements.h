@@ -1,7 +1,7 @@
 #ifndef _ELEMENT_H
 #define _ELEMENT_H
 
-#include "trackc++.h"
+#include "auxiliary.h"
 
 class Element {
 public:

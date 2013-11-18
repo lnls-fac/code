@@ -1,4 +1,4 @@
-#include "trackc++.h"
+#include "auxiliary.h"
 #include "elements.h"
 
 const std::vector<double> Element::default_polynom = std::vector<double>(3,0);

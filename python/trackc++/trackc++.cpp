@@ -23,7 +23,10 @@ int main() {
 	pos.rx = 0.001;
 	particles.push_back(pos);
 
-	track1turn(the_ring, particles);
+	Status::type stat;
+	if ((stat = track1turn(the_ring, particles)) != Status::success) {
+		std::cerr << "Error: " << stat << std::endl;
+	}
 
 	return 0;
 }

@@ -1,7 +1,7 @@
 #ifndef _PASS_METHODS_H
 #define _PASS_METHODS_H
 
-#include "trackc++.h"
+#include "auxiliary.h"
 #include "pos.h"
 
 template <typename T> Status::type pm_identity_pass(std::vector<Pos<T> >&pos, const Element &elem);
