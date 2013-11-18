@@ -53,6 +53,16 @@ Element Element::rbend (const std::string& fam_name_, const double& length_, con
 	return e;
 }
 
+Element Element::rfcavity (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_, const double& energy_) {
+	Element e = Element(fam_name_, length_);
+	e.pass_method = PassMethod::pm_cavity_pass;
+	e.frequency = frequency_;
+	e.voltage = voltage_;
+	e.energy = energy_;
+	return e;
+}
+
+
 
 void print_polynom(std::ostream& out, const std::string& label, const std::vector<double>& polynom) {
 	int order = 0;
@@ -68,13 +78,24 @@ void print_polynom(std::ostream& out, const std::string& label, const std::vecto
 
 std::ostream& operator<< (std::ostream &out, Element& el) {
 	out << "FamName      : " << el.fam_name << std::endl;
-	out << "Length       : " << el.length << std::endl;
+	if (el.length != 0) out << "Length       : " << el.length << std::endl;
 	out << "PassMethod   : " << passmethods[el.pass_method] << std::endl;
-	if (el.angle != 0) out << "BendingAngle : " << el.angle << std::endl;
-	if (el.angle != 0) out << "EntranceAngle: " << el.angle_in << std::endl;
-	if (el.angle != 0) out << "ExitAngle    : " << el.angle_out << std::endl;
+	if (el.nr_steps > 1) out << "NrSteps      : " << el.nr_steps << std::endl;
+	if (el.thin_KL != 0)  out << "ThinKL       : " << el.thin_KL << std::endl;
+	if (el.thin_SL != 0)  out << "ThinSL       : " << el.thin_SL << std::endl;
+	if (el.angle != 0)  out << "BendingAngle : " << el.angle << std::endl;
+	if (el.angle != 0)  out << "EntranceAngle: " << el.angle_in << std::endl;
+	if (el.angle != 0)  out << "ExitAngle    : " << el.angle_out << std::endl;
+	if ((el.gap != 0) and ((el.fint1 != 0) or (el.fint2 != 0))) {
+		out << "Gap          : " << el.gap << std::endl;
+		out << "FInt1        : " << el.fint1 << std::endl;
+		out << "FInt2        : " << el.fint2 << std::endl;
+	}
 	print_polynom(out, "PolynomA     : ", el.polynom_a);
 	print_polynom(out, "PolynomB     : ", el.polynom_b);
+	if (el.frequency != 0) out << "Frequency    : " << el.frequency << std::endl;
+	if (el.voltage != 0)   out << "Voltage      : " << el.voltage << std::endl;
+	if (el.energy != 0)    out << "Frequency    : " << el.energy << std::endl;
 	return out;
 }
 

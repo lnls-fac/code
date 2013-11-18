@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 #import sys
-
 #sys.path.append('/home/ximenes/workspace')
 
 import pyring.tracking
@@ -9,7 +8,7 @@ import ring_v403
 
 the_ring = ring_v403.create_lattice(mode = 'AC10', energy = 3e9)
 
-pyring.tracking.default_server = pyring.tracking.servers['pyring']
+pyring.tracking.default_server = pyring.tracking.servers['trackcpp']
 
 pos = pyring.pos(0.001,0,0,0,0,0)
 r = pyring.tracking.track1turn(the_ring, pos) 

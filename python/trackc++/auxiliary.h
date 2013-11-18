@@ -20,6 +20,17 @@ struct PassMethod {
 	};
 };
 
+const std::string pm_dict[] = {
+		"identity_pass",
+		"drift_pass",
+		"str_mpole_symplectic4_pass",
+		"bnd_mpole_symplectic4_pass",
+		"corrector_pass",
+		"cavity_pass",
+		"thinquad_pass",
+		"thinsext_pass"
+};
+
 struct Status {
 	enum type {
 		success = 0,

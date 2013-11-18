@@ -1,14 +1,15 @@
 #ifndef _TRACKING_H
 #define _TRACKING_H
 
-#include "auxiliary.h"
+#include "trackc++.h"
 
 template <typename T>
-Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> >& pos) {
+Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> >& pos, int *element_idx) {
 
 	Status::type status;
 
 	for(int i=0; i<lattice.size(); ++i) {
+		*element_idx = i;
 		const Element& element = lattice[i];
 		switch (lattice[i].pass_method) {
 			case PassMethod::pm_identity_pass:

@@ -14,7 +14,9 @@ module1 = Extension('trackcpp',
             '../../../trackc++/elements.cpp',
             '../../../trackc++/lattice.cpp',
             '../../../trackc++/passmethods.cpp',
-            ]
+            ],
+            language = "c++",
+            extra_compile_args = ["-std=c++11"],
            )
 
 setup (name        = 'trackcpp',
