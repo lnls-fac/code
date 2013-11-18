@@ -31,10 +31,10 @@ class marker(object):
          **kwargs
          ):
         
-        self.fam_name    = fam_name
-        self.length      = length
-        self.nr_steps    = nr_steps
-        self.pass_method = pass_method
+        if fam_name    is not None: self.fam_name    = fam_name
+        if length      is not None: self.length      = length
+        if nr_steps    is not None: self.nr_steps    = nr_steps
+        if pass_method is not None: self.pass_method = pass_method
         
         if angle      is not None: self.angle       = angle
         if gap        is not None: self.gap         = gap
