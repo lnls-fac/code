@@ -39,7 +39,7 @@ param.sigmas= 7e-3;
 
 %for how many meters do you want to track the incoming beamin the booster?
 % keep in mind that 150m consumes swap memory in a 8gb pc.
-param.len2trackB = 100;
+param.len2trackB = 25;
 
 %Calculate and load machines with orbit errors
 % lattice_errors([pwd '/cod_matlab']);
@@ -203,7 +203,7 @@ ylim(axes21,[-20 20]);
 title('Transfer Line','Parent',axes21);
 
 
-return;
+% return;
 saveas(figure1,'injection_x.fig');
 saveas(figure2,'injection_y.fig');
 
