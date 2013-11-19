@@ -14,8 +14,8 @@
 #include "../../../trackc++/tracking.h"
 
 // auxiliary functions
-void trackcpp_read_particles (PyObject *py_particles, std::vector<Pos<double> >&  pos);
-void trackcpp_read_lattice   (PyObject *py_lattice,   std::vector<Element>& pos);
+int trackcpp_read_particles (PyObject *py_particles, std::vector<Pos<double> >&  pos);
+int trackcpp_read_lattice   (PyObject *py_lattice,   std::vector<Element>& pos);
 
 // exposed functionalities
 PyObject*  trackcpp_track1turn(PyObject *Self, PyObject *args);

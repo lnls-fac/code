@@ -66,4 +66,10 @@ def flatten(lattice):
                 yield line
         else:
             yield element
+            
+def printlattice(lattice):
+    for i in range(len(lattice)):
+        print ('Element#  : ' + str(i) + '\n' + str(lattice[i]))
+        
+        
         

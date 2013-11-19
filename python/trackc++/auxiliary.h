@@ -44,4 +44,6 @@ extern std::string passmethods[];
 template <typename T> class Pos;
 class Element;
 
+const double light_speed = 299792458; // [m/s]
+
 #endif
