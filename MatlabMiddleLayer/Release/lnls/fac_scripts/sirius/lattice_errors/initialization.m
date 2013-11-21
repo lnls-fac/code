@@ -27,11 +27,9 @@ RandStream.setDefaultStream(RandStream('mt19937ar','seed', 131071));
 % turn sextupoles off
 params.the_ring = turn_longitudinal_dynamics_off(params.the_ring);
 
-% stores index and strengths of sextupoles in the ring
+% stores index of sextupoles in the ring
 sext_idx = findcells(params.the_ring, 'PolynomB');
-sext_str = getcellstruct(params.the_ring, 'PolynomB', sext_idx, 1, 3);
 setappdata(0, 'Sextupole_Idx', sext_idx);
-setappdata(0, 'Sextupole_Strength', sext_str);
 fprintf('\n');
 
 % saves file with nominal optics

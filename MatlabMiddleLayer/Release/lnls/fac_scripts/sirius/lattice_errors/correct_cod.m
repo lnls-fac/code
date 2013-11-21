@@ -21,11 +21,14 @@ end
 codx = zeros(length(machine), length(r.params.the_ring));
 cody = zeros(length(machine), length(r.params.the_ring));
 for i=selection
-        
+    
+    sext_idx = getappdata(0, 'Sextupole_Idx');
+    sext_str = getcellstruct(params.the_ring, 'PolynomB', sext_idx, 1, 3);
+    
     for j=1:length(sextupole_ramp)
               
         best_fm = Inf;
-        machine{i} = set_sextupoles(machine{i}, sextupole_ramp(j));
+        machine{i} = set_sextupoles(machine{i}, sextupole_ramp(j), sext_str);
         
         if (sextupole_ramp(j) == 0)
            [init_codx init_cody] = calc_cod(machine{i}); 

@@ -39,7 +39,7 @@ b = [pb, b1, pb];
 qd   = quadrupole('QD', 0.20, qd_strength, quad_pass_method);
 
 %coef do mapa de campo.
-polB = [[0 2.35824E-01], 1*[0 5.80904E+00 0 -1.10084E+05 0 +8.17767E+08 0 -3.13863E+12 ...
+polB = [[0 2.35824E-01], 0*[0 5.80904E+00 0 -1.10084E+05 0 +8.17767E+08 0 -3.13863E+12 ...
      0 +6.58302E+15 0 -7.11141E+18 0 +3.54236E+21 0 -6.05227E+23 ]];
  
 polB = polB/polB(2)* qf_strength;

@@ -1,9 +1,8 @@
-function the_ring = set_sextupoles(the_ring0, strength)
+function the_ring = set_sextupoles(the_ring0, strength, sext_str)
 
 the_ring = the_ring0;
 
 sext_idx = getappdata(0, 'Sextupole_Idx');
-sext_str = getappdata(0, 'Sextupole_Strength');
     
 if isstruct(the_ring{1})    
     the_ring = setcellstruct(the_ring, 'PolynomB', sext_idx, strength * sext_str, 1, 3);
