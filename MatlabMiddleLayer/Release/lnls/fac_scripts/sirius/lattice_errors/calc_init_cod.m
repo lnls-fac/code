@@ -2,7 +2,9 @@ function init_cod = calc_init_cod(r, selection)
 
 fprintf(['--- calc_closed_orbit [' datestr(now) '] ---\n']);
 for i=selection
-    r.machine{i} = set_sextupoles(r.machine{i}, 0);
+    sext_idx = getappdata(0, 'Sextupole_Idx');
+    sext_str = getcellstruct(r.params.the_ring, 'PolynomB', sext_idx, 1, 3);
+    r.machine{i} = set_sextupoles(r.machine{i}, 0, sext_str);
     [codx cody] = calc_cod(r.machine{i});
     init_cod.codx(i,:) = codx;
     init_cod.cody(i,:) = cody;
