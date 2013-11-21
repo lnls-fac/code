@@ -22,6 +22,10 @@ class Tracking:
     @staticmethod
     def track1turn_trackcpp(lattice, pos):
         return trackcpp.track1turn(lattice, pos)
+        if type(pos) is list:
+            return trackcpp.track1turn(lattice, pos)
+        else:
+            raise Exception('Error in pos type')
 
 
 def track1turn(lattice, pos):

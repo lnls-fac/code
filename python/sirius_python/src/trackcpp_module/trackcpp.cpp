@@ -9,6 +9,15 @@ static PyMethodDef trackcpp_methods[] = {
 	{NULL, NULL, 0, NULL}
 };
 
+PyObject *TrackcppError;
+std::string TrackcppErrorMsg;
+
+
 PyMODINIT_FUNC inittrackcpp(void) {
-	Py_InitModule3("trackcpp", trackcpp_methods, module_docstring);
+	PyObject *m = Py_InitModule3("trackcpp", trackcpp_methods, module_docstring);
+	if (m == NULL) return;
+	TrackcppError = PyErr_NewException("trackcpp.error", (PyObject*) NULL, (PyObject*) NULL);
+	Py_INCREF(TrackcppError);
+	PyModule_AddObject(m, "error", TrackcppError);
+
 };

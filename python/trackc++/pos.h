@@ -13,6 +13,7 @@ public:
 	typedef T type;
 	Pos(const T& rx_ = 0, const T& px_ = 0, const T& ry_ = 0, const T& py_ = 0, const T& de_ = 0, const T& dl_ = 0);
 
+
 };
 
 

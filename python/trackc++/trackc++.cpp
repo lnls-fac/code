@@ -24,7 +24,8 @@ int main() {
 	particles.push_back(pos);
 
 	Status::type stat;
-	if ((stat = track1turn(the_ring, particles)) != Status::success) {
+	int element_idx;
+	if ((stat = track1turn(the_ring, particles, &element_idx)) != Status::success) {
 		std::cerr << "Error: " << stat << std::endl;
 	}
 
