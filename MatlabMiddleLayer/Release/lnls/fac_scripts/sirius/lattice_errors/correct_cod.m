@@ -23,7 +23,7 @@ cody = zeros(length(machine), length(r.params.the_ring));
 for i=selection
     
     sext_idx = getappdata(0, 'Sextupole_Idx');
-    sext_str = getcellstruct(params.the_ring, 'PolynomB', sext_idx, 1, 3);
+    sext_str = getcellstruct(machine{i}, 'PolynomB', sext_idx, 1, 3);
     
     for j=1:length(sextupole_ramp)
               

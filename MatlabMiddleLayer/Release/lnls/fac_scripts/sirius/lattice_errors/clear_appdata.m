@@ -3,6 +3,8 @@ function clear_appdata()
 %remove appdata from previous runs
 if ~isempty(getappdata(0,'Sextupole_Idx'))
     rmappdata(0,'Sextupole_Idx');
+end
+if ~isempty(getappdata(0,'Sextupole_Strength'))
     rmappdata(0,'Sextupole_Strength');
 end
 if ~isempty(getappdata(0,'TwissTheRing0'))
