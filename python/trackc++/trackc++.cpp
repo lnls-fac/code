@@ -25,7 +25,8 @@ int main() {
 
 	Status::type stat;
 	int element_idx;
-	if ((stat = track1turn(the_ring, particles, &element_idx)) != Status::success) {
+	std::vector<Pos<> > new_particles;
+	if ((stat = track1turn(the_ring, particles, new_particles, &element_idx, false)) != Status::success) {
 		std::cerr << "Error: " << stat << std::endl;
 	}
 

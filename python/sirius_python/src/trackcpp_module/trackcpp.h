@@ -19,5 +19,6 @@ int trackcpp_read_lattice   (PyObject *py_lattice,   std::vector<Element>& pos);
 
 // exposed functionalities
 PyObject*  trackcpp_track1turn(PyObject *Self, PyObject *args);
+PyObject*  trackcpp_tracknturns(PyObject *Self, PyObject *args);
 
 #endif

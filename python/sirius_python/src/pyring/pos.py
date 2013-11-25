@@ -1,8 +1,4 @@
-
-
 class Pos(object):
-
-    #(rx,px,ry,py,de,dl) = (0,1,2,3,4,5)
     
     def __init__(self, rx=0.0, px=0.0, ry=0.0, py=0.0, de=0.0, dl=0.0):
         self._data = [rx,px,ry,py,de,dl]     
@@ -34,3 +30,5 @@ class Pos(object):
         return self._data
     def __str__(self):
         return '('+str(self._data[0])+','+str(self._data[1])+','+str(self._data[2])+','+str(self._data[3])+','+str(self._data[4])+','+str(self._data[5])+')'
+    
+    

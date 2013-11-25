@@ -2,10 +2,12 @@
 
 // DOCSTRINGS
 static char module_docstring[]              = "Module for efficiently tracking particles in transport lines and storage rings";
-static char trackcpp_track1turn_docstring[] = "track1turn(the_ring, pos)";
+static char trackcpp_track1turn_docstring[]  = "track1turn(the_ring, pos, trajectory)";
+static char trackcpp_tracknturns_docstring[] = "tracknturns(the_ring, pos, turn_by_turn, trajectory)";
 
 static PyMethodDef trackcpp_methods[] = {
-	{"track1turn", (PyCFunction)trackcpp_track1turn, METH_VARARGS, trackcpp_track1turn_docstring},
+	{"track1turn",  (PyCFunction)trackcpp_track1turn,  METH_VARARGS, trackcpp_track1turn_docstring},
+	{"tracknturns", (PyCFunction)trackcpp_tracknturns, METH_VARARGS, trackcpp_tracknturns_docstring},
 	{NULL, NULL, 0, NULL}
 };
 
