@@ -134,9 +134,9 @@ boocor  = [inicio, boosinj, boos, boosrf, boos, boos, fim];
 
 elist = boocor;
 THERING = buildlat(elist);
-mbegin = findcells(THERING, 'FamName', 'BEGIN');
-if ~isempty(mbegin), THERING = circshift(THERING, [0 -(mbegin(1)-1)]); end
-THERING{end+1} = struct('FamName','END','Length',0,'PassMethod','IdentityPass');
+% mbegin = findcells(THERING, 'FamName', 'BEGIN');
+% if ~isempty(mbegin), THERING = circshift(THERING, [0 -(mbegin(1)-1)]); end
+% THERING{end+1} = struct('FamName','END','Length',0,'PassMethod','IdentityPass');
 THERING = setcellstruct(THERING, 'Energy', 1:length(THERING), energy);
 
 

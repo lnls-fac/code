@@ -7,7 +7,7 @@ for i=1:size(indices,1)
     for j=1:size(indices,2)
         idx = indices(i,j);
         if isfield(new_ring{idx}, 'BendingAngle')
-            new_ring{idx}.PolynomB(2) = new_ring{idx}.PolynomB(2) * (1 + errors(i)); % não funciona com 'BendLinearPass'
+            new_ring{idx}.PolynomB(2) = new_ring{idx}.PolynomB(2) * (1 + errors(i)); % nao funciona com 'BendLinearPass'
         else
             error('lnls_set_excitation_Kdip: not a dipole!');
         end

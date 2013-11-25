@@ -30,8 +30,8 @@ meth_cavity    = 0;
 meth_marker    = 0;
 meth_kicktable = 1;
 
-%Organizar as fam???lias de acordo com a ordem que elas aparecem no modelo
-Fam = find_Families(ring);
+%Organizar as famílias de acordo com a ordem que elas aparecem no modelo
+ring = find_Families(ring);
 
 [path flat_name ext] = fileparts(flat_name);
 
@@ -44,8 +44,8 @@ prtName(mfile, 0, drift, meth_drift, Ele,0, 0);
 fprintf(mfile, ' %23.16e\n', 0);
 
 for i = 1:length(ring)
-     Fnum = find_Fnum(ring{i}.FamName,Fam);
-     Knum = find_Knum(ring,i);
+     Fnum = ring{i}.Fnum;
+     Knum = ring{i}.Knum;
     switch ring{i}.PassMethod
         case 'DriftPass'
             prtName(mfile, i, drift, meth_drift, ring{i},Knum, Fnum);
@@ -78,10 +78,19 @@ for i = 1:length(ring)
                 prtName(mfile, i, marker, meth_marker, ring{i},Knum, Fnum);
             end
         case 'CorrectorPass'
-            prtName(mfile, i, corrector, meth_corrector, ring{i}, Knum, Fnum);
-            fprintf(mfile, ' %23.16e %23.16e %23.16e\n', 0, 0, 0);
-            fprintf(mfile, '  %2d %2d\n', 1,0);
-            fprintf(mfile, '%3d %23.16e %23.16e\n', 1, -ring{i}.KickAngle(1), ring{i}.KickAngle(2));
+            if ring{i}.Length == 0
+                prtName(mfile, i, corrector, meth_corrector, ring{i}, Knum, Fnum);
+                fprintf(mfile, ' %23.16e %23.16e %23.16e\n', 0, 0, 0);
+                fprintf(mfile, '  %2d %2d\n', 1,0);
+                fprintf(mfile, '%3d %23.16e %23.16e\n', 1, -ring{i}.KickAngle(1), ring{i}.KickAngle(2));
+            else
+                if (ring{i}.KickAngle(1) ~= 0 || ring{i}.KickAngle(2) ~= 0)
+                    error('corretor com comprimento não nulo está ligado');
+                    return;
+                end
+                prtName(mfile, i, drift, meth_drift, ring{i},Knum, Fnum);
+                fprintf(mfile, ' %23.16e\n', ring{i}.Length);
+            end
         case 'ThinMPolePass'
             prtName(mfile, i, thin_kick, meth_thin_kick, ring{i}, Knum, Fnum);
             [PdTpar PdTerr]=isskew(ring{i});
@@ -121,30 +130,26 @@ end
 
 end
 
-function Fnum = find_Fnum(FamName, Fam)
-
-for j=1:length(Fam)
-    if strcmp(Fam{j}, FamName)
-        Fnum = j;
-    end
-end
-end
     
-function k = find_Knum(ring,i)
-k = 0;
-for j=1:i
-   if  strcmp(ring{j}.FamName,ring{i}.FamName)
-       k = k + 1;
-   end
-end
-end
 
-function Fam = find_Families(ring)
+function ring = find_Families(ring)
 
 Fam = {ring{1}.FamName};
+ring{1}.Fnum = 1;
+ring{1}.Knum = 1;
+Knums = [1];
 for j=2:length(ring)
-    if ~any(strcmp(Fam,ring{j}.FamName))
+    vec = strcmp(Fam,ring{j}.FamName);
+    if ~any(vec)
         Fam{end+1}=ring{j}.FamName;
+        ring{j}.Fnum = length(Fam);
+        ring{j}.Knum = 1;
+        Knums(end+1) = 1;
+    else
+        ind = find(vec,1);
+        ring{j}.Fnum = ind;
+        Knums(ind) = Knums(ind) + 1;
+        ring{j}.Knum = Knums(ind);
     end
 end
 end
