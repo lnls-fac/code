@@ -21,10 +21,10 @@ pyring.lattice.setcavity(the_ring, 'off')
 
 ''' parameters '''
 nr_particles = 1
-nr_turns     = 1
+nr_turns     = 100
 
 ''' selection of tracking method and initial conditions '''
-pos = nr_particles*[0.002,0.0000,0.0,0.0,0.0,0.0]
+pos = nr_particles*[0.009,0.0000,0.0,0.0,0.0,0.0]
 #pyring.tracking.default_server = pyring.tracking.servers['pyring']
 pyring.tracking.default_server = pyring.tracking.servers['trackcpp']
 
@@ -32,15 +32,17 @@ pyring.tracking.default_server = pyring.tracking.servers['trackcpp']
 ''' timed tracking '''
 t0 = time.time()
 #p = pyring.tracking.tracknturns(the_ring, pos, nr_turns = 20, turn_by_turn = True, trajectory = False)
-p = pyring.tracking.track1turn(the_ring, pos, trajectory = True)
+#p = pyring.tracking.track1turn(the_ring, pos, trajectory = False)
+p = pyring.tracking.tracknturns(the_ring, pos = pos, nr_turns = nr_turns, turn_by_turn = True, trajectory = False)
 t1 = time.time()
 print(t1-t0)
+print(len(p))
 
 ''' selects result data '''
-p1 = pyring.tracking.get_particle(p, the_ring, nr_particles, 0, nr_turns)
+p1 = pyring.tracking.get_particle(pos = p, nr_particles = nr_particles, nr_elements = 1, nr_turns = nr_turns, particle = 0)
 rx = pyring.tracking.get_rx(p1)
 px = pyring.tracking.get_px(p1)
-
+# 
 ''' plots result '''
 plt.scatter(rx,px)
 plt.show()

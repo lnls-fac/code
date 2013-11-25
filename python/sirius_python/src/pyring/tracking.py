@@ -11,18 +11,16 @@ servers = {
 
 default_server = servers['pyring']
 
-def get_turn (pos, lattice, nr_particles = 1, nr_turns = 1, turn = None):
-    if len(pos) != (6*nr_particles*len(lattice)*nr_turns):
+def get_turn (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, turn = None):
+    if len(pos) != (6*nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_turn invocation')
-    nr_elements = len(lattice)
     if turn is None:
         turn = nr_turns-1
     return pos[(turn*nr_elements*nr_particles*6):((turn+1)*nr_elements*nr_particles*6):1]
 
-def get_element (pos, lattice, nr_particles = 1, element = None, nr_turns = 1):
-    if len(pos) != (6*nr_particles*len(lattice)*nr_turns):
+def get_element (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, element = None):
+    if len(pos) != (6*nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_element invocation')
-    nr_elements = len(lattice)
     if element is None:
         element = nr_elements-1
     p = []
@@ -30,10 +28,9 @@ def get_element (pos, lattice, nr_particles = 1, element = None, nr_turns = 1):
         p = p + pos[(i*nr_elements*nr_particles*6 + element*nr_particles*6):((i+1)*nr_elements*nr_particles*6 + element*nr_particles*6):1]
     return p
 
-def get_particle (pos, lattice, nr_particles = 1, particle = 0, nr_turns = 1):
-    if len(pos) != (6*nr_particles*len(lattice)*nr_turns):
+def get_particle (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, particle = 0, ):
+    if len(pos) != (6*nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_particle invocation')
-    nr_elements = len(lattice)
     p = []
     for i in range(nr_turns):
         for j in range(nr_elements):
@@ -119,6 +116,10 @@ class Tracking:
     @staticmethod
     def track1turn_trackcpp(lattice, pos, trajectory):
         return trackcpp.track1turn(lattice, pos, trajectory)
+    
+    @staticmethod
+    def tracknturns_trackcpp(lattice, pos, nr_turns, turn_by_turn, trajectory):
+        return trackcpp.tracknturns(lattice, pos, nr_turns, turn_by_turn, trajectory)
 
 
 def track1turn(lattice, pos, trajectory = False):

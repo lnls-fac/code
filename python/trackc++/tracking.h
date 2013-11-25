@@ -58,4 +58,31 @@ Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> 
 
 }
 
+
+template <typename T>
+Status::type tracknturns(const std::vector<Element>& lattice, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, const int nr_turns, int *turn_idx, int *element_idx, bool turn_by_turn, bool trajectory) {
+
+	Status::type status;
+
+
+	for(int n=0; n<nr_turns; ++n) {
+		*turn_idx = n;
+		std::vector<Pos<T> > tmp_pos;
+		if ((status = track1turn(lattice, orig_pos, tmp_pos, element_idx, trajectory)) != Status::success) return status;
+		if (turn_by_turn || (n == nr_turns-1)) {
+			for(int j=0; j<tmp_pos.size();++j) {
+				pos.push_back(tmp_pos[j]);
+			}
+		}
+	}
+
+	return Status::success;
+
+}
+
+
+
+
+
+
 #endif

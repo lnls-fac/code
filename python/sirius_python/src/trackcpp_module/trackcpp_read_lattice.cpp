@@ -96,7 +96,7 @@ int trackcpp_read_lattice(PyObject *py_lattice, std::vector<Element>& v) {
 			}
 		}
 
-		std::vector<double> kick_angle = {0,0};
+		std::vector<double> kick_angle; kick_angle.push_back(0); kick_angle.push_back(0);
 		if (PyObject_HasAttrString(py_element, "kick_angle")) {
 			PyObject *py_attr = PyObject_GetAttrString(py_element, "kick_angle");
 			if (py_attr != NULL) {
@@ -232,28 +232,36 @@ int trackcpp_read_lattice(PyObject *py_lattice, std::vector<Element>& v) {
 
 		// inserts translation vector and rotation matrix
 		if ((t_in.size()  !=  0) and (t_in.size()  != 6)) {
-			TrackcppErrorMsg = "Incorrect parameters in 't_in' for element #" + std::to_string(i);
+			std::ostringstream convert; convert << i; std::string strnumber = convert.str();
+			TrackcppErrorMsg = "Incorrect parameters in 't_in' for element #" +  strnumber;
+			//TrackcppErrorMsg = "Incorrect parameters in 't_in' for element #" + std::to_string(i);
 			PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
 			return -1;
 		} else {
 			for(unsigned int j=0;j<t_in.size();++j) el.t_in[j] = t_in[j];
 		}
 		if ((t_out.size()  !=  0) and (t_out.size()  != 6)) {
-			TrackcppErrorMsg = "Incorrect parameters in 't_out' for element #" + std::to_string(i);
+			std::ostringstream convert; convert << i; std::string strnumber = convert.str();
+			TrackcppErrorMsg = "Incorrect parameters in 't_out' for element #" +  strnumber;
+			//TrackcppErrorMsg = "Incorrect parameters in 't_out' for element #" + std::to_string(i);
 			PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
 			return -1;
 		} else {
 			for(unsigned int j=0;j<t_out.size();++j) el.t_out[j] = t_out[j];
 		}
 		if ((r_in.size()  !=  0) and (r_in.size()  != 36)) {
-			TrackcppErrorMsg = "Incorrect parameters in 'r_in' for element #" + std::to_string(i);
+			std::ostringstream convert; convert << i; std::string strnumber = convert.str();
+			TrackcppErrorMsg = "Incorrect parameters in 'r_in' for element #" +  strnumber;
+			//TrackcppErrorMsg = "Incorrect parameters in 'r_in' for element #" + std::to_string(i);
 			PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
 			return -1;
 		} else {
 			for(unsigned int j=0;j<r_in.size();++j) el.r_in[j] = r_in[j];
 		}
 		if ((r_out.size()  !=  0) and (r_out.size()  != 36)) {
-			TrackcppErrorMsg = "Incorrect parameters in 'r_out' for element #" + std::to_string(i);
+			std::ostringstream convert; convert << i; std::string strnumber = convert.str();
+			TrackcppErrorMsg = "Incorrect parameters in 'r_out' for element #" +  strnumber;
+			//TrackcppErrorMsg = "Incorrect parameters in 'r_out' for element #" + std::to_string(i);
 			PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
 			return -1;
 		} else {
