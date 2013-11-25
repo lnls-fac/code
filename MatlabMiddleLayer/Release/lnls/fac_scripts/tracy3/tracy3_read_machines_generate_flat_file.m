@@ -1,5 +1,6 @@
-function tracy3_read_machines_generate_flat_file(archive_name)
+function tracy3_read_machines_generate_flat_file(archive_name,inicio)
 %function tracy3_read_machines_generate_flat_file(archive_name)
+%function tracy3_read_machines_generate_flat_file(archive_name,inicio)
 %
 % History
 %
@@ -29,8 +30,10 @@ for i=1:n_pastas
     flat_name = [sprintf('rms%02d', i) sprintf('/rms%02d', i) '.dat'];
     full_name = fullfile(path, flat_name);
     the_ring = machines.machine{i};
-    %the_ring = start_at_first_element(machines.machine{i}, 'mib');
-    %the_ring = modify_the_ring(machines.machine{i});
+    if exist('inicio','var')
+        the_ring = start_at_first_element(the_ring, inicio);
+    end
+%     the_ring = modify_the_ring(machines.machine{i});
     lnls_at2tracyflat(the_ring,full_name);
 end
 
