@@ -9,7 +9,7 @@ servers = {
     'trackmgr' : 2,
 }
 
-default_server = servers['pyring']
+default_server = servers['trackcpp']
 
 def get_turn (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, turn = None):
     if len(pos) != (6*nr_particles*nr_elements*nr_turns):
