@@ -5,7 +5,7 @@
 #import sys
 #sys.path.append('/home/ximenes/workspace')
 
-import ring_v403
+import ring_v500
 import pyring.tracking
 import pyring.lattice
 import time
@@ -16,7 +16,7 @@ def example1():
     
     ''' load lattice model
         ------------------ '''
-    the_ring = ring_v403.create_lattice(mode = 'AC10', energy = 3e9)
+    the_ring = ring_v500.create_lattice(mode = 'AC10_6', energy = 3e9)
     the_ring = the_ring[::] # option to select subset of elements
     pyring.lattice.setcavity(the_ring, 'off')
     #pyring.lattice.printlattice(the_ring)

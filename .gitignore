@@ -41,6 +41,7 @@ eclipse/
 .metadata/
 *Debug/
 *build/
+*.settings/
 
 
 
