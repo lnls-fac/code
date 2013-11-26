@@ -26,7 +26,7 @@ global THERING;
 % --- system parameters ---
 energy = 3e9;
 mode   = 'AC10';
-mode_version = 'AC10_5';
+mode_version = 'AC10_6';
 harmonic_number = 864;
 
 % processamento de input (energia e modo de operacao)
