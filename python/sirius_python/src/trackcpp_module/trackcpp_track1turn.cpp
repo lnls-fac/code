@@ -42,14 +42,14 @@ PyObject*  trackcpp_track1turn(PyObject *self, PyObject *args) {
 	Status::type ret = track1turn(lattice, orig_pos, pos, &element_idx, trajectory);
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
-			//std::string str = "Passmethod '" + pm_dict[lattice[element_idx].pass_method] + "' in element #" + std::to_string(element_idx) + " not defined";
-			TrackcppErrorMsg = "teste1";
+			std::string pmname = pm_dict[lattice[element_idx].pass_method];
+			std::ostringstream convert; convert << element_idx; std::string strnumber = convert.str();
+			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not defined";
 		}
 		if (ret == Status::passmethod_not_implemented) {
-			//std::string str = "Passmethod '' in element #" + std::to_string(element_idx) + " not implemented";
-			//PyErr_SetString(TrackcppError, str.c_str());
 			std::string pmname = pm_dict[lattice[element_idx].pass_method];
-			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + std::to_string(element_idx) + " not implemented";
+			std::ostringstream convert; convert << element_idx; std::string strnumber = convert.str();
+			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not implemented";
 		}
 		PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
 		Py_DECREF(py_lattice);
