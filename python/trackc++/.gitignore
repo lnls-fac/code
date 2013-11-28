@@ -25,6 +25,7 @@
 *.pydevproject
 *.cproject
 *.pyc
+trackc++
 trackc++-debug
 tracy
 .depend
