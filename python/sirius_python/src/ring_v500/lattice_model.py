@@ -139,7 +139,7 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     sf2      = sextupole(fam_name = 'sf2', length = 0.150000, s = mode.sf2_strength, pass_method = sext_pass_method)
            
     #% --- rf cavity ---
-    cav = rfcavity(fam_name = 'cav', length = 0, energy = energy, voltage = 2.5e6, frequency = 500e6, harmonic_number = lattice_parameters.harmonic_number, pass_method = rfca_pass_method)
+    cav = rfcavity(fam_name = 'cav', length = 0, energy = energy, voltage = 2.5e6, frequency = 500e6, hnumber = lattice_parameters.harmonic_number, pass_method = rfca_pass_method)
     
 
     #%% lines 
@@ -157,8 +157,8 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     dinjk3   = drift(fam_name = 'dinjk3' , length = 0.3, pass_method = drif_pass_method)
     dk3k4    = drift(fam_name = 'dk3k4'  , length = 0.6, pass_method = drif_pass_method)
     dk4pmm   = drift(fam_name = 'dk4pmm' , length = 0.2, pass_method = drif_pass_method)
-    dpmmcv   = drift(fam_name = 'dpmmcv' , length = (3.2692 - 0.3 - 0.3 - 0.6 - 0.2 - 3*0.6), pass_method = drif_pass_method)
-    dcvk1    = drift(fam_name = 'dcvk1'  , length = (3.2692 - 0.6 - 1.4 - 2*0.6), pass_method = drif_pass_method)
+    dpmmcv   = drift(fam_name = 'dpmmcv' , length = (3.2692 + 3.65e-3 - 0.3 - 0.3 - 0.6 - 0.2 - 3*0.6), pass_method = drif_pass_method)
+    dcvk1    = drift(fam_name = 'dcvk1'  , length = (3.2692 + 3.65e-3 - 0.6 - 1.4 - 2*0.6), pass_method = drif_pass_method)
     dk1k2    = drift(fam_name = 'dk1k2'  , length = 0.6, pass_method = drif_pass_method)
     sef      = sextupole(fam_name = 'sef', length = 0.6, k = 0.0, pass_method = sext_pass_method); #%corrector('sef', 0.6, [0 0], 'CorrectorPass');
     dk2sef   = drift(fam_name = 'dk2mia' , length = 0.8, pass_method = drif_pass_method)

@@ -2,9 +2,11 @@ import collections
 import passmethods
 
 
-def findspos(lattice, indices):
+def findspos(lattice, indices = None):
+    if indices is None:
+        indices = len(lattice)    
     pos = (len(lattice)+1) * [0]
-    for i in range(1,len(lattice)):
+    for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
     pos[-1] = pos[-2] + lattice[-1].length
     if type(indices) is int: 

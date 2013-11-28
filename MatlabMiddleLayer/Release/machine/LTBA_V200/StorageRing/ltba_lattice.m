@@ -166,7 +166,7 @@ lc5    = [l20, mon, repmat(l20,1,2), l50, cv, repmat(l15,1,2), lc5p];
 linea  = [septex, l20, septex, la1, qa1, la2, qa2, la3, qa3, la4];
 lineb  = [BP, lb1, qb1, lb2, qb2, lb3, qb3, lb4];
 linec  = [BP, lc1, qc1, lc2, qc2, lc3, qc3, lc4, qc4, lc5];
-lined  = [septgr, ld1, ch, septfi];
+lined  = [septgr, ld1, septfi];
 ltba   = [inicio, linea, lineb, linec, lined, fim];
 
 
