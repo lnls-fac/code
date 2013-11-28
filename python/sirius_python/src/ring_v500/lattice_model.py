@@ -124,7 +124,7 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     #% --- correctors ---
     ch     = corrector(fam_name = 'hcm',  length = 0, kick_angle = [0, 0], pass_method = corr_pass_method)
     cv     = corrector(fam_name = 'vcm',  length = 0, kick_angle = [0, 0], pass_method = corr_pass_method)
-    crhv   = corrector(fam_name = 'crhv', length = 0, kick_angle = [0,0], pass_method = corr_pass_method)
+    crhv   = corrector(fam_name = 'crhv', length = 0, kick_angle = [0, 0], pass_method = corr_pass_method)
 
 
     #% --- sextupoles ---    

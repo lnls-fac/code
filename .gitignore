@@ -25,7 +25,9 @@
 *.pydevproject
 *.cproject
 *.pyc
+trackc++-debug
 tracy
+.depend
 
 ## directories not to be tracked
 
