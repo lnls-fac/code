@@ -57,6 +57,7 @@ box(axes1,'on');
 hold(axes1,'all');
 % Create multiple lines using matrix input to plot
 plot1 = plot(axes1, I*1e3, sort(real(delta),1));
+ylim(axes1,[-0.1 (n_azi+0.1)]);
 % Create xlabel
 xlabel({'Current per bunch [mA]'},'FontSize',12);
 % Create ylabel
