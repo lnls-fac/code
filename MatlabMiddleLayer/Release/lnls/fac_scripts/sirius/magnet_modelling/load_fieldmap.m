@@ -40,10 +40,10 @@ set(gcf, 'Name','longitudinal_rolloff_of_bx')
 
 % prints by field roll-off
 pos = 10; % [mm]
-sel = (x <= pos/1000) & (x >= -pos/1000);
+[~,idx] = min(abs(x/1000 - pos));
 by0 = data.by(idx_z0, idx_x0);
-by  = data.by(idx_z0, sel);
-rolloff = 100 * max(abs(by - by0))/by0;
+by  = data.by(idx_z0, idx);
+rolloff = 100 * (by - by0)/abs(by0);
 fprintf('by(x) roll-off @ %f mm: %f %%\n', pos, rolloff);
 
     
