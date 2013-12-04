@@ -43,6 +43,7 @@ for i=1:length(rk_traj.s)
     
     % polynomial_a interpolation
     x = xgrid; y = field(1,:) - field(1, on_axis_idx);
+    y = y * sf.n(1); % Bx projection on the direction normal to the trajectory
     [coeffs_a y_fit] = mypolyfit(x, y, setdiff(monomials, [0]));
     dy = y_fit' - y;
     if (max(abs(dy)) > max_dy_a)
