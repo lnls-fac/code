@@ -168,7 +168,7 @@ le3   = [ l50, cv, bpm, l20, le3p];
 line1 = [ la1, qa1, l10, qa2, l10, qa1, l15, la2];
 arc1  = [ bspec, lb1, qb1, lb2, qb2, lb3, qb3, lb4, bn];
 line2 = [ lc1, qc1, lc2, qc2, lc3, qc3, lc4];
-arc2  = [ bp, ld1, qd1, ld2, qd2, ld3, bp, le1, qe1, le2, qe2, le3, ch, sep];
+arc2  = [ bp, ld1, qd1, ld2, qd2, ld3, bp, le1, qe1, le2, qe2, le3, sep];
 ltlb  = [inicio, line1, arc1, line2, arc2, fim];
 
 

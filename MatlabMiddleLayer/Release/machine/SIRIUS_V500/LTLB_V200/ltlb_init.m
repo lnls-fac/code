@@ -374,7 +374,7 @@ AO.qe2.Setpoint.DeltaRespMat  = 0.5;
 % hcm
 AO.hcm.FamilyName  = 'hcm';
 AO.hcm.MemberOf    = {'PlotFamily'; 'COR'; 'hcm'; 'Magnet'};
-AO.hcm.DeviceList  = getDeviceList(1,6);
+AO.hcm.DeviceList  = getDeviceList(1,5);
 AO.hcm.ElementList = (1:size(AO.hcm.DeviceList,1))';
 AO.hcm.Status      = ones(size(AO.hcm.DeviceList,1),1);
 AO.hcm.Position    = [];
