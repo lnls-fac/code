@@ -30,24 +30,11 @@ end
 
 % inicializa estruturas do MML
 cdir = pwd;
-if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
-    cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
-else
-    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-end
+root_folder = get_lnls_root_folder();
+cd(fullfile(root_folder, 'fac_files', 'code', 'MatlabMiddleLayer','Release','mml'))
 
 setpathsirius(['SIRIUS' default_version_sr], ['LTLB' default_version_ltlb], 'sirius_link');
 cd(cdir);
 clear cdir;
-
-if any(strcmpi(computer, {'PCWIN','PCWIN64'}))
-    addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\lnls\fac_scripts\sirius\lattice_errors'));
-    addpath(fullfile('C:\Arq\MatlabMiddleLayer\Release', 'lnls', 'fac_scripts', 'tracy3'), '-begin');
-else
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
-end
-
-return;
 
 
