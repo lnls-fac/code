@@ -1,5 +1,6 @@
 import collections
 import passmethods
+import copy
 
 
 def findspos(lattice, indices = None):
@@ -72,6 +73,15 @@ def flatten(lattice):
 def printlattice(lattice):
     for i in range(len(lattice)):
         print ('Element#  : ' + str(i) + '\n' + str(lattice[i]))
+        
+def unique(lattice, famname = None):
+    idx = findcells(lattice, 'fam_name', famname)
+    new_lattice = [element for element in lattice]
+    for i in range(len(lattice)):
+        if i in idx:
+            new_lattice[i] = copy.deepcopy(lattice[i])
+    return new_lattice
+    
         
         
         

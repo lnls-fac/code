@@ -15,7 +15,7 @@ def tracknturns(lattice, pos, nr_turns = 1, turn_by_turn = False, trajectory = F
     if engine == 'pyring':
         return _Tracking.tracknturns_pyring(lattice, pos, nr_turns, turn_by_turn, trajectory, engine = engine)
     elif engine == 'trackcpp':
-        return _Tracking.tracknturns_trackcpp(lattice, pos, nr_turns, turn_by_turn, trajectory, engine = engine)
+        return _Tracking.tracknturns_trackcpp(lattice, pos, nr_turns, turn_by_turn, trajectory)
     else:
         raise Exception('tracking server not defined|implemented!')
     

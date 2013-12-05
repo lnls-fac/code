@@ -63,53 +63,53 @@ class marker(object):
         
     def __str__(self):
         r  = ''
-        try: r += '   FamName: ' + self.fam_name + '\n' 
+        try: r += '   fam_name: ' + self.fam_name + '\n' 
         except: pass
-        try: r += '    Length: ' + str(self.length) + '\n'
+        try: r += '     length: ' + str(self.length) + '\n'
         except: pass
         try:
             pm = passmethods.pm_dict[self.pass_method] 
-            r += 'PassMethod: ' + str(pm[0]) + '\n'
+            r +=  'pass_method: ' + str(pm[0]) + '\n'
         except: pass
-        try: r += '     Angle: ' + str(self.angle) + '\n'
+        try: r += '      angle: ' + str(self.angle) + '\n'
         except: pass
-        try: r += '   AngleIn: ' + str(self.angle_in) + '\n'
+        try: r += '   angle_in: ' + str(self.angle_in) + '\n'
         except: pass
-        try: r += '  AngleOut: ' + str(self.angle_out) + '\n'
+        try: r += '  angle_out: ' + str(self.angle_out) + '\n'
         except: pass
-        try: r += '       Gap: ' + str(self.gap) + '\n'
+        try: r += '        gap: ' + str(self.gap) + '\n'
         except: pass
-        try: r += '  PolynomA: ' + str(self.polynom_a) + '\n'
+        try: r += '  polynom_a: ' + str(self.polynom_a) + '\n'
         except: pass
-        try: r += '  PolynomB: ' + str(self.polynom_b) + '\n'
+        try: r += '  polynom_b: ' + str(self.polynom_b) + '\n'
         except: pass
-        try: r += '         K: ' + str(self.k) + '\n'
+        try: r += '          k: ' + str(self.k) + '\n'
         except: pass
-        try: r += '        KL: ' + str(self.kl) + '\n'
+        try: r += '         kl: ' + str(self.kl) + '\n'
         except: pass
-        try: r += '        SL: ' + str(self.sl) + '\n'
+        try: r += '         sl: ' + str(self.sl) + '\n'
         except: pass
-        try: r += ' KickAngle: ' + str(self.kick_angle) + '\n'
+        try: r += ' kick_angle: ' + str(self.kick_angle) + '\n'
         except: pass
-        try: r += '   Voltage: ' + str(self.voltage) + '\n'
+        try: r += '    voltage: ' + str(self.voltage) + '\n'
         except: pass
-        try: r += ' Frequency: ' + str(self.frequency) + '\n'
+        try: r += '  frequency: ' + str(self.frequency) + '\n'
         except: pass
-        try: r += '    Energy: ' + str(self.energy) + '\n'
+        try: r += '     energy: ' + str(self.energy) + '\n'
         except: pass
-        try: r += 'HarmNumber: ' + str(self.hnumber) + '\n'
+        try: r += '    hnumber: ' + str(self.hnumber) + '\n'
         except: pass
-        try: r += '       TIn: ' + str(self.t_in) + '\n'
+        try: r += '       t_in: ' + str(self.t_in) + '\n'
         except: pass
-        try: r += '       RIn: ' + str(self.r_in) + '\n'
+        try: r += '       r_in: ' + str(self.r_in) + '\n'
         except: pass
-        try: r += '    FIntIn: ' + str(self.fint_in) + '\n'
+        try: r += '    fint_in: ' + str(self.fint_in) + '\n'
         except: pass
-        try: r += '      TOut: ' + str(self.t_out) + '\n'
+        try: r += '      t_out: ' + str(self.t_out) + '\n'
         except: pass
-        try: r += '      ROut: ' + str(self.r_out) + '\n'
+        try: r += '      r_out: ' + str(self.r_out) + '\n'
         except: pass
-        try: r += '   FIntOut: ' + str(self.fint_out) + '\n'
+        try: r += '   fint_out: ' + str(self.fint_out) + '\n'
         except: pass
         return r    
     

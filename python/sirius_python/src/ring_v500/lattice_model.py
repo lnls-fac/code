@@ -243,7 +243,6 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
         R11, C11, R12, C12, R13, C13, R14, C14, R15, C15,
         R16, C16, R17, C17, R18, C18, R19, C19, R20, C20,
     ]
-
     the_ring = list(lattice.flatten(the_ring))
     
     # shift lattice to start at the marker 'inicio'
@@ -265,6 +264,8 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     lattice.setcavity(the_ring, 'on'); 
     lattice.setradiation(the_ring, 'off');
 
-
+    the_ring = lattice.unique(the_ring, 'hcm')
+    the_ring = lattice.unique(the_ring, 'vcm')
+    the_ring = lattice.unique(the_ring, 'crhv')
     return the_ring 
     

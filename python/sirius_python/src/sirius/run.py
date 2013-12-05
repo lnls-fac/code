@@ -22,7 +22,13 @@ def example1():
     pyring.lattice.setcavity(the_ring, 'off')
     #pyring.lattice.printlattice(the_ring)
     
-    pyring.optics.findorbit6(the_ring)
+    hcms = pyring.lattice.findcells(the_ring, 'fam_name', 'hcm')
+    the_ring[hcms[0]].kick_angle[0] = 0.0003;
+    
+    orb = pyring.optics.findorbit4(the_ring, refpts = [0,1], de = 0, guess = [0.000,0,0,0], init_nr_turns = 40, tol = 1e-16)
+    
+    
+    print(1e3*orb)
     
     ''' parameters '''
     nr_particles = 1
