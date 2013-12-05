@@ -30,7 +30,7 @@ def findorbit6(ring, refpts = None, guess = None, max_iterations = 20, step_size
         RMATi[:,i] = Ri
     RMATi += D
     RMATf = tracking.track1turn(lattice = ring, pos = RMATi, trajectory = False, engine = 'trackcpp')
-    J6 = (RMATf[:,-1]-RMATf(:,7)*ones(1,6))/d;
+    #J6 = (RMATf[:,-1]-RMATf(:,7)*ones(1,6))/d;
     
     print('ok')
     

@@ -35,7 +35,7 @@ for i=1:length(rk_traj.s)
     dy = y_fit' - y;
     if (max(abs(dy)) > max_dy_b)
         max_dy_b = max(abs(dy));
-        figure(h1); clf(h1); plot(1e3*x, 1e4*dy); xlabel('Pos [mm]'); ylabel('dBy [G]'); title(['Multipole fit error at s = ' num2str(1000*s, '%8.3f mm (worst case).')]);
+        set(0, 'CurrentFigure',h1); clf(h1); plot(1e3*x, 1e4*dy); xlabel('Pos [mm]'); ylabel('dBy [G]'); title(['Multipole fit error at s = ' num2str(1000*s, '%8.3f mm (worst case).')]);
         drawnow; pause(0);
         set(gcf, 'Name','polynominal_b_fit_residue');
         %fprintf('%7.3f G @ %8.3f mm\n', 1e4*max_dy, 1000*s);
@@ -48,7 +48,7 @@ for i=1:length(rk_traj.s)
     dy = y_fit' - y;
     if (max(abs(dy)) > max_dy_a)
         max_dy_a = max(abs(dy));
-        figure(h2); clf(h2); plot(1e3*x, 1e4*dy); xlabel('Pos [mm]'); ylabel('dBx [G]'); title(['Multipole fit error at s = ' num2str(1000*s, '%8.3f mm (worst case).')]);
+        set(0, 'CurrentFigure',h2); clf(h2); plot(1e3*x, 1e4*dy); xlabel('Pos [mm]'); ylabel('dBx [G]'); title(['Multipole fit error at s = ' num2str(1000*s, '%8.3f mm (worst case).')]);
         drawnow; pause(0);
         set(gcf, 'Name','polynominal_a_fit_residue');
         %fprintf('%7.3f G @ %8.3f mm\n', 1e4*max_dy, 1000*s);
