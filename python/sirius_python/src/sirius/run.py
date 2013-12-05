@@ -5,9 +5,10 @@
 #import sys
 #sys.path.append('/home/ximenes/workspace')
 
-import ring_v403
+import ring_v500
 import pyring.tracking
 import pyring.lattice
+import pyring.optics
 import time
 import matplotlib.pyplot as plt
 
@@ -16,10 +17,12 @@ def example1():
     
     ''' load lattice model
         ------------------ '''
-    the_ring = ring_v403.create_lattice(mode = 'AC10', energy = 3e9)
+    the_ring = ring_v500.create_lattice(mode = 'AC10_6', energy = 3e9)
     the_ring = the_ring[::] # option to select subset of elements
     pyring.lattice.setcavity(the_ring, 'off')
     #pyring.lattice.printlattice(the_ring)
+    
+    pyring.optics.findorbit6(the_ring)
     
     ''' parameters '''
     nr_particles = 1
@@ -27,15 +30,12 @@ def example1():
     
     ''' selection of tracking method and initial conditions '''
     pos = nr_particles*[0.003,0.0000,0.0,0.0,0.0,0.0]
-    pyring.tracking.default_server = pyring.tracking.servers['trackcpp']
-    
-    
+       
     ''' timed tracking '''
     t0 = time.time()
     p = pyring.tracking.tracknturns(the_ring, pos = pos, nr_turns = nr_turns, turn_by_turn = True, trajectory = False)
     t1 = time.time()
     print('Total time: {0}'.format(t1-t0))
-    
     
     ''' selects result data '''
     p1 = pyring.tracking.get_particle(pos = p, nr_particles = nr_particles, nr_elements = 1, nr_turns = nr_turns, particle = 0)

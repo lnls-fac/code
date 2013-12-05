@@ -20,6 +20,7 @@ class marker(object):
          frequency   = None,
          voltage     = None,
          energy      = None,
+         hnumber     = None,
          t_in        = None,
          r_in        = None,
          angle_in    = None,
@@ -48,6 +49,7 @@ class marker(object):
         if voltage     is not None: self.voltage     = voltage
         if frequency   is not None: self.frequency   = frequency
         if energy      is not None: self.energy      = energy
+        if hnumber     is not None: self.hnumber     = hnumber
         
         if t_in        is not None: self.t_in        = t_in
         if r_in        is not None: self.r_in        = r_in
@@ -95,6 +97,8 @@ class marker(object):
         except: pass
         try: r += '    Energy: ' + str(self.energy) + '\n'
         except: pass
+        try: r += 'HarmNumber: ' + str(self.hnumber) + '\n'
+        except: pass
         try: r += '       TIn: ' + str(self.t_in) + '\n'
         except: pass
         try: r += '       RIn: ' + str(self.r_in) + '\n'
@@ -120,8 +124,8 @@ class corrector(marker):
         marker.__init__(self, pass_method = pass_method, kick_angle = kick_angle, **kwargs)
         
 class rfcavity(marker):
-    def __init__(self, voltage, frequency, energy, pass_method = passmethods.cavity_pass, **kwargs):
-        marker.__init__(self, pass_method = pass_method, voltage = voltage, frequency = frequency, energy = energy, **kwargs)
+    def __init__(self, voltage, frequency, energy, hnumber, pass_method = passmethods.cavity_pass, **kwargs):
+        marker.__init__(self, pass_method = pass_method, voltage = voltage, frequency = frequency, energy = energy, hnumber = hnumber, **kwargs)
 
 class quadrupole(marker):
     def __init__(self, pass_method = passmethods.str_mpole_symplectic4_pass, nr_steps = 10, polynom_a = None, polynom_b = None, **kwargs): 

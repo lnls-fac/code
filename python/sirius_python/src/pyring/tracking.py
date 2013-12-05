@@ -3,59 +3,73 @@ import passmethods
 import trackcpp
 import numpy
 
-servers = {
-    'pyring'   : 0,
-    'trackcpp' : 1,
-    'trackmgr' : 2,
-}
+def track1turn(lattice, pos, trajectory = False, engine = 'trackcpp'):
+    if engine == 'pyring':
+        return _Tracking.track1turn_pyring(lattice, pos, trajectory)
+    elif engine == 'trackcpp':
+        return _Tracking.track1turn_trackcpp(lattice, pos, trajectory)
+    else:
+        raise Exception('tracking engine not defined|implemented!')
+    
+def tracknturns(lattice, pos, nr_turns = 1, turn_by_turn = False, trajectory = False, engine = 'trackcpp'):
+    if engine == 'pyring':
+        return _Tracking.tracknturns_pyring(lattice, pos, nr_turns, turn_by_turn, trajectory, engine = engine)
+    elif engine == 'trackcpp':
+        return _Tracking.tracknturns_trackcpp(lattice, pos, nr_turns, turn_by_turn, trajectory, engine = engine)
+    else:
+        raise Exception('tracking server not defined|implemented!')
+    
 
-default_server = servers['trackcpp']
+def num2py(pos):
+    return numpy.reshape(pos, pos.size, order='F').tolist()
+def py2num(pos):
+    return numpy.reshape(numpy.array(pos), (6,-1), order='F')
+
 
 def get_turn (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, turn = None):
-    if len(pos) != (6*nr_particles*nr_elements*nr_turns):
+    if pos.shape[1] != (nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_turn invocation')
     if turn is None:
         turn = nr_turns-1
-    return pos[(turn*nr_elements*nr_particles*6):((turn+1)*nr_elements*nr_particles*6):1]
-
+    return pos[:,(turn*nr_elements*nr_particles):((turn+1)*nr_elements*nr_particles)]
 def get_element (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, element = None):
-    if len(pos) != (6*nr_particles*nr_elements*nr_turns):
+    if pos.shape[1] != (nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_element invocation')
     if element is None:
         element = nr_elements-1
     p = []
     for i in range(nr_turns):
-        p = p + pos[(i*nr_elements*nr_particles*6 + element*nr_particles*6):((i+1)*nr_elements*nr_particles*6 + element*nr_particles*6):1]
+        p = p + pos[:,(i*nr_elements*nr_particles + element*nr_particles):((i+1)*nr_elements*nr_particles + element*nr_particles)]
     return p
-
 def get_particle (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, particle = 0, ):
-    if len(pos) != (6*nr_particles*nr_elements*nr_turns):
+    if pos.shape[1] != (nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_particle invocation')
     p = []
     for i in range(nr_turns):
         for j in range(nr_elements):
-            p = p + pos[(i*nr_elements*nr_particles*6+j*nr_particles*6+particle*6):(i*nr_elements*nr_particles*6+j*nr_particles*6+(particle+1)*6):1]
+            p = p + pos[:,(i*nr_elements*nr_particles+j*nr_particles+particle):(i*nr_elements*nr_particles+j*nr_particles+(particle+1))]
     return p
-
-
 def get_rx(pos):
-    return pos[0::6]
+    return pos[0,:]
 def get_px(pos):
-    return pos[1::6]
+    return pos[1,:]
 def get_ry(pos):
-    return pos[2::6]
+    return pos[2,:]
 def get_py(pos):
-    return pos[3::6]
+    return pos[3,:]
 def get_de(pos):
-    return pos[4::6]
+    return pos[4,:]
 def get_dl(pos):
-    return pos[5::6]
+    return pos[5,:]
+
 
 
     
 
 
-class Tracking:
+
+
+class _Tracking:
 
     @staticmethod
     def tracknturns_pyring(lattice, particles, nr_turns, turn_by_turn, trajectory):
@@ -64,12 +78,12 @@ class Tracking:
         if turn_by_turn:
             new_particles = []
             for _ in range(nr_turns):
-                np = Tracking.track1turn_pyring(lattice, np, trajectory)
+                np = _Tracking.track1turn_pyring(lattice, np, trajectory)
                 new_particles += np
         else:
             new_particles = []
             for _ in range(nr_turns):
-                np = Tracking.track1turn_pyring(lattice, np, trajectory)
+                np = _Tracking.track1turn_pyring(lattice, np, trajectory)
             new_particles = np
         return new_particles
                 
@@ -115,25 +129,11 @@ class Tracking:
 
     @staticmethod
     def track1turn_trackcpp(lattice, pos, trajectory):
-        return trackcpp.track1turn(lattice, pos, trajectory)
+        return py2num(trackcpp.track1turn(lattice, num2py(pos), trajectory))
     
     @staticmethod
     def tracknturns_trackcpp(lattice, pos, nr_turns, turn_by_turn, trajectory):
-        return trackcpp.tracknturns(lattice, pos, nr_turns, turn_by_turn, trajectory)
+        return py2num(trackcpp.tracknturns(lattice, num2py(pos), nr_turns, turn_by_turn, trajectory))
 
 
-def track1turn(lattice, pos, trajectory = False):
-    if default_server == servers['pyring']:
-        return Tracking.track1turn_pyring(lattice, pos, trajectory)
-    elif default_server == servers['trackcpp']:
-        return Tracking.track1turn_trackcpp(lattice, pos, trajectory)
-    else:
-        raise Exception('tracking server not defined|implemented!')
     
-def tracknturns(lattice, pos, nr_turns = 1, turn_by_turn = False, trajectory = False):
-    if default_server == servers['pyring']:
-        return Tracking.tracknturns_pyring(lattice, pos, nr_turns, turn_by_turn, trajectory)
-    elif default_server == servers['trackcpp']:
-        return Tracking.tracknturns_trackcpp(lattice, pos, nr_turns, turn_by_turn, trajectory)
-    else:
-        raise Exception('tracking server not defined|implemented!')
