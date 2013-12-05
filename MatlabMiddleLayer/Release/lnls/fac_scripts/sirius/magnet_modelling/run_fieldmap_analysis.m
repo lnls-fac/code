@@ -1,10 +1,11 @@
 function r = run_fieldmap_analysis
 
 % initial cleanup
-clc; close('all'); fclose('all'); drawnow;
+clc;% close('all');
+fclose('all'); drawnow;
 
 % selects and loads configuration for analysis
-%parms = load_config('BOOSTER_B_MODELO2');
+parms = load_config('BOOSTER_B_MODELO2');
 %parms = load_config('BOOSTER_B_MODELO1');
 %parms = load_config('BOOSTER_B_MODELO1_TRAJ_CENTERED');
 %parms = load_config('BOOSTER_QD_MODELO2');
@@ -13,7 +14,7 @@ clc; close('all'); fclose('all'); drawnow;
 %parms = load_config('BOOSTER_QF_ERRORS');
 %parms = load_config('BOOSTER_QF_ERRORS_SKEW');
 
-parms = load_config('SIRIUS_B2_MODELO7');
+% parms = load_config('SIRIUS_B2_MODELO7');
 %parms = load_config('SIRIUS_CM_H');
 %parms = load_config('SIRIUS_CM_V');
 %parms = load_config('SIRIUS_QF_ERRORS');
@@ -36,6 +37,7 @@ else
     [~, zmax, xmin, xmax] = get_fmaps_boundingbox; s_length = max([zmax + (xmax - xmin), 1.01*parms.model.half_length]);
     rk_traj = calc_trajectory(s_length, parms.init_position, parms.runge_kutta_flags);
     if ~strcmpi(parms.magnet_type, 'dipole')
+%    if true
         % if not dipole RK_TRAJ (REF_TRAJ) should be straight line
         rk_traj.x = 0 * rk_traj.x;
         rk_traj.y = 0 * rk_traj.y;
