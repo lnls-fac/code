@@ -15,7 +15,7 @@ fmaps{1}.Ry       = [1 0 0; 0 1 0; 0 0 1];
 setappdata(0, 'FIELD_MAPS', fmaps);
 
 % for the case of combined correctors
-if exist('type','var')
+if exist('type','var') && ~strcmpi(type, 'suppress_plot')
     modify_fieldmap_for_correctors(type);
     fmaps = getappdata(0, 'FIELD_MAPS');
 end
@@ -26,26 +26,28 @@ x = data.x;
 z = data.z;
 [~,idx_z0] = min(abs(z));
 
-figure; plot(1000*x, data.by(idx_z0,:)); xlabel('Pos X [mm]'); ylabel('By [T]'); title('Transverse Rolloff of By');
-set(gcf, 'Name','transverse_rolloff_of_by')
-[~,idx_x0] = min(abs(x));
-figure; plot(1000*z, data.by(:,idx_x0)); xlabel('Pos Z [mm]'); ylabel('By [T]'); title('Longitudinal Rolloff of By');
-set(gcf, 'Name','longitudinal_rolloff_of_by')
+if ~exist('type','var') || ~strcmpi(type, 'suppress_plot')
+    figure; plot(1000*x, data.by(idx_z0,:)); xlabel('Pos X [mm]'); ylabel('By [T]'); title('Transverse Rolloff of By');
+    set(gcf, 'Name','transverse_rolloff_of_by')
+    [~,idx_x0] = min(abs(x));
+    figure; plot(1000*z, data.by(:,idx_x0)); xlabel('Pos Z [mm]'); ylabel('By [T]'); title('Longitudinal Rolloff of By');
+    set(gcf, 'Name','longitudinal_rolloff_of_by')
 
-figure; plot(1000*x, data.bx(idx_z0,:)); xlabel('Pos X [mm]'); ylabel('Bx [T]'); title('Transverse Rolloff of Bx');
-set(gcf, 'Name','transverse_rolloff_of_bx')
-[~,idx_x0] = min(abs(x));
-figure; plot(1000*z, data.bx(:,idx_x0)); xlabel('Pos Z [mm]'); ylabel('Bx [T]'); title('Longitudinal Rolloff of Bx');
-set(gcf, 'Name','longitudinal_rolloff_of_bx')
+    figure; plot(1000*x, data.bx(idx_z0,:)); xlabel('Pos X [mm]'); ylabel('Bx [T]'); title('Transverse Rolloff of Bx');
+    set(gcf, 'Name','transverse_rolloff_of_bx')
+    [~,idx_x0] = min(abs(x));
+    figure; plot(1000*z, data.bx(:,idx_x0)); xlabel('Pos Z [mm]'); ylabel('Bx [T]'); title('Longitudinal Rolloff of Bx');
+    set(gcf, 'Name','longitudinal_rolloff_of_bx')
+    
+    % prints by field roll-off
+    pos = 10; % [mm]
+    [~,idx] = min(abs(x/1000 - pos));
+    by0 = data.by(idx_z0, idx_x0);
+    by  = data.by(idx_z0, idx);
+    rolloff = 100 * (by - by0)/abs(by0);
+    fprintf('by(x) roll-off @ %f mm: %f %%\n', pos, rolloff);
 
-% prints by field roll-off
-pos = 10; % [mm]
-[~,idx] = min(abs(x/1000 - pos));
-by0 = data.by(idx_z0, idx_x0);
-by  = data.by(idx_z0, idx);
-rolloff = 100 * (by - by0)/abs(by0);
-fprintf('by(x) roll-off @ %f mm: %f %%\n', pos, rolloff);
-
+end
     
 
 

@@ -1,4 +1,10 @@
-function rk_traj = calc_field_on_rk_trajectory(rk_traj0, perp_grid)
+function rk_traj = calc_field_on_rk_trajectory(rk_traj0, perp_grid, verbose_off)
+
+if exist('verbose_off','var')
+    verbose_off = true;
+else
+    verbose_off = false;
+end
 
 rk_traj = rk_traj0;
 
@@ -9,8 +15,10 @@ max_dy_a = 0;
 max_dy_b = 0;
 on_axis_idx = find(xgrid == 0);
 
-h1 = figure;
-h2 = figure;
+if ~verbose_off
+    h1 = figure;
+    h2 = figure;
+end
 
 % removes fields of rk_traj, if rk traj was loaded
 if isfield(rk_traj, 'by_polynom'), rk_traj = rmfield(rk_traj,'by_polynom'); end;
@@ -33,7 +41,7 @@ for i=1:length(rk_traj.s)
     x = xgrid; y = field(2,:) - field(2, on_axis_idx);
     [coeffs_b y_fit] = mypolyfit(x, y, setdiff(monomials, [0]));
     dy = y_fit' - y;
-    if (max(abs(dy)) > max_dy_b)
+    if (max(abs(dy)) > max_dy_b) && (~verbose_off)
         max_dy_b = max(abs(dy));
         set(0, 'CurrentFigure',h1); clf(h1); plot(1e3*x, 1e4*dy); xlabel('Pos [mm]'); ylabel('dBy [G]'); title(['Multipole fit error at s = ' num2str(1000*s, '%8.3f mm (worst case).')]);
         drawnow; pause(0);
@@ -46,7 +54,7 @@ for i=1:length(rk_traj.s)
     y = y * sf.n(1); % Bx projection on the direction normal to the trajectory
     [coeffs_a y_fit] = mypolyfit(x, y, setdiff(monomials, [0]));
     dy = y_fit' - y;
-    if (max(abs(dy)) > max_dy_a)
+    if (max(abs(dy)) > max_dy_a)  && (~verbose_off)
         max_dy_a = max(abs(dy));
         set(0, 'CurrentFigure',h2); clf(h2); plot(1e3*x, 1e4*dy); xlabel('Pos [mm]'); ylabel('dBx [G]'); title(['Multipole fit error at s = ' num2str(1000*s, '%8.3f mm (worst case).')]);
         drawnow; pause(0);
@@ -78,7 +86,9 @@ rk_traj = filter_polynomial(rk_traj);
 %plot_fields(rk_traj);
 
 % plots multipoles on trajectory
-plot_polynomials(monomials, rk_traj);
+ if (~verbose_off)
+    plot_polynomials(monomials, rk_traj);
+ end
 
 
 function rk_traj = filter_polynomial(old_rk_traj)
