@@ -11,9 +11,15 @@ import pyring.lattice
 import pyring.optics
 import time
 import matplotlib.pyplot as plt
+import numpy
 
 def example1():
   
+    
+#     a = numpy.array([[0],[0]])
+#     b = numpy.array([[1],[1]])
+#     a[0,0] = b[0,0]
+    
     
     ''' load lattice model
         ------------------ '''
@@ -25,10 +31,15 @@ def example1():
     hcms = pyring.lattice.findcells(the_ring, 'fam_name', 'hcm')
     the_ring[hcms[0]].kick_angle[0] = 0.0003;
     
-    orb = pyring.optics.findorbit4(the_ring, refpts = [0,1], de = 0, guess = [0.000,0,0,0], init_nr_turns = 40, tol = 1e-16)
+    orb1 = pyring.optics.findorbit4(the_ring, refpts = [0,1], de = 0)
     
     
-    print(1e3*orb)
+    pyring.lattice.setcavity(the_ring, 'on')
+    orb2 = pyring.optics.findorbit6(the_ring)
+    
+    
+    print(1e3*orb1)
+    print(1e3*orb2)
     
     ''' parameters '''
     nr_particles = 1
