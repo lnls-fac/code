@@ -46,8 +46,8 @@ def example1():
     nr_turns     = 1000
     
     ''' selection of tracking method and initial conditions '''
-    pos = nr_particles*[0.003,0.0000,0.0,0.0,0.0,0.0]
-       
+    pos = numpy.zeros((6,nr_particles))
+    pos[:,0] = [0.003, 0, 0, 0, 0, 0]   
     ''' timed tracking '''
     t0 = time.time()
     p = pyring.tracking.tracknturns(the_ring, pos = pos, nr_turns = nr_turns, turn_by_turn = True, trajectory = False)
@@ -62,9 +62,6 @@ def example1():
     ''' plots result '''
     plt.scatter(rx,px)
     plt.show()
-
-
-
 
 
 
