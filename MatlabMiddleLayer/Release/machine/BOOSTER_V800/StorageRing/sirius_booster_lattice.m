@@ -119,7 +119,7 @@ lsich   = [lm145, sept_in, l80, ch, l25]; % septum de injecao
 
 fodo2ke  = [mqf, qf, lke, lqd, b, fliplr(lcvmon), lch, qf]; % aplic de 1
 fodo1se = [mqf, qf, lse, lfree, b, lfree, mon, lsf, qf];
-fodo2si = [mqf, qf, lfree, lqd, b, inj, fliplr(lcv), mon, lsich, qf];
+fodo2si = [mqf, qf, lfree, lqd, b, fliplr(lcv), mon, lsich, qf];
 fodo1ki = [mqf, qf, lki, lfree, b, lfree, mon, lsf, qf];
 boosinj = [fodo1sd, fodo2ke, fodo1se, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2];
 

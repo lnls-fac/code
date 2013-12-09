@@ -10,7 +10,7 @@ if strcmpi(magnet_type, 'dipole')
     ref_traj.beta_y = rk_traj.beta_y(sel);
     ref_traj.beta_z = rk_traj.beta_z(sel);
         
-    final_beta_z  = sqrt(1/(1+tan(nominal_ang)^2));
+    final_beta_z  = cos(nominal_ang);
     final_beta_x  = sign(rk_traj.beta_x(end)) * sqrt(1.0 - final_beta_z^2);
 %     final_beta_x = rk_traj.beta_x(end) * abs(nominal_ang / rk_traj.beta_x(end));
 %     final_beta_z = sqrt(1 - final_beta_x^2);

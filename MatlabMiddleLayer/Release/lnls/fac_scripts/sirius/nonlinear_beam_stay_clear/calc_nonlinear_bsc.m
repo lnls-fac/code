@@ -153,7 +153,7 @@ save(sprintf('%s',[date name]),'the_ring','points','bsch_pos','bsch_neg','bscv_p
 
 %por fim, vamos gerar um arquivo com o bsc nao linear
 fp = fopen('nonlinear_bsc.txt','w');
-fprintf(fp,'Beam Stay Clear nao-linear para a rede Sirius_v403-ac20_2\n\n');
+fprintf(fp,'Beam Stay Clear nao-linear para a rede Sirius_v500-ac10_6\n\n');
 fprintf(fp,'Pontos para os quais foi calculado: centro trechos retos, centro dipolos, BPMs, comeco quadrupolos\n\n');
 fprintf(fp,'%10s   %11s   %11s   %11s   %11s\n','Position [m]','BSC_Hp [mm]','BSC_Hn [mm]','BSC_Vp [mm]','BSC_Vn [mm]');
 fprintf(fp,'%10.5g   %11.5g   %11.5g   %11.5g   %11.5g\n',[spos;[bsch_pos;bsch_neg;bscv_pos;bscv_neg]*1e3]);

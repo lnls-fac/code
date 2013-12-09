@@ -19,7 +19,7 @@ for i=1:size(pts0,1)
     if pos(1) == 0
         disp('ok');
     end
-    beta_x = sf_in.p(1) + pts0(i,2);
+    beta_x = sf_in.t(1) + pts0(i,2);
     beta_z = sqrt(1-beta_x^2); % beta = constant
     p = [beta_x; 0; beta_z];
     traj = calc_trajectory(s_length, [pos; p], runge_kutta_flags);
@@ -59,7 +59,7 @@ beta_z = interp1(traj.s, traj.beta_z, s);
 
 sf.s = s;
 sf.r = [x; y; z];                                                 % coordenadas na posicaoo s da trajet?ria
-sf.p = [beta_x; beta_y; beta_z];                                  % velocidades na posicaoo s da trajet?ria
+% sf.p = [beta_x; beta_y; beta_z];                                  % velocidades na posicaoo s da trajet?ria
 sf.t = [beta_x; beta_y; beta_z] / norm([beta_x; beta_y; beta_z]); % versor tangente
 sf.n = [0 0 1; 0 1 0; -1 0 0] * sf.t;                             % versor normal
 sf.k = cross(sf.t, sf.n);                                         % versor torsao
