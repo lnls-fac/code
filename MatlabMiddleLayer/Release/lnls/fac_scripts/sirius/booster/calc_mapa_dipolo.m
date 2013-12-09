@@ -18,13 +18,14 @@
 % name = 'modelo4_fewsegments.mat';
 % name = 'modelo4_segmentado.mat';
 % name = 'modelo4.mat';
-name = 'modelo4_4segments.mat';
+% name = 'modelo4_4segments.mat';
+name = 'modelo4_6segments.mat';
 at_model = load(['/home/fac_files/data/sirius_mml/magnet_modelling/CONFIGS/BOOSTER_B_MODELO2/' name]);
 at_model = at_model.r.at_model;
 comp_atmod = findspos(at_model, length(at_model)+1);
 
 the_ring = sirius_booster_lattice();
-atsummary(the_ring);
+% atsummary(the_ring);
 idx_dip = findcells(the_ring,'FamName','B');
 n_dip = length(idx_dip);
 comp_dip = the_ring{idx_dip(1)}.Length/2;

@@ -31,7 +31,7 @@ for i=1:size(pts0,1)
     p1(1,1) = interp1q(traj.s, traj.beta_x, s_intersection);
     p1(2,1) = interp1q(traj.s, traj.beta_y, s_intersection);
     p1(3,1) = interp1q(traj.s, traj.beta_z, s_intersection);
-    dp = (p1 - sf_out.p)'*sf_out.n;
+    dp = (p1 - sf_out.t)'*sf_out.n;
     pts1(i,:) = [x_perp dp 0 0 0 s_intersection - ref_traj.s(end)];
 
     fprintf('rx = %+7.2f [mm] -> px = %+7.4f [mrad] \n', 1e3*pts0(i,1), 1e3*pts1(i,2));

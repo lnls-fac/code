@@ -54,7 +54,7 @@ rk_traj = calc_field_on_rk_trajectory(rk_traj, parms.perp_grid);
 rk_traj_parms = calc_parameters_on_rk_trajectory(rk_traj, parms.beam, parms.magnet_type, parms.tracy.r0, parms.perp_grid.monomials);
 
 % creates segmentated model based on PolynomB profil
-seg_model = generate_model_segmentation(rk_traj, parms.model.half_length, parms.perp_grid.monomials, 'load_return', parms.config_path);
+seg_model = generate_model_segmentation(rk_traj, parms.model.half_length, parms.perp_grid.monomials, 'load', parms.config_path);
 
 % creates segmented AT model (with thin element bumping all multipoles outside model half-length)
 at_model  = create_at_model(rk_traj, seg_model, parms.magnet_type, parms.perp_grid.monomials, parms.nominal_ang);

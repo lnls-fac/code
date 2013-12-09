@@ -34,3 +34,9 @@ ref_traj = rk_traj;
 
 % tracks particle through fieldmap and generates kick curves
 fieldmap_track = track_through_fieldmap(ref_traj, parms.track, parms.runge_kutta_flags);
+
+xi  = fieldmap_track.in_pts(:,1)';
+pxf = fieldmap_track.out_pts(:,2)';
+r.kick_coeffs = mypolyfit(xi,pxf,parms.perp_grid.monomials);
+
+
