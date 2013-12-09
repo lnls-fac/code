@@ -37,18 +37,14 @@ def get_element (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, element =
         raise Exception('inconsistent parameters in get_element invocation')
     if element is None:
         element = nr_elements-1
-    p = []
-    for i in range(nr_turns):
-        p = p + pos[:,(i*nr_elements*nr_particles + element*nr_particles):((i+1)*nr_elements*nr_particles + element*nr_particles)]
-    return p
+    selection = numpy.zeros((6,nr_turns*nr_particles))
+    for t in range(nr_turns):
+        selection[:,t*nr_particles::nr_elements] = pos[:,(t*nr_elements*nr_particles+element*nr_particles):(t*nr_elements*nr_particles+(element+1)*nr_particles)]
+    return selection
 def get_particle (pos, nr_particles = 1, nr_elements = 1, nr_turns = 1, particle = 0, ):
     if pos.shape[1] != (nr_particles*nr_elements*nr_turns):
         raise Exception('inconsistent parameters in get_particle invocation')
-    selection = numpy.zeros((6,nr_turns*nr_elements))
-    for i in range(nr_turns):
-        for j in range(nr_elements):       
-            selection[:,i*nr_elements+j] = pos[:,i*nr_elements*nr_particles+j*nr_particles+particle]
-    return selection
+    return pos[:,particle::nr_elements]
 def get_rx(pos):
     return pos[0,:]
 def get_px(pos):
