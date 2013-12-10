@@ -2,8 +2,8 @@
 
 // DOCSTRINGS
 static char module_docstring[]            = "Module for efficiently tracking particles in transport lines and storage rings";
-static char trackcpp_linepass_docstring[] = "linepass(the_ring, pos, trajectory)";
-static char trackcpp_ringpass_docstring[] = "ringpass(the_ring, pos, nr_turns, turn_by_turn)";
+static char trackcpp_linepass_docstring[] = "linepass(the_ring, particles, trajectory)";
+static char trackcpp_ringpass_docstring[] = "ringpass(the_ring, particles)";
 
 static PyMethodDef trackcpp_methods[] = {
 	{"linepass", (PyCFunction)trackcpp_linepass, METH_VARARGS, trackcpp_linepass_docstring},

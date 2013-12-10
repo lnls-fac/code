@@ -111,7 +111,6 @@ void mp_task_mgr(int nr_cpus, int nr_pnts, void *data_in, void *data_out, int da
 
 	printf("<mp_task_mgr> FINISH\n");
 
-
 }
 
 #undef FMAP_MP_DATA_RAW

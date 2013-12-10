@@ -1,10 +1,5 @@
 #!/usr/bin/python
 
-# importing libraries from bash
-# -----------------------------
-#import sys
-#sys.path.append('/home/ximenes/workspace')
-
 import ring_v500
 import pyring.tracking
 import pyring.lattice
@@ -21,22 +16,34 @@ def test_linepass(the_ring):
     
     #s = pyring.lattice.findspos(lattice = the_ring, indices = range(len(the_ring)))
     
-    posi = numpy.zeros((6,1))
+    nr_particles = 2
+    refpts = [0,1500-1,len(the_ring)]
+    posi = numpy.zeros((6,nr_particles))
     posi[:,0] = [0.001,0,0,0,0,0]
-    posf = pyring.tracking.linepass(lattice = the_ring, pos = posi, trajectory = True, engine = 'pyring')
+    posi[:,1] = [0.002,0,0,0,0,0]
+    posf = pyring.tracking.linepass(lattice = the_ring, particles = posi, refpts = refpts, engine = 'pyring')
     
-    for i in range(6):
-        print('{:22.16E}'.format(posf[i,-1]))
+    for i in range(posf.shape[0]):
+        for j in range(posf.shape[1]):
+            print('{:+22.16E} '.format(posf[i,j])),
+        print('')
 #     plt.plot(s, 1000*posf[0,:])
 #     plt.xlabel('s [m]'); plt.ylabel('x [mm]')
 #     plt.show()
     
-def test_tracknturns(the_ring):
+def test_ringpass(the_ring):
     
-    nr_turns = 200
+    nr_turns = 1000
     posi = numpy.array([[0.001],[0],[0],[0],[0],[0]])
-    posf = pyring.tracking.ringpass(lattice = the_ring, pos = posi, nr_turns = nr_turns, turn_by_turn = True, engine = 'pyring')
+    posf = pyring.tracking.ringpass(ring = the_ring, particles = posi, nr_turns = nr_turns, engine = 'trackcpp')
     
+
+    
+    for i in range(posf.shape[0]):
+        for j in range(posf.shape[1]):
+            print('{:+22.16E} '.format(posf[i,j])),
+        print('')
+        
     plt.scatter(1000*posf[0,:],1000*posf[1,:])
     plt.xlabel('x [mm]'); plt.ylabel('xl [mrad]')
     plt.show()          
@@ -89,11 +96,8 @@ def run_tests():
     
     
     test_linepass(the_ring)
-    #test_tracknturns(the_ring)
+    #test_ringpass(the_ring)
     #test_findorbit4(the_ring)
-    
-    
-    
     
     
 #     pyring.lattice.setcavity(the_ring, 'on')

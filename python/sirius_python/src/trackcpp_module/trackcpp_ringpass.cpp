@@ -6,8 +6,8 @@ extern std::string TrackcppErrorMsg;
 
 PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 
-	PyObject *py_lattice, *py_pos, *py_nr_turns, *py_turn_by_turn;
-	if (!PyArg_ParseTuple(args, "OOOO", &py_lattice, &py_pos, &py_nr_turns, &py_turn_by_turn))
+	PyObject *py_lattice, *py_pos, *py_nr_turns;
+	if (!PyArg_ParseTuple(args, "OOO", &py_lattice, &py_pos, &py_nr_turns))
 		return NULL;
 
 	Py_INCREF(py_lattice);
@@ -15,7 +15,6 @@ PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 
 
 	int  nr_turns = PyInt_AS_LONG(py_nr_turns);
-	bool turn_by_turn = PyObject_IsTrue(py_turn_by_turn);
 
 	// reads pyring particles coordinates in phase space into trackc++ vector
 	std::vector<Pos<double> > orig_pos;
@@ -40,7 +39,7 @@ PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 	int element_idx = -1;
 	int turn_idx    = -1;
 	std::vector<Pos<double> > pos;
-	Status::type ret = ringpass (lattice, orig_pos, pos, nr_turns, &turn_idx, &element_idx, turn_by_turn);
+	Status::type ret = ringpass (lattice, orig_pos, pos, nr_turns, &turn_idx, &element_idx);
 
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {

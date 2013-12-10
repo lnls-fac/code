@@ -36,7 +36,7 @@ trackc++-debug:	$(OBJECTS)
 	g++ $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
 
 clean:
-	rm -rf *.o trackc++ trackc++-debug .depend *.out *.dat
+	rm -rf *.o trackc++ trackc++-debug .depend *.out *.dat *~
 
 cleanall: clean
 	cd tracking_mp; make clean;
