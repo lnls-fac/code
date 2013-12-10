@@ -4,7 +4,7 @@
 #include "trackc++.h"
 
 template <typename T>
-Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, int *element_idx, bool trajectory) {
+Status::type linepass (const std::vector<Element>& lattice, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, int *element_idx, bool trajectory) {
 
 	Status::type status;
 
@@ -14,6 +14,14 @@ Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> 
 	for(int i=0; i<nr_elements; ++i) {
 		*element_idx = i;
 		const Element& element = lattice[i];
+
+		// records trajectory at beginning of lattice or at all elements if flagged
+		if (trajectory || (i == 0)) {
+			for(int j=0; j<nr_particles;++j) {
+				pos.push_back(orig_pos[j]);
+			}
+		}
+
 		switch (lattice[i].pass_method) {
 			case PassMethod::pm_identity_pass:
 				if ((status = pm_identity_pass<T>(orig_pos, element)) != Status::success) return status;
@@ -46,11 +54,6 @@ Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> 
 			default:
 				return Status::passmethod_not_defined;
 		}
-		if (trajectory || (i == nr_elements-1)) {
-			for(int j=0; j<nr_particles;++j) {
-				pos.push_back(orig_pos[j]);
-			}
-		}
 		//std::cout << " " << pos[0].rx << std::endl;
 	}
 
@@ -60,22 +63,20 @@ Status::type track1turn(const std::vector<Element>& lattice, std::vector<Pos<T> 
 
 
 template <typename T>
-Status::type tracknturns(const std::vector<Element>& lattice, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, const int nr_turns, int *turn_idx, int *element_idx, bool turn_by_turn, bool trajectory) {
+Status::type ringpass (const std::vector<Element>& lattice, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, const int nr_turns, int *turn_idx, int *element_idx, bool turn_by_turn) {
 
 	Status::type status;
-
 
 	for(int n=0; n<nr_turns; ++n) {
 		*turn_idx = n;
 		std::vector<Pos<T> > tmp_pos;
-		if ((status = track1turn(lattice, orig_pos, tmp_pos, element_idx, trajectory)) != Status::success) return status;
-		if (turn_by_turn || (n == nr_turns-1)) {
+		if ((status = linepass (lattice, orig_pos, tmp_pos, element_idx, false)) != Status::success) return status;
+		if (turn_by_turn || (n == 0)) {
 			for(int j=0; j<tmp_pos.size();++j) {
-				pos.push_back(tmp_pos[j]);
+				pos.push_back(orig_pos[j]);
 			}
 		}
 	}
-
 	return Status::success;
 
 }

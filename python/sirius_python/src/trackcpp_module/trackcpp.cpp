@@ -1,13 +1,13 @@
 #include "trackcpp.h"
 
 // DOCSTRINGS
-static char module_docstring[]              = "Module for efficiently tracking particles in transport lines and storage rings";
-static char trackcpp_track1turn_docstring[]  = "track1turn(the_ring, pos, trajectory)";
-static char trackcpp_tracknturns_docstring[] = "tracknturns(the_ring, pos, nr_turns, turn_by_turn, trajectory)";
+static char module_docstring[]            = "Module for efficiently tracking particles in transport lines and storage rings";
+static char trackcpp_linepass_docstring[] = "linepass(the_ring, pos, trajectory)";
+static char trackcpp_ringpass_docstring[] = "ringpass(the_ring, pos, nr_turns, turn_by_turn)";
 
 static PyMethodDef trackcpp_methods[] = {
-	{"track1turn",  (PyCFunction)trackcpp_track1turn,  METH_VARARGS, trackcpp_track1turn_docstring},
-	{"tracknturns", (PyCFunction)trackcpp_tracknturns, METH_VARARGS, trackcpp_tracknturns_docstring},
+	{"linepass", (PyCFunction)trackcpp_linepass, METH_VARARGS, trackcpp_linepass_docstring},
+	{"ringpass", (PyCFunction)trackcpp_ringpass, METH_VARARGS, trackcpp_ringpass_docstring},
 	{NULL, NULL, 0, NULL}
 };
 
@@ -21,5 +21,4 @@ PyMODINIT_FUNC inittrackcpp(void) {
 	TrackcppError = PyErr_NewException("trackcpp.error", (PyObject*) NULL, (PyObject*) NULL);
 	Py_INCREF(TrackcppError);
 	PyModule_AddObject(m, "error", TrackcppError);
-
 };

@@ -6,7 +6,7 @@ import copy
 def findspos(lattice, indices = None):
     if indices is None:
         indices = len(lattice)    
-    pos = (len(lattice)+1) * [0]
+    pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
     pos[-1] = pos[-2] + lattice[-1].length
@@ -32,7 +32,15 @@ def getcellstruct(lattice, attribute_name, indices):
     for idx in indices:
         data.append(getattr(lattice[idx], attribute_name))
     return data
- 
+
+def setcellstruct(lattice, attribute_name, indices, values):    
+    for idx in range(len(indices)):
+        try:
+            setattr(lattice[indices[idx]], attribute_name, values[idx])
+        except:
+            setattr(lattice[indices[idx]], attribute_name, values)
+    return lattice
+
 def finddict(lattice, attribute_name):
     latt_dict = {}  
     for i in range(len(lattice)):
@@ -56,9 +64,11 @@ def setcavity(lattice, state):
     indices = findcells(lattice, 'frequency')
     for idx in indices:
         lattice[idx].pass_method = pass_method
+    return lattice
         
 def setradiation(lattice, state):
     pass
+    #raise Exception('setradiation: not yet implemented')
 
 
 

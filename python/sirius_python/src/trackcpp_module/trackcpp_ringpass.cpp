@@ -4,10 +4,10 @@
 extern PyObject *TrackcppError;
 extern std::string TrackcppErrorMsg;
 
-PyObject*  trackcpp_tracknturns(PyObject *self, PyObject *args) {
+PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 
-	PyObject *py_lattice, *py_pos, *py_nr_turns, *py_turn_by_turn, *py_trajectory;
-	if (!PyArg_ParseTuple(args, "OOOOO", &py_lattice, &py_pos, &py_nr_turns, &py_turn_by_turn, &py_trajectory))
+	PyObject *py_lattice, *py_pos, *py_nr_turns, *py_turn_by_turn;
+	if (!PyArg_ParseTuple(args, "OOOO", &py_lattice, &py_pos, &py_nr_turns, &py_turn_by_turn))
 		return NULL;
 
 	Py_INCREF(py_lattice);
@@ -16,9 +16,6 @@ PyObject*  trackcpp_tracknturns(PyObject *self, PyObject *args) {
 
 	int  nr_turns = PyInt_AS_LONG(py_nr_turns);
 	bool turn_by_turn = PyObject_IsTrue(py_turn_by_turn);
-	bool trajectory = PyObject_IsTrue(py_trajectory);
-
-
 
 	// reads pyring particles coordinates in phase space into trackc++ vector
 	std::vector<Pos<double> > orig_pos;
@@ -43,7 +40,7 @@ PyObject*  trackcpp_tracknturns(PyObject *self, PyObject *args) {
 	int element_idx = -1;
 	int turn_idx    = -1;
 	std::vector<Pos<double> > pos;
-	Status::type ret = tracknturns(lattice, orig_pos, pos, nr_turns, &turn_idx, &element_idx, turn_by_turn, trajectory);
+	Status::type ret = ringpass (lattice, orig_pos, pos, nr_turns, &turn_idx, &element_idx, turn_by_turn);
 
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {

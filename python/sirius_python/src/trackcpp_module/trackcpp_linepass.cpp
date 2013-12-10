@@ -4,7 +4,7 @@
 extern PyObject *TrackcppError;
 extern std::string TrackcppErrorMsg;
 
-PyObject*  trackcpp_track1turn(PyObject *self, PyObject *args) {
+PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 
 	PyObject *py_lattice, *py_pos, *py_trajectory;
@@ -39,7 +39,7 @@ PyObject*  trackcpp_track1turn(PyObject *self, PyObject *args) {
 	// Does tracking
 	int element_idx = -1;
 	std::vector<Pos<double> > pos;
-	Status::type ret = track1turn(lattice, orig_pos, pos, &element_idx, trajectory);
+	Status::type ret = linepass (lattice, orig_pos, pos, &element_idx, trajectory);
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
 			std::string pmname = pm_dict[lattice[element_idx].pass_method];

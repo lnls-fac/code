@@ -1,5 +1,5 @@
 #import mathphysicslibs.constants as mpconsts
-#import lattice
+import lattice
 import tracking
 import numpy
 
@@ -21,6 +21,7 @@ def findorbit4(ring, de = 0, refpts = None, guess = None, init_nr_turns = 20, to
         guess = numpy.array(guess)
         Ri[:4,0] = guess[:4,0]
     Ri_next = numpy.zeros((6,1))
+    
     
     ''' main loop '''
     while True:
@@ -54,6 +55,7 @@ def findorbit4(ring, de = 0, refpts = None, guess = None, init_nr_turns = 20, to
         
     ''' returns 4d (default) or 6d closed orbit data '''
     if turn_by_turn:
+        Rf = numpy.zeros((6,1+init_nr_turns))
         Ri = tracking.tracknturns(lattice = ring, pos = Ri, nr_turns = init_nr_turns, turn_by_turn = True, trajectory = False, engine = 'trackcpp')
         return Ri
     else:
