@@ -7,8 +7,10 @@ Afonso Haruo Carnielli Mukai (FAC - LNLS)
 2013-12-04: v0.1
 """
 
-import CustomPlot
+import matplotlib.ticker
 import ColorConversion
+import PositionLine
+import CustomPlot
 
 
 DEFAULT_BACKGROUND_COLOR = ColorConversion.DEFAULT_BACKGROUND_COLOR
@@ -35,8 +37,7 @@ class PositionPlot(CustomPlot.CustomPlot):
                  autoscale=True,
                  axis_extra_spacing=0,
                  interval_min=0,
-                 interval_max=1,
-                 interpolate=False):
+                 interval_max=1):
         
         if not interval_min <= interval_max:
             raise IntervalBoundsError
@@ -50,21 +51,12 @@ class PositionPlot(CustomPlot.CustomPlot):
                 
         self._interval_min = interval_min
         self._interval_max = interval_max
-        self._interpolate = interpolate
         
         self.x_axis = (self._interval_min, self._interval_max)
         
         self._ticks = {}
         self._selected_ticks = []
        
-    @property 
-    def interpolate(self):
-        return self._interpolate
-    
-    @interpolate.setter
-    def interpolate(self, value):
-        self._interpolate = value
-    
     @property
     def ticks(self):
         return self._ticks
@@ -80,10 +72,30 @@ class PositionPlot(CustomPlot.CustomPlot):
         self._ticks = dict(name_pos_pairs)
     
     def select_ticks(self, names):
-        for name in names:
-            if not self._ticks.has_key(name):
-                raise KeyError
+        """
+        Select ticks to be displayed.
+        Raises KeyError if names are not valid keys.
+        """
+        self._check_tick_names_exist(names)        
+        pos = self._get_selected_ticks_pos_by_name(names)
+        ticker = matplotlib.ticker.FixedLocator(locs=pos, nbins=len(pos))
+        formatter = matplotlib.ticker.FixedFormatter(names)
+        self._axes.xaxis.set_major_locator(ticker)
+        self._axes.xaxis.set_major_formatter(formatter)
         self._selected_ticks = names
+    
+    def add_line(self, name, interpolate=False):
+        """Add new line for presenting (position,y) data"""
+        line, = self._axes.plot([])
+        self._lines[name] = PositionLine.PositionLine(line,
+                                                      self._interval_min,
+                                                      self._interval_max,
+                                                      interpolate)
+    
+    def update_plot(self):
+        for line in self._lines:
+            self._lines[line].set_data_to_plot()
+        self.super.update_plot()
     
     def _find_axis_min_and_max(self, axis):
         if axis == 'y':
@@ -93,3 +105,14 @@ class PositionPlot(CustomPlot.CustomPlot):
             new_max = self._interval_max
             result = (new_min, new_max)
         return result
+    
+    def _check_tick_names_exist(self, names):
+        for name in names:
+            if not self._ticks.has_key(name):
+                raise KeyError
+    
+    def _get_selected_ticks_pos_by_name(self, names):
+        pos = []
+        for name in names:
+            pos.append(self._ticks[name])
+        return pos

@@ -55,15 +55,7 @@ class CustomLine(object):
     @color.setter
     def color(self, color):
         new_color = ColorConversion.normalize_color(color)
-        self.line.set_color(new_color)
-    
-    @property    
-    def marker_fill(self):
-        return self.line.get_fillstyle()
-        
-    @marker_fill.setter
-    def marker_fill(self, style):
-        self.line.get_fillstyle(style)
+        self.line.set_color(new_color)    
     
     @property
     def line_style(self):
@@ -88,6 +80,24 @@ class CustomLine(object):
     @marker.setter
     def marker(self, marker):
         self.line.set_marker(marker)
+    
+    @property    
+    def marker_fill(self):
+        return self.line.get_fillstyle()
+        
+    @marker_fill.setter
+    def marker_fill(self, style):
+        self.line.set_fillstyle(style)
+    
+    @property
+    def marker_edge_color(self):
+        color = self.line.get_markeredgecolor()
+        return ColorConversion.denormalize_color(color)
+    
+    @marker_edge_color.setter
+    def marker_edge_color(self, color):
+        new_color = ColorConversion.normalize_color(color)
+        self.line.set_markeredgecolor(new_color)
     
     @property
     def marker_face_color(self):

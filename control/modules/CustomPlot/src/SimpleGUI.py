@@ -17,6 +17,7 @@ import numpy
 from PyQt4 import QtGui, QtCore
 import CustomPlot
 import DateTimePlot
+import PositionPlot
 
 
 class Window(QtGui.QWidget):
@@ -38,6 +39,10 @@ class Window(QtGui.QWidget):
         self.plot = CustomPlot.CustomPlot(**args)        
         self.plot_datetime = DateTimePlot.DateTimePlot(**args)
         
+        args['interval_min'] = -1
+        args['interval_max'] = 10
+        self.plot_position = PositionPlot.PositionPlot(**args)
+        
         self.plot.show_x_grid('green', line_style='-', line_width=1.5)
         self.plot.show_y_grid('yellow', line_style='-', line_width=1.0)
         self.plot.hide_y_grid()        
@@ -55,6 +60,7 @@ class Window(QtGui.QWidget):
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.plot)
         layout.addWidget(self.plot_datetime)
+        layout.addWidget(self.plot_position)
         layout.addWidget(self.label)        
         layout.addWidget(self.button)
         
@@ -137,6 +143,36 @@ class Window(QtGui.QWidget):
         self.update_times = collections.deque(maxlen=10)
         self.last_update = datetime.datetime.now()
         self.timer.start(100)
+        
+        # PositionPlot
+        
+        self.plot_position.show_y_grid()
+        
+        size = 10
+        names = [str(5+i)+'a' for i in range(size)]
+        pos = range(size)
+        values = numpy.random.normal(size=len(pos))
+        
+        self.plot_position.define_ticks(names, pos)
+        self.plot_position.x_axis_extra_spacing = 0.01
+        self.plot_position.y_axis_extra_spacing = 0.05
+        selected_ticks = names[0:-1:2]
+        self.plot_position.select_ticks(selected_ticks)
+        self.plot_position.add_line('line', interpolate=True)
+        self.plot_position.add_line('markers', interpolate=False)        
+        self.plot_position.line('line').x = pos
+        self.plot_position.line('line').y = values
+        self.plot_position.line('markers').x = pos
+        self.plot_position.line('markers').y = values
+        self.plot_position.line('markers').marker = 's'
+        self.plot_position.line('markers').line_style = ''
+        self.plot_position.line('markers').marker_fill = 'left'
+        self.plot_position.line('markers').marker_color = 'blue'
+        self.plot_position.line('markers').marker_edge_color = 'blue'
+        self.plot_position.line('markers').marker_face_color = 'blue'
+        print(self.plot_position.selected_ticks)
+        
+        self.plot_position.update_plot()
     
     def update_plot_datetime(self):
         i = self.x_index
