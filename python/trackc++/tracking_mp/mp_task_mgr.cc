@@ -1,8 +1,9 @@
-// MP_TASK_MGR
+// TRACKING_MP
 // ===========
-// Rotina genérica de paralelização.
-//
-// 2012-08-20	Ximenes R. Resende
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		2012-08-20
 
 #include "mp_task_mgr.h"
 

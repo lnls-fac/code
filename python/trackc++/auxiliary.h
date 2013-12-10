@@ -1,11 +1,23 @@
 #ifndef _AUXILIARY_H
 #define _AUXILIARY_H
 
+// TRACKC++
+// ========
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		Tue Dec 10 17:57:20 BRST 2013
+
 #include <vector>
 #include <string>
 #include <ostream>
 #include <iostream>
 #include <cmath>
+
+// Important: 	the order of these passmethods and the order
+// ==========	of the pyring passmethods have to be the same
+//				so that python can correctly call trackcpp
+//				module.
 
 struct PassMethod {
 	enum type {
@@ -35,7 +47,8 @@ struct Status {
 	enum type {
 		success = 0,
 		passmethod_not_defined = 1,
-		passmethod_not_implemented = 2
+		passmethod_not_implemented = 2,
+		particle_lost = 3
 	};
 };
 

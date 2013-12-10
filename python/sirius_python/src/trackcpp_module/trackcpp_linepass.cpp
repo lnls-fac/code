@@ -1,3 +1,10 @@
+// TRACKCPP
+// ========
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		Tue Dec 10 18:14:27 BRST 2013
+
 #include "trackcpp.h"
 
 // Exception object

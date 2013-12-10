@@ -1,3 +1,10 @@
+# TRACKING_MP
+# ===========
+# Author: 		Ximenes R. Resende
+# email:  		xresende@gmail.com, ximenes.resende@lnls.br
+# affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+# Date: 		2012-08-20
+
 all:	tracking_mp
 
 tracking_mp:
@@ -7,8 +14,6 @@ tracking_mp:
 	#g++ -m64 -O2 -c fmapdp_mp.cc
 	ar r tracking_mp.a *.o 
 
-
-
 clean:
-	rm -rf *.o *.a
+	rm -rf *.o *.a *~
 

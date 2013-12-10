@@ -3,8 +3,12 @@
 //  TEMPLATE CLASS IMPLEMENTATION OF TRUNCATED POWER SERIES AND ITS ALGEBRA
 // _________________________________________________________________________
 //
-// By Ximenes R. Resende
-// August 31st, 2006 @ LNLS
+// TPSA
+// ====
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		August 31st, 2006 @ LNLS
 //
 // Notes:
 //
@@ -32,6 +36,7 @@
 
 #include <complex>
 #include <cstring>
+#include <ostream>
 
 
 // Expression Templates: IMPLEMENTATION OF BINOMIALS COEFFICIENTS AND RELATED RELEVANT EXPRESSIONS
@@ -652,7 +657,7 @@ std::ostream& operator << (std::ostream& out, const tpsa_t<V,N,TYPE>& o) {
 		out << i << "  ";
 		tpsa_t<V,N,TYPE>::get_power(i,p);
 		for(unsigned int v=0; v<tpsa_t<V,N,TYPE>::get_v(); v++) out << p[v] << " ";
-		out << "  " << o.get_c(i) << std::endl;
+		out << "  " << o.get_c(i); out << std::endl;
 	}
 	return out;
 }

@@ -1,12 +1,13 @@
-// FMAP_MP
-// =======
-// Rotina que paraleliza o cálculo de abertura dinâmica 'fmap' com análise NAFF
-//
-// 2012-08-20	Ximenes R. Resende
-
-
 #ifndef FMAP_MP_H
 #define FMAP_MP_H
+
+// TRACKING_MP
+// ===========
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		2012-08-20
+
 
 #include <stdlib.h>
 

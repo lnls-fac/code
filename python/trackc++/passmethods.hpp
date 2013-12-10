@@ -1,6 +1,12 @@
 #ifndef _PASS_METHOD_AT_H
 #define _PASS_METHOD_AT_H
 
+// TRACKC++
+// ========
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		Tue Dec 10 17:57:20 BRST 2013
 
 #include "auxiliary.h"
 #include "pos.h"
@@ -148,6 +154,7 @@ Status::type pm_str_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Eleme
 	const std::vector<double> &polynom_a = elem.polynom_a;
 	const std::vector<double> &polynom_b = elem.polynom_b;
 	for(unsigned int p=0; p<pos.size(); ++p) {
+
 		T &de = pos[p].de;
 		for(unsigned int i=0; i<elem.nr_steps; ++i) {
 			T norm   = 1/(1 + de);

@@ -1,9 +1,9 @@
-// FMAPDP_MP
-// =========
-// Rotina que paraleliza o cálculo de abertura dinâmica 'fmapdp' com análise NAFF
-//
-// 2012-08-20	Ximenes R. Resende
-
+// TRACKING_MP
+// ===========
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		2012-08-20
 
 #include "fmapdp_mp.h"
 

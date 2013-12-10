@@ -36,6 +36,20 @@ def ringpass (ring, particles, nr_turns = 1, engine = 'trackcpp'):
     else:
         raise Exception('tracking server not defined|implemented!')
     
+def lost (particles, nr_particles = 1, nr_elements = 1, nr_turns = 1):
+    
+    if particles.shape[1] != (nr_turns * nr_elements * nr_particles):
+        raise Exception('pyring.tracking.lost: invocation with inconsistent parameters')
+    
+    (_,lost_idx) = numpy.nonzero(numpy.isnan(particles))
+    if len(lost_idx) != 0:
+        first_lost_idx = lost_idx[0] # first lost particle
+        (turn, element, particle) = numpy.unravel_index(first_lost_idx, (nr_turns, nr_elements, nr_particles))
+        return (turn, element, particle)
+    else:
+        return ()
+    
+    
 def select(particles, nr_particles = 1, nr_elements = 1, nr_turns = 1, particle = None, element = None, turn = None):
     
     if particles.shape[1] != (nr_turns * nr_elements * nr_particles):
