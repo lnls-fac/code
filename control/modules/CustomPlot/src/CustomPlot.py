@@ -325,9 +325,9 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
 
     def _get_line_data_from_axis(self, line, axis):
         if axis == 'x':
-            return line.get_x()
+            return line.x
         elif axis == 'y':
-            return line.get_y()
+            return line.y
         else:
             raise AxisNameError
 

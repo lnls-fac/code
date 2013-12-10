@@ -24,8 +24,8 @@ class TestScaleBounds(unittest.TestCase):
         t0 = datetime.datetime(2000, 1, 1, 10)
         self.t = [t0 + datetime.timedelta(hours=i) for i in range(3)]        
         self.y = range(len(self.t))
-        self.plot.line('line').set_x(self.t)
-        self.plot.line('line').set_y(self.y)
+        self.plot.line('line').x = self.t
+        self.plot.line('line').y = self.y
     
     def test_scale_x_bounds_min_one(self):
         self.plot.x_axis_extra_spacing = datetime.timedelta(minutes=30)

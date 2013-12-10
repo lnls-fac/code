@@ -26,7 +26,7 @@ class TestEmptyLine(unittest.TestCase):
         self.datetime_line = DateTimeLine.DateTimeLine(self.line)
 
     def test_get_length_empty(self):
-        result = self.datetime_line.get_length()
+        result = self.datetime_line.length
         self.assertEqual(result, 0,
                          'length not empty')
 
@@ -45,44 +45,52 @@ class TestSetGet(unittest.TestCase):
         t0 = datetime.datetime(2000, 1, 1, 0, 0, 0)
         self.t = [t0 + datetime.timedelta(hours=i) for i in range(10)]
         self.y = range(len(self.t))
-        self.datetime_line.set_x(self.t)
-        self.datetime_line.set_y(self.y)
+        self.datetime_line.x = self.t
+        self.datetime_line.y = self.y
 
     def test_get_length(self):
-        result = self.datetime_line.get_length()
+        result = self.datetime_line.length
         self.assertEqual(result, 10,
                          'length not equal to input length')
     
     def test_get_max_length(self):
-        result = self.datetime_line.get_max_length()
+        result = self.datetime_line.max_length
         self.assertEqual(result, 10,
                          'wrong value for max length')
     
     def test_get_x(self):
-        result = self.datetime_line.get_x()
+        result = self.datetime_line.x
         self.assertEqual(result, self.t,
                          'returned different x')
     
     def test_get_y(self):
-        result = self.datetime_line.get_y()
+        result = self.datetime_line.y
         self.assertEqual(result, self.y,
                          'returned different y')
         
-    def test_set_x_larger_than_max_length(self):
+    def test_set_x_larger_than_max_length(self):        
         self.t.append(datetime.datetime(2000, 1, 2, 0, 0, 0))
-        self.assertRaises(DateTimeLine.DateTimeLengthError,
-                          self.datetime_line.set_x,
-                          self.t)
+        result = False
+        try:
+            self.datetime_line.x = self.t
+        except DateTimeLine.DateTimeLengthError:
+            result = True        
+        self.assertTrue(result,
+                        'DateTimeLengthError not raised')
     
-    def test_set_y_larger_than_max_length(self):
+    def test_set_y_larger_than_max_length(self):        
         self.y.append(10)
-        self.assertRaises(DateTimeLine.DateTimeLengthError,
-                          self.datetime_line.set_y,
-                          self.y)
+        result = False
+        try:
+            self.datetime_line.y = self.y
+        except DateTimeLine.DateTimeLengthError:
+            result = True        
+        self.assertTrue(result,
+                        'DateTimeLengthError not raised')
     
     def test_clear(self):
         self.datetime_line.clear()
-        result = self.datetime_line.get_length()
+        result = self.datetime_line.length
         self.assertEqual(result, 0,
                          'length not zero after clear')
     
@@ -90,15 +98,15 @@ class TestSetGet(unittest.TestCase):
         t1 = datetime.datetime(2000, 1, 2, 0, 0, 0)
         y1 = 10
         self.datetime_line.add_xy(t1, y1)        
-        new_t = self.datetime_line.get_x()
-        new_y = self.datetime_line.get_y()
+        new_t = self.datetime_line.x
+        new_y = self.datetime_line.y
         self.assertEqual((new_t[-1], new_y[-1]), (t1, y1),
                          'wrong value for added (x,y)')
         
     def test_add_y(self):
         y1 = 10
         self.datetime_line.add_y(y1)        
-        new_y = self.datetime_line.get_y()
+        new_y = self.datetime_line.y
         self.assertEqual(new_y[-1], y1,
                          'wrong value for added y')    
     
@@ -117,15 +125,15 @@ class TestFullArray(unittest.TestCase):
         t0 = datetime.datetime(2000, 1, 1, 0, 0, 0)
         self.t = [t0 + datetime.timedelta(hours=i) for i in range(10)]
         self.y = range(len(self.t))
-        self.datetime_line.set_x(self.t)
-        self.datetime_line.set_y(self.y)
+        self.datetime_line.x = self.t
+        self.datetime_line.y = self.y
         
         self.t1 = self.t[-1] + datetime.timedelta(hours=1)
         self.y1 = 10
         self.datetime_line.add_xy(self.t1, self.y1)
 
     def test_add_xy_full_array_get_x(self):
-        new_t = self.datetime_line.get_x()
+        new_t = self.datetime_line.x
         expected_t = numpy.append(numpy.delete(self.t, 0), self.t1)        
         result = True
         for i in range(10):
@@ -134,7 +142,7 @@ class TestFullArray(unittest.TestCase):
         self.assertTrue(result, 'returned wrong x array')
     
     def test_add_xy_full_array_get_y(self):
-        new_y = self.datetime_line.get_y()
+        new_y = self.datetime_line.y
         expected_y = numpy.append(numpy.delete(self.y, 0), self.y1)
         
         result = True
@@ -144,7 +152,7 @@ class TestFullArray(unittest.TestCase):
         self.assertTrue(result, 'returned wrong y array')
         
     def test_add_xy_full_array_get_length(self):
-        result = self.datetime_line.get_length()
+        result = self.datetime_line.length
         self.assertEqual(result, 10,
                          'length not equal to _max_data_length')        
 

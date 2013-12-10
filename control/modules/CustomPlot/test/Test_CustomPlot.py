@@ -37,8 +37,8 @@ class TestScaleBounds(unittest.TestCase):
     def setUp(self):
         self.plot = CustomPlot.CustomPlot()
         self.plot.add_line('line')
-        self.plot.line('line').set_x([-1, 4])
-        self.plot.line('line').set_y([-2, 3])
+        self.plot.line('line').x = [-1, 4]
+        self.plot.line('line').y = [-2, 3]
         
 
     def test_scale_x_bounds_min(self):

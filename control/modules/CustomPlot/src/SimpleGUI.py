@@ -73,20 +73,20 @@ class Window(QtGui.QWidget):
          
         x = numpy.linspace(1, 100, 50)
         y3 = 10 + numpy.sin(2*numpy.pi*x)
-        self.plot.line('line3').set_x(x)
-        self.plot.line('line3').set_y(y3)
+        self.plot.line('line3').x = x
+        self.plot.line('line3').y = y3
         
-        self.plot.line('line2').set_x(x)
+        self.plot.line('line2').x = x
         y2 = 10 + numpy.random.normal(size=len(x))
-        self.plot.line('line2').set_y(y2)
+        self.plot.line('line2').y = y2
          
         self.plot.remove_line('line1')
-        self.plot.line('line2').set_color('white')
-        print(self.plot.line('line2').get_color())
-        self.plot.line('line2').set_line_style('--')
-        self.plot.line('line3').set_color('yellow')
-        self.plot.line('line3').set_line_width(2.0)        
-        self.plot.line('line3').set_marker('s')
+        self.plot.line('line2').color = 'white'
+        print(self.plot.line('line2').color)
+        self.plot.line('line2').line_style = '--'
+        self.plot.line('line3').color = 'yellow'
+        self.plot.line('line3').line_width = 2.0        
+        self.plot.line('line3').marker = 's'
          
         self.plot.x_axis_extra_spacing = 0
         self.plot.y_axis_extra_spacing = (0.1, 0.1)
@@ -115,11 +115,11 @@ class Window(QtGui.QWidget):
         self.plot_datetime.show_interval = True
         
         self.plot_datetime.add_line('line1', 3600)
-        self.plot_datetime.line('line1').set_color('yellow')         
+        self.plot_datetime.line('line1').color = 'yellow'         
         self.plot_datetime.add_line('line2', 3600)
-        self.plot_datetime.line('line2').set_color('red')
+        self.plot_datetime.line('line2').color = 'red'
         self.plot_datetime.add_line('line3', 3600)
-        self.plot_datetime.line('line3').set_color('green')
+        self.plot_datetime.line('line3').color = 'green'
         
         t0 = datetime.datetime.now() - datetime.timedelta(seconds=3600)
         t = [t0 + datetime.timedelta(seconds=i) for i in range(3600)]
@@ -127,12 +127,12 @@ class Window(QtGui.QWidget):
         y2 = numpy.random.normal(size=len(t))
         y3 = numpy.random.normal(size=len(t))
         
-        self.plot_datetime.line('line1').set_x(t)
-        self.plot_datetime.line('line1').set_y(y1)
-        self.plot_datetime.line('line2').set_x(t)
-        self.plot_datetime.line('line2').set_y(y2)
-        self.plot_datetime.line('line3').set_x(t)
-        self.plot_datetime.line('line3').set_y(y3)
+        self.plot_datetime.line('line1').x = t
+        self.plot_datetime.line('line1').y = y1
+        self.plot_datetime.line('line2').x = t
+        self.plot_datetime.line('line2').y = y2
+        self.plot_datetime.line('line3').x = t
+        self.plot_datetime.line('line3').y = y3
         
         self.update_times = collections.deque(maxlen=10)
         self.last_update = datetime.datetime.now()
