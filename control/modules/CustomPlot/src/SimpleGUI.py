@@ -66,7 +66,9 @@ class Window(QtGui.QWidget):
         
         self.setLayout(layout) 
         
-        # CustomPlot            
+        # CustomPlot        
+        
+        self.plot.set_spacing(left=0.2, bottom=0.1, top=0.7, right=0.9)    
                 
         self.plot.y_label = '$y = f(x)$'
         self.plot.title = 'Título do gráfico'

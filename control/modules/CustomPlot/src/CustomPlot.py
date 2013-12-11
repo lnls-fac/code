@@ -60,7 +60,9 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         
         self._lines = {}
         self._figure = matplotlib.figure.Figure()
-        super(CustomPlot, self).__init__(self._figure)        
+        super(CustomPlot, self).__init__(self._figure) 
+        
+        self.set_spacing()       
                 
         self.background_color = background_color
         
@@ -78,7 +80,7 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         self.y_ticks_side = 'left'
         
         self._x_grid_on = False
-        self._y_grid_on = False
+        self._y_grid_on = False                
     
     @property
     def background_color(self):
@@ -268,6 +270,12 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         if self.y_autoscale:
             self._scale_bounds('y')
         self._figure.canvas.draw()
+    
+    def set_spacing(self, left=0.10, bottom=0.10, right=0.90, top=0.85):
+        self._figure.subplots_adjust(left=left,
+                                     bottom=bottom,
+                                     right=right,
+                                     top=top)
     
     def _check_lines_has_key(self, key):
         if not key in self._lines:
