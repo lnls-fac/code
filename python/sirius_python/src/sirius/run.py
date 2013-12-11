@@ -132,10 +132,10 @@ def run_tests():
     #test_linepass(the_ring)
     
     ''' tests ringpass use '''
-    #test_ringpass(the_ring)
+    test_ringpass(the_ring)
     
     ''' tests speed of tracking code '''
-    test_speed(the_ring)
+    #test_speed(the_ring)
     
     ''' tests findorbit4 '''
     #test_findorbit4(the_ring)
