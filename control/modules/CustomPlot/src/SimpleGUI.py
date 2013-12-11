@@ -18,6 +18,7 @@ from PyQt4 import QtGui, QtCore
 import CustomPlot
 import DateTimePlot
 import PositionPlot
+import CustomToolbar
 
 
 class Window(QtGui.QWidget):
@@ -43,6 +44,8 @@ class Window(QtGui.QWidget):
         args['interval_max'] = 10
         self.plot_position = PositionPlot.PositionPlot(**args)
         
+        self.toolbar = CustomToolbar.CustomToolbar(self.plot, self)
+        
         self.plot.show_x_grid('green', line_style='-', line_width=1.5)
         self.plot.show_y_grid('yellow', line_style='-', line_width=1.0)
         self.plot.hide_y_grid()        
@@ -58,8 +61,9 @@ class Window(QtGui.QWidget):
         self.timer.timeout.connect(self.update_plot_datetime)
         
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.plot)
+        layout.addWidget(self.plot)        
         layout.addWidget(self.plot_datetime)
+        layout.addWidget(self.toolbar)
         layout.addWidget(self.plot_position)
         layout.addWidget(self.label)        
         layout.addWidget(self.button)
