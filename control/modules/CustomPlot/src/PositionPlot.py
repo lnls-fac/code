@@ -108,7 +108,7 @@ class PositionPlot(CustomPlot.CustomPlot):
     
     def _check_tick_names_exist(self, names):
         for name in names:
-            if not self._ticks.has_key(name):
+            if not name in self._ticks:
                 raise KeyError
     
     def _get_selected_ticks_pos_by_name(self, names):

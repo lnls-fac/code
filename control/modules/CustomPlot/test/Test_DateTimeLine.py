@@ -44,7 +44,7 @@ class TestSetGet(unittest.TestCase):
         
         t0 = datetime.datetime(2000, 1, 1, 0, 0, 0)
         self.t = [t0 + datetime.timedelta(hours=i) for i in range(10)]
-        self.y = range(len(self.t))
+        self.y = [i for i in range(len(self.t))]
         self.datetime_line.x = self.t
         self.datetime_line.y = self.y
 

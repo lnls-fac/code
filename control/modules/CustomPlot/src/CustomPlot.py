@@ -7,6 +7,7 @@ Afonso Haruo Carnielli Mukai (FAC - LNLS)
 2013-11-21: v0.1
 """
 
+import sys
 import matplotlib.backends.backend_qt4agg
 import matplotlib.figure
 import ColorConversion
@@ -48,6 +49,11 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
                  axis_elements_color=DEFAULT_AXIS_ELEMENTS_COLOR,
                  autoscale=True,
                  axes_extra_spacing=0.0):
+        
+        if sys.version_info.major == 2:
+            self._return_unicode_string = self._return_unicode_string_python2
+        else:
+            self._return_unicode_string = self._return_unicode_string_python3
         
         self._autoscale = XY()
         self._axes_extra_spacing = XY(MinMax(), MinMax())
@@ -118,7 +124,8 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
     
     @title.setter
     def title(self, title):
-        self._axes.set_title(unicode(title))
+        new_title = self._return_unicode_string(title)
+        self._axes.set_title(new_title)
     
     @property
     def x_label(self):
@@ -126,7 +133,8 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         
     @x_label.setter
     def x_label(self, label):
-        self._axes.set_xlabel(unicode(label))
+        new_label = self._return_unicode_string(label)
+        self._axes.set_xlabel(new_label)
     
     @property
     def y_label(self):
@@ -134,7 +142,8 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         
     @y_label.setter
     def y_label(self, label):
-        self._axes.set_ylabel(unicode(label))
+        new_label = self._return_unicode_string(label)
+        self._axes.set_ylabel(new_label)
     
     @property
     def x_axis(self):
@@ -261,7 +270,7 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         self._figure.canvas.draw()
     
     def _check_lines_has_key(self, key):
-        if not self._lines.has_key(key):
+        if not key in self._lines:
             raise LineNameException
         
     def _select_axis_extra_spacing(self, axis):
@@ -393,3 +402,10 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         args['linestyle'] = line_style
         args['linewidth'] = line_width
         return args
+    
+    def _return_unicode_string_python2(self, string):
+        return unicode(string, encoding='utf-8')
+    
+    def _return_unicode_string_python3(self, string):
+        return string
+
