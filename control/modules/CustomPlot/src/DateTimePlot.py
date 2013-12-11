@@ -51,6 +51,9 @@ class DateTimePlot(CustomPlot.CustomPlot):
         
         self.x_axis_extra_spacing = x_axis_extra_spacing
         self.set_ticker()
+        
+        self.x_ticks_label_format = '%H:%M'
+        self.datetime_coord_format = '%H:%M:%S'
     
     @property
     def interval(self):
@@ -86,7 +89,7 @@ class DateTimePlot(CustomPlot.CustomPlot):
         """
         self._x_ticks_label_format = format_string
         formatter = matplotlib.dates.DateFormatter(format_string)
-        self._axes.xaxis.set_major_formatter(formatter)
+        self._axes.xaxis.set_major_formatter(formatter)    
         
     @property
     def x_tick_label_rotation(self):
@@ -96,6 +99,19 @@ class DateTimePlot(CustomPlot.CustomPlot):
     @x_tick_label_rotation.setter
     def x_tick_label_rotation(self, angle):
         self._figure.autofmt_xdate(rotation=angle)
+        
+    @property
+    def datetime_coord_format(self):
+        return self._datetime_coord_format
+
+    @datetime_coord_format.setter
+    def datetime_coord_format(self, format_string):
+        """
+        format_string -- a strftime() format string
+        """
+        date_formatter = matplotlib.dates.DateFormatter(format_string)
+        self._axes.format_xdata = date_formatter
+        self._datetime_coord_format = format_string 
     
     def add_line(self, name, max_data_len=1000):
         line, = self._axes.plot_date(x=[], y=[], xdate=True)

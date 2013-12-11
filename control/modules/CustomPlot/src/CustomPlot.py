@@ -235,6 +235,17 @@ class CustomPlot(matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg):
         elif side == 'right':
             self._axes.yaxis.tick_right()
             self._y_ticks_side = side
+            
+    @property
+    def x_tick_label_rotation(self):
+        tick_labels = self._axes.get_xticklabels()        
+        return tick_labels[0].get_rotation()
+    
+    @x_tick_label_rotation.setter
+    def x_tick_label_rotation(self, angle):
+        tick_labels = self._axes.get_xticklabels()
+        for label in tick_labels:
+            label.set_rotation(angle)
         
     def show_x_grid(self, color='black', line_style='--', line_width=0.5):        
         self._show_grid('x', color, line_style, line_width)

@@ -44,7 +44,7 @@ class Window(QtGui.QWidget):
         args['interval_max'] = 10
         self.plot_position = PositionPlot.PositionPlot(**args)
         
-        self.toolbar = CustomToolbar.CustomToolbar(self.plot, self)
+        self.toolbar = CustomToolbar.CustomToolbar(self.plot_datetime, self)
         
         self.plot.show_x_grid('green', line_style='-', line_width=1.5)
         self.plot.show_y_grid('yellow', line_style='-', line_width=1.0)
@@ -116,7 +116,8 @@ class Window(QtGui.QWidget):
         self.plot_datetime.y_autoscale = False
         self.plot_datetime.y_axis = (0.0, 5.0)
         self.plot_datetime.x_ticks_label_format = '%H:%M'
-        self.plot_datetime.x_tick_label_rotation = 0        
+        self.plot_datetime.x_tick_label_rotation = 0
+        self.plot_datetime.datetime_coord_format = '%H:%M:%S'
         
         delta0 = datetime.timedelta(seconds=0)
         delta1 = datetime.timedelta(seconds=0)
@@ -155,9 +156,13 @@ class Window(QtGui.QWidget):
         self.plot_position.show_y_grid()
         
         size = 10
-        names = [str(5+i)+'a' for i in range(size)]
+        names = ['AMP' + str(5+i)+'A' for i in range(size)]
         pos = range(size)
         values = numpy.random.normal(size=len(pos))
+        
+        self.plot_position.title = 'Posição'
+        self.plot_position.x_label = 'x'
+        self.plot_position.y_label = 'Valor'
         
         self.plot_position.define_ticks(names, pos)
         self.plot_position.x_axis_extra_spacing = 0.01
@@ -177,6 +182,8 @@ class Window(QtGui.QWidget):
         self.plot_position.line('markers').marker_edge_color = 'blue'
         self.plot_position.line('markers').marker_face_color = 'blue'
         print(self.plot_position.selected_ticks)
+        self.plot_position.x_tick_label_rotation = 10
+        self.plot_position.set_spacing(bottom=0.25, right=0.95)
         
         self.plot_position.update_plot()
     

@@ -10,7 +10,7 @@ Afonso Haruo Carnielli Mukai (FAC - LNLS)
 import matplotlib.backends.backend_qt4agg as backend
 
 
-ACTIONS_TO_DISABLE = ['back', 'forward', 'customize']
+ACTIONS_TO_DISABLE = ['back', 'forward', 'subplots', 'customize']
 
 
 class CustomToolbar(backend.NavigationToolbar2QTAgg):
@@ -52,4 +52,4 @@ class CustomToolbar(backend.NavigationToolbar2QTAgg):
         actions = self.actions()
         for action in actions:
             if str.lower(str(action.text())) in ACTIONS_TO_DISABLE:
-                action.setEnabled(False)
+                self.removeAction(action)
