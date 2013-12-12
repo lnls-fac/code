@@ -81,15 +81,22 @@ for i=1:size(rk_traj.bx_polynom,2)
 end
 fprintf(fp, '\n');
 
-
 %% --- transfer matrix ---
-fprintf(fp, 'TRANSFER MATRIX: AT MODEL vs RUNGE-KUTTA (half model)\n\n');
+fprintf(fp, 'TRANSFER MATRIX: AT MODEL vs RUNGE-KUTTA-REF-TRAJ (half model)\n\n');
 fprintf(fp, 'determinant (Runge-Kutta): %+17.15f\n', det(M_fieldmap));
 fprintf(fp, '%-10s', 'element'); fprintf(fp, '%-22s', '[runge-kutta]'); fprintf(fp, '%-22s', '[at-model]'); fprintf(fp, '%-22s', '[error %]'); fprintf(fp, '\n');
 fprintf(fp, '%-10s', 'M11');     fprintf(fp, '%-22s', num2str(M_fieldmap(1,1), '%+9.6f'));  fprintf(fp, '%-22s', num2str(M_atmodel(1,1), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(M_atmodel(1,1) - M_fieldmap(1,1))/M_fieldmap(1,1), '%+9.6f')); fprintf(fp, '\n');
 fprintf(fp, '%-10s', 'M12');     fprintf(fp, '%-22s', num2str(M_fieldmap(1,2), '%+9.6f'));  fprintf(fp, '%-22s', num2str(M_atmodel(1,2), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(M_atmodel(1,2) - M_fieldmap(1,2))/M_fieldmap(1,2), '%+9.6f')); fprintf(fp, '\n');
 fprintf(fp, '%-10s', 'M21');     fprintf(fp, '%-22s', num2str(M_fieldmap(2,1), '%+9.6f'));  fprintf(fp, '%-22s', num2str(M_atmodel(2,1), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(M_atmodel(2,1) - M_fieldmap(2,1))/M_fieldmap(2,1), '%+9.6f')); fprintf(fp, '\n');
 fprintf(fp, '%-10s', 'M22');     fprintf(fp, '%-22s', num2str(M_fieldmap(2,2), '%+9.6f'));  fprintf(fp, '%-22s', num2str(M_atmodel(2,2), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(M_atmodel(2,2) - M_fieldmap(2,2))/M_fieldmap(2,2), '%+9.6f')); fprintf(fp, '\n');
+xi  = fieldmap_track.in_pts(:,1)';
+pxf = fieldmap_track.out_pts(:,2)';
+kick_coeffs_rk = mypolyfit(xi,pxf,parms.perp_grid.monomials);
+xi  = atmodel_track.in_pts(:,1)';
+pxf = atmodel_track.out_pts(:,2)';
+kick_coeffs_at = mypolyfit(xi,pxf,parms.perp_grid.monomials);
+fprintf(fp, '%-10s', 'T211');     fprintf(fp, '%-22s', num2str(kick_coeffs_rk(3), '%+9.6f'));  fprintf(fp, '%-22s', num2str(kick_coeffs_at(3), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(kick_coeffs_at(3) - kick_coeffs_rk(3))/kick_coeffs_rk(3), '%+9.6f')); fprintf(fp, '\n');
+
 fprintf(fp, '\n');
 
 
