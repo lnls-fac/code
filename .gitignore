@@ -28,6 +28,7 @@
 trackc++-debug
 tracy
 .depend
+*.map
 
 ## directories not to be tracked
 
