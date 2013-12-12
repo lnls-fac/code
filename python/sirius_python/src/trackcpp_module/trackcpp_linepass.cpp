@@ -44,7 +44,7 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 
 	// Does tracking
-	int element_idx = -1;
+	int element_idx = 0;
 	std::vector<Pos<double> > pos;
 	Status::type ret = linepass (lattice, orig_pos, pos, &element_idx, trajectory);
 	if (ret != Status::success) {

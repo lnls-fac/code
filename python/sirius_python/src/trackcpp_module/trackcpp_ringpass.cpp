@@ -36,8 +36,8 @@ PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 	//Py_RETURN_NONE;
 
 	// Does tracking
-	int element_idx = -1;
-	int turn_idx    = -1;
+	int element_idx = 0;
+	int turn_idx    = 0;
 	std::vector<Pos<double> > pos;
 	Status::type ret = ringpass (lattice, orig_pos, pos, nr_turns, &turn_idx, &element_idx);
 
