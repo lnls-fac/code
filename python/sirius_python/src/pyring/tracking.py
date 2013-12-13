@@ -151,12 +151,18 @@ class _Tracking:
         return new_particles
     
     @staticmethod
-    def linepass_trackcpp(lattice, particles, trajectory, element_offset): 
-        return _Tracking.py2num(trackcpp.linepass(lattice, _Tracking.num2py(particles), trajectory, element_offset))
+    def linepass_trackcpp(line, particles, trajectory, element_offset): 
+        py_particles     = _Tracking.num2py(particles)
+        py_particles_new = trackcpp.linepass(line, py_particles, trajectory, element_offset)
+        numpy_particles  = _Tracking.py2num(py_particles_new)  
+        return numpy_particles
     
     @staticmethod
-    def ringpass_trackcpp(lattice, particles, nr_turns, element_offset):
-        return _Tracking.py2num(trackcpp.ringpass(lattice, _Tracking.num2py(particles), nr_turns, element_offset))
+    def ringpass_trackcpp(ring, particles, nr_turns, element_offset):
+        py_particles     = _Tracking.num2py(particles)
+        py_particles_new = trackcpp.ringpass(ring, py_particles, nr_turns, element_offset)
+        numpy_particles  = _Tracking.py2num(py_particles_new)  
+        return numpy_particles
 
 
     

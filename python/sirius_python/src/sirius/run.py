@@ -103,12 +103,15 @@ def test_findorbit4(the_ring):
     hcms = pyring.lattice.findcells(the_ring, 'fam_name', 'hcm')
     the_ring[hcms[0]].kick_angle[0] = 0.0003;
     
-    orb = pyring.optics.findorbit4(the_ring, de = 0, refpts = range(len(the_ring)))
+    t0 = time.time()
+    orb = pyring.optics.findorbit4(ring = the_ring, de = 0, refpts = range(len(the_ring)))
+    t1 = time.time()
+    print('time[s]: ' + str(t1-t0))
     print('4D Closed orbit at beginning of model:')
-    print('x  [mm]  : {0}'.format(orb[0,0]))
-    print('xl [mrad]: {0}'.format(orb[1,0]))
-    print('y  [mm]  : {0}'.format(orb[2,0]))
-    print('yl [mrad]: {0}'.format(orb[3,0]))
+    print('x  [mm]  : {0:+22.16E}'.format(orb[0,0]))
+    print('xl [mrad]: {0:+22.16E}'.format(orb[1,0]))
+    print('y  [mm]  : {0:+22.16E}'.format(orb[2,0]))
+    print('yl [mrad]: {0:+22.16E}'.format(orb[3,0]))
     
     s = pyring.lattice.findspos(lattice = the_ring, indices = range(len(the_ring)))
     plt.scatter(s, 1000*orb[0,:])
@@ -139,7 +142,7 @@ def run_tests():
     
     ''' compares tracking with AT results '''
     #test_compare_with_AT_linepass(the_ring)
-    test_compare_with_AT_ringpass(the_ring)
+    #test_compare_with_AT_ringpass(the_ring)
     
     ''' tests linepass use '''
     #test_linepass(the_ring)
@@ -151,7 +154,7 @@ def run_tests():
     #test_speed(the_ring)
     
     ''' tests findorbit4 '''
-    #test_findorbit4(the_ring)
+    test_findorbit4(the_ring)
     
     ''' tests findorbit6 '''
     #test_findorbit6(the_ring)

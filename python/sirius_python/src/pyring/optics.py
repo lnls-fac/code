@@ -1,10 +1,12 @@
 #import mathphysicslibs.constants as mpconsts
-import lattice
+#import lattice
 import tracking
 import numpy
 
     
-def findorbit4(ring, de = 0, refpts = None, guess = None, init_nr_turns = 20, tol = 1e-14, max_iterations = 15, turn_by_turn = False):
+def findorbit4(ring, de = 0, refpts = None, guess = None, turn_by_turn = False, engine = 'trackcpp',
+               init_nr_turns = 20, max_pos_tol = 1e-14, max_iterations = 20):
+     
     
     ''' builds a valid list of element indices '''
     if refpts is None:
@@ -15,18 +17,18 @@ def findorbit4(ring, de = 0, refpts = None, guess = None, init_nr_turns = 20, to
         refpts = [refpts]
         
     ''' builds initial guess coordinate vector '''    
-    Ri = numpy.zeros((6,1))
-    Ri[:,0] = [0,0,0,0,de,0]
+    Ri = numpy.array([[0.0],[0.0],[0.0],[0.0],[de],[0.0]])
     if guess is not None:
         guess = numpy.array(guess)
-        Ri[:4,0] = guess[:4,0]
-    Ri_next = numpy.zeros((6,1))
-    
+        Ri[:4,0] = guess[:4,0]    
     
     ''' main loop '''
+    Ri_next = numpy.zeros((6,1))
     while True:
-        Rf = tracking.tracknturns(lattice = ring, pos = Ri, nr_turns = init_nr_turns, turn_by_turn = True, trajectory = False, engine = 'trackcpp')
-        Ri_next[:,0] = numpy.mean(Rf,axis=1)
+        
+        ''' tracking '''
+        Rf = tracking.ringpass(ring = ring, particles = Ri, nr_turns = init_nr_turns, engine = engine)
+        Ri_next[:,0] = numpy.mean(Rf,axis=1) # averaging over points on invariant manifold
         
         ''' checks whether tracking is unstable '''
         if numpy.isnan(sum(Ri_next)):
@@ -39,24 +41,23 @@ def findorbit4(ring, de = 0, refpts = None, guess = None, init_nr_turns = 20, to
         
         ''' tolerance achieved? '''
         delta = abs(Ri_next[[1,2,3,4],0] - Ri[[1,2,3,4],0])
-        #print(max(delta))
-        Ri = Ri_next
-        if all(delta < tol):
+        if all(delta < max_pos_tol):
             break;
         
         ''' next iteration '''
+        Ri = numpy.array(Ri_next)
         init_nr_turns += 1
     
     ''' builds closed orbit at all specified locations '''
     Rf = numpy.zeros((6,len(ring)+1))
     Rf[:,0] = Ri[:,0]
     if (len(refpts)>1) or (refpts[0] != 0):             
-        Rf[:,1:] = tracking.track1turn(lattice = ring, pos = Ri, trajectory = True, engine = 'trackcpp')
+        Rf[:,1:] = tracking.linepass(line = ring, particles = Ri, refpts = refpts, engine = engine)
         
     ''' returns 4d (default) or 6d closed orbit data '''
     if turn_by_turn:
         Rf = numpy.zeros((6,1+init_nr_turns))
-        Ri = tracking.tracknturns(lattice = ring, pos = Ri, nr_turns = init_nr_turns, turn_by_turn = True, trajectory = False, engine = 'trackcpp')
+        Ri = tracking.ringpass(ring = ring, particles = Ri, nr_turns = init_nr_turns, engine = engine)
         return Ri
     else:
         return Rf[:4,refpts]
