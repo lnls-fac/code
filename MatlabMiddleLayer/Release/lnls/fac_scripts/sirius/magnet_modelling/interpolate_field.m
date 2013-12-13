@@ -42,6 +42,9 @@ for i=1:length(fmaps)
     x = rl(1);
     y = rl(2);
     z = rl(3);
+    
+%      bl(2,1) = (22.6956*x.^2 + 1.9024*x - 1.09848)./(1+exp((z + x^2 -1.150/2)/0.001));
+%      bl(1,1) = 0; bl(3,1) = 0;
     for k=1:length(data.fderivs)
         if (k == 1), factor = 1; else factor = y^(k-1)/(k-1); end;
         bl(1,1) = bl(1,1) + str * interp2(data.gx, data.gz, data.fderivs{k}.bx, x, z, '*linear') * factor;

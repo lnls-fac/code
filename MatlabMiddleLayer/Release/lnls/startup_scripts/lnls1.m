@@ -34,11 +34,8 @@ end
 
 % inicializa estruturas do MML
 cdir = pwd;
-try
-    cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
-catch
-    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-end
+root_folder = lnls_get_root_folder();
+cd(fullfile(root_folder, 'fac_files', 'code', 'MatlabMiddleLayer','Release','mml'))
 setpathlnls('LNLS1', 'StorageRing', 'lnls1_link');
 cd(cdir);
 clear cdir;

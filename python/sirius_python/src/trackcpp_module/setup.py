@@ -9,8 +9,8 @@ module1 = Extension('trackcpp',
             'trackcpp_read_particles.cpp',
             'trackcpp_read_lattice.cpp',
             # module functionalities
-            'trackcpp_track1turn.cpp',
-            'trackcpp_tracknturns.cpp',
+            'trackcpp_linepass.cpp',
+            'trackcpp_ringpass.cpp',
             # trackc++
             '../../../trackc++/elements.cpp',
             '../../../trackc++/lattice.cpp',

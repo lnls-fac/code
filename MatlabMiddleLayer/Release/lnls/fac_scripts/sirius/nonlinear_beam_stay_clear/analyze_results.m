@@ -3,7 +3,7 @@
 %primeiro, vamos carregar os arquivos gerados pelo script de calculo
 % nesse caso, temos dois calculos:
 % o dos markers
-data = load('07-Aug-2013marker_quad.mat');
+data = load('06-Dec-2013marker_quad.mat');
 the_ring = data.the_ring;
 points = data.points;
 bsch_pos = data.bsch_pos;

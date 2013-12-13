@@ -28,6 +28,7 @@
 trackc++-debug
 tracy
 .depend
+commit-msg.txt
 
 ## directories not to be tracked
 

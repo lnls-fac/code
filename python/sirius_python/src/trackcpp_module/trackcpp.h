@@ -20,7 +20,7 @@ int trackcpp_read_particles (PyObject *py_particles, std::vector<Pos<double> >& 
 int trackcpp_read_lattice   (PyObject *py_lattice,   std::vector<Element>& pos);
 
 // exposed functionalities
-PyObject*  trackcpp_track1turn(PyObject *Self, PyObject *args);
-PyObject*  trackcpp_tracknturns(PyObject *Self, PyObject *args);
+PyObject*  trackcpp_linepass (PyObject *Self, PyObject *args);
+PyObject*  trackcpp_ringpass (PyObject *Self, PyObject *args);
 
 #endif

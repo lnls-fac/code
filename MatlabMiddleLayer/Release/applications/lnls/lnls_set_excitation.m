@@ -20,7 +20,7 @@ for i=1:size(indices,1)
             end
         elseif (isfield(new_ring{idx}, 'KickAngle'))
             new_ring{idx}.KickAngle = (1 + errors(i)) * new_ring{idx}.KickAngle;
-        else
+        elseif (isfield(new_ring{idx}, 'PolynomB'))
             for k=1:length(new_ring{idx}.PolynomA)
                 new_ring{idx}.PolynomA(k) = (1 + errors(i)) * new_ring{idx}.PolynomA(k);
                 new_ring{idx}.PolynomB(k) = (1 + errors(i)) * new_ring{idx}.PolynomB(k);

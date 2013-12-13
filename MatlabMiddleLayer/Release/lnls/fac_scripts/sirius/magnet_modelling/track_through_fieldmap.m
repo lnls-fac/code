@@ -16,7 +16,10 @@ s_length = ref_traj.s(end) + 0.1; % 100 mm should be enough
 pts1 = zeros(size(pts0));
 for i=1:size(pts0,1)
     pos = sf_in.r + sf_in.n * pts0(i,1);
-    beta_x = sf_in.p(1) + pts0(i,2);
+    if pos(1) == 0
+        disp('ok');
+    end
+    beta_x = sf_in.t(1) + pts0(i,2);
     beta_z = sqrt(1-beta_x^2); % beta = constant
     p = [beta_x; 0; beta_z];
     traj = calc_trajectory(s_length, [pos; p], runge_kutta_flags);
@@ -28,7 +31,7 @@ for i=1:size(pts0,1)
     p1(1,1) = interp1q(traj.s, traj.beta_x, s_intersection);
     p1(2,1) = interp1q(traj.s, traj.beta_y, s_intersection);
     p1(3,1) = interp1q(traj.s, traj.beta_z, s_intersection);
-    dp = (p1 - sf_out.p)'*sf_out.n;
+    dp = (p1 - sf_out.t)'*sf_out.n;
     pts1(i,:) = [x_perp dp 0 0 0 s_intersection - ref_traj.s(end)];
 
     fprintf('rx = %+7.2f [mm] -> px = %+7.4f [mrad] \n', 1e3*pts0(i,1), 1e3*pts1(i,2));
@@ -56,7 +59,7 @@ beta_z = interp1(traj.s, traj.beta_z, s);
 
 sf.s = s;
 sf.r = [x; y; z];                                                 % coordenadas na posicaoo s da trajet?ria
-sf.p = [beta_x; beta_y; beta_z];                                  % velocidades na posicaoo s da trajet?ria
+% sf.p = [beta_x; beta_y; beta_z];                                  % velocidades na posicaoo s da trajet?ria
 sf.t = [beta_x; beta_y; beta_z] / norm([beta_x; beta_y; beta_z]); % versor tangente
 sf.n = [0 0 1; 0 1 0; -1 0 0] * sf.t;                             % versor normal
 sf.k = cross(sf.t, sf.n);                                         % versor torsao

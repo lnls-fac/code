@@ -2,18 +2,18 @@ import mathphysicslibs.constants as consts
 import mathphysicslibs.functions as mfuncs
 from   pyring.elements import *
 import pyring.lattice as lattice
-import lattice_parameters
-    
+import lattice_parameters   
+import numpy
 
 def create_lattice(mode = 'AC10_6', energy = 3e9):
     
     
+    ''' loads lattice parameters (harmonic number, strengths, etc) '''
     mode = lattice_parameters.Mode(mode)
     
-    #harmonic_number = 864
     
-    #%% passmethods
-    #%  ===========
+    ''' passmethods
+        =========== '''
     
     drif_pass_method = passmethods.drift_pass
     bend_pass_method = passmethods.bnd_mpole_symplectic4_pass
@@ -23,10 +23,10 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     corr_pass_method = passmethods.corrector_pass
     rfca_pass_method = passmethods.cavity_pass
 
-    #%% elements
-    #%  ========
+    ''' elements 
+        ======== '''
 
-    #% --- drift spaces ---
+    ''' --- drift spaces --- '''
 
     id_length = 2.0 # % [m]
 
@@ -50,7 +50,7 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     d32      = drift(fam_name = 'd32', length = 0.320000, pass_method = drif_pass_method)
     d44      = drift(fam_name = 'd44', length = 0.440000, pass_method = drif_pass_method)
 
-    #% --- markers ---
+    ''' --- markers --- '''
     mc       = marker(fam_name = 'mc',      pass_method = mark_pass_method)
     mia      = marker(fam_name = 'mia',     pass_method = mark_pass_method)
     mib      = marker(fam_name = 'mib',     pass_method = mark_pass_method)
@@ -61,10 +61,10 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     fim      = marker(fam_name = 'fim',     pass_method = mark_pass_method)
     mid      = marker(fam_name = 'id_end',  pass_method = mark_pass_method)
 
-    #% --- beam position monitors ---
+    ''' --- beam position monitors --- '''
     mon      = marker(fam_name = 'BPM', pass_method = mark_pass_method)
 
-    #% --- quadrupoles ---
+    ''' --- quadrupoles --- '''
     qaf      = quadrupole(fam_name = 'qaf',  length = 0.340000, k = mode.qaf_strength,  pass_method = quad_pass_method)
     qad      = quadrupole(fam_name = 'qad',  length = 0.140000, k = mode.qad_strength,  pass_method = quad_pass_method)
     qbd2     = quadrupole(fam_name = 'qbd2', length = 0.140000, k = mode.qbd2_strength, pass_method = quad_pass_method)
@@ -75,11 +75,12 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     qf3      = quadrupole(fam_name = 'qf3',  length = 0.250000, k = mode.qf3_strength,  pass_method = quad_pass_method)
     qf4      = quadrupole(fam_name = 'qf4',  length = 0.250000, k = mode.qf4_strength,  pass_method = quad_pass_method)
 
-    #% --- bending magnets --- 
+    ''' --- bending magnets --- ''' 
+
     deg_2_rad = (mfuncs.pi/180.0)
 
 
-    #% -- b1 --
+    ''' -- b1 -- '''
     dip_nam =  'b1'
     dip_len =  0.828080
     dip_ang =  2.766540 * deg_2_rad
@@ -89,7 +90,7 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     h2      = rbend(fam_name = dip_nam, length = dip_len/2, angle = dip_ang/2, angle_in = 0*dip_ang/2, angle_out = 1*dip_ang/2, k = dip_K, s = dip_S, pass_method = bend_pass_method)                    
     B1      = [h1, mb1, h2]
 
-    #% -- b2 --
+    ''' -- b2 -- '''
     dip_nam =  'b2'
     dip_len =  1.228262
     dip_ang =  4.103510 * deg_2_rad
@@ -99,7 +100,7 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     h2      = rbend(fam_name = dip_nam, length = dip_len/2, angle = dip_ang/2, angle_in = 0*dip_ang/2, angle_out = 1*dip_ang/2, k = dip_K, s = dip_S, pass_method = bend_pass_method)
     B2      = [h1, mb2, h2]
 
-    #% -- b3 --
+    ''' -- b3 -- '''
     dip_nam =  'b3'
     dip_len =  0.428011
     dip_ang =  1.429950 * deg_2_rad
@@ -109,7 +110,7 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     h2      = rbend(fam_name = dip_nam, length = dip_len/2, angle = dip_ang/2, angle_in = 0*dip_ang/2, angle_out = 1*dip_ang/2, k = dip_K, s = dip_S, pass_method = bend_pass_method)
     B3      = [h1, mb3, h2]
 
-    #% -- bc --
+    ''' -- bc -- '''
     dip_nam =  'bc'
     dip_len =  0.125394
     dip_ang =  1.4 * deg_2_rad
@@ -121,13 +122,13 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     BC      = [bce, mc, bcs]
 
 
-    #% --- correctors ---
+    ''' --- correctors --- '''
     ch     = corrector(fam_name = 'hcm',  length = 0, kick_angle = [0, 0], pass_method = corr_pass_method)
     cv     = corrector(fam_name = 'vcm',  length = 0, kick_angle = [0, 0], pass_method = corr_pass_method)
     crhv   = corrector(fam_name = 'crhv', length = 0, kick_angle = [0, 0], pass_method = corr_pass_method)
 
 
-    #% --- sextupoles ---    
+    ''' --- sextupoles --- '''    
     sa1      = sextupole(fam_name = 'sa1', length = 0.150000, s = mode.sa1_strength, pass_method = sext_pass_method)
     sa2      = sextupole(fam_name = 'sa2', length = 0.150000, s = mode.sa2_strength, pass_method = sext_pass_method)
     sb1      = sextupole(fam_name = 'sb1', length = 0.150000, s = mode.sb1_strength, pass_method = sext_pass_method)
@@ -138,11 +139,10 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     sd3      = sextupole(fam_name = 'sd3', length = 0.150000, s = mode.sd3_strength, pass_method = sext_pass_method)
     sf2      = sextupole(fam_name = 'sf2', length = 0.150000, s = mode.sf2_strength, pass_method = sext_pass_method)
            
-    #% --- rf cavity ---
-    cav = rfcavity(fam_name = 'cav', length = 0, energy = energy, voltage = 2.5e6, frequency = 500e6, harmonic_number = lattice_parameters.harmonic_number, pass_method = rfca_pass_method)
+    ''' --- rf cavity --- '''
+    cav = rfcavity(fam_name = 'cav', length = 0, energy = energy, voltage = 2.5e6, frequency = 500e6, hnumber = lattice_parameters.harmonic_number, pass_method = rfca_pass_method)
     
-
-    #%% lines 
+    ''' lines ''' 
     
     insa   = [ dia1, mid, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17];
     insb   = [ dib1, mid, dib2, d10, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17];
@@ -152,13 +152,13 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     cline3 = [ d44, mon, d12, ch,  d15, qf4, d20, sf2, d11, mon, d12, qf3, d17, sd3, d26, cv, crhv, d18];
     cline4 = [ d20, ch,  d12, sd2, d17, qf2, d20, sf1, d11, mon, d12, qf1, d17, sd1, d15, ch,  d12, cv, d22, mon, d10];
     
-    #%% Injection Section
+    ''' Injection Section '''
     dmiainj  = drift(fam_name = 'dmiainj', length = 0.3, pass_method = drif_pass_method)
     dinjk3   = drift(fam_name = 'dinjk3' , length = 0.3, pass_method = drif_pass_method)
     dk3k4    = drift(fam_name = 'dk3k4'  , length = 0.6, pass_method = drif_pass_method)
     dk4pmm   = drift(fam_name = 'dk4pmm' , length = 0.2, pass_method = drif_pass_method)
-    dpmmcv   = drift(fam_name = 'dpmmcv' , length = (3.2692 - 0.3 - 0.3 - 0.6 - 0.2 - 3*0.6), pass_method = drif_pass_method)
-    dcvk1    = drift(fam_name = 'dcvk1'  , length = (3.2692 - 0.6 - 1.4 - 2*0.6), pass_method = drif_pass_method)
+    dpmmcv   = drift(fam_name = 'dpmmcv' , length = (3.2692 + 3.65e-3 - 0.3 - 0.3 - 0.6 - 0.2 - 3*0.6), pass_method = drif_pass_method)
+    dcvk1    = drift(fam_name = 'dcvk1'  , length = (3.2692 + 3.65e-3 - 0.6 - 1.4 - 2*0.6), pass_method = drif_pass_method)
     dk1k2    = drift(fam_name = 'dk1k2'  , length = 0.6, pass_method = drif_pass_method)
     sef      = sextupole(fam_name = 'sef', length = 0.6, k = 0.0, pass_method = sext_pass_method); #%corrector('sef', 0.6, [0 0], 'CorrectorPass');
     dk2sef   = drift(fam_name = 'dk2mia' , length = 0.8, pass_method = drif_pass_method)
@@ -174,27 +174,11 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     
     
     B3BCB3 = [ B3, d13, BC, d13, B3];     
-
-
-#     %% the_ring
-#     
-#     % Lattice Ordering
-#     % ----------------
-#     % 
-#     % R01 C01 R02 C02 R03 C03 R04 C04 R05 C05 R06 C06 R07 C07 R08 C08 R09 C09 R10 C10
-#     % R11 C11 R12 C12 R13 C13 R14 C14 R15 C15 R16 C16 R17 C17 R18 C18 R19 C19 R20 C20
-#     % 
-#     % High Beta (mia) : R01, R03, R05, R07, R09, R11, R13, R15, R17, R19
-#     % Low  Beta (mib) : R02, R04, R06, R08, R10, R12, R14, R16, R18, R20
-#     %
-#     % injection: straight section R01
-#     % cavities:  straight section R03
     
     
-    
-    R01 = [injinsa, fim, inicio, mia, insainj]  #% injection sector, marker of the lattice model starting element
+    R01 = [injinsa, fim, inicio, mia, insainj]   #% injection sector, marker of the lattice model starting element
     #R01 = [insa[::-1], fim, inicio, mia, insa]  #% injection sector, marker of the lattice model starting element    
-    R03 = [insa[::-1], mia, cav, insa]        #% sector with cavities
+    R03 = [insa[::-1], mia, cav, insa]           #% sector with cavities
     R05 = [insa[::-1], mia, insa]
     R07 = [insa[::-1], mia, insa]
     R09 = [insa[::-1], mia, insa]
@@ -243,20 +227,19 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
         R11, C11, R12, C12, R13, C13, R14, C14, R15, C15,
         R16, C16, R17, C17, R18, C18, R19, C19, R20, C20,
     ]
-
     the_ring = list(lattice.flatten(the_ring))
     
-    # shift lattice to start at the marker 'inicio'
+    ''' shift lattice to start at the marker 'inicio' '''
     idx = lattice.findcells(the_ring, 'fam_name', 'inicio')
-    the_ring = the_ring[idx[0]:] + the_ring[:idx[0]-1]
+    the_ring = the_ring[idx[0]:] + the_ring[:idx[0]]
 
 
-    # check if there are elements with negative lengths
+    ''' check if there are elements with negative lengths '''
     lens = lattice.getcellstruct(the_ring, 'length', range(len(the_ring)))
     if any([l < 0 for l in lens]):
         raise Exception('negative drift in lattice!')
     
-    # sets cavity frequency according to lattice length
+    ''' sets cavity frequency according to lattice length '''
     C = lattice.findspos(the_ring, len(the_ring))
     rev_freq = consts.light_speed / C
     rf_idx = lattice.findcells(the_ring, 'fam_name', 'cav')
@@ -265,6 +248,45 @@ def create_lattice(mode = 'AC10_6', energy = 3e9):
     lattice.setcavity(the_ring, 'on'); 
     lattice.setradiation(the_ring, 'off');
 
-
-    return the_ring 
+    ''' adjusts number of integraton steps for each element family '''
+    the_ring = set_num_integ_steps(the_ring)
     
+    ''' makes each corrector an unique elements '''
+    the_ring = lattice.unique(the_ring, 'hcm')
+    the_ring = lattice.unique(the_ring, 'vcm')
+    the_ring = lattice.unique(the_ring, 'crhv')
+    
+    return the_ring 
+
+
+def set_num_integ_steps(the_ring):
+    
+    ''' builds index vectors for bends, quads and sexts '''
+    bends     = lattice.findcells(the_ring, 'angle')
+    indices   = sorted(list(set(lattice.findcells(the_ring, 'polynom_b')) - set(bends)))
+    polynom_b = lattice.getcellstruct(the_ring, 'polynom_b', indices)
+    (quads,sexts) = ([],[])
+    for i in range(len(polynom_b)):
+        p = polynom_b[i]
+        try:
+            p[2]; sexts.append(indices[i])
+        except:
+            try:
+                p[1]; quads.append(indices[i])
+            except:
+                pass
+        
+    
+    dl = 0.035
+
+    bends_len = lattice.getcellstruct(the_ring, 'length', bends)
+    bends_nis = numpy.zeros((2, len(bends)))
+    bends_nis[0,:] = numpy.ceil(numpy.array(bends_len) / dl)
+    bends_nis[1,:] = 10
+    bends_nis = numpy.max(bends_nis,0).astype(int)
+    
+    the_ring = lattice.setcellstruct(the_ring, 'nr_steps', bends, bends_nis);
+    the_ring = lattice.setcellstruct(the_ring, 'nr_steps', quads, 10);
+    the_ring = lattice.setcellstruct(the_ring, 'nr_steps', sexts, 5);
+    
+    return the_ring

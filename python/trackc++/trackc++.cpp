@@ -1,3 +1,11 @@
+// TRACKC++
+// ========
+// Author: 		Ximenes R. Resende
+// email:  		xresende@gmail.com, ximenes.resende@lnls.br
+// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+// Date: 		Tue Dec 10 17:57:20 BRST 2013
+
+
 #include "trackc++.h"
 
 int main() {
@@ -26,7 +34,7 @@ int main() {
 	Status::type stat;
 	int element_idx;
 	std::vector<Pos<> > new_particles;
-	if ((stat = track1turn(the_ring, particles, new_particles, &element_idx, false)) != Status::success) {
+	if ((stat = linepass (the_ring, particles, new_particles, &element_idx, false)) != Status::success) {
 		std::cerr << "Error: " << stat << std::endl;
 	}
 

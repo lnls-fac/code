@@ -32,24 +32,14 @@ end
 
 % inicializa estruturas do MML
 cdir = pwd;
-if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
-    cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
-else
-    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-end
+root_folder = lnls_get_root_folder();
+cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 
 setpathsirius(['SIRIUS' default_version], 'StorageRing', 'sirius_link');
 cd(cdir);
 clear cdir;
 
-if any(strcmpi(computer, {'PCWIN','PCWIN64'}))
-    addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\lnls\fac_scripts\sirius\lattice_errors'));
-    addpath(fullfile('C:\Arq\MatlabMiddleLayer\Release', 'lnls', 'fac_scripts', 'tracy3'), '-begin');
-    addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\machine\LTBA_V200'));
-else
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/machine/LTBA_V200'));
-end
+addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','sirius','lattice_errors')));
+addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','tracy3'), '-begin');
+addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','machine','LTBA_V200')));
 
-return;

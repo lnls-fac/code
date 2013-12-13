@@ -22,6 +22,7 @@ Main projects in this repository:
 - python scripts
     . module_trackcpp (python-exposed trackc++ module)
     . pyring (python port of matlab AcceleratorToolbox + MML)
+- control (high level applications and related modules)
 
 
 

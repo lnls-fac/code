@@ -28,6 +28,10 @@ if strcmpi(SubMachine, 'StorageRing')
     MachineType = 'StorageRing';
 elseif strcmpi(SubMachine, 'Booster')
     MachineType = 'Booster';
+elseif ~isempty(strfind(SubMachine, 'LTBA'))
+    MachineType = 'TransportLine';
+elseif ~isempty(strfind(SubMachine, 'LTLB'))
+    MachineType = 'TransportLine';
 end
 
 [MachineName, SubMachineName, LinkFlag, MMLROOT] = setpathmml(Machine, SubMachine, MachineType, LinkFlag);
