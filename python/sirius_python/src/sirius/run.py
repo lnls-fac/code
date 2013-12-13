@@ -14,7 +14,7 @@ def test_compare_with_AT(the_ring):
     refpts = [0, 1500-1, 1800-1, len(the_ring)]
     posi = numpy.zeros((6,1))
     posi[:,0] = [0.001,0,0,0,0,0]
-    posf = pyring.tracking.linepass(lattice = the_ring, particles = posi, refpts = refpts, engine = 'trackcpp')
+    posf = pyring.tracking.linepass(lattice = the_ring, particles = posi, refpts = refpts, engine = 'trackcpp', element_offset=1)
     
     for i in range(posf.shape[0]):
         for j in range(posf.shape[1]):
@@ -126,13 +126,13 @@ def run_tests():
     #pyring.lattice.printlattice(the_ring)
     
     ''' compares tracking with AT results '''
-    #test_compare_with_AT(the_ring):
+    test_compare_with_AT(the_ring)
     
     ''' tests linepass use '''
     #test_linepass(the_ring)
     
     ''' tests ringpass use '''
-    test_ringpass(the_ring)
+    #test_ringpass(the_ring)
     
     ''' tests speed of tracking code '''
     #test_speed(the_ring)

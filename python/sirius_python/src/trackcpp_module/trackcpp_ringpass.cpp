@@ -6,15 +6,15 @@ extern std::string TrackcppErrorMsg;
 
 PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 
-	PyObject *py_lattice, *py_pos, *py_nr_turns;
-	if (!PyArg_ParseTuple(args, "OOO", &py_lattice, &py_pos, &py_nr_turns))
+	PyObject *py_lattice, *py_pos, *py_nr_turns, *py_element_offset;
+	if (!PyArg_ParseTuple(args, "OOOO", &py_lattice, &py_pos, &py_nr_turns, &py_element_offset))
 		return NULL;
 
 	Py_INCREF(py_lattice);
 	Py_INCREF(py_pos);
 
-
-	int  nr_turns = PyInt_AS_LONG(py_nr_turns);
+	int nr_turns       = PyInt_AS_LONG(py_nr_turns);
+	int element_offset = PyInt_AS_LONG(py_element_offset);
 
 	// reads pyring particles coordinates in phase space into trackc++ vector
 	std::vector<Pos<double> > orig_pos;
@@ -36,20 +36,19 @@ PyObject*  trackcpp_ringpass(PyObject *self, PyObject *args) {
 	//Py_RETURN_NONE;
 
 	// Does tracking
-	int element_idx = 0;
 	int turn_idx    = 0;
 	std::vector<Pos<double> > pos;
-	Status::type ret = ringpass (lattice, orig_pos, pos, nr_turns, &turn_idx, &element_idx);
+	Status::type ret = ringpass (lattice, orig_pos, pos, nr_turns, &turn_idx, &element_offset);
 
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
-			std::string pmname = pm_dict[lattice[element_idx].pass_method];
-			std::ostringstream convert; convert << element_idx; std::string strnumber = convert.str();
+			std::string pmname = pm_dict[lattice[element_offset].pass_method];
+			std::ostringstream convert; convert << element_offset; std::string strnumber = convert.str();
 			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not defined";
 		}
 		if (ret == Status::passmethod_not_implemented) {
-			std::string pmname = pm_dict[lattice[element_idx].pass_method];
-			std::ostringstream convert; convert << element_idx; std::string strnumber = convert.str();
+			std::string pmname = pm_dict[lattice[element_offset].pass_method];
+			std::ostringstream convert; convert << element_offset; std::string strnumber = convert.str();
 			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not implemented";
 		}
 		PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());

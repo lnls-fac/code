@@ -17,16 +17,16 @@
 // inputs:
 //		line:	 		Element vector representing the beam transport line
 //		orig_pos:		Pos vector representing initial positions of particles
-//		element_idx:	equivalent to shifting the lattice so that '*element_idx' is the index for the first element
+//		element_offset:	equivalent to shifting the lattice so that '*element_offset' is the index for the first element
 //		trajectory:		flag indicating that trajectory is to be recorded at entrance of all elements
 //						(otherwise only the coordinates at the exit of last element is recorded)
 // outputs:
 //		pos:			Pos vector of particles' final coordinates (or trajetory)
-//		element_idx:	in case of problems with passmethods, '*element_idx' is the index of the corresponding element
+//		element_offset:	in case of problems with passmethods, '*element_offset' is the index of the corresponding element
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 template <typename T>
-Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, int *element_idx, bool trajectory) {
+Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, int *element_offset, bool trajectory) {
 
 	Status::type status = Status::success;
 
@@ -35,16 +35,17 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 
 	for(int i=0; i<nr_elements; ++i) {
 
-		const Element& element = line[*element_idx];
+		const int& e = *element_offset;    // syntactic-sugar for read-only access to element index
+		const Element& element = line[e];  // syntactic-sugar for read-only access to element object parameters
 
-		// records trajectory at entrance of element
+		// stores trajectory at entrance of each element
 		if (trajectory) {
 			for(int j=0; j<nr_particles;++j) {
 				pos.push_back(orig_pos[j]);
 			}
 		}
 
-		switch (line[i].pass_method) {
+		switch (line[e].pass_method) {
 			case PassMethod::pm_identity_pass:
 				if ((status = pm_identity_pass<T>(orig_pos, element)) != Status::success) return status;
 				break;
@@ -77,9 +78,11 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 				return Status::passmethod_not_defined;
 		}
 
-		*element_idx = (*element_idx + 1) % nr_elements;
+		*element_offset = (*element_offset + 1) % nr_elements; // increment element index
 
 	}
+
+	// stores final particles' positions at the end of the line
 	for(int j=0; j<nr_particles;++j) {
 		pos.push_back(orig_pos[j]);
 	}
@@ -95,25 +98,25 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 // inputs:
 //		ring: 			Element vector representing the ring
 //		orig_pos:		Pos vector representing initial positions of particles
-//		element_idx:	equivalent to shifting the lattice so that '*element_idx' is the index for the first element
+//		element_offset:	equivalent to shifting the lattice so that '*element_offset' is the index for the first element
 //		nr_turns:		number of turns for tracking
 //
 // outputs:
 //		pos:			Pos vector of particles' coordinates of the turn_by_turn data (at end of the ring at each turn)
 //		turn_idx:		in case of problems with passmethods, '*turn_idx' is the index of the corresponding turn
-//		element_idx:	in case of problems with passmethods, '*element_idx' is the index of the corresponding element
+//		element_offset:	in case of problems with passmethods, '*element_offset' is the index of the corresponding element
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 
 template <typename T>
-Status::type ringpass (const std::vector<Element>& ring, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, const int nr_turns, int *turn_idx, int *element_idx) {
+Status::type ringpass (const std::vector<Element>& ring, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, const int nr_turns, int *turn_idx, int *element_offset) {
 
 	Status::type status  = Status::success;
 
 	*turn_idx = 0;
 	for(int n=0; n<nr_turns; ++n) {
 		std::vector<Pos<T> > tmp_pos;
-		if ((status = linepass (ring, orig_pos, tmp_pos, element_idx, false)) != Status::success) return status;
+		if ((status = linepass (ring, orig_pos, tmp_pos, element_offset, false)) != Status::success) return status;
 		// records turn-by-turn data
 		for(int j=0; j<tmp_pos.size();++j) {
 			pos.push_back(orig_pos[j]);

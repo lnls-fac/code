@@ -2,8 +2,8 @@
 
 // MODULE Docstrings
 static char module_docstring[]            = "Module for efficiently tracking particles in transport lines and storage rings";
-static char trackcpp_linepass_docstring[] = "linepass(the_ring, particles, trajectory)";
-static char trackcpp_ringpass_docstring[] = "ringpass(the_ring, particles)";
+static char trackcpp_linepass_docstring[] = "linepass(the_ring, particles, trajectory, element_offset)";
+static char trackcpp_ringpass_docstring[] = "ringpass(the_ring, particles, nr_turns, element_offset)";
 static char trackcpp_error[] = "trackcpp.error";
 
 // MODULE Global variables for dealing with module exceptions

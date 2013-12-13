@@ -14,11 +14,13 @@ extern std::string TrackcppErrorMsg;
 PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 
-	PyObject *py_lattice, *py_pos, *py_trajectory;
-	if (!PyArg_ParseTuple(args, "OOO", &py_lattice, &py_pos, &py_trajectory))
+	PyObject *py_lattice, *py_pos, *py_trajectory, *py_element_offset;
+	if (!PyArg_ParseTuple(args, "OOOO", &py_lattice, &py_pos, &py_trajectory, &py_element_offset))
 		return NULL;
 
-	bool trajectory = PyObject_IsTrue(py_trajectory);
+	bool trajectory     = PyObject_IsTrue(py_trajectory);
+	int  element_offset = PyInt_AS_LONG(py_element_offset) ;
+	std::cout << "element_offset: " << element_offset << std::endl;
 
 	Py_INCREF(py_lattice);
 	Py_INCREF(py_pos);
@@ -44,18 +46,17 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 
 	// Does tracking
-	int element_idx = 0;
 	std::vector<Pos<double> > pos;
-	Status::type ret = linepass (lattice, orig_pos, pos, &element_idx, trajectory);
+	Status::type ret = linepass (lattice, orig_pos, pos, &element_offset, trajectory);
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
-			std::string pmname = pm_dict[lattice[element_idx].pass_method];
-			std::ostringstream convert; convert << element_idx; std::string strnumber = convert.str();
+			std::string pmname = pm_dict[lattice[element_offset].pass_method];
+			std::ostringstream convert; convert << element_offset; std::string strnumber = convert.str();
 			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not defined";
 		}
 		if (ret == Status::passmethod_not_implemented) {
-			std::string pmname = pm_dict[lattice[element_idx].pass_method];
-			std::ostringstream convert; convert << element_idx; std::string strnumber = convert.str();
+			std::string pmname = pm_dict[lattice[element_offset].pass_method];
+			std::ostringstream convert; convert << element_offset; std::string strnumber = convert.str();
 			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not implemented";
 		}
 		PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
