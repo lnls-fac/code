@@ -3,7 +3,7 @@ import passmethods
 import trackcpp
 import numpy
 
-def linepass (lattice, particles, refpts = None, element_offset = 0, engine = 'trackcpp'):
+def linepass (line, particles, refpts = None, element_offset = 0, engine = 'trackcpp'):
     
     ''' process arguments '''
     if refpts is None:
@@ -15,15 +15,15 @@ def linepass (lattice, particles, refpts = None, element_offset = 0, engine = 't
             
     ''' does tracking according to selected engine '''
     if engine == 'pyring':
-        pos_out = _Tracking.linepass_pyring(lattice, particles, trajectory, element_offset)
+        pos_out = _Tracking.linepass_pyring(line, particles, trajectory, element_offset)
     elif engine == 'trackcpp':
-        pos_out = _Tracking.linepass_trackcpp(lattice, particles, trajectory, element_offset)
+        pos_out = _Tracking.linepass_trackcpp(line, particles, trajectory, element_offset)
     else:
         raise Exception('tracking engine not defined|implemented!')
     
     ''' returns data '''
     if trajectory:
-        return select(pos_out, nr_particles = particles.shape[1], nr_elements = len(lattice)+1, nr_turns = 1, element = refpts)
+        return select(pos_out, nr_particles = particles.shape[1], nr_elements = len(line)+1, nr_turns = 1, element = refpts)
     else:
         return pos_out
         

@@ -9,16 +9,28 @@ import matplotlib.pyplot as plt
 import numpy
 import time
 
-def test_compare_with_AT(the_ring):
+def test_compare_with_AT_linepass(the_ring):
     
     refpts = [0, 1500-1, 1800-1, len(the_ring)]
     posi = numpy.zeros((6,1))
     posi[:,0] = [0.001,0,0,0,0,0]
-    posf = pyring.tracking.linepass(lattice = the_ring, particles = posi, refpts = refpts, engine = 'trackcpp', element_offset=1)
+    posf = pyring.tracking.linepass(line = the_ring, particles = posi, refpts = refpts, engine = 'trackcpp', element_offset=1)
     
     for i in range(posf.shape[0]):
         for j in range(posf.shape[1]):
             print('{:+22.16E} '.format(posf[i,j])),
+        print('')
+        
+def test_compare_with_AT_ringpass(the_ring):
+    
+    posi = numpy.zeros((6,1))
+    posi[:,0] = [0.001,0,0,0,0,0]
+    posf = pyring.tracking.ringpass(ring = the_ring, particles = posi, nr_turns = 1000, element_offset = 1)
+ 
+    turns = [0,1,999]
+    for i in range(posf.shape[0]):
+        for t in turns:
+            print('{:+22.16E} '.format(posf[i,t])),
         print('')
 
 def test_linepass(the_ring):
@@ -126,7 +138,8 @@ def run_tests():
     #pyring.lattice.printlattice(the_ring)
     
     ''' compares tracking with AT results '''
-    test_compare_with_AT(the_ring)
+    #test_compare_with_AT_linepass(the_ring)
+    test_compare_with_AT_ringpass(the_ring)
     
     ''' tests linepass use '''
     #test_linepass(the_ring)
