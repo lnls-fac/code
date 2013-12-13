@@ -5,12 +5,12 @@ w = ringdata.w;
 %% Load parameters
 
 tau  = ringdata.taue;
-sigma = ringdata.sigma;
 nb = ringdata.nb;
 w0 = ringdata.w0; 
 nus = ringdata.nus;
 eta = ringdata.eta;
 I_tot = ringdata.I_tot;
+sigma = interp1(1e-3*ringdata.sigma(:,1)',ringdata.sigma(:,2)',I_tot/nb);
 E = ringdata.E;
 
 Zl = zeros(1,length(w));

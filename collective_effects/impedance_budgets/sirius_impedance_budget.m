@@ -20,9 +20,9 @@ if (any(strcmp(select,'resistive_wall')) )%|| strcmp(select,'all'))
     ange    = [0 0];
     angm    = [0 0];
     sigmadc = [0 5.9e7];
-    tau     = [0 1]*27e-15;
+    tau     = [0 0]*27e-15;
     b       = 12.00*1e-3;
-    L       = 480;
+    L       = 4800;
     budget{i}.mub = mub;
     budget{i}.ange = ange;
     budget{i}.angm = angm;
@@ -55,7 +55,7 @@ if (any(strcmp(select,'resistive_wall_with_coating')) || strcmp(select,'all') ||
     ange    = [0 0 0];
     angm    = [0 0 0];
     sigmadc = [0 4e6 5.9e7]; % Not sure about NEG resistivity
-    tau     = [0 0 1]*27e-15;
+    tau     = [0 0 0]*27e-15;
     b       = [12.000 12.001]*1e-3;
     L       = 480;
     budget{i}.mub = mub;
@@ -83,7 +83,7 @@ end
 if (any(strcmp(select,'in_vacuum_undulators')) || strcmp(select,'all') || strcmp(select,'ring'))
     budget{i}.name = 'In-vac. Und. @ low betax';
     budget{i}.type = 'rw';
-    budget{i}.quantity = 5;
+    budget{i}.quantity = 4;
     budget{i}.betax = 4.1;
     budget{i}.betay = 1.5;
   
@@ -162,13 +162,13 @@ end
 if (any(strcmp(select,'smallgap_undulators')) || strcmp(select,'all') || strcmp(select,'ring'))
     budget{i}.name = 'Small Gap Undulators';
     budget{i}.type = 'rw';
-    budget{i}.quantity = 4;
+    budget{i}.quantity = 3;
     budget{i}.betax = 16.9;
     budget{i}.betay = 5;
     budget{i}.thick = 0.2e-3;
     budget{i}.cond = 5.94e7;
     budget{i}.perm = 1;
-    budget{i}.h = 8e-3;
+    budget{i}.h = 10e-3;
     budget{i}.L = 2;
     [Zv Zh Zl w_val] = lnls_calc_impedance_flat_chamber(budget{i}.thick, ...
         budget{i}.cond, budget{i}.perm, budget{i}.h, budget{i}.L, 0, w);
@@ -380,21 +380,23 @@ end
 %     budget{i}.escala = 'linear';
 %     i=i+1;
 % end
-if (any(strcmp(select,'broad_band')) || strcmp(select,'all') )%|| strcmp(select,'ring'))
+if (any(strcmp(select,'broad_band')) || strcmp(select,'all') || strcmp(select,'ring'))
     budget{i}.name = 'Broad Band';
     budget{i}.type = 'geo';
     budget{i}.quantity = 1;
     budget{i}.betax = 6.8;
-    budget{i}.betay = 11;                    
-    budget{i}.Rsx =  0.42e6/2; % = 13.5*1e6*518.25/845/20;
-    budget{i}.wrx =  22*1e9*2*pi;
-    budget{i}.Qx =   1;                        
-    budget{i}.Rsy =  0.42e6/2; % = 13.5*1e6*518.25/845/20;
-    budget{i}.wry =  22*1e9*2*pi;              
-    budget{i}.Qy =   1;                        
-    budget{i}.Rsl = 5.3e3; % = 3.6*518.25/354.0*1e3;
-    budget{i}.wrl = 20*1e9*2*pi;
+    budget{i}.betay = 11;  
+    Zovern = 0.2;
+    fr  = 2.4* 299792458/12e-3/2/pi; % 2.4 c/b/2/pi;
+    budget{i}.Rsl = Zovern*fr/0.578e6; % = 3.6*518.25/354.0*1e3;
+    budget{i}.wrl = fr*2*pi;
     budget{i}.Ql =  1;
+    budget{i}.Rsx =  budget{i}.Rsl/12e-3;%0.42e6/2; % = 13.5*1e6*518.25/845/20;
+    budget{i}.wrx =  fr*2*pi;
+    budget{i}.Qx =   1;                        
+    budget{i}.Rsy =  budget{i}.Rsl/12e-3;%0.42e6/2; % = 13.5*1e6*518.25/845/20;
+    budget{i}.wry =  fr*2*pi;              
+    budget{i}.Qy =   1;                        
     Zv = lnls_calc_impedance_transverse_resonator(budget{i}.Rsy, budget{i}.Qy, budget{i}.wry, w);
     Zh = lnls_calc_impedance_transverse_resonator(budget{i}.Rsx, budget{i}.Qx, budget{i}.wrx, w);
     Zl = lnls_calc_impedance_longitudinal_resonator(budget{i}.Rsl, budget{i}.Ql, budget{i}.wrl, w);

@@ -1,4 +1,4 @@
-function plot_impedances(w, budget, escalax, escalay, mult_beta, save)
+function plot_impedances(w, budget, escalax, escalay, mult_beta, save, name)
 % Funcao que plota impedancias:
 % plot_impedances(w, budget, escalax, escalay, mult_beta, save)
 %
@@ -41,6 +41,17 @@ if strcmp(escalax,'log')
     Zh = Zh(:,indx);
     Zl = Zl(:,indx);
 end
+% if strcmp(escalay,'log')
+%     indl = imag(-Zl) > 0;
+%     indv = imag(-Zv) > 0;
+%     indh = imag(-Zh) > 0;
+%     ind = ~any(~(indl & indv & indh));
+%     w  =  w(:,ind);
+%     Zv = Zv(:,ind);
+%     Zh = Zh(:,ind);
+%     Zl = Zl(:,ind);
+% end
+
 
 % Create figure
 scrsz = get(0,'ScreenSize');
@@ -181,6 +192,9 @@ xlabel('\omega [rad/s]','FontSize',16);
 ylabel('Re(Z_{L}) [\Omega]','FontSize',16);
 
 if save
-    saveas(figure1,'impedance.fig');
+    if ~exist('name','var')
+        name = 'no_name';
+    end
+    saveas(figure1,['impedance_' name '.fig']);
 end
 

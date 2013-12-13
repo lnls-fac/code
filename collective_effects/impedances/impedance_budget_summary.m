@@ -3,25 +3,32 @@ function impedance_budget_summary(ringdata, budget, save)
 w = ringdata.w;
 h = ringdata.nb;
 I = ringdata.I_tot;
+sigma = interp1(1e-3*ringdata.sigma(:,1)',ringdata.sigma(:,2)',I/h);
 T0 = 2*pi/ringdata.w0;
 lf = zeros(1,length(budget));
-Pl = lf; TPl = lf; Tlf = lf; Tkfx = lf; Tkfy = lf;
+Pl = lf; TPl = lf; Tlf = lf; Tkfx = lf; Tkfy = lf; Zl_eff = lf; Zh_eff = lf;
+Zv_eff = lf;
 
 fprintf('%-26s: %-20s\n','Lattice', ringdata.lattice_version);
 fprintf('%-26s: %-20s\n','Stage', ringdata.stage);
 fprintf('%-26s: %-20d\n','Number of Bunches', ringdata.nb);
 fprintf('%-26s: %-20.4g\n','Revolution Frequency [Mhz]', ringdata.w0*1e-6/2/pi);
 fprintf('%-26s: %-20.4g\n','Total Current [mA]', ringdata.I_tot*1e3);
-fprintf('%-26s: %-20.4g\n','Bunch Lengh [mm]', ringdata.sigma*1e3); fprintf('\n');
-fprintf('Model                     Number     Kl      Power     sum(Kl)  sum(Power)   bx*Kh        by*Kv  \n');
-fprintf('                            #      [mV/pC]    [mW]     [V/pC]     [W]       [kV/pC]      [kV/pC] \n');
+fprintf('%-26s: %-20.4g\n','Bunch Lengh [mm]', sigma*1e3); fprintf('\n');
+fprintf('Model                     Number     Kl      Power     sum(Kl)  sum(Power)   bx*Kh        by*Kv \n');
+fprintf('                            #      [mV/pC]    [mW]     [V/pC]     [W]       [kV/pC]      [kV/pC]\n');
 for i=1:length(budget)
-    lf(i) = lnls_calc_loss_factor(w,budget{i}.Zl,ringdata.sigma, ringdata.w0,ringdata.nb);
+    [lf(i), Zl_eff(i)] = lnls_calc_loss_factor(w,budget{i}.Zl,sigma, ringdata.w0,ringdata.nb);
     Pl(i) = I^2/h*T0*lf(i);
     Tlf(i) = budget{i}.quantity*lf(i);
+    Zl_eff(i) = budget{i}.quantity*Zl_eff(i);
     TPl(i) = Pl(i)*budget{i}.quantity;
-    Tkfx(i)= budget{i}.betax*budget{i}.quantity*lnls_calc_kick_factor(w,budget{i}.Zh,ringdata.sigma, ringdata.w0,ringdata.nb);
-    Tkfy(i)= budget{i}.betay*budget{i}.quantity*lnls_calc_kick_factor(w,budget{i}.Zv,ringdata.sigma, ringdata.w0,ringdata.nb);
+    [kik, Zh_eff(i)] = lnls_calc_kick_factor(w,budget{i}.Zh,sigma, ringdata.w0,ringdata.nb);
+    Tkfx(i)= budget{i}.betax*budget{i}.quantity*kik;
+    Zh_eff(i) = budget{i}.betax*budget{i}.quantity*Zh_eff(i);
+    [kik, Zv_eff(i)] = lnls_calc_kick_factor(w,budget{i}.Zv,sigma, ringdata.w0,ringdata.nb);
+    Tkfy(i) = budget{i}.betay*budget{i}.quantity*kik;
+    Zv_eff(i) = budget{i}.betay*budget{i}.quantity*Zv_eff(i);
     if budget{i}.quantity == 1
         fprintf('%-27s %-7d %-9s %-9s %-9.3g %-9.3g %-12.3g %-12.3g\n', budget{i}.name, budget{i}.quantity, ...
             '-', '-', Tlf(i)*1e-12, TPl(i), Tkfx(i)*1e-15 ,Tkfy(i)*1e-15);
@@ -42,7 +49,7 @@ if save
     fprintf(fp,'%-26s: %-20d\n','Number of Bunches', ringdata.nb);
     fprintf(fp,'%-26s: %-20.4g\n','Revolution Frequency [Mhz]', ringdata.w0*1e-6/2/pi);
     fprintf(fp,'%-26s: %-20.4g\n','Total Current [mA]', ringdata.I_tot*1e3);
-    fprintf(fp,'%-26s: %-20.4g\n','Bunch Lengh [mm]', ringdata.sigma*1e3); fprintf('\n');
+    fprintf(fp,'%-26s: %-20.4g\n','Bunch Lengh [mm]', sigma*1e3); fprintf('\n');
     fprintf(fp,'Model                     Number     Kl      Power     sum(Kl)  sum(Power)   bx*Kh        by*Kv  \n');
     fprintf(fp,'                            #      [mV/pC]    [mW]     [V/pC]     [W]       [kV/pC]      [kV/pC] \n');
     for i=1:length(budget)
@@ -50,7 +57,7 @@ if save
             fprintf(fp,'%-27s %-7d %-9s %-9s %-9.3g %-9.3g %-12.3g %-12.3g\n', budget{i}.name, budget{i}.quantity, ...
                 '-', '-', Tlf(i)*1e-12, TPl(i), Tkfx(i)*1e-15 ,Tkfy(i)*1e-15);
         else
-            fprintf(fp,'%-27s %-7d %-9.3g %-9.3g %-9.3g %-9.3g %-12.3g %-12.3g\n', budget{i}.name, budget{i}.quantity, ...
+            fprintf(fp,'%-27s %-7d %-9.3g %-9.3g %-9.3g %-9.3g %-12.3g\n', budget{i}.name, budget{i}.quantity, ...
                 lf(i)*1e-9, Pl(i)*1e3, Tlf(i)*1e-12, TPl(i), Tkfx(i)*1e-15 ,Tkfy(i)*1e-15);
         end
     end
