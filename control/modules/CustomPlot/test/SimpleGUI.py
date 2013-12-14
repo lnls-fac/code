@@ -14,7 +14,7 @@ import sys
 import datetime
 import collections
 import numpy
-from PyQt4 import QtGui, QtCore
+from PythonQt import QtGui, QtCore
 import CustomPlot
 import DateTimePlot
 import PositionPlot

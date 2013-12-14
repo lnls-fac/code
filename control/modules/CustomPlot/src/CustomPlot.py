@@ -1,6 +1,6 @@
 """
 CustomPlot
-    Class for embedding matplotlib plots in PyQt GUI. 
+    Class for embedding matplotlib plots in Qt GUI. 
 
 Afonso Haruo Carnielli Mukai (FAC - LNLS)
 

@@ -1,6 +1,6 @@
 """
 DateTimePlot
-    Class for embedding matplotlib datetime plots in PyQt GUI. 
+    Class for embedding matplotlib datetime plots in Qt GUI. 
 
 Afonso Haruo Carnielli Mukai (FAC - LNLS)
 

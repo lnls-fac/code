@@ -1,6 +1,6 @@
 """
 CustomToolbar
-    Class for embedding a matplotlib toolbar in a PyQt GUI. 
+    Class for embedding a matplotlib toolbar in a Qt GUI. 
 
 Afonso Haruo Carnielli Mukai (FAC - LNLS)
 
