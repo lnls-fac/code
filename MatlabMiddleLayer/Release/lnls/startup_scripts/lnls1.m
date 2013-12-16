@@ -35,7 +35,7 @@ end
 % inicializa estruturas do MML
 cdir = pwd;
 root_folder = lnls_get_root_folder();
-cd(fullfile(root_folder, 'fac_files', 'code', 'MatlabMiddleLayer','Release','mml'))
+cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 setpathlnls('LNLS1', 'StorageRing', 'lnls1_link');
 cd(cdir);
 clear cdir;
