@@ -1,6 +1,6 @@
 """
 PythonQt
-    Select between PyQt4 and PySide.
+    Select PyQt4 or PySide.
     
     If the environment variable PYTHON_QT is set to PySide, use PySide;
     otherwise, use PyQt4.
@@ -15,9 +15,7 @@ import os
 
 PYTHON_QT = 'PYTHON_QT'
 env = os.environ
-if PYTHON_QT in env:
-    python_qt = env[PYTHON_QT]
-    if python_qt == 'PySide':
-        from PySide import *
+if PYTHON_QT in env and env[PYTHON_QT] == 'PySide':
+    from PySide import QtCore, QtGui
 else:
-    from PyQt4 import *
+    from PyQt4 import QtCore, QtGui
