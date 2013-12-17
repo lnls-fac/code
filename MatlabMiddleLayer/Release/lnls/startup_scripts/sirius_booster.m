@@ -1,11 +1,11 @@
 function sirius_booster(versao, varargin)
 % Inicializa as estruturas do MML-LNLS e conecta com servidor LNLS1LinkS
 %
-% Hist???rico
+% Historico
 % 
-% 2011-06-02: c???pia modificada da vers???o do LNLS1
-% 2011-04-28: nova vers???o. script transformado em fun??????o.
-% 2010-09-16: coment???rios iniciais no c???digo
+% 2011-06-02: copia modificada da versao do LNLS1
+% 2011-04-28: nova versao. script transformado em funcao.
+% 2010-09-16: comentarios iniciais no codigo
 
 Disconnect = false;
 
@@ -30,11 +30,8 @@ end
 % inicializa estruturas do MML
 cdir = pwd;
 
-try
-    cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
-catch
-    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-end
+mml_path = fullfile(lnls_get_root_folder(), 'MatlabMiddleLayer','Release');
+cd(fullfile(mml_path,'mml'));
 
 if ~exist('versao', 'var')
     versao = 'V800';
@@ -43,16 +40,10 @@ setpathlnls(['BOOSTER_' versao],'StorageRing', 'sirius_link');
 cd(cdir);
 clear cdir;
 
-if strcmpi(computer, 'PCWIN')
-    addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\lnls\fac_scripts\sirius\lattice_errors'));
-    addpath(fullfile('C:\Arq\MatlabMiddleLayer\Release', 'lnls', 'fac_scripts', 'tracy3'), '-begin');
-    addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\machine\LTLB_V100'));
-    addpath(genpath('C:\Arq\MatlabMiddleLayer\Release\machine\LTBA_V100'));
-else
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/lattice_errors'));
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/tracy3'));
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/machine/LTLB_V100'));
-    addpath(genpath('/home/fac_files/code/MatlabMiddleLayer/Release/machine/LTBA_V100'));
-end
+
+addpath(genpath(fullfile(mml_path, 'lnls','fac_scripts','sirius','lattice_errors')));
+addpath(fullfile(mml_path, 'lnls', 'fac_scripts', 'tracy3'), '-begin');
+addpath(genpath(fullfile(mml_path, 'machine','LTLB_V100'));
+addpath(genpath(fullfile(mml_path, 'machine', 'LTBA_V100'));
 
 return;

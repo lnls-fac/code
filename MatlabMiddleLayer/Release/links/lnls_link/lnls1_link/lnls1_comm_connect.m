@@ -52,7 +52,7 @@ PVServer.server.ip_port = ip_port;
 if (strcmp(PVServer.server.ip_address,'127.0.0.1') && strcmp(PVServer.server.type,'LNLS1Link'))
     disp('lnls1_comm_connect: verificando servidor local de estado do anel...');
     dir_init = pwd;
-    exe_path = 'C:\Arq\MatlabMiddleLayer\Release\links\lnls_link\lnls1_link\cmd_findwindow\';
+    exe_path = fullfile(lnls_get_root_folder(), 'code', 'MatlabMiddleLayer', 'Release', 'links', 'lnls_link', 'lnls1_link', 'cmd_findwindow');
     cd(exe_path);
     cmd = ['dos(''' 'cmd_findwindow' ' ' 'TFLNLS1Link' ' ' 'FLNLS1Link' ''')'];
     [hwnd tmp] = evalc(cmd);
