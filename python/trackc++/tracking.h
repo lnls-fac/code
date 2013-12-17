@@ -10,6 +10,10 @@
 
 #include "trackc++.h"
 
+
+Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66);
+
+
 // linepass
 // --------
 // tracks particles along a beam transport line
@@ -24,6 +28,48 @@
 //		pos:			Pos vector of particles' final coordinates (or trajetory)
 //		element_offset:	in case of problems with passmethods, '*element_offset' is the index of the corresponding element
 //		RETURN:			status do tracking (see 'auxiliary.h')
+
+template <typename T>
+Status::type elementpass (const Element& el, std::vector<Pos<T> >& orig_pos) {
+
+	Status::type status = Status::success;
+
+	switch (el.pass_method) {
+	case PassMethod::pm_identity_pass:
+		if ((status = pm_identity_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_drift_pass:
+		if ((status = pm_drift_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_str_mpole_symplectic4_pass:
+		//break;
+		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_bnd_mpole_symplectic4_pass:
+		//break;
+		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_corrector_pass:
+		//break;
+		if ((status = pm_corrector_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_cavity_pass:
+		//break;
+		if ((status = pm_cavity_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_thinquad_pass:
+		if ((status = pm_thinquad_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	case PassMethod::pm_thinsext_pass:
+		if ((status = pm_thinsext_pass<T>(orig_pos, el)) != Status::success) return status;
+		break;
+	default:
+		return Status::passmethod_not_defined;
+	}
+
+	return status;
+
+}
 
 template <typename T>
 Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, int *element_offset, bool trajectory) {
@@ -125,8 +171,6 @@ Status::type ringpass (const std::vector<Element>& ring, std::vector<Pos<T> >& o
 	}
 	return status;
 }
-
-
 
 
 #endif

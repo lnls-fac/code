@@ -48,7 +48,9 @@ struct Status {
 		success = 0,
 		passmethod_not_defined = 1,
 		passmethod_not_implemented = 2,
-		particle_lost = 3
+		particle_lost = 3,
+		inconsistent_dimensions = 4,
+		uninitialized_memory = 5
 	};
 };
 
@@ -58,5 +60,11 @@ template <typename T> class Pos;
 class Element;
 
 const double light_speed = 299792458; // [m/s]
+
+
+typedef double Vector4[4];
+typedef double Vector6[6];
+typedef double Matrix4[4][4];
+typedef double Matrix6[6][6];
 
 #endif

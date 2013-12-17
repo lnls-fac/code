@@ -36,6 +36,11 @@ def ringpass (ring, particles, nr_turns = 1, element_offset = 0, engine = 'track
     else:
         raise Exception('tracking server not defined|implemented!')
     
+def findm66 (line, closed_orbit = None):
+    if closed_orbit is None:
+        closed_orbit = numpy.zeros((6,len(line)))
+    return _Tracking.findm66_trackcpp(line, closed_orbit)
+    
 def lost (particles, nr_particles = 1, nr_elements = 1, nr_turns = 1):
     
     if particles.shape[1] != (nr_turns * nr_elements * nr_particles):
@@ -90,6 +95,10 @@ class _Tracking:
     @staticmethod
     def py2num(pos):
         return numpy.reshape(numpy.array(pos), (6,-1), order='F')
+    
+    @staticmethod
+    def py2num_m66(m66):
+        return numpy.reshape(numpy.array(m66), (-1,6,6), order='C')
 
 
     @staticmethod
@@ -163,6 +172,13 @@ class _Tracking:
         py_particles_new = trackcpp.ringpass(ring, py_particles, nr_turns, element_offset)
         numpy_particles  = _Tracking.py2num(py_particles_new)  
         return numpy_particles
+    
+    @staticmethod
+    def findm66_trackcpp(line, closed_orbit):
+        py_closed_orbit = _Tracking.num2py(closed_orbit)
+        py_m66          = trackcpp.findm66(line, py_closed_orbit)
+        numpy_m66       = _Tracking.py2num_m66(py_m66)
+        return numpy_m66
 
 
     

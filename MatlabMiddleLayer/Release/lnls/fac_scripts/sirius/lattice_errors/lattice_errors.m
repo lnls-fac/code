@@ -11,6 +11,7 @@ cd(pathstr);
 
 % inicializacoes basicas
 % files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
+config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums'); 
 %if ~exist('config_folder', 'var'), config_folder = fullfile(pwd, 'CONFIG_V403_AC10_5_coup2p5'); end;
 %if ~exist('config_folder', 'var'), config_folder = fullfile(pwd, 'CONFIG_V403_AC10_5_ripple'); end;
 %if ~exist('config_folder', 'var'), config_folder = fullfile(pwd, 'CONFIG_V403_AC10_5_studyRespM'); end;

@@ -14,5 +14,6 @@
 #include "passmethods.h"
 #include "lattice.h"
 #include "tracking.h"
+#include "tpsa.h"
 
 #endif

@@ -93,6 +93,13 @@ def test_speed(the_ring):
     t1 = time.time()
     print(str(nr_turns)+ ' turns with ' + str(nr_particles) + ' particles: ' + str(t1-t0) + ' seconds')
     
+def test_findm66(the_ring):
+    
+    t0 = time.time()
+    m66 = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    t1 = time.time()
+    print(str(t1-t0))
+    
 def test_findorbit4(the_ring):
     
     ''' set cavity state '''
@@ -154,10 +161,13 @@ def run_tests():
     #test_speed(the_ring)
     
     ''' tests findorbit4 '''
-    test_findorbit4(the_ring)
+    #test_findorbit4(the_ring)
     
     ''' tests findorbit6 '''
     #test_findorbit6(the_ring)
+    
+    ''' tests findm66 '''
+    test_findm66(the_ring)
       
     
 ''' TEST Suite for PyRing and TrackC++ '''

@@ -63,47 +63,47 @@ def findorbit4(ring, de = 0, refpts = None, guess = None, turn_by_turn = False, 
         return Rf[:4,refpts]
     
     
-def findorbit6(ring, refpts = None, guess = None, init_nr_turns = 20, tol = 1e-8, max_iterations = 15, step_de = 1e-4):
+# def findorbit6(ring, refpts = None, guess = None, init_nr_turns = 20, tol = 1e-8, max_iterations = 15, step_de = 1e-4):
     
-    ''' builds a valid list of element indices '''
-    if refpts is None:
-        refpts = [0]
-    try:
-        refpts[0]
-    except:
-        refpts = [refpts]
-     
-    if guess is None:
-        guess = numpy.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-    
-    de0 = guess[4,0]        
-    iteration = 0
-    while (step_de > tol):
-        
-        de1 = de0 - step_de/2
-        pos = findorbit4(ring, de = de1, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = 1e-14, max_iterations = max_iterations, turn_by_turn = True)
-        guess[:,0] = pos[:,0] 
-        dl1 = pos[5,-1] - pos[5,0]
-        
-        
-        de2 = de0 + step_de/2
-        pos = findorbit4(ring, de = de2, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = 1e-14, max_iterations = max_iterations, turn_by_turn = True)
-        guess[:4,0] = pos[:4,0]
-        dl2 = pos[5,-1] - pos[5,0]
-        
-        de0 = de1 - (de2 - de1) * (dl1/(dl2-dl1)) # linear interpolation
-        
-        if ((dl1<=0)!=(dl2<=0)):  # if interval contains solution does bisection
-            step_de /= 2.0
-    
-        iteration += 1
-        #print((iteration, de0, step_de))
-            
-    de = 0.5 * (de1 + de2)
-    Ri = findorbit4(ring, de = de, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = tol, max_iterations = max_iterations, turn_by_turn = True)
-    Ri = Ri[:,0]
-    Ri = tracking.track1turn(lattice = ring, pos = Ri, trajectory = True, engine = 'trackcpp')
-    Ri = Ri[:, refpts]
-    return Ri
+#     ''' builds a valid list of element indices '''
+#     if refpts is None:
+#         refpts = [0]
+#     try:
+#         refpts[0]
+#     except:
+#         refpts = [refpts]
+#      
+#     if guess is None:
+#         guess = numpy.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
+#     
+#     de0 = guess[4,0]        
+#     iteration = 0
+#     while (step_de > tol):
+#         
+#         de1 = de0 - step_de/2
+#         pos = findorbit4(ring, de = de1, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = 1e-14, max_iterations = max_iterations, turn_by_turn = True)
+#         guess[:,0] = pos[:,0] 
+#         dl1 = pos[5,-1] - pos[5,0]
+#         
+#         
+#         de2 = de0 + step_de/2
+#         pos = findorbit4(ring, de = de2, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = 1e-14, max_iterations = max_iterations, turn_by_turn = True)
+#         guess[:4,0] = pos[:4,0]
+#         dl2 = pos[5,-1] - pos[5,0]
+#         
+#         de0 = de1 - (de2 - de1) * (dl1/(dl2-dl1)) # linear interpolation
+#         
+#         if ((dl1<=0)!=(dl2<=0)):  # if interval contains solution does bisection
+#             step_de /= 2.0
+#     
+#         iteration += 1
+#         #print((iteration, de0, step_de))
+#             
+#     de = 0.5 * (de1 + de2)
+#     Ri = findorbit4(ring, de = de, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = tol, max_iterations = max_iterations, turn_by_turn = True)
+#     Ri = Ri[:,0]
+#     Ri = tracking.track1turn(lattice = ring, pos = Ri, trajectory = True, engine = 'trackcpp')
+#     Ri = Ri[:, refpts]
+#     return Ri
     
     

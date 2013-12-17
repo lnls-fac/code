@@ -51,7 +51,7 @@ inline void calcpolykick(const Pos<T> &pos, const std::vector<double>& polynom_a
 
 
 template <typename T>
-void fastdrift(Pos<T> &pos, const double& norml) {
+void fastdrift(Pos<T> &pos, const T& norml) {
 	T dx = norml * pos.px;
     T dy = norml * pos.py;
     pos.rx += dx;
@@ -84,7 +84,7 @@ void edge_fringe(std::vector<Pos<T> >& pos, const double& inv_rho, const double&
 		T       &px = pos[p].px, &py = pos[p].py;
 		T fx      = inv_rho * std::tan(edge_angle)/(1 + de);
 		T psi_bar = edge_angle - inv_rho * gap * fint * (1 + std::sin(edge_angle) * std::sin(edge_angle)) / std::cos(edge_angle) / (1 + de);
-		T fy      = inv_rho * std::tan(psi_bar) / (1 + de);
+		T fy      = inv_rho * tan(psi_bar) / (1 + de);
 		px       += rx * fx;
 		py       -= ry * fy;
 	}

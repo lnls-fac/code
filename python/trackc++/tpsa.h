@@ -52,68 +52,68 @@ template <int V, int N>        struct et_osip<V,N,0>   { enum { val = et_binomia
 // Forward Declarations
 // --------------------
 
-template <unsigned int  , unsigned int  , typename     > class tpsa_t;
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> abs   (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> sqrt  (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> log   (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> atan  (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> atanh (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> cos   (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> sin   (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> tan   (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> cosh  (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> sinh  (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> asin  (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> acos  (const tpsa_t<V,N,TYPE>&);
-template <unsigned int V, unsigned int N, typename TYPE> tpsa_t<V,N,TYPE> D     (const tpsa_t<V,N,TYPE>&, const unsigned int);
+template <unsigned int  , unsigned int  , typename     > class Tpsa;
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> abs   (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> sqrt  (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> log   (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> atan  (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> atanh (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> cos   (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> sin   (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> tan   (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> cosh  (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> sinh  (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> asin  (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> acos  (const Tpsa<V,N,TYPE>&);
+template <unsigned int V, unsigned int N, typename TYPE> Tpsa<V,N,TYPE> D     (const Tpsa<V,N,TYPE>&, const unsigned int);
 
 
 // Definition: CLASS TPS
 // ---------------------
 
 template <unsigned int V = 0, unsigned int N = 0, typename TYPE = double>
-class tpsa_t {
+class Tpsa {
 
-	friend tpsa_t<V,N,TYPE> abs<>   (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> sqrt<>  (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> log<>   (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> atan<>  (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> atanh<> (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> cos<>   (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> sin<>   (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> tan<>   (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> cosh<>  (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> sinh<>  (const tpsa_t<V,N,TYPE>&);
-	template <typename T> friend tpsa_t<V,N,T> asin (const tpsa_t<V,N,T>&);
-	template <typename T> friend tpsa_t<V,N,T> acos (const tpsa_t<V,N,T>&);
-	//friend tpsa_t<V,N,TYPE> asin<>  (const tpsa_t<V,N,TYPE>&);
-	friend tpsa_t<V,N,TYPE> D<>     (const tpsa_t<V,N,TYPE>&, const unsigned int);
+	friend Tpsa<V,N,TYPE> abs<>   (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> sqrt<>  (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> log<>   (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> atan<>  (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> atanh<> (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> cos<>   (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> sin<>   (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> tan<>   (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> cosh<>  (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> sinh<>  (const Tpsa<V,N,TYPE>&);
+	template <typename T> friend Tpsa<V,N,T> asin (const Tpsa<V,N,T>&);
+	template <typename T> friend Tpsa<V,N,T> acos (const Tpsa<V,N,T>&);
+	//friend Tpsa<V,N,TYPE> asin<>  (const Tpsa<V,N,TYPE>&);
+	friend Tpsa<V,N,TYPE> D<>     (const Tpsa<V,N,TYPE>&, const unsigned int);
 
 public:
 
 	// constructors
-	tpsa_t(const TYPE& a_ = 0, const unsigned int v_ = V);
-	tpsa_t(const tpsa_t& a_);
+	Tpsa(const TYPE& a_ = 0, const unsigned int v_ = V);
+	Tpsa(const Tpsa& a_);
 
 	// algebra of class elements with support field
-	tpsa_t  operator *  (const TYPE& o_) const;
-	tpsa_t  operator /  (const TYPE& o_) const;
-	tpsa_t& operator += (const TYPE& o_);
-	tpsa_t& operator -= (const TYPE& o_);
-	tpsa_t& operator *= (const TYPE& o_);
-	tpsa_t& operator /= (const TYPE& o_);
+	Tpsa  operator *  (const TYPE& o_) const;
+	Tpsa  operator /  (const TYPE& o_) const;
+	Tpsa& operator += (const TYPE& o_);
+	Tpsa& operator -= (const TYPE& o_);
+	Tpsa& operator *= (const TYPE& o_);
+	Tpsa& operator /= (const TYPE& o_);
 
 	// algebra of class elements
-	tpsa_t  operator -  () const;
-	tpsa_t  operator +  (const tpsa_t& o_) const;
-	tpsa_t  operator -  (const tpsa_t& o_) const;
-	tpsa_t  operator *  (const tpsa_t& o_) const;
-	tpsa_t  inverse     ()              const;
-	tpsa_t  operator /  (const tpsa_t& o_) const;
-	tpsa_t& operator += (const tpsa_t& o_);
-	tpsa_t& operator -= (const tpsa_t& o_);
-	tpsa_t& operator *= (const tpsa_t& o_);
-	tpsa_t& operator /= (const tpsa_t& o_);
+	Tpsa  operator -  () const;
+	Tpsa  operator +  (const Tpsa& o_) const;
+	Tpsa  operator -  (const Tpsa& o_) const;
+	Tpsa  operator *  (const Tpsa& o_) const;
+	Tpsa  inverse     ()              const;
+	Tpsa  operator /  (const Tpsa& o_) const;
+	Tpsa& operator += (const Tpsa& o_);
+	Tpsa& operator -= (const Tpsa& o_);
+	Tpsa& operator *= (const Tpsa& o_);
+	Tpsa& operator /= (const Tpsa& o_);
 
 	// boolean operators
 	bool operator == (const TYPE& o_) const;
@@ -123,10 +123,10 @@ public:
 	bool operator >  (const TYPE& o_) const;
 	bool operator >= (const TYPE& o_) const;
 
-	bool operator >  (const tpsa_t& o_) const;
-	bool operator >= (const tpsa_t& o_) const;
-	bool operator == (const tpsa_t& o_) const;
-	bool operator != (const tpsa_t& o_) const;
+	bool operator >  (const Tpsa& o_) const;
+	bool operator >= (const Tpsa& o_) const;
+	bool operator == (const Tpsa& o_) const;
+	bool operator != (const Tpsa& o_) const;
 
 
 	// auxiliary public functions
@@ -160,17 +160,17 @@ public:
 // Static Members
 // --------------
 
-template <unsigned int V, unsigned int N, typename TYPE> bool tpsa_t<V,N,TYPE>::init = true;
-template <unsigned int V, unsigned int N, typename TYPE> unsigned int tpsa_t<V,N,TYPE>::binomials[((N+V+1)*(N+V+2))>>1];
-template <unsigned int V, unsigned int N, typename TYPE> unsigned int tpsa_t<V,N,TYPE>::osip[et_osip<V,N,N>::val];
-template <unsigned int V, unsigned int N, typename TYPE> unsigned int tpsa_t<V,N,TYPE>::powers[et_osip<V,N,N>::val][V];
+template <unsigned int V, unsigned int N, typename TYPE> bool Tpsa<V,N,TYPE>::init = true;
+template <unsigned int V, unsigned int N, typename TYPE> unsigned int Tpsa<V,N,TYPE>::binomials[((N+V+1)*(N+V+2))>>1];
+template <unsigned int V, unsigned int N, typename TYPE> unsigned int Tpsa<V,N,TYPE>::osip[et_osip<V,N,N>::val];
+template <unsigned int V, unsigned int N, typename TYPE> unsigned int Tpsa<V,N,TYPE>::powers[et_osip<V,N,N>::val][V];
 
 
 // Implementations: CONSTRUCTORS
 // -----------------------------
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>::tpsa_t(const TYPE& a_, const unsigned int v_) {
+Tpsa<V,N,TYPE>::Tpsa(const TYPE& a_, const unsigned int v_) {
 	if (init) initialization();
 	memset(this->c, 0, sizeof(TYPE)*get_size());
 	//for(unsigned int i=1; i<get_size(); i++) c[i] = 0;
@@ -179,7 +179,7 @@ tpsa_t<V,N,TYPE>::tpsa_t(const TYPE& a_, const unsigned int v_) {
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>::tpsa_t(const tpsa_t<V,N,TYPE>& a_)  {
+Tpsa<V,N,TYPE>::Tpsa(const Tpsa<V,N,TYPE>& a_)  {
 	for(unsigned int i=0; i<get_size(); i++) c[i] = a_.c[i];
 }
 
@@ -189,39 +189,39 @@ tpsa_t<V,N,TYPE>::tpsa_t(const tpsa_t<V,N,TYPE>& a_)  {
 // -----------------------------------------------------
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator * (const TYPE& o_) const {
-	tpsa_t<V,N,TYPE> r(*this);
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator * (const TYPE& o_) const {
+	Tpsa<V,N,TYPE> r(*this);
 	for(unsigned int i=0; i<get_size(); i++) r.c[i] *= o_;
 	return r;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator / (const TYPE& o_) const {
-	tpsa_t<V,N,TYPE> r(*this);
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator / (const TYPE& o_) const {
+	Tpsa<V,N,TYPE> r(*this);
 	for(unsigned int i=0; i<get_size(); i++) r.c[i] /= o_;
 	return r;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator += (const TYPE& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator += (const TYPE& o_) {
 	c[0] += o_;
 	return *this;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator -= (const TYPE& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator -= (const TYPE& o_) {
 	c[0] -= o_;
 	return *this;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator *= (const TYPE& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator *= (const TYPE& o_) {
 	for(unsigned int i=0; i<get_size(); i++) c[i] *= o_;
 	return *this;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator /= (const TYPE& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator /= (const TYPE& o_) {
 	for(unsigned int i=0; i<get_size(); i++) c[i] /= o_;
 	return *this;
 };
@@ -231,29 +231,29 @@ tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator /= (const TYPE& o_) {
 // ------------------------------------------
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator - () const {
-	tpsa_t<V,N,TYPE> r(*this);
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator - () const {
+	Tpsa<V,N,TYPE> r(*this);
 	for(unsigned int i=0; i<get_size(); i++) r.c[i] = -r.c[i];
 	return r;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator + (const tpsa_t<V,N,TYPE>& o_) const {
-	tpsa_t<V,N,TYPE> r(*this);
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator + (const Tpsa<V,N,TYPE>& o_) const {
+	Tpsa<V,N,TYPE> r(*this);
 	for(unsigned int i=0; i<get_size(); i++) r.c[i] += o_.c[i];
 	return r;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator - (const tpsa_t<V,N,TYPE>& o_) const {
-	tpsa_t<V,N,TYPE> r(*this);
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator - (const Tpsa<V,N,TYPE>& o_) const {
+	Tpsa<V,N,TYPE> r(*this);
 	for(unsigned int i=0; i<get_size(); i++) r.c[i] -= o_.c[i];
 	return r;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator * (const tpsa_t<V,N,TYPE>& o_) const {
-	tpsa_t<V,N,TYPE> r;
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator * (const Tpsa<V,N,TYPE>& o_) const {
+	Tpsa<V,N,TYPE> r;
 	unsigned int counter = 0;
 	for(unsigned int n1 = 0; n1 <= N; n1++) {
 		for(unsigned int i1 = first_at_order(n1); i1 < last_at_order(n1); i1++) {
@@ -269,11 +269,11 @@ tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator * (const tpsa_t<V,N,TYPE>& o_) const
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::inverse() const {
-	tpsa_t<V,N,TYPE> r;
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::inverse() const {
+	Tpsa<V,N,TYPE> r;
 	TYPE          a = this->c[0];
-	tpsa_t<V,N,TYPE> x(*this); x.c[0] = 0; x /= a;
-	tpsa_t<V,N,TYPE> p(1);
+	Tpsa<V,N,TYPE> x(*this); x.c[0] = 0; x /= a;
+	Tpsa<V,N,TYPE> p(1);
 	for(unsigned int i=0; i<=N; i++) {
 		r += p * (i&1?-1:1);
 		p *= x;
@@ -282,30 +282,30 @@ tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::inverse() const {
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tpsa_t<V,N,TYPE>::operator / (const tpsa_t<V,N,TYPE>& o_) const {
+Tpsa<V,N,TYPE> Tpsa<V,N,TYPE>::operator / (const Tpsa<V,N,TYPE>& o_) const {
 	return *this * o_.inverse();
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator += (const tpsa_t<V,N,TYPE>& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator += (const Tpsa<V,N,TYPE>& o_) {
 	for(unsigned int i=0; i<get_size(); i++) c[i] += o_.c[i];
 	return *this;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator -= (const tpsa_t<V,N,TYPE>& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator -= (const Tpsa<V,N,TYPE>& o_) {
 	for(unsigned int i=0; i<get_size(); i++) c[i] -= o_.c[i];
 	return *this;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator *= (const tpsa_t<V,N,TYPE>& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator *= (const Tpsa<V,N,TYPE>& o_) {
 	*this = *this * o_;
 	return *this;
 };
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator /= (const tpsa_t<V,N,TYPE>& o_) {
+Tpsa<V,N,TYPE>& Tpsa<V,N,TYPE>::operator /= (const Tpsa<V,N,TYPE>& o_) {
 	*this = *this * o_.inverse();
 	return *this;
 };
@@ -315,56 +315,56 @@ tpsa_t<V,N,TYPE>& tpsa_t<V,N,TYPE>::operator /= (const tpsa_t<V,N,TYPE>& o_) {
 // ---------------------------------
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator == (const TYPE& o_) const {
+bool Tpsa<V,N,TYPE>::operator == (const TYPE& o_) const {
 	return c[0] == o_;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator != (const TYPE& o_) const {
+bool Tpsa<V,N,TYPE>::operator != (const TYPE& o_) const {
 	return c[0] != o_;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator < (const TYPE& o_) const {
+bool Tpsa<V,N,TYPE>::operator < (const TYPE& o_) const {
 	for(unsigned int i=0; i<get_size(); i++) if (c[i] - o_ != 0) return c[i] - o_ < 0;
 	return false;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator <= (const TYPE& o_) const {
+bool Tpsa<V,N,TYPE>::operator <= (const TYPE& o_) const {
 	for(unsigned int i=0; i<get_size(); i++) if (c[i] - o_ != 0) return c[i] - o_ <= 0;
 	return false;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator > (const TYPE& o_) const {
+bool Tpsa<V,N,TYPE>::operator > (const TYPE& o_) const {
 	for(unsigned int i=0; i<get_size(); i++) if (c[i] - o_ != (TYPE) 0) return c[i] - o_ > 0;
 	return false;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator >= (const TYPE& o_) const {
+bool Tpsa<V,N,TYPE>::operator >= (const TYPE& o_) const {
 	for(unsigned int i=0; i<get_size(); i++) if (c[i] - o_ != (TYPE) 0) return c[i] - o_ >= 0;
 	return false;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator >= (const tpsa_t<V,N,TYPE>& o_) const {
+bool Tpsa<V,N,TYPE>::operator >= (const Tpsa<V,N,TYPE>& o_) const {
 	return (*this - o_) >= (TYPE) 0;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator == (const tpsa_t<V,N,TYPE>& o_) const {
+bool Tpsa<V,N,TYPE>::operator == (const Tpsa<V,N,TYPE>& o_) const {
 	return (*this - o_) == (TYPE) 0;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator != (const tpsa_t<V,N,TYPE>& o_) const {
+bool Tpsa<V,N,TYPE>::operator != (const Tpsa<V,N,TYPE>& o_) const {
 	return (*this - o_) != (TYPE) 0;
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-bool tpsa_t<V,N,TYPE>::operator > (const tpsa_t<V,N,TYPE>& o_) const {
+bool Tpsa<V,N,TYPE>::operator > (const Tpsa<V,N,TYPE>& o_) const {
 	return (*this - o_) > (TYPE) 0;
 }
 
@@ -373,7 +373,7 @@ bool tpsa_t<V,N,TYPE>::operator > (const tpsa_t<V,N,TYPE>& o_) const {
 // ------------------------------------------
 
 template <unsigned int V, unsigned int N, typename TYPE>
-void tpsa_t<V,N,TYPE>::initialization() {
+void Tpsa<V,N,TYPE>::initialization() {
 	// sets binomial coefficients
 	for(unsigned int s=0; s<=N+V; s++) {
 		C(s,0) = C(0,s) = 1;
@@ -402,7 +402,7 @@ void tpsa_t<V,N,TYPE>::initialization() {
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-unsigned int tpsa_t<V,N,TYPE>::get_index(const unsigned int* power_) {
+unsigned int Tpsa<V,N,TYPE>::get_index(const unsigned int* power_) {
 	unsigned int s_i = 0;
 	unsigned int idx = 0;
 	for(unsigned int i=0; i<V-1; i++) {
@@ -415,7 +415,7 @@ unsigned int tpsa_t<V,N,TYPE>::get_index(const unsigned int* power_) {
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-void tpsa_t<V,N,TYPE>::get_power(unsigned int idx_, unsigned int* power_) {
+void Tpsa<V,N,TYPE>::get_power(unsigned int idx_, unsigned int* power_) {
 	unsigned int idx = idx_ + 1;
 	for(power_[0]=0; C(V,power_[0]) < idx; power_[0]++);
 	idx = C(V,power_[0]) - idx;
@@ -433,32 +433,32 @@ void tpsa_t<V,N,TYPE>::get_power(unsigned int idx_, unsigned int* power_) {
 // (N=10,V=10 for example) at a P4 with 1Gb of RAM
 
 template <typename T, unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> operator + (const T& o1, const tpsa_t<V,N,TYPE>& o2) { return o2 + o1; }
+Tpsa<V,N,TYPE> operator + (const T& o1, const Tpsa<V,N,TYPE>& o2) { return o2 + o1; }
 
 template <typename T, unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> operator * (const T& o1, const tpsa_t<V,N,TYPE>& o2) { return o2 * o1; }
+Tpsa<V,N,TYPE> operator * (const T& o1, const Tpsa<V,N,TYPE>& o2) { return o2 * o1; }
 
 template <typename T, unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> operator - (const T& o1, const tpsa_t<V,N,TYPE>& o2) { return (-o2) + o1; }
+Tpsa<V,N,TYPE> operator - (const T& o1, const Tpsa<V,N,TYPE>& o2) { return (-o2) + o1; }
 
 template <typename T, unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> operator / (const T& o1, const tpsa_t<V,N,TYPE>& o2) { return o2.inverse() * o1; }
+Tpsa<V,N,TYPE> operator / (const T& o1, const Tpsa<V,N,TYPE>& o2) { return o2.inverse() * o1; }
 
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> abs(const tpsa_t<V,N,TYPE>& a_) {
+Tpsa<V,N,TYPE> abs(const Tpsa<V,N,TYPE>& a_) {
 	if (a_ >= 0) return a_; else return -a_;
 }
 
 //template <unsigned int V, unsigned int N, typename TYPE>
-//tpsa_t<V,N,TYPE> fabs(const tpsa_t<V,N,TYPE>& a_) { return abs(a_); }
+//Tpsa<V,N,TYPE> fabs(const Tpsa<V,N,TYPE>& a_) { return abs(a_); }
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> sqrt(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> r;
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0; x /= a_.c[0];
-	tpsa_t<V,N,TYPE> p(1);
+Tpsa<V,N,TYPE> sqrt(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> r;
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0; x /= a_.c[0];
+	Tpsa<V,N,TYPE> p(1);
 	TYPE          f = 1;
 	for(unsigned int i=0; i<=N; i++) {
 		r += p * f;
@@ -471,10 +471,10 @@ tpsa_t<V,N,TYPE> sqrt(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> log(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> r;
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0; x /= a_.c[0];;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> log(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> r;
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0; x /= a_.c[0];;
+	Tpsa<V,N,TYPE> p(x);
 	for(int i=1; i<=N; i++) {
 		r += p / ((i&1?1.0:-1.0)*i);
 		p *= x;
@@ -485,10 +485,10 @@ tpsa_t<V,N,TYPE> log(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> cos(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> rc(1), rs;
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> cos(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> rc(1), rs;
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0;
+	Tpsa<V,N,TYPE> p(x);
 	unsigned int fac = 1;
 	for(int i=1; i<=N; i++) {
 		if (i&1) { rs += ((i&2)?-1:1) * p / fac; } else { rc += ((i&2)?-1:1) * p / fac; }
@@ -500,10 +500,10 @@ tpsa_t<V,N,TYPE> cos(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> sin(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> rc(1), rs;
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> sin(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> rc(1), rs;
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0;
+	Tpsa<V,N,TYPE> p(x);
 	unsigned int fac = 1;
 	for(int i=1; i<=N; i++) {
 		if (i&1) { rs += ((i&2)?-1:1) * p / fac; } else { rc += ((i&2)?-1:1) * p / fac; }
@@ -515,16 +515,16 @@ tpsa_t<V,N,TYPE> sin(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> tan(const tpsa_t<V,N,TYPE>& a_) {
+Tpsa<V,N,TYPE> tan(const Tpsa<V,N,TYPE>& a_) {
 	return sin(a_)/cos(a_);
 }
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> cosh(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> rc(1), rs;
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> cosh(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> rc(1), rs;
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0;
+	Tpsa<V,N,TYPE> p(x);
 	unsigned int fac = 1;
 	for(int i=1; i<=N; i++) {
 		if (i&1) { rs += p / fac; } else { rc += p / fac; }
@@ -536,10 +536,10 @@ tpsa_t<V,N,TYPE> cosh(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> sinh(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> rc(1), rs;
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> sinh(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> rc(1), rs;
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0;
+	Tpsa<V,N,TYPE> p(x);
 	unsigned int fac = 1;
 	for(int i=1; i<=N; i++) {
 		if (i&1) { rs += p / fac; } else { rc += p / fac; }
@@ -552,10 +552,10 @@ tpsa_t<V,N,TYPE> sinh(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> atan(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> r(atan(a_.c[0]));
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> atan(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> r(atan(a_.c[0]));
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0;
+	Tpsa<V,N,TYPE> p(x);
 	TYPE          q  = sqrt(1 + a_.c[0]*a_.c[0]);
 	TYPE          pq = q;
 	TYPE          c1 = 1/q;
@@ -582,14 +582,14 @@ tpsa_t<V,N,TYPE> atan(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> asin(const tpsa_t<V,N,TYPE>& a_) {
+Tpsa<V,N,TYPE> asin(const Tpsa<V,N,TYPE>& a_) {
 
 	std::complex<TYPE> I(0,1);
-	tpsa_t<V,N,TYPE> t1 = sqrt(1-a_*a_);
-	tpsa_t<V,N,std::complex<TYPE> > t2;
+	Tpsa<V,N,TYPE> t1 = sqrt(1-a_*a_);
+	Tpsa<V,N,std::complex<TYPE> > t2;
 	for(unsigned int i=0; i<a_.get_size(); i++) t2.c[i] = I * a_.c[i] + t1.c[i];
-	tpsa_t<V,N,std::complex<TYPE> > t3 = log(t2);
-	tpsa_t<V,N,TYPE> r;
+	Tpsa<V,N,std::complex<TYPE> > t3 = log(t2);
+	Tpsa<V,N,TYPE> r;
 	for(unsigned int i=0; i<a_.get_size(); i++) r.c[i] = t3.c[i].imag();
 	return r;
 
@@ -597,16 +597,16 @@ tpsa_t<V,N,TYPE> asin(const tpsa_t<V,N,TYPE>& a_) {
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> acos(const tpsa_t<V,N,TYPE>& a_) {
+Tpsa<V,N,TYPE> acos(const Tpsa<V,N,TYPE>& a_) {
 	return M_PI/2 - asin(a_);
 }
 
 #include <math.h>
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> atanh(const tpsa_t<V,N,TYPE>& a_) {
-	tpsa_t<V,N,TYPE> r(atan(a_.c[0]));
-	tpsa_t<V,N,TYPE> x(a_); x.c[0] = 0;
-	tpsa_t<V,N,TYPE> p(x);
+Tpsa<V,N,TYPE> atanh(const Tpsa<V,N,TYPE>& a_) {
+	Tpsa<V,N,TYPE> r(atan(a_.c[0]));
+	Tpsa<V,N,TYPE> x(a_); x.c[0] = 0;
+	Tpsa<V,N,TYPE> p(x);
 	TYPE          q  = sqrt(1 + a_.c[0]*a_.c[0]);
 	TYPE          pq = q;
 	TYPE          c1 = 1/q;
@@ -632,9 +632,9 @@ tpsa_t<V,N,TYPE> atanh(const tpsa_t<V,N,TYPE>& a_) {
 }
 
 template <unsigned int V, unsigned int N, typename TYPE>
-tpsa_t<V,N,TYPE> D(const tpsa_t<V,N,TYPE>& a_, const unsigned int v_) {
+Tpsa<V,N,TYPE> D(const Tpsa<V,N,TYPE>& a_, const unsigned int v_) {
 	if (v_>=V) return 0;
-	tpsa_t<V,N,TYPE> r;
+	Tpsa<V,N,TYPE> r;
 	unsigned int power[V];
 	for(unsigned int i=0; i<a_.get_size(); i++) {
 		a_.get_power(i,power);
@@ -650,13 +650,13 @@ tpsa_t<V,N,TYPE> D(const tpsa_t<V,N,TYPE>& a_, const unsigned int v_) {
 
 #include <iostream>
 template <int V, int N, typename TYPE>
-std::ostream& operator << (std::ostream& out, const tpsa_t<V,N,TYPE>& o) {
-	//out << tpsa_t<V,N,TYPE>::get_v() << " " << tpsa_t<V,N,TYPE>::get_n() << " " << tpsa_t<V,N,TYPE>::get_size() << std::endl;
+std::ostream& operator << (std::ostream& out, const Tpsa<V,N,TYPE>& o) {
+	//out << Tpsa<V,N,TYPE>::get_v() << " " << Tpsa<V,N,TYPE>::get_n() << " " << Tpsa<V,N,TYPE>::get_size() << std::endl;
 	unsigned int p[V];
-	for(unsigned int i=0; i<tpsa_t<V,N,TYPE>::get_size(); i++) {
+	for(unsigned int i=0; i<Tpsa<V,N,TYPE>::get_size(); i++) {
 		out << i << "  ";
-		tpsa_t<V,N,TYPE>::get_power(i,p);
-		for(unsigned int v=0; v<tpsa_t<V,N,TYPE>::get_v(); v++) out << p[v] << " ";
+		Tpsa<V,N,TYPE>::get_power(i,p);
+		for(unsigned int v=0; v<Tpsa<V,N,TYPE>::get_v(); v++) out << p[v] << " ";
 		out << "  " << o.get_c(i); out << std::endl;
 	}
 	return out;
