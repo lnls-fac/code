@@ -23,6 +23,8 @@ fprintf(['--- initialization [' datestr(now) '] ---\n']);
 params = r.params;
 
 RandStream.setDefaultStream(RandStream('mt19937ar','seed', 131071));
+%Warning: The RandStream.setDefaultStream static method will be removed in a future
+%release.  Use RandStream.setGlobalStream instead. 
 
 % turn sextupoles off
 params.the_ring = turn_longitudinal_dynamics_off(params.the_ring);

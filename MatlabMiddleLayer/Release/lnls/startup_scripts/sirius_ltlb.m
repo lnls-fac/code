@@ -31,7 +31,7 @@ end
 % inicializa estruturas do MML
 cdir = pwd;
 root_folder = lnls_get_root_folder();
-cd(fullfile(root_folder, 'fac_files', 'code', 'MatlabMiddleLayer','Release','mml'))
+cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 
 setpathsirius(['SIRIUS' default_version_sr], ['LTLB' default_version_ltlb], 'sirius_link');
 cd(cdir);

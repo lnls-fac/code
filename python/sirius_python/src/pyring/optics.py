@@ -3,10 +3,18 @@
 import tracking
 import numpy
 
-    
+def calcm66 (line, m66 = None, closed_orbit = None):
+    """ returns the total transfer matrix (or one-turn matrix) """
+    if m66 is None:
+        m66 = tracking.findm66(line = line, closed_orbit = closed_orbit)
+    m = numpy.eye(6,6)
+    for i in range(m66.shape[0]):
+        m = numpy.dot(m66[i,:,:], m)
+    return m
+
 def findorbit4(ring, de = 0, refpts = None, guess = None, turn_by_turn = False, engine = 'trackcpp',
                init_nr_turns = 20, max_pos_tol = 1e-14, max_iterations = 20):
-     
+    """ returns the closed orbit solution of the ring """
     
     ''' builds a valid list of element indices '''
     if refpts is None:

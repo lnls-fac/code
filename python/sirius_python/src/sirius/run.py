@@ -97,8 +97,14 @@ def test_findm66(the_ring):
     
     t0 = time.time()
     m66 = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    b1 = pyring.lattice.findcells(the_ring, 'fam_name', 'b1')
+    print(m66[b1[0],:,:])
     t1 = time.time()
     print(str(t1-t0))
+    
+def test_calcm66(the_ring):
+    m66 = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    pyring.optics.calcm66(line = the_ring, m66 = m66)
     
 def test_findorbit4(the_ring):
     
@@ -169,6 +175,8 @@ def run_tests():
     ''' tests findm66 '''
     test_findm66(the_ring)
       
+    ''' tests calcm66 '''
+    test_calcm66(the_ring)
     
 ''' TEST Suite for PyRing and TrackC++ '''
     

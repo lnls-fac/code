@@ -1,0 +1,4 @@
+function run_all
+
+run_fieldmap_analysis_I0;
+run_fieldmap_analysis_I6;
