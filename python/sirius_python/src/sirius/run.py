@@ -8,6 +8,7 @@ import pyring.optics
 import matplotlib.pyplot as plt
 import numpy
 import time
+import math
 
 def test_compare_with_AT_linepass(the_ring):
     
@@ -125,6 +126,31 @@ def test_twiss(the_ring):
     
     fractunes,m66,m66_list,closed_orbit = pyring.optics.fractunes(the_ring)
     twiss,_,_,_ = pyring.optics.twiss(line = the_ring, m66 = m66, m66_list = m66_list, closed_orbit = closed_orbit)
+    
+    s = pyring.lattice.findspos(the_ring)
+    betax = pyring.lattice.getcellstruct(twiss, 'betax')
+    betay = pyring.lattice.getcellstruct(twiss, 'betay')
+    etax  = pyring.lattice.getcellstruct(twiss, 'etax')
+    mux = pyring.lattice.getcellstruct(twiss, 'mux')
+    tunex = numpy.array(mux) / math.pi / 2
+    muy = pyring.lattice.getcellstruct(twiss, 'muy')
+    tuney = numpy.array(muy) / math.pi / 2
+    print((tunex[-1],tuney[-1]))
+    
+    plt.plot(s, 1000*numpy.array(etax))
+    plt.xlabel('pos [m]'); plt.ylabel('etax  [mm]')
+    plt.show()
+    
+    plt.plot(s, betax)
+    plt.plot(s, betay)
+    plt.xlabel('pos [m]'); plt.ylabel('betax,betay [m]')
+    plt.show()
+    
+    plt.plot(s, tunex)
+    plt.plot(s, tuney)
+    plt.xlabel('pos [m]'); plt.ylabel('tunex,tuney')
+    plt.show()
+    
     print(fractunes)
     print(twiss)
             

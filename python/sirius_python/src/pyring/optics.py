@@ -3,6 +3,7 @@
 import tracking
 import numpy
 import math
+import copy
 
 class Twiss:
     def __init__(self):
@@ -163,13 +164,20 @@ def twiss (line, refpts = None, m66 = None, m66_list = None, closed_orbit = None
     
     
     ''' calcs twiss at first element '''
-    sin_nux = math.copysign(1,m66[0,1]) * math.sqrt(-m66[0,1] * m66[1,0] - ((m66[0,0] - m66[1,1])**2)/4);
-    sin_nuy = math.copysign(1,m66[2,3]) * math.sqrt(-m66[2,3] * m66[3,2] - ((m66[2,2] - m66[3,3])**2)/4);
+    (mx, my) = (m66[0:2,0:2], m66[2:4,2:4]) # decoupled transfer matrices
+    sin_nux = math.copysign(1,mx[0,1]) * math.sqrt(-mx[0,1] * mx[1,0] - ((mx[0,0] - mx[1,1])**2)/4);
+    sin_nuy = math.copysign(1,my[0,1]) * math.sqrt(-my[0,1] * my[1,0] - ((my[0,0] - my[1,1])**2)/4);
     t = Twiss()
-    t.alphax  = (m66[0,0] - m66[1,1]) / 2 / sin_nux
-    t.betax   = m66[0,1] / sin_nux
-    t.alphay  = (m66[2,2] - m66[3,3]) / 2 / sin_nuy
-    t.betay   = m66[2,3] / sin_nuy
+    t.alphax  = (mx[0,0] - mx[1,1]) / 2 / sin_nux
+    t.betax   = mx[0,1] / sin_nux
+    t.alphay  = (my[0,0] - my[1,1]) / 2 / sin_nuy
+    t.betay   = my[0,1] / sin_nuy
+    ''' dispersion function based on eta = (1 - M)^(-1) D'''
+    Dx = numpy.array([[m66[0,4]],[m66[1,4]]])
+    Dy = numpy.array([[m66[2,4]],[m66[3,4]]]) 
+    t.etax = numpy.linalg.solve(numpy.eye(2,2) - mx, Dx)
+    t.etay = numpy.linalg.solve(numpy.eye(2,2) - my, Dy)
+    
     if 0 in refpts:
         tw = [t]
     else:
@@ -178,15 +186,27 @@ def twiss (line, refpts = None, m66 = None, m66_list = None, closed_orbit = None
     ''' propagates twiss through line '''
     for i in range(1,1+len(line)):
         m = m66_list[i-1,:,:]
+        (mx, my) = (m[0:2,0:2], m[2:4,2:4]) # decoupled transfer matrices
         n = Twiss()
-        n.betax  = ((m[0,0] * t.betax - m[0,1] * t.alphax)**2 + m[0,1]**2) / t.betax
-        n.betay  = ((m[2,2] * t.betay - m[2,3] * t.alphay)**2 + m[2,3]**2) / t.betay
-        n.alphax = ((m[0,0] * t.betax - m[0,1] * t.alphax) * (m[1,0] * t.betax - m[1,1] * t.alphax) + m[0,1] * m[1,1]) / t.betax
-        n.alphay = ((m[2,2] * t.betay - m[2,3] * t.alphay) * (m[3,2] * t.betay - m[3,3] * t.alphay) + m[2,3] * m[3,3]) / t.betay
+        n.betax  =  ((mx[0,0] * t.betax - mx[0,1] * t.alphax)**2 + mx[0,1]**2) / t.betax
+        n.alphax = -((mx[0,0] * t.betax - mx[0,1] * t.alphax) * (mx[1,0] * t.betax - mx[1,1] * t.alphax) + mx[0,1] * mx[1,1]) / t.betax
+        n.betay  =  ((my[0,0] * t.betay - my[0,1] * t.alphay)**2 + my[0,1]**2) / t.betay
+        n.alphay = -((my[0,0] * t.betay - my[0,1] * t.alphay) * (my[1,0] * t.betay - my[1,1] * t.alphay) + my[0,1] * my[1,1]) / t.betay
+        ''' calcs phase advance based on R(mu) = U(2) M(2|1) U^-1(1) '''
+        n.mux    = t.mux + math.asin(mx[0,1]/math.sqrt(n.betax * t.betax)) 
+        n.muy    = t.muy + math.asin(my[0,1]/math.sqrt(n.betay * t.betay))
+        ''' dispersion function '''
+        (n.etax, n.etay) = (numpy.dot(mx, t.etax), numpy.dot(my, t.etay))
+    
         if i in refpts:
             tw.append(n)
-        t = n
- 
+        t = copy.deepcopy(n)
+    
+    ''' converts eta format '''
+    for t in tw:
+        (t.etaxl, t.etayl) = (t.etax[1,0], t.etay[1,0])
+        (t.etax,  t.etay ) = (t.etax[0,0], t.etay[0,0])
+        
     return (tw, m66, m66_list, closed_orbit)
     
     

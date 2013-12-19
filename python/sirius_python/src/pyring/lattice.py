@@ -4,14 +4,24 @@ import copy
 
 
 def findspos(lattice, indices = None):
+    
+    ''' process input '''
+    is_number = False
     if indices is None:
-        indices = len(lattice)    
+        indices = range(len(lattice))
+    else:
+        try:
+            indices[0]
+        except:
+            is_number = True
+            indices = [indices]
+                    
     pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
     pos[-1] = pos[-2] + lattice[-1].length
-    if type(indices) is int: 
-        return pos[indices]
+    if is_number:
+        return pos[i]
     else:
         return [pos[i] for i in indices]
     
@@ -27,10 +37,20 @@ def findcells(lattice, attribute_name, value = None):
                     indices.append(i)
     return indices
 
-def getcellstruct(lattice, attribute_name, indices):
+def getcellstruct(lattice, attribute_name, indices = None):
+    
+    if indices is None:
+        indices = range(len(lattice))
+    else:
+        try:
+            indices[0]
+        except:
+            indices = [indices]
+    
     data = []
     for idx in indices:
-        data.append(getattr(lattice[idx], attribute_name))
+        tdata = getattr(lattice[idx], attribute_name)
+        data.append(tdata)
     return data
 
 def setcellstruct(lattice, attribute_name, indices, values):    
