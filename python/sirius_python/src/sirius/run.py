@@ -44,7 +44,7 @@ def test_linepass(the_ring):
     posi = numpy.zeros((6,nr_particles))
     posi[:,0] = [0.001,0,0,0,0,0]
     posi[:,1] = [0.002,0,0,0,0,0]
-    posf = pyring.tracking.linepass(lattice = the_ring, particles = posi, refpts = refpts, engine = 'trackcpp')
+    posf = pyring.tracking.linepass(line = the_ring, particles = posi, refpts = refpts, engine = 'trackcpp')
     
     s = pyring.lattice.findspos(lattice = the_ring, indices = range(len(the_ring)))
     p1 = pyring.tracking.select(posf, nr_particles = nr_particles, nr_elements = len(refpts), particle = 0)    
@@ -84,7 +84,7 @@ def test_ringpass(the_ring):
 def test_speed(the_ring):
     
     nr_turns       = 1026 * 2
-    nr_particles   = 100 
+    nr_particles   = 50 
     particles      = numpy.zeros((6,nr_particles))
     particles[:,0] = 0.001
     
@@ -96,7 +96,7 @@ def test_speed(the_ring):
 def test_findm66(the_ring):
     
     t0 = time.time()
-    m66 = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    m66,_ = pyring.tracking.findm66(the_ring, closed_orbit = None)
     b1 = pyring.lattice.findcells(the_ring, 'fam_name', 'b1')
     print(m66[b1[0],:,:])
     t1 = time.time()
@@ -108,13 +108,26 @@ def test_calcm66(the_ring):
     the_ring = pyring.lattice.copy.deepcopy(the_ring)
     the_ring = pyring.lattice.setcavity(the_ring, 'on')
     
-    m66 = pyring.tracking.findm66(the_ring, closed_orbit = None)
-    tm = pyring.optics.calcm66(line = the_ring, m66 = m66)
+    t0 = time.clock()
+    m66_list,_ = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    t1 = time.clock()
+    print('findm66: {:f} s'.format(t1-t0))
+    t0 = time.clock()
+    tm,_,_ = pyring.optics.calcm66(line = the_ring, m66_list = m66_list)
+    t1 = time.clock()
+    print('calcm66: {:f} s'.format(t1-t0))
     for i in range(tm.shape[0]):
         for j in range(tm.shape[1]):
             print('{:+22.16E} '.format(tm[i,j])),
         print('')
+
+def test_twiss(the_ring):
     
+    fractunes,m66,m66_list,closed_orbit = pyring.optics.fractunes(the_ring)
+    twiss,_,_,_ = pyring.optics.twiss(line = the_ring, m66 = m66, m66_list = m66_list, closed_orbit = closed_orbit)
+    print(fractunes)
+    print(twiss)
+            
 def test_findorbit4(the_ring):
     
     ''' set cavity state '''
@@ -185,7 +198,10 @@ def run_tests():
     #test_findm66(the_ring)
       
     ''' tests calcm66 '''
-    test_calcm66(the_ring)
+    #test_calcm66(the_ring)
+    
+    ''' tests twiss '''
+    test_twiss(the_ring)
     
 ''' TEST Suite for PyRing and TrackC++ '''
     

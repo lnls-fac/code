@@ -39,7 +39,7 @@ def ringpass (ring, particles, nr_turns = 1, element_offset = 0, engine = 'track
 def findm66 (line, closed_orbit = None):
     if closed_orbit is None:
         closed_orbit = numpy.zeros((6,len(line)))
-    return _Tracking.findm66_trackcpp(line, closed_orbit)
+    return (_Tracking.findm66_trackcpp(line, closed_orbit), closed_orbit)
     
 def lost (particles, nr_particles = 1, nr_elements = 1, nr_turns = 1):
     
