@@ -84,6 +84,9 @@ PyObject*  trackcpp_findm66(PyObject *self, PyObject *args) {
 		}
 	}
 
+	// deallocates memory for the 6x6 transfer matrices
+	for(unsigned int i=0; i<m66.size(); ++i) delete m66[i];
+
 	return lst;
 
 }

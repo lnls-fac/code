@@ -103,8 +103,17 @@ def test_findm66(the_ring):
     print(str(t1-t0))
     
 def test_calcm66(the_ring):
+    
+    ''' set cavity state '''
+    the_ring = pyring.lattice.copy.deepcopy(the_ring)
+    the_ring = pyring.lattice.setcavity(the_ring, 'on')
+    
     m66 = pyring.tracking.findm66(the_ring, closed_orbit = None)
-    pyring.optics.calcm66(line = the_ring, m66 = m66)
+    tm = pyring.optics.calcm66(line = the_ring, m66 = m66)
+    for i in range(tm.shape[0]):
+        for j in range(tm.shape[1]):
+            print('{:+22.16E} '.format(tm[i,j])),
+        print('')
     
 def test_findorbit4(the_ring):
     
@@ -173,7 +182,7 @@ def run_tests():
     #test_findorbit6(the_ring)
     
     ''' tests findm66 '''
-    test_findm66(the_ring)
+    #test_findm66(the_ring)
       
     ''' tests calcm66 '''
     test_calcm66(the_ring)
