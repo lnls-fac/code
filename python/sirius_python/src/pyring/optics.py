@@ -187,6 +187,8 @@ def twiss (line, refpts = None, m66 = None, m66_list = None, closed_orbit = None
     for i in range(1,1+len(line)):
         m = m66_list[i-1,:,:]
         (mx, my) = (m[0:2,0:2], m[2:4,2:4]) # decoupled transfer matrices
+        Dx = numpy.array([[m[0,4]],[m[1,4]]])
+        Dy = numpy.array([[m[2,4]],[m[3,4]]])
         n = Twiss()
         n.betax  =  ((mx[0,0] * t.betax - mx[0,1] * t.alphax)**2 + mx[0,1]**2) / t.betax
         n.alphax = -((mx[0,0] * t.betax - mx[0,1] * t.alphax) * (mx[1,0] * t.betax - mx[1,1] * t.alphax) + mx[0,1] * mx[1,1]) / t.betax
@@ -196,7 +198,8 @@ def twiss (line, refpts = None, m66 = None, m66_list = None, closed_orbit = None
         n.mux    = t.mux + math.asin(mx[0,1]/math.sqrt(n.betax * t.betax)) 
         n.muy    = t.muy + math.asin(my[0,1]/math.sqrt(n.betay * t.betay))
         ''' dispersion function '''
-        (n.etax, n.etay) = (numpy.dot(mx, t.etax), numpy.dot(my, t.etay))
+        n.etax = Dx + numpy.dot(mx, t.etax)
+        n.etay = Dy + numpy.dot(my, t.etay)
     
         if i in refpts:
             tw.append(n)

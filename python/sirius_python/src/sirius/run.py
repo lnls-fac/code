@@ -127,6 +127,10 @@ def test_twiss(the_ring):
     fractunes,m66,m66_list,closed_orbit = pyring.optics.fractunes(the_ring)
     twiss,_,_,_ = pyring.optics.twiss(line = the_ring, m66 = m66, m66_list = m66_list, closed_orbit = closed_orbit)
     
+    ''' calcs ring circumference '''
+    C = pyring.lattice.findspos(the_ring, len(the_ring))
+    
+    ''' calcs linear optics '''
     s = pyring.lattice.findspos(the_ring)
     betax = pyring.lattice.getcellstruct(twiss, 'betax')
     betay = pyring.lattice.getcellstruct(twiss, 'betay')
@@ -135,24 +139,20 @@ def test_twiss(the_ring):
     tunex = numpy.array(mux) / math.pi / 2
     muy = pyring.lattice.getcellstruct(twiss, 'muy')
     tuney = numpy.array(muy) / math.pi / 2
-    print((tunex[-1],tuney[-1]))
     
-    plt.plot(s, 1000*numpy.array(etax))
-    plt.xlabel('pos [m]'); plt.ylabel('etax  [mm]')
-    plt.show()
+    ''' prints tunes '''
+    print('fractunes: {0:19.16f} {1:19.16f} {2:19.16f}'.format(fractunes[0],fractunes[1],fractunes[2]))
+    print('tunes    : {0:19.16f} {1:19.16f}'.format(tunex[-1],tuney[-1]))
     
+    ''' plots linear optics '''
     plt.plot(s, betax)
     plt.plot(s, betay)
-    plt.xlabel('pos [m]'); plt.ylabel('betax,betay [m]')
+    plt.plot(s, 100*numpy.array(etax))
+    plt.xlabel('pos [m]'); plt.ylabel('betax[m],betay[m],etax[cm]')
+    plt.xlim([0,C/20.0])
+    plt.grid()
     plt.show()
     
-    plt.plot(s, tunex)
-    plt.plot(s, tuney)
-    plt.xlabel('pos [m]'); plt.ylabel('tunex,tuney')
-    plt.show()
-    
-    print(fractunes)
-    print(twiss)
             
 def test_findorbit4(the_ring):
     
