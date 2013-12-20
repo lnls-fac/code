@@ -15,6 +15,7 @@
 *.mexs32
 *.mexs64
 *.mexglx
+*.mexmaci64
 *.lib
 *.mexglx
 *.dll
@@ -29,7 +30,7 @@ trackc++-debug
 tracy
 .depend
 COMMIT_EDITMSG
-
+*DS_Store
 ## directories not to be tracked
 
 gitrepo/

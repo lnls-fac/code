@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python-fac
 # -*- coding: utf-8 -*-
 
 import ring_v500
