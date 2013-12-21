@@ -26,35 +26,35 @@ FieldMap::~FieldMap()
 inline
 size_t FieldMap::ix(const double& x) const 
 {
-	size_t ix = (int) ((x - this->x_min) / this->dx());
-	if ((ix < 0) throw FieldMapException::out_of_range_x_min;
-	if ((ix > this->nx) throw FieldMapException::out_of_range_x_max;
+	size_t ix = floor(0.5 + (x - this->x_min) / this->dx);
+	if (ix < 0) { throw FieldMapException::out_of_range_x_min; }
+	if (ix > this->nx) { throw FieldMapException::out_of_range_x_max; }
 	return ix;
 }
 
 inline
-size_t FieldMap::iz(const double& x) const 
+size_t FieldMap::iz(const double& z) const 
 {
-	size_t iz = (int) ((z - this->z_min) / this->dz());
-	if ((iz < 0) throw FieldMapException::out_of_range_z_min;
-	if ((iz > this->nz) throw FieldMapException::out_of_range_z_max;
+	size_t iz = floor(0.5 + (z - this->z_min) / this->dz);
+	if (iz < 0) { throw FieldMapException::out_of_range_z_min; }
+	if (iz > this->nz) { throw FieldMapException::out_of_range_z_max; }
 	return iz;
 }
 
 inline
 double FieldMap::x(size_t ix) const 
 {
-	if ((ix < 0) throw FieldMapException::out_of_range_x_min;
-	if ((ix > this->nx) throw FieldMapException::out_of_range_x_max;
-	return (this->x_min + ix * this->dx());
+	if (ix < 0) { throw FieldMapException::out_of_range_x_min; }
+	if (ix > this->nx) { throw FieldMapException::out_of_range_x_max; }
+	return (this->x_min + ix * this->dx);
 }
 
 inline
 double FieldMap::z(size_t iz) const 
 {
-	if ((iz < 0) throw FieldMapException::out_of_range_Z_min;
-	if ((iz > this->nx) throw FieldMapException::out_of_range_z_max;
-	return (this->z_min + iz * this->dz());
+	if (iz < 0) { throw FieldMapException::out_of_range_z_min; }
+	if (iz > this->nz) { throw FieldMapException::out_of_range_z_max; }
+	return (this->z_min + iz * this->dz);
 }
 
 void FieldMap::read_fieldmap_from_file(const std::string& fname_)
@@ -115,6 +115,8 @@ void FieldMap::read_fieldmap_from_file(const std::string& fname_)
 	this->x_max = *(x_set.rbegin());
 	this->z_min = *(z_set.begin());
 	this->z_max = *(z_set.rbegin());
+	this->dx    = (this->x_max - this->x_min)/(this->nx - 1);
+	this->dz    = (this->z_max - this->z_min)/(this->nz - 1);
 	// throws exception in case dimensions do not agree
 	if (nr_points != (this->nx * this->nz * y_set.size())) {
 		throw FieldMapException::inconsistent_dimensions;
@@ -147,12 +149,13 @@ Vector3D<double> FieldMap::field(const Vector3D<double>& pos) const
 	size_t p2 = iz1 * this->nx + ix2;
 	size_t p3 = iz2 * this->nx + ix1;
 	size_t p4 = iz2 * this->nx + ix2;
-	double x1  = this->x(ix1), z1 = this->z(iz1);
+	double x1 = this->x(ix1);
+	double z1 = this->z(iz1);
 	double x2  = this->x(ix2), z2 = this->z(iz2);
 	double bx1 = this->data[3*p1+0], by1 = this->data[3*p1+1], bz1 = this->data[3*p1+2];
 	double bx2 = this->data[3*p2+0], by2 = this->data[3*p2+1], bz2 = this->data[3*p2+2];
-	double bx3 = this->data[3*p3+0], by3 = this->data[3*p3+1], bz2 = this->data[3*p3+2];
-	double bx4 = this->data[3*p4+0], by4 = this->data[3*p4+1], bz2 = this->data[3*p4+2];
+	double bx3 = this->data[3*p3+0], by3 = this->data[3*p3+1], bz3 = this->data[3*p3+2];
+	double bx4 = this->data[3*p4+0], by4 = this->data[3*p4+1], bz4 = this->data[3*p4+2];
 	// linear iterpolation: first along z (v_l=(p1+p3)/2, v_u=(p2+p4)/2), then along z (v = (v_l+v_u)/2)
 	//
 	//  (p2) ----- z ----- (p4)
