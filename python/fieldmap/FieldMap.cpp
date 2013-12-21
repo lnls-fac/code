@@ -23,6 +23,39 @@ FieldMap::~FieldMap()
 	delete [] data;
 }
 
+inline
+size_t FieldMap::ix(const double& x) const 
+{
+	size_t ix = (int) ((x - this->x_min) / this->dx());
+	if ((ix < 0) throw FieldMapException::out_of_range_x_min;
+	if ((ix > this->nx) throw FieldMapException::out_of_range_x_max;
+	return ix;
+}
+
+inline
+size_t FieldMap::iz(const double& x) const 
+{
+	size_t iz = (int) ((z - this->z_min) / this->dz());
+	if ((iz < 0) throw FieldMapException::out_of_range_z_min;
+	if ((iz > this->nz) throw FieldMapException::out_of_range_z_max;
+	return iz;
+}
+
+inline
+double FieldMap::x(size_t ix) const 
+{
+	if ((ix < 0) throw FieldMapException::out_of_range_x_min;
+	if ((ix > this->nx) throw FieldMapException::out_of_range_x_max;
+	return (this->x_min + ix * this->dx());
+}
+
+inline
+double FieldMap::z(size_t iz) const 
+{
+	if ((iz < 0) throw FieldMapException::out_of_range_Z_min;
+	if ((iz > this->nx) throw FieldMapException::out_of_range_z_max;
+	return (this->z_min + iz * this->dz());
+}
 
 void FieldMap::read_fieldmap_from_file(const std::string& fname_)
 {
@@ -103,23 +136,9 @@ void FieldMap::read_fieldmap_from_file(const std::string& fname_)
 Vector3D<double> FieldMap::field(const Vector3D<double>& pos) const
 {
 
-	// checks range
-	if (pos.x < this->x_min) {
-		throw FieldMapException::out_of_range_x_min;
-	}
-	if (pos.x > this->x_max) {
-		throw FieldMapException::out_of_range_x_max;
-	}
-	if (pos.z < this->z_min) {
-		throw FieldMapException::out_of_range_z_min;
-	}
-	if (pos.z > this->x_max) {
-		throw FieldMapException::out_of_range_z_max;
-	}
-
 	// calcs indices
-	size_t ix1  = (size_t) (this->nx * (pos.x - this->x_min) / (this->x_max - this->x_min));
-	size_t iz1  = (size_t) (this->nz * (pos.z - this->z_min) / (this->z_max - this->z_min));
+	size_t ix1  = this->ix(pos.x);
+	size_t iz1  = this->iz(pos.z);
 	size_t ix2  = (ix1 == this->nx) ? ix1 : ix1 + 1;
 	size_t iz2  = (iz1 == this->nz) ? iz1 : iz1 + 1;
 	// gets field on grid points
@@ -128,13 +147,35 @@ Vector3D<double> FieldMap::field(const Vector3D<double>& pos) const
 	size_t p2 = iz1 * this->nx + ix2;
 	size_t p3 = iz2 * this->nx + ix1;
 	size_t p4 = iz2 * this->nx + ix2;
-	double x1  = this->x_min + ix1 * (this->x_max - this->)
+	double x1  = this->x(ix1), z1 = this->z(iz1);
+	double x2  = this->x(ix2), z2 = this->z(iz2);
 	double bx1 = this->data[3*p1+0], by1 = this->data[3*p1+1], bz1 = this->data[3*p1+2];
 	double bx2 = this->data[3*p2+0], by2 = this->data[3*p2+1], bz2 = this->data[3*p2+2];
 	double bx3 = this->data[3*p3+0], by3 = this->data[3*p3+1], bz2 = this->data[3*p3+2];
 	double bx4 = this->data[3*p4+0], by4 = this->data[3*p4+1], bz2 = this->data[3*p4+2];
+	// linear iterpolation: first along z (v_l=(p1+p3)/2, v_u=(p2+p4)/2), then along z (v = (v_l+v_u)/2)
+	//
+	//  (p2) ----- z ----- (p4)
+	//   |                  |  
+	//   |                  |
+	//   x                  x
+	//   |                  |
+	//   |                  |
+	//  (p1) ----- z ----- (p3)
+	//
+	// BX
+	double bx_l = bx1 + (bx3 - bx1) * (pos.z - z1) / (z2 - z1);
+	double bx_u = bx2 + (bx4 - bx2) * (pos.z - z1) / (z2 - z1);
+	double bx   = bx_l + (bx_u - bx_l) * (pos.x - x1) / (x2 - x1);
+	// BY
+	double by_l = by1 + (by3 - by1) * (pos.z - z1) / (z2 - z1);
+	double by_u = by2 + (by4 - by2) * (pos.z - z1) / (z2 - z1);
+	double by   = by_l + (by_u - by_l) * (pos.x - x1) / (x2 - x1);
+	// BZ
+	double bz_l = bz1 + (bz3 - bz1) * (pos.z - z1) / (z2 - z1);
+	double bz_u = bz2 + (bz4 - bz2) * (pos.z - z1) / (z2 - z1);
+	double bz   = bz_l + (bz_u - bz_l) * (pos.x - x1) / (x2 - x1);
+ 
+	return Vector3D<double>(bx,by,bz);
 
-	// linear iterpolation: first along z then along z
-	bx_step1 = pos.x
-	Vector3D<double> f = Vector3D<double>();
 }

@@ -30,7 +30,12 @@ public:
 	FieldMap(const std::string& fname_);
 	~FieldMap();
 
-	void             index(const double& x, const double& z, size_t& ix, size_t& iz) const;
+	double		 dx() const { return (this->x_max - this->x_min)/this->nx; }
+	double		 dz() const { return (this->z_max - this->z_min)/this->nz; }
+	size_t           ix(const double& x) const;
+	size_t           iz(const double& z) const;
+	double		 x(size_t ix) const;
+	double		 z(size_t iz) const;
 	Vector3D<double> pos(size_t ix, size_t iy) const;
 	Vector3D<double> field(const Vector3D<double>& pos) const;
 
