@@ -7,9 +7,10 @@
 #include <cstdlib>
 #include <set>
 
-#include "FieldMap.h"
+#include "API.h"
 
-FieldMap::FieldMap(const std::string& fname_) :
+FieldMap::FieldMap(size_t id_, const std::string& fname_) :
+		id(id_),
 		nx(0), nz(0),
 		x_min(0), x_max(0),
 		z_min(0), z_max(0),
@@ -18,9 +19,9 @@ FieldMap::FieldMap(const std::string& fname_) :
 	this->read_fieldmap_from_file(fname_);
 }
 
-FieldMap::~FieldMap()
-{
-	delete [] data;
+
+void FieldMap::delete_data() {
+	delete [] this->data;
 }
 
 inline
@@ -111,10 +112,10 @@ void FieldMap::read_fieldmap_from_file(const std::string& fname_)
 	this->data  = (double*) std::realloc(this->data, nr_points*3*sizeof(double));
 	this->nx    = x_set.size();
 	this->nz    = z_set.size();
-	this->x_min = *(x_set.begin());
-	this->x_max = *(x_set.rbegin());
-	this->z_min = *(z_set.begin());
-	this->z_max = *(z_set.rbegin());
+	this->x_min = *(x_set.begin()) / 1000;
+	this->x_max = *(x_set.rbegin()) / 1000;
+	this->z_min = *(z_set.begin()) / 1000;
+	this->z_max = *(z_set.rbegin()) / 1000;
 	this->dx    = (this->x_max - this->x_min)/(this->nx - 1);
 	this->dz    = (this->z_max - this->z_min)/(this->nz - 1);
 	// throws exception in case dimensions do not agree
