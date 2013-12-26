@@ -1,7 +1,6 @@
 import fieldmapcpp
 import numpy
 
-
     
 class Fieldmap:
     
@@ -22,10 +21,39 @@ class Fieldmap:
     def interpolate(self, pos):
         py_pos = _Aux.num2py(pos)
         py_field = fieldmapcpp.interpolate(self.id, py_pos)
-        numpy_field = _Aux.py2num(py_field)
+        numpy_field = _Aux.py3_2_num(py_field)
         return numpy_field 
-     
     
+    def electron_trajectory(self, energy, si = 0, sf = None, nrpts = 1000, init_state = None):
+        if sf == None:
+            sf = self.zmax
+        if init_state == None:
+            init_state = numpy.array([[0.],[0.],[0.],[0.],[0.],[1.]])
+        py_init_state = _Aux.num2py(init_state)
+        py_traj = fieldmapcpp.odeint_const(self.id, energy, si, sf, nrpts, py_init_state)
+        traj = _Aux.py7_2_num(py_traj)
+        return traj
+         
+     
+    @property 
+    def nx(self): return self.nx
+    @property 
+    def xmin(self): return self.xmin
+    @property 
+    def xmax(self): return self.xmax
+    @property 
+    def nz(self): return self.nz
+    @property 
+    def zmin(self): return self.zmin
+    @property 
+    def zmax(self): return self.zmax
+    
+    @staticmethod
+    def clear_all():
+        fieldmapcpp.clear()
+    
+clear_all = Fieldmap.clear_all
+
 class _Aux:
     
     @staticmethod
@@ -33,5 +61,8 @@ class _Aux:
         return numpy.reshape(pos, pos.size, order='F').tolist()
     
     @staticmethod
-    def py2num(pos):
-        return numpy.reshape(numpy.array(pos), (3,-1), order='F')   
+    def py3_2_num(pos):
+        return numpy.reshape(numpy.array(pos), (3,-1), order='F')  
+    @staticmethod
+    def py7_2_num(pos):
+        return numpy.reshape(numpy.array(pos), (7,-1), order='F') 

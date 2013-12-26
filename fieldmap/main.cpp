@@ -5,9 +5,24 @@
 #include "Vector3D.hpp"
 #include "FieldMap.h"
 
-int main() {
+void test_trajectory() {
 
-	//double energy = 3.0;
+	double energy = 3.0;
+	FieldMap fm("/home/ximenes/fmap.txt");
+
+	state_type init_state(6);
+	init_state[0] = 0.0; init_state[1] = 0.0;
+	init_state[2] = 0.0; init_state[3] = 0.0;
+	init_state[4] = 0.0; init_state[5] = 1.0;
+	std::vector<double> s;
+	std::vector<state_type> trajectory;
+	boost_integrate_const(energy, fm, 0.0, 2.0, 500, init_state, s, trajectory);
+
+}
+
+
+void test_interpolation() {
+
 	size_t id, nx, nz;
 	double x_min, x_max, z_min, z_max;
 
@@ -27,21 +42,10 @@ int main() {
 	}
 
 
+}
 
-//	double si = 0.0;
-//	double sf = 1.0;
-//	state_type init_state(6);
-//	init_state[0] = 0.0; init_state[1] = 0.0; init_state[2] = 0.0;
-//	init_state[3] = 0.0; init_state[4] = 0.0; init_state[5] = 1.0;
-//	size_t nr_pts = 1000;
-//	std::vector<double>     s;
-//	std::vector<state_type> trajectory;
-//
-//	boost_test_integrate_const(energy, fieldmap_id, si, sf, nr_pts, init_state, s, trajectory);
-//	for(size_t i=0; i<s.size(); ++i) {
-//		std::cout << i << ": " << s[i] << " " << trajectory[i][0] << std::endl;
-//	}
+int main() {
 
-	return 0;
+	test_trajectory();
 
 }

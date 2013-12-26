@@ -17,7 +17,7 @@ class FieldMap {
 
 public:
 
-	FieldMap(size_t id_, const std::string& fname_);
+	FieldMap(const std::string& fname_, size_t id_ = 0);
 
 	size_t       getid() const { return this->id; }
 	size_t       ix(const double& x) const;

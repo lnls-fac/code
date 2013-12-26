@@ -4,7 +4,7 @@ extern size_t g_id;
 extern std::vector<FieldMap> g_fieldmaps;
 
 void  load_fieldmap(const std::string& fname, size_t& id, size_t& nx, double& x_min, double& x_max, size_t& nz, double& z_min, double& z_max) {
-	FieldMap fieldmap(g_id, fname);
+	FieldMap fieldmap(fname, g_id);
 	g_fieldmaps.push_back(fieldmap);
 	id    = g_id;
 	nx    = g_fieldmaps.rbegin()->nx;

@@ -9,11 +9,11 @@
 
 #include "API.h"
 
-FieldMap::FieldMap(size_t id_, const std::string& fname_) :
+FieldMap::FieldMap(const std::string& fname_, size_t id_) :
 		id(id_),
 		nx(0), nz(0),
-		x_min(0), x_max(0),
-		z_min(0), z_max(0),
+		x_min(0), dx(0), x_max(0),
+		z_min(0), dz(0), z_max(0),
 		data(0)
 {
 	this->read_fieldmap_from_file(fname_);
@@ -165,19 +165,38 @@ Vector3D<double> FieldMap::field(const Vector3D<double>& pos) const
 	//   |                  |
 	//  (p1) ----- z ----- (p3)
 	//
-	// BX
-	double bx_l = bx1 + (bx3 - bx1) * (pos.z - z1) / (z2 - z1);
-	double bx_u = bx2 + (bx4 - bx2) * (pos.z - z1) / (z2 - z1);
-	double bx   = bx_l + (bx_u - bx_l) * (pos.x - x1) / (x2 - x1);
-	// BY
-	double by_l = by1 + (by3 - by1) * (pos.z - z1) / (z2 - z1);
-	double by_u = by2 + (by4 - by2) * (pos.z - z1) / (z2 - z1);
-	double by   = by_l + (by_u - by_l) * (pos.x - x1) / (x2 - x1);
-	// BZ
-	double bz_l = bz1 + (bz3 - bz1) * (pos.z - z1) / (z2 - z1);
-	double bz_u = bz2 + (bz4 - bz2) * (pos.z - z1) / (z2 - z1);
-	double bz   = bz_l + (bz_u - bz_l) * (pos.x - x1) / (x2 - x1);
- 
+	double bx,by,bz;
+	if (iz1 == iz2) {
+		if (ix1 == ix2) {
+			bx = bx1;
+			by = by1;
+			bz = bz1;
+		} else {
+			bx = bx1 + (bx2 - bx1) * (pos.x - x1) / (x2 - x1);
+			by = by1 + (by2 - by1) * (pos.x - x1) / (x2 - x1);
+			bz = bz1 + (bz2 - bz1) * (pos.x - x1) / (x2 - x1);
+		}
+	} else {
+		if (ix1 == ix2) {
+			bx = bx1 + (bx3 - bx1) * (pos.z - z1) / (z2 - z1);
+			by = by1 + (by3 - by1) * (pos.z - z1) / (z2 - z1);
+			bz = bz1 + (bz3 - bz1) * (pos.z - z1) / (z2 - z1);
+		} else {
+			// BX
+			double bx_l = bx1 + (bx3 - bx1) * (pos.z - z1) / (z2 - z1);
+			double bx_u = bx2 + (bx4 - bx2) * (pos.z - z1) / (z2 - z1);
+			bx   = bx_l + (bx_u - bx_l) * (pos.x - x1) / (x2 - x1);
+			// BY
+			double by_l = by1 + (by3 - by1) * (pos.z - z1) / (z2 - z1);
+			double by_u = by2 + (by4 - by2) * (pos.z - z1) / (z2 - z1);
+			by   = by_l + (by_u - by_l) * (pos.x - x1) / (x2 - x1);
+			// BZ
+			double bz_l = bz1 + (bz3 - bz1) * (pos.z - z1) / (z2 - z1);
+			double bz_u = bz2 + (bz4 - bz2) * (pos.z - z1) / (z2 - z1);
+			bz   = bz_l + (bz_u - bz_l) * (pos.x - x1) / (x2 - x1);
+		}
+	}
+
 	return Vector3D<double>(bx,by,bz);
 
 }

@@ -13,6 +13,7 @@ module1 = Extension('fieldmapcpp',
             'fieldmapcpp_interpolate_fieldmap.cpp',
             'fieldmapcpp_nr_fieldmaps.cpp',
             'fieldmapcpp_clear.cpp',
+            'fieldmapcpp_odeint_const.cpp',
             # trackc++
             '../../../../fieldmap/API.cpp',
             '../../../../fieldmap/FieldMap.cpp',

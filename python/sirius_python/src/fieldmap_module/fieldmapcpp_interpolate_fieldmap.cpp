@@ -14,15 +14,19 @@ PyObject*  fieldmapcpp_interpolate_fieldmap(PyObject *self, PyObject *args) {
 	size_t id = (size_t) PyLong_AsLong(py_id);
 
 	Py_INCREF(py_pos);
-	std::vector<Vector3D<double> > pos;
+	std::vector<double> pos;
 	if (fieldmapcpp_read_pos(py_pos, pos)) {
 		Py_DECREF(py_pos);
 		return NULL;
 	}
 	Py_DECREF(py_pos);
 
+	std::vector<Vector3D<double> > posv;
+	for(size_t i=0; i<(pos.size()/3); ++i) {
+		posv.push_back(Vector3D<double>(pos[3*i+0],pos[3*i+1],pos[3*i+2]));
+	}
 	std::vector<Vector3D<double> > field;
-	interpolate_fieldmap(id, pos, field);
+	interpolate_fieldmap(id, posv, field);
 	//std::cout << pos.size() << std::endl;
 
 	PyObject *py_lst  = PyList_New(3*field.size());

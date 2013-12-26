@@ -20,16 +20,21 @@ static void set_field_map_and_energy(const FieldMap& fieldmap, const double& ene
 void newton_lorentz_equation( const state_type &state , state_type &dstate_ds , const double s)
 {
 	// symbolic sugars
-	const double &x         = state[0],     &y         = state[1],     &z         = state[2];
-	const double &betax     = state[3],     &betay     = state[4],     &betaz     = state[5];
-	double       &dx_ds     = dstate_ds[0], &dy_ds     = dstate_ds[1], &dz_ds     = dstate_ds[2];
-	double       &dbetax_ds = dstate_ds[3], &dbetay_ds = dstate_ds[4], &dbetaz_ds = dstate_ds[5];
+	const double &x         = state[0],     &y         = state[2],     &z         = state[4];
+	const double &betax     = state[1],     &betay     = state[3],     &betaz     = state[5];
+	double       &dx_ds     = dstate_ds[0], &dy_ds     = dstate_ds[2], &dz_ds     = dstate_ds[4];
+	double       &dbetax_ds = dstate_ds[1], &dbetay_ds = dstate_ds[3], &dbetaz_ds = dstate_ds[5];
+
+//	if (s > 1.3) {
+//		std::cout << s << std::endl;
+//	}
 
 	Vector3D<double> r(x,y,z);
-	Vector3D<double> b;
+	Vector3D<double> b(0,0,0);
 	try {
 		b = fieldmap_->field(r);
-	} catch (...) { }
+	} catch (...)
+	{ }
 
 	double alpha = 1 / brho_ / beta_;
 	dx_ds     = betax;
@@ -38,6 +43,10 @@ void newton_lorentz_equation( const state_type &state , state_type &dstate_ds , 
 	dbetax_ds = - alpha * (betay * b.z - betaz * b.y);
 	dbetay_ds = - alpha * (betaz * b.x - betax * b.z);
 	dbetaz_ds = - alpha * (betax * b.y - betay * b.x);
+
+//	if (s > 1.3) {
+//		std::cout << s << " " << b.x << " " << b.y << " " << b.z << " " << dbetax_ds << " " << dbetay_ds << " " << dbetaz_ds << std::endl;
+//	}
 
 }
 

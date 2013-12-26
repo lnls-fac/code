@@ -7,6 +7,7 @@ static char fieldmapcpp_unload_docstring[]        = "unload(fieldmap_id)";
 static char fieldmapcpp_interpolate_docstring[]   = "interpolate(fieldmap_id, pos)";
 static char fieldmapcpp_nr_fieldmaps_docstring[]  = "nr_fieldmaps()";
 static char fieldmapcpp_clear_docstring[]         = "clear()";
+static char fieldmapcpp_odeint_const_docstring[]  = "odeint_const(fieldmap_id,energy,si,sf,nrpts,init_state)";
 static char fieldmapcpp_error[] = "fieldmap.error";
 
 // MODULE Global variables for dealing with module exceptions
@@ -20,6 +21,7 @@ static PyMethodDef fieldmapcpp_methods[] = {
 	{"interpolate",  (PyCFunction) fieldmapcpp_interpolate_fieldmap, METH_VARARGS, fieldmapcpp_interpolate_docstring},
 	{"nr_fieldmaps", (PyCFunction) fieldmapcpp_nr_fieldmaps,         METH_VARARGS, fieldmapcpp_nr_fieldmaps_docstring},
 	{"clear",        (PyCFunction) fieldmapcpp_clear,                METH_VARARGS, fieldmapcpp_clear_docstring},
+	{"odeint_const", (PyCFunction) fieldmapcpp_odeint_const,         METH_VARARGS, fieldmapcpp_odeint_const_docstring},
 	{NULL, NULL, 0, NULL}
 };
 
