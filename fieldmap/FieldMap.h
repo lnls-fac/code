@@ -6,6 +6,7 @@
 
 class FieldMap {
 
+	friend void  load_fieldmap(const std::string& fname, size_t& id, size_t& nx, double& x_min, double& x_max, size_t& nz, double& z_min, double& z_max);
 	size_t id;
 	size_t nx;
 	size_t nz;

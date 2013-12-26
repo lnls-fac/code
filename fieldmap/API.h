@@ -12,7 +12,8 @@ struct FieldMapException {
 		out_of_range_x_min            = 2,
 		out_of_range_x_max            = 3,
 		out_of_range_z_min            = 4,
-		out_of_range_z_max            = 5
+		out_of_range_z_max            = 5,
+		file_not_found                = 6
 	};
 };
 
@@ -26,8 +27,11 @@ void boost_integrate_const(
 		const double& si, const double& sf, size_t nr_pts, state_type& init_state,
 		std::vector<double>& s, std::vector<state_type>& trajectory);
 
-size_t fieldmap_load_fieldmap(const std::string& fname);
-void   fieldmap_unload_fieldmap(const size_t fieldmap_id);
-int    fieldmap_interpolate_field(const size_t fieldmap_id, const std::vector<Vector3D<double> >& pos, std::vector<Vector3D<double> >& field);
+void   load_fieldmap(const std::string& fname, size_t& id, size_t& nx, double& x_min, double& x_max, size_t& nz, double& z_min, double& z_max);
+void   unload_fieldmap(const size_t fieldmap_id);
+int    interpolate_fieldmap(const size_t fieldmap_id, const std::vector<Vector3D<double> >& pos, std::vector<Vector3D<double> >& field);
+size_t nr_fieldmaps();
+void   clear();
+
 
 #endif

@@ -8,18 +8,25 @@
 int main() {
 
 	//double energy = 3.0;
+	size_t id, nx, nz;
+	double x_min, x_max, z_min, z_max;
 
-	size_t id = fieldmap_load_fieldmap("fieldmap.txt");
-
-	std::vector<Vector3D<double> > pos;
-	std::vector<Vector3D<double> > field;
-	pos.push_back(Vector3D<double>(0,0,0));
-	pos.push_back(Vector3D<double>(0,0,1.0));
-	fieldmap_interpolate_field(id, pos, field);
-	for(size_t i=0; i<field.size(); ++i) {
-		std::cout << field[i] << std::endl;
+	try {
+		load_fieldmap("fieldmap.txt", id, nx, x_min, x_max, nz, z_min, z_max);
+		std::vector<Vector3D<double> > pos;
+		std::vector<Vector3D<double> > field;
+		pos.push_back(Vector3D<double>(0,0,0));
+		pos.push_back(Vector3D<double>(0,0,1.0));
+		interpolate_fieldmap(id, pos, field);
+		for(size_t i=0; i<field.size(); ++i) {
+			std::cout << field[i] << std::endl;
+		}
+		unload_fieldmap(id);
+	} catch (...) {
+		std::cout << "error" << std::endl;
 	}
-	fieldmap_unload_fieldmap(id);
+
+
 
 //	double si = 0.0;
 //	double sf = 1.0;

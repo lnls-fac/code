@@ -1,9 +1,6 @@
 #include "API.h"
 
-extern size_t g_id;
-extern std::vector<FieldMap> g_fieldmaps;
-
-int fieldmap_interpolate_field(const size_t fieldmap_id, const std::vector<Vector3D<double> >& pos, std::vector<Vector3D<double> >& field) {
+int interpolate_fieldmap(const size_t fieldmap_id, const std::vector<Vector3D<double> >& pos, std::vector<Vector3D<double> >& field) {
 
 	const FieldMap* fieldmap = getfieldmap(fieldmap_id);
 	if (fieldmap == NULL) {

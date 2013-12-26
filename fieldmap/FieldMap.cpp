@@ -64,10 +64,8 @@ void FieldMap::read_fieldmap_from_file(const std::string& fname_)
 	const size_t capacity_inc = 10 * 1000;
 
 	// opens file
-	std::ifstream file("fmap.txt");
-	if (!file.is_open()) {
-		return;
-	}
+	std::ifstream file(fname_.c_str());
+	if (!file.is_open()) throw FieldMapException::file_not_found;
 
 	// reads header section
 	std::string word, line;
@@ -123,14 +121,14 @@ void FieldMap::read_fieldmap_from_file(const std::string& fname_)
 		throw FieldMapException::inconsistent_dimensions;
 	}
 
-	std::cout << "nr.points       : " << nr_points    << std::endl;
-	std::cout << "nr.points.x_set : " << this->nx     << std::endl;
-	std::cout << "nr.points.y_set : " << y_set.size() << std::endl;
-	std::cout << "nr.points.z_set : " << this->nz     << std::endl;
-	std::cout << "min.x           : " << this->x_min  << std::endl;
-	std::cout << "max.x           : " << this->x_max  << std::endl;
-	std::cout << "min.z           : " << this->z_min  << std::endl;
-	std::cout << "max.z           : " << this->z_max  << std::endl;
+	//std::cout << "nr.points       : " << nr_points    << std::endl;
+	//std::cout << "nr.points.x_set : " << this->nx     << std::endl;
+	//std::cout << "nr.points.y_set : " << y_set.size() << std::endl;
+	//std::cout << "nr.points.z_set : " << this->nz     << std::endl;
+	//std::cout << "min.x           : " << this->x_min  << std::endl;
+	//std::cout << "max.x           : " << this->x_max  << std::endl;
+	//std::cout << "min.z           : " << this->z_min  << std::endl;
+	//std::cout << "max.z           : " << this->z_max  << std::endl;
 
 	file.close();
 
