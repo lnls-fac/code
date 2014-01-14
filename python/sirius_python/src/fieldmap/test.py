@@ -1,3 +1,4 @@
+import math
 import fieldmap
 import numpy
 from Tkinter import Tk
@@ -59,10 +60,23 @@ def calcs_trajectory():
     
     ''' does runge-kutta integration with constant step size '''
     init_state = numpy.array([[0.],[0.],[0.],[0.],[0.],[1.0]])
-    traj = fm.electron_trajectory(energy = 3, si = 0, sf = 2.0, nrpts = 500, init_state = init_state)
-    #s = traj[0,:]
-    x = traj[1,:]
-    z = traj[5,:]
+    traj = fm.electron_trajectory(energy = 3, si = 0, sf = 2.0, nrpts = 5000, init_state = init_state)
+    s     = traj[0,:]
+    x     = traj[1,:]
+    betax = traj[2,:]
+    z     = traj[5,:]
+    betaz = traj[6,:]
+    
+    ''' calcs final deflection angle '''
+    angf  = abs(math.atan(betax[-1] / betaz[-1]))
+    
+    ''' compares with nominal deflection angle and calcs error '''
+    nangle = 7.2 * (math.pi/180)
+    dangle = 100 * (2*angf - nangle) / nangle
+    print('final angle at s = {0:f}: {1:f}'.format(s[-1], angf * (180/math.pi)))
+    print('angle error: {0:+6.3f}'.format(dangle))
+    
+    ''' plot trajectory in z-x plane '''
     plt.plot(z,x)
     plt.show()
     

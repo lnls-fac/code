@@ -30,7 +30,7 @@ end
 % inicializa estruturas do MML
 cdir = pwd;
 
-mml_path = fullfile(lnls_get_root_folder(), 'MatlabMiddleLayer','Release');
+mml_path = fullfile(lnls_get_root_folder(), 'code', 'MatlabMiddleLayer','Release');
 cd(fullfile(mml_path,'mml'));
 
 if ~exist('versao', 'var')
@@ -43,7 +43,7 @@ clear cdir;
 
 addpath(genpath(fullfile(mml_path, 'lnls','fac_scripts','sirius','lattice_errors')));
 addpath(fullfile(mml_path, 'lnls', 'fac_scripts', 'tracy3'), '-begin');
-addpath(genpath(fullfile(mml_path, 'machine','LTLB_V100'));
-addpath(genpath(fullfile(mml_path, 'machine', 'LTBA_V100'));
+addpath(genpath(fullfile(mml_path, 'machine','LTLB_V100')));
+addpath(genpath(fullfile(mml_path, 'machine', 'LTBA_V100')));
 
 return;
