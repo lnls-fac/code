@@ -11,31 +11,33 @@ fitting_tol_symm = 0.01;
 fitting_tol_tune = 1.0;
 
 % loads ID definitions
+ids_def = create_ids_def_PH;
 %ids_def = create_ids_def_PV;
-ids_def = create_ids_def_PC;
+% ids_def = create_ids_def_PC;
 
 % defines IDs to be inserted
 ids = [];
 
-%ids = [ids ids_def.araucaria1];
-%  ids = [ids ids_def.araucaria2];
-%  ids = [ids ids_def.sibipiruna1];
-%  ids = [ids ids_def.sibipiruna2];
-%  ids = [ids ids_def.caterete];
-%  ids = [ids ids_def.mangabeira];
-%  ids = [ids ids_def.manaca];
-%  ids = [ids ids_def.carnauba];
-%  ids = [ids ids_def.w2t];
-%  ids = [ids ids_def.scw3t];
-%  ids = [ids ids_def.inga1];
-%ids = [ids ids_def.inga2];
+ids = [ids ids_def.araucaria1];
+ ids = [ids ids_def.araucaria2];
+ ids = [ids ids_def.sibipiruna1];
+ ids = [ids ids_def.sibipiruna2];
+ ids = [ids ids_def.caterete];
+ ids = [ids ids_def.mangabeira];
+ ids = [ids ids_def.manaca];
+ ids = [ids ids_def.carnauba];
+ids = [ids ids_def.w2t];
+ ids = [ids ids_def.scw3t];
+ ids = [ids ids_def.inga1];
+ids = [ids ids_def.inga2];
 
 
 % loads initial SIRIUS lattice model
-global THERING
+% global THERING
 %sirius('_V402');
 sirius;
-the_ring0 = THERING;
+% the_ring0 = THERING;
+the_ring0 = sirius_lattice('ac10_6');
 the_ring0 = start_at_last_element(the_ring0, 'mc'); % shifts model to start at center of 2T bending magnets
 twiss0 = calc_short_twiss(the_ring0); % calcs original twiss parameters
 

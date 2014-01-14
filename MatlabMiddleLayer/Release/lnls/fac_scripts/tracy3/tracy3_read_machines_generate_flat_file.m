@@ -18,7 +18,7 @@ else
     machines = load([path '/cod_matlab/' archive_name '.mat']);
 end
 
-[status result] = system('ls | grep rms | wc -l');
+[~, result] = system('ls | grep rms | wc -l');
 n_pastas = str2double(result);
 
 if(n_pastas~=length(machines.machine))
@@ -27,6 +27,7 @@ if(n_pastas~=length(machines.machine))
 end
 
 for i=1:n_pastas
+    fprintf('machine #%03i...', i);
     flat_name = [sprintf('rms%02d', i) sprintf('/rms%02d', i) '.dat'];
     full_name = fullfile(path, flat_name);
     the_ring = machines.machine{i};
@@ -35,6 +36,7 @@ for i=1:n_pastas
     end
 %     the_ring = modify_the_ring(machines.machine{i});
     lnls_at2tracyflat(the_ring,full_name);
+    fprintf('ok\n');
 end
 
 function the_ring = modify_the_ring(the_ring_old)

@@ -93,7 +93,7 @@ if (any(strcmp(select,'in_vacuum_undulators')) || strcmp(select,'all') || strcmp
     angm    = [0 0 0];
     sigmadc = [0 5.9e7 6.25e5]; % Copper Sheet
     tau     = [0 1 0]*27e-15;
-    b       = [4/2 4.1/2]*1e-3;
+    b       = [4.5/2 4.7/2]*1e-3;
     L       = 2.0;
     budget{i}.mub = mub;
     budget{i}.ange = ange;
