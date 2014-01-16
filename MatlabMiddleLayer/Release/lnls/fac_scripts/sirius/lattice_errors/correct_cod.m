@@ -57,7 +57,7 @@ for i=selection
         hkicks     = best_hkicks;
         vkicks     = best_vkicks;
         if (j == 1),
-            %machine{i} = set_ids(machine{i}, 'on');
+            machine{i} = set_ids(machine{i}, 'on');
         end
     end
     codx(i,:)    = best_codx;

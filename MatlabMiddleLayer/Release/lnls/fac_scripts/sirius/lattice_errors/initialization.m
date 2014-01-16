@@ -22,7 +22,9 @@ fprintf(['--- initialization [' datestr(now) '] ---\n']);
 
 params = r.params;
 
-RandStream.setDefaultStream(RandStream('mt19937ar','seed', 131071));
+%RandStream.setDefaultStream(RandStream('mt19937ar','seed', 131071));
+RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
+ 
 %Warning: The RandStream.setDefaultStream static method will be removed in a future
 %release.  Use RandStream.setGlobalStream instead. 
 
