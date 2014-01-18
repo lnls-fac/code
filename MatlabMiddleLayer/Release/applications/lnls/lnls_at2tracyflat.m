@@ -103,7 +103,9 @@ for i = 1:length(ring)
             kicktable_filename = lower([ring{i}.FamName '.txt']);
             fprintf(mfile, ' 1.0 2 %s\n', kicktable_filename);
             kick_fullname = fullfile(path, kicktable_filename);
-            save_kicktable_file(ring{i}, kick_fullname);
+            if ~(exist(kick_fullname,'file') == 2);
+                save_kicktable_file(ring{i}, kick_fullname);
+            end
         otherwise
             fprintf(mfile, 'prtmfile: unknown type\n');
             
