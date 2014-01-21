@@ -9,7 +9,7 @@ param.emity = param.emitx*20/100;
 param.sigmae= 15e-4;
 param.sigmas= 11.3e-3;
 
-param.number_simu = 50;
+param.number_simu = 1;
 
 %% Definition of Booster's parameters
 
@@ -31,7 +31,7 @@ param.boo.seb_leak= 0e-4;
 %% Definition of the Transport line parameters
 
 % mode of operation
-param.ltba.mode = 'mismatched_4k';
+param.ltba.mode = 'matched';
 
 % Load the transfer line
 [transfer_line IniCond] = ltba_lattice(param.ltba.mode);
@@ -70,10 +70,10 @@ param.ltba.seg_err  = 1e-4; %tested
 %% Definition of the Storage Ring parameters
 
 % Load the sirius lattice;
-storage_ring = sirius_lattice('test_inject_4k');
+storage_ring = sirius_lattice('ac10_6');
 
 % Simulate injection in the storage ring too?
-param.sr.inject = false;
+param.sr.inject = true;
 
 % Injection mode: with four kickers or multipole?
 param.sr.mode = '4kickers'; % '4kickers' or 'pmm'

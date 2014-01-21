@@ -50,13 +50,13 @@ if (any(strcmp(select,'resistive_wall_with_coating')) || strcmp(select,'all') ||
     budget{i}.quantity = 1;
     budget{i}.betax = 7;
     budget{i}.betay = 11;
-    epb     = [1 1 1];
-    mub     = [1 1 1];
-    ange    = [0 0 0];
-    angm    = [0 0 0];
-    sigmadc = [0 4e6 5.9e7]; % Not sure about NEG resistivity
-    tau     = [0 0 0]*27e-15;
-    b       = [12.000 12.001]*1e-3;
+    epb     = [1 1 1 1];
+    mub     = [1 1 1 1];
+    ange    = [0 0 0 0];
+    angm    = [0 0 0 0];
+    sigmadc = [0 4e6 5.9e7 1]; % Not sure about NEG resistivity
+    tau     = [0 0 0 0]*27e-15;
+    b       = [12.000 12.001 13.000]*1e-3;
     L       = 480;
     budget{i}.mub = mub;
     budget{i}.ange = ange;
@@ -70,7 +70,7 @@ if (any(strcmp(select,'resistive_wall_with_coating')) || strcmp(select,'all') ||
         epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
     end
-    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E, false, 0, 0);
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E);
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
@@ -88,7 +88,7 @@ if (any(strcmp(select,'in_vacuum_undulators')) || strcmp(select,'all') || strcmp
     budget{i}.betay = 1.5;
   
     epb     = [1 1 1];
-    mub     = [1 1 10];
+    mub     = [1 1 100];
     ange    = [0 0 0];
     angm    = [0 0 0];
     sigmadc = [0 5.9e7 6.25e5]; % Copper Sheet
@@ -109,7 +109,7 @@ if (any(strcmp(select,'in_vacuum_undulators')) || strcmp(select,'all') || strcmp
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
     end
     
-    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E, false, 0, 0);
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E);
     Zv = pi^2/12*Zv;
     Zh = pi^2/24*Zh;
     budget{i}.Zv = Zv;
@@ -180,8 +180,36 @@ if (any(strcmp(select,'smallgap_undulators')) || strcmp(select,'all') || strcmp(
     i=i+1;
 end
 
+
+%% Fast Correctors with SS316L
+if (any(strcmp(select,'fast_corr')) || strcmp(select,'all') || strcmp(select,'ring') )
+    budget{i}.name = 'Fast Correctors';
+    budget{i}.type = 'rw';
+    budget{i}.quantity = 80;
+    budget{i}.betax = 7;
+    budget{i}.betay = 11;
+    epb     = [1 1 1 1];
+    mub     = [1 1 1 1];
+    ange    = [0 0 0 0];
+    angm    = [0 0 0 0];
+    sigmadc = [0 4e6 1.3e6 0.1]; % Not sure about NEG resistivity
+    tau     = [0 0 0 0]*27e-15;
+    b       = [12.000 12.001 12.3]*1e-3;
+    L       = 0.1;
+    
+    for j = 1: length(epb)
+        epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
+        mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
+    end
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E);
+    budget{i}.Zv = Zv;
+    budget{i}.Zh = Zh;
+    budget{i}.Zl = Zl;
+    budget{i}.escala = 'log';
+    i=i+1;
+end
 %% Ferrite Kickers for injection
-if (any(strcmp(select,'kicker')) || strcmp(select,'all') )%|| strcmp(select,'ring') )
+if (any(strcmp(select,'kicker')) || strcmp(select,'all') || strcmp(select,'ring') )
     budget{i}.name = 'Ferrite Kickers';
     budget{i}.type = 'misto';
     budget{i}.quantity = 4;
@@ -386,7 +414,7 @@ if (any(strcmp(select,'broad_band')) || strcmp(select,'all') || strcmp(select,'r
     budget{i}.quantity = 1;
     budget{i}.betax = 6.8;
     budget{i}.betay = 11;  
-    Zovern = 0.2;
+    Zovern = 0.4; % phase 1 = 0.2 phase 2 = 0.4
     fr  = 2.4* 299792458/12e-3/2/pi; % 2.4 c/b/2/pi;
     budget{i}.Rsl = Zovern*fr/0.578e6; % = 3.6*518.25/354.0*1e3;
     budget{i}.wrl = fr*2*pi;
