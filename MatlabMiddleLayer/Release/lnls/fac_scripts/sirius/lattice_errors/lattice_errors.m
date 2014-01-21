@@ -15,6 +15,7 @@ cd(pathstr);
 %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums'); 
 % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_50ums'); 
 
+config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs');
 
 AData = getappdata(0, 'AcceleratorData');
 if isempty(AData)
@@ -44,10 +45,16 @@ r.errors = generate_errors(r);
 % aplica erros a otica nominal e retorna estrutura com as maquinas aleatorias
 fprintf('< applying random errors to bare lattice (ramping up) ... > \n\n');
 
+
 for i=1:length(r.config.errors_delta)
     
     r.machine = apply_errors(r, r.config.errors_delta(i));
     
+    % desliga IDS para eliminar restrição física
+    for m=selection
+        r.machine{m} = set_ids(r.machine{m}, 'off');
+    end
+
     % faz calculo da trajetoria distorcida (com sextupolos zerados)
     if r.params.cod_correction_flag
         fprintf('< calculating COD with sextupoles off... > \n\n');

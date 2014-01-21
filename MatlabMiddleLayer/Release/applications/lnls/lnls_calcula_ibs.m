@@ -1,13 +1,13 @@
-% LNLS_CALCULA_IBS calcula o aumento das emitâncias horizontal e vertical e
-% o aumento da dispersão relativa de energia devido a Intrabeam Scattering,
-% com base na aproximação CIMP descrita em KUBO, MTINGWA, AND WOLSKI -
+% LNLS_CALCULA_IBS calcula o aumento das emitï¿½ncias horizontal e vertical e
+% o aumento da dispersï¿½o relativa de energia devido a Intrabeam Scattering,
+% com base na aproximaï¿½ï¿½o CIMP descrita em KUBO, MTINGWA, AND WOLSKI -
 % Intrabeam scattering formulas for high energy beams - Phys. Rev. ST
-% Accel. Beams 8, 081001 (2005). As emitâncias  de equilíbrio são
-% calculadas pela evolução temporal em um tempo múltiplo do tempo de
-% amortecimento, com base nas equações descritas em KIM - A Code for
+% Accel. Beams 8, 081001 (2005). As emitï¿½ncias  de equilï¿½brio sï¿½o
+% calculadas pela evoluï¿½ï¿½o temporal em um tempo mï¿½ltiplo do tempo de
+% amortecimento, com base nas equaï¿½ï¿½es descritas em KIM - A Code for
 % Calculating the Time Evolution of Beam Parameters in High Intensity
-% Circular Accelerators - PAC 97. O comprimento do pacote é calculado pela
-% expressão em SANDS - The Physics of Electron Storage Rings, an
+% Circular Accelerators - PAC 97. O comprimento do pacote ï¿½ calculado pela
+% expressï¿½o em SANDS - The Physics of Electron Storage Rings, an
 % Introduction.
 %
 %   [finalEmit,relEmit] = LNLS_CALCULA_IBS(data1,data2)
@@ -15,46 +15,46 @@
 %   [finalEmit,relEmit] = LNLS_CALCULA_IBS(data1,data2,R,'plot')
 %
 %   ENTRADA
-%       data1       struct com os parâmetros do anel (atsummary):
-%                       revTime              período de revolução [s]
+%       data1       struct com os parï¿½metros do anel (atsummary):
+%                       revTime              perï¿½odo de revoluï¿½ï¿½o [s]
 %                       gamma
 %                       twiss
 %                       compactionFactor
 %                       damping
 %                       naturalEnergySpread
-%                       naturalEmittance     emitância natural [m rad]
+%                       naturalEmittance     emitï¿½ncia natural [m rad]
 %                       radiationDamping     tempos de amortecimento [s]
 %                       synctune
-%       data2       struct com os parâmetros do anel (getad):
+%       data2       struct com os parï¿½metros do anel (getad):
 %                       Coupling             coeficiente de acoplamento
 %                       BeamCurrent          corrente [A]
-%                       NrBunches            número de pacotes
+%                       NrBunches            nï¿½mero de pacotes
 %       R(=1)       fator de aumento do comprimento do pacote (opcional)
-%       'plot'      gera gráficos da evolução temporal (opcional)
-%   SAÍDA
-%       finalEmit   valores de equilíbrio [Ex Ey sigmaE sigmaz] 
+%       'plot'      gera grï¿½ficos da evoluï¿½ï¿½o temporal (opcional)
+%   SAï¿½DA
+%       finalEmit   valores de equilï¿½brio [Ex Ey sigmaE sigmaz] 
 %                   [m rad] [m rad] [] [m]
-%       relEmit     razão entre os valores finais e iniciais
+%       relEmit     razï¿½o entre os valores finais e iniciais
 %
 % NOTAS -------------------------------------------------------------------
-%   1. Desvio de energia relativo não bate com o Tracy
-%   2. Gráficos não batem com o Elegant
-%   3. Pendências:
-%       - melhorar integração
-%       - adicionar opções para cálculo dos tempos de crescimento através
-%         de outros métodos (aproximação de Bane, Bjorken-Mtingwa)?
+%   1. Desvio de energia relativo nï¿½o bate com o Tracy
+%   2. Grï¿½ficos nï¿½o batem com o Elegant
+%   3. Pendï¿½ncias:
+%       - melhorar integraï¿½ï¿½o
+%       - adicionar opï¿½ï¿½es para cï¿½lculo dos tempos de crescimento atravï¿½s
+%         de outros mï¿½todos (aproximaï¿½ï¿½o de Bane, Bjorken-Mtingwa)?
 % -------------------------------------------------------------------------
 %
 % 2012-09-06 Afonso Haruo Carnielli Mukai
 
 function [finalEmit,relEmit] = lnls_calcula_ibs(data1,data2,R,p)
 
-% Se o argumento R não existe, R = 1
+% Se o argumento R nï¿½o existe, R = 1
 if(~exist('R','var'))
     R = 1;
 end
 
-% Verifica se a opção de gráficos foi selecionada
+% Verifica se a opï¿½ï¿½o de grï¿½ficos foi selecionada
 if(exist('p','var'))
     if(strcmp(p,'plot'))
         flag_plot = true;
@@ -66,11 +66,11 @@ else
 end
 
 % Constantes
-qe = 1.6021773e-19; % carga do elétron [C]
-r0 = 2.8179409e-15; % raio clássico do elétron [m]
+qe = 1.6021773e-19; % carga do elï¿½tron [C]
+r0 = 2.8179409e-15; % raio clï¿½ssico do elï¿½tron [m]
 c  = 2.99792458e8;  % velocidade da luz [m/s]
 
-% Carrega tabela para interpolação
+% Carrega tabela para interpolaï¿½ï¿½o
 ginttable = getappdata(0, 'IBSGIntegralTable');
 if isempty(ginttable)
     load('lnls_tabela_g_ibs.mat');
@@ -82,7 +82,7 @@ else
     g_tabela = ginttable.g_tabela;
 end
 
-% Copia parâmetros
+% Copia parï¿½metros
 T_rev     = data1.revTime;
 gamma     = data1.gamma;
 alpha     = data1.compactionFactor;
@@ -108,19 +108,19 @@ etax_diff = data1.twiss.Dispersion(idx,2);
 etay      = data1.twiss.Dispersion(idx,3);
 etay_diff = data1.twiss.Dispersion(idx,4);
 
-N = I * T_rev / qe / Nb; % número de elétrons por bunch
+N = I * T_rev / qe / Nb; % nï¿½mero de elï¿½trons por bunch
 C = r0^2 * c * N / 64 / pi^2 /  gamma^4;
 delta_s = s(end) - s(1);
 
-omega = 2 * pi * synctune / T_rev; % frequência síncrotron angular
+omega = 2 * pi * synctune / T_rev; % frequï¿½ncia sï¿½ncrotron angular
 
 [~,Hym] = calcula_H(betay,alphay,etay,etay_diff,s);
 
-% Valores iniciais de emitância
+% Valores iniciais de emitï¿½ncia
 Ex  = En/(1 + K);
 Ey  = K*En/(1 + K) + Je*Hym*Se^2;
 Sb  = R * c * alpha / omega * Se; % comprimento do pacote
-Eln = Se * Sb; % emitância longitudinal natural
+Eln = Se * Sb; % emitï¿½ncia longitudinal natural
 El  = Eln;
 
 initialEmit = [Ex Ey Se Sb];
