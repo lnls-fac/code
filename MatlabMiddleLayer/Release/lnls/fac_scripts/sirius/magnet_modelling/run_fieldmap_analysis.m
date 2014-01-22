@@ -5,7 +5,8 @@ clc; close('all');
 fclose('all'); drawnow;
 
 % selects and loads configuration for analysis
-parms = load_config('BOOSTER_B_MODELO6');
+%parms = load_config('BOOSTER_B_MODELO6');
+parms = load_config('BOOSTER_B_MODELO6_1.5GeV');
 %parms = load_config('BOOSTER_B_MODELO1');
 %parms = load_config('BOOSTER_B_MODELO1_TRAJ_CENTERED');
 %parms = load_config('BOOSTER_QD_MODELO2');

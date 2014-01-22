@@ -4,11 +4,10 @@ clc;
 
 % selects SIRIUS version
 
-
 % number of optics matching iterations
 max_nr_iters = 500;
 fitting_tol_symm = 0.01;
-fitting_tol_tune = 1.0;
+fitting_tol_tune = 3.0;
 
 % loads ID definitions
 ids_def = create_ids_def_PH;
@@ -19,16 +18,16 @@ ids_def = create_ids_def_PH;
 ids = [];
 
 ids = [ids ids_def.araucaria1];
- ids = [ids ids_def.araucaria2];
- ids = [ids ids_def.sibipiruna1];
- ids = [ids ids_def.sibipiruna2];
- ids = [ids ids_def.caterete];
- ids = [ids ids_def.mangabeira];
- ids = [ids ids_def.manaca];
- ids = [ids ids_def.carnauba];
+ids = [ids ids_def.araucaria2];
+ids = [ids ids_def.sibipiruna1];
+ids = [ids ids_def.sibipiruna2];
+ids = [ids ids_def.caterete];
+ids = [ids ids_def.mangabeira];
+ids = [ids ids_def.manaca];
+ids = [ids ids_def.carnauba];
 ids = [ids ids_def.w2t];
- ids = [ids ids_def.scw3t];
- ids = [ids ids_def.inga1];
+ids = [ids ids_def.scw3t];
+ids = [ids ids_def.inga1];
 ids = [ids ids_def.inga2];
 
 
