@@ -44,7 +44,7 @@ if (any(strcmp(select,'resistive_wall')) )%|| strcmp(select,'all'))
     i=i+1;
 end
 
-if (any(strcmp(select,'resistive_wall_with_coating')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'resistive_wall_with_coating')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Wall With Coating';
     budget{i}.type = 'rw';
     budget{i}.quantity = 1;
@@ -80,7 +80,7 @@ end
 
 
 %% Resistive wall from in-vaccum ondulators;
-if (any(strcmp(select,'in_vacuum_undulators')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'in_vacuum_undulators')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'In-vac. Und. @ low betax';
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
@@ -159,7 +159,7 @@ end
 
 
 %% Resistive wall from smallgap vacuum chambers;
-if (any(strcmp(select,'smallgap_undulators')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'smallgap_undulators')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Small Gap Undulators';
     budget{i}.type = 'rw';
     budget{i}.quantity = 3;
@@ -182,7 +182,7 @@ end
 
 
 %% Fast Correctors with SS316L
-if (any(strcmp(select,'fast_corr')) || strcmp(select,'all') || strcmp(select,'ring') )
+if (any(strcmp(select,'fast_corr')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Fast Correctors';
     budget{i}.type = 'rw';
     budget{i}.quantity = 80;
@@ -209,7 +209,7 @@ if (any(strcmp(select,'fast_corr')) || strcmp(select,'all') || strcmp(select,'ri
     i=i+1;
 end
 %% Ferrite Kickers for injection
-if (any(strcmp(select,'kicker')) || strcmp(select,'all') || strcmp(select,'ring') )
+if (any(strcmp(select,'kicker')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Ferrite Kickers';
     budget{i}.type = 'misto';
     budget{i}.quantity = 4;
@@ -264,7 +264,7 @@ end
 
 
 %% BPMs;
-if (any(strcmp(select,'bpm')) || strcmp(select,'all') )%|| strcmp(select,'ring') )
+if (any(strcmp(select,'bpm')) || any(strcmp(select,'all')))%|| strcmp(select,'ring') )
     budget{i}.name = 'BPM-3-BNcernew';
     budget{i}.type = 'geo';
     budget{i}.quantity = 180;
@@ -303,7 +303,7 @@ if (any(strcmp(select,'bpm')) || strcmp(select,'all') )%|| strcmp(select,'ring')
 end
 
 %% Masks
-if (any(strcmp(select,'masks')) || strcmp(select,'all') )%|| strcmp(select,'ring') )
+if (any(strcmp(select,'masks')) || any(strcmp(select,'all')))%|| strcmp(select,'ring') )
     budget{i}.name = 'Masks-ridge-softhard-h2';
     budget{i}.type = 'geo';
     budget{i}.quantity = 350;
@@ -340,7 +340,7 @@ if (any(strcmp(select,'masks')) || strcmp(select,'all') )%|| strcmp(select,'ring
 end
 
 %% RF Cavity's tapers
-if (any(strcmp(select,'taper_cv')) || strcmp(select,'all') )%|| strcmp(select,'ring') )
+if (any(strcmp(select,'taper_cv')) || any(strcmp(select,'all')))%|| strcmp(select,'ring') )
     budget{i}.name = 'Taper-Cav-SC-compL800';
     budget{i}.type = 'geo';
     budget{i}.quantity = 1;
@@ -408,13 +408,13 @@ end
 %     budget{i}.escala = 'linear';
 %     i=i+1;
 % end
-if (any(strcmp(select,'broad_band')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'broad_band')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Broad Band';
     budget{i}.type = 'geo';
     budget{i}.quantity = 1;
     budget{i}.betax = 6.8;
     budget{i}.betay = 11;  
-    Zovern = 0.4; % phase 1 = 0.2 phase 2 = 0.4
+    Zovern = 0.2; % phase 1 = 0.2 phase 2 = 0.4
     fr  = 2.4* 299792458/12e-3/2/pi; % 2.4 c/b/2/pi;
     budget{i}.Rsl = Zovern*fr/0.578e6; % = 3.6*518.25/354.0*1e3;
     budget{i}.wrl = fr*2*pi;
