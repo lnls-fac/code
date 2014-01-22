@@ -138,6 +138,57 @@ elseif strcmpi(mode_version,'AC10_6')
     sd1_strength       =  -161.1970;
     sf1_strength       =   190.8217; 
     
+%moga0178-big_tilt_res, a partir do v500_ac10_6
+%     %%% QUADRUPOLOS
+%     %  =========== 
+%    
+%     qaf_strength       =  2.534452046369969;
+%     qad_strength       = -2.721882048842282;
+%     qbd2_strength      = -3.960051554204441;
+%     qbf_strength       =  3.904146433575   ;
+%     qbd1_strength      = -2.966536822810686;
+%     qf1_strength       =  2.366701288408948;
+%     qf2_strength       =  3.354329303320331;
+%     qf3_strength       =  3.077769628685031;
+%     qf4_strength       =  2.708489087069408;
+%     
+%     %%% SEXTUPOLOS
+%     %  ==========    
+%     sa1_strength       = -127.9080554132855 / 2;
+%     sa2_strength       =   57.78419417402928 / 2;
+%     sb1_strength       = -227.5454950776875 / 2;
+%     sb2_strength       =  126.7648264359512 / 2;
+%     sd2_strength       = -154.1121983690638 / 2;
+%     sd3_strength       = -283.2617249705017 / 2;
+%     sf2_strength       =  309.2779698608929 / 2;
+%     sd1_strength       = -319.8048169434226 / 2;
+%     sf1_strength       =  380.2347412191791 / 2; 
+
+%moga0221-v500-ac10_6
+%     %%% QUADRUPOLOS
+%     %  =========== 
+%    
+%     qaf_strength       =  2.534191154803834;
+%     qad_strength       = -2.723772961899106;
+%     qbd2_strength      = -3.961610912052611;
+%     qbf_strength       =  3.903212903260016;
+%     qbd1_strength      = -2.964396036611413;
+%     qf1_strength       =  2.363734706318783;
+%     qf2_strength       =  3.356832076444897;
+%     qf3_strength       =  3.077793780094138;
+%     qf4_strength       =  2.70755330632922 ;
+%     
+%     %%% SEXTUPOLOS
+%     %  ==========    
+%     sa1_strength       = -130.9311228118792 / 2;
+%     sa2_strength       =   57.77414574018537 / 2;
+%     sb1_strength       = -226.4801659991465 / 2;
+%     sb2_strength       =  131.9466595507695 / 2;
+%     sd2_strength       = -148.8139007380059 / 2;
+%     sd3_strength       = -283.6155501170642 / 2;
+%     sf2_strength       =  311.9177912604076 / 2;
+%     sd1_strength       = -323.9457247288785 / 2;
+%     sf1_strength       =  377.9007031096051 / 2; 
 
 
 %% Testes de otimizacao de injecao 02/10/2013

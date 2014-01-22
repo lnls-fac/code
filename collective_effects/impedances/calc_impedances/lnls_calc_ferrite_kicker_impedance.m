@@ -90,7 +90,7 @@ elseif strcmp(model,'pior')
     mub     = [1 1     1   1    1];
     ange    = [0 0     0   0    0];
     angm    = [0 0     0   0    0];
-    sigmadc = [0 1.8e6   0   0 6.4e18];
+    sigmadc = [0 1.8e6 1   1 5.9e7];
     tau     = [0 0     0   0    0]*27e-15;
     b1       = [(b-7.5e-3), (b-7.5e-3+2e-6), b , d    ];
     
@@ -100,14 +100,14 @@ elseif strcmp(model,'pior')
     end
     epr1(4,:) = epr;
     mur1(4,:) = mur;
-    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr1, mur1, b1, L, 3, true, 50, 5e7);
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr1, mur1, b1, L, 3);
     Zv = pi^2/12*Zv;
     Zh = pi^2/24*Zh;
         
-    ind = abs(w)>1e7;
+%     ind = abs(w)>1e7;
 %     Zh = Zh(ind); Zv = Zv(ind);
     %ind = real(Zh) < 0 | real(Zv) < 0;
-    Zh(~ind) = 0; Zv(~ind)=0;
+%     Zh(~ind) = 0; Zv(~ind)=0;
 %     Zh = [-conj(Zh) Zh]; Zv = [-conj(Zv) Zv];
 
 else
@@ -115,7 +115,7 @@ else
     mub     = [1 1     1   1    1];
     ange    = [0 0     0   0    0];
     angm    = [0 0     0   0    0];
-    sigmadc = [0 1.8e6   0   0 6.4e18];
+    sigmadc = [0 1.8e6 1   1 5.9e7];
     tau     = [0 0     0   0    0]*27e-15;
     b1       = [(b-7.5e-3), (b-7.5e-3+2e-6), b , d];
     
@@ -130,14 +130,14 @@ else
     mur1 = mur1(indx,:);
     epr1 = epr1(indx,:);
     b1    = b1([1 2 3]);
-    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr1, mur1, b1, L, 3, true, 50, 5e7);
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr1, mur1, b1, L, 3);
     Zv = pi^2/12*Zv;
     Zh = pi^2/24*Zh;
     
-    ind = abs(w)>1e7;
+%     ind = abs(w)>1e7;
 %     Zh = Zh(ind); Zv = Zv(ind);
 %     ind = real(Zh) < 0 | real(Zv) < 0;
-    Zh(~ind) = 0; Zv(~ind)=0;
+%     Zh(~ind) = 0; Zv(~ind)=0;
 %     Zh = [-conj(Zh) Zh]; Zv = [-conj(Zv) Zv];
 end
 

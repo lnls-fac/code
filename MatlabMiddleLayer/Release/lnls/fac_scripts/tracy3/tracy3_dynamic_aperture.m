@@ -4,6 +4,7 @@ function tracy3_dynamic_aperture(fmapdpFlag, nrecalls, nr_rms, varargin)
 first_call = true;
 if ~isempty(varargin)
     first_call = false;
+    default = varargin{5};
     fa = varargin{1};
     plot1 = varargin{2};
     if fmapdpFlag
@@ -13,7 +14,9 @@ if ~isempty(varargin)
     
 end
 
-default = '/home/fac_files/data/sirius_tracy/';
+if first_call
+    default = '/home/fac_files/data/sirius_tracy/';
+end
 
 path = uigetdir(default,'Em qual pasta estao os dados?');
 if (path==0);
@@ -224,5 +227,5 @@ end
 drawnow;
 
 if (nrecalls ~= 1)
-    tracy3_dynamic_aperture(fmapdpFlag,nrecalls-1,nr_rms,fa,plot1,fdpa,plot1dp);
+    tracy3_dynamic_aperture(fmapdpFlag,nrecalls-1,nr_rms,fa,plot1,fdpa,plot1dp,path);
 end

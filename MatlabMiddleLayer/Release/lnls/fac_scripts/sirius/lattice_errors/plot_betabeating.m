@@ -2,11 +2,11 @@ function plot_betabeating(machine_fname, thering_fname)
 
 clc;
 
-machbef_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_machines_cod_corrected.mat');
-machaft_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_machines_cod_coup_opt_corrected.mat');
-thering_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_the_ring.mat');
+% machbef_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_machines_cod_corrected.mat');
+% machaft_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_machines_cod_coup_opt_corrected.mat');
+% thering_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_the_ring.mat');
 
-%% seleção de arquivos de input
+%% seleï¿½ï¿½o de arquivos de input
 if ~exist('machbef_fname','var')
     [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select mat file with machines (before symm)');
     if isnumeric(FileName)
@@ -37,7 +37,7 @@ data = load(machaft_fname); mach_aft  = data.machine;
 data = load(thering_fname); the_ring = data.the_ring;
 
 
-%% calcula ótica
+%% calcula ï¿½tica
 twiss0 = calctwiss(the_ring);
 for i=1:length(mach_bef)
     twiss_bef(i) = calctwiss(mach_bef{i});
@@ -77,7 +77,7 @@ plot(twiss0.pos, -sqrt(sum(betay_aft_diff.^2)/size(betay_aft_diff,1)), 'Color', 
 
 
 xlabel('Pos [m]');
-ylabel('\edlta\beta [%%]');
-%axis([xmin, xmax, ymin, ymax]);
+ylabel('\delta\beta [%%]');
+% axis([xmin, xmax, ymin, ymax]);
 
 
