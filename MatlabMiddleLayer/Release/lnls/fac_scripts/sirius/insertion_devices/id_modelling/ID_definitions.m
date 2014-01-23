@@ -87,6 +87,9 @@ IDS.U19.phase_csd                  =  0 * mm;
 IDS.U19.phase_cie                  =  0 * mm;
 IDS.U19.chamfer                    =  0  * mm;
 IDS.U19.magnetization              =  1.44 * Tesla;
+IDS.U19.vchamber_thkness           = 0.075 * mm;
+IDS.U19.mech_tol                   = 0.025 * mm;
+IDS.U19.physical_gap               = IDS.U19.magnetic_gap - 2 * (IDS.U19.vchamber_thkness + IDS.U19.mech_tol);
 
 IDS.U25.id_label                   = 'U25';
 IDS.U25.nr_periods                 = 80;
@@ -100,6 +103,9 @@ IDS.U25.phase_csd                  =  0 * mm;
 IDS.U25.phase_cie                  =  0 * mm;
 IDS.U25.chamfer                    =  0  * mm;
 IDS.U25.magnetization              =  1.44 * Tesla;
+IDS.U25.vchamber_thkness           = 0.075 * mm;
+IDS.U25.mech_tol                   = 0.025 * mm;
+IDS.U25.physical_gap               = IDS.U25.magnetic_gap - 2 * (IDS.U25.vchamber_thkness + IDS.U25.mech_tol);
 
 
 %% EPUs
@@ -115,9 +121,11 @@ IDS.EPU80_PH.block_width          = 40 * mm;
 IDS.EPU80_PH.block_height         = 60 * mm;
 IDS.EPU80_PH.phase_csd            =  0 * mm;
 IDS.EPU80_PH.phase_cie            =  0 * mm;
-IDS.EPU80_PH.chamfer              =  0  * mm;
+IDS.EPU80_PH.chamfer              =  0 * mm;
 IDS.EPU80_PH.magnetization        =  (0.9/0.7037) * 0.7634 * Tesla;
-
+IDS.EPU80_PH.vchamber_thkness     = 1.00 * mm;
+IDS.EPU80_PH.mech_tol             = 0.50 * mm;
+IDS.EPU80_PH.physical_gap         = IDS.EPU80_PH.magnetic_gap - 2 * (IDS.EPU80_PH.vchamber_thkness + IDS.EPU80_PH.mech_tol);
 
 % --- epu50 ---
 IDS.EPU50_PH.id_label             = 'EPU50_PH';

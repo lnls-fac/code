@@ -12,17 +12,15 @@ if ~exist('id_def','var')
     %id_def = ids.W2T;
     %id_def = ids.U18;
     %id_def = ids.U19;
-    %id_def = ids.U25;
+    id_def = ids.U25;
     %id_def = ids.EPU50_PH;
     %id_def = ids.EPU50_PC;
     %id_def = ids.EPU50_PV;
     %id_def = ids.EPU200_PH;
     %id_def = ids.EPU200_PC;
     %id_def = ids.EPU200_PV;
-    id_def = ids.EPU80_PH;
-    %id_def = ids.UTEST;
-    
-    
+    %id_def = ids.EPU80_PH;
+    %id_def = ids.UTEST;  
 end
 
 % turns diary mode on
