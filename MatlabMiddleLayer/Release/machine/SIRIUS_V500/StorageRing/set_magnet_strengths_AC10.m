@@ -190,6 +190,32 @@ elseif strcmpi(mode_version,'AC10_6')
 %     sd1_strength       = -323.9457247288785 / 2;
 %     sf1_strength       =  377.9007031096051 / 2; 
 
+%moga0588-v500-ac10-6
+%     %%% QUADRUPOLOS
+%     %  =========== 
+%    
+%     qaf_strength       =  2.535724858398984;
+%     qad_strength       = -2.72955460119064 ;
+%     qbd2_strength      = -3.960661701890468;
+%     qbf_strength       =  3.902164277235203;
+%     qbd1_strength      = -2.967081458831678;
+%     qf1_strength       =  2.36938569713568 ;
+%     qf2_strength       =  3.35327822416183 ;
+%     qf3_strength       =  3.078506217925285;
+%     qf4_strength       =  2.70733856686752 ;
+%     
+%     %%% SEXTUPOLOS
+%     %  ==========    
+%     sa1_strength       = -130.149892249165 / 2;
+%     sa2_strength       =  57.77236323325154 / 2;
+%     sb1_strength       = -224.6811527292462/ 2;
+%     sb2_strength       =  127.9420610264198/ 2;
+%     sd2_strength       = -153.5288871220191/ 2;
+%     sd3_strength       = -282.7254770873486/ 2;
+%     sf2_strength       =  308.5865012223424/ 2;
+%     sd1_strength       = -321.2641907883568/ 2;
+%     sf1_strength       =  380.8365880364574/ 2; 
+
 
 %% Testes de otimizacao de injecao 02/10/2013
 % Apos Montar o script que simula a injecao no anel, notamos que estavamos
