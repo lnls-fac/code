@@ -1,6 +1,0 @@
-{Undefined function 'epu_create' for input arguments of type 'struct'.
-
-Error in <a href="matlab:helpUtils.errorDocCallback('create_ID', '/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/insertion_devices/id_modelling/create_ID.m', 36)" style="font-weight:bold">create_ID</a> (<a href="matlab: opentoline('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/insertion_devices/id_modelling/create_ID.m',36,0)">line 36</a>)
-id_model = epu_create(id_def);
-} 
-create_ID
