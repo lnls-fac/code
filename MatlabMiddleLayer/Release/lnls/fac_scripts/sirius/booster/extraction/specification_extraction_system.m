@@ -267,7 +267,8 @@ if param.sr.inject
     box(axes11,'on');
     hold(axes11,'on');
     %also, draw the septum's blade
-    pos_sef_blade = (12 + 0.5 + 3 + 0.5);
+%     pos_sef_blade = (12 + 0.5 + 3 + 0.5);
+    pos_sef_blade = (12 + 2.5);
     plot([-12,-12, -pos_sef_blade,-pos_sef_blade],[6, -2, -2, 6],'c','Parent',axes11, 'LineWidth',3);
     
     %and the incoming beam
