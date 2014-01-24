@@ -113,8 +113,8 @@ elseif strcmpi(mode_version,'AC10_6')
    % AC10_4, tentei minimizar os tuneshifts e obtive essa configuracão.
    % ela era a antiga test_inject_4k-4ta.]
    
-    %%% QUADRUPOLOS
-    %  =========== (os mesmos do AC10_4)
+%     %% QUADRUPOLOS
+    %=========== (os mesmos do AC10_4)
     
     qaf_strength       =  2.53733156985179;
     qad_strength       = -2.729928269122092;
@@ -126,8 +126,8 @@ elseif strcmpi(mode_version,'AC10_6')
     qf3_strength       =  3.080099756299886;
     qf4_strength       =  2.708484971587339;
 
-    %%% SEXTUPOLOS
-    %  ==========
+    %% SEXTUPOLOS
+    %==========
     sa1_strength       =   -64.5501;
     sa2_strength       =    28.5005;
     sb1_strength       =  -113.8315;
@@ -215,6 +215,32 @@ elseif strcmpi(mode_version,'AC10_6')
 %     sf2_strength       =  308.5865012223424/ 2;
 %     sd1_strength       = -321.2641907883568/ 2;
 %     sf1_strength       =  380.8365880364574/ 2; 
+
+%moga0971-v500-ac10-6
+%     %%% QUADRUPOLOS
+%     %  =========== 
+%    
+%     qaf_strength       = 2.535451895884474;
+%     qad_strength       =-2.725929350735566;
+%     qbd2_strength      =-3.953777623548974;
+%     qbf_strength       = 3.903381483667984;
+%     qbd1_strength      =-2.97146054692988 ;
+%     qf1_strength       = 2.367970526509503;
+%     qf2_strength       = 3.352876999694592;
+%     qf3_strength       = 3.081544485057456;
+%     qf4_strength       = 2.703477202378308;
+%     
+%     %%% SEXTUPOLOS
+%     %  ==========    
+%     sa1_strength       =-127.3883391040551 / 2;
+%     sa2_strength       =  58.0790834613335 / 2;
+%     sb1_strength       =-231.6889784941538 / 2;
+%     sb2_strength       = 126.1760419276741 / 2;
+%     sd2_strength       =-154.056971132508  / 2;
+%     sd3_strength       =-282.2421468978114 / 2;
+%     sf2_strength       = 311.564952935271  / 2;
+%     sd1_strength       =-319.9492958108365 / 2;
+%     sf1_strength       = 379.0377497710925 / 2; 
 
 
 %% Testes de otimizacao de injecao 02/10/2013

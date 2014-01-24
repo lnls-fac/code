@@ -43,15 +43,10 @@ if (any(strcmp(select,'rw_with_coating')) || strcmp(select,'all') || strcmp(sele
     i=i+1;
 end
 
-<<<<<<< HEAD
 
 %% Resistive wall from in-vaccum ondulators;
 if (any(strcmp(select,'iuv')) || strcmp(select,'all') || strcmp(select,'ring'))
     budget{i}.name = 'In-vac. Und. @ low betax';
-=======
-if (any(strcmp(select,'resistive_wall_with_coating')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'Wall With Coating';
->>>>>>> ee28773d547091bc9332061aeee51cbe3b7bb32d
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
     if strcmp(phase,'phase_2')
@@ -92,15 +87,9 @@ if (any(strcmp(select,'resistive_wall_with_coating')) || any(strcmp(select,'all'
     i=i+1;
 end
 
-<<<<<<< HEAD
+
 if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'In-vac. Und. @ high betax';
-=======
-
-%% Resistive wall from in-vaccum ondulators;
-if (any(strcmp(select,'in_vacuum_undulators')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'In-vac. Und. @ low betax';
->>>>>>> ee28773d547091bc9332061aeee51cbe3b7bb32d
     budget{i}.type = 'rw';
     budget{i}.quantity = 2;
     if strcmp(phase,'phase_2')
@@ -142,13 +131,8 @@ end
 
 
 %% Resistive wall from smallgap vacuum chambers;
-<<<<<<< HEAD
 if (any(strcmp(select,'epus')) || strcmp(select,'all') || strcmp(select,'ring'))
     budget{i}.name = 'EPUs';
-=======
-if (any(strcmp(select,'smallgap_undulators')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'Small Gap Undulators';
->>>>>>> ee28773d547091bc9332061aeee51cbe3b7bb32d
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
     if strcmp(phase,'phase_2')
@@ -405,14 +389,10 @@ if (any(strcmp(select,'broad_band')) || any(strcmp(select,'all')) || any(strcmp(
     budget{i}.quantity = 1;
     budget{i}.betax = 6.8;
     budget{i}.betay = 11;  
-<<<<<<< HEAD
     Zovern = 0.2;
     if strcmp(phase,'phase_2')
         Zovern = 0.4; 
     end
-=======
-    Zovern = 0.2; % phase 1 = 0.2 phase 2 = 0.4
->>>>>>> ee28773d547091bc9332061aeee51cbe3b7bb32d
     fr  = 2.4* 299792458/12e-3/2/pi; % 2.4 c/b/2/pi;
     budget{i}.Rsl = Zovern*fr/0.578e6; % = 3.6*518.25/354.0*1e3;
     budget{i}.wrl = fr*2*pi;
