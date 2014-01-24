@@ -46,6 +46,9 @@ IDS.SCW4T.phase_csd                =  0 * mm;
 IDS.SCW4T.phase_cie                =  0 * mm;
 IDS.SCW4T.chamfer                  =  0  * mm;
 IDS.SCW4T.magnetization            =  4.53 * (4/3); % gives 3T field
+IDS.SCW4T.vchamber_thkness         = 1.00 * mm;
+IDS.SCW4T.mech_tol                 = 0.50 * mm;
+IDS.SCW4T.physical_gap             = IDS.SCW4T.magnetic_gap - 2 * (IDS.SCW4T.vchamber_thkness + IDS.SCW4T.mech_tol);
 
 IDS.W2T.id_label                   = 'W2T';
 IDS.W2T.nr_periods                 = 15;
