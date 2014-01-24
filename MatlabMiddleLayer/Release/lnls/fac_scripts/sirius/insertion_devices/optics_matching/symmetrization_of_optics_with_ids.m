@@ -10,26 +10,40 @@ fitting_tol_symm = 0.01;
 fitting_tol_tune = 3.0;
 
 % loads ID definitions
+%ids_def = create_ids_def_PH_old;
+%ids_def = create_ids_def_PV_old;
+%ids_def = create_ids_def_PC_old;
+
 ids_def = create_ids_def_PH;
-%ids_def = create_ids_def_PV;
-% ids_def = create_ids_def_PC;
 
 % defines IDs to be inserted
 ids = [];
 
-ids = [ids ids_def.araucaria1];
-ids = [ids ids_def.araucaria2];
-ids = [ids ids_def.sibipiruna1];
-ids = [ids ids_def.sibipiruna2];
+% % old ID table
+% ids = [ids ids_def.araucaria1];
+% ids = [ids ids_def.araucaria2];
+% ids = [ids ids_def.sibipiruna1];
+% ids = [ids ids_def.sibipiruna2];
+% ids = [ids ids_def.caterete];
+% ids = [ids ids_def.mangabeira];
+% ids = [ids ids_def.manaca];
+% ids = [ids ids_def.carnauba];
+% ids = [ids ids_def.w2t];
+% ids = [ids ids_def.scw3t];
+% ids = [ids ids_def.inga1];
+% ids = [ids ids_def.inga2];
+
 ids = [ids ids_def.caterete];
-ids = [ids ids_def.mangabeira];
+ids = [ids ids_def.ema];
 ids = [ids ids_def.manaca];
 ids = [ids ids_def.carnauba];
-ids = [ids ids_def.w2t];
-ids = [ids ids_def.scw3t];
+ids = [ids ids_def.jatoba];
 ids = [ids ids_def.inga1];
 ids = [ids ids_def.inga2];
-
+ids = [ids ids_def.sabia1];
+ids = [ids ids_def.sabia2];
+ids = [ids ids_def.ipe1];
+ids = [ids ids_def.ipe2];
 
 % loads initial SIRIUS lattice model
 % global THERING
@@ -413,9 +427,89 @@ for i=1:length(etax_idx)
 end;
 
 
-
-
 function ids_def = create_ids_def_PH
+
+
+ids_def.caterete.label           = 'caterete';
+ids_def.caterete.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.caterete.nr_segs         = 20;
+ids_def.caterete.straight_label  = 'mib';
+ids_def.caterete.straight_number = 1;
+ids_def.caterete.strength        = 1;
+
+ids_def.ema.label           = 'ema';
+ids_def.ema.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.ema.nr_segs         = 20;
+ids_def.ema.straight_label  = 'mib';
+ids_def.ema.straight_number = 2;
+ids_def.ema.strength        = 1;
+
+ids_def.manaca.label           = 'manaca';
+ids_def.manaca.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.manaca.nr_segs         = 20;
+ids_def.manaca.straight_label  = 'mib';
+ids_def.manaca.straight_number = 3;
+ids_def.manaca.strength        = 1;
+
+ids_def.carnauba.label           = 'carnauba';
+ids_def.carnauba.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.carnauba.nr_segs         = 20;
+ids_def.carnauba.straight_label  = 'mib';
+ids_def.carnauba.straight_number = 4;
+ids_def.carnauba.strength        = 1;
+
+ids_def.jatoba.label           = 'jatoba';
+ids_def.jatoba.kicktable_file  = '../id_modelling/SCW4T/SCW4T_kicktable.txt';
+ids_def.jatoba.nr_segs         = 20;
+ids_def.jatoba.straight_label  = 'mib';
+ids_def.jatoba.straight_number = 6;
+ids_def.jatoba.strength        = 1;
+
+ids_def.inga1.label           = 'inga1';
+ids_def.inga1.kicktable_file  = '../id_modelling/U25/U25_kicktable.txt';
+ids_def.inga1.nr_segs         = 20;
+ids_def.inga1.straight_label  = 'mib';
+ids_def.inga1.straight_number = 7;
+ids_def.inga1.strength        = 1;
+
+ids_def.inga2.label           = 'inga2';
+ids_def.inga2.kicktable_file  = '../id_modelling/U25/U25_kicktable.txt';
+ids_def.inga2.nr_segs         = 20;
+ids_def.inga2.straight_label  = 'mib';
+ids_def.inga2.straight_number = 8;
+ids_def.inga2.strength        = 1;
+
+ids_def.sabia1.label           = 'sabia1';
+ids_def.sabia1.kicktable_file  = '../id_modelling/EPU80/EPU80_PH_kicktable.txt';
+ids_def.sabia1.nr_segs         = 20;
+ids_def.sabia1.straight_label  = 'mia';
+ids_def.sabia1.straight_number = 4;
+ids_def.sabia1.strength        = 1;
+
+ids_def.sabia2.label           = 'sabia2';
+ids_def.sabia2.kicktable_file  = '../id_modelling/EPU80/EPU80_PH_kicktable.txt';
+ids_def.sabia2.nr_segs         = 20;
+ids_def.sabia2.straight_label  = 'mia';
+ids_def.sabia2.straight_number = 5;
+ids_def.sabia2.strength        = 1;
+
+
+ids_def.ipe1.label           = 'ipe1';
+ids_def.ipe1.kicktable_file  = '../id_modelling/EPU80/EPU80_PH_kicktable.txt';
+ids_def.ipe1.nr_segs         = 20;
+ids_def.ipe1.straight_label  = 'mia';
+ids_def.ipe1.straight_number = 6;
+ids_def.ipe1.strength        = 1;
+
+ids_def.ipe2.label           = 'ipe2';
+ids_def.ipe2.kicktable_file  = '../id_modelling/EPU80/EPU80_PH_kicktable.txt';
+ids_def.ipe2.nr_segs         = 20;
+ids_def.ipe2.straight_label  = 'mia';
+ids_def.ipe2.straight_number = 7;
+ids_def.ipe2.strength        = 1;
+
+
+function ids_def = create_ids_def_PH_old
 
 
 ids_def.caterete.label           = 'caterete';
@@ -509,7 +603,7 @@ ids_def.sibipiruna2.straight_label  = 'mia';
 ids_def.sibipiruna2.straight_number = 7;
 ids_def.sibipiruna2.strength        = 1;
 
-function ids_def = create_ids_def_PV
+function ids_def = create_ids_def_PV_old
 
 
 ids_def.caterete.label           = 'caterete';
@@ -603,7 +697,7 @@ ids_def.sibipiruna2.straight_label  = 'mia';
 ids_def.sibipiruna2.straight_number = 7;
 ids_def.sibipiruna2.strength        = 1;
 
-function ids_def = create_ids_def_PC
+function ids_def = create_ids_def_PC_old
 
 
 ids_def.caterete.label           = 'caterete';
