@@ -7,7 +7,7 @@ addpath('epu');
 % reads data from ID model mat file
 %id_mat_file_name = fullfile('EPU50', 'EPU50_PC - ID.mat');
 %id_mat_file_name = fullfile('EPU80','EPU80_PH - ID.mat');
-id_mat_file_name = fullfile('U25','U25 - ID.mat');
+%id_mat_file_name = fullfile('U25','U25 - ID.mat');
 
 if ~exist('id_mat_file_name','var')
     [FileName,PathName,~] = uigetfile('*.mat','Select mat file with ID model','');
