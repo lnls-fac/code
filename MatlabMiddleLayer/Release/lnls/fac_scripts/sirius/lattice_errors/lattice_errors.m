@@ -8,18 +8,19 @@ p = mfilename('fullpath');
 [pathstr, ~, ~] = fileparts(p); 
 cd(pathstr);
 
-
 % inicializacoes basicas
-% files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
-%config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums'); 
-%config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums'); 
-%config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_coup'); 
-% config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_50ums'); 
-%config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs');
-%config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums_IDs_symm');
-% config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs_symm');
-%config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_newIDs');
-config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_test');
+if ~exist('config_folder', 'var')
+    % files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
+    %config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums'); 
+    %config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums'); 
+    %config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_coup'); 
+    % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_50ums'); 
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs');
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums_IDs_symm');
+    % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs_symm');
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_newIDs');
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_test');
+end
 
 AData = getappdata(0, 'AcceleratorData');
 if isempty(AData)
