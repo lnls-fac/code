@@ -10,6 +10,7 @@ end
 
 scale_x = 200e-6;
 scale_y = 100e-6;
+scale_kicks = 30e-6;
 
 if ~exist('frequency','var')
     fofb_attenuation = 0.0;
@@ -25,44 +26,48 @@ for i=selection
     sext_idx = getappdata(0, 'Sextupole_Idx');
     sext_str = getcellstruct(machine{i}, 'PolynomB', sext_idx, 1, 3);
     
-    for j=1:length(sextupole_ramp)
-              
-        best_fm = Inf;
-        machine{i} = set_sextupoles(machine{i}, sextupole_ramp(j), sext_str);
-        
-        if (sextupole_ramp(j) == 0)
-           [init_codx init_cody] = calc_cod(machine{i}); 
-           random_codx = r.errors.errors_x(i,r.params.bpm_idx);
-           random_cody = r.errors.errors_y(i,r.params.bpm_idx);
-           goal_codx = fofb_attenuation * init_codx(r.params.bpm_idx) + random_codx;
-           goal_cody = fofb_attenuation * init_cody(r.params.bpm_idx) + random_cody;
-        end;
-        
-        for s=sv_list
-            [machine{i} hkicks vkicks tcodx tcody] = cod_sg(r, s, machine{i}, nr_iterations, goal_codx, goal_cody);
-            fm = max([max(abs(tcodx))/scale_x; max(abs(tcody))/scale_y]);
-            if (fm < best_fm)
-                best_fm      = fm;
-                best_hkicks  = hkicks;
-                best_vkicks  = vkicks;
-                best_machine = machine{i};
-                best_codx    = tcodx;
-                best_cody    = tcody;
-            else
-                machine{i} = best_machine;
-            end
-        end 
+    best_fm = Inf;
+    for s=sv_list
+        for j=1:length(sextupole_ramp)
+            machine{i} = set_sextupoles(machine{i}, sextupole_ramp(j), sext_str);
+            
+            if (sextupole_ramp(j) == 0)
+                [init_codx init_cody] = calc_cod(machine{i});
+                random_codx = r.errors.errors_x(i,r.params.bpm_idx);
+                random_cody = r.errors.errors_y(i,r.params.bpm_idx);
+                goal_codx = fofb_attenuation * init_codx(r.params.bpm_idx) + random_codx;
+                goal_cody = fofb_attenuation * init_cody(r.params.bpm_idx) + random_cody;
+            end;
+            
+            [the_ring hkicks vkicks tcodx tcody nr_iterations] = cod_sg(r, s, machine{i}, goal_codx, goal_cody);
+        end
         % restores best config of orbit correction singular values
-        machine{i} = best_machine;
-        hkicks     = best_hkicks;
-        vkicks     = best_vkicks;
+        
+        fm = max([max(abs(tcodx))/scale_x; max(abs(tcody))/scale_y]);
+        %             fm = std(hkicks)/scale_kicks + std(vkicks)/scale_kicks + std(tcodx)/scale_x + std(tcody)/scale_y;
+        if (fm < best_fm)
+            best_fm      = fm;
+            best_hkicks  = hkicks;
+            best_vkicks  = vkicks;
+            best_machine = the_ring;
+            best_codx    = tcodx;
+            best_cody    = tcody;
+            best_s = s;
+            best_nr_iterations = nr_iterations;
+        end
+        
         if (j == 1),
             machine{i} = set_ids(machine{i}, 'on');
         end
     end
+    
+    machine{i} = best_machine;
+    hkicks     = best_hkicks;
+    vkicks     = best_vkicks;
+    
     codx(i,:)    = best_codx;
-    cody(i,:)    = best_cody;   
-    fprintf('%03i| codx[um] %6.2f(max) %6.2f(std) | cody[um] %6.2f(max) %6.2f(std) | max. kick x y [mrad] %5.3f %5.3f\n', i, 1e6*max(abs(codx(i,:))), 1e6*std(codx(i,:)), 1e6*max(abs(cody(i,:))), 1e6*std(cody(i,:)), 1e3*max(abs(hkicks)), 1e3*max(abs(vkicks)));
+    cody(i,:)    = best_cody;
+    fprintf('%03i| nrsv %03i | ite %03i | codx[um] %6.2f(max) %6.2f(std) | cody[um] %6.2f(max) %6.2f(std) | max. kick x y [mrad] %5.3f %5.3f\n', i,best_s, best_nr_iterations, 1e6*max(abs(codx(i,:))), 1e6*std(codx(i,:)), 1e6*max(abs(cody(i,:))), 1e6*std(cody(i,:)), 1e3*max(abs(hkicks)), 1e3*max(abs(vkicks)));
 end
 
 hkicks = zeros(length(machine), length(r.params.the_ring));
@@ -79,7 +84,7 @@ dlmwrite([r.config.label '_corrector_vkicks.dat'],      1e3*vkicks, 'precision',
 fprintf('\n');
 
 
-function [the_ring hkicks vkicks codx cody] = cod_sg(r, nr_sing_values, the_ring0, nr_iterations, goal_codx, goal_cody)
+function [the_ring hkicks vkicks codx cody nr_iterations] = cod_sg(r, nr_sing_values, the_ring0, goal_codx, goal_cody)
 
 the_ring = the_ring0;
 
@@ -94,23 +99,39 @@ diS(nr_sing_values+1:end) = 0;
 iS = diag(diS);
 CM = -(V*iS*U');
 
-for k=1:nr_iterations
+twiss = calctwiss(r.params.the_ring); %
+betax = twiss.betax';%
+betay = twiss.betay';%
+
+
+[codx cody] = calc_cod(the_ring);
+% codx = codx./sqrt(betax);%
+% cody = cody./sqrt(betay);%
+
+tota_hkicks = getcellstruct(the_ring, 'KickAngle', r.params.hcm_idx, 1, 1);
+tota_vkicks = getcellstruct(the_ring, 'KickAngle', r.params.vcm_idx, 1, 2);
+nr_iterations = 0;
+change = Inf;
+while (change > 1e-9) && (nr_iterations < 100)
+    nr_iterations = nr_iterations + 1;
+    cod_ini = [codx, cody];
     % calcs kicks
-    [codx cody] = calc_cod(the_ring);
     delta_kick = CM * [codx(r.params.bpm_idx)' - goal_codx(:); cody(r.params.bpm_idx)' - goal_cody(:)];
     % sets kicks
     delt_hkicks = delta_kick(1:length(r.params.hcm_idx));
     delt_vkicks = delta_kick((1+length(r.params.hcm_idx)):end);
-    init_hkicks = getcellstruct(the_ring, 'KickAngle', r.params.hcm_idx, 1, 1);
-    init_vkicks = getcellstruct(the_ring, 'KickAngle', r.params.vcm_idx, 1, 2);
-    tota_hkicks = init_hkicks + delt_hkicks;
-    tota_vkicks = init_vkicks + delt_vkicks;
+    tota_hkicks = tota_hkicks + delt_hkicks;
+    tota_vkicks = tota_vkicks + delt_vkicks;
     the_ring = setcellstruct(the_ring, 'KickAngle', r.params.hcm_idx, tota_hkicks, 1, 1);
     the_ring = setcellstruct(the_ring, 'KickAngle', r.params.vcm_idx, tota_vkicks, 1, 2);
+    [codx cody] = calc_cod(the_ring);
+%     codx = codx./sqrt(betax);%
+%     cody = cody./sqrt(betay);%
+    change = sum(abs(cod_ini - [codx, cody]));
 end
-hkicks = getcellstruct(the_ring, 'KickAngle', r.params.hcm_idx, 1, 1);
-vkicks = getcellstruct(the_ring, 'KickAngle', r.params.vcm_idx, 1, 2);
-[codx cody] = calc_cod(the_ring);
+hkicks = tota_hkicks;
+vkicks = tota_vkicks;
+
 
 
 function factor = fofb_attenuation_factor(frequency)

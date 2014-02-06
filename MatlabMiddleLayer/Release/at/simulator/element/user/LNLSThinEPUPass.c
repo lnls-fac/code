@@ -1,5 +1,6 @@
 /* LNLSThinEPUPass.c
    Accelerator Toolbox 
+   ximenes@lnls.br
 */
 
 #include <stdlib.h>

@@ -1,9 +1,11 @@
 function residual_orbit_sextupoles()
 
-file = 'CONFIG';
-nr_machines = 10;
+file = 'CONFIG_V500_AC10_6_40ums';
+
 
 r = load([file '_machines_cod_corrected.mat']);
+nr_machines = length(r.machine);
+
 bare_ring = load([file '_the_ring.mat']);
 [baretune barechrom] = tunechrom(bare_ring.the_ring,0,[0.40 0.27],'chrom','coup');
 
@@ -16,13 +18,23 @@ sext_idx  = sext_idx(sext_idx2);
 sext_len  = getcellstruct(bare_ring.the_ring,'Length',sext_idx);
 sext_len  = repmat(sext_len,1,nr_machines);
 
-codx       = load([file '_codx_corrected.dat']);
-codx       = codx(:,sext_idx)';
+
+codx = zeros(nr_machines,length(r.machine{1}));
+cody = codx;
+for ii=1:nr_machines
+    the_ring0 = r.machine{ii};
+    cod = findorbit4(the_ring0,0,1:length(the_ring0));
+    codx(ii,:) = cod(1,:);
+    cody(ii,:) = cod(3,:);
+end
+
+% codx       = load([file '_codx_corrected.dat']);
+codx       = 1e6*codx(:,sext_idx)';
 std_codx   = std(codx);
 max_codx   = max(abs(codx));
 
-cody      = load([file '_cody_corrected.dat']);
-cody       = cody(:,sext_idx)';
+% cody      = load([file '_cody_corrected.dat']);
+cody       = 1e6*cody(:,sext_idx)';
 std_cody   = std(cody);
 max_cody   = max(abs(cody));
 
