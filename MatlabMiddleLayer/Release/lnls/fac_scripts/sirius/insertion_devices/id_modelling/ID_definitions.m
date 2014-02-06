@@ -130,6 +130,22 @@ IDS.EPU80_PH.vchamber_thkness     = 1.00 * mm;
 IDS.EPU80_PH.mech_tol             = 0.50 * mm;
 IDS.EPU80_PH.physical_gap         = IDS.EPU80_PH.magnetic_gap - 2 * (IDS.EPU80_PH.vchamber_thkness + IDS.EPU80_PH.mech_tol);
 
+IDS.EPU80_PV.id_label             = 'EPU80_PV';
+IDS.EPU80_PV.period               = 80 * mm;
+IDS.EPU80_PV.nr_periods           = 38;
+IDS.EPU80_PV.magnetic_gap         = 16.0 * mm;
+IDS.EPU80_PV.cassette_separation  = 0.001 * mm; % diferente de zero para evitar singularidades nas express?es
+IDS.EPU80_PV.block_separation     = 0  * mm;
+IDS.EPU80_PV.block_width          = 40 * mm;
+IDS.EPU80_PV.block_height         = 60 * mm;
+IDS.EPU80_PV.phase_csd            = 40 * mm;
+IDS.EPU80_PV.phase_cie            = 40 * mm;
+IDS.EPU80_PV.chamfer              =  0 * mm;
+IDS.EPU80_PV.magnetization        =  (0.9/0.7037) * 0.7634 * Tesla;
+IDS.EPU80_PV.vchamber_thkness     = 1.00 * mm;
+IDS.EPU80_PV.mech_tol             = 0.50 * mm;
+IDS.EPU80_PV.physical_gap         = IDS.EPU80_PV.magnetic_gap - 2 * (IDS.EPU80_PV.vchamber_thkness + IDS.EPU80_PV.mech_tol);
+
 % --- epu50 ---
 IDS.EPU50_PH.id_label             = 'EPU50_PH';
 IDS.EPU50_PH.period               = 50 * mm;

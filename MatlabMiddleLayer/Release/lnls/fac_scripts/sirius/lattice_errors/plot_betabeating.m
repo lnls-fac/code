@@ -1,4 +1,4 @@
-function plot_betabeating(machine_fname, thering_fname)
+function plot_betabeating(machbef_fname, machaft_fname, thering_fname)
 
 clc;
 
@@ -55,21 +55,19 @@ xmin = 0; xmax = twiss0.pos(end)/(symmetry - 0.0000001);
 ymin = 0; ymax = 20;
 
 for i=1:length(mach_aft)
-    betax_bef_diff(i,:) = 100*(twiss_bef(i).betax - twiss0.betax)./twiss0.betax;
-    betay_bef_diff(i,:) = 100*(twiss_bef(i).betay - twiss0.betay)./twiss0.betay;
-    betax_aft_diff(i,:) = 100*(twiss_aft(i).betax - twiss0.betax)./twiss0.betax;
-    betay_aft_diff(i,:) = 100*(twiss_aft(i).betay - twiss0.betay)./twiss0.betay;
+    betax_bef_diff(i,:) = 100*(abs(twiss_bef(i).betax - twiss0.betax))./twiss0.betax;
+    betay_bef_diff(i,:) = 100*(abs(twiss_bef(i).betay - twiss0.betay))./twiss0.betay;
+    betax_aft_diff(i,:) = 100*(abs(twiss_aft(i).betax - twiss0.betax))./twiss0.betax;
+    betay_aft_diff(i,:) = 100*(abs(twiss_aft(i).betay - twiss0.betay))./twiss0.betay;
     data = betax_bef_diff;
-    data(betax_bef_diff<0) = 0;
     plot(twiss_bef(i).pos, data, 'Color', [0.7 0.7 1.0]);
     data = betay_bef_diff;
-    data(betay_bef_diff>0) = 0;
-    plot(twiss_bef(i).pos, data, 'Color', [1.0 0.7 0.7]);
+    plot(twiss_bef(i).pos, -data, 'Color', [1.0 0.7 0.7]);
 end
-plot(twiss0.pos, sqrt(sum(betax_bef_diff.^2)/size(betax_bef_diff,1)), 'Color', [0 0 1.0], 'LineWidth', 2.5);
-plot(twiss0.pos, sqrt(sum(betax_aft_diff.^2)/size(betax_aft_diff,1)), 'Color', [0 0 1.0], 'LineWidth', 2.5);
-plot(twiss0.pos, -sqrt(sum(betay_bef_diff.^2)/size(betay_bef_diff,1)), 'Color', [1.0 0 0], 'LineWidth', 2.5);
-plot(twiss0.pos, -sqrt(sum(betay_aft_diff.^2)/size(betay_aft_diff,1)), 'Color', [1.0 0 0], 'LineWidth', 2.5);
+plot(twiss0.pos,  std(betax_bef_diff), 'Color', [0 0 1.0], 'LineWidth', 2.5);
+plot(twiss0.pos,  std(betax_aft_diff), 'Color', [0 0 1.0], 'LineWidth', 2.5);
+plot(twiss0.pos, -std(betay_bef_diff), 'Color', [1.0 0 0], 'LineWidth', 2.5);
+plot(twiss0.pos, -std(betay_aft_diff), 'Color', [1.0 0 0], 'LineWidth', 2.5);
 
 %plot(twiss0.pos, twiss0.betax, 'Color', [0 0 1], 'LineWidth', 2.5);
 %axis([xmin, xmax, ymin, ymax]);

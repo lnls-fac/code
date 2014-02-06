@@ -13,12 +13,13 @@ cd(pathstr);
 % files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
 %config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums'); 
 %config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums'); 
-% config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_coup'); 
+%config_folder  = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_coup'); 
 % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_50ums'); 
 %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs');
 %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums_IDs_symm');
 % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs_symm');
-
+%config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_newIDs');
+%config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_test');
 
 AData = getappdata(0, 'AcceleratorData');
 if isempty(AData)
@@ -64,7 +65,8 @@ for i=1:length(r.config.errors_delta)
                 
         r.init_cod = calc_init_cod(r, selection);
         
-        % faz correcao de orbita ligando gradualmente os campos dos sextupolos
+        % faz correcao de orbita ligando gradualmente os campos dos
+        % sextupolos e os IDs (apos 1a iteracao da correcao)
         fprintf('< correcting COD with ramping up sextupoles... > \n\n');
         if isfield(r.params, 'cod_fofb_frequency')
             r.machine = correct_cod(r, selection, r.params.cod_sextupoles_ramp, r.params.cod_svs, r.params.cod_nr_iter, r.params.cod_fofb_frequency);
