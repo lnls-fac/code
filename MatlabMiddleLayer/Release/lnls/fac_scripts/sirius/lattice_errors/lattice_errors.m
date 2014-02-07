@@ -1,6 +1,6 @@
 function r = lattice_errors(config_folder)
 
-clc; % close('all'); fclose('all'); drawnow;
+%clc; % close('all'); fclose('all'); drawnow;
 
 % apaga variaveis temporarias criadas em appdata por calculos anteriores
 clear_appdata();
@@ -19,7 +19,9 @@ if ~exist('config_folder', 'var')
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_30ums_IDs_symm');
     % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_IDs_symm');
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_newIDs');
-    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_test');
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_6_40ums_test');
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs');
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs_symm');
 end
 
 AData = getappdata(0, 'AcceleratorData');
@@ -35,6 +37,7 @@ fprintf('< loading configuration parameters... > \n\n');
 mfiles = dir('*.m'); config_label = strrep(mfiles(1).name,'.m','');
 r = eval(config_label);
 selection = 1:r.config.nr_machines;
+%selection = 5;
 fprintf('\n');
 
 %selection = 93;
