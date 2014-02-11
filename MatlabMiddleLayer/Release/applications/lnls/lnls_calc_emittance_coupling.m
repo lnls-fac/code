@@ -1,11 +1,8 @@
-function coupling = lnls_calc_emittance_coupling(the_ring, xlist, yvalue)
+function [coupling, xlist] = lnls_calc_emittance_coupling(the_ring, xlist)
 
 % arguments
 if ~exist('xlist','var')
     xlist = 1e-3 * linspace(-0.1,0.1,10);
-end
-if ~exist('xvalue','var')
-    yvalue = 0;
 end
 
 nr_turns = 30;
@@ -18,17 +15,15 @@ cod = [findorbit4(the_ring, 0); 0; 0];
 % calcs twiss
 twiss = calctwiss(the_ring);
 
-% does tracking (arounf closed orbit)
-r = zeros(1,length(xlist));
+% does tracking (around closed orbit)
+coupling = zeros(1,length(xlist));
 for i=1:length(xlist)
-    pos_init = cod + [xlist(i); 0; yvalue + 1e-5*xlist(i); 0; 0; 0];
+    pos_init = cod + [xlist(i); 0; 1e-5*xlist(i); 0; 0; 0];
     traj = ringpass(the_ring, pos_init, nr_turns);
     dtraj = traj - repmat(cod, 1, nr_turns);
     [emitx, emity] = calc_emittances(dtraj, twiss, 1);
-    r(i) = emity / emitx;
+    coupling(i) = emity / emitx;
 end
-
-coupling = mean(r);
 
 
 
