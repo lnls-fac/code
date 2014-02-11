@@ -1101,7 +1101,7 @@ void lnls_Ring_Fittune(Vector2 &nu, double eps, int n_quads, long nq[], long qua
 	struct LOC_Ring_Fittune V;
 
 	int      i, j, k;
-	double nu0[2], nu1[2], dnumin, Kmin[2], K[2];
+	double nu0[2], nu1[2], dnumin, Kmin[5], K[5];
 	double **U, *w, **Vi, *dnu, *dnu1, *dkL1;
 
 	bool prt = false;
@@ -1122,7 +1122,8 @@ void lnls_Ring_Fittune(Vector2 &nu, double eps, int n_quads, long nq[], long qua
 	nu0[0] = globval.TotalTune[0]; nu0[1] = globval.TotalTune[1];
 // calc parameters before loop 2013-03-07
 	for (j = 0; j <= 1; j++)
-		dnu[j+1] = nu[j] - (long)nu[j] - nu0[j] + (long)nu0[j];
+		dnu[j+1] = nu[j] - nu0[j];
+//11/02/2014	dnu[j+1] = nu[j] - (long)nu[j] - nu0[j] + (long)nu0[j];
 
 	dnumin = sqrt(sqr(dnu[1])+sqr(dnu[2]));
 	for(j = 1; j <= n_quads; j++) {
@@ -1141,7 +1142,8 @@ void lnls_Ring_Fittune(Vector2 &nu, double eps, int n_quads, long nq[], long qua
 			nu1[0] = globval.TotalTune[0]; nu1[1] = globval.TotalTune[1];
 			checkifstable(&V);
 			for (k = 0; k <= 1; k++) {
-				dnu1[k+1] = nu1[k] - (long)nu1[k] - nu0[k] + (long)nu0[k];
+				dnu1[k+1] = nu1[k] - nu0[k];
+//11/02/2014	dnu1[k+1] = nu1[k] - (long)nu1[k] - nu0[k] + (long)nu0[k];
 				if (fabs(dnu1[k+1]) > 0.5) dnu1[k+1] = 1 - fabs(dnu1[k+1]);
 				U[k+1][j] = dnu1[k+1]/dkL;
 			}
@@ -1166,7 +1168,8 @@ void lnls_Ring_Fittune(Vector2 &nu, double eps, int n_quads, long nq[], long qua
 		nu0[0] = globval.TotalTune[0]; nu0[1] = globval.TotalTune[1];
 
 		for (j = 0; j <= 1; j++)
-			dnu[j+1] = nu[j] - (long)nu[j] - nu0[j] + (long)nu0[j];
+			dnu[j+1] = nu[j] - nu0[j];
+//11/02/2014 dnu[j+1] = nu[j] - (long)nu[j] - nu0[j] + (long)nu0[j];
 // keep the best result so far 2013-03-07, Fernando.
 		if ( sqrt(sqr(dnu[1])+sqr(dnu[2])) <= dnumin )
 		{
