@@ -113,30 +113,30 @@ elseif strcmpi(mode_version,'AC10_6')
    % AC10_4, tentei minimizar os tuneshifts e obtive essa configuracão.
    % ela era a antiga test_inject_4k-4ta.]
    
-%     %% QUADRUPOLOS
-%     %=========== (os mesmos do AC10_4)
-%     
-%     qaf_strength       =  2.53733156985179;
-%     qad_strength       = -2.729928269122092;
-%     qbd2_strength      = -3.960473342625189;
-%     qbf_strength       =  3.902662679038675;
-%     qbd1_strength      = -2.9676529175558;
-%     qf1_strength       =  2.368979188452946;
-%     qf2_strength       =  3.354162681362089;
-%     qf3_strength       =  3.080099756299886;
-%     qf4_strength       =  2.708484971587339;
-% 
-%     %% SEXTUPOLOS
-%     %==========
-%     sa1_strength       =   -64.5501;
-%     sa2_strength       =    28.5005;
-%     sb1_strength       =  -113.8315;
-%     sb2_strength       =    64.6216;
-%     sd2_strength       =   -76.9782;
-%     sd3_strength       =  -142.3458;
-%     sf2_strength       =   154.1521;
-%     sd1_strength       =  -161.1970;
-%     sf1_strength       =   190.8217; 
+    %% QUADRUPOLOS
+    %=========== (os mesmos do AC10_4)
+    
+    qaf_strength       =  2.53733156985179;
+    qad_strength       = -2.729928269122092;
+    qbd2_strength      = -3.960473342625189;
+    qbf_strength       =  3.902662679038675;
+    qbd1_strength      = -2.9676529175558;
+    qf1_strength       =  2.368979188452946;
+    qf2_strength       =  3.354162681362089;
+    qf3_strength       =  3.080099756299886;
+    qf4_strength       =  2.708484971587339;
+
+    %% SEXTUPOLOS
+    %==========
+    sa1_strength       =   -64.5501;
+    sa2_strength       =    28.5005;
+    sb1_strength       =  -113.8315;
+    sb2_strength       =    64.6216;
+    sd2_strength       =   -76.9782;
+    sd3_strength       =  -142.3458;
+    sf2_strength       =   154.1521;
+    sd1_strength       =  -161.1970;
+    sf1_strength       =   190.8217; 
     
 %moga0178-big_tilt_res, a partir do v500_ac10_6
 %     %%% QUADRUPOLOS
@@ -243,31 +243,31 @@ elseif strcmpi(mode_version,'AC10_6')
 %     sf1_strength       = 379.0377497710925 / 2; 
 
 
-%moga0971-v500-ac10-6
-    %%% QUADRUPOLOS
-    %  =========== 
-   
-    qaf_strength       = 2.53627471188854 ;
-    qad_strength       =-2.728516246314001;
-    qbd2_strength      =-3.960731975941231;
-    qbf_strength       = 3.902685235940207;
-    qbd1_strength      =-2.966107539831392;
-    qf1_strength       = 2.368563702010446;
-    qf2_strength       = 3.354137465244811;
-    qf3_strength       = 3.080831622651167;
-    qf4_strength       = 2.706601660977516;
-    
-    %%% SEXTUPOLOS
-    %  ==========    
-    sa1_strength       =-129.2175540266447  / 2;
-    sa2_strength       =  58.92830423059801 / 2;
-    sb1_strength       =-228.4943394823198  / 2;
-    sb2_strength       = 130.2215473611024  / 2;
-    sd2_strength       =-155.3117813888325  / 2;
-    sd3_strength       =-285.8782716986572  / 2;
-    sf2_strength       = 308.6658193331957  / 2;
-    sd1_strength       =-317.842366961223   / 2;
-    sf1_strength       = 381.0585236938746  / 2; 
+%mogaNew0403-v500-ac10-6
+%     %%% QUADRUPOLOS
+%     %  =========== 
+%    
+%     qaf_strength       = 2.53627471188854 ;
+%     qad_strength       =-2.728516246314001;
+%     qbd2_strength      =-3.960731975941231;
+%     qbf_strength       = 3.902685235940207;
+%     qbd1_strength      =-2.966107539831392;
+%     qf1_strength       = 2.368563702010446;
+%     qf2_strength       = 3.354137465244811;
+%     qf3_strength       = 3.080831622651167;
+%     qf4_strength       = 2.706601660977516;
+%     
+%     %%% SEXTUPOLOS
+%     %  ==========    
+%     sa1_strength       =-129.2175540266447  / 2;
+%     sa2_strength       =  58.92830423059801 / 2;
+%     sb1_strength       =-228.4943394823198  / 2;
+%     sb2_strength       = 130.2215473611024  / 2;
+%     sd2_strength       =-155.3117813888325  / 2;
+%     sd3_strength       =-285.8782716986572  / 2;
+%     sf2_strength       = 308.6658193331957  / 2;
+%     sd1_strength       =-317.842366961223   / 2;
+%     sf1_strength       = 381.0585236938746  / 2; 
 
 
 
