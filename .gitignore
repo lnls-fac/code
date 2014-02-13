@@ -28,6 +28,7 @@
 *.pyc
 trackc++-debug
 tracy
+tracyd
 .depend
 COMMIT_EDITMSG
 *DS_Store
