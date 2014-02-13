@@ -3,13 +3,13 @@ param.Rin = [0;0.0;0;0;0;0];
 
 %Definition of the bunch to be used:
 param.n_part = 10000;
-param.cutoff = 3;
+param.cutoff = 1;
 param.emitx = 3.8e-9;
 param.emity = param.emitx*20/100;
 param.sigmae= 9e-4;
 param.sigmas= 11.3e-3;
 
-param.number_simu = 1;
+param.number_simu = 50;
 
 %% Definition of Booster's parameters
 
@@ -18,20 +18,20 @@ synchrotron = sirius_booster_lattice;
 %carrega maquinas com erros de orbitas:
 param.boo.simulate_orbit_errors = false;
 % lattice_errors([pwd '/cod_matlab']);
-% machines = load('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/booster/extraction/cod_matlab/CONFIG_machines_cod_corrected.mat');
-% machines = machines.machine;
+machines = load('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/booster/extraction/cod_matlab/CONFIG_machines_cod_corrected.mat');
+machines = machines.machine;
 
 
 % kicker angle
 param.boo.kick_ang =1.1e-3;
-param.boo.kick_err = 5e-3; % tested!
+param.boo.kick_err = 0*5e-3; % tested!
 param.boo.seb_leak= 0e-4;
 
 
 %% Definition of the Transport line parameters
 
 % mode of operation
-param.ltba.mode = 'matched';
+param.ltba.mode = 'mismatched_4k';
 
 % Load the transfer line
 [transfer_line IniCond] = ltba_lattice(param.ltba.mode);
@@ -45,7 +45,7 @@ param.ltba.seb_x = (  18    +  0.5  +   3    +  0.5   +   9/2)*1e-3; %position
 param.ltba.seb_xp = -0.38/180*pi*1;%angle
 % septum deflection angle and error (total for both septa)
 param.ltba.seb_dang = 1.07e-4; % additional angle of deflection of the particle.
-param.ltba.seb_err = 5e-4; % tested
+param.ltba.seb_err = 0*7e-4; % tested
 
 
 % Definition of the THIN SEPTUM's position in relation to the storage ring:
@@ -59,19 +59,19 @@ param.ltba.sef_xp = 0;%angle
 % septum deflection angle and error 
 % param.ltba.sef_dang = -4.05e-3; % additional angle to deflect of the particle.
 param.ltba.sef_dang = 0.45e-3*0;
-param.ltba.sef_err  = 1e-4; % tested
+param.ltba.sef_err  = 0*7e-4; % tested
 
 
 % THICK SEPTUM's deflection angle, error and leak field 
 % param.ltba.seg_dang = 0.8e-3; % additional angle to deflect the particle.
 param.ltba.seg_dang = -0.45e-3*0;
-param.ltba.seg_err  = 1e-4; %tested
+param.ltba.seg_err  = 0*7e-4; %tested
 
 
 %% Definition of the Storage Ring parameters
 
 % Load the sirius lattice;
-storage_ring = sirius_lattice('ac10_6');
+storage_ring = sirius_lattice('ac10_5');
 
 % Simulate injection in the storage ring too?
 param.sr.inject = true;
@@ -94,7 +94,7 @@ param.sr.kick.nturns = 8.3e-6/518.25*299792458; % half sine pulse width
 param.sr.kick.angle  = 6.7e-3; % angle for each kicker
 param.sr.kick.pha_err = 0e-4; % phase errors among kickers
 param.sr.kick.amp_err = 0e-4; % amplitude errors among kickers
-param.sr.kick.deform_err = 2e-5; % a defomation of the shape of the bump
+param.sr.kick.deform_err = 0;%2e-5; % a defomation of the shape of the bump
 % the deformation error is not included in the simulation of the injected
 % beam, only in the perturbation of the stored one.
 
@@ -112,5 +112,5 @@ param.sr.perturb_stored_beam = true;
 param.sr.nturns_pert         = 100; % must be > param.sr.{pmm,kick}.nturns
 % septum's half sine pulse width in units of number of turns
 %                     per  / circ *   c
-param.sr.sef_width = 116e-6/518.25*299792458;
+param.sr.sef_width = 116e-6/518.396*299792458;
 

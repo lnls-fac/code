@@ -25,6 +25,12 @@ meth = 'naff';
 nt = nextpow2(nturns);
 nturns = 2^nt + 6 - mod(2^nt,6);
 
+
+
+orb = findorbit6(the_ring);
+if any(isnan(orb))
+    orb = [findorbit4(the_ring,0);0;0];
+end
 % calula os tunes do anel
 [~, tunes] = twissring(the_ring, 0, 1:length(the_ring)+1);
 
@@ -33,7 +39,7 @@ nturns = 2^nt + 6 - mod(2^nt,6);
 % a posicao vertical inicial para 1e-5 para evitar singularidades do mapa
 % de transferencia e tornar possivel a obtencao da sintonia vertical
 x_amps = x_amps(:);
-Rinx  = [x_amps'; zeros(1,length(x_amps)); 1e-5*ones(1,length(x_amps)); zeros(3,length(x_amps))];
+Rinx  = [x_amps'+orb(1); zeros(1,length(x_amps))+orb(2); 1e-5*ones(1,length(x_amps))+orb(3); zeros(3,length(x_amps))+repmat(orb(4:6),1,length(x_amps))];
 Routx = ringpass(the_ring,Rinx,nturns);
 coordx_x  = reshape(Routx(1,:),length(x_amps),nturns);
 coordxl_x = reshape(Routx(2,:),length(x_amps),nturns);
@@ -58,7 +64,7 @@ fprintf(' [mm] nao sobreviveram\n');
 %%
 % a mesma coisa que foi feita para a horizontal eh repetida para vertical
 y_amps = y_amps(:);
-Riny  = [1e-5*ones(1,length(y_amps)); zeros(1,length(y_amps)); y_amps'; zeros(3,length(y_amps))];
+Riny  = [1e-5*ones(1,length(y_amps))+orb(1); zeros(1,length(y_amps))+orb(2); y_amps'+orb(3); zeros(3,length(y_amps))+repmat(orb(4:6),1,length(y_amps))];
 Routy = ringpass(the_ring,Riny,nturns);
 coordx_y  = reshape(Routy(1,:),length(y_amps),nturns);
 coordxl_y = reshape(Routy(2,:),length(y_amps),nturns);
@@ -82,9 +88,9 @@ fprintf(' [mm] nao sobreviveram\n');
 %%
 % e agora para as amplitudes de energia
 en_amps = en_amps(:);
-Rinen  = [1e-4*ones(1,length(en_amps)); zeros(1,length(en_amps)); ...
-          1e-4*ones(1,length(en_amps)); zeros(1,length(en_amps)); ...
-          en_amps'; zeros(1,length(en_amps))];
+Rinen  = [1e-4*ones(1,length(en_amps))+orb(1); zeros(1,length(en_amps))+orb(2); ...
+          1e-4*ones(1,length(en_amps))+orb(3); zeros(1,length(en_amps))+orb(4); ...
+          en_amps'+orb(5); zeros(1,length(en_amps))+orb(6)];
 Routen = ringpass(the_ring,Rinen,nturns);
 coordx_en  = reshape(Routen(1,:),length(en_amps),nturns);
 coordxl_en = reshape(Routen(2,:),length(en_amps),nturns);

@@ -15,17 +15,17 @@ r.config.nr_machines       = 50;
 r.config.cutoff_errors     = 2;
 r.config.errors_delta      = 1;
 
-r.config.families.quads.sigma_x      = 100 * um * 1;
-r.config.families.sexts.sigma_x      = 100 * um * 1;
-r.config.families.bends.sigma_x      = 100 * um * 1;
+r.config.families.quads.sigma_x      = 0.4 * um * 1;
+r.config.families.sexts.sigma_x      = 2.5 * um * 1;
+r.config.families.bends.sigma_x      = 2.5 * um * 1;
 
-r.config.families.quads.sigma_y      = 100 * um * 1;
-r.config.families.sexts.sigma_y      = 100 * um * 1;
-r.config.families.bends.sigma_y      = 100 * um * 1;
+r.config.families.quads.sigma_y      = 10 * um * 1;
+r.config.families.sexts.sigma_y      = 10 * um * 1;
+r.config.families.bends.sigma_y      = 8 * um * 1;
 
-r.config.families.quads.sigma_roll   = 0.50 * mrad * 1;
-r.config.families.sexts.sigma_roll   = 0.50 * mrad * 1;
-r.config.families.bends.sigma_roll   = 0.50 * mrad * 1;
+r.config.families.quads.sigma_roll   = 0.50 * mrad * 0;
+r.config.families.sexts.sigma_roll   = 0.50 * mrad * 0;
+r.config.families.bends.sigma_roll   = 0.50 * mrad * 0;
 
 %para determinar erros de yaw e pitch tomei por base o deslocamento do
 %extremo do elemento em relacao a posicao ideal.
@@ -37,17 +37,17 @@ r.config.families.quads.sigma_pitch  = 0.70 * mrad * 0;
 r.config.families.sexts.sigma_pitch  = 1.50 * mrad * 0;
 r.config.families.bends.sigma_pitch  = 0.20 * mrad * 0;
 
-r.config.families.quads.sigma_e      = 0.2 * percent * 1;
-r.config.families.sexts.sigma_e      = 0.2 * percent * 1;
-r.config.families.bends.sigma_e      = 0.1 * percent * 1;
-r.config.families.bends.sigma_e_kdip = 0.50 * percent * 1;
+r.config.families.quads.sigma_e      = 0.2 * percent * 0;
+r.config.families.sexts.sigma_e      = 0.2 * percent * 0;
+r.config.families.bends.sigma_e      = 0.1 * percent * 0;
+r.config.families.bends.sigma_e_kdip = 0.50 * percent * 0;
 
 r.config.families.quads.labels = {'QD','QF'};
 r.config.families.quads.nrsegs = [1 2];
 r.config.families.sexts.labels = {'SD','SF'};
 r.config.families.sexts.nrsegs = ones(1, 2);
 r.config.families.bends.labels = {'B'};
-r.config.families.bends.nrsegs = 3;
+r.config.families.bends.nrsegs = 1;
 
 %% loads ring nominal AT model
 % r.params.the_ring = r.config.lattice_function(r.config.lattice_func_arg);
@@ -75,7 +75,7 @@ r.params.ele_idx = 1:length(r.params.the_ring);
 % r.params.kbs_idx = findcells(r.params.the_ring, 'K');
 % r.params.kbs_idx = setdiff(r.params.kbs_idx, findcells(r.params.the_ring, 'BendingAngle'));
 
-r.params.cod_correction_flag = true;
+r.params.cod_correction_flag = false;
 r.params.cod_sextupoles_ramp = [0 1];
 r.params.cod_svs        = 20:10:50;
 r.params.cod_nr_iter    = 3;
