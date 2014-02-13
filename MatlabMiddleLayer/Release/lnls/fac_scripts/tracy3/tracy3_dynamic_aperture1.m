@@ -139,13 +139,13 @@ for i=1:n_pastas
     end
 end
 figure;
-pcolor(x, y, idx_fmap);
+pcolor(x, y, 20-idx_fmap);
 % contour(x, y, idx_fmap);
-colormap('Hot'); shading('faceted');
+colormap('Gray'); shading('interp');
 % hold on; 
 figure;
-pcolor(en, xe, idx_fmapdp);
-colormap('Hot'); shading('faceted');
+pcolor(en, xe, 20-idx_fmapdp);
+colormap('Gray'); shading('faceted');
 
 figure; plot(fx_fmap,fy_fmap,'.');
 figure; plot(fx_fmapdp,fy_fmapdp,'.');

@@ -38,65 +38,64 @@ for i=1:min([n_pastas, nr_rms]);
     full_name = fullfile(pathname,'fmap.out');
     try
         [~, fmap] = hdrload(full_name);
+        
+        % Agora, eu tenho que encontrar a DA
+        %primeiro eu identifico quantos x e y existem
+        npx = length(unique(fmap(:,1)));
+        npy = size(fmap,1)/npx;
+        %agora eu pego a coluna da frequencia x
+        x = fmap(:,1);
+        y = fmap(:,2);
+        fx = fmap(:,3);
+        % e a redimensiono para que todos os valores calculados para x iguais
+        %fiquem na mesma coluna:
+        x = reshape(x,npy,npx);
+        y = reshape(y,npy,npx);
+        fx = reshape(fx,npy,npx);
+        % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
+        % a borda da DA
+        y  = flipud(y);
+        fx = flipud(fx);
+        [~,ind] = min(fx,[],1);
+        
+        % por fim, defino a DA
+        x = x(1,:);
+        y = unique(y(ind,:)','rows');
+        
+        onda(end+1,:,:) = [x', y'];
     catch
         disp('nao carregou');
     end
-    
-    % Agora, eu tenho que encontrar a DA
-    %primeiro eu identifico quantos x e y existem
-    npx = length(unique(fmap(:,1)));
-    npy = size(fmap,1)/npx;
-    %agora eu pego a coluna da frequencia x
-    x = fmap(:,1);
-    y = fmap(:,2);
-    fx = fmap(:,3);
-    % e a redimensiono para que todos os valores calculados para x iguais
-    %fiquem na mesma coluna:
-    x = reshape(x,npy,npx);
-    y = reshape(y,npy,npx);
-    fx = reshape(fx,npy,npx);
-    % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
-    % a borda da DA
-    y  = flipud(y);
-    fx = flipud(fx);
-    [~,ind] = min(fx,[],1);
-    
-    % por fim, defino a DA
-    x = x(1,:);
-    y = unique(y(ind,:)','rows');
-    
-    onda(end+1,:,:) = [x', y'];
     
     if (fmapdpFlag)
         full_name = fullfile(pathname,'fmapdp.out');
         try
             [~, fmapdp] = hdrload(full_name);
+            
+            % Agora, eu tenho que encontrar a DA
+            %primeiro eu identifico quantos x e y existem
+            npe = length(unique(fmapdp(:,1)));
+            npx = size(fmapdp,1)/npe;
+            %agora eu pego a coluna da frequencia x
+            en = fmapdp(:,1);
+            x = fmapdp(:,2);
+            fen = fmapdp(:,3);
+            % e a redimensiono para que todos os valores calculados para x iguais
+            %fiquem na mesma coluna:
+            en = reshape(en,npx,npe);
+            x = reshape(x,npx,npe);
+            fen = reshape(fen,npx,npe);
+            % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
+            % a borda da DA
+            [~,ind] = min(fen,[],1);
+            
+            % por fim, defino a DA
+            en = en(1,:);
+            x = unique(x(ind,:)','rows');
+            
+            offda(end+1,:,:) = [en', x'];
         catch
         end
-        
-        
-        % Agora, eu tenho que encontrar a DA
-        %primeiro eu identifico quantos x e y existem
-        npe = length(unique(fmapdp(:,1)));
-        npx = size(fmapdp,1)/npe;
-        %agora eu pego a coluna da frequencia x
-        en = fmapdp(:,1);
-        x = fmapdp(:,2);
-        fen = fmapdp(:,3);
-        % e a redimensiono para que todos os valores calculados para x iguais
-        %fiquem na mesma coluna:
-        en = reshape(en,npx,npe);
-        x = reshape(x,npx,npe);
-        fen = reshape(fen,npx,npe);
-        % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
-        % a borda da DA
-        [~,ind] = min(fen,[],1);
-        
-        % por fim, defino a DA
-        en = en(1,:);
-        x = unique(x(ind,:)','rows');
-        
-        offda(end+1,:,:) = [en', x'];
     end
     
 end%carrega e prepara os dados
