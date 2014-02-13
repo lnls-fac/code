@@ -168,8 +168,10 @@ else
             leg_text = inputdlg(['Digite a ', int2str(ii), '-esima legenda'],'Legenda',1);
             cell_leg_text(end+1) = leg_text;
         end
+        title_text = inputdlg('Digite um Título para os Gráficos','Título',1);
         legend1 = legend(plot1(:,2),'show',cell_leg_text);
         set(legend1, 'Location','NorthEast');
+        title(fa,['DA - ' title_text{1}]);
         xlim(fa, [-limx limx]);
         ylim(fa,[0 limy]);
     end
@@ -215,6 +217,7 @@ if fmapdpFlag
         if nrecalls == 1
             legend2 = legend(plot1dp(:,2),'show',cell_leg_text);
             set(legend2, 'Location','SouthEast');
+            title(fdpa,['MA - ' title_text{1}]);
             xlim(fdpa, [-lime lime]);
             ylim(fdpa,[-limx,0]);
         end
