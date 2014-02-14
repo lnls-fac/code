@@ -113,30 +113,30 @@ elseif strcmpi(mode_version,'AC10_6')
    % AC10_4, tentei minimizar os tuneshifts e obtive essa configuracão.
    % ela era a antiga test_inject_4k-4ta.]
    
-    %% QUADRUPOLOS
-    %=========== (os mesmos do AC10_4)
-    
-    qaf_strength       =  2.53733156985179;
-    qad_strength       = -2.729928269122092;
-    qbd2_strength      = -3.960473342625189;
-    qbf_strength       =  3.902662679038675;
-    qbd1_strength      = -2.9676529175558;
-    qf1_strength       =  2.368979188452946;
-    qf2_strength       =  3.354162681362089;
-    qf3_strength       =  3.080099756299886;
-    qf4_strength       =  2.708484971587339;
-
-    %% SEXTUPOLOS
-    %==========
-    sa1_strength       =   -64.5501;
-    sa2_strength       =    28.5005;
-    sb1_strength       =  -113.8315;
-    sb2_strength       =    64.6216;
-    sd2_strength       =   -76.9782;
-    sd3_strength       =  -142.3458;
-    sf2_strength       =   154.1521;
-    sd1_strength       =  -161.1970;
-    sf1_strength       =   190.8217; 
+%     %% QUADRUPOLOS
+%     %=========== (os mesmos do AC10_4)
+%     
+%     qaf_strength       =  2.53733156985179;
+%     qad_strength       = -2.729928269122092;
+%     qbd2_strength      = -3.960473342625189;
+%     qbf_strength       =  3.902662679038675;
+%     qbd1_strength      = -2.9676529175558;
+%     qf1_strength       =  2.368979188452946;
+%     qf2_strength       =  3.354162681362089;
+%     qf3_strength       =  3.080099756299886;
+%     qf4_strength       =  2.708484971587339;
+% 
+%     %% SEXTUPOLOS
+%     %==========
+%     sa1_strength       =   -64.5501;
+%     sa2_strength       =    28.5005;
+%     sb1_strength       =  -113.8315;
+%     sb2_strength       =    64.6216;
+%     sd2_strength       =   -76.9782;
+%     sd3_strength       =  -142.3458;
+%     sf2_strength       =   154.1521;
+%     sd1_strength       =  -161.1970;
+%     sf1_strength       =   190.8217; 
     
 %moga0178-big_tilt_res, a partir do v500_ac10_6
 %     %%% QUADRUPOLOS
@@ -268,6 +268,33 @@ elseif strcmpi(mode_version,'AC10_6')
 %     sf2_strength       = 308.6658193331957  / 2;
 %     sd1_strength       =-317.842366961223   / 2;
 %     sf1_strength       = 381.0585236938746  / 2; 
+
+
+%mogaNew0813-v500-ac10-6
+    %%% QUADRUPOLOS
+    %  =========== 
+   
+    qaf_strength       = 2.534257484578366;
+    qad_strength       =-2.723213352888594;
+    qbd2_strength      =-3.968979976312133;
+    qbf_strength       = 3.903304402222135;
+    qbd1_strength      =-2.96002112445169 ;
+    qf1_strength       = 2.366712022960049;
+    qf2_strength       = 3.354120078692373;
+    qf3_strength       = 3.080046081072741;
+    qf4_strength       = 2.706144026555749;
+    
+    %%% SEXTUPOLOS
+    %  ==========    
+    sa1_strength       =-129.1361257957425  / 2;
+    sa2_strength       =  57.78226603708704 / 2;
+    sb1_strength       =-228.9440447562287  / 2;
+    sb2_strength       = 128.4598611792707  / 2;
+    sd2_strength       =-153.3514207406851  / 2;
+    sd3_strength       =-283.3230062016303  / 2;
+    sf2_strength       = 307.2595136757461  / 2;
+    sd1_strength       =-321.0128770176808  / 2;
+    sf1_strength       = 381.2771279755756  / 2; 
 
 
 
