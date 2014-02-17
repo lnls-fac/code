@@ -1,5 +1,5 @@
 #define seed for the random multipole error
-seed 1800
+seed 500
 
 
 ####################################################################
