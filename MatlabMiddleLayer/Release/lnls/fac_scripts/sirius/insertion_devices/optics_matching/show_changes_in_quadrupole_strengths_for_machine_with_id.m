@@ -5,7 +5,7 @@ clc;
 % loads the_ring
 if ~exist('the_ring','var')
     load('the_ring.mat'); the_ring1 = the_ring;
-    load('the_ring_withids_ac10_5_newIDs.mat'); the_ring2 = the_ring;
+    load('the_ring_withids_scw4t_in_high_beta.mat'); the_ring2 = the_ring;
 end
 
 idx1 = setdiff(findcells(the_ring1, 'K'), findcells(the_ring1, 'BendingAngle'));
