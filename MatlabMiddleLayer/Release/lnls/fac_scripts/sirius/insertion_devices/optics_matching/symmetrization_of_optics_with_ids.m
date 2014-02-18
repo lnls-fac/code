@@ -458,12 +458,12 @@ ids_def.carnauba.straight_label  = 'mib';
 ids_def.carnauba.straight_number = 4;
 ids_def.carnauba.strength        = 1;
 
-ids_def.jatoba.label           = 'jatoba';
-ids_def.jatoba.kicktable_file  = '../id_modelling/SCW4T/SCW4T_kicktable.txt';
-ids_def.jatoba.nr_segs         = 20;
-ids_def.jatoba.straight_label  = 'mib';
-ids_def.jatoba.straight_number = 6;
-ids_def.jatoba.strength        = 1;
+% ids_def.jatoba.label           = 'jatoba';
+% ids_def.jatoba.kicktable_file  = '../id_modelling/SCW4T/SCW4T_kicktable.txt';
+% ids_def.jatoba.nr_segs         = 20;
+% ids_def.jatoba.straight_label  = 'mib';
+% ids_def.jatoba.straight_number = 6;
+% ids_def.jatoba.strength        = 1;
 
 ids_def.inga1.label           = 'inga1';
 ids_def.inga1.kicktable_file  = '../id_modelling/U25/U25_kicktable.txt';
@@ -507,6 +507,14 @@ ids_def.ipe2.nr_segs         = 20;
 ids_def.ipe2.straight_label  = 'mia';
 ids_def.ipe2.straight_number = 7;
 ids_def.ipe2.strength        = 1;
+
+ids_def.jatoba.label           = 'jatoba';
+ids_def.jatoba.kicktable_file  = '../id_modelling/SCW4T/SCW4T_kicktable.txt';
+ids_def.jatoba.nr_segs         = 20;
+ids_def.jatoba.straight_label  = 'mia';
+ids_def.jatoba.straight_number = 8;
+ids_def.jatoba.strength        = 1;
+
 
 
 function ids_def = create_ids_def_PH_old

@@ -1,0 +1,109 @@
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep in; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep in; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+ID Label                      : EPU80_PH
+if system_dependent('IsDebugMode')==1, dbstep; end
+--- geometry ---
+if system_dependent('IsDebugMode')==1, dbstep; end
+Period                        : 80 mm
+if system_dependent('IsDebugMode')==1, dbstep; end
+Length                        : 3040 mm
+if system_dependent('IsDebugMode')==1, dbstep; end
+Magnetic gap                  : 16 mm
+if system_dependent('IsDebugMode')==1, dbstep; end
+ID width                      : 80.001 mm
+if system_dependent('IsDebugMode')==1, dbstep; end
+URC phase                     : 0 mm
+if system_dependent('IsDebugMode')==1, dbstep; end
+LLC phase                     : 0 mm
+if system_dependent('IsDebugMode')==1, dbstep; end
+--- fields ---
+if system_dependent('IsDebugMode')==1, dbstep; end
+KX (from Vert.Field)          : 6.7279
+if system_dependent('IsDebugMode')==1, dbstep; end
+KY (from Hori.Field)          : 0.0000
+if system_dependent('IsDebugMode')==1, dbstep; end
+Max.Vertical     By (on-axis) : 0.9000 T
+if system_dependent('IsDebugMode')==1, dbstep; end
+Max.Horizontal   Bx (on-axis) : 0.0000 T
+if system_dependent('IsDebugMode')==1, dbstep; end
+Max.Longitudinal Bz (on-axis) : 0.0000 T
+if system_dependent('IsDebugMode')==1, dbstep; end
+dbstep
+<a href="matlab: opentoline('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/insertion_devices/id_modelling/create_ID.m',145,1)">145 </a>plot(field_parms.on_axis_z, field_parms.on_axis_bz, 'g', 'LineWidth', 2);
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+dbstep
+<a href="matlab: opentoline('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/insertion_devices/id_modelling/create_ID.m',155,1)">155 </a>plot(field_parms.x_rolloff_x, field_parms.x_rolloff_bz, 'g', 'LineWidth', 2);
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+dbstep
+<a href="matlab: opentoline('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/insertion_devices/id_modelling/create_ID.m',165,1)">165 </a>plot(field_parms.y_rolloff_y, field_parms.y_rolloff_bz, 'g', 'LineWidth', 2);
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbstep; end
+if system_dependent('IsDebugMode')==1, dbcont; end

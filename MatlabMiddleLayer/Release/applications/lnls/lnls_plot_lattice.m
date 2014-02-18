@@ -1,185 +1,68 @@
-function lnls_plot_lattice(varargin)
+function lnls_plot_lattice(the_ring, smin, smax, y, dy)
 
-global THERING;
+bends = findcells(the_ring, 'BendingAngle');
+sexts = setdiff(findcells(the_ring, 'PolynomB'), bends);
+sexts = sexts(getcellstruct(the_ring, 'PolynomB', sexts, 1, 3) ~= 0);
+quads = setdiff(findcells(the_ring, 'K'), [bends, sexts]);
+quads_qf = (getcellstruct(the_ring, 'K', quads) >= 0);
+bpms  = findcells(the_ring, 'FamName', 'BPM');
 
-% valores default dos parâmetros
-g.min_s  = 0;
-g.max_s  = findspos(THERING,length(THERING)+1);
-g.offset = 5;
-g.height  = 1 * (0.5/1.4);
+s = findspos(the_ring, 1:length(the_ring)+1);
+bends_pos = [s(bends)' s(bends+1)'];
+sexts_pos = [s(sexts)' s(sexts+1)'];
+quads_pos = [s(quads)' s(quads+1)'];
+%bpms_pos  = [s(bpms)' s(bpms+1)'];
 
-h = [];
 
-% processa input
-i = 1;
-while (i<=length(varargin))
-    if ischar(varargin{i})
-        if strcmpi(varargin{i},'AllLattice')
-            g.min_s = 0;
-            g.max_s = findspos(THERING,length(THERING)+1);
-        elseif strcmpi(varargin{i}, 'Min')
-            g.min_s = varargin{i+1};
-            i = i + 1;
-        elseif strcmpi(varargin{i}, 'Max')
-            g.max_s = varargin{i+1};
-            i = i + 1;
-        elseif strcmpi(varargin{i}, 'Offset')
-            g.offset = varargin{i+1};
-            i = i + 1;
-        elseif strcmpi(varargin{i}, 'Scale')
-            g.height = varargin{i+1} * (0.5/1.4);
-            i = i + 1;
-        elseif strcmpi(varargin{i}, 'HCM')
-            g.hcm = varargin{i+1};
-        elseif strcmpi(varargin{i}, 'VCM')
-            g.vcm = varargin{i+1};    
-        elseif strcmpi(varargin{i}, 'SKEW')
-            g.skew = varargin{i+1};
-        end
-    elseif isnumeric(varargin{i})
-        if ishghandle(varargin{i})
-            h = varargin{i};
-        end
-    end
-    i = i + 1;
-end
-    
-if isempty(h),
-    h = figure;
+%bpms_height  = 0.50 * dy;
+quads_height = 0.40 * dy;
+bends_height = 0.50 * dy;
+sexts_height = 0.40 * dy;
+
+hold all;
+plot([smin, smax], [y, y], 'k-');
+
+% plots dipoles
+for i=1:size(bends_pos, 1)
+    pos = get_pos(bends_pos(i,:), smin, smax);
+    if isempty(pos), continue; end;
+    rectangle('Position', [pos(1),y-bends_height/2,diff(pos),bends_height], 'FaceColor', 'r', 'EdgeColor', 'r');
 end
 
-
-set(h, 'Color', [1 1 1]);
-%axis off;
-
-g.pos = g.min_s;
-for i=1:length(THERING)
-    s1 = findspos(THERING,i);
-    s2 = findspos(THERING,i+1);
-    if (s1 < g.min_s), continue; end;
-    if (s1 >= g.max_s), break; end; % elemento não pertence ao intervalo
-    g.len = min([g.max_s s2]) - s1;
-    g.ele = THERING{i};
-    %if (g.len == 0) && ~strcmpi(g.ele.FamName, 'BPM'), continue; end; % elemento com comprimento de plot nulo
-    if isfield(g, 'hcm') && intersect(i, g.hcm)
-        g.ele.FamName = 'HCM';
-        plot_cmag(h, g);
-    end
-    if isfield(g, 'vcm') && intersect(i, g.vcm)
-        g.ele.FamName = 'VCM';
-        plot_cmag(h, g);
-    end
-    if isfield(g, 'skew') && intersect(i, g.skew(:,1))
-        plot_skewquad(h, g);
-    end
-    if any(strcmpi(THERING{i}.FamName,{'AWG01','AON11','AWG09'}))
-        plot_id(h,g);
-    elseif isfield(g.ele, 'BendingAngle')
-        plot_bend(h, g);
-    elseif isfield(g.ele, 'K')
-        plot_quad(h, g);
-    elseif isfield(g.ele, 'PolynomB') && length(THERING{i}.PolynomB)>2 && (THERING{i}.PolynomB(3) || any(strcmpi(THERING{i}.FamName,{'SF','SFF','SD','SDD','HSF','HSD'})))
-        plot_sext(h, g);
+% plots quadrupoles
+for i=1:size(quads_pos, 1)
+    pos = get_pos(quads_pos(i,:), smin, smax);
+    if isempty(pos), continue; end;
+    if quads_qf(i)
+        rectangle('Position', [pos(1),y,diff(pos),quads_height], 'FaceColor', 'b', 'EdgeColor', 'b');
     else
-        plot_line(h, g);
+        rectangle('Position', [pos(1),y-quads_height,diff(pos),quads_height], 'FaceColor', 'b', 'EdgeColor', 'b');
     end
-    drawnow;
-    g.pos = g.pos + g.len;
-    if ~ishghandle(h), return; end;
 end
 
-g.pos = g.min_s;
-for i=1:length(THERING)
-    s1 = findspos(THERING,i);
-    s2 = findspos(THERING,i+1);
-    if (s1 < g.min_s), continue; end;
-    if (s1 >= g.max_s), break; end; % elemento não pertence ao intervalo
-    g.len = min([g.max_s s2]) - s1;
-    g.ele = THERING{i};
-    if strcmpi(g.ele.FamName, 'BPM')
-        plot_bpms(h, g);
-    end
-    drawnow;
-    g.pos = g.pos + g.len;
-    if ~ishghandle(h), return; end;
+% plots sextupoles
+for i=1:size(sexts_pos, 1)
+    pos = get_pos(sexts_pos(i,:), smin, smax);
+    if isempty(pos), continue; end;
+    rectangle('Position', [pos(1),y-sexts_height/2,diff(pos),sexts_height], 'FaceColor', [0,0.8,0], 'EdgeColor', [0,0.8,0]);
 end
 
-%axis([0 g.max_s -5 5]);
+% % plots BPMs
+% for i=1:size(bpms_pos, 1)
+%     pos = get_pos(bpms_pos(i,:), smin, smax);
+%     if isempty(pos), continue; end;
+%     line([pos(1), pos(1)], [y,y+bpms_height], 'LineStyle', '-', 'Color', [0,0,0]);
+%     %rectangle('Position', [pos(1)-(smax-smin)*0.01*0.5,y+bpms_height,(smax-smin)*0.01,dy*0.01], 'Curvature', [1,1], 'FaceColor', [0,0,0], 'EdgeColor', [0,0,0]);
+% end
 
-function plot_cmag(h, g)
 
-if ~ishghandle(h), return; end;
-%figure(h);
-if any(strcmpi(g.ele.FamName, {'HCM', 'cm'}))
-    col = [0 0 1]; 
-    y   = g.offset + [1.2 * g.height 1.4 * g.height];
-    line([g.pos g.pos], y, 'Color', col, 'Marker','.');
-elseif any(strcmpi(g.ele.FamName, {'VCM', 'cm'}))
-    col = [1 0 0]; 
-    y   = g.offset + [-1.2 * g.height -1.4 * g.height];
-    line([g.pos g.pos], y, 'Color', col, 'Marker','.');
-else
+function pos = get_pos(old_pos, smin, smax)
+
+pos = old_pos;
+if ((pos(1) > smax)||(pos(2) < smin))
+    pos = [];
+    return
 end
-
-
-function plot_skewquad(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-line([g.pos-0*g.len/2, g.pos+0*g.len/2], g.offset + 1.3*g.height * [1 1], 'Color', [0 0.8 0], 'Marker', 'X'); 
-
-
-
-
-function plot_line(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-line([g.pos g.pos+g.len], g.offset + [0 0], 'Color', [0 0 0]);
-
-function plot_id(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-col = [1 0.7 0];
-%if strcmpi(g.ele.FamName, 'BC'), col = [1 0.7 0]; end;
-%if strcmpi(g.ele.FamName, 'BI'), col = [0.9 0.9 0]; end;
-rectangle('Position',[g.pos,-0.3 * g.height + g.offset,g.len,0.6 * g.height],'FaceColor',col, 'EdgeColor',col);
-
-function plot_bend(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-col = [1 1 0];
-if strcmpi(g.ele.FamName, 'BC'), col = [1 0.7 0]; end;
-if strcmpi(g.ele.FamName, 'BI'), col = [0.9 0.9 0]; end;
-rectangle('Position',[g.pos,-1 * g.height + g.offset ,g.len,2 * g.height],'FaceColor',col, 'EdgeColor',col);
-
-function plot_quad(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-if g.ele.K > 0
-    col = [0 0 1];
-else
-    col = [1 0 0];
-end
-rectangle('Position',[g.pos,-0.8 * g.height + g.offset,g.len,1.6 * g.height],'FaceColor',col, 'EdgeColor',col,'Curvature',[0.9,0.1]);
-
-function plot_sext(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-if g.ele.PolynomB(3) < 0
-    col = [0 0.7 0];
-else
-    col = [0.7 0 0.7];
-end
-rectangle('Position',[g.pos,-0.6 * g.height + g.offset,g.len,1.2 * g.height],'FaceColor',col, 'EdgeColor',col,'Curvature',[0.9,0.1]);
-
-function plot_bpms(h, g)
-
-if ~ishghandle(h), return; end;
-%figure(h);
-line([g.pos g.pos], [0 0] + g.offset, 'Marker','O','Color', [0 0 0],'MarkerFaceColor',[0 0 0], 'MarkerSize', 5);
+if pos(1) < smin, pos(1) = smin; end
+if pos(2) > smax, pos(2) = smax; end
 

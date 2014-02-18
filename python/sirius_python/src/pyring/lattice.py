@@ -4,6 +4,7 @@ import copy
 
 
 def findspos(lattice, indices = None):
+    """ returns longitudinal position of the entrance for all lattice elements """
     
     ''' process input '''
     is_number = False
@@ -26,6 +27,7 @@ def findspos(lattice, indices = None):
         return [pos[i] for i in indices]
     
 def findcells(lattice, attribute_name, value = None):
+    """ returns a list with indices of elements that match criteria 'attribute_name=value' """
     indices = []
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):    
@@ -38,7 +40,7 @@ def findcells(lattice, attribute_name, value = None):
     return indices
 
 def getcellstruct(lattice, attribute_name, indices = None):
-    
+    """ returns a list with requested lattice data """
     if indices is None:
         indices = range(len(lattice))
     else:
@@ -54,6 +56,7 @@ def getcellstruct(lattice, attribute_name, indices = None):
     return data
 
 def setcellstruct(lattice, attribute_name, indices, values):    
+    """ sets elements data and returns a new updated lattice """
     for idx in range(len(indices)):
         try:
             setattr(lattice[indices[idx]], attribute_name, values[idx])
@@ -62,6 +65,7 @@ def setcellstruct(lattice, attribute_name, indices, values):
     return lattice
 
 def finddict(lattice, attribute_name):
+    """ returns a dict which correlates values of 'attribute_name' and a list of indices corresponding to matching elements """
     latt_dict = {}  
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):
@@ -74,6 +78,7 @@ def finddict(lattice, attribute_name):
 
 
 def setcavity(lattice, state):
+    """ sets state of cavities: on or off """
     state = state.upper()
     if state == 'ON':
         pass_method = passmethods.cavity_pass
@@ -87,12 +92,14 @@ def setcavity(lattice, state):
     return lattice
         
 def setradiation(lattice, state):
+    """ turns ratiative effects on or off """
     pass
     #raise Exception('setradiation: not yet implemented')
 
 
 
 def flatten(lattice):
+    """ takes a list-of-list-of-... elements and flattens it: a simple list of lattice elements."""
     for element in lattice:
         if isinstance(element, collections.Iterable) and not isinstance(element, basestring):
             for line in flatten(element):
@@ -101,6 +108,7 @@ def flatten(lattice):
             yield element
             
 def printlattice(lattice):
+    """ prints elements info of a lattice """
     for i in range(len(lattice)):
         print ('Element#  : ' + str(i) + '\n' + str(lattice[i]))
         
