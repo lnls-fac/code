@@ -196,7 +196,6 @@ cline3 = [ mgirder, d44, mon, d12, ch,  d15, qf4, d20, sf2, d11, mon, d12, qf3, 
 cline4 = [ mgirder, d20, ch,  d12, sd2, d17, qf2, d20, sf1, d11, mon, d12, qf1, d17, sd1, d15, ch,  d12, cv, d22, mon, d10, mgirder];
 
 %% Injection Section
-% dia      = drift('dia', 3.269200, 'DriftPass');
 dmiainj  = drift('dmiainj', 0.3, 'DriftPass');
 dinjk3   = drift('dinjk3' , 0.3, 'DriftPass');
 dk3k4    = drift('dk3k4'  , 0.6, 'DriftPass');
@@ -235,61 +234,27 @@ B3BCB3 = [ B3, d13, BC, d13, B3];
 % cavities:  straight section R03
 
 
-% ID MULTIPOLES
-% =============
-% integrated_ID_sextupole_strength = 0.75; % [T/m]
-% integrated_ID_octupole_strength  = 40;   % [T/m^2]
-% ID_length                        = 2.0;  % [m]
-% b_rho                            = 10;   % [T.m]
-% diaID                            = drift('dia', 3.269200-ID_length/2, 'DriftPass');
-% dibID                            = drift('dib', 2.909200-ID_length/2, 'DriftPass');
-% hIDm                             = sextupole_sirius('IDm', ID_length/2, [0], 1*[0 0 -integrated_ID_sextupole_strength/ID_length/b_rho  -integrated_ID_octupole_strength/ID_length/b_rho], sext_pass_method);
-% insaID                           = [ hIDm, diaID, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17];
-% insbID                           = [ hIDm, dibID, d10, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17];
-
-% R01 = [fliplr(insaID) fim inicio mia insaID];  % injection sector, marker of the lattice model starting element
-% R03 = [fliplr(insaID) mia cav insa];             % sector with cavities
-% R05 = [fliplr(insaID) mia insaID];
-% R07 = [fliplr(insaID) mia insaID];
-% R09 = [fliplr(insaID) mia insaID];
-% R11 = [fliplr(insaID) mia insaID];
-% R13 = [fliplr(insaID) mia insaID];
-% R15 = [fliplr(insaID) mia insaID];
-% R17 = [fliplr(insaID) mia insaID];
-% R19 = [fliplr(insaID) mia insaID];
-
-R01 = [injinsa fim inicio mia insainj];  % injection sector, marker of the lattice model starting element
-R03 = [fliplr(insa) mia cav insa];         % sector with cavities
-R05 = [fliplr(insa) mia insa];
-R07 = [fliplr(insa) mia insa];
-R09 = [fliplr(insa) mia insa];
-R11 = [fliplr(insa) mia insa];
-R13 = [fliplr(insa) mia insa];
-R15 = [fliplr(insa) mia insa];
-R17 = [fliplr(insa) mia insa];
-R19 = [fliplr(insa) mia insa];
-
-% R02 = [fliplr(insbID) mib insbID];
-% R04 = [fliplr(insbID) mib insbID];
-% R06 = [fliplr(insbID) mib insbID];
-% R08 = [fliplr(insbID) mib insbID];
-% R10 = [fliplr(insbID) mib insbID];
-% R12 = [fliplr(insbID) mib insbID];
-% R14 = [fliplr(insbID) mib insbID];
-% R16 = [fliplr(insbID) mib insbID];
-% R18 = [fliplr(insbID) mib insbID];
-% R20 = [fliplr(insbID) mib insbID];
+sector_01S = [injinsa fim inicio mia insainj];  % injection sector, marker of the lattice model starting element
+sector_03S = [fliplr(insa) mia cav insa];       % sector with cavities
+sector_05S = [fliplr(insa) mia insa];
+sector_07S = [fliplr(insa) mia insa];
+sector_09S = [fliplr(insa) mia insa];
+sector_11S = [fliplr(insa) mia insa];
+sector_13S = [fliplr(insa) mia insa];
+sector_15S = [fliplr(insa) mia insa];
+sector_17S = [fliplr(insa) mia insa];
+sector_19S = [fliplr(insa) mia insa];
  
-R02 = [fliplr(insb) mib insb];
-R04 = [fliplr(insb) mib insb];
-R06 = [fliplr(insb) mib insb];
-R08 = [fliplr(insb) mib insb];
-R10 = [fliplr(insb) mib insb];
-R12 = [fliplr(insb) mib insb];
-R14 = [fliplr(insb) mib insb];
-R16 = [fliplr(insb) mib insb];
-R18 = [fliplr(insb) mib insb];
-R20 = [fliplr(insb) mib insb];
+sector_02S = [fliplr(insb) mib insb];
+sector_04S = [fliplr(insb) mib insb];
+sector_06S = [fliplr(insb) mib insb];
+sector_08S = [fliplr(insb) mib insb];
+sector_10S = [fliplr(insb) mib insb];
+sector_12S = [fliplr(insb) mib insb];
+sector_14S = [fliplr(insb) mib insb];
+sector_16S = [fliplr(insb) mib insb];
+sector_18S = [fliplr(insb) mib insb];
+sector_20S = [fliplr(insb) mib insb];
 
 
 C01 = [ B1 cline1 B2 cline2 B3BCB3 cline3 B2 cline4 B1 ];
@@ -314,10 +279,10 @@ C19 = [ B1 cline1 B2 cline2 B3BCB3 cline3 B2 cline4 B1 ];
 C20 = [ B1 cline1 B2 cline2 B3BCB3 cline3 B2 cline4 B1 ];
 
 anel = [ ...
-    R01 C01 R02 C02 R03 C03 R04 C04 R05 C05 ...
-    R06 C06 R07 C07 R08 C08 R09 C09 R10 C10 ...
-    R11 C11 R12 C12 R13 C13 R14 C14 R15 C15 ...
-    R16 C16 R17 C17 R18 C18 R19 C19 R20 C20 ...
+    sector_01S C01 sector_02S C02 sector_03S C03 sector_04S C04 sector_05S C05 ...
+    sector_06S C06 sector_07S C07 sector_08S C08 sector_09S C09 sector_10S C10 ...
+    sector_11S C11 sector_12S C12 sector_13S C13 sector_14S C14 sector_15S C15 ...
+    sector_16S C16 sector_17S C17 sector_18S C18 sector_19S C19 sector_20S C20 ...
 ];
 
 
