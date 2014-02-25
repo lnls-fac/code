@@ -34,7 +34,7 @@ mml_path = fullfile(lnls_get_root_folder(), 'code', 'MatlabMiddleLayer','Release
 cd(fullfile(mml_path,'mml'));
 
 if ~exist('versao', 'var')
-    versao = 'V800';
+    versao = 'V810';
 end
 setpathlnls(['BOOSTER_' versao],'StorageRing', 'sirius_link');
 cd(cdir);
@@ -43,7 +43,7 @@ clear cdir;
 
 addpath(genpath(fullfile(mml_path, 'lnls','fac_scripts','sirius','lattice_errors')));
 addpath(fullfile(mml_path, 'lnls', 'fac_scripts', 'tracy3'), '-begin');
-addpath(genpath(fullfile(mml_path, 'machine','LTLB_V100')));
-addpath(genpath(fullfile(mml_path, 'machine', 'LTBA_V100')));
+addpath(genpath(fullfile(mml_path, 'machine','LTLB_V200')));
+addpath(genpath(fullfile(mml_path, 'machine', 'LTBA_V200')));
 
 return;
