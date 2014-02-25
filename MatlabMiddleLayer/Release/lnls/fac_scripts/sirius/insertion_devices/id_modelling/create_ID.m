@@ -19,8 +19,8 @@ if ~exist('id_def','var')
     %id_def = ids.EPU200_PH;
     %id_def = ids.EPU200_PC;
     %id_def = ids.EPU200_PV;
-    %id_def = ids.EPU80_PH;
-    id_def = ids.EPU80_PV;
+    id_def = ids.EPU80_PH;
+    %id_def = ids.EPU80_PV;
     %id_def = ids.UTEST;  
 end
 
