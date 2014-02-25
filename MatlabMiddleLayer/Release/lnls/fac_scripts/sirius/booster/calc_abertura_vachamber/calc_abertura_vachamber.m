@@ -27,7 +27,7 @@ Ax =   3.0*sqrt(a.betax*1*emit+(a.etax).^2*energysprd^2)*1000 + ... 4*beamsize@i
 Ay =  3.0*sqrt(a.betay*1*emit+a.etay.^2*energysprd^2)*1000 + ... 4*beamsize@injection + 
        1*cody + ... 1mm(cod) + 
        3*varenergy*a.etay*1000 + ... % varenergylinac*dispersion
-       1*4.5; % (oscilacao residual injecao)
+       1*3.0; % (oscilacao residual injecao)
 
 max_s = a.pos(end);
    
