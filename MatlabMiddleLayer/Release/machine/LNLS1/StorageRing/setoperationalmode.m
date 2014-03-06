@@ -23,6 +23,7 @@ ModeCell = { ...
     '1.37 GeV - BEDI', ...
     '1.37 GeV - No IDs', ...
     '1.37 GeV - AWS07', ...
+    '1.37 GeV - Low-Alpha', ...
 };
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,8 +47,10 @@ elseif ModeNumber == 4
     set_operationalmode_noIDs;
 elseif ModeNumber == 5
     set_operationalmode_AWS07;
+elseif ModeNumber == 6
+    set_operationalmode_LowAlpha;
 else
-     error('Operational mode unknown');
+    error('Operational mode unknown');
 end
 
 % Set the AD directory path
@@ -75,8 +78,10 @@ elseif ModeNumber == 4
     lnls1_simulation_mode_IDsOFF_1p37GeV;
 elseif ModeNumber == 5
     lnls1_simulation_mode_AWS07_1p37GeV;
+elseif ModeNumber == 6
+    lnls1_simulation_mode_low_alpha;
 else
-     error('Operational mode unknown');
+    error('Operational mode unknown');
 end
 
 
@@ -312,6 +317,43 @@ setad(AD);
 switch2sim;
 switch2hw; 
 
+
+function set_operationalmode_LowAlpha
+
+global THERING;
+
+AD = getad;
+AD.Machine             = 'LNLS1';           % Will already be defined if setpathmml was used
+AD.SubMachine          = 'StorageRing';     % Will already be defined if setpathmml was used
+AD.OperationalMode     = 'Low Alpha (1.37 GeV)';
+AD.Energy              = 1.37;
+AD.InjectionEnergy     = 0.49;
+AD.ModeName            = 'LowAlpha';
+AD.OpsFileExtension    = '';
+
+lnls1_lattice_low_alpha(AD.Energy);
+
+AD.Circumference       = findspos(THERING,length(THERING)+1);
+AD.HarmonicNumber      = 148;
+AD.LNLS1Params         = lnls1_params;
+AD.DeltaRFDisp         = 2000e-6;
+%AD.DeltaRFChro         = [-4000 -2000 -1000 0 1000 2000 4000] * 1e-6;
+%AD.DeltaRFChro         = [-2000 -1000 0 1000 2000] * 1e-6;
+AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
+
+AD.BeamCurrent         = 0.25; % [A]
+AD.NrBunches           = AD.HarmonicNumber;
+AD.Coupling            = 0.0035;
+AD.OpsData.PrsProfFile = 'lnls1_pressure_profile.txt';
+
+AD.TuneDelay           = 3.0;  
+AD.ATModel             = 'lnls1_lattice_low_alpha';
+AD.Chromaticity.Golden = [1; 1];
+AD.MCF                 = getmcf('Model');
+
+setad(AD);
+switch2sim;
+switch2hw;
 
 
 
