@@ -105,14 +105,14 @@ onda_rms = std(onda,1);
 offda_mean = mean(offda,1);
 offda_rms = std(offda,1);
 
-color = {'b','r','g','m','c'};
+color = {'b','r','g','m','c','k','y'};
 esp_lin = 5;
 size_font = 24;
 limx = 15;
 limy = 5;
 lime = 6;
 
-color_vec = {'b','g','m','c'};
+color_vec = {'b','g','m','c','k','y'};
 try
     color = color_vec{size(plot1,1) - nrecalls};
 catch 

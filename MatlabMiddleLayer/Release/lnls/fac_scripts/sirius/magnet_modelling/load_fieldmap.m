@@ -78,8 +78,16 @@ data = fgetl(fp); magnet.nr_submagnets = str2double(strtrim(strrep(strrep(data, 
 data = fgetl(fp);
 for i=1:magnet.nr_submagnets
     data = fgetl(fp); submagnet.label   = strtrim(strrep(strrep(data, 'Nome_do_Ima:', ''), '\t', ''));
-    data = fgetl(fp); submagnet.gap     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap[mm]:', ''), '\t', ''))); 
-    data = fgetl(fp); submagnet.cgap    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap_Controle[mm]:', ''), '\t', ''))); 
+    % tinha um problema aqui, originalmente o script procurava os campos
+    % Gap e Gap_Controle, mas o mapa de campo possui o campo Bore Diameter
+    % para quadrupolos. resolvi dessa maneira, mas precisamos discutir se
+    % não há modo melhor de fazer isso.
+    if strncmpi(magnet.label,'dipolo',6)
+        data = fgetl(fp); submagnet.gap     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap[mm]:', ''), '\t', ''))); 
+        data = fgetl(fp); submagnet.cgap    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap_Controle[mm]:', ''), '\t', ''))); 
+    else
+        data = fgetl(fp); submagnet.bore     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Bore Diameter[mm]:', ''), '\t', '')));
+    end
     data = fgetl(fp); submagnet.length  = 0.001 * str2double(strtrim(strrep(strrep(data, 'Comprimento[mm]:', ''), '\t', ''))); 
     data = fgetl(fp); submagnet.current = str2double(strtrim(strrep(strrep(data, 'Corrente[A]:', ''), '\t', '')));
     data = fgetl(fp); submagnet.shift_z = 0.001 * str2double(strtrim(strrep(strrep(data, 'Centro_Posicao_z[mm]:', ''), '\t', ''))); 
@@ -97,7 +105,12 @@ data([1 2 3],:) = data([1 2 3],:) / 1000;
 
 if magnet.nr_submagnets == 1
     magnet.length = magnet.submagnets(1).length;
-    magnet.gap    = magnet.submagnets(1).gap;
+    % também tive que alterar aqui. Fernando-2014-03-05
+    if strncmpi(magnet.label,'dipolo',6)
+        magnet.gap    = magnet.submagnets(1).gap;
+    else
+        magnet.bore   = magnet.submagnets(1).bore;
+    end
 end
     
 % 1. gera vetores x, y e z com posi??es dos pontos no grid 3D do mapa
