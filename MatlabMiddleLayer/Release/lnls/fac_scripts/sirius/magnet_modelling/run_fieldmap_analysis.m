@@ -6,7 +6,7 @@ fclose('all'); drawnow;
 
 % selects and loads configuration for analysis
 %parms = load_config('BOOSTER_B_MODELO6');
-parms = load_config('BOOSTER_B_MODELO6_1.5GeV');
+% parms = load_config('BOOSTER_B_MODELO6_1.5GeV');
 %parms = load_config('BOOSTER_B_MODELO1');
 %parms = load_config('BOOSTER_B_MODELO1_TRAJ_CENTERED');
 %parms = load_config('BOOSTER_QD_MODELO2');
@@ -19,6 +19,7 @@ parms = load_config('BOOSTER_B_MODELO6_1.5GeV');
 %parms = load_config('SIRIUS_CM_H');
 %parms = load_config('SIRIUS_CM_V');
 %parms = load_config('SIRIUS_QF_ERRORS');
+parms = load_config('SIRIUS_QF_TESTE_ANEL');
 
 % calcs beam parameters (magnetic rigidity, gamma factor, beta, etc)
 calc_beam_parameters(parms.beam.energy);
@@ -69,6 +70,7 @@ fieldmap_track = track_through_fieldmap(ref_traj, parms.track, parms.runge_kutta
 % calibrates at_model to yield kick curve close to the one from the fieldmap
 [at_model_calibrated M_fieldmap M_atmodel K_fieldmap K_atmodel] = calibrate_at_model(ref_traj, at_model, fieldmap_track, parms.track, parms.perp_grid.monomials, parms.runge_kutta_flags, parms.calibration);
 atmodel_track = track_through_atmodel(at_model_calibrated, parms.track, ref_traj.s(end));
+
 
 % prints summary data
 print_summary(parms, rk_traj, rk_traj_parms, ref_traj, at_model_calibrated, fieldmap_track, atmodel_track, M_fieldmap, M_atmodel);
