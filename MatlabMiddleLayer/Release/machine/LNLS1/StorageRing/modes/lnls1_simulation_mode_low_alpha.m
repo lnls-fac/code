@@ -7,8 +7,8 @@ lnls1_set_id_field('AWS07', 0);
 
 % negative alpha (6-fold symmetry)
 setpv('QF',     'Physics',   2.688);
-%setpv('QD',     'Physics',  -2.95392);
-setpv('QD',     'Physics',  -2.944);
+setpv('QD',     'Physics',  -2.95392);
+%setpv('QD',     'Physics',  -2.944);
 setpv('QFC',    'Physics',   2.144);
 setpv('SD',     'Physics', -31.44);
 setpv('SF',     'Physics',  51.39);
