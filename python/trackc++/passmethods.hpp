@@ -257,6 +257,7 @@ Status::type pm_cavity_pass(std::vector<Pos<T> >&pos, const Element &elem) {
     	for(unsigned int p=0; p<pos.size(); ++p) {
     		T &de = pos[p].de, &dl = pos[p].dl;
     		de +=  -nv * sin(2*M_PI*elem.frequency * dl/ light_speed);
+    		//de +=  -nv * (2*M_PI*elem.frequency * dl/ light_speed);
     	}
     } else {
     	for(unsigned int p=0; p<pos.size(); ++p) {

@@ -3,6 +3,7 @@ import passmethods
 import trackcpp
 import numpy
 
+
 def linepass (line, particles, refpts = None, element_offset = 0, engine = 'trackcpp'):
     
     ''' process arguments '''

@@ -93,7 +93,7 @@ def setcavity(lattice, state):
         
 def setradiation(lattice, state):
     """ turns ratiative effects on or off """
-    pass
+    return lattice
     #raise Exception('setradiation: not yet implemented')
 
 

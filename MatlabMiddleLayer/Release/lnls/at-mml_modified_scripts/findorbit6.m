@@ -98,7 +98,7 @@ itercount = 1;
 
 % XRR X.R.R. 2012/02/23 alterado criterio de convergencia: eps->5*eps
 % 2012-10-31 Afonso: alterado 5*eps -> 100*eps
-%   Para algumas máquinas, o valor de change converge para números
+%   Para algumas mï¿½quinas, o valor de change converge para nï¿½meros
 %   ligeiramente maiores que 5*eps.
 while (change>100*eps) & (itercount < max_iterations)
    RMATi= [Ri Ri Ri Ri Ri Ri Ri] + [D, zeros(6,1)];
@@ -110,6 +110,7 @@ while (change>100*eps) & (itercount < max_iterations)
 %    Ri_next = Ri + B*(Rf-Ri-theta);
     Ri_next = Ri + (eye(6)-J6)\(Rf-Ri-theta);
    change = norm(Ri_next - Ri);
+   %change = max(abs(Ri_next - Ri));
    Ri = Ri_next;
    itercount = itercount+1;
 end;
