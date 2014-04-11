@@ -26,7 +26,7 @@ template <typename T>
 Pos<T>::Pos(const T& rx_, const T& px_, const T& ry_, const T& py_, const T& de_, const T& dl_):
 rx(rx_), px(px_),
 ry(ry_), py(py_),
-de(de_), dl(py_)
+de(de_), dl(dl_)
 {
 
 }

@@ -20,7 +20,7 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 	bool trajectory     = PyObject_IsTrue(py_trajectory);
 	int  element_offset = PyInt_AS_LONG(py_element_offset) ;
-	std::cout << "element_offset: " << element_offset << std::endl;
+	//std::cout << "element_offset: " << element_offset << std::endl;
 
 	Py_INCREF(py_lattice);
 	Py_INCREF(py_pos);
