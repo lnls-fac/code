@@ -37,49 +37,68 @@ setappdata(0, 'Sextupole_Idx', sext_idx);
 fprintf('\n');
 
 % saves file with nominal optics
-the_ring = params.the_ring; save([r.config.label '_the_ring.mat'], 'the_ring');
+% the_ring = params.the_ring; save([r.config.label '_the_ring.mat'], 'the_ring');
 
-% calcs cod response matrix
-fname = [r.config.label '_respm_cod.mat'];
-if params.cod_correction_flag
-    if (read_cod_respm && exist(fname, 'file'))
-        data = load(fname);
-        params.cod_respm = data.cod_respm;
+if r.config.simulate_static
+    % calcs cod response matrix
+    fname = [r.config.label '_static_respm_cod.mat'];
+    if params.static.cod_correction_flag
+        if (read_cod_respm && exist(fname, 'file'))
+            data = load(fname);
+            params.static.cod_respm = data.cod_respm;
+        end
+        if (~read_cod_respm || ~exist(fname, 'file') || ~isfield(data, 'the_ring') || ~isequal(data.the_ring,  params.the_ring))
+            cod_respm = calc_respm_cod(params.the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx);
+            params.static.cod_respm = cod_respm.respm;
+            the_ring = params.the_ring;
+            cod_respm = params.static.cod_respm;
+            save(fname, 'cod_respm','the_ring');
+        end
     end
-    if (~read_cod_respm || ~exist(fname, 'file') || ~isfield(params.cod_respm, 'the_ring') || ~isequal(params.cod_respm.the_ring,  params.the_ring))
-        cod_respm = calc_respm_cod(params.the_ring, params.bpm_idx, params.hcm_idx, params.vcm_idx);
-        params.cod_respm = cod_respm;
-        params.cod_respm.the_ring = params.the_ring;
-        cod_respm = params.cod_respm; save(fname, 'cod_respm');
+    
+    % calcs coupling correction matrix
+    fname = [r.config.label '_respm_coupling.mat'];
+    if params.static.coup_correction_flag
+        if (~read_coup_respm || ~exist(fname, 'file'))
+            coup_respm = calc_respm_coupling(params.the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx, params.static.scm_idx);
+            params.static.coup_respm = coup_respm;
+            save(fname, 'coup_respm');
+        else
+            data = load(fname);
+            params.static.coup_respm = data.coup_respm;
+        end
+    end
+    
+    % calcs optics symmetrization matrix
+    fname = [r.config.label '_respm_optics.mat'];
+    if params.static.optics_correction_flag
+        if (~read_opt_respm || ~exist(fname, 'file'))
+            opt_respm = calc_respm_optics(params.the_ring, params.static.kbs_idx);
+            params.static.opt_respm = opt_respm;
+            save(fname, 'opt_respm');
+        else
+            data = load(fname);
+            params.static.opt_respm = data.opt_respm;
+        end
     end
 end
 
-% calcs coupling correction matrix
-fname = [r.config.label '_respm_coupling.mat'];
-if params.coup_correction_flag
-    if (~read_coup_respm || ~exist(fname, 'file'))
-        coup_respm = calc_respm_coupling(params.the_ring, params.bpm_idx, params.hcm_idx, params.vcm_idx, params.scm_idx);
-        params.coup_respm = coup_respm;
-        save(fname, 'coup_respm');
-    else
-        data = load(fname);
-        params.coup_respm = data.coup_respm;
+if r.config.simulate_dynamic
+    fname = [r.config.label '_dynamic_respm_cod.mat'];
+    if params.dynamic.cod_correction_flag
+        if (read_cod_respm && exist(fname, 'file'))
+            data = load(fname);
+            params.dynamic.cod_respm = data.cod_respm;
+        end
+        if (~read_cod_respm || ~exist(fname, 'file') || ~isfield(data, 'the_ring') || ~isequal(data.the_ring,  params.the_ring))
+            cod_respm = calc_respm_cod(params.the_ring, params.dynamic.bpm_idx, params.dynamic.hcm_idx, params.dynamic.vcm_idx);
+            params.dynamic.cod_respm = cod_respm.respm;
+            the_ring = params.the_ring;
+            cod_respm = params.dynamic.cod_respm;
+            save(fname, 'cod_respm','the_ring');
+        end
     end
 end
-
-% calcs optics symmetrization matrix
-fname = [r.config.label '_respm_optics.mat'];
-if params.optics_correction_flag
-    if (~read_opt_respm || ~exist(fname, 'file'))
-        opt_respm = calc_respm_optics(params.the_ring, params.kbs_idx);
-        params.opt_respm = opt_respm;
-        save(fname, 'opt_respm');
-    else
-        data = load(fname);
-        params.opt_respm = data.opt_respm;
-    end
-end
-
 
 function the_ring = turn_longitudinal_dynamics_off(the_ring0)
 
