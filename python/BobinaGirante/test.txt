@@ -1,0 +1,11 @@
+### MEDIDA DE BOBINA GIRANTE ###
+
+### DADOS DE CONFIGURACAO ###
+nome_ima                 nome_ima
+arquivo                  test.txt
+data                     29/01/2014
+hora                     16:07:53
+ganho                    100
+nr_pontos_integracao     128
+velocidade               1.0
+aceleracao               0.5
