@@ -49,7 +49,8 @@ for i=selection
         for s=sv_list
             [machine{i} hkicks vkicks tcodx tcody] = cod_sg(r.params.static, s, machine{i}, nr_iterations, goal_codx, goal_cody);
             fm = std([(tcodx(r.params.static.bpm_idx)-goal_codx)/scale_x, (tcody(r.params.static.bpm_idx)-goal_cody)/scale_y]);
-
+            %fm = max([(tcodx(r.params.static.bpm_idx)-goal_codx)/scale_x, (tcody(r.params.static.bpm_idx)-goal_cody)/scale_y]);
+            %fm = max([(tcodx)/scale_x, (tcody)/scale_y]);
             if (fm < best_fm)
                 best_fm      = fm;
                 best_hkicks  = hkicks;

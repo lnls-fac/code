@@ -8,11 +8,6 @@ p = mfilename('fullpath');
 [pathstr, ~, ~] = fileparts(p); 
 cd(pathstr);
 
-AData = getappdata(0, 'AcceleratorData');
-if isempty(AData)
-    sirius;
-end
-
 % testa se input e uma estrutura ou string
 if ~isempty(varargin)
     if isstruct(varargin{1})
