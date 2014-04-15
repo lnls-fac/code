@@ -1,5 +1,5 @@
 import analysis
 
 
-''' análise de dados de corretoras '''
-analysis.booster_correctors_main()
+''' analise de dados de corretoras do booster'''
+analysis.booster_correctors_main(archive = True)

@@ -1,5 +1,7 @@
-import datetime
+import os
+import sys
 import math
+import datetime
 import rotating_coil_measurements
 
 def analysis_at_single_current(data, current_idx, harmonics = [1,2,3], r0 = 17.5/1000, display_plot = False):
@@ -106,9 +108,9 @@ def analysis_at_single_corrector(data, reference_data_idx = 0, directory = None,
     data1, data2 = data, []
     for i in range(len(data)):
         data2.append([data[i]])
+        
     corrector = data1[0].label
     
-
     legend = None
     rotating_coil_measurements.plot_multipoles(data1, 
                               main_harmonic_order = 1, 
@@ -144,11 +146,16 @@ def analysis_at_single_corrector(data, reference_data_idx = 0, directory = None,
                              )
        
     
-def main():
+def main(archive = False):
     
     directory = '/home/fac_files/data/sirius_python/bobina_girante/booster_corretoras/2014-04-01_8prototypes/'
     magnet_names = ['BC-0001','BC-0002','BC-0003','BC-0004','BC-0005','BC-0006','BC-0007','BC-0008']
     data = rotating_coil_measurements.load_data_set(directory, magnet_names)
+    
+    if archive:
+        original_stdout = sys.stdout
+        f = file(os.path.join(directory,'summary.txt'), 'w')
+        sys.stdout = f
     
     print('ANALYSIS OF ROTATING COIL MEASUREMENTS FOR THE BOOSTER CORRECTOR PROTOTYPES')
     print('===========================================================================')
@@ -163,6 +170,10 @@ def main():
     for i in range(len(data[0])):
         analysis_at_single_current(data, current_idx = i, harmonics = [1,2,3], display_plot = False)                    
 
+    if archive:
+        f.close()
+        sys.stdout = original_stdout
+    
 if __name__ == '__main__':
     main()
     
