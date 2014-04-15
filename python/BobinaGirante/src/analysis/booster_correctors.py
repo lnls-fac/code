@@ -1,7 +1,6 @@
 import datetime
 import math
-import analysis
-import matplotlib.pyplot as plt
+import rotating_coil_measurements
 
 def analysis_at_single_current(data, current_idx, harmonics = [1,2,3], r0 = 17.5/1000, display_plot = False):
     
@@ -20,7 +19,7 @@ def analysis_at_single_current(data, current_idx, harmonics = [1,2,3], r0 = 17.5
         current_avg += selection[i].config['corrente_alimentacao_avg(A)']
         current_std += selection[i].config['corrente_alimentacao_std(A)']**2
         d = selection[i]
-        p = analysis.calc_normalized_multipoles(d.harmonics, d.LNn_avg, d.LNn_std, d.LSn_avg, d.LSn_std, r0 = r0, main_harmonic_order = 1)
+        p = rotating_coil_measurements.calc_normalized_multipoles(d.harmonics, d.LNn_avg, d.LNn_std, d.LSn_avg, d.LSn_std, r0 = r0, main_harmonic_order = 1)
         LNn_norm_avg_tmp.append(p[0])
         LNn_norm_std_tmp.append(p[1])
         LSn_norm_avg_tmp.append(p[2])
@@ -90,12 +89,12 @@ def analysis_at_single_current(data, current_idx, harmonics = [1,2,3], r0 = 17.5
     ''' plots multipole comparison for the prototypes set '''
     #plt.xkcd()
     current_label = '{0:03d}'.format(current_idx) + '_I='+str(current_avg)+'A'
-    analysis.plot_multipoles(selection, 
+    rotating_coil_measurements.plot_multipoles(selection, 
                              main_harmonic_order = 1, 
                              harmonics = [1,2,3,4,5], 
                              plot_label = current_label, 
                              alpha_blending = 0.4, 
-                             colors = analysis.colors_happy, 
+                             colors = rotating_coil_measurements.colors_happy, 
                              ymin = 1e-6,
                              directory = '/home/fac_files/data/sirius_python/bobina_girante/booster_corretoras/2014-04-01_8prototypes/',
                              filename  = current_label,
@@ -111,13 +110,13 @@ def analysis_at_single_corrector(data, reference_data_idx = 0, directory = None,
     
 
     legend = None
-    analysis.plot_multipoles(data1, 
+    rotating_coil_measurements.plot_multipoles(data1, 
                               main_harmonic_order = 1, 
                               reference_data_idx = reference_data_idx,
                               harmonics = [2,3,4,5], 
                               plot_label = corrector, 
                               alpha_blending = 0.4, 
-                              colors = analysis.colors_happy, 
+                              colors = rotating_coil_measurements.colors_happy, 
                               ymin = 1e-6, 
                               directory = directory,
                               filename  = corrector,
@@ -125,7 +124,7 @@ def analysis_at_single_corrector(data, reference_data_idx = 0, directory = None,
                               display_plot = display_plot
                               ) 
         
-    analysis.plot_excitation_curve(data2[:7],
+    rotating_coil_measurements.plot_excitation_curve(data2[:7],
                           main_harmonic_order = 1,
                           plot_label = corrector,
                           directory = directory,
@@ -134,7 +133,7 @@ def analysis_at_single_corrector(data, reference_data_idx = 0, directory = None,
                           display_plot = display_plot
                           )   
     
-    analysis.plot_skew_angle(data2,
+    rotating_coil_measurements.plot_skew_angle(data2,
                              main_harmonic_order = 1,
                              plot_label = corrector,
                              directory = directory,
@@ -145,20 +144,16 @@ def analysis_at_single_corrector(data, reference_data_idx = 0, directory = None,
                              )
        
     
-                                
-
-if __name__ == '__main__':
+def main():
     
     directory = '/home/fac_files/data/sirius_python/bobina_girante/booster_corretoras/2014-04-01_8prototypes/'
     magnet_names = ['BC-0001','BC-0002','BC-0003','BC-0004','BC-0005','BC-0006','BC-0007','BC-0008']
-    data = analysis.load_data_set(directory, magnet_names)
-    
-    today = datetime.date.today()
+    data = rotating_coil_measurements.load_data_set(directory, magnet_names)
     
     print('ANALYSIS OF ROTATING COIL MEASUREMENTS FOR THE BOOSTER CORRECTOR PROTOTYPES')
     print('===========================================================================')
     print('Timestamp: ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    analysis.print_data_set_information(data, main_harmonic_order = 1)
+    rotating_coil_measurements.print_data_set_information(data, main_harmonic_order = 1)
     
     ''' analysis for each corrector '''
     for i in range(len(data)):
@@ -166,7 +161,11 @@ if __name__ == '__main__':
         
     ''' analysis for each current '''
     for i in range(len(data[0])):
-        analysis_at_single_current(data, current_idx = i, harmonics = [1,2,3], display_plot = False)
+        analysis_at_single_current(data, current_idx = i, harmonics = [1,2,3], display_plot = False)                    
+
+if __name__ == '__main__':
+    main()
+    
         
     
 

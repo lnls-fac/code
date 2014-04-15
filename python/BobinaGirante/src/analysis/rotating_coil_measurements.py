@@ -8,30 +8,38 @@ colors_happy   = [(0,0,0), (1,0,0),(0,0,1),(0,0.8,0),(1,0,1),(0,1,1),(1,1,0)]
 colors_redline = [(0,0,0), (128,0,0),(165,42,42),(220,20,60),(255,99,71),(205,92,92),(233,150,122),(255,160,122)]
 colors_redline = [(1.0*c[0]/255.0,1.0*c[1]/255.0,1.0*c[2]/255.0) for c in colors_redline]
         
-            
+        
 class RotatingCoilMeasurement:
+    ''' class for reading rotating coil measurements from file and calculating normal and skew multipoles '''
     
     def __init__(self, 
-                 fname = None, 
-                 label = None, 
-                 max_harmonic_order = 15, 
-                 harmonics = None, 
-                 LNn_avg = None, 
-                 LNn_std = None, 
-                 LSn_avg = None, 
-                 LSn_std = None):
-        self.label       = label
-        self.fname       = fname
+                 
+                 fname = None,              # name of the file with rotating coil measurement data
+                 label = None,              # label for this measurement data
+                 max_harmonic_order = 15,   # max harmonic order of the multipole analysis
+                 
+                 harmonics = None,          # option to create data set with predefined specs
+                 LNn_avg   = None,          # option to create data set with predefined specs
+                 LNn_std   = None,          # option to create data set with predefined specs
+                 LSn_avg   = None,          # option to create data set with predefined specs
+                 LSn_std   = None,          # option to create data set with predefined specs
+                 ):      
+           
+        ''' internal data structure '''
+        self.fname       = fname            # name of the file with rotating coil measurement data
+        self.label       = label            # label for this measurement data
         self.config      = {}
-        self.harmonics   = []
-        self.max_harmonic_order = max_harmonic_order
-        self.LNn_avg = []
-        self.LNn_std = []
-        self.LSn_avg = []
-        self.LSn_std = []
-        self.Ang_avg = []
-        self.Ang_std = []
-        self.raw         = None
+        self.max_harmonic_order = max_harmonic_order # max harmonic order of the multipole analysis
+        self.harmonics   = []               # order list of the harmonics for the data analysis
+        self.LNn_avg = []                   # list of lists with average integrated normal multipoles
+        self.LNn_std = []                   # list of lists with std integrated normal multipoles
+        self.LSn_avg = []                   # list of lists with average integrated skew multipoles
+        self.LSn_std = []                   # list of lists with std integrated skew multipoles
+        self.Ang_avg = []                   # list of lists with average skew angle
+        self.Ang_std = []                   # list of lists with std skew angle
+        self.raw         = None             # raw data from integrated rotating coil signal
+        
+        ''' reads data from file and calcs multipoles or sets internal structure from passed multipoles '''
         if fname is not None:
             self.read_file()
             self.calc_multipoles()
@@ -42,7 +50,6 @@ class RotatingCoilMeasurement:
             self.LSn_avg = LSn_avg
             self.LSn_std = LSn_std
         
-            
 
     def calc_multipoles(self):
         """ Calculates multipoles from rotating coil integrated signal"""
@@ -63,12 +70,10 @@ class RotatingCoilMeasurement:
         SJN = numpy.zeros((max_harmonic_order,nTurns))
         SKN = numpy.zeros((max_harmonic_order,nTurns))
         AGN = numpy.zeros((max_harmonic_order,nTurns))
-        Nn  = numpy.zeros(max_harmonic_order)
-        Sn  = numpy.zeros(max_harmonic_order)
-        sNn = numpy.zeros(max_harmonic_order)
-        sSn = numpy.zeros(max_harmonic_order)
-        #ang = numpy.zeros(21)
-        #sang = numpy.zeros(21)
+#         Nn  = numpy.zeros(max_harmonic_order)
+#         Sn  = numpy.zeros(max_harmonic_order)
+#         sNn = numpy.zeros(max_harmonic_order)
+#         sSn = numpy.zeros(max_harmonic_order)
         for i in range(nTurns):
             for n in range(1,max_harmonic_order+1,1):
                 R = Ne * (r2 ** n - r1 ** n)
@@ -83,7 +88,7 @@ class RotatingCoilMeasurement:
                 if i == 0:
                     self.harmonics.append(n)
 
-        #Calulate average and rms of the Normal and Skew multipoles  
+        ''' Calculates average and std of the Normal and Skew multipoles '''  
         Nn  = numpy.mean(SKN,axis=1)   
         Sn  = numpy.mean(SJN,axis=1)
         An  = numpy.mean(AGN,axis=1)
@@ -151,13 +156,6 @@ class RotatingCoilMeasurement:
                 words = line.split()
                 if words[0].upper() == 'N':
                     continue
-#                 self.harms.append(float(words[0]))
-#                 self.LNn_avg_original.append(float(words[1]))
-#                 self.LSn_avg_original.append(float(words[2]))
-#                 self.LBn_avg_original.append(float(words[3]))
-#                 self.LNn_std_original.append(float(words[4]))
-#                 self.LSn_std_original.append(float(words[5]))
-#                 self.LBn_std_original.append(float(words[6]))
                 continue
             if section == 'RAW':
                 words = line.split()
@@ -171,6 +169,7 @@ class RotatingCoilMeasurement:
         return (alpha*fg[0]+(1-alpha)*bg[0],alpha*fg[1]+(1-alpha)*bg[1],alpha*fg[2]+(1-alpha)*bg[2])
         
 def calc_multipole_units(n = 2):
+    ''' returns a string with unit multipoles of a specified harmonic order'''
     if (n == 1):
         units = 'T.m'
     elif (n == 2):
@@ -210,13 +209,12 @@ def plot_skew_angle(data,
         angle_std[i] = 1000 * math.sqrt(mu2_m) / nr_points
         
     ''' skew angle '''
-    fig = plt.figure()
+    plt.figure()
     plt.plot(current_avg, angle_avg, color='b')
     plt.errorbar(current_avg, angle_avg, yerr = angle_std, xerr = current_std, fmt = 'o', color='b')
     plt.xlabel('current [A]')
     plt.ylabel('Skew angle [mrad]')
     plt.title(plot_label)
-    #plt.yscale('log')
     plt.ylim(ymax = ymax, ymin = ymin)
     if filename == None:
         fn = 'skew_angle.ps'
@@ -264,7 +262,7 @@ def plot_excitation_curve(data,
         multipoles_std[i] = math.sqrt(mu2_m) / nr_points
     
     ''' excitation '''
-    fig = plt.figure()
+    plt.figure()
     plt.plot(current_avg, multipoles_avg, color='b')
     plt.errorbar(current_avg, multipoles_avg, yerr = multipoles_std, xerr = current_std, fmt = 'o', color='b')
     plt.xlabel('current [A]')
@@ -363,15 +361,11 @@ def plot_multipoles(data,
     for j in range(nr_bars):
         main_idx = data[j].harmonics.index(main_harmonic_order)
         main_multipole       = abs(data[j].LNn_avg[main_idx]*(r0**(data[j].harmonics[main_idx]-1)))
-        main_multipole_error = abs(data[j].LNn_std[main_idx]*(r0**(data[j].harmonics[main_idx]-1)))
+        #main_multipole_error = abs(data[j].LNn_std[main_idx]*(r0**(data[j].harmonics[main_idx]-1)))
         x, y, n = [], [], 1
         for i in range(len(harmonics)):
             
-            idx = data[j].harmonics.index(harmonics[i])
-            #multipole_0     = abs(data[j].LNn_avg[idx])*(r0**(data[j].harmonics[idx]-1)) / main_multipole
-            #multipole_p     = (abs(data[j].LNn_avg[idx])+data[j].LNn_std[idx])*(r0**(data[j].harmonics[idx]-1)) / main_multipole
-            #multipole_n     = (abs(data[j].LNn_avg[idx])-data[j].LNn_std[idx])*(r0**(data[j].harmonics[idx]-1)) / main_multipole
-            
+            idx = data[j].harmonics.index(harmonics[i])      
             alpha           = r0**(data[j].harmonics[idx]-1) / (r0**(data[j].harmonics[main_idx]-1))
             error           = alpha * math.sqrt((data[j].LNn_std[idx]/data[j].LNn_avg[main_idx])**2 + (data[j].LNn_avg[idx]*data[j].LNn_std[main_idx]/data[j].LNn_avg[main_idx])**2)
             multipole_0     = alpha * abs(data[j].LNn_avg[idx] / data[j].LNn_avg[main_idx]) 
@@ -478,6 +472,7 @@ def calc_normalized_multipoles(harmonics, LNn_avg, LNn_std, LSn_avg, LSn_std, ma
 def calc_absolute_multipoles(harmonics, LNn_norm_avg, LNn_norm_std, LSn_norm_avg, LSn_norm_std, main_harmonic_order = 2, r0 = 17.5/1000):
     
     main_idx  = harmonics.index(main_harmonic_order)
+    main_multipole = LNn_norm_avg[main_idx]
     LNn_avg, LNn_std = [], []
     LSn_avg, LSn_std = [], []
     for i in range(len(harmonics)):
