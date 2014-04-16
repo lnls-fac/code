@@ -176,9 +176,9 @@ void Trac_Simple6DCOD(double x, double px, double y, double py, double dp,
              dp*1e2, globval.CODvect[0]*1e3, globval.CODvect[2]*1e3);
 
   /* Tracking coordinates around the closed orbit */
-  x1[0] =  x + 0*globval.CODvect[0]; x1[1] = px + 0*globval.CODvect[1];
-  x1[2] =  y + 0*globval.CODvect[2]; x1[3] = py + 0*globval.CODvect[3];
-  x1[4] = dp + 0*globval.CODvect[4]; x1[5] = ctau +  0*globval.CODvect[5];
+  x1[0] =  x + globval.CODvect[0]; x1[1] = px + globval.CODvect[1];
+  x1[2] =  y + globval.CODvect[2]; x1[3] = py + globval.CODvect[3];
+  x1[4] = dp + globval.CODvect[4]; x1[5] = ctau +  globval.CODvect[5];
 
   Tx[0][lastn] = x1[0]; Tx[1][lastn] = x1[1];
   Tx[2][lastn] = x1[2]; Tx[3][lastn] = x1[3];
