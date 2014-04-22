@@ -54,7 +54,7 @@ cmds = {
 
 if __name__ == '__main__':
 
-    if True:    
+    if False:    
         local_machine = LocalMachine()
         cmds['get_task_pid_list'](local_machine)
     else:
