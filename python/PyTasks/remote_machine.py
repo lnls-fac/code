@@ -58,7 +58,7 @@ cmds = {
 
 if __name__ == '__main__':
     
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
             print('error: invalid number of arguments')
     else:
         if sys.argv[1] == 'get_task_pid_list':
