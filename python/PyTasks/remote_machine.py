@@ -34,7 +34,7 @@ class RemoteMachine:
         #ssh.close()
         return result, exit_status
     
-def cmd_get_cmd_list(remote_machine):
+def cmd_get_cmd_list():
    for cmd in cmds:
        print(cmd) 
 
