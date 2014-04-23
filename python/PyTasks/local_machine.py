@@ -19,8 +19,8 @@ class LocalMachine:
     @staticmethod 
     def kill_pid(pid):
         p = psutil.Process(pid)
-        p.kill()
-
+        p.send_signal(psutil.signal.SIGABRT)
+         
 def cmd_get_ip(local_machine):
     print(local_machine.ip)
     
@@ -48,7 +48,7 @@ def cmd_get_task_pid_list(local_machine):
         p = psutil.Process(pid)
         if len(p.cmdline)>1:
             cmd = p.cmdline
-            if pytask.task_label in cmd[1]:
+            if pytask.pytask_label in cmd[1]:
                 print(str(pid).rstrip())
     
  

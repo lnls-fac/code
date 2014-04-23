@@ -38,6 +38,12 @@ def cmd_get_cmd_list():
    for cmd in cmds:
        print(cmd) 
 
+def cmd_get_cpu_count(remote_machine):
+
+    result, exit_status = remote_machine.exec_command('local_machine.py get_cpu_count')
+    for r in result:
+        print(r)
+
 def cmd_get_task_pid_list(remote_machine):
 
     result, exit_status = remote_machine.exec_command('local_machine.py get_task_pid_list')
@@ -46,11 +52,14 @@ def cmd_get_task_pid_list(remote_machine):
         
 def cmd_kill_pid(remote_machine, pid):
     result, exit_status = remote_machine.exec_command('local_machine.py kill_pid ' + str(pid))
+    for line in result:
+        print(line)
 
     
     
 ''' command list of module '''   
 cmds = {
+        'get_cpu_count':cmd_get_cpu_count,
         'get_task_pid_list':cmd_get_task_pid_list,
         'get_cmd_list':cmd_get_cmd_list,
         'kill_pid':cmd_kill_pid,
@@ -58,22 +67,20 @@ cmds = {
 
 if __name__ == '__main__':
     
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 4:
             print('error: invalid number of arguments')
     else:
-        if sys.argv[1] == 'get_cmd_list':
+        ip_address, username, timeout, fname = sys.argv[1], sys.argv[2], sys.argv[3], '~/.ssh/id_rsa'
+        rm = RemoteMachine(ip_address = ip_address, username = username, fname = fname, timeout = timeout)
+        if sys.argv[4] == 'get_cmd_list':
             cmd_get_cmd_list()
-        elif sys.argv[1] == 'get_task_pid_list':
-            if len(sys.argv) < 5:
-                print('error: invalid number of arguments')
-            else:
-                ip_address, username, timeout = sys.argv[2], sys.argv[3], sys.argv[4]
-                rm = RemoteMachine(ip_address = ip_address, username = username, fname = '~/.ssh/id_rsa', timeout = timeout)    
-                cmds['get_task_pid_list'](rm)
-        elif sys.argv[1] == 'kill_pid':
-                ip_address, username, timeout = sys.argv[2], sys.argv[3], sys.argv[4]
-                rm = RemoteMachine(ip_address = ip_address, username = username, fname = '~/.ssh/id_rsa', timeout = timeout)    
-                cmds['kill_pid'](rm)
+        elif sys.argv[4] == 'get_task_pid_list':    
+            cmd_get_task_pid_list(rm)
+        elif sys.argv[4] == 'kill_pid':
+            pid = sys.argv[5]
+            cmd_kill_pid(rm, pid)
+        elif sys.argv[4] == 'get_cpu_count':
+            cmd_get_cpu_count(rm)
         else:
             print('error: invalid command')
                 
