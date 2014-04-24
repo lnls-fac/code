@@ -226,6 +226,7 @@ if fmapdpFlag
     end
 end
 
+disp('------------');
 drawnow;
 
 if (nrecalls ~= 1)

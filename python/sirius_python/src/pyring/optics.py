@@ -1,5 +1,5 @@
-#import mathphysicslibs.constants as mpconsts
-#import lattice
+import mathphysicslibs.constants as mpconsts
+import lattice
 import tracking
 import numpy
 import math
@@ -18,108 +18,134 @@ class Twiss:
         self.muy    = 0
         self.etayl  = 0
         self.etay   = 0
+    def __str__(self):
+        r = ''
+        r += 'closed orbit: ' + '{0[0][0]:+10.3e} {0[1][0]:+10.3e} {0[2][0]:+10.3e} {0[3][0]:+10.3e} {0[4][0]:+10.3e} {0[5][0]:+10.3e}'.format(self.closed_orbit) + '\n'
+        r += 'mux         : ' + '{0:+10.3e}'.format(self.mux) + '\n'
+        r += 'betax       : ' + '{0:+10.3e}'.format(self.betax) + '\n'
+        r += 'alphax      : ' + '{0:+10.3e}'.format(self.alphax) + '\n'
+        r += 'etax        : ' + '{0:+10.3e}'.format(self.etax) + '\n'
+        r += 'etaxl       : ' + '{0:+10.3e}'.format(self.etaxl) + '\n'
+        r += 'muy         : ' + '{0:+10.3e}'.format(self.muy) + '\n'
+        r += 'betay       : ' + '{0:+10.3e}'.format(self.betay) + '\n'
+        r += 'alphay      : ' + '{0:+10.3e}'.format(self.alphay) + '\n'
+        r += 'etay        : ' + '{0:+10.3e}'.format(self.etay) + '\n'
+        r += 'etayl       : ' + '{0:+10.3e}'.format(self.etayl) + '\n'
+        return r 
         
-def findorbit4(ring, de = 0, refpts = None, guess = None, turn_by_turn = False, engine = 'trackcpp',
-               init_nr_turns = 20, max_pos_tol = 1e-14, max_iterations = 20):
-    """ returns the closed orbit solution of the ring """
+def findorbit4(ring, de = 0, refpts = None, guess = None, max_nr_iters = 50, tolerance = 100*numpy.spacing(1), delta = 1e-8, engine = 'trackcpp'):
+    """ returns the 4D closed orbit solution of the ring """
     
-    ''' builds a valid list of element indices '''
+    co = numpy.matrix(numpy.zeros((6,5,)))
+    co[4,:] = [de,de,de,de,de]
+    if guess is not None:
+        co[:4,0] = numpy.array(guess).reshape((4,1))
+            
+    d1 = numpy.matrix([[delta],[0],[0],[0],[0],[0]])
+    d2 = numpy.matrix([[0],[delta],[0],[0],[0],[0]])
+    d3 = numpy.matrix([[0],[0],[delta],[0],[0],[0]])
+    d4 = numpy.matrix([[0],[0],[0],[delta],[0],[0]])
+    
+    change = 1e100
+    nr_iter = 0;
+    while (change > tolerance) and (nr_iter <= max_nr_iters):
+        co[:,1] = co[:,0] + d1
+        co[:,2] = co[:,0] + d2
+        co[:,3] = co[:,0] + d3
+        co[:,4] = co[:,0] + d4
+        co2 = numpy.matrix(tracking.linepass(line = ring, particles = numpy.array(co), engine = engine))
+        (Ri, Rf) = (co[:4,0], co2[:4,0])
+        M = numpy.matrix(numpy.zeros((4,4)))
+        M[:,0] = (co2[:4,1]-co2[:4,0])/delta
+        M[:,1] = (co2[:4,2]-co2[:4,0])/delta
+        M[:,2] = (co2[:4,3]-co2[:4,0])/delta
+        M[:,3] = (co2[:4,4]-co2[:4,0])/delta
+        IM = numpy.linalg.inv(numpy.eye(4,4) - M)
+        new_co = Ri + IM * (Rf - Ri)
+        change = numpy.linalg.norm(new_co - co[:4,0])        
+        co[:4,0] = new_co
+        nr_iter += 1
+        
+    co = co[:,0]
+        
+    if (nr_iter > max_nr_iters):
+        raise Exception('findorbit4 did not converge!')
+    
     if refpts is None:
-        refpts = [0]
+        return co[:4,0]
+    
     try:
         refpts[0]
     except:
         refpts = [refpts]
         
-    ''' builds initial guess coordinate vector '''    
-    Ri = numpy.array([[0.0],[0.0],[0.0],[0.0],[de],[0.0]])
+    orb = tracking.linepass(line = ring, particles = numpy.array(co), refpts = range(len(ring)+1), engine = engine)
+    return orb[:4,refpts]    
+            
+    
+def findorbit6(ring, refpts = None, guess = None, max_nr_iters = 50, tolerance = 100*numpy.spacing(1), delta = 1e-9, engine = 'trackcpp'):
+    """ returns the 6D closed orbit solution of the ring """
+    
+    co = numpy.matrix(numpy.zeros((6,7,)))
     if guess is not None:
-        guess = numpy.array(guess)
-        Ri[:4,0] = guess[:4,0]    
+        co[:,0] = numpy.array(guess).reshape((6,1))
+            
+    d1 = numpy.matrix([[delta],[0],[0],[0],[0],[0]])
+    d2 = numpy.matrix([[0],[delta],[0],[0],[0],[0]])
+    d3 = numpy.matrix([[0],[0],[delta],[0],[0],[0]])
+    d4 = numpy.matrix([[0],[0],[0],[delta],[0],[0]])
+    d5 = numpy.matrix([[0],[0],[0],[0],[delta],[0]])
+    d6 = numpy.matrix([[0],[0],[0],[0],[0],[delta]])
     
-    ''' main loop '''
-    Ri_next = numpy.zeros((6,1))
-    while True:
-        
-        ''' tracking '''
-        Rf = tracking.ringpass(ring = ring, particles = Ri, nr_turns = init_nr_turns, engine = engine)
-        Ri_next[:,0] = numpy.mean(Rf,axis=1) # averaging over points on invariant manifold
-        
-        ''' checks whether tracking is unstable '''
-        if numpy.isnan(sum(Ri_next)):
-            raise Exception('findorbit4: overflow in particle coordinates')
-        
-        ''' number of iterations exceeded? '''
-        max_iterations -= 1
-        if max_iterations < 0:
-            raise Exception('findorbit4: max number of iterations reached')
-        
-        ''' tolerance achieved? '''
-        delta = abs(Ri_next[[1,2,3,4],0] - Ri[[1,2,3,4],0])
-        if all(delta < max_pos_tol):
-            break;
-        
-        ''' next iteration '''
-        Ri = numpy.array(Ri_next)
-        init_nr_turns += 1
+    L0 = lattice.findspos(ring, len(ring)+1)
+    C0 = mpconsts.light_speed
+    T0 = L0/C0 
+    cav_idx = lattice.findcells(ring, 'frequency')
+    frf = ring[cav_idx[0]].frequency;
+    harm_number = ring[cav_idx[0]].hnumber
+    theta = numpy.matrix([[0],[0],[0],[0],[0],[C0*(harm_number/frf - T0)]])
     
-    ''' builds closed orbit at all specified locations '''
-    Rf = numpy.zeros((6,len(ring)+1))
-    Rf[:,0] = Ri[:,0]
-    if (len(refpts)>1) or (refpts[0] != 0):             
-        Rf[:,1:] = tracking.linepass(line = ring, particles = Ri, refpts = refpts, engine = engine)
+    dco = [1,1,1,1,1,1];
+    nr_iter = 0;
+    while (any(numpy.absolute(dco) > tolerance)) and (nr_iter <= max_nr_iters):
+        co[:,1] = co[:,0] + d1
+        co[:,2] = co[:,0] + d2
+        co[:,3] = co[:,0] + d3
+        co[:,4] = co[:,0] + d4
+        co[:,5] = co[:,0] + d5
+        co[:,6] = co[:,0] + d6
+        co2 = numpy.matrix(tracking.linepass(line = ring, particles = numpy.array(co), engine = engine))
+        (Ri, Rf) = (co[:,0], co2[:,0])
+        M = numpy.matrix(numpy.zeros((6,6)))
+        M[:,0] = (co2[:,1]-co2[:,0])/delta
+        M[:,1] = (co2[:,2]-co2[:,0])/delta
+        M[:,2] = (co2[:,3]-co2[:,0])/delta
+        M[:,3] = (co2[:,4]-co2[:,0])/delta
+        M[:,4] = (co2[:,5]-co2[:,0])/delta
+        M[:,5] = (co2[:,6]-co2[:,0])/delta
+        IM = numpy.linalg.inv(numpy.eye(6,6) - M)
+        new_co = Ri + IM * (Rf - Ri - theta)        
+        dco = new_co - co[:,0]
+        co[:,0] = new_co
+        print(new_co)
+        nr_iter += 1
         
-    ''' returns 4d (default) or 6d closed orbit data '''
-    if turn_by_turn:
-        Rf = numpy.zeros((6,1+init_nr_turns))
-        Ri = tracking.ringpass(ring = ring, particles = Ri, nr_turns = init_nr_turns, engine = engine)
-        return Ri
-    else:
-        return Rf[:4,refpts]
+    co = co[:,0]
     
+    if (nr_iter > max_nr_iters):
+        raise Exception('findorbit6 did not converge!')
     
-# def findorbit6(ring, refpts = None, guess = None, init_nr_turns = 20, tol = 1e-8, max_iterations = 15, step_de = 1e-4):
+    if refpts is None:
+        return co[:,0]
     
-#     ''' builds a valid list of element indices '''
-#     if refpts is None:
-#         refpts = [0]
-#     try:
-#         refpts[0]
-#     except:
-#         refpts = [refpts]
-#      
-#     if guess is None:
-#         guess = numpy.array([[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]])
-#     
-#     de0 = guess[4,0]        
-#     iteration = 0
-#     while (step_de > tol):
-#         
-#         de1 = de0 - step_de/2
-#         pos = findorbit4(ring, de = de1, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = 1e-14, max_iterations = max_iterations, turn_by_turn = True)
-#         guess[:,0] = pos[:,0] 
-#         dl1 = pos[5,-1] - pos[5,0]
-#         
-#         
-#         de2 = de0 + step_de/2
-#         pos = findorbit4(ring, de = de2, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = 1e-14, max_iterations = max_iterations, turn_by_turn = True)
-#         guess[:4,0] = pos[:4,0]
-#         dl2 = pos[5,-1] - pos[5,0]
-#         
-#         de0 = de1 - (de2 - de1) * (dl1/(dl2-dl1)) # linear interpolation
-#         
-#         if ((dl1<=0)!=(dl2<=0)):  # if interval contains solution does bisection
-#             step_de /= 2.0
-#     
-#         iteration += 1
-#         #print((iteration, de0, step_de))
-#             
-#     de = 0.5 * (de1 + de2)
-#     Ri = findorbit4(ring, de = de, refpts = [0], guess = guess, init_nr_turns = init_nr_turns, tol = tol, max_iterations = max_iterations, turn_by_turn = True)
-#     Ri = Ri[:,0]
-#     Ri = tracking.track1turn(lattice = ring, pos = Ri, trajectory = True, engine = 'trackcpp')
-#     Ri = Ri[:, refpts]
-#     return Ri
+    try:
+        refpts[0]
+    except:
+        refpts = [refpts]
+        
+    orb = tracking.linepass(line = ring, particles = numpy.array(co), refpts = range(len(ring)+1), engine = engine)
+    return orb[:,refpts]  
+    
     
 def calcm66 (line, m66_list = None, closed_orbit = None):
     """ returns the total transfer matrix (or one-turn matrix) """
@@ -132,6 +158,8 @@ def calcm66 (line, m66_list = None, closed_orbit = None):
 
 def fractunes(ring, m66 = None, m66_list = None, closed_orbit = None):
     """ returns uncoupled fractional tunes """
+    if closed_orbit is None:
+        closed_orbit = findorbit6(ring, range(len(ring)))
     if m66 is None:
         m66,m66_list,closed_orbit = calcm66(ring, m66_list = m66_list, closed_orbit = closed_orbit)
     nux = math.acos((m66[0,0]+m66[1,1])/2)/(2*math.pi)

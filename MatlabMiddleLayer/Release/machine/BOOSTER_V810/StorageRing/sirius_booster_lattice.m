@@ -1,6 +1,7 @@
 function r = sirius_booster_lattice(varargin)
 %maquina com simetria 50, formada por dipolos e quadrupolos com sextupolos
 %integrados. 15/08/2012 - Fernando.
+% modelode segmentado dos dipolos. 10/04/2014
 
 %%% HEADER SECTION %%%
 
@@ -20,21 +21,32 @@ bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
 sext_pass_method = 'StrMPoleSymplectic4Pass';
 
-B_length = 1.1520;
-B_angle  = 360 / 50;
-B_gap    = 0.028;
-B_fint1  = 0.0;
-B_fint2  = 0.0;
-B_edge   = (B_angle/2)*(pi/180)*1;
+
 
 %carrega as forcas dos magnetos;
 set_magnets_strength_booster;
 
 
-b1 = rbend_sirius('B', B_length, B_angle*(pi/180), B_edge, B_edge, ...
-    B_gap, B_fint1, B_fint2, [0 0 0 0], [0, B_strength, B_sext, 0], bend_pass_method);
+% B_length = 1.1520;
+% B_angle  = 360 / 50;
+% B_gap    = 0.028;
+% B_fint1  = 0.0;
+% B_fint2  = 0.0;
+% B_edge   = (B_angle/2)*(pi/180)*1;
+% b1 = rbend_sirius('B', B_length, B_angle*(pi/180), B_edge, B_edge, ...
+%     B_gap, B_fint1, B_fint2, [0 0 0 0], [0, B_strength, B_sext, 0], bend_pass_method);
+% pb = marker('PB', 'IdentityPass');
+% b = [pb, b1, pb];
+
+b01 = rbend_sirius('B', 1.000000000000000E-03, +1.426485950996607E-05, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+4.140577271934239E-05, +3.058605208196647E-02, -8.251801752174037E+00, -1.257804343190303E+02, -1.878934962563991E+05, -1.670003254353561E+06, +3.079228436209509E+09], bend_pass_method);
+b02 = rbend_sirius('B', 1.580000000000000E-01, +1.179618086127569E-03, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+0.000000000000000E+00, +4.855295535374061E-03, -7.216745503658560E-01, +3.061480477170636E+00, -9.532253730626083E+01, -1.138817354802063E+03, +7.896135726359183E+05], bend_pass_method);
+b03 = rbend_sirius('B', 3.000000000000003E-02, +1.459353758750183E-03, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+0.000000000000000E+00, -9.506765125433098E-02, -1.657771745012960E+00, +2.456999406155903E+01, +4.157933504094569E+03, +5.002371662930900E+03, -1.022424406403009E+08], bend_pass_method);
+b04 = rbend_sirius('B', 3.399999999999992E-02, +3.412178069747464E-03, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+0.000000000000000E+00, -2.079714071591720E-01, -1.920477735683628E+00, +5.810211405032815E+00, -3.509300682929235E+03, +6.420776809816113E+04, +6.291399026007216E+07], bend_pass_method);
+b05 = rbend_sirius('B', 1.580000000000000E-01, +1.662526504959806E-02, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+0.000000000000000E+00, -1.859620865317806E-01, -1.883162915218852E+00, -1.596178727167645E-01, -8.441889487347562E+01, +1.847758710080948E+03, -1.274410000899198E+06], bend_pass_method);
+b06 = rbend_sirius('B', 1.920000000000000E-01, +1.994573240088625E-02, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+0.000000000000000E+00, -2.119930065064550E-01, -1.926905039970153E+00, -3.604593481630426E+00, -8.571181055182160E+01, -7.508028910206927E+03, -1.055179786595804E+06], bend_pass_method);
+b07 = rbend_sirius('B', 1.960000000000000E-01, +2.019544084717638E-02, 0, 0, 0, 0, 0, [0,0,0,0,0,0,0], [+0.000000000000000E+00, -2.272573009556761E-01, -1.993793351671241E+00, -6.474955824281598E+00, +2.179224582442633E+02, -2.005269082855995E+04, -7.440279279190110E+06], bend_pass_method);
 pb = marker('PB', 'IdentityPass');
-b = [pb, b1, pb];
+b = [pb, b01, b02, b03, b04, b05, b06, b07, b07, b06, b05, b04, b03, b02, b01, pb];
 
 qd   = quadrupole('QD', 0.20, qd_strength, quad_pass_method);
 
@@ -99,34 +111,45 @@ mlt      = marker('MLT', 'IdentityPass');
 
 
 %Standard:
+
+diff_b_len = 1.538 - 1.1520;
+hlt2 = drift('HLT',  2.146000/2-diff_b_len/2, 'DriftPass');
+lfree_2   = [hlt mlt hlt2];
+l25_2     = drift('L25',  0.250000-diff_b_len/2, 'DriftPass');
+lqd       = [lm45, qd, l25_2];
+l30_2     = drift('L30',  0.300000-diff_b_len/2, 'DriftPass');
+lcv_2     = [l30_2, cv, lm30];
+lsd_2     = [l25_2, sd, lm45];
+lsdcv_2   = [l25_2, sd, l25, cv, lm70];
+lcvmon_2  = [l30_2, cv, lm114, mon, l81]; % 1) desloca bpm do centro p/ cam. vac. elip.
+
 lfree   = [hlt mlt hlt];
-lqd     = [lm45, qd, l25];
-lsd     = [lm45, sd, l25];
 lsf     = [lm35, sf, l15];
 lch     = [lm25, ch, l25];
-lcv     = [lm30, cv, l30];
-lsdcv   = [lm70, cv, l25, sd, l25];
-fodo1   = [mqf, qf, lfree, lfree, b, lfree, mon, lsf, qf];
-fodo2   = [mqf, qf, lfree, lqd, b, fliplr(lcv), mon, lch, qf];
-fodo1sd = [mqf, qf, lfree, lfree, b, fliplr(lsd), mon, lsf, qf];
-fodo2sd = [mqf, qf, lfree, lqd, b, fliplr(lsdcv), mon, lch, qf];
+fodo1   = [mqf, qf, lfree, lfree_2, b, fliplr(lfree_2), mon, lsf, qf];
+fodo2   = [mqf, qf, lfree, lqd, b, lcv_2, mon, lch, qf];
+fodo1sd = [mqf, qf, lfree, lfree_2, b, lsd_2, mon, lsf, qf];
+fodo2sd = [mqf, qf, lfree, lqd, b, lsdcv_2, mon, lch, qf];
 boos    = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2];
 
 %Injection and Extraction
-lcvmon  = [l81, mon, lm114, cv, l30]; % 1) desloca bpm do centro p/ cam. vac. elip.
+%lcvmon  = [l81, mon, lm114, cv, l30]; % 1) desloca bpm do centro p/ cam. vac. elip.
 lke     = [l42, kick_e]; % kikcer de extracao
 lse     = [l30, sept_ex, l04]; % septum de extracao
 lsich   = [lm145, sept_in, l80, ch, l25]; % septum de injecao
 
-fodo2ke  = [mqf, qf, lke, lqd, b, fliplr(lcvmon), lch, qf]; % aplic de 1
-fodo1se = [mqf, qf, lse, lfree, b, lfree, mon, lsf, qf];
-fodo2si = [mqf, qf, lfree, lqd, b, fliplr(lcv), mon, lsich, qf];
-fodo1ki = [mqf, qf, lki, lfree, b, lfree, mon, lsf, qf];
+
+fodo2ke  = [mqf, qf, lke, lqd, b, lcvmon_2, lch, qf]; % aplic de 1
+fodo1se = [mqf, qf, lse, lfree_2, b, fliplr(lfree_2), mon, lsf, qf];
+fodo2si = [mqf, qf, lfree, lqd, b, lcv_2, mon, lsich, qf];
+fodo1ki = [mqf, qf, lki, lfree_2, b, fliplr(lfree_2), mon, lsf, qf];
 boosinj = [fodo1sd, fodo2ke, fodo1se, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2];
 
 % RF section
-fodo1rf = [mqf, qf, lfree, RFC, lfree, b, lfree, mon, lsf, qf];
+
+fodo1rf = [mqf, qf, lfree, RFC, lfree_2, b, fliplr(lfree_2), mon, lsf, qf];
 boosrf  = [fodo1sd, fodo2, fodo1, fodo2, fodo1rf, fodo2sd, fodo1, fodo2, fodo1, fodo2];
+
 
 boocor  = [inicio, boosinj, boos, boosrf, boos, boos, fim];
 

@@ -1,2 +1,2 @@
-/Users/liulin/anaconda/lib/python2.7/site-packages/trackcpp.so
-/Users/liulin/anaconda/lib/python2.7/site-packages/trackcpp-1.0-py2.7.egg-info
+/usr/local/lib/python2.7/dist-packages/trackcpp.so
+/usr/local/lib/python2.7/dist-packages/trackcpp-1.0.egg-info

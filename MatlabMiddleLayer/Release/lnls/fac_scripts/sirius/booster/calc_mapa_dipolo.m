@@ -1,3 +1,5 @@
+function the_ring = calc_mapa_dipolo
+
 %% multipolos
 % n = repmat([1 2 3 4 5 6],100,1);
 % %x = repmat(linspace(-10,10,100)'*1e-3,1,6);

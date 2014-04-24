@@ -1,0 +1,38 @@
+0
+Configurações da bobina girante
+
+Porta Display	10
+Porta Driver	1
+Porta Integrador	4
+Porta PUC	5
+Enderecamento PUC	8
+
+Endereco Driver	1
+Ganho	6
+Pontos Integracao	3
+Pulsos Encoder	1024
+Pulsos para Trigger	1526
+Velocidade Medida	1
+Aceleracao Medida	.5
+Voltas offset	15
+Volta filtro	10
+Passos Motor	50000
+
+
+
+Endereco Driver A	3
+Endereco Driver B	4
+Endereco Driver C	2
+Avanco do motor A	0
+Avanco do motor B	0
+Avanco do motor C	1
+Posicao de indice A	-31.2
+Posicao de indice B	-27.53
+Posicao de Premontagem A	20.0
+Posicao de Premontagem B	30.0
+Posicao de Final A	50.0
+Posicao de Final B	120.0
+Posicao angular montagem	3500
+Posicao longitudinal montagem	7.0
+Posicao vertical	4800
+Posicao tracao	12.0
