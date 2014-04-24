@@ -331,12 +331,12 @@ AD.InjectionEnergy     = 0.49;
 AD.ModeName            = 'LowAlpha';
 AD.OpsFileExtension    = '';
 
-lnls1_lattice_low_alpha(AD.Energy);
+THERING = lnls1_lattice_low_alpha(AD.Energy);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 148;
 AD.LNLS1Params         = lnls1_params;
-AD.DeltaRFDisp         = 2000e-6;
+AD.DeltaRFDisp         = 200e-6;
 %AD.DeltaRFChro         = [-4000 -2000 -1000 0 1000 2000 4000] * 1e-6;
 %AD.DeltaRFChro         = [-2000 -1000 0 1000 2000] * 1e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
@@ -349,7 +349,8 @@ AD.OpsData.PrsProfFile = 'lnls1_pressure_profile.txt';
 AD.TuneDelay           = 3.0;  
 AD.ATModel             = 'lnls1_lattice_low_alpha';
 AD.Chromaticity.Golden = [1; 1];
-AD.MCF                 = getmcf('Model');
+%AD.MCF                 = getmcf('Model');
+AD.MCF                 = 0.0007;
 
 setad(AD);
 switch2sim;

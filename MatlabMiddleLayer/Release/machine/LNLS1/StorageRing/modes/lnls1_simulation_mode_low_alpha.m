@@ -23,7 +23,8 @@ lnls1_set_id_field('AWS07', 0);
 % setpv('SF',     'Physics',  51.39);
 setpv('QF',     'Physics',   2.68);
 setpv('QD',     'Physics',  -2.957);
-setpv('QFC',    'Physics',   2.164);
+%setpv('QFC',    'Physics',   2.164);
+setpv('QFC',    'Physics',   2.123);
 setpv('SD',     'Physics', -27.97);
 setpv('SF',     'Physics',  45.91);
 
