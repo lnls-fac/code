@@ -20,6 +20,9 @@ setbpmaverages(reading_interval,nr_points);
 DeltaHCM = 0.0001 / 1.5; % rad  % dividido por fator de forma a gerar COD que não acionam intertravamento de órbita do AWG09...
 DeltaVCM = 0.0001 / 1.5; % rad
 
+DeltaHCM = 0.0001 / 1.5 / 2; % rad  % dividido por fator de forma a gerar COD que não acionam intertravamento de órbita do AWG09...
+DeltaVCM = 0.0001 / 1.5 / 2; % rad
+
 HCMValuesHW = getsp('HCM');
 HCMValuesPH = hw2physics('HCM', 'Setpoint', HCMValuesHW, family2dev('HCM'), getenergy);
 HCMValuesHWDelta = physics2hw('HCM', 'Setpoint', HCMValuesPH + DeltaHCM, family2dev('HCM'), getenergy);
