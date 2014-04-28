@@ -5,28 +5,28 @@ lnls1_set_id_field('AWG09', 0);
 lnls1_set_id_field('AON11', 0);
 lnls1_set_id_field('AWS07', 0);
 
-%% negative alpha (6-fold symmetry)
-%setpv('QF',     'Physics',   2.688);
-%setpv('QD',     'Physics',  -2.95392);
-%%setpv('QD',     'Physics',  -2.944);
-%setpv('QFC',    'Physics',   2.144);
-%setpv('SD',     'Physics', -31.44);
-%setpv('SF',     'Physics',  51.39);
 
-% setpv('QF',     'Physics',   2.688);
-% setpv('QD',     'Physics',  -2.95392);
-% setpv('QD',     'Physics',  -2.944);
+% %% negative alpha (6-fold symmetry)
+% %setpv('QF',     'Physics',   2.688);
+% %setpv('QD',     'Physics',  -2.95392);
+% %%setpv('QD',     'Physics',  -2.944);
+% %setpv('QFC',    'Physics',   2.144);
+% %setpv('SD',     'Physics', -31.44);
+% %setpv('SF',     'Physics',  51.39);
+% 
+% % setpv('QF',     'Physics',   2.688);
+% % setpv('QD',     'Physics',  -2.95392);
+% % setpv('QD',     'Physics',  -2.944);
+% % setpv('QF',     'Physics',   2.68);
+% % setpv('QD',     'Physics',  -2.957);
+% % setpv('QFC',    'Physics',   2.144);
+% % setpv('SD',     'Physics', -41.44);
+% % setpv('SF',     'Physics',  51.39);
 % setpv('QF',     'Physics',   2.68);
 % setpv('QD',     'Physics',  -2.957);
-% setpv('QFC',    'Physics',   2.144);
-% setpv('SD',     'Physics', -41.44);
-% setpv('SF',     'Physics',  51.39);
-setpv('QF',     'Physics',   2.68);
-setpv('QD',     'Physics',  -2.957);
-%setpv('QFC',    'Physics',   2.164);
-setpv('QFC',    'Physics',   2.123);
-setpv('SD',     'Physics', -27.97);
-setpv('SF',     'Physics',  45.91);
+% setpv('QFC',    'Physics',   2.123);
+% setpv('SD',     'Physics', -27.97);
+% setpv('SF',     'Physics',  45.91);
 
 
 % % low-alpha (3-fold symmetry)
