@@ -10,80 +10,83 @@ end
 
 %%% TEMPLATE SECTION %%%
 
+% Forca dos Quadrupolos baseada no ajuste LOCO do dia 2014-04-28
+
+
 % MARKER Template %
 e1 = marker('MARKER', 'IdentityPass');
 MARKER_element = [e1];
 
 % A2QF01 Template %
-e1 = quadrupole('A2QF01', 0.27/2, 2.68, 'QuadLinearPass');
-e2 = quadrupole('A2QF01', 0.27/2, 2.68, 'QuadLinearPass');
+e1 = quadrupole('A2QF01', 0.27/2, 2.705934877756326, 'QuadLinearPass');
+e2 = quadrupole('A2QF01', 0.27/2, 2.705934877756326, 'QuadLinearPass');
 A2QF01_element = [e1 e2];
 
 % A2QF03 Template %
-e1 = quadrupole('A2QF03', 0.27/2, 2.68, 'QuadLinearPass');
-e2 = quadrupole('A2QF03', 0.27/2, 2.68, 'QuadLinearPass');
+e1 = quadrupole('A2QF03', 0.27/2, 2.708143764437382, 'QuadLinearPass');
+e2 = quadrupole('A2QF03', 0.27/2, 2.708143764437382, 'QuadLinearPass');
 A2QF03_element = [e1 e2];
 
 % A2QF05 Template %
-e1 = quadrupole('A2QF05', 0.27/2, 2.68, 'QuadLinearPass');
-e2 = quadrupole('A2QF05', 0.27/2, 2.68, 'QuadLinearPass');
+e1 = quadrupole('A2QF05', 0.27/2, 2.711932010703761, 'QuadLinearPass');
+e2 = quadrupole('A2QF05', 0.27/2, 2.711932010703761, 'QuadLinearPass');
 A2QF05_element = [e1 e2];
 
 % A2QF07 Template %
-e1 = quadrupole('A2QF07', 0.27/2, 2.68, 'QuadLinearPass');
-e2 = quadrupole('A2QF07', 0.27/2, 2.68, 'QuadLinearPass');
+e1 = quadrupole('A2QF07', 0.27/2, 2.711486159041618, 'QuadLinearPass');
+e2 = quadrupole('A2QF07', 0.27/2, 2.711486159041618, 'QuadLinearPass');
 A2QF07_element = [e1 e2];
 
 % A2QF09 Template %
-e1 = quadrupole('A2QF09', 0.27/2, 2.68, 'QuadLinearPass');
-e2 = quadrupole('A2QF09', 0.27/2, 2.68, 'QuadLinearPass');
+e1 = quadrupole('A2QF09', 0.27/2, 2.710699070856108, 'QuadLinearPass');
+e2 = quadrupole('A2QF09', 0.27/2, 2.710699070856108, 'QuadLinearPass');
 A2QF09_element = [e1 e2];
 
 % A2QF11 Template %
-e1 = quadrupole('A2QF11', 0.27/2, 2.68, 'QuadLinearPass');
-e2 = quadrupole('A2QF11', 0.27/2, 2.68, 'QuadLinearPass');
+e1 = quadrupole('A2QF11', 0.27/2, 2.710112923759205, 'QuadLinearPass');
+e2 = quadrupole('A2QF11', 0.27/2, 2.710112923759205, 'QuadLinearPass');
 A2QF11_element = [e1 e2];
 
 % A2QD01 Template %
-e1 = quadrupole('A2QD01', 0.27/2, -2.957, 'QuadLinearPass');
-e2 = quadrupole('A2QD01', 0.27/2, -2.957, 'QuadLinearPass');
+e1 = quadrupole('A2QD01', 0.27/2, -2.958316591791574, 'QuadLinearPass');
+e2 = quadrupole('A2QD01', 0.27/2, -2.958316591791574, 'QuadLinearPass');
 A2QD01_element = [e1 e2];
 
 % A2QD03 Template %
-e1 = quadrupole('A2QD03', 0.27/2, -2.957, 'QuadLinearPass');
-e2 = quadrupole('A2QD03', 0.27/2, -2.957, 'QuadLinearPass');
+e1 = quadrupole('A2QD03', 0.27/2, -2.958123884241660, 'QuadLinearPass');
+e2 = quadrupole('A2QD03', 0.27/2, -2.958123884241660, 'QuadLinearPass');
 A2QD03_element = [e1 e2];
 
 % A2QD05 Template %
-e1 = quadrupole('A2QD05', 0.27/2, -2.957, 'QuadLinearPass');
-e2 = quadrupole('A2QD05', 0.27/2, -2.957, 'QuadLinearPass');
+e1 = quadrupole('A2QD05', 0.27/2, -2.957987915238165, 'QuadLinearPass');
+e2 = quadrupole('A2QD05', 0.27/2, -2.957987915238165, 'QuadLinearPass');
 A2QD05_element = [e1 e2];
 
 % A2QD07 Template %
-e1 = quadrupole('A2QD07', 0.27/2, -2.957, 'QuadLinearPass');
-e2 = quadrupole('A2QD07', 0.27/2, -2.957, 'QuadLinearPass');
+e1 = quadrupole('A2QD07', 0.27/2, -2.958577809214161, 'QuadLinearPass');
+e2 = quadrupole('A2QD07', 0.27/2, -2.958577809214161, 'QuadLinearPass');
 A2QD07_element = [e1 e2];
 
 % A2QD09 Template %
-e1 = quadrupole('A2QD09', 0.27/2, -2.957, 'QuadLinearPass');
-e2 = quadrupole('A2QD09', 0.27/2, -2.957, 'QuadLinearPass');
+e1 = quadrupole('A2QD09', 0.27/2, -2.958076590625608, 'QuadLinearPass');
+e2 = quadrupole('A2QD09', 0.27/2, -2.958076590625608, 'QuadLinearPass');
 A2QD09_element = [e1 e2];
 
 % A2QD11 Template %
-e1 = quadrupole('A2QD11', 0.27/2, -2.957, 'QuadLinearPass');
-e2 = quadrupole('A2QD11', 0.27/2, -2.957, 'QuadLinearPass');
+e1 = quadrupole('A2QD11', 0.27/2, -2.960163621654679, 'QuadLinearPass');
+e2 = quadrupole('A2QD11', 0.27/2, -2.960163621654679, 'QuadLinearPass');
 A2QD11_element = [e1 e2];
 
 % A6QF01 Template %
-e1 = quadrupole('A6QF01', 0.27/2, 2.123, 'QuadLinearPass');
+e1 = quadrupole('A6QF01', 0.27/2, 2.126388072939004, 'QuadLinearPass');
 e2 = corrector  ('VCM', 0.00000, [0 0], 'CorrectorPass');
-e3 = quadrupole('A6QF01', 0.27/2, 2.123, 'QuadLinearPass');
+e3 = quadrupole('A6QF01', 0.27/2, 2.126388072939004, 'QuadLinearPass');
 A6QF01_element = [e1 e2 e3];
 
 % A6QF02 Template %
-e1 = quadrupole('A6QF02', 0.27/2, 2.123, 'QuadLinearPass');
+e1 = quadrupole('A6QF02', 0.27/2, 2.129579547689569, 'QuadLinearPass');
 e2 = corrector  ('VCM', 0.00000, [0 0], 'CorrectorPass');
-e3 = quadrupole('A6QF02', 0.27/2, 2.123, 'QuadLinearPass');
+e3 = quadrupole('A6QF02', 0.27/2, 2.129579547689569, 'QuadLinearPass');
 A6QF02_element = [e1 e2 e3];
 
 % SKEWQUAD Template %
