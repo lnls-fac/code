@@ -63,9 +63,9 @@ class RotatingCoilMeasurement:
             F[i] = (numpy.fft.fft(dados[:,i]))/(nPoints/2)
             
         F = numpy.array(F)
-        Ne = 10                        # Numero de Espiras
-        r1 = 1.0/1000                  # Raio interno [m]
-        r2 = 18.03/1000                # Raio externo [m]
+        Ne = self.config['n_espiras_bobina_principal']     # Numero de Espiras
+        r1 = self.config['raio_interno_bobina_princip(m)'] # Raio interno [m]
+        r2 = self.config['raio_externo_bobina_princip(m)'] # Raio externo [m]
         dtheta = 2*numpy.pi/nPoints
         SJN = numpy.zeros((max_harmonic_order,nTurns))
         SKN = numpy.zeros((max_harmonic_order,nTurns))
@@ -138,13 +138,25 @@ class RotatingCoilMeasurement:
             if '### DADOS DE LEITURA' in line.upper():
                 section = 'MULTIPOLES'
                 continue
-            if '### DADOS ARMAZENADOS' in line.upper():
+            if '### DADOS DA BOBINA' in line.upper():
+                section = 'BOBINA'
+                continue
+            #if '### DADOS ARMAZENADOS' in line.upper():
+            if '### DADOS BRUTOS' in line.upper():
                 section = 'RAW'
                 raw = []
                 continue
             if line[0] == '#':
                 continue
             if section == 'CONFIG':
+                words = line.split()
+                self.config[words[0]] = ' '.join(words[1:])
+                try:
+                    self.config[words[0]] = float(self.config[words[0]])
+                except:
+                    pass
+                continue
+            if section == 'BOBINA':
                 words = line.split()
                 self.config[words[0]] = ' '.join(words[1:])
                 try:

@@ -5,7 +5,6 @@ import socket
 import os
 import sys
 
-
 class RemoteMachine:
     
     def __init__(self, ip_address, username, password = None, fname = '~/.ssh/id_rsa', timeout = None):
@@ -34,6 +33,13 @@ class RemoteMachine:
         #ssh.close()
         return result, exit_status
     
+    def exec_command_in_background(self, cmd):
+        
+        ssh_stdin, ssh_stdout, ssh_stderr = self.ssh.exec_command(cmd + ' &')
+        exit_status = ssh_stdout.channel.recv_exit_status()
+        return exit_status
+    
+    
 def cmd_get_cmd_list():
    for cmd in cmds:
        print(cmd) 
@@ -44,9 +50,9 @@ def cmd_get_cpu_count(remote_machine):
     for r in result:
         print(r)
 
-def cmd_get_task_pid_list(remote_machine):
+def cmd_get_pytask_pid_list(remote_machine):
 
-    result, exit_status = remote_machine.exec_command('local_machine.py get_task_pid_list')
+    result, exit_status = remote_machine.exec_command('local_machine.py get_pytask_pid_list')
     for r in result:
         print(r)
         
@@ -60,7 +66,7 @@ def cmd_kill_pid(remote_machine, pid):
 ''' command list of module '''   
 cmds = {
         'get_cpu_count':cmd_get_cpu_count,
-        'get_task_pid_list':cmd_get_task_pid_list,
+        'get_pytask_pid_list':cmd_get_task_pid_list,
         'get_cmd_list':cmd_get_cmd_list,
         'kill_pid':cmd_kill_pid,
        }
@@ -74,7 +80,7 @@ if __name__ == '__main__':
         rm = RemoteMachine(ip_address = ip_address, username = username, fname = fname, timeout = timeout)
         if sys.argv[4] == 'get_cmd_list':
             cmd_get_cmd_list()
-        elif sys.argv[4] == 'get_task_pid_list':    
+        elif sys.argv[4] == 'get_pytask_pid_list':    
             cmd_get_task_pid_list(rm)
         elif sys.argv[4] == 'kill_pid':
             pid = sys.argv[5]

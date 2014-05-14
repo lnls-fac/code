@@ -11,7 +11,8 @@ import time
 pytask_label = 'pytask.py'
 default_pytask_dir = os.path.join(os.path.expanduser('~'), 'pytask_dir')
 
-class LocalPyTask:
+        
+class PyTask:
     
     def __init__(self, cmdline = None, remote_machine = None, remote_username = None, remote_dir = None):
         self.pid              = os.getpid()
@@ -36,7 +37,8 @@ class LocalPyTask:
     
     def execute_task(self):
         self.fp.write(str(datetime.datetime.now()) + ': running...\n')
-        time.sleep(60)
+        os.chdir(self.local_dir)
+        time.sleep(10)
         #if self.cmdline is None:
         #    while True:
         #        pass
@@ -53,6 +55,8 @@ class LocalPyTask:
         
     
     def send_results_back(self):
+        os.chdir('../')
+        cmd = 'scp -pr ' + self.local_dir + '/. ' + self.remote_username + '@' + self.remote_machine + ':' + self.remote_dir + '/.' + ' ' + self.local_dir + '/'
         pass
     
     def run(self):
@@ -76,4 +80,4 @@ class LocalPyTask:
 
 
 if __name__ == '__main__':
-    lt = LocalPyTask(remote_machine = '10.0.21.42', remote_username = 'ximenes', remote_dir = '~/rodar_tracy')
+    lt = PyTask(remote_machine = '10.0.21.42', remote_username = 'ximenes', remote_dir = '~/rodar_tracy')

@@ -34,4 +34,4 @@ def analysis_booster_quadrupoles():
     m3 = analysis.RotatingCoilMeasurement('BQF_03_Medida_03.dat')
     m3.print_multipoles()
     data = [m0, m1, m2, m3]
-    analysis.plot_multipoles(data, plot_label = 'tests', alpha_blending = 0.4, colors = colors_happy, min_y = 1e-8)
+    analysis.rotating_coil_measurements.plot_multipoles(data, plot_label = 'tests', alpha_blending = 0.4, colors = analysis.colors_happy, min_y = 1e-8)

@@ -42,7 +42,7 @@ def cmd_kill_pid(local_machine, pid):
     except:
         print('error: could not kill process')
        
-def cmd_get_task_pid_list(local_machine):
+def cmd_get_pytask_pid_list(local_machine):
     pids = local_machine.get_pid_list()
     for pid in pids:
         p = psutil.Process(pid)
@@ -58,7 +58,7 @@ cmds = {
         'get_ip':cmd_get_ip,
         'get_cpu_count':cmd_get_cpu_count,
         'get_pid_list':cmd_get_pid_list,
-        'get_task_pid_list':cmd_get_task_pid_list,
+        'get_pytask_pid_list':cmd_get_pytask_pid_list,
         'kill_pid':cmd_kill_pid,
        }
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     if False:    
         local_machine = LocalMachine()
-        cmds['get_task_pid_list'](local_machine)
+        cmds['get_pytask_pid_list'](local_machine)
     else:
         if len(sys.argv) < 2:
             print('error: invalid number of arguments')
