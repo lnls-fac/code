@@ -1,4 +1,4 @@
-function lnls_characterize_lmci(ringdata,budget,I,sigma,n_azi,n_rad,nb,mu, save)
+function varargout = lnls_characterize_lmci(ringdata,budget,I,sigma,n_azi,n_rad,nb,mu, save)
 % lnls_characterize_lmci(ringdata,budget,I,sigma,n_azi,n_rad,nb,mu, save)
 
 w = ringdata.w;
@@ -22,9 +22,6 @@ eta = ringdata.eta;     % momentum compaction factor
 E = ringdata.E;         % energy [GeV];
 
 %% Calcula Longitudinal mode Coupling
-tam = n_azi + 1 + n_azi + n_rad*(2*n_azi + 1);
-delta = zeros(tam,length(I));
-
 fprintf('Calculation of Longitudinal Mode Coupling Instability\n');
 fprintf('%-20s: %-20.4g\n','Shynchrotron Tune', nus);
 fprintf('%-20s: %-20d\n','Azimuthal Modes', n_azi);
@@ -36,9 +33,14 @@ fprintf('Stable? ');
 delta = lnls_calc_longitudinal_mode_couplingopt(w, Zl, n_rad, n_azi, sigma, ...
     I, E, w0, nus, eta, nb, mu);
 
+first = true;
 for i = 1:length(I)
     if any(imag(delta(:,i))*nus*w0*tau > 1)
         fprintf('%-6s','N');
+        if first
+            varargout{1} = I(i);
+        end
+        first = false;
     else
         fprintf('%-6s','Y');
     end
