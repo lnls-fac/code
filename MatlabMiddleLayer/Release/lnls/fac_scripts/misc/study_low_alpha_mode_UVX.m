@@ -123,9 +123,9 @@ else
     orb = [0;0;0;0;0;0];
     
     
-    var_grid = linspace(-5e-2, 0e-2 ,20);
+    var_grid = [linspace(-35e-2, -25e-2 ,20) linspace(-2e-2, -0.2e-3,30)];
     ngrid = length(var_grid);
-    nturns = 5000;
+    nturns = 1000;
     
     xini  = 0.1e-4*ones(1,ngrid);
     xlini = 0*ones(1,ngrid);
