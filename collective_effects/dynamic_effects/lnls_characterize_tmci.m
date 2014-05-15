@@ -1,4 +1,4 @@
-function lnls_characterize_tmci(ringdata,budget,I,sigma,plane,n_azi,n_rad,chrom,nb,mu, save)
+function varargout = lnls_characterize_tmci(ringdata,budget,I,sigma,plane,n_azi,n_rad,chrom,nb,mu, save)
 
 w = ringdata.w;
 
@@ -30,9 +30,6 @@ eta = ringdata.eta;     % momentum compaction factor
 E = ringdata.E;         % energy [GeV];
 
 %% Calcula Transeverse mode Coupling
-tam = n_azi + 1 + n_azi + n_rad*(2*n_azi + 1);
-delta = zeros(tam,length(I));
-
 fprintf('Calculation of %s Mode Coupling Instability\n', label);
 fprintf('%-20s: %-20.4g\n','Betatron Tune', nut);
 fprintf('%-20s: %-20.4g\n','Chromaticity', chrom);
@@ -46,9 +43,14 @@ fprintf('Stable? ');
 delta =lnls_calc_transverse_mode_couplingopt(w, Zt, n_rad, n_azi, sigma, ...
     I, E, w0, nut, nus, eta, chrom, nb, mu);
 
+first = true;
 for i = 1:length(I)
     if any(imag(delta(:,i))*nus*w0*tau > 1)
         fprintf('%-6s','N');
+        if first
+            varargout{1} = I(i);
+        end
+        first = false;
     else
         fprintf('%-6s','Y');
     end
@@ -61,8 +63,8 @@ fprintf('\n\n\n');
 % for j = 1:size(delta,2)
 %     imag_delta(:,j) = imag(delta(ind(:,j),j));
 % end
-[real_delta ~] = sort(real(delta));
-[imag_delta ~] = sort(imag(delta));
+[real_delta, ~] = sort(real(delta));
+[imag_delta, ~] = sort(imag(delta));
 
 
 % Create figure
