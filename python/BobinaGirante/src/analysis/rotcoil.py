@@ -4,13 +4,20 @@ import matplotlib.pyplot as plt
 import os
 
 ''' color patterns for multipole plots '''
-colors_happy   = [(0,0,0), (1,0,0),(0,0,1),(0,0.8,0),(1,0,1),(0,1,1),(1,1,0)]
-colors_redline = [(0,0,0), (128,0,0),(165,42,42),(220,20,60),(255,99,71),(205,92,92),(233,150,122),(255,160,122)]
-colors_redline = [(1.0*c[0]/255.0,1.0*c[1]/255.0,1.0*c[2]/255.0) for c in colors_redline]
-        
+# colors_redline   = [(1.0,0,0),(0.5,0,0)]
+# colors_blueline  = [(0,0,1.0),(0,0,0.5)]
+# colors_greenline = [(0,0.5,0),(0,1,0)]
+
+colors_redline   = [(1,0,0),]
+colors_greenline = [(0,1,0),]
+colors_blueline  = [(0,0.2,0.8),]
+
+
+  
+default_ymin = 1e-6
         
 class multipoles:
-    
+    """ class which represents multipole analysis from a rotating coil measurement """
     def __init__(self, 
                  measurement = None, 
                  harmonics = None, 
@@ -95,8 +102,9 @@ class multipoles:
         self.r0 = r0
         self.calc_relative_multipoles()
             
-    def select_main_multipole(self, h):
-        
+    def select_main_multipole(self, h):    
+        if self.absolute_LN_avg is None:
+            self.calc_absolute_multipoles()
         idx  = self.harmonics.index(h)
         return (h,self.absolute_LN_avg[idx])  
         
@@ -111,27 +119,56 @@ class multipoles:
         if self.absolute_LN_avg is None:
             self.calc_absolute_multipoles()
         
-        nr_turns  = self.measurement.nr_turns
         main = self.main_multipole[1] * (self.r0 ** self.main_multipole[0])
-        self.relative_LN = numpy.zeros((len(self.harmonics), nr_turns))
-        self.relative_LS = numpy.zeros((len(self.harmonics), nr_turns))
-        for j in range(len(self.harmonics)):
-            n = self.harmonics[j]
-            for i in range(nr_turns):
-                self.relative_LN[j,i] = self.absolute_LN[j,i] * (self.r0 ** n) / main
-                self.relative_LS[j,i] = self.absolute_LS[j,i] * (self.r0 ** n) / main
         
-        ''' Calculates average and std of the Normal and Skew relative multipoles '''  
-        self.relative_LN_avg  = numpy.mean(self.relative_LN,axis=1)   
-        self.relative_LS_avg  = numpy.mean(self.relative_LS,axis=1)
-        self.relative_LN_std  = numpy.std(self.relative_LN,axis=1, ddof=1) / numpy.sqrt(nr_turns)
-        self.relative_LS_std  = numpy.std(self.relative_LS,axis=1, ddof=1) / numpy.sqrt(nr_turns)
+        if self.absolute_LN is None:
+            self.relative_LN_avg = [0] * len(self.harmonics)
+            self.relative_LS_avg = [0] * len(self.harmonics)
+            self.relative_LN_std = [0] * len(self.harmonics)
+            self.relative_LS_std = [0] * len(self.harmonics)
+            for j in range(len(self.harmonics)):
+                n = self.harmonics[j]
+                self.relative_LN_avg[j]  = self.absolute_LN_avg[j] * (self.r0 ** n) / main
+                self.relative_LS_avg[j]  = self.absolute_LS_avg[j] * (self.r0 ** n) / main
+                self.relative_LN_std[j]  = self.absolute_LN_std[j] * (self.r0 ** n) / main
+                self.relative_LS_std[j]  = self.absolute_LS_std[j] * (self.r0 ** n) / main
+        else:
+            nr_turns  = self.measurement.nr_turns
+            self.relative_LN = numpy.zeros((len(self.harmonics), nr_turns))
+            self.relative_LS = numpy.zeros((len(self.harmonics), nr_turns))
+            for j in range(len(self.harmonics)):
+                n = self.harmonics[j]
+                for i in range(nr_turns):
+                    self.relative_LN[j,i] = self.absolute_LN[j,i] * (self.r0 ** n) / main
+                    self.relative_LS[j,i] = self.absolute_LS[j,i] * (self.r0 ** n) / main
+        
+            ''' Calculates average and std of the Normal and Skew relative multipoles '''  
+            self.relative_LN_avg  = numpy.mean(self.relative_LN,axis=1)   
+            self.relative_LS_avg  = numpy.mean(self.relative_LS,axis=1)
+            self.relative_LN_std  = numpy.std(self.relative_LN,axis=1, ddof=1) / numpy.sqrt(nr_turns)
+            self.relative_LS_std  = numpy.std(self.relative_LS,axis=1, ddof=1) / numpy.sqrt(nr_turns)
                 
     def calc_absolute_multipoles(self):
     
-        if self.harmonics is None or self.measurement is None:
+        if self.harmonics is None:
             return
         
+        if self.measurement is None:
+            if (self.main_multipole is None) or (self.r0 is None):
+                return
+            main = self.main_multipole[1] * (self.r0 ** self.main_multipole[0])
+            self.absolute_LN_avg = [0] * len(self.harmonics)
+            self.absolute_LS_avg = [0] * len(self.harmonics)
+            self.absolute_LN_std = [0] * len(self.harmonics)
+            self.absolute_LS_std = [0] * len(self.harmonics)
+            for j in range(len(self.harmonics)):
+                n = self.harmonics[j]
+                self.absolute_LN_avg[j] = main * self.relative_LN_avg[j] / (self.r0 ** n)
+                self.absolute_LS_avg[j] = main * self.relative_LS_avg[j] / (self.r0 ** n)
+                self.absolute_LN_std[j] = main * self.relative_LN_std[j] / (self.r0 ** n)
+                self.absolute_LS_std[j] = main * self.relative_LS_std[j] / (self.r0 ** n)
+            return  
+            
         Ne = self.measurement.rcoil_Ne # Numero de Espiras
         r1 = self.measurement.rcoil_r1 # Raio interno [m]
         r2 = self.measurement.rcoil_r2 # Raio externo [m]
@@ -170,8 +207,8 @@ class multipoles:
         self.absolute_LS_std  = numpy.std(self.absolute_LS,axis=1, ddof=1) / numpy.sqrt(nr_turns - 1)
         self.skew_angle_std   = numpy.std(self.skew_angle,axis=1,  ddof=1) / numpy.sqrt(nr_turns - 1)
         
-        
 class measurement:
+    """ class which represents rotating coil measurement """
     
     def __init__(self, fname):
         
@@ -254,29 +291,132 @@ class measurement:
                 raw.append(words)
         self.raw = 1e-12 * numpy.array(raw)  # unidade em V.s
         
-
 def calc_alpha_blending(fg, alpha, bg=(1,1,1)):
+    """ does color linear combination for alpha-blending (ps figures loose alpha-blending props unless it is hard-coded in colors) """
     return (alpha*fg[0]+(1-alpha)*bg[0],alpha*fg[1]+(1-alpha)*bg[1],alpha*fg[2]+(1-alpha)*bg[2])
-        
-def plot_normal_multipoles(data,  
-                           plot_label = '', 
-                           harmonics = None, 
-                           directory = None,
-                           filename = None, 
-                           ymin = 1e-6,
-                           colors = None,
-                           alpha_blending = 0.6,
-                           legend = None,
-                           display_plot = True
-                           ):  
     
-    if colors == None:
-        colors = colors_redline
+def bar_print_summary(data, base_bar = False):
+    
+    if base_bar:
+        idx = 1
+    else:
+        idx = 0
+        
+    nrpts = len(data[idx:])
+    main_multipole = data[idx].main_multipole
+    harmonics = data[idx].harmonics
+    
+    print('main multipole         : {0:+11.4e} {1:s}'.format(main_multipole[1], multipoles.calc_multipole_units(main_multipole[0])))
+    print('number of measurements : {0:d}'.format(nrpts))
+    avg_relative_LN_avg = [0] * len(data[idx].relative_LN_avg)
+    std_relative_LN_avg = [0] * len(data[idx].relative_LN_avg)
+    max_relative_LN_std = None
+    avg_relative_LS_avg = [0] * len(data[idx].relative_LS_avg)
+    std_relative_LS_avg = [0] * len(data[idx].relative_LS_avg)
+    max_relative_LS_std = None
+    print('{0:s}  [{1:s},  {2:s},  {3:s}]'.format('harmonic','avg_relative_LN_avg','std_relative_LN_avg', 'max_relative_LN_std'))
+    print('          [{0:s},  {1:s},  {2:s}]'.format('avg_relative_LS_avg','std_relative_LS_avg', 'max_relative_LS_std'))
+    for h in range(len(avg_relative_LN_avg)):
+        for i in range(idx,nrpts):
+            avg_relative_LN_avg[h] += data[i].relative_LN_avg[h]
+            std_relative_LN_avg[h] += data[i].relative_LN_avg[h] ** 2
+            avg_relative_LS_avg[h] += data[i].relative_LS_avg[h]
+            std_relative_LS_avg[h] += data[i].relative_LS_avg[h] ** 2
+            if (data[i].relative_LN_std[h] > max_relative_LN_std) or (data[i].relative_LN_std[h] is None):
+                max_relative_LN_std = data[i].relative_LN_std[h]
+            if (data[i].relative_LS_std[h] > max_relative_LS_std) or (data[i].relative_LS_std[h] is None):
+                max_relative_LS_std = data[i].relative_LS_std[h]
+        avg_relative_LN_avg[h] /= nrpts
+        std_relative_LN_avg[h] = math.sqrt(std_relative_LN_avg[h]/nrpts - avg_relative_LN_avg[h] ** 2)
+        avg_relative_LS_avg[h] /= nrpts
+        std_relative_LS_avg[h] = math.sqrt(std_relative_LS_avg[h]/nrpts - avg_relative_LS_avg[h] ** 2)
+        print('{0:<8d}: [{1:<+11.4e} {2:<10.4e} {3:<10.4e}]   [{4:<+11.4e} {5:<10.4e} {6:<10.4e}]'.format(harmonics[h], avg_relative_LN_avg[h], std_relative_LN_avg[h], max_relative_LN_std, avg_relative_LS_avg[h], std_relative_LS_avg[h], max_relative_LS_std))
+    
+
+def current_plot_multipoles(data,  
+                            harmonic_order,
+                            plot_label = '', 
+                            legend = None,
+                            plot_type = 'normal_multipoles',
+                            plot_excitation_flag = True,
+                            plot_nonlinearity_flag = True,
+                            current_range = None,
+                            ):  
+    try:
+        r0 = data[0].r0
+    except:
+        r0 = 0
+        
+    idx_attr_avg, idx_attr_std, idx_ylabel, idx_title = 0, 1, 2, 3
+    options = {'skew_multipoles'            : ('relative_LS_avg', 'relative_LS_std', 'relative skew multipole strength (r$_0$ = ' + str(r0*1000) + ' mm)', 'teste'),
+               'normal_multipoles'          : ('relative_LN_avg', 'relative_LN_std', 'relative normal multipole strength (r$_0$ = ' + str(r0*1000) + ' mm)', 'teste'),
+               'skew_angle'                 : ('skew_angle_avg',  'skew_angle_std',  'skew angle [mrad]', 'teste'),
+               'absolute_skew_multipoles'   : ('absolute_LS_avg', 'ansolute_LS_std', 'absolute skew multipole strength [' + data[0].calc_multipole_units(harmonic_order) + ']', 'teste'), 
+               'absolute_normal_multipoles' : ('absolute_LN_avg', 'ansolute_LN_std', 'absolute normal multipole strength [' + data[0].calc_multipole_units(harmonic_order) + ']', 'teste'),
+               }
+    
+    ''' builds lists with current and multipoles values (and error bars) '''
+    currents, multipoles_avg, multipoles_std = [], [], []
+    for d in data:
+        curr  = d.measurement.config['corrente_alim_principal_avg(A)']
+        tmp = getattr(d, options[plot_type][idx_attr_avg])
+        m_avg = tmp[harmonic_order]
+        tmp = getattr(d, options[plot_type][idx_attr_std])
+        m_std = tmp[harmonic_order]
+        #m_avg = tmp[harmonic_order]
+        #m_std = getattr(d, options[plot_type][idx_attr_std])
+        if (current_range is None) or (current_range[0] <= curr <= current_range[1]):
+            currents.append(curr)
+            multipoles_avg.append(m_avg)
+            multipoles_std.append(m_std)
+         
+    ''' plots excitation curve '''
+    if plot_excitation_flag:
+        plt.errorbar(currents, multipoles_avg, yerr = multipoles_std, marker='o')         
+        plt.xlabel('current [A]'), plt.ylabel(options[plot_type][idx_ylabel])
+        plt.title(options[plot_type][idx_title])
+        plt.show()
+        plt.close()
+    
+    ''' plots excitation non-linearity '''
+    if plot_nonlinearity_flag:
+        p = numpy.poly1d(numpy.polyfit(currents, multipoles_avg, deg = 1))
+        fitted_error = [0] * len(currents)
+        fitted_error_std = [0] * len(currents)
+        for i in range(len(currents)):
+            fitted_error[i]     = 100 * (p(currents[i]) - multipoles_avg[i]) / multipoles_avg[i]
+            fitted_error_std[i] = 100 * multipoles_std[i] / multipoles_avg[i]
+        plt.errorbar(currents, fitted_error, yerr = fitted_error_std, marker='o')         
+        plt.xlabel('current [A]'), plt.ylabel('non-linearity [%]')
+        plt.title(options[plot_type][idx_title])
+        plt.show()
+        plt.close()    
+    
+        
+def bar_plot_multipoles(data,  
+                        plot_label = '', 
+                        harmonics = None, 
+                        ymin = default_ymin,
+                        legend = None,
+                        plot_type = 'normal_multipoles',
+                        base_bar = False,
+                        ):  
+    """ generic drive routine that plots multipole (and skew angle) comparisons """
     if harmonics is None:
         harmonics = data[0].harmonics
     
     r0 = data[0].r0
     nr_bars = len(data)
+    ylabels = {'skew_multipoles'   : 'relative skew multipole strengths (r$_0$ = ' + str(r0*1000) + ' mm)',
+               'normal_multipoles' : 'relative normal multipole strengths (r$_0$ = ' + str(r0*1000) + ' mm)',
+               'skew_angle'        : 'skew angle [mrad]',
+               }
+    titles  = {'skew_multipoles'   : plot_label + ': skew multipoles',
+               'normal_multipoles' : plot_label + ': normal multipoles',
+               'skew_angle'        : plot_label + ': skew angle',
+               }
+    
+    black = (0,0,0)
     
     fig = plt.figure(figsize=(8,8))
     ax = fig.add_subplot(1,1,1)
@@ -287,56 +427,169 @@ def plot_normal_multipoles(data,
         x, y, n = [], [], 1
         for i in range(len(harmonics)):
             try:
-                idx          = data[j].harmonics.index(harmonics[i])      
-                error        = data[j].relative_LN_std[idx]
-                multipole_0  = abs(data[j].relative_LN_avg[idx]) 
+                ''' selects data to plot and errorbars '''
+                idx          = data[j].harmonics.index(harmonics[i]) 
+                if plot_type == 'skew_multipoles':
+                    error        = data[j].relative_LS_std[idx]
+                    multipole_0  = abs(data[j].relative_LS_avg[idx])
+                elif plot_type == 'normal_multipoles':
+                    error        = data[j].relative_LN_std[idx]
+                    multipole_0  = abs(data[j].relative_LN_avg[idx])
+                elif plot_type == 'skew_angle':
+                    try:
+                        error        = 1000 * data[j].skew_angle_std[idx]
+                        multipole_0  = 1000 * data[j].skew_angle_avg[idx]
+                    except:
+                        error        = 0
+                        multipole_0  = 0
+                else:
+                    raise Exception('Invalid plot type')  
+    
+                ''' checks bars sign acts accordingly (color settings) '''
+                if multipole_0 < 0:
+                    ''' negative multipoles get painted represented with red bars '''
+                    c = colors_redline[j%len(colors_blueline)]    
+                    ''' bars are plotted with absolute values '''
+                    multipole_0 = abs(multipole_0) 
+                else:
+                    ''' positive multipoles get painted represented with blue bars '''
+                    c = colors_blueline[j%len(colors_blueline)]
+                    
+                if (j == 0) and (base_bar == True):
+                    c = colors_greenline[0]
+
                 multipole_p  = multipole_0 + error
-                multipole_n  = multipole_0 - error 
+                multipole_n  = multipole_0 - error
+                
+                if multipole_0 < ymin:
+                    multipole_0 = ymin    
                 if multipole_n < ymin:
-                    multipole_n = ymin 
+                    multipole_n = ymin
+                if multipole_p < ymin:
+                    multipole_p = ymin 
                 x0 = n * (nr_bars+2) + j
                 if j == nr_bars/2:
                     xticks.append(x0)
-                    #xticks.append(harmonics[i])
                 x.append(x0-0.5*dx), y.append(ymin)
                 x.append(x0-0.5*dx), y.append(multipole_0)
                 x.append(x0+0.5*dx), y.append(multipole_0)
                 x.append(x0+0.5*dx), y.append(ymin)
-                if (multipole_n != 0) or (multipole_p != 0):  
-                    plt.plot([x0, x0], [multipole_n, multipole_p], color = (0,0,0)) #colors[j])
-                    plt.plot([x0-0.25*dx, x0+0.25*dx], [multipole_n, multipole_n], color = (0,0,0)) #colors[j])
-                    plt.plot([x0-0.25*dx, x0+0.25*dx], [multipole_p, multipole_p], color = (0,0,0)) #colors[j])
+                if (multipole_n != 0) or (multipole_p != 0):
+                    ''' error bars '''  
+                    plt.plot([x0, x0], [multipole_n, multipole_p], color = black)
+                    plt.plot([x0-0.25*dx, x0+0.25*dx], [multipole_n, multipole_n], color = black)
+                    plt.plot([x0-0.25*dx, x0+0.25*dx], [multipole_p, multipole_p], color = black)
             except ValueError:
                 pass
             finally:
                 n += 1
-        c = calc_alpha_blending(colors[j%len(colors)],alpha_blending)
-        plt.fill(x,y, color=calc_alpha_blending(colors[j%len(colors)],alpha_blending))
+        ''' plots bars '''
+        plt.fill(x,y, color = c)
+        plt.plot(x,y, color = black)
     ax.grid(True)
     ax.xaxis.set_ticks(xticks)
     ax.xaxis.set_ticklabels(['{0:d}'.format(i) for i in harmonics])
-    plt.xlabel('harmonic order')
-    plt.ylabel('relative normal multipole strengths (r$_0$ = ' + str(r0*1000) + ' mm)')
+    plt.xlabel('harmonic order'), plt.ylabel(ylabels[plot_type])
     if legend is not None:
         plt.legend(legend)
-    plt.title(plot_label + ': normal components')
-#     if directory is not None:
-#         fname = os.path.join(directory,filename + '_skew.ps')
-#     else:
-#         fname = filename + '_skew.ps'
-#     plt.savefig(fname)
-    if display_plot:
-        plt.show()
+    plt.title(titles[plot_type])
+    plt.show()
     plt.close()
     
+def bar_plot_normal_multipoles(data,  
+                               plot_label = '', 
+                               harmonics = None,  
+                               ymin = default_ymin,
+                               legend = None,
+                               base_bar = False
+                               ):  
+    """ comparison plot of normal multipoles from a list with multipole objects """
+    bar_plot_multipoles(data,  
+                        plot_label = plot_label, 
+                        harmonics = harmonics,  
+                        ymin = ymin,
+                        legend = legend,
+                        plot_type = 'normal_multipoles',
+                        base_bar = base_bar
+                        )  
     
-def read_folder(folder):
-    
+def bar_plot_skew_multipoles(data,  
+                             plot_label = '', 
+                             harmonics = None,  
+                             ymin = default_ymin,
+                             legend = None,
+                             base_bar = False
+                             ):  
+    """ comparison plot of skew multipoles from a list with multipole objects """
+    bar_plot_multipoles(data,  
+                        plot_label = plot_label, 
+                        harmonics = harmonics, 
+                        ymin = ymin,
+                        legend = legend,
+                        plot_type = 'skew_multipoles',
+                        base_bar = base_bar,
+                        )   
+     
+def bar_plot_skew_angle(data,  
+                        plot_label = '', 
+                        harmonics = None, 
+                        ymin = default_ymin,
+                        legend = None,
+                        base_bar = False
+                        ):
+    """ comparison plot of skew angle from a list with multipole objects """ 
+    bar_plot_multipoles(data,  
+                        plot_label = plot_label, 
+                        harmonics = harmonics, 
+                        ymin = ymin,
+                        legend = legend,
+                        plot_type = 'skew_angle',
+                        base_bar = base_bar,
+                        )   
+
+def bar_plot_multipoles_repetibility(multipoles,
+                                     harmonics,
+                                     r0,                                  
+                                     plot_label = 'PLOT_LABEL',
+                                     ymin = default_ymin,
+                                     colors = None,
+                                     legend = None,
+                                     plot_normal_multipoles_flag = True, 
+                                     plot_skew_multipoles_flag = True,
+                                     plot_skew_angle_flag = True,
+                                     base_bar = False):
+
+    if plot_normal_multipoles_flag:
+        bar_plot_normal_multipoles(multipoles, plot_label = plot_label, harmonics = harmonics, 
+                                   ymin = ymin, legend = legend, base_bar = base_bar)
+    if plot_skew_multipoles_flag:
+        bar_plot_skew_multipoles(multipoles, plot_label = plot_label, harmonics = harmonics, 
+                                 ymin = ymin, legend = legend, base_bar = base_bar)
+    if plot_skew_angle_flag:
+        bar_plot_skew_angle(multipoles, plot_label = plot_label, harmonics = harmonics, 
+                            ymin = ymin, legend = legend, base_bar = base_bar)
+                                      
+def read_measurements_from_folder(folder):
+    """ reads all data files within a folder and stores measurement objects in a list which is then returned """
     fnames = [os.path.join(folder, f) for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
     data = []
     for fname in fnames:
         m = measurement(fname)
         data.append(m)
     return data
+
+def calc_multipoles_from_measurements(measurements, harmonics, r0, main_multipole):
+    """ calcs absolute and relative multipoles for a list of measurements """
+    
+    multip = []
+    #main_multipole = None
+    for d in measurements:
+        m = multipoles(measurement = d, harmonics = harmonics)
+        m.calc_absolute_multipoles()
+        #if main_multipole is None:
+        #    main_multipole  = m.select_main_multipole(main_harmonic)
+        m.calc_relative_multipoles(r0 = r0, main_multipole = main_multipole)
+        multip.append(m)
+    return multip
     
     

@@ -1,11 +1,11 @@
 import rotcoil
 import booster
+import test_dipole
 
 ''' rotating_coil_measurements symbols '''
 
 #colors_happy   = rotcoil.colors_happy
 #colors_redline = rotcoil.colors_redline
-
 
 ''' booster_correctors symbols '''
 
