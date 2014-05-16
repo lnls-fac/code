@@ -9,7 +9,7 @@ E = 3;
 
 i=1;
 %% Resistive wall form cilindrical vaccum chamber;
-if (any(strcmp(select,'rw_with_coating')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'rw_with_coating')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Wall With Coating';
     budget{i}.type = 'rw';
     budget{i}.quantity = 1;
@@ -45,7 +45,7 @@ end
 
 
 %% Resistive wall from in-vaccum ondulators;
-if (any(strcmp(select,'iuv')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'In-vac. Und. @ low betax';
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
@@ -55,13 +55,13 @@ if (any(strcmp(select,'iuv')) || strcmp(select,'all') || strcmp(select,'ring'))
     budget{i}.betax = 4.1;
     budget{i}.betay = 1.5;
   
-    epb     = [1 1 1];
-    mub     = [1 1 100];
-    ange    = [0 0 0];
-    angm    = [0 0 0];
-    sigmadc = [0 5.9e7 6.25e5]; % Copper Sheet
-    tau     = [0 1 0]*27e-15;
-    b       = [4.5/2 4.7/2]*1e-3;
+    epb     = [1 1 1 1];
+    mub     = [1 1 1 100];
+    ange    = [0 0 0 0];
+    angm    = [0 0 0 0];
+    sigmadc = [0 5.9e7 1 6.25e5]; % Copper Sheet
+    tau     = [0 1 0 0]*27e-15;
+    b       = [4.5 4.65 4.7]/2*1e-3;
     L       = 2.0;
     budget{i}.mub = mub;
     budget{i}.ange = ange;
@@ -97,13 +97,13 @@ if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,
     end
     budget{i}.betax = 16.9;
     budget{i}.betay = 5.0;
-    epb     = [1 1 1];
-    mub     = [1 1 100];
-    ange    = [0 0 0];
-    angm    = [0 0 0];
-    sigmadc = [0 5.9e7 6.25e5]; % Copper Sheet
-    tau     = [0 1 0]*27e-15;
-    b       = [7.8/2 8/2]*1e-3;
+    epb     = [1 1 1 1];
+    mub     = [1 1 1 100];
+    ange    = [0 0 0 0];
+    angm    = [0 0 0 0];
+    sigmadc = [0 5.9e7 1 6.25e5]; % Copper Sheet
+    tau     = [0 1 0 0]*27e-15;
+    b       = [7.8 7.95 8]/2*1e-3;
     L       = 2.0;
     budget{i}.mub = mub;
     budget{i}.ange = ange;
@@ -131,7 +131,7 @@ end
 
 
 %% Resistive wall from smallgap vacuum chambers;
-if (any(strcmp(select,'epus')) || strcmp(select,'all') || strcmp(select,'ring'))
+if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'EPUs';
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
@@ -190,7 +190,7 @@ if (any(strcmp(select,'kicker')) || any(strcmp(select,'all')) || any(strcmp(sele
     budget{i}.quantity = 4;
     budget{i}.betax = 17;
     budget{i}.betay = 4;
-% Valores que peguei com o F??bio.
+% Valores que peguei com o Fabio.
     a = 63/2*1e-3;
     b = (10+7.5)*1e-3;
     d = b + 20e-3;
@@ -204,17 +204,17 @@ if (any(strcmp(select,'kicker')) || any(strcmp(select,'all')) || any(strcmp(sele
     mur = 1 + mui./(1+1i*w/ws);
     Zg = (1/50 + 1i*w*30e-12).^-1;
     % mean case
-    [Zlw Zhw Zvw] = lnls_calc_ferrite_kicker_impedance(w,a,b,d,L,epr,mur,Zg,'pior');
-    [Zlb Zhb Zvb] = lnls_calc_ferrite_kicker_impedance(w,a,b,d,L,epr,mur,Zg,'melhor');
-    theta = atan(b/a);
-    Zl = (theta*Zlb + (pi/2-theta)*Zlw)/(pi/2);
-    Zv = (theta*Zvb + (pi/2-theta)*Zvw)/(pi/2);
-    Zh = (theta*Zhb + (pi/2-theta)*Zhw)/(pi/2);
+    [Zlw, Zhw, Zvw] = lnls_calc_ferrite_kicker_impedance(w,a,b,d,L,epr,mur,Zg,'pior');
+%     [Zlb Zhb Zvb] = lnls_calc_ferrite_kicker_impedance(w,a,b,d,L,epr,mur,Zg,'melhor');
+%     theta = atan(b/a);
+%     Zl = (theta*Zlb + (pi/2-theta)*Zlw)/(pi/2);
+%     Zv = (theta*Zvb + (pi/2-theta)*Zvw)/(pi/2);
+%     Zh = (theta*Zhb + (pi/2-theta)*Zhw)/(pi/2);
         
     budget{i}.L = L;
-    budget{i}.Zv = Zv;
-    budget{i}.Zh = Zh;
-    budget{i}.Zl = Zl;
+    budget{i}.Zv = Zvw;
+    budget{i}.Zh = Zhw;
+    budget{i}.Zl = Zlw;
     budget{i}.escala = 'log';
     i=i+1;
 end

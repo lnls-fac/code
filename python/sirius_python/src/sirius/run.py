@@ -96,8 +96,12 @@ def test_speed(the_ring):
     
 def test_findm66(the_ring):
     
+    the_ring = pyring.lattice.copy.deepcopy(the_ring)
+    the_ring = pyring.lattice.setcavity(the_ring, 'on')
+    
     t0 = time.time()
-    m66,_ = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    closed_orbit = pyring.optics.findorbit6(the_ring)
+    m66,_ = pyring.tracking.findm66(the_ring, closed_orbit = closed_orbit)
     b1 = pyring.lattice.findcells(the_ring, 'fam_name', 'b1')
     print(m66[b1[0],:,:])
     t1 = time.time()
@@ -109,8 +113,10 @@ def test_calcm66(the_ring):
     the_ring = pyring.lattice.copy.deepcopy(the_ring)
     the_ring = pyring.lattice.setcavity(the_ring, 'on')
     
+    closed_orbit = pyring.optics.findorbit6(the_ring)
+    
     t0 = time.clock()
-    m66_list,_ = pyring.tracking.findm66(the_ring, closed_orbit = None)
+    m66_list,_ = pyring.tracking.findm66(the_ring, closed_orbit = closed_orbit)
     t1 = time.clock()
     print('findm66: {:f} s'.format(t1-t0))
     t0 = time.clock()
@@ -123,6 +129,10 @@ def test_calcm66(the_ring):
         print('')
 
 def test_twiss(the_ring):
+    
+    ''' set cavity state '''
+    the_ring = pyring.lattice.copy.deepcopy(the_ring)
+    the_ring = pyring.lattice.setcavity(the_ring, 'on')
     
     fractunes,m66,m66_list,closed_orbit = pyring.optics.fractunes(the_ring)
     twiss,_,_,_ = pyring.optics.twiss(line = the_ring, m66 = m66, m66_list = m66_list, closed_orbit = closed_orbit)
@@ -154,7 +164,7 @@ def test_twiss(the_ring):
     plt.show()
     
             
-def test_findorbit4(the_ring):
+def test_findorbit4_tracking(the_ring):
     
     ''' set cavity state '''
     the_ring = pyring.lattice.copy.deepcopy(the_ring)
@@ -180,9 +190,70 @@ def test_findorbit4(the_ring):
     
     print('ok')
     
+def test_findorbit4(the_ring):
+    
+    ''' set cavity state '''
+    the_ring = pyring.lattice.copy.deepcopy(the_ring)
+    the_ring = pyring.lattice.setcavity(the_ring, 'off')
+    
+    hcms = pyring.lattice.findcells(the_ring, 'fam_name', 'hcm')
+    the_ring[hcms[0]].kick_angle[0] = 1*1e-4
+    
+    co = pyring.optics.findorbit4(the_ring, de = 0, refpts = range(len(the_ring)), guess = None, max_nr_iters = 50, tolerance = 100*numpy.spacing(1), delta = 1e-8, engine = 'trackcpp')
+    s = pyring.lattice.findspos(lattice = the_ring, indices = range(len(the_ring)))
+    
+    o = co
+    for i in range(1000,2000):
+        print('{0:03d}: {1:+18.16f} {2:+18.16f} {3:+18.16f} {4:+18.16f}'.format(i+1, o[0,i],o[1,i],o[2,i],o[3,i]))
+    
+    plt.plot(s, co[0,:])
+    plt.show()
+
+
+
+def test_trackingsimple(the_ring):
+    
+    the_ring = pyring.lattice.setcavity(the_ring, 'on')
+    the_ring = pyring.lattice.setradiation(the_ring, 'off')
+    posi = numpy.zeros((6,1))
+    posi[:,0] = [1e-4,2e-4,3e-4,4e-4,5e-4,6e-4]
+    o = pyring.tracking.linepass(the_ring, posi, refpts = range(len(the_ring)))
+    for i in range(20):
+        print('{0:03d}: {1:+18.16f} {2:+18.16f} {3:+18.16f} {4:+18.16f} {5:+18.16f} {6:+18.16f}'.format(i+1, o[0,i],o[1,i],o[2,i],o[3,i],o[4,i],o[5,i]))
+    
+    
+def test_findorbit6(the_ring):
+    
+    ''' set cavity state '''
+    the_ring = pyring.lattice.copy.deepcopy(the_ring)
+    the_ring = pyring.lattice.setcavity(the_ring, 'on')
+    
+    hcms = pyring.lattice.findcells(the_ring, 'fam_name', 'hcm')
+    the_ring[hcms[0]].kick_angle[0] = 1*1e-6
+    
+    co = pyring.optics.findorbit6(the_ring, refpts = range(len(the_ring)+1), guess = None, max_nr_iters = 50, tolerance = 100*2.220446049250313e-16, delta = 1e-9, engine = 'trackcpp')
+    s = pyring.lattice.findspos(lattice = the_ring, indices = range(len(the_ring)+1))
+    
+    o = co
+    
+    for i in range(1000,2000):
+        print('{0:03d}: {1:+18.16f} {2:+18.16f} {3:+18.16f} {4:+18.16f} {5:+18.16f} {6:+18.16f}'.format(i+1, o[0,i],o[1,i],o[2,i],o[3,i],o[4,i],o[5,i]))
+    
+    
+#     plt.plot(s, co[0,:])
+#     plt.show()  
+#     plt.plot(s, co[2,:])
+#     plt.show()
+    plt.plot(s, co[4,:])
+    plt.show()
+    plt.plot(s, co[5,:])
+    plt.show()
+    
+   
+    
 def create_the_ring_sirius():
     
-    the_ring = ring_v500.create_lattice(mode = 'AC10_6', energy = 3e9)
+    the_ring = ring_v500.create_lattice(mode = 'AC10_5', energy = 3e9)
     the_ring = the_ring[::] # option to select subset of elements
     pyring.lattice.setcavity(the_ring, 'off')
     return the_ring
@@ -199,6 +270,8 @@ def run_tests():
         ------------------ '''
     the_ring = create_the_ring_sirius()
     #the_ring = create_the_ring_test()
+    
+    ''' tests printlattice '''
     #pyring.lattice.printlattice(the_ring)
     
     ''' compares tracking with AT results '''
@@ -228,6 +301,11 @@ def run_tests():
     
     ''' tests twiss '''
     test_twiss(the_ring)
+    
+    ''' tests simpletracking '''
+    #test_trackingsimple(the_ring)
+    
+    
     
 ''' TEST Suite for PyRing and TrackC++ '''
     

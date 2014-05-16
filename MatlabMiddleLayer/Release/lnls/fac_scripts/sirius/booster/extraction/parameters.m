@@ -2,7 +2,7 @@
 param.Rin = [0;0.0;0;0;0;0];
 
 %Definition of the bunch to be used:
-param.n_part = 10000;
+param.n_part = 1;
 param.cutoff = 1;
 param.emitx = 3.8e-9;
 param.emity = param.emitx*20/100;

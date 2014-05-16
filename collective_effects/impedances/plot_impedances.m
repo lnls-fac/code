@@ -84,8 +84,6 @@ if mult_beta
 else
     ylabel('-Im(Z_{x}) [\Omega/m]','FontSize',16);
 end
-% Create legend
-legend1 = legend(subplot11,'show');
 
 
 % Create subplot
@@ -190,6 +188,9 @@ end
 xlabel('\omega [rad/s]','FontSize',16);
 % Create ylabel
 ylabel('Re(Z_{L}) [\Omega]','FontSize',16);
+% Create legend
+legend1 = legend(subplot23,'show');
+
 
 if save
     if ~exist('name','var')

@@ -106,6 +106,33 @@ elseif strcmpi(mode_version,'AC10_5')
 %     sd3_strength       = -289.9270429064217/2;
 %     sf2_strength       =  333.7039740852999/2;
 
+
+%     % possible_change_low2chrom
+%     %     %%% QUADRUPOLOS
+%     %  ===========
+%     qaf_strength       =  2.536876;
+%     qad_strength       = -2.730416;
+%     qbd2_strength      = -3.961194;
+%     qbf_strength       =  3.902838;
+%     qbd1_strength      = -2.966239;
+%     qf1_strength       =  2.367821;
+%     qf2_strength       =  3.354286;
+%     qf3_strength       =  3.080632;
+%     qf4_strength       =  2.707639;
+%     
+% 
+%     %%% SEXTUPOLOS
+%     %  ==========
+%     sa1_strength       =  -70.853154;
+%     sa2_strength       =   30.233062;
+%     sb1_strength       = -120.693260;
+%     sb2_strength       =   76.510022;
+%     sd1_strength       = -134.263630;
+%     sf1_strength       =  176.025605;
+%     sd2_strength       =  -92.401355;
+%     sd3_strength       = -153.186174;
+%     sf2_strength       =  188.453270;
+
 elseif strcmpi(mode_version,'AC10_6')
     
    % Essa rede é um resultado da tentativa de melhorar a injecao com os
@@ -139,31 +166,31 @@ elseif strcmpi(mode_version,'AC10_6')
     sf1_strength       =   190.8217; 
     
 
-%moga3seeds - 0813-v500-ac10-6
+%moga3seeds - 119_235_320_1149-v500-ac10-6
 %     %%% QUADRUPOLOS
 %     %  =========== 
 %    
-%     qaf_strength       = 2.532869499658598;
-%     qad_strength       =-2.717262615474284;
-%     qbd2_strength      =-3.95927308352121 ;
-%     qbf_strength       = 3.904019532913861;
-%     qbd1_strength      =-2.96594139849164 ;
-%     qf1_strength       = 2.366411788165399;
-%     qf2_strength       = 3.353787637851648;
-%     qf3_strength       = 3.080228868072833;
-%     qf4_strength       = 2.703235841330593;
+%     qaf_strength       = 2.536723473173347;
+%     qad_strength       =-2.741523290845321;
+%     qbd2_strength      =-3.983186842271514;
+%     qbf_strength       = 3.904200532908222;
+%     qbd1_strength      =-2.960126035504997;
+%     qf1_strength       = 2.373088903218954;
+%     qf2_strength       = 3.350085889049807;
+%     qf3_strength       = 3.080835708218113;
+%     qf4_strength       = 2.703962188286038;
 %     
 %     %%% SEXTUPOLOS
 %     %  ==========    
-%     sa1_strength       =-125.3604239795933  / 2;
-%     sa2_strength       =  53.61957397326521 / 2;
-%     sb1_strength       =-225.2559026485492  / 2;
-%     sb2_strength       = 134.3189793621744  / 2;
-%     sd2_strength       =-154.0989499139385  / 2;
-%     sd3_strength       =-277.9350533034433  / 2;
-%     sf2_strength       = 315.3068185437343  / 2;
-%     sd1_strength       =-321.6321430139201  / 2;
-%     sf1_strength       = 377.1723006157712  / 2; 
+%     sa1_strength       =-63.5598353397126 ;
+%     sa2_strength       = 25.9155891776268 ;
+%     sb1_strength       =-118.4508900291824;
+%     sb2_strength       = 62.5024703279084 ;
+%     sd2_strength       = -84.0881196396030;
+%     sd3_strength       =-138.5851115500286;
+%     sf2_strength       = 161.9377920076308;
+%     sd1_strength       =-154.7093218268305;
+%     sf1_strength       = 188.2260666144867; 
 
 
 

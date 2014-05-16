@@ -1,0 +1,20 @@
+1
+Nome da Fonte:	Fonte_Teste
+Corrente Linear:	3.0
+Amplitude Linear:	0.1
+Tempo Linear:	0.1
+Corrente Inicial Auto:	1.0
+Corrente Final Auto:	4.0
+Numero Correntes:	5
+Amplitude Senoidal:	3.0
+Offset Senoidal:	1.0
+Pico Inferior:	1.0
+Pico Superior:	1.0
+Corrente Final Senoidal:	1.0
+Frequencia Senoidal:	2.0
+N Ciclos Senoidal:	1
+N Pontos Senoidal:	1
+Fator Entrada:	1.0
+Fator Saida:	1.0
+Corrente Máxima da Fonte:	0.0
+Corrente Mínima da Fonte:	0.0

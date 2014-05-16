@@ -99,7 +99,7 @@ mb3      = marker('mb3',     'IdentityPass');
 inicio   = marker('inicio',  'IdentityPass');
 fim      = marker('fim',     'IdentityPass');
 mid      = marker('id_end',  'IdentityPass');
-mgirder  = []; %marker('mgirder', 'IdentityPass');
+%mgirder  = marker('mgirder', 'IdentityPass');
 
 % --- beam position monitors ---
 mon      = marker('BPM', 'IdentityPass');
@@ -187,13 +187,13 @@ cav = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
 %% lines 
 
-insa   = [ dia1, mid, dia2, mgirder, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17, mgirder];
-insb   = [ dib1, mid, dib2, d10, mgirder, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17, mgirder];
+insa   = [ dia1, mid, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17];
+insb   = [ dib1, mid, dib2, d10, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17];
 
-cline1 = [ mgirder, d32, cv,  d12, ch,  d15, sd1, d17, qf1, d12, mon, d11, sf1, d20, qf2, d17, sd2, d12, ch, d10, mon, d10, mgirder];
-cline2 = [ mgirder, d18, cv,  d26, sd3, d17, qf3, d12, mon, d11, sf2, d20, qf4, d15, ch,  crhv, d12, mon, d44, mgirder];
-cline3 = [ mgirder, d44, mon, d12, ch,  d15, qf4, d20, sf2, d11, mon, d12, qf3, d17, sd3, d26, cv, crhv, d18, mgirder];
-cline4 = [ mgirder, d20, ch,  d12, sd2, d17, qf2, d20, sf1, d11, mon, d12, qf1, d17, sd1, d15, ch,  d12, cv, d22, mon, d10, mgirder];
+cline1 = [ d32, cv,  d12, ch,  d15, sd1, d17, qf1, d12, mon, d11, sf1, d20, qf2, d17, sd2, d12, ch, d10, mon, d10];
+cline2 = [ d18, cv,  d26, sd3, d17, qf3, d12, mon, d11, sf2, d20, qf4, d15, ch,  crhv, d12, mon, d44];
+cline3 = [ d44, mon, d12, ch,  d15, qf4, d20, sf2, d11, mon, d12, qf3, d17, sd3, d26, cv, crhv, d18];
+cline4 = [ d20, ch,  d12, sd2, d17, qf2, d20, sf1, d11, mon, d12, qf1, d17, sd1, d15, ch,  d12, cv, d22, mon, d10];
 
 %% Injection Section
 dmiainj  = drift('dmiainj', 0.3, 'DriftPass');
@@ -320,6 +320,9 @@ THERING = set_num_integ_steps(THERING);
 % Define Camara de Vacuo
 THERING = set_vacuum_chamber(THERING);
 
+% Define Girders
+THERING = set_girders(THERING);
+
 
 % pre-carrega passmethods de forma a evitar problema com bibliotecas recem-compiladas
 lnls_preload_passmethods;
@@ -327,6 +330,83 @@ lnls_preload_passmethods;
 
 r = THERING;
 
+
+function the_ring = set_girders(the_ring0)
+
+the_ring = the_ring0;
+b1  = findcells(the_ring,'FamName','b1');b1 = b1(2:2:end);
+b2  = findcells(the_ring,'FamName','b2');b2 = b2(2:2:end);
+b3  = findcells(the_ring,'FamName','b3');b3 = b3(2:2:end);
+mia = findcells(the_ring,'FamName','mia');
+the_ring(end+1) = the_ring(mia(1));
+mia = [mia (length(the_ring))];
+mib = findcells(the_ring,'FamName','mib');
+mis = sort([mia mib]);
+mis = [mis(1) sort([mis(2:end-1) mis(2:end-1)]) mis(end)];
+% mag = findcells(the_ring,'PolynomB');
+% cor = findcells(the_ring,'KickAngle');
+% bpm = findcells(the_ring,'FamName','bpm');
+
+
+% Girders entre b1 e b2
+diff = abs(b1-b2);
+first = min(b1,b2);
+for ii=1:length(first)
+    idx = (first(ii)+1:first(ii)+diff(ii)-3);
+    if mod(ii,2)
+        name_girder = sprintf('B1B2-C%02d',ceil(ii/2));
+    else
+        name_girder = sprintf('B2B1-C%02d',ceil(ii/2));
+    end
+    the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
+end
+
+% Girders entre b2 e b3
+first = min(b2,b3);
+diff = abs(b2-b3);
+for ii=1:length(b2)
+    if mod(ii,2)
+        name_girder = sprintf('B2B3-C%02d',ceil(ii/2));
+    else
+        name_girder = sprintf('B3B2-C%02d',ceil(ii/2));
+    end
+    idx = (first(ii)+1:first(ii)+diff(ii)-3);
+    the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
+end
+
+% Girders entre b1 e centro do trecho reto
+first = min(mis,b1);
+diff = abs(mis-b1);
+for ii=1:length(b2)
+    if strcmp(the_ring{first(ii)}.PassMethod,'IdentityPass')
+        name_girder = sprintf('MIB1-S%02d',ceil(ii/2));
+    else
+        name_girder = sprintf('B1MI-S%02d',ceil((ii+1)/2) - floor(ii/length(b2))*(length(b2)/2));
+    end
+    idx = (first(ii)+1:first(ii)+diff(ii)-1);
+    the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
+end
+
+% suportes dos dipolos
+for ii=1:length(b1)
+    idx = b1(ii) + [-2 -1 0];
+    side = 'B';
+    if mod(ii,2), side = 'A'; end
+    name_girder = sprintf('B1-C%02d-%s',ceil(ii/2),side);
+    the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
+end
+for ii=1:length(b2)
+    idx = b2(ii) + [-2 -1 0];
+    side = 'B';
+    if mod(ii,2), side = 'A'; end
+    name_girder = sprintf('B2-C%02d-%s',ceil(ii/2),side);
+    the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
+end
+for ii=1:(length(b3)/2)
+    idx = (b3(2*ii-1)-2):b3(2*ii) ;
+    name_girder = sprintf('B3BCB3-C%02d',ii);
+    the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
+end
 
 function the_ring = set_vacuum_chamber(the_ring0)
 
@@ -338,7 +418,9 @@ other_vchamber = [0.014 0.014 2];   % n = 2;   circular/eliptica
 ivu_vchamber   = [0.014 0.002 2];   
 
 bends = findcells(the_ring, 'BendingAngle');
-ivu   = sort([findcells(the_ring, 'FamName', 'id_end') findcells(the_ring, 'FamName', 'mia') findcells(the_ring, 'FamName', 'mib')]);
+ivu   = sort([findcells(the_ring, 'FamName', 'id_end') ...
+              findcells(the_ring, 'FamName', 'mia') ...
+              findcells(the_ring, 'FamName', 'mib')]);
 other = setdiff(1:length(the_ring), [bends ivu]);
 
 for i=1:length(bends)

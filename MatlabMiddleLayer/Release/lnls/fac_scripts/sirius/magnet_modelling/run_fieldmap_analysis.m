@@ -15,19 +15,25 @@ fclose('all'); drawnow;
 %parms = load_config('BOOSTER_QF_ERRORS');
 %parms = load_config('BOOSTER_QF_ERRORS_SKEW');
 
-% parms = load_config('SIRIUS_B2_MODELO7');
+parms = load_config('SIRIUS_B2_MODELO7');
 %parms = load_config('SIRIUS_CM_H');
 %parms = load_config('SIRIUS_CM_V');
 %parms = load_config('SIRIUS_QF_ERRORS');
-parms = load_config('SIRIUS_QF_TESTE_ANEL');
+%parms = load_config('SIRIUS_QF_TESTE_ANEL');
+%parms = load_config('SIRIUS_QF');
+%parms = load_config('SIRIUS_QD');
+%parms = load_config('SIRIUS_QFC');
 
 % calcs beam parameters (magnetic rigidity, gamma factor, beta, etc)
 calc_beam_parameters(parms.beam.energy);
 
 % loads fieldmap from file
-%load_fieldmap(parms.fmap_fname);
 %load_fieldmap(parms.fmap_fname, 'HCM');
+%load_fieldmap(parms.fmap_fname, 'invert');
 load_fieldmap(parms.fmap_fname);
+
+
+
 maxwell_field_reconstruction(parms.fmap_maxwell_order);
 
 % calcs real trajectory based on adaptative-step RK integration on fieldmap data
@@ -56,7 +62,8 @@ rk_traj = calc_field_on_rk_trajectory(rk_traj, parms.perp_grid);
 rk_traj_parms = calc_parameters_on_rk_trajectory(rk_traj, parms.beam, parms.magnet_type, parms.tracy.r0, parms.perp_grid.monomials);
 
 % creates segmentated model based on PolynomB profil
-seg_model = generate_model_segmentation(rk_traj, parms.model.half_length, parms.perp_grid.monomials, 'load_return', parms.config_path);
+%seg_model = generate_model_segmentation(rk_traj, parms.model.half_length, parms.perp_grid.monomials, 'load_return', parms.config_path);
+seg_model = generate_model_segmentation(rk_traj, parms.model.half_length, parms.perp_grid.monomials, 'load', parms.config_path);
 
 % creates segmented AT model (with thin element bumping all multipoles outside model half-length)
 at_model  = create_at_model(rk_traj, seg_model, parms.magnet_type, parms.perp_grid.monomials, parms.nominal_ang);
