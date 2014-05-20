@@ -12,7 +12,7 @@ OPT_FLAG	= -O3
 DBG_FLAG	= -O0 -g3
 DFLAGS          =
 SOURCES_C       = 
-SOURCES_CPP	= lattice.cpp elements.cpp passmethods.cpp trackc++.cpp
+SOURCES_CPP	= lattice.cpp elements.cpp passmethods.cpp tracking.cpp trackc++.cpp
 
 ifeq ($(MAKECMDGOALS),trackc++-debug)
 	CFLAGS		= $(MACHINE) $(DBG_FLAG) $(DFLAGS)

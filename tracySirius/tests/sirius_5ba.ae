@@ -1,8 +1,0 @@
-#--------------------------------------------  
-#  rms(systematic) alignment errors for SOLEIL
-#  name       x(m) 	 y(m)            r (rad) 
-#--------------------------------------------
-seed 1312
-quad	rms   30.0e-6	 30.0e-6     0.2e-03
-sext	rms   30.0e-6	 30.0e-6     0.2e-03
-dipole	rms   30.0e-6	 30.0e-6     0.2e-03

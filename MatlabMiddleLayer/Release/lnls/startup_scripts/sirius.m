@@ -2,7 +2,7 @@ function sirius(varargin)
 % Inicializa as estruturas do MML-LNLS e conecta com servidor LNLS1LinkS
 %
 % Historico
-% 
+%
 % 2011-06-02: c??pia modificada da vers??o do LNLS1
 % 2011-04-28: nova vers??o. script transformado em fun????o.
 % 2010-09-16: coment??rios iniciais no c??digo
@@ -35,6 +35,10 @@ cdir = pwd;
 root_folder = lnls_get_root_folder();
 cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 
+% remove toolbox/finance/finsupport/ do path para previnir conflito com
+% funcao drift da Financial Toolbox
+rmpath(fullfile(matlabroot, 'toolbox', 'finance', 'finsupport'));
+
 setpathsirius(['SIRIUS' default_version], 'StorageRing', 'sirius_link');
 cd(cdir);
 clear cdir;
@@ -42,4 +46,3 @@ clear cdir;
 addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','sirius','lattice_errors')));
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','tracy3'), '-begin');
 addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','machine','LTBA_V200')));
-

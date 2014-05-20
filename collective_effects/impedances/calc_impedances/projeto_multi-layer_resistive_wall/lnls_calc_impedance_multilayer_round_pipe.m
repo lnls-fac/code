@@ -1,4 +1,4 @@
-function [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L,E, filt, n, lim_w)
+function [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L,E)%, filt, n, lim_w)
 
 
 c = 299792458;
@@ -14,9 +14,9 @@ nu2 = (ones(size(epr,1),1)*abs(w/c)).^2.*(1 - bet^2*epr.*mur);
 
 Zl = -squeeze(1i*L*w/(2*pi*ep0*(bet*c)^2*gam^2) .*alphaTM(0, epr, mur, bet, nu, nu2, b)); % minus signal to compatibilize with Chao's convention
 Zv = -squeeze(1i*L*w.^2/(4*pi*ep0*c^2*(bet*c)*gam^4) .*alphaTM(1, epr, mur, bet, nu, nu2, b));% minus signal to compatibilize with Chao's convention
-if filt
-    Zv = suaviza(w, Zv,n,lim_w);
-end
+% if filt
+%     Zv = suaviza(w, Zv,n,lim_w);
+% end
 Zh = Zv;
 
 

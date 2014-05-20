@@ -5,7 +5,7 @@ import pyring.lattice as lattice
 import lattice_parameters   
 import numpy
 
-def create_lattice(mode = 'AC10_6', energy = 3e9):
+def create_lattice(mode = 'AC10_5', energy = 3e9):
     
     
     ''' loads lattice parameters (harmonic number, strengths, etc) '''

@@ -6,6 +6,10 @@ addpath('epu');
 
 % reads data from ID model mat file
 %id_mat_file_name = fullfile('EPU50', 'EPU50_PC - ID.mat');
+%id_mat_file_name = fullfile('EPU80','EPU80_PH - ID.mat');
+%id_mat_file_name = fullfile('U25','U25 - ID.mat');
+%id_mat_file_name = fullfile('U19','U19 - ID.mat');
+
 if ~exist('id_mat_file_name','var')
     [FileName,PathName,~] = uigetfile('*.mat','Select mat file with ID model','');
     id_mat_file_name = fullfile(PathName,FileName);
@@ -15,9 +19,9 @@ r = load(id_mat_file_name, 'ID'); ID = r.ID;
 % defines grid for kicktable calculation (mm units)
 kicktable_grid.symmetric = true; % reflection symmetry on x and y axis (only 1/4 of initial points are calculated)
 kicktable_grid.x = 30 * linspace(-1,1,81); 
-kicktable_grid.y = ((ID.def.magnetic_gap/2) - 0.05) * linspace(-1,1,17);
+kicktable_grid.y = (ID.def.physical_gap/2) * linspace(-1,1,17);
 %kicktable_grid.x = 30 * linspace(-1,1,3); 
-%kicktable_grid.y = ((ID.def.magnetic_gap/2) - 0.05) * linspace(-1,1,3);
+%kicktable_grid.y = (ID.def.physical_gap/2) * linspace(-1,1,3);
 
 % calcs kicktable
 ID.kicktables = calc_kicktables(ID.def, ID.model, ID.field, kicktable_grid);
@@ -50,7 +54,7 @@ mm = 1;
 
 
 
-% parâmetros de cálculo de U em cada linha (x,y)
+% parametros de calculo de U em cada linha (x,y)
 if false
     % calcula o menor numero de pontos em um periodo para que erro < 1% em todo grid (x,y).
     kickmaps.nr_pts_period = calc_nrpts(kickmap, kickmap.id_summary.max_by_pos);
@@ -62,7 +66,7 @@ y2    = y1 + id_def.period;
 posx = grid.x;
 posy = grid.y;
 
-lnls_create_waitbar('Construindo Função Potencial', 0.2, length(posy) * length(posx));
+lnls_create_waitbar('Construindo Funcao Potencial', 0.2, length(posy) * length(posx));
 U = zeros(length(posy), length(posx));
 counter = 0;
 figure; set(gcf, 'Name', 'KICKTABLES-PotU');
@@ -85,7 +89,7 @@ for i=1:length(posy)
     end
 end
 
-% interpola tabela de kicks (normalizada pelo quadrado da rigidez magnética)
+% interpola tabela de kicks (normalizada pelo quadrado da rigidez magnï¿½tica)
 [kickx kicky] = calc_derivatives(-0.5 * id_def.nr_periods * U, posx, posy);
 mm_2_m = 1e-3;
 kickx = mm_2_m^2 * kickx;

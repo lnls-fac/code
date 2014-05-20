@@ -1,111 +1,156 @@
-function tracy3_dynamic_aperture1(fmapdpFlag)
+function tracy3_dynamic_aperture1(varargin)
 
-f=figure;
-fa = axes('Parent',f,'YGrid','on','XGrid','on');
-box(fa,'on');
-hold(fa,'all');
-xlabel('x [mm]','FontSize',20);
-ylabel('z [mm]','FontSize',20);
-
-if(fmapdpFlag)
-    fdp=figure;
-    fdpa = axes('Parent',fdp,'YGrid','on','XGrid','on');
-    box(fdpa,'on');
-    hold(fdpa,'all');
-    xlabel('dp [%]','FontSize',20);
-    ylabel('x [mm]','FontSize',20);
+fmapdpFlag = true;
+default_dir = lnls_get_root_folder();
+for i=1:length(varargin)
+    if (ischar(varargin{i}) && strcmpi(varargin{i}, 'local_dir'))
+        default_dir = pwd();
+    else
+        fmapdpFlag = varargin{i};
+    end
 end
 
-%path = ['/home/ABTLUS/liu/Sirius/SiriusB1LE/bare/physap/'];
-%default = '/home/ABTLUS/fernando.sa/redes_tracy/Sirius/Sirius_v200/';
-default = '/opt/sirius_tracy/';
 
-drawnow;
+% selects data folder
+default_dir = fullfile(default_dir, 'data', 'sirius_tracy');
+pathname = uigetdir(default_dir,'Em qual pasta estao os dados?');
+if (pathname == 0);
+    return
+end
 
-path = uigetdir(default,'Em qual pasta estao os dados?');
-if (path==0);
-    path = default;
-else
-    path = [path '/'];
-end;
-% path = ['/home/ABTLUS/fernando.sa/redes_tracy/Booster/Boo03_02/multipolos/1ra_simulacao_mais_rms_vaccham/'];
 
-[status result] = system(['ls ' path '| grep rms | wc -l']);
+
+% gets number of random machines (= number of rms folders)
+[~, result] = system(['ls ' pathname '| grep rms | wc -l']);
 n_pastas = str2double(result);
 
+% % creates figures or ploting dynapts
+% f=figure;
+% fa = axes('Parent',f,'YGrid','on','XGrid','on'); box(fa,'on'); hold(fa,'all');
+% xlabel('x [mm]','FontSize',20); ylabel('z [mm]','FontSize',20);
+% if(fmapdpFlag)
+%     fdp=figure;
+%     fdpa = axes('Parent',fdp,'YGrid','on','XGrid','on'); box(fdpa,'on'); hold(fdpa,'all');
+%     xlabel('dp [%]','FontSize',20); ylabel('x [mm]','FontSize',20);
+% end
+
+
+% loops over random machine, loading and plotting data
+fx_fmap = [ ];fy_fmap = [ ];
+fx_fmapdp = [ ]; fy_fmapdp = [ ];
 for i=1:n_pastas
-%pathname = uigetdir(pwd,'Em qual pasta est�o os dados?');
-    diretorio = sprintf('rms%02d',i);
-    pathname = [path diretorio '/'];
-    full_name = fullfile(pathname,'fmap.out');
-    [~, fmap] = hdrload(full_name);
     
+    % -- FMAP --
+    full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmap.out');
+ 
+%     try
+%         dynapt    = tracy3_load_fmap_data(full_name);
+%     catch
+%         disp('fmap nao carregou');
+%         continue;
+%     end
+%     
+%   
+%     
+%     plot(fa,1000*dynapt(:,1),1000*dynapt(:,2));
+%     title(fa,{full_name},'Interpreter','none','FontSize',30); drawnow;
+%     
+%     if (fmapdpFlag)
+%         % -- FMAPDP --
+%         full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmapdp.out');
+%         
+%         try
+%             dynapt    = tracy3_load_fmapdp_data(full_name);
+%         catch
+%             disp('fmapdp nao carregou');
+%             continue;
+%         end
+%         plot(fdpa,100*dynapt(:,1),1000*dynapt(:,2));
+%         title(fdpa,{full_name},'Interpreter','none','FontSize',30); drawnow;
+%     end
     
-    
-    for j=1:length(fmap')
-        if fmap(j,1) ~= fmap(1,1)
-            k=j-1;
-            break;
-        end
+
+    try
+        [~, fmap] = hdrload(full_name);
+    catch
+        disp('fmap nao carregou');
     end
-    l = length(fmap')/k;
     
-    abertura = [];
-    for j=0:(l-1)
-        m=k;
-        controle=0;
-        while ((controle < 1) && (m>=1))
-            if (fmap(j*k+m,3)==0)
-                controle=controle+1;
-            end
-            m=m-1;
-        end
-        abertura=[abertura; fmap(j*k+m+1,:)];
+    % Agora, eu tenho que encontrar a DA
+    %primeiro eu identifico quantos x e y existem
+    npx = length(unique(fmap(:,1)));
+    npy = size(fmap,1)/npx;
+    %agora eu pego a coluna da frequencia x
+    x = fmap(:,1);
+    y = fmap(:,2);
+    fx = fmap(:,3);
+    fy = fmap(:,4);
+    % e a redimensiono para que todos os valores calculados para x iguais
+    %fiquem na mesma coluna:
+    x = reshape(x,npy,npx);
+    y = reshape(y,npy,npx);
+    fx = reshape(fx,npy,npx);
+    fy = reshape(fy,npy,npx);
+    % vejo quais pontos sobreviveram.
+    ind = fx ~= 0;
+    if ~ exist('idx_fmap','var')
+        idx_fmap = ind;
+    else
+        idx_fmap = idx_fmap + ind;
     end
     
-    plot(fa,1000*abertura(:,1),1000*abertura(:,2));%,'DisplayName',diretorio);
-    title(fa,{full_name},'Interpreter','none','FontSize',30);
+    fx_fmap = [fx_fmap; fx(ind)];
+    fy_fmap = [fy_fmap; fy(ind)];
     
     if (fmapdpFlag)
-        full_name = fullfile(pathname,'fmapdp.out');
-        [~, fmapdp] = hdrload(full_name);
-        
-        
-        teste=fmapdp(1,1);
-        for j=1:length(fmapdp')
-            if fmapdp(j,1) ~= teste
-                k=j-1;
-                break;
-            end
-        end
-        l = length(fmapdp')/k;
-        
-        abertura = [];
-        for j=0:(l-1)
-            m=1;
-            controle=0;
-            while ((controle < 1) && (m<=k))
-                if (fmapdp(j*k+m,3)==0)
-                    controle=controle+1;
-                end
-                m=m+1;
-            end
-            abertura=[abertura; fmapdp(j*k+m-1,:)];
+        full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmapdp.out');
+        try
+            [~, fmapdp] = hdrload(full_name);
+        catch
+            disp('fmapdp nao carregou');
         end
         
+        %primeiro eu identifico quantos x e y existem
+        npe = length(unique(fmapdp(:,1)));
+        npx = size(fmapdp,1)/npe;
+        %agora eu pego a coluna da frequencia x
+        en = fmapdp(:,1);
+        xe = fmapdp(:,2);
+        fxe = fmapdp(:,3);
+        fye = fmapdp(:,4);
+        % e a redimensiono para que todos os valores calculados para x iguais
+        %fiquem na mesma coluna:
+        en = reshape(en,npx,npe);
+        xe = reshape(xe,npx,npe);
+        fxe = reshape(fxe,npx,npe);
+        fye = reshape(fye,npx,npe);
+        % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
+        % a borda da DA
+        inddp = fxe ~= 0;
+        if ~ exist('idx_fmapdp','var')
+            idx_fmapdp = inddp;
+        else
+            idx_fmapdp = idx_fmapdp + inddp;
+        end
         
-        plot(fdpa,100*abertura(:,1),1000*abertura(:,2));%,'DisplayName',diretorios{i});
-        title(fdpa,{full_name},'Interpreter','none','FontSize',30);
+        fx_fmapdp = [fx_fmapdp; fxe(inddp)];
+        fy_fmapdp = [fy_fmapdp; fye(inddp)];
+        
     end
-    
 end
+figure;
+pcolor(1000*x, 1000*y, idx_fmap);
+% contour(x, y, idx_fmap);
+colormap('Hot'); shading('faceted');
+xlabel('X [mm]'); ylabel('Y [mm]');
+% hold on; 
+figure;
+pcolor(100*en, 1000*xe, idx_fmapdp);
+colormap('Hot'); shading('faceted');
+xlabel('\delta\epsilon [%]'); ylabel('X [mm]');
 
-% legend1 = legend(fa,'show');
-% set(legend1,...
-%     'Position',[0.727810304449646 0.183255269320842 0.13521662763466 0.341256830601093]);
-% 
-% if fmapdpFlag
-%     legend2 = legend(fdpa,'show');
-%     set(legend2,...
-%         'Position',[0.727810304449646 0.183255269320842 0.13521662763466 0.341256830601093]);
-end
+figure; plot(fx_fmap,fy_fmap,'.');
+figure; plot(fx_fmapdp,fy_fmapdp,'.');
+
+
+% view(2); grid on;

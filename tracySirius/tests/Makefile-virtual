@@ -1,8 +1,0 @@
-test:	
-	cd ..; \
-	make -f Makefile-virtual tracyd; \
-	cp tracyd tests/tracyd
-
-clean:
-	rm -rf *.dat *.out *.lax tracyd
-	

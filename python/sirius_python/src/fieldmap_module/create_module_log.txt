@@ -1,0 +1,2 @@
+/usr/local/lib/python2.7/dist-packages/fieldmapcpp.so
+/usr/local/lib/python2.7/dist-packages/fieldmapcpp-1.0.egg-info

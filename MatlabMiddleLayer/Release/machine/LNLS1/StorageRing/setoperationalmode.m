@@ -5,9 +5,14 @@ function setoperationalmode(ModeNumber)
 %  ModeNumber = 1.  1.37 GeV, User Mode {Default}
 %               2.  0.49 GeV, Injection Mode
 %               3.  1.37 GeV, BEDI
+%               4.  1.37 GeV, Low Alpha
+%               5.  1.37 GeV - No IDs
+%               6.  1.37 GeV - AWS07
+%               7.  1.37 GeV - Low-Alpha
 %
 % History
 %
+% 2014-04-26 Low-Alpha cleanup
 % 2011-04-27 Cleaned up code (Ximenes)
 
 
@@ -18,11 +23,12 @@ checkforao;
 
 % MODES
 ModeCell = { ...
-    '1.37 GeV - User Mode', ...
-    '0.49 GeV - Injection', ...
-    '1.37 GeV - BEDI', ...
-    '1.37 GeV - No IDs', ...
-    '1.37 GeV - AWS07', ...
+    '1: 1.37 GeV - User Mode', ...
+    '2: 0.49 GeV - Injection', ...
+    '3: 1.37 GeV - BEDI', ...
+    '4: 1.37 GeV - No IDs', ...
+    '5: 1.37 GeV - AWS07', ...
+    '6: 1.37 GeV - Low-Alpha', ...
 };
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -37,17 +43,25 @@ if nargin < 1
 end
 
 if ModeNumber == 1
+    disp('   setoperationmode: USERMODE(1)')
     set_operationalmode_usermode;
 elseif ModeNumber == 2
+    disp('   setoperationmode: INJECTIONMODE(2)')
     set_operationalmode_injectionmode;
 elseif ModeNumber == 3
+    disp('   setoperationmode: BEDI(3)')
     set_operationalmode_BEDI;
 elseif ModeNumber == 4
+    disp('   setoperationmode: NOIDS(4)')
     set_operationalmode_noIDs;
 elseif ModeNumber == 5
+    disp('   setoperationmode: AWS07(5)')
     set_operationalmode_AWS07;
+elseif ModeNumber == 6
+    disp('   setoperationmode: LOWALPHA(6)')
+    set_operationalmode_LowAlpha;
 else
-     error('Operational mode unknown');
+    error('Operational mode unknown');
 end
 
 % Set the AD directory path
@@ -75,8 +89,10 @@ elseif ModeNumber == 4
     lnls1_simulation_mode_IDsOFF_1p37GeV;
 elseif ModeNumber == 5
     lnls1_simulation_mode_AWS07_1p37GeV;
+elseif ModeNumber == 6
+    lnls1_simulation_mode_low_alpha;
 else
-     error('Operational mode unknown');
+    error('Operational mode unknown');
 end
 
 
@@ -140,7 +156,7 @@ AD.InjectionEnergy     = 0.49;
 AD.ModeName            = 'User';
 AD.OpsFileExtension    = '';
 
-lnls1_lattice(AD.Energy);
+THERING = lnls1_lattice(AD.Energy);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 148;
@@ -177,7 +193,7 @@ AD.InjectionEnergy     = 0.49;
 AD.ModeName            = 'User';
 AD.OpsFileExtension    = '';
 
-lnls1_lattice(AD.Energy);
+THERING = lnls1_lattice(AD.Energy);
 
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
@@ -215,7 +231,7 @@ AD.InjectionEnergy     = 0.49;
 AD.ModeName            = 'User';
 AD.OpsFileExtension    = '';
 
-lnls1_lattice(AD.Energy);
+THERING = lnls1_lattice(AD.Energy);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 148;
@@ -252,7 +268,7 @@ AD.InjectionEnergy     = 0.49;
 AD.ModeName            = 'Injection';
 AD.OpsFileExtension    = '';
 
-lnls1_lattice(AD.Energy);
+THERING = lnls1_lattice(AD.Energy);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 148;
@@ -287,7 +303,7 @@ AD.InjectionEnergy     = 0.49;
 AD.ModeName            = 'User';
 AD.OpsFileExtension    = '';
 
-lnls1_lattice_BEDI(AD.Energy);
+THERING = lnls1_lattice_BEDI(AD.Energy);
 
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
@@ -312,6 +328,43 @@ setad(AD);
 switch2sim;
 switch2hw; 
 
+
+function set_operationalmode_LowAlpha
+
+global THERING;
+
+AD = getad;
+AD.Machine             = 'LNLS1';           % Will already be defined if setpathmml was used
+AD.SubMachine          = 'StorageRing';     % Will already be defined if setpathmml was used
+AD.OperationalMode     = 'Low Alpha (1.37 GeV)';
+AD.Energy              = 1.37;
+AD.InjectionEnergy     = 0.49;
+AD.ModeName            = 'LowAlpha';
+AD.OpsFileExtension    = '';
+
+THERING = lnls1_lattice_low_alpha(AD.Energy);
+
+AD.Circumference       = findspos(THERING,length(THERING)+1);
+AD.HarmonicNumber      = 148;
+AD.LNLS1Params         = lnls1_params;
+AD.DeltaRFDisp         = 50e-6;
+%AD.DeltaRFChro         = [-4000 -2000 -1000 0 1000 2000 4000] * 1e-6;
+%AD.DeltaRFChro         = [-2000 -1000 0 1000 2000] * 1e-6;
+AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
+
+AD.BeamCurrent         = 0.25; % [A]
+AD.NrBunches           = AD.HarmonicNumber;
+AD.Coupling            = 0.0035;
+AD.OpsData.PrsProfFile = 'lnls1_pressure_profile.txt';
+
+AD.TuneDelay           = 3.0;  
+AD.ATModel             = 'lnls1_lattice_low_alpha';
+AD.Chromaticity.Golden = [1; 1];
+AD.MCF                 = getmcf('Model');
+
+setad(AD);
+switch2sim;
+switch2hw;
 
 
 

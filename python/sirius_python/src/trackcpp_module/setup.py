@@ -11,10 +11,12 @@ module1 = Extension('trackcpp',
             # module functionalities
             'trackcpp_linepass.cpp',
             'trackcpp_ringpass.cpp',
+            'trackcpp_findm66.cpp',
             # trackc++
             '../../../trackc++/elements.cpp',
             '../../../trackc++/lattice.cpp',
             '../../../trackc++/passmethods.cpp',
+            '../../../trackc++/tracking.cpp',
             ],
             language = "c++",
             #extra_compile_args = ["-std=c++11"],

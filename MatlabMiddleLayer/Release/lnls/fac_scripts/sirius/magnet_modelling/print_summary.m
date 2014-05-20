@@ -32,7 +32,13 @@ for i=1:length(fmaps)
     [~, name, ext] = fileparts(fmap.fname); fname = [name ext];
     fprintf(fp, strfmt, 'filename:');              fprintf(fp, fname); fprintf(fp, '\n');
     fprintf(fp, strfmt, 'physical length:');       fprintf(fp, [num2str(1000*fmap.magnet.length), ' mm']); fprintf(fp, '\n');
-    fprintf(fp, strfmt, 'magnetic gap:');          fprintf(fp, [num2str(1000*fmap.magnet.gap), ' mm']); fprintf(fp, '\n');
+    % em virtude a alteracao feita em load_fieldmap também tive que alterar
+    % aqui. Fernando-2014-03-05
+    if strncmpi(fmap.magnet.label,'dipolo',6)
+        fprintf(fp, strfmt, 'magnetic gap:');          fprintf(fp, [num2str(1000*fmap.magnet.gap), ' mm']); fprintf(fp, '\n');
+    else
+        fprintf(fp, strfmt, 'bore diameter:');          fprintf(fp, [num2str(1000*fmap.magnet.bore), ' mm']); fprintf(fp, '\n');
+    end
     fprintf(fp, strfmt, 'horizontal grid (x):');   fprintf(fp, ['[', num2str(1000*min(fmap.data.x)), ',', num2str(1000*max(fmap.data.x)), '] mm, ', num2str(length(fmap.data.x)), ' pts']); fprintf(fp, '\n');
     fprintf(fp, strfmt, 'longitudinal grid (z):'); fprintf(fp, ['[', num2str(1000*min(fmap.data.z)), ',', num2str(1000*max(fmap.data.z)), '] mm, ', num2str(length(fmap.data.z)), ' pts']); fprintf(fp, '\n');
     fprintf(fp, strfmt, 'vertical field By:');     fprintf(fp, ['[', num2str(min(fmap.data.fderivs{1}.by(:)), '%+7.4f'), ',' num2str(max(fmap.data.fderivs{1}.by(:)), '%+7.4f'), '] T']); fprintf(fp, '\n');

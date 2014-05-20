@@ -1,5 +1,7 @@
+% function lnls_characterize_transverse_cbi(ringdata, budget,plane, n_azi, n_rad, chrom, save)
 function lnls_characterize_transverse_cbi(ringdata, budget,plane, azi_modes, chrom, save)
-
+% n_rad = 4;
+% n_azi = 6;
 w = ringdata.w;
 
 %% Load parameters
@@ -17,12 +19,12 @@ else
     label = 'Horizontal';
 end
 
-sigma = ringdata.sigma;
 nb = ringdata.nb;
 w0 = ringdata.w0; 
 nus = ringdata.nus;
 eta = ringdata.eta;
 I_tot = ringdata.I_tot;
+sigma = interp1(1e-3*ringdata.sigma(:,1)',ringdata.sigma(:,2)',I_tot/nb);
 E = ringdata.E;
 
 Zt = zeros(1,length(w));
@@ -34,6 +36,155 @@ for j=imped
     quant = budget{j}.quantity;
     Zt    = Zt + Z*beta*quant;
 end
+
+
+%% new method
+
+% fprintf('Calculation of %s Coupled Bunch Instability and Tune Shifts\n', label);
+% fprintf('%-20s: %-20.4g\n','Betatron Tune', nut);
+% fprintf('%-20s: %-20.4g\n\n','Damping Time [ms]', tau*1e3);
+% fprintf('%-7s # of unstable Modes Modes\n',' ');
+% fprintf('%-7s ','Chrom');fprintf('%-7.2f ', chrom);fprintf('\n');
+% fprintf('%s',repmat('-',1,8*length(chrom))); fprintf('\n');
+% fprintf('%-7s ','#');
+% 
+% 
+% n_uns_modes = zeros(1,length(chrom));
+% max_rate = zeros(1,length(chrom));
+% max_shift = zeros(1,length(chrom));
+% g_rate = zeros(1,nb);
+% tu_shift = zeros(1,nb);
+% for ii=1:length(chrom)
+%     for mu=0:(nb-1)
+%         deltaw =lnls_calc_transverse_mode_couplingopt(w, Zt, n_rad, n_azi, sigma, ...
+%             I_tot/nb, E, w0, nut, nus, eta, chrom(ii), nb, mu);
+%         [gmax, ~] = max(imag(deltaw));
+%         g_rate(mu + 1) = gmax*nus*w0;
+%         tu_shift(mu + 1) =  max(abs(real(deltaw)) - round(abs(real(deltaw))));
+%     end
+%     if chrom(ii)==0;
+%         deltaw0 = 1i*g_rate + tu_shift;
+%     end
+%     n = g_rate > 1/tau ;
+%     n = sum(n);
+%     n_uns_modes(ii) = n;
+%     fprintf('%-7d ',n);
+%     max_rate(ii) = max(g_rate);
+%     [~, ind] = max(abs(tu_shift));
+%     max_shift(ii) = tu_shift(ind);
+% end
+% fprintf('\n\n');
+% rel_tuneshift = max_shift';
+% rel_tuneshift0  = real(deltaw0);
+% rel_growth    = max_rate'*tau;
+% rel_growth0   = imag(deltaw0)*tau;
+% 
+% 
+% %% Plot Results
+% 
+% % Create figure
+% scrsz = get(0,'ScreenSize');
+% figure1 = figure('OuterPosition',[scrsz(1)+100 scrsz(2)+40 scrsz(3)*0.9 scrsz(4)*0.9]);
+% 
+% h = 0.27;
+% v = 0.39;
+% hs = 0.055;
+% vs = 0.09;
+% 
+% % Create subplot
+% subplot11 = subplot(2,3,1,'Parent',figure1,'FontSize',16,'Position',[hs (2*vs+v) h v]);
+% box(subplot11,'on');
+% hold(subplot11,'all');
+% % Create multiple lines using matrix input to plot
+% plot11 = plot(subplot11, chrom,rel_tuneshift);
+% % Create xlabel
+% xlabel({'Chromaticity'},'FontSize',16);
+% % Create ylabel
+% ylabel({'Re(\Omega - \nu_b)/\nu_s'},'FontSize',16);
+% % Create title
+% title({'Tune Shift of the most shifted coupled bunch mode'},'FontSize',16);
+% 
+% 
+% % Create subplot
+% subplot21 = subplot(2,3,4,'Parent',figure1,'FontSize',16,'Position',[hs vs*2/3 h v]);
+% box(subplot21,'on');
+% hold(subplot21,'all');
+% % Create multiple lines using matrix input to plot
+% plot21 = plot(subplot21, (1:nb)-1,rel_tuneshift0);
+% xlim([0 (nb-1)]);
+% % Create xlabel
+% xlabel({'Coupled Bunch Mode'},'FontSize',16);
+% % Create ylabel
+% ylabel({'Re(\Omega - \nu_b)/\nu_s'},'FontSize',16);
+% % Create title
+% title({'Tune shifts @ zero chromaticity and m=0'},'FontSize',16);
+% 
+% 
+% % Create subplot
+% subplot13 = subplot(2,3,3,'Parent',figure1,'FontSize',16,'Position',[(3*hs+2*h) (2*vs+v) h v]);
+% box(subplot13,'on');
+% hold(subplot13,'all');
+% % Create multiple lines using matrix input to plot
+% plot(subplot13, chrom,rel_growth);
+% % Create xlabel
+% xlabel({'Chromaticity'},'FontSize',16);
+% % Create ylabel
+% ylabel({'\tau_{damp}/\tau_g'},'FontSize',16);
+% % Create title
+% title({'Growth Rates of the most unstable coupled bunch mode'},'FontSize',16);
+% % Create legend
+% 
+% % Create subplot
+% subplot23 = subplot(2,3,6,'Parent',figure1,'FontSize',16,'Position',[(3*hs+2*h) vs*2/3 h v]);
+% box(subplot23,'on');
+% hold(subplot23,'all');
+% % Create multiple lines using matrix input to plot
+% plot23 = plot(subplot23, (1:nb)-1,rel_growth0);
+% xlim([0 (nb-1)]);
+% % Create xlabel
+% xlabel({'Coupled Bunch Mode'},'FontSize',16);
+% % Create ylabel
+% ylabel({'\tau_{damp}/\tau_g'},'FontSize',16);
+% % Create title
+% title({'Growth rates @ zero chromaticity and m=0'},'FontSize',16);
+% 
+% % Create subplot
+% subplot12 = subplot(2,3,2,'Parent',figure1,'FontSize',16,'Position',[(2*hs+h) (2*vs+v) h v]);
+% box(subplot12,'on');
+% hold(subplot12,'all');
+% % Create multiple lines using matrix input to plot
+% plot12 = plot(subplot12, chrom,n_uns_modes');
+% % Create xlabel
+% xlabel({'Chromaticity'},'FontSize',16);
+% % Create ylabel
+% ylabel({'#'},'FontSize',16);
+% % Create title
+% title({'Number of Unstable Coupled Bunch Modes'},'FontSize',16);
+% 
+% % Create textbox
+% 
+% if strcmp(plane,'v')
+%     string = [{'Plane: Vertical'}, {' '}]; 
+% else
+%     string = [{'Plane: Horizontal'}, {' '}]; 
+% end
+% string = [string , {'Impedances used:'}];
+% for i=imped
+%     string = [string, {sprintf('- %s', budget{i}.name)}];
+% end
+% string = [string , {' '}, {'Stage of the Machine:'}, {ringdata.stage}];
+% 
+% annotation(figure1,'textbox',...
+%     [(hs*3/2+h) vs h*3/5 v],...
+%     'String',string,...
+%     'FontSize',16,...
+%     'FitBoxToText','off');
+% 
+% if save
+%     saveas(figure1,['transverse_cbi_' plane '_' ringdata.stage '.fig']);
+% end
+% 
+% 
 
 %% Calc coherent tune-shifts
 
@@ -84,6 +235,7 @@ rel_tuneshift = retune_shift'/w0/nus;
 rel_tuneshift0  = real(deltaw0)/w0/nus;
 rel_growth    = imtune_shift'*tau;
 rel_growth0   = imag(deltaw0)*tau;
+
 
 %% Plot Results
 
@@ -197,3 +349,6 @@ annotation(figure1,'textbox',...
 if save
     saveas(figure1,['transverse_cbi_' plane '_' ringdata.stage '.fig']);
 end
+
+
+

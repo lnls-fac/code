@@ -1,4 +1,4 @@
-function kickf = lnls_calc_kick_factor(w,Z,sigma,w0,nb)
+function [kickf, Zt_eff] = lnls_calc_kick_factor(w,Z,sigma,w0,nb)
 
 % c = 299792458;
 % 
@@ -22,4 +22,5 @@ wp = w0*p*nb;
 h = exp(-(wp*sigma/c).^2);
 interpol_Z = interp1(w,imag(Z),wp);
 
-kickf = nb*(w0/2/pi)*sum(interpol_Z.*h);
+Zt_eff = sum(interpol_Z.*h);
+kickf = nb*(w0/2/pi)*Zt_eff;

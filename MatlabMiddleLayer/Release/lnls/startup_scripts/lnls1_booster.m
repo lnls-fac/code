@@ -2,27 +2,16 @@
 
 dr = pwd;
 
-% desconecta com servidor se conexao existir
-if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
-    addpath('C:\Arq\MatlabMiddleLayer\Release\mml\');
-    cd('C:\Arq\MatlabMiddleLayer\Release\links\lnls_link\lnls1_link\');
-    lnls1_comm_disconnect;
-    rmpath('C:\Arq\MatlabMiddleLayer\Release\mml\');
-else
-    addpath('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-    cd('/home/fac_files/code/MatlabMiddleLayer/Release/links/lnls_link/lnls1_link/');
-    lnls1_comm_disconnect;
-    rmpath('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-end
+mml_root = fullfile(lnls_get_root_folder(), 'code', 'MatlabMiddleLayer', 'Release');
 
+% desconecta com servidor se conexao existir
+addpath(fullfile(mml_root, 'mml'));
+cd(fullfile(mml_root, 'links', 'lnls_link','lnls1_link'));
+lnls1_comm_disconnect;
+rmpath(fullfile(mml_root, 'mml'));
 
 % carrega paths do LNLS1
-if any(strcmpi(computer, {'PCWIN', 'PCWIN64'}))
-    cd('C:\Arq\MatlabMiddleLayer\Release\mml\');
-else
-    cd('/home/fac_files/code/MatlabMiddleLayer/Release/mml/');
-end
-
+cd(fullfile(mml_root, 'mml'))
 setpathlnls('LNLS1', 'Booster', 'lnls1_link');
 
 % volta ao working dir inicial

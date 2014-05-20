@@ -1,0 +1,41 @@
+#define seed for the random multipole error
+seed 500
+
+
+####################################################################
+####TESTE COM ERROS SISTEMATICOS BASEADOS NOS MAPAS DE CAMPO DOS MAGNETOS
+####E ALEATORIOS TAIS QUE O CAMPO NORMAL EM 11.7MM DESVIE 1/10000 DO ESPECIFICADO
+#### CAMPOS SKEW SEJAM 3/100000 EM 11.7MM.       DATA 2013-11-08
+
+
+# conjunto de erros do Sirius_B1_alterado
+#*******************************************************************
+# DIPOLOS
+#*******************************************************************
+
+#valor do modelo de 2012-12-05-modelo7, aprovado:
+dip   sys  11.7E-3  3 -9E-5 0.0  4 3E-5 0.0   5 1E-4  0.0  6 -8E-5 0.0  7 6E-5  0.0
+
+dip   rms  11.7E-3  3 4E-5 1E-5  4 4E-5 1E-5  5 4E-5 1E-5  6 4E-5 1E-5  7 4E-5 1E-5 8 4E-5 1E-5 9 4E-5 1E-5
+ 
+#*******************************************************************
+# QUADRUPOLOS
+#*******************************************************************
+
+# modelo 4 de 2013-02-01, aprovado:
+ quad  sys  11.7E-3  3 3E-8  0.0  4 1E-5 0.0  5 -2E-8  0.0  6 -3E-5 0.0 10 8E-5 0.0 
+ quad  rms  11.7E-3  3 4E-5 1E-5  4 4E-5 1E-5  5 4E-5 1E-5  6 4E-5 1E-5  7 4E-5 1E-5 8 4E-5 1E-5 9 4E-5 1E-5 10 4E-5 1E-5
+
+#*******************************************************************
+# SEXTUPOLOS
+#*******************************************************************
+
+ sext  sys  11.7E-3  9 4E-6 0.0  15 -1E-7 0.0
+ sext  rms  11.7E-3  4 4E-5 1E-5  5 4E-5 1E-5  6 4E-5 1E-5  7 4E-5 1E-5 8 4E-5 1E-5 9 4E-5 1E-5 10 4E-5 1E-5 11 4E-5 1E-5
+
+#*******************************************************************
+# CORRETORA VERTICAL
+#*******************************************************************
+
+#modelo ferrite 4 (simulações do Ricardo), aprovada em 18/04/2013: está comentada porque ainda não foi feita simulação 3D;
+# vcm   sys   2e-2  2 0.0 5.7e-7  3 0.0 2.7e-8  4 0.0 3.2e-11  5 0.0 -4.5e-14  6 0.0 -1.7e-16  7 0.0 -1.6e-19 

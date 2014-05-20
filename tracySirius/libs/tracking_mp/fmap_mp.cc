@@ -64,6 +64,7 @@ void fmap_mp(int nr_cpus, long Nbx, long Nbz, long Nbtour, double x0, double xma
 	k = 0;
 	for(int i=0; i<Nbx; ++i) {
 		for(int j=0; j<Nbz; ++j) {
+		    k = Nbz*i + Nbz-j-1;
 			double x = points[2*k+0];
 			double z = points[2*k+1];
 			double nux1 = result[4*k+0];
@@ -75,7 +76,7 @@ void fmap_mp(int nr_cpus, long Nbx, long Nbz, long Nbtour, double x0, double xma
 			}else{
 				fprintf(outf,"%10.6e %10.6e %10.6e %10.6e\n", x, z, nux1, nuz1);
 			}
-			k++;
+			//k++;
 		}
 	}
 	fclose(outf);

@@ -15,9 +15,13 @@ fmaps{1}.Ry       = [1 0 0; 0 1 0; 0 0 1];
 setappdata(0, 'FIELD_MAPS', fmaps);
 
 % for the case of combined correctors
-if exist('type','var') && ~strcmpi(type, 'suppress_plot')
+invert = 0;
+if exist('type','var') && strcmpi(type, 'HCM')
     modify_fieldmap_for_correctors(type);
     fmaps = getappdata(0, 'FIELD_MAPS');
+elseif exist('type','var') && strcmpi(type, 'invert')
+    fmaps{1}.data.bx = -fmaps{1}.data.bx; fmaps{1}.data.by = -fmaps{1}.data.by; fmaps{1}.data.bz = -fmaps{1}.data.bz;
+    setappdata(0, 'FIELD_MAPS', fmaps);
 end
 
 % plot field
@@ -78,8 +82,25 @@ data = fgetl(fp); magnet.nr_submagnets = str2double(strtrim(strrep(strrep(data, 
 data = fgetl(fp);
 for i=1:magnet.nr_submagnets
     data = fgetl(fp); submagnet.label   = strtrim(strrep(strrep(data, 'Nome_do_Ima:', ''), '\t', ''));
-    data = fgetl(fp); submagnet.gap     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap[mm]:', ''), '\t', ''))); 
-    data = fgetl(fp); submagnet.cgap    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap_Controle[mm]:', ''), '\t', ''))); 
+    % tinha um problema aqui, originalmente o script procurava os campos
+    % Gap e Gap_Controle, mas o mapa de campo possui o campo Bore Diameter
+    % para quadrupolos. resolvi dessa maneira, mas precisamos discutir se
+    % não há modo melhor de fazer isso.
+    % Voltei a como era antigamente (em acordo com a Priscila - Ximenes
+    % 2014-03-26
+%     if strncmpi(magnet.label,'dipolo',6)
+%         data = fgetl(fp); submagnet.gap     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap[mm]:', ''), '\t', ''))); 
+%         data = fgetl(fp); submagnet.cgap    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap_Controle[mm]:', ''), '\t', ''))); 
+%     else
+%         data = fgetl(fp); submagnet.bore     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Bore Diameter[mm]:', ''), '\t', '')));
+%     end
+    if strncmpi(magnet.label,'dipolo',6)
+        data = fgetl(fp); submagnet.gap     = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap[mm]:', ''), '\t', ''))); 
+        data = fgetl(fp); submagnet.cgap    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap_Controle[mm]:', ''), '\t', ''))); 
+    else
+        data = fgetl(fp); submagnet.bore    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap[mm]:', ''), '\t', ''))); 
+        data = fgetl(fp); submagnet.cgap    = 0.001 * str2double(strtrim(strrep(strrep(data, 'Gap_Controle[mm]:', ''), '\t', ''))); 
+    end
     data = fgetl(fp); submagnet.length  = 0.001 * str2double(strtrim(strrep(strrep(data, 'Comprimento[mm]:', ''), '\t', ''))); 
     data = fgetl(fp); submagnet.current = str2double(strtrim(strrep(strrep(data, 'Corrente[A]:', ''), '\t', '')));
     data = fgetl(fp); submagnet.shift_z = 0.001 * str2double(strtrim(strrep(strrep(data, 'Centro_Posicao_z[mm]:', ''), '\t', ''))); 
@@ -97,7 +118,12 @@ data([1 2 3],:) = data([1 2 3],:) / 1000;
 
 if magnet.nr_submagnets == 1
     magnet.length = magnet.submagnets(1).length;
-    magnet.gap    = magnet.submagnets(1).gap;
+    % também tive que alterar aqui. Fernando-2014-03-05
+    if strncmpi(magnet.label,'dipolo',6)
+        magnet.gap    = magnet.submagnets(1).gap;
+    else
+        magnet.bore   = magnet.submagnets(1).bore;
+    end
 end
     
 % 1. gera vetores x, y e z com posi??es dos pontos no grid 3D do mapa

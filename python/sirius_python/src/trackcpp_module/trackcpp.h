@@ -22,5 +22,6 @@ int trackcpp_read_lattice   (PyObject *py_lattice,   std::vector<Element>& pos);
 // exposed functionalities
 PyObject*  trackcpp_linepass (PyObject *Self, PyObject *args);
 PyObject*  trackcpp_ringpass (PyObject *Self, PyObject *args);
+PyObject*  trackcpp_findm66  (PyObject *Self, PyObject *args);
 
 #endif

@@ -1,12 +1,4 @@
-% global THERING;
-% 
-% dips = findcells(THERING,'FamName','B');
-% HALF_DIP = THERING(dips(2));
-% rin = zeros(6,80);
-% rin(1,:)=linspace(-10,10,80)*1e-3;
-% rout = linepass(HALF_DIP,rin);
-% plot(rin(1,:),rout(2,:))
-% polyfit(rin(1,:),rout(2,:),2)
+function the_ring = calc_mapa_dipolo
 
 %% multipolos
 % n = repmat([1 2 3 4 5 6],100,1);
@@ -16,11 +8,11 @@
 % plot(x(:,1),pol*7.5/180*pi);
 % 
 % name = 'modelo4_fewsegments.mat';
-name = 'modelo5_segmentado.mat';
+name = 'fieldmap_analysis_modelo6_6segmentos.mat';
 % name = 'modelo4.mat';
 % name = 'modelo5_1segmento.mat';
 % name = 'modelo5_6segmentos.mat';
-at_model = load(['/home/fac_files/data/sirius_mml/magnet_modelling/CONFIGS/BOOSTER_B_MODELO5/' name]);
+at_model = load(['/home/fac_files/data/sirius_mml/magnet_modelling/CONFIGS/BOOSTER_B_MODELO6/' name]);
 at_model = at_model.r.at_model;
 comp_atmod = findspos(at_model, length(at_model)+1);
 
@@ -62,16 +54,16 @@ ind = length(bend_idx)/50/2;
 atmodel_idx = bend_idx(1:ind);
 atmodel = fliplr(the_ring(atmodel_idx));
 
-% spos = findspos(at_model, 1:length(at_model));
-% quad = getcellstruct(at_model,'PolynomB',1:length(at_model),2);
-% figure; plot(spos, quad)
-% quad = getcellstruct(atmodel,'PolynomB',1:length(atmodel),2);
-% hold on; plot(spos, quad, 'r')
-% 
-% sext = getcellstruct(at_model, 'PolynomB', 1:length(at_model), 3);
-% figure;plot(spos, sext)
-% sext = getcellstruct(atmodel, 'PolynomB', 1:length(atmodel), 3);
-% hold on; plot(spos, sext,'r')
+spos = findspos(at_model, 1:length(at_model));
+quad = getcellstruct(at_model,'PolynomB',1:length(at_model),2);
+figure; plot(spos, quad)
+quad = getcellstruct(atmodel,'PolynomB',1:length(atmodel),2);
+hold on; plot(spos, quad, 'r')
+
+sext = getcellstruct(at_model, 'PolynomB', 1:length(at_model), 3);
+figure;plot(spos, sext)
+sext = getcellstruct(atmodel, 'PolynomB', 1:length(atmodel), 3);
+hold on; plot(spos, sext,'r')
 
 
 spos = findspos(atmodel, 1:length(atmodel)+1);

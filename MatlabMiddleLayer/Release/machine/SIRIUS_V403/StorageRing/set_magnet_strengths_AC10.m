@@ -211,30 +211,30 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %tentativa de aumentar tune com opa mantendo os mesmos sexts: 2da
-    %%% QUADRUPOLOS
-    %  =========== (quads obtidos com o opa)
-    qaf_strength       = 2.536961 ;
-    qad_strength       = -2.729805;
-    qbd2_strength      = -3.960473;
-    qbf_strength       = 3.902663 ;
-    qbd1_strength      = -2.967653;
-    qf1_strength       = 2.357389 ;
-    qf2_strength       = 3.363276 ;
-    qf3_strength       = 3.079729 ;
-    qf4_strength       = 2.713552 ;
-    
-    
-    %%% SEXTUPOLOS
-    %  ========== (os mesmos do AC10_5)
-    sa1_strength       = -115.7829759411277/2;
-    sa2_strength       =   49.50386128829739/2;
-    sb1_strength       = -214.5386552515188/2;
-    sb2_strength       =  133.1252391065637/2;
-    sd1_strength       = -302.6188062085843/2;
-    sf1_strength       =  369.5045185071228/2;
-    sd2_strength       = -164.3042864671946/2;
-    sd3_strength       = -289.9270429064217/2;
-    sf2_strength       =  333.7039740852999/2;
+%     %%% QUADRUPOLOS
+%     %  =========== (quads obtidos com o opa)
+%     qaf_strength       = 2.536961 ;
+%     qad_strength       = -2.729805;
+%     qbd2_strength      = -3.960473;
+%     qbf_strength       = 3.902663 ;
+%     qbd1_strength      = -2.967653;
+%     qf1_strength       = 2.357389 ;
+%     qf2_strength       = 3.363276 ;
+%     qf3_strength       = 3.079729 ;
+%     qf4_strength       = 2.713552 ;
+%     
+%     
+%     %%% SEXTUPOLOS
+%     %  ========== (os mesmos do AC10_5)
+%     sa1_strength       = -115.7829759411277/2;
+%     sa2_strength       =   49.50386128829739/2;
+%     sb1_strength       = -214.5386552515188/2;
+%     sb2_strength       =  133.1252391065637/2;
+%     sd1_strength       = -302.6188062085843/2;
+%     sf1_strength       =  369.5045185071228/2;
+%     sd2_strength       = -164.3042864671946/2;
+%     sd3_strength       = -289.9270429064217/2;
+%     sf2_strength       =  333.7039740852999/2;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -268,30 +268,30 @@ elseif strcmpi(mode_version,'test_inject_4k')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Partindo do AC10_4, tentei minimizar os tuneshifts: 4ta
-%     %%% QUADRUPOLOS
-%     %  =========== (os mesmos do AC10_4)
-%     
-%     qaf_strength       =  2.53733156985179;
-%     qad_strength       = -2.729928269122092;
-%     qbd2_strength      = -3.960473342625189;
-%     qbf_strength       =  3.902662679038675;
-%     qbd1_strength      = -2.9676529175558;
-%     qf1_strength       =  2.368979188452946;
-%     qf2_strength       =  3.354162681362089;
-%     qf3_strength       =  3.080099756299886;
-%     qf4_strength       =  2.708484971587339;
-% 
-%     %%% SEXTUPOLOS
-%     %  ==========
-%     sa1_strength       =   -64.5501;
-%     sa2_strength       =    28.5005;
-%     sb1_strength       =  -113.8315;
-%     sb2_strength       =    64.6216;
-%     sd2_strength       =   -76.9782;
-%     sd3_strength       =  -142.3458;
-%     sf2_strength       =   154.1521;
-%     sd1_strength       =  -161.1970;
-%     sf1_strength       =   190.8217;
+    %%% QUADRUPOLOS
+    %  =========== (os mesmos do AC10_4)
+    
+    qaf_strength       =  2.53733156985179;
+    qad_strength       = -2.729928269122092;
+    qbd2_strength      = -3.960473342625189;
+    qbf_strength       =  3.902662679038675;
+    qbd1_strength      = -2.9676529175558;
+    qf1_strength       =  2.368979188452946;
+    qf2_strength       =  3.354162681362089;
+    qf3_strength       =  3.080099756299886;
+    qf4_strength       =  2.708484971587339;
+
+    %%% SEXTUPOLOS
+    %  ==========
+    sa1_strength       =   -64.5501;
+    sa2_strength       =    28.5005;
+    sb1_strength       =  -113.8315;
+    sb2_strength       =    64.6216;
+    sd2_strength       =   -76.9782;
+    sd3_strength       =  -142.3458;
+    sf2_strength       =   154.1521;
+    sd1_strength       =  -161.1970;
+    sf1_strength       =   190.8217;
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 
