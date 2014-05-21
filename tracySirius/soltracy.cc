@@ -18,7 +18,9 @@ extern bool freq_map;
 //
 //****************************************************************************************
 int main(int argc, char *argv []) {
-
+    
+    
+    printf("\nTracy3 - LNLS:  21/05/2014\n");
 	/* for time handling */
 	uint32_t start, stop;
 
