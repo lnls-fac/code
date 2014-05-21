@@ -33,8 +33,8 @@ void PhasePortrait2(long pos,double x0,double px0,double z0, double pz0, double 
                           double end, long Nb, long Nbtour, int num);
 void Multipole_thicksext(char const *fic_hcorr, char const *fic_vcorr, char const *fic_skew);
 void Multipole_thinsext(char const *fic_hcorr, char const *fic_vcorr, char const *fic_skew);
-void MomentumAcceptance(long deb, long fin, double ep_min, double ep_max, long nstepp,
-                        double em_min, double em_max, long nstepm);
+void MomentumAcceptance(long nturn, double sdeb, double sfin, double ep_min, double ep_max,
+			long nstepp, double em_min, double em_max, long nstepm, long nnames, char names[6][max_str]);
 
 void Trac_Tab(double x, double px, double y, double py, double dp,
             long nmax, long pos, long *lastn, long *lastpos, FILE *outf1, double Tx[][NTURN]);

@@ -180,6 +180,10 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 				sscanf(line, "%*s %s", UserCommandFlag[CommNo].CavityFlag);
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
+			else if (strcmp("VacuumChamberFlag", name) == 0){
+				sscanf(line, "%*s %s", UserCommandFlag[CommNo].VacuumChamberFlag);
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
 			else if (strcmp("RadiationFlag", name) == 0){
 				sscanf(line, "%*s %s", UserCommandFlag[CommNo].RadiationFlag);
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
@@ -318,17 +322,25 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 
 			}
 			else if (strcmp("MomentumAccFlag", name) == 0){
-				sscanf(line, "%*s  %s %ld %ld %lf %lf %ld %lf %lf %ld",
+				UserCommandFlag[CommNo]._MomentumAccFlag_nnames = 
+				  sscanf(line, "%*s  %s %ld %lf %lf %ld %lf %lf %ld %lf %lf %s %s %s %s %s %s",
 						UserCommandFlag[CommNo].TrackDim,
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_istart),
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_istop),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_nturn),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltaminp),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltamaxp),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_nstepp),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltaminn),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltamaxn),
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_nstepn)
-				);
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_nstepn),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_sstart),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_sstop),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[0]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[1]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[2]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[3]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[4]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[5]));
+				UserCommandFlag[CommNo]._MomentumAccFlag_nnames -= 10;
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
 

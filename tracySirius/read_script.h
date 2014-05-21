@@ -12,6 +12,7 @@
     //RFVoltFlag
    double RFvolt;   // RF voltage
    char CavityFlag[max_str]; // Turn cavity on and off
+   char VacuumChamberFlag[max_str]; // Turn cavity on and off
    char RadiationFlag[max_str]; // Turn radiation on and off
    
    //chamber file
@@ -56,11 +57,12 @@
 
    
   //MomentumAccFlag;
-   char TrackDim[3];
-   long  _MomentumAccFlag_istart, _MomentumAccFlag_istop,
-         _MomentumAccFlag_nstepn, _MomentumAccFlag_nstepp;
+   char TrackDim[3], _MomentumAccFlag_names[6][max_str];
+   long  _MomentumAccFlag_nturn, _MomentumAccFlag_nstepn,
+      _MomentumAccFlag_nstepp, _MomentumAccFlag_nnames;
    double _MomentumAccFlag_deltaminn, _MomentumAccFlag_deltamaxn;
    double _MomentumAccFlag_deltaminp, _MomentumAccFlag_deltamaxp;
+   double _MomentumAccFlag_sstart, _MomentumAccFlag_sstop;
  
   // /* Phase space */
    double _Phase_X, _Phase_Px, _Phase_Y, _Phase_Py,_Phase_delta, _Phase_ctau;
@@ -101,7 +103,8 @@
 
 /* momentum acceptance */
  TrackDim[3] = '6D';
- _MomentumAccFlag_istart=1L, _MomentumAccFlag_istop=108L,
+ _MomentumAccFlag_nturn=5000L,  _MomentumAccFlag_nnames=6L;
+ _MomentumAccFlag_sstart=0.00, _MomentumAccFlag_sstop=52.0;
  _MomentumAccFlag_nstepn=100L, _MomentumAccFlag_nstepp=100L;
  _MomentumAccFlag_deltaminn=-0.01, _MomentumAccFlag_deltamaxn=-0.05;
  _MomentumAccFlag_deltaminp=0.01, _MomentumAccFlag_deltamaxp=0.05;
