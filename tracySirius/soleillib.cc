@@ -3093,8 +3093,9 @@ for (i = 0L; i < globval.Cell_nLoc; i++){
         dp2= ep_max - (nstepp - i)*(ep_max - ep_min)/(nstepp - 1L);
       else
         dp2 = ep_max;
-
-      Trac(x, px, z, pz, dp2+delta , ctau0, nturn, pos, lastn, lastpos, outf1);
+    
+    // Calcula a abertura em momemtum no final do elemento (pos+1L);
+      Trac(x, px, z, pz, dp2+delta , ctau0, nturn, pos+1L, lastn, lastpos, outf1);
     }while (((lastn) == nturn) && (i != nstepp));
 
     if ((lastn) == nturn)
@@ -3148,7 +3149,8 @@ for ( j = 0L; j < num_points; j++ ){
         dp2 = em_max;
       }
 
-      Trac(x, px, z, pz, dp2+delta, ctau0, nturn, pos, lastn, lastpos, outf1);
+    // Calcula a abertura em momemtum no final do elemento (pos+1L);
+      Trac(x, px, z, pz, dp2+delta, ctau0, nturn, pos+1L, lastn, lastpos, outf1);
       
     }while (((lastn) == nturn) && (i != nstepm));
 
