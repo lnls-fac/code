@@ -1,17 +1,45 @@
-%   [W,Wm,V] = LNLS_TAU_TOUSCHEK_INVERSO(E_n,gamma,N,sigma_E,sigma_s,d_acc,r,Bx,
-%   By,alpha,eta,eta_diff,K) calcula o inverso do tempo de vida Touschek W
-%   [1/s] a cada ponto, o valor médio Wm [1/s] e o volume do bunch V [m^3].
+function Resp = lnls_tau_touschek_inverso(params,Accep,optics)
+%   Resp =lnls_tau_touschek_inverso(params,Accep,optics) 
+%      calcula o inverso do tempo de vida Touschek.
 %
-%   As entradas são a emitância natural E_n [m rad], gamma, o número de
-%   elétrons por bunch N, a dispersão de energia relativa sigma_E, o
-%   comprimento do bunch sigma_s [m], a aceitância em energia d_acc, um
-%   vetor de posições r [m] ao longo do qual W é calculado, as funções
-%   betatron horizontal e vertical Bx e By [m], alpha = -B'/2 [m], a
-%   dispersão e sua derivada eta e eta_diff [m] ao longo de r e o fator de
-%   acoplamento K (Ey = K*Ex). Para aceitância nula, negativa ou complexa,
-%   o tempo de vida calculado é nulo.
+%   SaÃ­das:
+%       Resp = estrutura com campos:
+%           Rate = taxa de perda de elÃ©trons ao longo do anel [1/s]
+%           AveRate = Taxa mÃ©dia de perda de elÃ©trons [1/s]
+%           Pos  = PosiÃ§Ã£o do anel onde foi calculada a taxa [m]
+%           Volume = Volume do feixe ao longo do anel [m^3]
+%        
+%   Entradas:
+%       params = estrutura com campos:
+%           emit0 = emitÃ¢ncia natural [m rad]
+%           E     = energia das partÃ­culas [eV] 
+%           N     = nÃºmero de elÃ©trons por bunch
+%           sigE  = dispersÃ£o de energia relativa sigE, 
+%           sigS  = comprimento do bunch [m]
+%           K     = fator de acoplamento (emity = K*emitx)
+%
+%       Accep(2,:) = aceitÃ¢ncia de energia para uma seleÃ§Ã£o de pontos
+%                    do anel (lembrar: min(accep_din, accep_rf))
+%       Accep(1,:) = posiÃ§Ã£o longitudinal dos pontos para os quais a
+%                    aceitÃ¢ncia foi calculada.
+%
+%       Optics = estrutura com as funÃ§Ãµes Ã³ticas ao longo do trecho 
+%               para o qual setÃ¡ calculado o tempo de vida:
+%                   spos,   betax,    betay,  etax,   etay,
+%                           alphax,   alphay, etaxl,  etayl
+%
+%   CUIDADO: os limites de cÃ¡lculo sÃ£o definidos pelos pontos
+%      inicial e final da AceitÃ¢ncia e nÃ£o das funÃ§Ãµes Ã³pticas.
 
-function [W,Wm,V] = lnls_tau_touschek_inverso(E_n,gamma,N,sigma_E,sigma_s,d_acc,r,Bx,By,alpha,eta,eta_diff,K)
+c = 299792458;
+me = 9.10938291e-31;
+Qe = 1.602176565e-19;
+mu0 = 4*pi*1e-7;
+ep0 = 1/c^2/mu0;
+r0 = Qe^2/(4*pi*ep0*me*c^2);
+
+gamma = params.E/510.998928e3;
+N     = params.N;
 
 % Tabela para interpolar d_touschek
 dinttable = getappdata(0, 'TouschekDIntegralTable');
@@ -24,32 +52,50 @@ else
     x_tabela = dinttable.x_tabela;
     y_tabela = dinttable.y_tabela;
 end
-    
+
+
+% calcular o tempo de vida a cada 10 cm do anel:
+npoints = ceil((Accep(1,end) - Accep(1,1))/0.1);
+s_calc = linspace(Accep(1,1), Accep(1,end), npoints);
+
+d_acc  = interp1(Accep(1,:), Accep(2,:), s_calc);
+
+[~, ind, ~] = unique(optics.pos);
+
+betax  = interp1(optics.pos(ind), optics.betax(ind), s_calc);
+alphax = interp1(optics.pos(ind), optics.alphax(ind), s_calc);
+etax   = interp1(optics.pos(ind), optics.etax(ind), s_calc);     
+etaxl  = interp1(optics.pos(ind), optics.etaxl(ind), s_calc);
+betay  = interp1(optics.pos(ind), optics.betay(ind), s_calc);
+etay   = interp1(optics.pos(ind), optics.etay(ind), s_calc); 
+
+K    = params.K;        emit0 = params.emit0; 
+sigS = params.sigS;     sigE  = params.sigE;
 
 % Volume do bunch
-V = sigma_s * sqrt(By*(K/(1+K))*E_n) .* sqrt(Bx*(1/(1+K))*E_n + eta.^2*sigma_E^2);
+V = sigS * sqrt(betay*(K/(1+K))*emit0 + etay.^2*sigE^2) ...
+        .* sqrt(betax*(1/(1+K))*emit0 + etax.^2*sigE^2);
 
-if(isreal(d_acc) && d_acc > 0)
-    % Tamanho horizontal do bunch
-    Sx2 = 1/(1+K) * E_n * Bx;
-    
-    fator = Bx.*eta_diff + alpha.*eta;
-    A1 = 1/(4*sigma_E^2) + (eta.^2 + fator.^2)./(4*Sx2);
-    B1 = Bx.*fator./(2*Sx2);
-    C1 = Bx.^2./(4*Sx2) - B1.^2./(4*A1);
-    
-    % Limite de integração inferior
-    ksi = (2*sqrt(C1)/gamma * d_acc).^2;
-    
-    % Interpola d_touschek
-    D = interp1(x_tabela,y_tabela,ksi);
-    
-    % Tempo de vida touschek inverso
-    W = 9.4718e-23*N/gamma^2 / d_acc^3 * D ./ V;
-    
-    % Tempo de vida touschek inverso médio
-    Wm = trapz(r,W) / ( r(length(r)) - r(1) );
-else
-    W = Inf(length(r),1);
-    Wm = Inf;
-end
+
+% Tamanho betatron horizontal do bunch
+Sx2 = 1/(1+K) * emit0 * betax;
+
+fator = betax.*etaxl + alphax.*etax;
+A1 = 1/(4*sigE^2) + (etax.^2 + fator.^2)./(4*Sx2);
+B1 = betax.*fator./(2*Sx2);
+C1 = betax.^2./(4*Sx2) - B1.^2./(4*A1);
+
+% Limite de integraÃ§Ã£o inferior
+ksi = (2*sqrt(C1)/gamma .* d_acc).^2;
+
+% Interpola d_touschek
+D = interp1(x_tabela,y_tabela,ksi);
+
+% Tempo de vida touschek inverso
+Resp.Rate = (r0^2*c/8/pi)*N/gamma^2 ./ d_acc.^3 .* D ./ V;
+
+% Tempo de vida touschek inverso mï¿½dio
+Resp.AveRate = trapz(s_calc, Resp.Rate) / ( s_calc(end) - s_calc(1) );
+Resp.Volume = V;
+Resp.Pos = s_calc;
+
