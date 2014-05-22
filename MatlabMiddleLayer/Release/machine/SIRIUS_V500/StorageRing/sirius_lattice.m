@@ -413,13 +413,12 @@ function the_ring = set_vacuum_chamber(the_ring0)
 % y = +/- y_lim * (1 - (x/x_lim)^n)^(1/n);
 
 the_ring = the_ring0;
-bends_vchamber = [0.014 0.014 100]; % n = 100: ~rectangular
-other_vchamber = [0.014 0.014 2];   % n = 2;   circular/eliptica
-ivu_vchamber   = [0.014 0.002 2];   
+bends_vchamber = [0.0117 0.0117 100]; % n = 100: ~rectangular
+other_vchamber = [0.0117 0.0117 2];   % n = 2;   circular/eliptica
+ivu_vchamber   = [0.0117 0.00225 2];   
 
 bends = findcells(the_ring, 'BendingAngle');
-ivu   = sort([findcells(the_ring, 'FamName', 'id_end') ...
-              findcells(the_ring, 'FamName', 'mia') ...
+ivu   = sort([findcells(the_ring, 'FamName', 'id_end') ...%               findcells(the_ring, 'FamName', 'mia') ...
               findcells(the_ring, 'FamName', 'mib')]);
 other = setdiff(1:length(the_ring), [bends ivu]);
 

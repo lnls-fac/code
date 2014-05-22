@@ -17,7 +17,7 @@ lime = 5;
 
 
 % selects data folder
-default_dir = fullfile(default_dir, 'data', 'sirius_tracy');
+default_dir = fullfile(default_dir, 'data', 'sirius_tracy', 'sr', 'oficial', 'v500', 'ac10_5');
 pathname = uigetdir(default_dir,'Em qual pasta estao os dados?');
 if (pathname == 0);
     return
@@ -26,9 +26,13 @@ end
 % gets number of random machines (= number of rms folders)
 [~, result] = system(['ls ' pathname '| grep rms | wc -l']);
 n_pastas = str2double(result);
+%n_pastas = 12;
 
 % loops over random machine, loading and plotting data
 count = 0; countdp = 0;
+% v1 = zeros(1,90);
+% v2 = zeros(1,49);
+
 for i=1:n_pastas
     % -- FMAP --
     full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmap.out');
@@ -51,6 +55,11 @@ for i=1:n_pastas
         fy = reshape(fy,npy,npx);
         % vejo quais pontos sobreviveram.
         ind = fx ~= 0;
+%         for j=1:size(ind,2)
+%             idx = find(ind(:,j) == 0, 1, 'last');
+%             v1(j) = v1(j) + y(idx,j);
+%         end
+        
         if ~ exist('idx_fmap','var')
             idx_fmap = ind;
         else
@@ -82,6 +91,10 @@ for i=1:n_pastas
             % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
             % a borda da DA
             inddp = fxe ~= 0;
+%             for j=1:size(inddp,2)
+%                 idx = find(inddp(:,j) == 0, 1, 'first');
+%                 v2(j) = v2(j) + xe(idx,j);
+%             end
             if ~ exist('idx_fmapdp','var')
                 idx_fmapdp = inddp;
             else
@@ -94,6 +107,9 @@ for i=1:n_pastas
     end
 end
 
+% v1 = v1 / count;
+% v2 = v2 / count;
+% 
 idx_fmap = (count-idx_fmap)/count*100;
 idx_fmapdp = (count-idx_fmapdp)/countdp*100;
 
@@ -102,6 +118,7 @@ xi = scrsz(4)/12;
 yi = scrsz(4)/20;
 xf = xi + scrsz(4);
 yf = yi + scrsz(4);
+
 f=figure('OuterPosition',[xi yi xf yf]);
 sb(1,1) = subplot(2,2,1,'Parent',f,'FontSize',size_font,...
     'Position',[0.065 0.60 0.368 0.382]);
@@ -118,6 +135,7 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(1000*x(1,:),1000*v1,'r', 'LineWidth', 2);
 
 sb(1,2) = subplot(2,2,2,'Parent',f,'FontSize',size_font,...
     'Position',[0.53 0.60 0.368 0.382]);
@@ -134,6 +152,7 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(100*en(1,:),1000*v2,'r', 'LineWidth', 2);
 
 clear idx_fmap idx_fmapdp;
 
@@ -149,9 +168,13 @@ end
 % gets number of random machines (= number of rms folders)
 [~, result] = system(['ls ' pathname '| grep rms | wc -l']);
 n_pastas = str2double(result);
+%n_pastas = 12;
 
 % loops over random machine, loading and plotting data
 count = 0; countdp = 0;
+% v1 = zeros(1,90);
+% v2 = zeros(1,49);
+
 for i=1:n_pastas
     % -- FMAP --
     full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmap.out');
@@ -174,6 +197,11 @@ for i=1:n_pastas
         fy = reshape(fy,npy,npx);
         % vejo quais pontos sobreviveram.
         ind = fx ~= 0;
+%         for j=1:size(ind,2)
+%             idx = find(ind(:,j) == 0, 1, 'last');
+%             v1(j) = v1(j) + y(idx,j);
+%         end
+        
         if ~ exist('idx_fmap','var')
             idx_fmap = ind;
         else
@@ -205,6 +233,10 @@ for i=1:n_pastas
             % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
             % a borda da DA
             inddp = fxe ~= 0;
+%             for j=1:size(inddp,2)
+%                 idx = find(inddp(:,j) == 0, 1, 'first');
+%                 v2(j) = v2(j) + xe(idx,j);
+%             end
             if ~ exist('idx_fmapdp','var')
                 idx_fmapdp = inddp;
             else
@@ -216,6 +248,9 @@ for i=1:n_pastas
         end
     end
 end
+
+% v1 = v1 / count;
+% v2 = v2 / count;
 
 idx_fmap = (count-idx_fmap)/count*100;
 idx_fmapdp = (count-idx_fmapdp)/countdp*100;
@@ -235,6 +270,7 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(1000*x(1,:),1000*v1,'r', 'LineWidth', 2);
 
 sb(2,2) = subplot(2,2,4,'Parent',f,'FontSize',size_font,...
     'Position',[0.53 0.1 0.368 0.382]);
@@ -251,6 +287,8 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(100*en(1,:),1000*v2,'r', 'LineWidth', 2);
+
 
 colorbar('peer',sb(2,2),...
     [0.91 0.1 0.013 0.88],...
