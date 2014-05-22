@@ -323,7 +323,7 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 			}
 			else if (strcmp("MomentumAccFlag", name) == 0){
 				UserCommandFlag[CommNo]._MomentumAccFlag_nnames = 
-				  sscanf(line, "%*s  %s %ld %lf %lf %ld %lf %lf %ld %lf %lf %s %s %s %s %s %s",
+				  sscanf(line, "%*s  %s %ld %lf %lf %ld %lf %lf %ld %lf %lf %s %s %s %s %s %s %s %s %s %s %s %s",
 						UserCommandFlag[CommNo].TrackDim,
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_nturn),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltaminp),
@@ -339,7 +339,13 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[2]),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[3]),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[4]),
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[5]));
+					    &(UserCommandFlag[CommNo]._MomentumAccFlag_names[5]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[6]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[7]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[8]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[9]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[10]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[11]));
 				UserCommandFlag[CommNo]._MomentumAccFlag_nnames -= 10;
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}

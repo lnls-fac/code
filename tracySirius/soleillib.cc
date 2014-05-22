@@ -2929,7 +2929,7 @@ void SetSkewQuad(void)
 /* void MomentumAcceptance(double deb, double fin,
                            double ep_min, double ep_max, long nstepp,
                            double em_min, double em_max, long nstepm,
-                           long nnames  , char names[])
+                           long nnames  , char names[12][max_str])
    Purpose:
         Compute momemtum acceptance along the ring, track the particle with
 	different energy, momentum acceptance is the energy when the particle
@@ -2983,10 +2983,10 @@ void SetSkewQuad(void)
 
 ****************************************************************************/
 void MomentumAcceptance(long nturn, double sdeb, double sfin, double ep_min, double ep_max,
-			long nstepp, double em_min, double em_max, long nstepm, long nnames, char names[6][max_str])
+			long nstepp, double em_min, double em_max, long nstepm, long nnames, char names[12][max_str])
 {
   double        dP = 0.0, dp1 = 0.0, dp2 = 0.0;
-  long          lastpos = 0L, lastn = 0L, type_mo[6], fam_mo[6], num_points = 0L, Fnum=0L;
+  long          lastpos = 0L, lastn = 0L, type_mo[12], fam_mo[12], num_points = 0L, Fnum=0L;
   long          i = 0L, j = 0L, pos = 0L, type_jj=0L, fam_jj=0L, vec_ind[Cell_nLocMax];
   double        x = 0.0, px = 0.0, z = 0.0, pz = 0.0, ctau0 = 0.0, delta = 0.0;
   Vector        x0;

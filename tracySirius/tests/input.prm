@@ -24,10 +24,10 @@
 # FmapFlag	90	40	500	-0.015	0.015	0.0	0.0042	0.0	false
 # FmapdpFlag	45	48	3500	0.0	-0.015	-0.06	0.06	0.001	false
 
-# a variável name pode ser um conjunto de até seis palavras, podendo assumir qualquer uma das seguintes
+# a variável name pode ser um conjunto de até dozes palavras, podendo assumir qualquer uma das seguintes
 # palavras: "dip, quad, sext, corr, all" ou então nomes de famílias de elementos da rede
-#MomentumAccFlag Dim  nturn deminp  demaxp nstepp deminn  demaxn nstepn sstart sstop name(1-6)
- MomentumAccFlag 6D   500   0.021   0.061   20    -0.021  -0.061   20   0.00   52.0  qaf
+#MomentumAccFlag Dim  nturn deminp  demaxp nstepp deminn  demaxn nstepn sstart sstop name(1-12)
+ MomentumAccFlag 6D   500   0.021   0.061   20    -0.021  -0.061   20   0.00   52.0  qaf qad qbf qbd1 qbd2 mia mib mc
 
 
 # PhaseSpaceFlag	6D	1e-6	0.0	1e-6	0.0	0.05	0.0	1000	true
