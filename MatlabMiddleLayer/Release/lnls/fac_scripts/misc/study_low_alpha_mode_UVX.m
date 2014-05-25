@@ -92,7 +92,11 @@ if flag
     % Create ylabel
     ylabel('\eta_2 [m]','FontSize',16);
     % Create title
+<<<<<<< HEAD
+    title('Fun��es dispers�o de segunda ordem','FontSize',20);
+=======
     title('Funções dispersão de segunda ordem','FontSize',20);
+>>>>>>> b816cff0aa06decd70c99568a6560fdaee91aa14
     legend1 = legend(axes1,'show');
     set(legend1,...
         'Position',[0.743446131065501 0.127321623093685 0.136259977194983 0.0974264705882354]);
@@ -113,7 +117,11 @@ if flag
     % Create ylabel
     ylabel('\eta_1 [m]','FontSize',16);
     % Create title
+<<<<<<< HEAD
+    title('Fun��es dispers�o de primeira ordem','FontSize',20);
+=======
     title('Funções dispersão de primeira ordem','FontSize',20);
+>>>>>>> b816cff0aa06decd70c99568a6560fdaee91aa14
     % Create legend
     legend1 = legend(axes1,'show');
     set(legend1,...
