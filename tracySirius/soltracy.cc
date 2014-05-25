@@ -18,7 +18,9 @@ extern bool freq_map;
 //
 //****************************************************************************************
 int main(int argc, char *argv []) {
-
+    
+    
+    printf("\nTracy3 - LNLS:  22/05/2014\n");
 	/* for time handling */
 	uint32_t start, stop;
 
@@ -100,7 +102,7 @@ int main(int argc, char *argv []) {
 	 *************************************************************************/
 
 	//print flat file with all the design values of the lattice,
-	prtmfile("flat_file.dat");
+	prtmfile("flat_file.out");
 	// print location, twiss parameters and close orbit at all elements position to a file
 	getcod(dP, lastpos);
 	prt_cod("cod.out", globval.bpm, true);
@@ -142,25 +144,41 @@ int main(int argc, char *argv []) {
 		}
 		//set Cavity on and off
 		else if(strcmp(CommandStr,"CavityFlag") == 0) {
-			printf("\nSetting Cavity:\n");
+			printf("\nSetting Cavity:");
 			if (strncmp("true", UserCommandFlag[i].CavityFlag, 4) == 0) {
 				globval.Cavity_on = true;
+				printf(" ON\n");
 			} else  {
 				globval.Cavity_on = false;
+				printf(" OFF\n");
 			}
 		}
 			//set radiation on and off
 		else if(strcmp(CommandStr,"RadiationFlag") == 0) {
-			printf("\nSetting Radiation:\n");
+			printf("\nSetting Radiation:");
 			if (strncmp("true", UserCommandFlag[i].RadiationFlag, 4) == 0) {
 				globval.radiation = true;
+				printf(" ON\n");
 			} else  {
 				globval.radiation = false;
+				printf(" OFF\n");
+			}
+		}
+		//set chamber on and off
+		else if(strcmp(CommandStr,"VacuumChamberFlag") == 0) {
+			printf("\nSetting Vacuum Chamber:");
+			if (strncmp("true", UserCommandFlag[i].VacuumChamberFlag, 4) == 0) {
+				globval.Aperture_on = true;
+				printf(" ON\n");
+				PrintCh();
+			} else  {
+				globval.Aperture_on = false;
+				printf(" OFF\n");
 			}
 		}
 		// Chamber factory
 		else if(strcmp(CommandStr,"ReadChamberFlag") == 0) {
-			ReadCh(UserCommandFlag[i].chamber_file); /* read vacuum chamber from a file "Apertures.dat" , soleil version*/
+			ReadCh(UserCommandFlag[i].chamber_file); /* read vacuum chamber from a file "chamber.out" , soleil version*/
 			PrintCh(); // print chamber into chamber.out
 		}
 
@@ -285,14 +303,14 @@ int main(int argc, char *argv []) {
 			LoadFieldErrs(UserCommandFlag[i].fe_file, true, 1.0, true, 1);
 
 			Ring_GetTwiss(true, 0.0);
-			prtmfile("flat_file_fefile.dat");
+			prtmfile("flat_file_fefile.out");
 		}
 		// read multipole errors from a file; specific for soleil lattice
 		else if(strcmp(CommandStr,"ReadMultipoleFlag") == 0) {
 			fprintf(stdout,"\n Read Multipoles file for lattice with thick sextupoles, specific for SOLEIL lattice: \n");
 			ReadFieldErr(multipole_file);
 			//first print the full lattice with error as a flat file
-			prtmfile("flat_file_errmultipole.dat"); // writes flat file with all element errors  /* very important file for debug*/
+			prtmfile("flat_file_errmultipole.out"); // writes flat file with all element errors  /* very important file for debug*/
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
 			printglob();
 		}
@@ -451,7 +469,7 @@ int main(int argc, char *argv []) {
 		// coupling calculation
 		else if(strcmp(CommandStr,"CouplingFlag") == 0) {
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
-			printlatt("linlat_coupling.out"); /* dump linear lattice functions into "linlat.dat" */
+			printlatt("linlat_coupling.out"); /* dump linear lattice functions into "linlat.out" */
 			// GetEmittance(ElemIndex("cav"), true);  //only for test
 			Coupling_Edwards_Teng();
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
@@ -461,11 +479,11 @@ int main(int argc, char *argv []) {
 		// add coupling by random rotating of the full quadrupole magnets
 		//if (ErrorCouplingFlag == true) {
 		else if(strcmp(CommandStr,"ErrorCouplingFlag") == 0) {
-			prtmfile("flat_file.dat"); //print the elements without rotation errors
+			prtmfile("flat_file.out"); //print the elements without rotation errors
 			SetErr(UserCommandFlag[i].err_seed, UserCommandFlag[i].err_rms);
-			prtmfile("flat_file_errcoupling_full.dat"); //print the elements with rotation errors
+			prtmfile("flat_file_errcoupling_full.out"); //print the elements with rotation errors
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
-			printlatt("linlat_errcoupling.out"); /* dump linear lattice functions into "linlat.dat" */
+			printlatt("linlat_errcoupling.out"); /* dump linear lattice functions into "linlat.out" */
 			Coupling_Edwards_Teng();
 			// GetEmittance(ElemIndex("cav"), true); //only for test
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
@@ -475,11 +493,11 @@ int main(int argc, char *argv []) {
 
 		//  add coupling by random rotating of the half quadrupole magnets, delicated for soleil
 		else if(strcmp(CommandStr,"ErrorCoupling2Flag") == 0) {
-			prtmfile("flat_file.dat"); //print the elements without rotation errors
+			prtmfile("flat_file.out"); //print the elements without rotation errors
 			SetErr2(UserCommandFlag[i].err_seed, UserCommandFlag[i].err_rms);
-			prtmfile("flat_file_errcoupling_half.dat"); //print the elements with rotation errors
+			prtmfile("flat_file_errcoupling_half.out"); //print the elements with rotation errors
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
-			printlatt("linlat_errcoupling2.out"); /* dump linear lattice functions into "linlat.dat" */
+			printlatt("linlat_errcoupling2.out"); /* dump linear lattice functions into "linlat.out" */
 			Coupling_Edwards_Teng();
 			// GetEmittance(ElemIndex("cav"), true);
 			Ring_GetTwiss(chroma = true, 0.0); /* Compute and get Twiss parameters */
@@ -569,14 +587,17 @@ int main(int argc, char *argv []) {
 
 			/* calculate momentum acceptance*/
 			printf("\n Calculate momentum acceptance: \n");
-			MomentumAcceptance(UserCommandFlag[i]._MomentumAccFlag_istart,
-					UserCommandFlag[i]._MomentumAccFlag_istop,
-					UserCommandFlag[i]._MomentumAccFlag_deltaminp,
-					UserCommandFlag[i]._MomentumAccFlag_deltamaxp,
-					UserCommandFlag[i]._MomentumAccFlag_nstepp,
-					UserCommandFlag[i]._MomentumAccFlag_deltaminn,
-					UserCommandFlag[i]._MomentumAccFlag_deltamaxn,
-					UserCommandFlag[i]._MomentumAccFlag_nstepn);
+			MomentumAcceptance(UserCommandFlag[i]._MomentumAccFlag_nturn,
+			    UserCommandFlag[i]._MomentumAccFlag_sstart,
+				UserCommandFlag[i]._MomentumAccFlag_sstop,
+				UserCommandFlag[i]._MomentumAccFlag_deltaminp,
+				UserCommandFlag[i]._MomentumAccFlag_deltamaxp,
+				UserCommandFlag[i]._MomentumAccFlag_nstepp,
+				UserCommandFlag[i]._MomentumAccFlag_deltaminn,
+				UserCommandFlag[i]._MomentumAccFlag_deltamaxn,
+				UserCommandFlag[i]._MomentumAccFlag_nstepn,
+				UserCommandFlag[i]._MomentumAccFlag_nnames,
+				UserCommandFlag[i]._MomentumAccFlag_names);
 
 			/* restore the initial values*/
 			globval.Cavity_on = cavityflag;
@@ -595,7 +616,7 @@ int main(int argc, char *argv []) {
 			for (int ii = 0; ii <= 40; ii++) {
 				dP = -0.02 + 0.001 * ii;
 				Ring_GetTwiss(chroma = false, dP); /* Compute and get Twiss parameters */
-				printlatt("linlat_eta.out"); /* dump linear lattice functions into "linlat.dat" */
+				printlatt("linlat_eta.out"); /* dump linear lattice functions into "linlat.out" */
 				getcod(dP, lastpos);
 				//     printcod();
 				prt_cod("cod.out", globval.bpm, true);

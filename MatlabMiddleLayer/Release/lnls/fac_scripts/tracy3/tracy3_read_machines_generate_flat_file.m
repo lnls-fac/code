@@ -32,6 +32,7 @@ for i=1:n_pastas
     flat_name = [sprintf('rms%02d', i) sprintf('/rms%02d', i) '.dat'];
     full_name = fullfile(path, flat_name);
     the_ring = machines.machine{i};
+    the_ring = simplify_kicktables(the_ring);
     if exist('inicio','var')
         the_ring = start_at_first_element(the_ring, inicio);
     end
@@ -39,6 +40,29 @@ for i=1:n_pastas
     lnls_at2tracyflat(the_ring,full_name);
     fprintf('ok\n');
 end
+
+function the_ring = simplify_kicktables(the_ring_old)
+
+the_ring = the_ring_old;
+idx = findcells(the_ring, 'PxGrid');
+for i = 1:length(idx)
+    for j = i+1:length(idx)
+        if any(the_ring{idx(j)}.XGrid ~= the_ring{idx(i)}.XGrid), continue; end;
+        if any(the_ring{idx(j)}.YGrid ~= the_ring{idx(i)}.YGrid), continue; end;
+        if any(the_ring{idx(j)}.PxGrid ~= the_ring{idx(i)}.PxGrid), continue; end;
+        if any(the_ring{idx(j)}.PyGrid ~= the_ring{idx(i)}.PyGrid), continue; end;
+        
+        if length(the_ring{idx(j)}.FamName) < length(the_ring{idx(i)}.FamName)
+            label = the_ring{idx(j)}.FamName;
+        else
+            label = the_ring{idx(i)}.FamName;
+        end
+        the_ring{idx(i)}.FamName = label;
+        the_ring{idx(j)}.FamName = label;
+    end
+end
+
+
 
 function the_ring = modify_the_ring(the_ring_old)
 
