@@ -1,7 +1,7 @@
 function study_low_alpha_mode_UVX(the_ring, flag)
 if flag
-    deltaf_rf_pos = 300;
-    deltaf_rf_neg = 250;
+    deltaf_rf_pos = 25;
+    deltaf_rf_neg = 25;
     f_rf = 476066780;
     
     [~, the_ring] = setcavity('off',the_ring);
@@ -21,7 +21,7 @@ if flag
     file = 'C:\Documents and Settings\Maquina\Desktop\20140307-Estudo_Maq\med_eta_300Hz_mig11.orb';
     rawData1 = importdata(file);
     xpos=rawData1(:,1)'/1000;
-    
+        
     file = 'C:\Documents and Settings\Maquina\Desktop\20140307-Estudo_Maq\med_eta_-250Hz_mig11.orb';
     rawData1 = importdata(file);
     xneg = rawData1(:,1)'/1000;
@@ -88,7 +88,7 @@ if flag
     % Create ylabel
     ylabel('\eta_2 [m]','FontSize',16);
     % Create title
-    title('Funções dispersão de segunda ordem','FontSize',20);
+    title('Funï¿½ï¿½es dispersï¿½o de segunda ordem','FontSize',20);
     legend1 = legend(axes1,'show');
     set(legend1,...
         'Position',[0.751806017398898 0.771405466601973 0.0967351874244256 0.116448326055313]);
@@ -109,7 +109,7 @@ if flag
     % Create ylabel
     ylabel('\eta_1 [m]','FontSize',16);
     % Create title
-    title('Funções dispersão de primeira ordem','FontSize',20);
+    title('Funï¿½ï¿½es dispersï¿½o de primeira ordem','FontSize',20);
     % Create legend
     legend1 = legend(axes1,'show');
     set(legend1,...

@@ -407,6 +407,7 @@ for ii=1:(length(b3)/2)
     name_girder = sprintf('B3BCB3-C%02d',ii);
     the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
 end
+the_ring = the_ring(1:end-1);
 
 function the_ring = set_vacuum_chamber(the_ring0)
 
