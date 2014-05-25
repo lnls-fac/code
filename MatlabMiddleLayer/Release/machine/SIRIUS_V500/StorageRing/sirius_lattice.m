@@ -318,7 +318,7 @@ setradiation('off');
 THERING = set_num_integ_steps(THERING);
 
 % Define Camara de Vacuo
-THERING = set_vacuum_chamber(THERING);
+THERING = sirius_set_vacuum_chamber(THERING);
 
 % Define Girders
 THERING = set_girders(THERING);
@@ -406,30 +406,6 @@ for ii=1:(length(b3)/2)
     idx = (b3(2*ii-1)-2):b3(2*ii) ;
     name_girder = sprintf('B3BCB3-C%02d',ii);
     the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
-end
-
-function the_ring = set_vacuum_chamber(the_ring0)
-
-% y = +/- y_lim * (1 - (x/x_lim)^n)^(1/n);
-
-the_ring = the_ring0;
-bends_vchamber = [0.0117 0.0117 100]; % n = 100: ~rectangular
-other_vchamber = [0.0117 0.0117 2];   % n = 2;   circular/eliptica
-ivu_vchamber   = [0.0117 0.00225 2];   
-
-bends = findcells(the_ring, 'BendingAngle');
-ivu   = sort([findcells(the_ring, 'FamName', 'id_end') ...%               findcells(the_ring, 'FamName', 'mia') ...
-              findcells(the_ring, 'FamName', 'mib')]);
-other = setdiff(1:length(the_ring), [bends ivu]);
-
-for i=1:length(bends)
-    the_ring{bends(i)}.VChamber = bends_vchamber;
-end
-for i=1:length(ivu)
-    the_ring{ivu(i)}.VChamber = ivu_vchamber;
-end
-for i=1:length(other)
-    the_ring{other(i)}.VChamber = other_vchamber;
 end
 
 
