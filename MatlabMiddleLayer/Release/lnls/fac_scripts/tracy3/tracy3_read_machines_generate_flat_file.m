@@ -20,11 +20,12 @@ end
 
 [~, result] = system('ls | grep rms | wc -l');
 n_pastas = str2double(result);
-
-if(n_pastas~=length(machines.machine))
+if(length(machines.machine) < n_pastas)
     error('inconsistent: either pwd not correct or n_pasts <> length(machines)');
-    return;
+elseif length(machines.machine) > n_pastas)
+    warning('inconsistent: either pwd not correct or n_pasts <> length(machines). continuing...');
 end
+n_pastas = min([n_pastas, length(machines.machine)]);
 
 for i=1:n_pastas
     fprintf('machine #%03i...', i);
