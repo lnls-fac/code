@@ -21,7 +21,8 @@ if ~isempty(varargin)
 else
     % files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
     % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs_new_order_symm_coup');
-    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','BOOSTER_V810');
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','BOOSTER_V810');
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs_phase2');
 end
 
 cd(config_folder);
@@ -33,7 +34,7 @@ if ~exist('r','var')
     r = eval(config_label);
 end
 selection = 1:r.config.nr_machines;
-%selection = 5;
+%selection = 4;
 fprintf('\n');
 
 if ~isfield(r,'question') || r.question
@@ -53,7 +54,6 @@ if ~isfield(r,'question') || r.question
     end
 end
 
-%selection = 93;
 
 % calcula estruturas auxiliares baseadas nos par??metros de configura????o
 fprintf('< initializing data structures... > \n\n');
@@ -68,6 +68,7 @@ if r.config.simulate_dynamic
     r.errors.dynamic = generate_errors(r,'dynamic');
 end
 
+
 if r.config.simulate_static
     
     % aplica erros a otica nominal e retorna estrutura com as maquinas aleatorias
@@ -77,20 +78,29 @@ if r.config.simulate_static
         
         r.machine = apply_errors(r, r.config.static.errors_delta(i),'static');
         
-        % desliga IDS para eliminar restrição física
-        for m=selection
-            r.machine{m} = set_ids(r.machine{m}, 'off');
+        if (i == 1)
+            sext_idx = getappdata(0, 'Sextupole_Idx');
+            % desliga IDS para eliminar restrição física
+            for m=selection
+                r.machine{m} = set_ids(r.machine{m}, 'off');
+                sext_str{m}  = getcellstruct(r.machine{m}, 'PolynomB', sext_idx, 1, 3);
+                r.machine{m} = set_sextupoles(r.machine{m}, 0, sext_str{m});
+            end
+            % faz calculo da trajetoria distorcida (com sextupolos e IDs zerados)
+            fprintf('< calculating COD with sextupoles off... > \n\n');
+            r.init_cod = calc_init_cod(r, selection);
+        elseif (i == length(r.config.static.errors_delta))
+            % liga IDS para eliminar restrição física
+            for m=selection
+                r.machine{m} = set_ids(r.machine{m}, 'on');
+                r.machine{m} = set_sextupoles(r.machine{m}, 1, sext_str{m});
+            end
         end
         
-        % faz calculo da trajetoria distorcida (com sextupolos zerados)
-        if r.params.static.cod_correction_flag
-            fprintf('< calculating COD with sextupoles off... > \n\n');
-            
-            r.init_cod = calc_init_cod(r, selection);
-            
+        if r.params.static.cod_correction_flag    
             % faz correcao de orbita ligando gradualmente os campos dos
             % sextupolos e os IDs (apos 1a iteracao da correcao)
-            fprintf('< correcting COD with ramping up sextupoles... > \n\n');
+            fprintf('< correcting COD ... > \n\n');
             r = correct_cod_slow(r, selection, r.params.static.cod_sextupoles_ramp, r.params.static.cod_svs, r.params.static.cod_nr_iter);
         end
     end

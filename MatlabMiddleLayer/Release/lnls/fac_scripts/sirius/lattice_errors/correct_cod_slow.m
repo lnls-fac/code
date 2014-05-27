@@ -13,7 +13,7 @@ scale_y = 200e-6;
 
 codx = zeros(length(machine), length(r.params.the_ring));
 cody = zeros(length(machine), length(r.params.the_ring));
-fprintf('%03s |   codx[um]    |   codx[um]    | max. kick [urad]\n', 'i');
+fprintf('%03s |   codx[um]    |   cody[um]    | max. kick [urad]\n', 'i');
 fprintf('    | (max)  (std)  | (max)  (std)  |   x     y   \n');
 
 r.correctors.static.orbit.hcm_str = zeros(length(selection),length(r.params.static.hcm_idx));
@@ -47,7 +47,7 @@ for i=selection
         machine{i} = set_sextupoles(machine{i}, sextupole_ramp(j), sext_str);
               
         for s=sv_list
-            [machine{i} hkicks vkicks tcodx tcody] = cod_sg(r.params.static, s, machine{i}, nr_iterations, goal_codx, goal_cody);
+            [machine{i}, hkicks, vkicks, tcodx, tcody] = cod_sg(r.params.static, s, machine{i}, nr_iterations, goal_codx, goal_cody);
             fm = std([(tcodx(r.params.static.bpm_idx)-goal_codx)/scale_x, (tcody(r.params.static.bpm_idx)-goal_cody)/scale_y]);
             %fm = max([(tcodx(r.params.static.bpm_idx)-goal_codx)/scale_x, (tcody(r.params.static.bpm_idx)-goal_cody)/scale_y]);
             %fm = max([(tcodx)/scale_x, (tcody)/scale_y]);
@@ -66,9 +66,9 @@ for i=selection
         machine{i} = best_machine;
         hkicks     = best_hkicks;
         vkicks     = best_vkicks;
-        if (j == 1),
-            machine{i} = set_ids(machine{i}, 'on');
-        end
+        %if (j == 1),
+        %   machine{i} = set_ids(machine{i}, 'on');
+        %end
     end
     codx(i,:)    = best_codx;
     cody(i,:)    = best_cody;   

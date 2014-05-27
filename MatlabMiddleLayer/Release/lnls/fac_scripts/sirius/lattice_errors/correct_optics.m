@@ -4,11 +4,16 @@ fprintf(['--- correct_optics [' datestr(now) '] ---\n']);
 
 machine = r.machine;
 
+if ischar(sv_list) && strcmpi(sv_list, 'all')
+    sv_list = min(size(r.params.static.opt_respm.S,1));
+end
+
+
 for i=selection
     v = calc_residue_optics(machine{i}, r.params.the_ring); init_fm = sqrt(sum(v.^2) / length(v));
     best_fm = Inf;
     for s=sv_list
-        [machine{i} v] = optics_sg(r, s, machine{i}, nr_iterations);
+        [machine{i}, v] = optics_sg(r, s, machine{i}, nr_iterations);
         fm = sqrt(sum(v.^2) / length(v));
         if (fm < best_fm)
             best_fm      = fm;
@@ -33,9 +38,9 @@ function [the_ring v] = optics_sg(r, nr_sing_values, the_ring0, nr_iterations)
 
 the_ring = the_ring0;
 
-S = r.params.opt_respm.S;
-U = r.params.opt_respm.U;
-V = r.params.opt_respm.V;
+S = r.params.static.opt_respm.S;
+U = r.params.static.opt_respm.U;
+V = r.params.static.opt_respm.V;
 
 % selection of singular values
 iS = diag(1./diag(S));
@@ -48,10 +53,10 @@ for i=1:nr_iterations
     v = calc_residue_optics(the_ring, r.params.the_ring);
     %disp([std(v) max(abs(v))]);
     dk = CM * v;
-    k_init  = getcellstruct(the_ring, 'K', r.params.kbs_idx);
+    k_init  = getcellstruct(the_ring, 'K', r.params.static.kbs_idx);
     k_final = k_init + dk;
-    the_ring = setcellstruct(the_ring, 'K', r.params.kbs_idx, k_final);
-    the_ring = setcellstruct(the_ring, 'PolynomB', r.params.kbs_idx, k_final, 1, 2);
+    the_ring = setcellstruct(the_ring, 'K', r.params.static.kbs_idx, k_final);
+    the_ring = setcellstruct(the_ring, 'PolynomB', r.params.static.kbs_idx, k_final, 1, 2);
 end
 
 

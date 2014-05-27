@@ -7,14 +7,14 @@ fprintf(['--- correct_coupling [' datestr(now) '] ---\n']);
 machine = r.machine;
 
 if ischar(sv_list) && strcmpi(sv_list, 'all')
-    sv_list = min(size(r.params.coup_respm.M));
+    sv_list = min(size(r.params.static.coup_respm.M));
 end
 
 for i=selection
         THERING = machine{i};
         [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling;
         Ratio_lnls = mean(lnls_calc_emittance_coupling(machine{i}));
-        init_fm = calc_residue_coupling(THERING, r.params.bpm_idx, r.params.hcm_idx, r.params.vcm_idx);
+        init_fm = calc_residue_coupling(THERING, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
         %init_fm = init_fm(r.params.ele_idx);
         init_fm = sqrt(sum(init_fm.^2)/length(init_fm));
         best_fm = init_fm;
@@ -59,7 +59,7 @@ function [the_ring skewstr coup_vec] = coup_sg(r, nr_sing_values, the_ring0, nr_
 
 the_ring = the_ring0;
 
-[U,S,V] = svd(r.params.coup_respm.M, 'econ');
+[U,S,V] = svd(r.params.static.coup_respm.M, 'econ');
 
 % selection of singular values
 iS = diag(1./diag(S));
@@ -70,15 +70,15 @@ CM = -(V*iS*U');
 
 for k=1:nr_iterations
     % calcs kicks
-    coup_vec = calc_residue_coupling(the_ring, r.params.bpm_idx, r.params.hcm_idx, r.params.vcm_idx);
+    coup_vec = calc_residue_coupling(the_ring, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
     delta_kicks = CM * coup_vec;
     
     % sets kicks
-    init_kicks = getcellstruct(the_ring, 'PolynomA', r.params.scm_idx, 1, 2);
+    init_kicks = getcellstruct(the_ring, 'PolynomA', r.params.static.scm_idx, 1, 2);
     tota_kicks = init_kicks + delta_kicks;
-    the_ring   = setcellstruct(the_ring, 'PolynomA', r.params.scm_idx, tota_kicks, 1, 2);
+    the_ring   = setcellstruct(the_ring, 'PolynomA', r.params.static.scm_idx, tota_kicks, 1, 2);
 end
-skewstr = getcellstruct(the_ring, 'PolynomA', r.params.scm_idx, 1, 2);
-coup_vec = calc_residue_coupling(the_ring, r.params.bpm_idx, r.params.hcm_idx, r.params.vcm_idx);
+skewstr = getcellstruct(the_ring, 'PolynomA', r.params.static.scm_idx, 1, 2);
+coup_vec = calc_residue_coupling(the_ring, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
 
 

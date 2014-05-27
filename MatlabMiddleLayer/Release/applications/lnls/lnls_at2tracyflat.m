@@ -106,6 +106,14 @@ for i = 1:length(ring)
             if ~(exist(kick_fullname,'file') == 2);
                 save_kicktable_file(ring{i}, kick_fullname);
             end
+        case 'LNLSThickEPUPass'
+            prtName(mfile, i, insertion, meth_kicktable, ring{i}, Knum, Fnum);
+            kicktable_filename = lower([ring{i}.FamName '.txt']);
+            fprintf(mfile, ' 1.0 2 %s\n', kicktable_filename);
+            kick_fullname = fullfile(path, kicktable_filename);
+            if ~(exist(kick_fullname,'file') == 2);
+                save_kicktable_file(ring{i}, kick_fullname);
+            end
         otherwise
             fprintf(mfile, 'prtmfile: unknown type\n');
             

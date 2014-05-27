@@ -36,8 +36,11 @@ root_folder = lnls_get_root_folder();
 cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 
 % remove toolbox/finance/finsupport/ do path para previnir conflito com
-% funcao drift da Financial Toolbox
-rmpath(fullfile(matlabroot, 'toolbox', 'finance', 'finsupport'));
+% funcao drift da Financial Toolbox (se pasta está no caminho, para evitar warningMessage)
+fins = fullfile(matlabroot, 'toolbox', 'finance', 'finsupport');
+if ~isempty(strfind(path, fins))
+    rmpath(fins);
+end
 
 setpathsirius(['SIRIUS' default_version], 'StorageRing', 'sirius_link');
 cd(cdir);

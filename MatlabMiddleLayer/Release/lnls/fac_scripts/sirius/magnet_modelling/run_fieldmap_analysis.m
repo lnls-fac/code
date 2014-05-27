@@ -15,12 +15,16 @@ fclose('all'); drawnow;
 %parms = load_config('BOOSTER_QF_ERRORS');
 %parms = load_config('BOOSTER_QF_ERRORS_SKEW');
 
-parms = load_config('SIRIUS_B2_MODELO7');
+%parms = load_config('SIRIUS_B2_MODELO7');
 %parms = load_config('SIRIUS_CM_H');
 %parms = load_config('SIRIUS_CM_V');
 %parms = load_config('SIRIUS_QF_ERRORS');
 %parms = load_config('SIRIUS_QF_TESTE_ANEL');
 %parms = load_config('SIRIUS_QF');
+%parms = load_config('SIRIUS_QF_MODELO2');
+%parms = load_config('SIRIUS_QFC_MODELO2');
+%parms = load_config('SIRIUS_QD_MODELO2');
+parms = load_config('SIRIUS_QF_MODELO3');
 %parms = load_config('SIRIUS_QD');
 %parms = load_config('SIRIUS_QFC');
 
