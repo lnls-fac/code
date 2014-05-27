@@ -22,7 +22,7 @@ end
 n_pastas = str2double(result);
 if(length(machines.machine) < n_pastas)
     error('inconsistent: either pwd not correct or n_pasts <> length(machines)');
-elseif length(machines.machine) > n_pastas)
+elseif (length(machines.machine) > n_pastas)
     warning('inconsistent: either pwd not correct or n_pasts <> length(machines). continuing...');
 end
 n_pastas = min([n_pastas, length(machines.machine)]);

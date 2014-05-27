@@ -98,7 +98,8 @@ mb2      = marker('mb2',     'IdentityPass');
 mb3      = marker('mb3',     'IdentityPass');
 inicio   = marker('inicio',  'IdentityPass');
 fim      = marker('fim',     'IdentityPass');
-mid      = marker('id_end',  'IdentityPass');
+mida     = marker('id_enda',  'IdentityPass');
+midb     = marker('id_endb',  'IdentityPass');
 %mgirder  = marker('mgirder', 'IdentityPass');
 
 % --- beam position monitors ---
@@ -187,8 +188,8 @@ cav = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
 %% lines 
 
-insa   = [ dia1, mid, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17];
-insb   = [ dib1, mid, dib2, d10, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17];
+insa   = [ dia1, mida, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17];
+insb   = [ dib1, midb, dib2, d10, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17];
 
 cline1 = [ d32, cv,  d12, ch,  d15, sd1, d17, qf1, d12, mon, d11, sf1, d20, qf2, d17, sd2, d12, ch, d10, mon, d10];
 cline2 = [ d18, cv,  d26, sd3, d17, qf3, d12, mon, d11, sf2, d20, qf4, d15, ch,  crhv, d12, mon, d44];
