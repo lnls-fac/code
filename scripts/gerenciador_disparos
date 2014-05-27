@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# Programa que gerencia o disparo de vários cálculos do tracy em máquinas diferentes da rede.
+# Ele assume que dentro da pasta que você o executa há dois arquivos: 
+# comandos - com a lista de caminho das diferentes pastas onde você quer executar tracy,
+# sendo que esses caminhos podem ser relativos a pasta atual, ou então completos, a partir da raiz;
+# maquinas - com a lista de máquinas a serem usadas (para mais informações, ver arquivo maquinas, nessa pasta).
+# Ele também assume que o nome do link do tracy é lnlstracy e o nome do arquivo de input para o tracy é input.prm.
+
+# Fernando - 24/09/2012
+
+old_IFS=$IFS
+IFS=$'\n'
+pastas=($( grep -v ^\# comandos | grep . )) # array
+machines=($( grep -v ^\# maquinas | grep . )) # array
+IFS=$old_IFS
+
+i=0;
+nr_info=3; # número de informações que cada maquina possui (nome,nr-cpus,pasta_padrão)
+a=($( hostname ));
+b=($( pwd ));
+while [ "$i" -lt ${#pastas[*]} ]; do 
+	j=-1;
+	nr_machines=$(($((${#machines[*]}))/$nr_info));
+	for ((l=0; l < $nr_machines; l++ )); do
+		j=$(($j+1));
+		if [ "${machines[$j]}" == "$a" ];then
+			n_proc=$(ps -e | grep lnlstracy | wc -l);
+		elif [ "${machines[$j]}" == "fernando.sa@sgi" ];then
+			n_proc=$(ssh "${machines[$j]}" "qstat | grep lnlstracy | wc -l 2>/dev/null &");
+		else
+			n_proc=$(ssh "${machines[$j]}" "ps -e | grep lnlstracy | wc -l 2>/dev/null &");
+		fi
+		
+		re='^[0-9]+$';
+        if ! [[ $n_proc =~ $re ]] ; then
+            j=$(($j+1));
+            j=$(($j+1));
+            continue;
+        fi 
+        
+		j=$(($j+1));
+		disp_n_proc=$((${machines[$j]}-$n_proc));
+		j=$(($j+1));
+		for((k=0; k < $disp_n_proc; k++)); do
+			if [ "$i" -lt ${#pastas[*]} ]; then
+				p=$(($j-2));
+				hora=($( date '+%a%H%M%S' ));
+#				if [ "${machines[$p]}" == "$a" ];then
+#					str=${machines[$j]}"/calculos_tracy"$i"-""$hora";
+#					mkdir -p "$str";
+#					str3=${str}"/";
+#					str2=${pastas[$i]}"/*";
+#					cp -ar $str2 $str3 > "/dev/null";
+#					dispara_processo $str ${pastas[$i]} $a $b > /dev/null 2>&1 &
+#				else
+					str=${machines[$j]}"/calculos_tracy"$i"-""$hora";
+					ssh "${machines[$p]}" "mkdir -p $str 2>/dev/null &";
+					str3=${machines[$p]}":"${str}"/";
+					str2=${pastas[$i]}"/*";
+					scp -pr $str2 $str3 > "/dev/null";
+					ssh -f "${machines[$p]}" "dispara_processo $str ${pastas[$i]} $a $b > /dev/null 2>&1 &"
+#				fi
+				tim=($( date '+%a-%d.%H:%M' ))
+				echo $[i+1]" - ""${machines[$p]} - "$tim " - "${pastas[$i]}
+				i=$(($i+1));
+			else
+				break;
+			fi
+		done
+		old_IFS=$IFS
+		IFS=$'\n'
+		pastas=($(grep -v ^\# comandos | grep .)) # array
+		machines=($( grep -v ^\# maquinas | grep . )) # array
+		IFS=$old_IFS
+		sleep 3
+	done
+	sleep 60
+done

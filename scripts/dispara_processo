@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cd "$1";
+inicio=$( date );
+
+lnlstracy input.prm > output.txt 2>&1;
+#ls -lt "$1" > output.txt 2>&1;
+touch fimdeproc;
+
+a=($( hostname ));
+
+echo $inicio >> fimdeproc
+echo "$a:$2/" >> fimdeproc
+echo $( date ) >> fimdeproc
+
+cd -;
+pasta=$1"/*";
+if [ "$3" == "$a" ];then
+	cp -ar $pasta $2"/" > /dev/null && rm -r $1;
+else
+	scp -pr $pasta $3":"$2"/" > /dev/null && rm -r $1;
+fi
+

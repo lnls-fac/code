@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#rm -fr rms*;
+
+if [ "$2" == "50" ];then
+	mkdir rms{0{1,2,3,4,5,6,7,8,9},1{0,1,2,3,4,5,6,7,8,9},2{0,1,2,3,4,5,6,7,8,9},3{0,1,2,3,4,5,6,7,8,9},4{0,1,2,3,4,5,6,7,8,9},50};
+elif [ "$2" == "20" ]; then
+	mkdir rms{0{1,2,3,4,5,6,7,8,9},1{0,1,2,3,4,5,6,7,8,9},20}
+elif [ "$2" == "10" ]; then
+	mkdir rms{0{1,2,3,4,5,6,7,8,9},10}
+fi
+
+pastas=($( ls | grep rms ));
+j=0;
+for i in ${pastas[@]}; do
+	cp *.lat *.dat *.prm *.txt $i 2>/dev/null;
+	cd $i;
+	sed "s/rms01/$i/" <../input.prm >input.prm;
+	j=$(($j+1));
+	if [ "$1" == "sr" ];then
+		sed "s/seed 100/seed ${j}00/" <../multipole_Sirius_v500.dat >multipole_Sirius_v500.dat;
+	elif [ "$1" == "boo" ];then
+		sed "s/seed 100/seed ${j}00/" <../multipole_Booster_v800.dat >multipole_Booster_v800.dat;
+    else
+        echo "erro: boo ou sr"
+	fi
+	cd ..;
+done
