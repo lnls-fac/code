@@ -54,6 +54,15 @@
    long _FmapdpFlag_nxpoint, _FmapdpFlag_nepoint, _FmapdpFlag_nturn;
    double _FmapdpFlag_x0, _FmapdpFlag_xmax, _FmapdpFlag_emin, _FmapdpFlag_emax, _FmapdpFlag_z;
    bool _FmapdpFlag_diffusion;	
+   
+   
+ //extern bool DynamicAperXY;
+   long _DAXY_nxpoint, _DAXY_nypoint, _DAXY_nturn;
+   double _DAXY_x0, _DAXY_xmax, _DAXY_y0,_DAXY_ymax, _DAXY_delta;
+ 
+ //extern bool DynamicAperEX;
+   long _DAEX_nxpoint, _DAEX_nepoint, _DAEX_nturn;
+   double _DAEX_x0, _DAEX_xmax, _DAEX_emin, _DAEX_emax, _DAEX_z;	
 
    
   //MomentumAccFlag;
@@ -88,6 +97,15 @@
  _FmapdpFlag_nxpoint=31L, _FmapdpFlag_nepoint=21L, _FmapdpFlag_nturn=516L;
  _FmapdpFlag_x0=0.0, _FmapdpFlag_xmax=0.025, _FmapdpFlag_emin=-0.005, _FmapdpFlag_emax=0.005, _FmapdpFlag_z=0.0;
  _FmapdpFlag_diffusion = true;			
+ 
+ 
+//  Dynamic Aperture in the plane X Y
+   _DAXY_nxpoint=31L, _DAXY_nypoint=21L, _DAXY_nturn=516L;
+   _DAXY_x0=0.0, _DAXY_xmax=0.025, _DAXY_x0=0.0, _DAXY_ymax=0.005, _DAXY_delta=0.0;
+
+//  Dynamic Aperture in the plane E X
+ _DAEX_nxpoint=31L, _DAEX_nepoint=21L, _DAEX_nturn=516L;
+ _DAEX_x0=0.0, _DAEX_xmax=0.025, _DAEX_emin=-0.005, _DAEX_emax=0.005, _DAEX_z=0.0;		
 
 /* tune shift with amplitude*/
  _AmplitudeTuneShift_nxpoint=31L;  _AmplitudeTuneShift_nypoint=21L;

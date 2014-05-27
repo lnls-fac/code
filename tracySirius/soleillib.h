@@ -39,10 +39,14 @@ void MomentumAcceptance(long nturn, double sdeb, double sfin, double ep_min, dou
 void Trac_Tab(double x, double px, double y, double py, double dp,
             long nmax, long pos, long *lastn, long *lastpos, FILE *outf1, double Tx[][NTURN]);
 void SetSkewQuad(void);
-void TracCO(double x, double px, double y, double py, double dp, double ctau,
-                 long nmax, long pos, long *lastn, long *lastpos, FILE *outf1);
+void Trac_COD(double x, double px, double y, double py, double dp, double ctau,
+                 long nmax, long &lastn, long &lastpos);
 void Dyna(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
                double energy, bool diffusion);
+void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
+		double z0, double zmax, double energy);
+void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
+		double emin, double emax, double z);
                             
 /* Frequency map analysis */
 void TunesShiftWithEnergy(long Nb, long Nbtour, double emax);

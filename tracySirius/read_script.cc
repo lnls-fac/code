@@ -245,6 +245,30 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 			else if (strcmp("ChromTracFlag", name) == 0){
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
+			
+			else if (strcmp("DynApXYFlag", name) == 0){
+				strcpy(dummy, "");
+				sscanf(line, "%*s %ld %ld %ld %lf %lf %lf %lf %lf",
+						&(UserCommandFlag[CommNo]._DAXY_nxpoint),
+						&(UserCommandFlag[CommNo]._DAXY_nypoint), &(UserCommandFlag[CommNo]._DAXY_nturn),
+						&(UserCommandFlag[CommNo]._DAXY_x0), &(UserCommandFlag[CommNo]._DAXY_xmax),
+						&(UserCommandFlag[CommNo]._DAXY_y0), &(UserCommandFlag[CommNo]._DAXY_ymax),
+						&(UserCommandFlag[CommNo]._DAXY_delta));
+
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
+			else if (strcmp("DynApEXFlag", name) == 0){
+				strcpy(dummy, "");
+				sscanf(line, "%*s %ld %ld %ld %lf %lf %lf %lf %lf",
+						&(UserCommandFlag[CommNo]._DAEX_nxpoint),
+						&(UserCommandFlag[CommNo]._DAEX_nepoint), &(UserCommandFlag[CommNo]._DAEX_nturn),
+						&(UserCommandFlag[CommNo]._DAEX_x0), &(UserCommandFlag[CommNo]._DAEX_xmax),
+						&(UserCommandFlag[CommNo]._DAEX_emin),&(UserCommandFlag[CommNo]._DAEX_emax),
+						&(UserCommandFlag[CommNo]._DAEX_z));
+
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
+			
 			// FMA
 			else if (strcmp("FmapFlag", name) == 0){
 				strcpy(dummy, "");
