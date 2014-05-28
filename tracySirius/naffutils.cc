@@ -101,7 +101,7 @@ void Trac_Simple4DCOD(double x, double px, double y, double py, double dp,
     }
     else
     {
-      printf("Trac_Simple: Particle lost \n");
+      printf("Trac_Simple4DCOD: Particle lost \n");
       fprintf(stdout, "%6ld plane: %1d %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g \n", 
          lastn, status.lossplane, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
       lostF = true;
@@ -113,7 +113,7 @@ void Trac_Simple4DCOD(double x, double px, double y, double py, double dp,
   if (lastpos != globval.Cell_nLoc)
   { /* Particle lost: Error message section */
     *status2 = false;
-    printf("Trac_Simple: Particle lost \n");
+    printf("Trac_Simple4DCOD: Particle lost \n");
     fprintf(stdout, "turn=%5ld plane= %1d %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g \n", lastn-1,
              status.lossplane, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
   }
@@ -200,7 +200,7 @@ void Trac_Simple6DCOD(double x, double px, double y, double py, double dp,
     }
     else
     {
-      printf("Trac_Simple: Particle lost \n");
+      printf("Trac_Simple6DCOD: Particle lost \n");
       fprintf(stdout, "%6ld plane: %1d %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g \n",
          lastn, status.lossplane, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
       lostF = true;
@@ -212,7 +212,7 @@ void Trac_Simple6DCOD(double x, double px, double y, double py, double dp,
   if (lastpos != globval.Cell_nLoc)
   { /* Particle lost: Error message section */
     *status2 = false;
-    printf("Trac_Simple: Particle lost \n");
+    printf("Trac_Simple6DCOD: Particle lost \n");
     fprintf(stdout, "turn=%5ld plane= %1d %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g \n", lastn-1,
              status.lossplane, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
   }

@@ -1097,6 +1097,277 @@ void fmapdp(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
 }
 #undef NTERM2
 
+
+/****************************************************************************/
+/* void daxy(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
+   double energy)
+
+   Purpose:
+       Compute dynamic aperture at the beginning of the lattice in the plane XY
+       For each set of initial conditions the particle is tracked over
+       Nbtour for an energy offset dp
+
+       The stepsize is linear
+
+       Results in daxy.out
+
+   Input:
+       Nbx    horizontal step number
+       Nby    vertical step number
+       xmax   horizontal maximum amplitude
+       zmax   vertical maximum amplitude
+       Nbtour number of turn for tracking
+       energy particle energy offset
+
+   Output:
+       status true if stable
+              false otherwise
+
+   Return:
+       none
+
+   Global variables:
+       none
+
+   Specific functions:
+       Trac_COD
+
+   Comments:
+       26/05/2014 Created
+
+****************************************************************************/
+void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
+		  double z0, double zmax, double energy)
+{
+	FILE * outf;
+	const char fic[] = "daxy.out";
+	long i = 0L, j = 0L, lastn = 0L, lastpos = 0L;
+	double x = 0.0, z = 0.0, xstep = 0.0, zstep = 0.0;
+	struct tm *newtime;
+
+	/* Get time and date */
+	time_t aclock;
+	time(&aclock);                 /* Get time in seconds */
+	newtime = localtime(&aclock);  /* Convert time to struct */
+
+	if (trace) printf("Entering fmap ... results in %s\n\n",fic);
+
+	/* Opening file */
+	if ((outf = fopen(fic, "w")) == NULL) {
+		fprintf(stdout, "daxy: error while opening file %s\n", fic);
+		exit_(1);
+	}
+
+	fprintf(outf,"# TRACY III SYNCHROTRON LNLS-- %s -- %s \n", fic, asctime2(newtime));
+	fprintf(outf,"#     x               y                 plane_lost         turn_lost     s_lost  \n");
+	fprintf(outf,"#    [m]             [m]         (1=x,2=y,-1=not_lost)         #           [m]  \n");
+
+	fprintf(stdout,"#    x[m]          y[m]           lost?(0=nao 1=sim)\n");
+
+
+	if ((Nbx < 1) || (Nbz < 1)) // <=
+		fprintf(stdout,"fmap: Error Nbx=%ld Nbz=%ld\n",Nbx,Nbz);
+
+
+	// steps in both planes
+	xstep = (xmax-x0)/((double)Nbx);
+	zstep = (zmax-z0)/((double)Nbz);
+	
+	/* Get closed orbit */
+    getcod(0.0, lastpos);
+
+	// Tracking part 
+	for (i = 1; i <= Nbx; i++) {
+		x  = 1e-6 + x0 + ((double)i)*xstep;
+
+		fprintf(stdout,"\n");
+		for (j = 0; j<= Nbz; j++) {
+			z  =1e-6 + z0 + ((double)(Nbz-j))*zstep;
+    		Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+			// printout value
+		    if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)){
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", x, z, -1, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", x, z, 0);
+			}else{
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", x, z, status.lossplane, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", x, z, 1);
+			}
+		}
+	}
+	fclose(outf);
+}
+
+
+/****************************************************************************/
+/* void daex(long Nbx, long Nbe, long Nbtour, double xmax, double emax,
+   double z)
+
+   Purpose:
+       Compute dynamic aperture at the beginning of the lattice in the plane EX
+       For each set of initial conditions the particle is tracked over
+       Nbtour for an vertical offset z
+
+       The stepsize is linear
+
+       Results in daex.out
+
+   Input:
+       Nbx              horizontal step number
+       Nbe              energy step number
+       Nbtour           number of turns for tracking
+       xmax             horizontal maximum amplitude
+       emax             maximum energy
+       z                vertical amplitude
+
+   Output:
+
+
+   Return:
+       none
+
+   Global variables:
+       none
+
+   Specific functions:
+       Trac_COD
+
+   Comments:
+       26/05/2014 Created
+
+****************************************************************************/
+void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
+		double emin, double emax, double z)
+{
+	FILE * outf;
+	const char fic[] = "daex.out";
+	long i = 0L, j = 0L, lastn = 0L, lastpos = 0L;
+	double x = 0.0, dp = 0.0;
+	double xstep = 0.0, estep = 0.0;
+	struct tm *newtime;
+
+	/* Get time and date */
+	time_t aclock;
+	time(&aclock);                 /* Get time in seconds */
+	newtime = localtime(&aclock);  /* Convert time to struct */
+
+	if (trace) printf("Entering fmap ... results in %s\n\n",fic);
+
+	/* Opening file */
+	if ((outf = fopen(fic, "w")) == NULL) {
+		fprintf(stdout, "fmap: error while opening file %s\n", fic);
+		exit_(1);
+	}
+
+	fprintf(outf,"# TRACY III SYNCHROTRON LNLS-- %s -- %s \n", fic, asctime2(newtime));
+	fprintf(outf,"#     dp               x                 plane_lost         turn_lost     s_lost  \n");
+	fprintf(outf,"#    [%%]             [m]         (1=x,2=y,-1=not_lost)         #           [m]  \n");
+
+	fprintf(stdout,"#    dp[%%]          x[m]           lost?(0=nao 1=sim)\n");
+
+	if ((Nbx < 1) || (Nbe < 1)) //<=
+		fprintf(stdout,"fmap: Error Nbx=%ld Nbe=%ld\n",Nbx,Nbe);
+
+
+	xstep = (xmax-x0)/((double)Nbx);
+	estep = (emax-emin)/Nbe;
+	
+	/* Get closed orbit */
+    getcod(0.0, lastpos);
+
+	for (i = 0; i <= Nbe; i++) {
+		dp  = emin + i*estep;
+		fprintf(stdout,"\n");
+		for (j = 1; j<= Nbx; j++){
+			x  = 1e-6 + x0 + ((double)j)*xstep;
+		    Trac_COD(x, 0.0, z, 0.0, dp, 0.0, Nbtour, lastn, lastpos);
+		    // printout value
+		    
+		    if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)){
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", dp, x, -1, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", dp, x, 0);
+			}else{
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", dp, x, status.lossplane, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", dp, x, 1);
+			}
+		}
+	}
+	fclose(outf);
+}
+
+
+/****************************************************************************/
+/* void Trac_COD(double x, double px, double y, double py, double dp, double ctau,
+          long nmax, long *lastn, long *lastpos)
+
+   Purpose:
+      Single particle tracking
+      Same as Trac but with respect to closed orbit
+
+   Input:
+      x, px, y, py 4 transverses coordinates
+      dp           energy offset
+      nmax         number of turns
+      pos          starting position for tracking
+      aperture     global physical aperture
+
+
+   Output:
+      lastn       last n (should be nmax if  not lost)
+      lastpos     last position in the ring
+
+   Return:
+       none
+
+   Global variables:
+       globval
+
+   specific functions:
+       Cell_Pass
+
+   Comments:
+       BUG: last printout is wrong because not at pos but at the end of the ring
+       26/04/03 print output for phase space is for position pos now
+       26/05/2014 Tirei todas as impressões, o arquivo que é passado para ela,
+                  mudei o nome de TracCO para Trac_COD e tirei a opção de fazer
+                  tracking começando de posição arbitrária do anel
+
+****************************************************************************/
+void Trac_COD(double x, double px, double y, double py, double dp, double ctau,
+	    long nmax, long &lastn, long &lastpos)
+{
+  Vector x1;     /* tracking coordinates */
+
+
+  if (trace) printf("dp= % .5e %% xcod= % .5e mm zcod= % .5e mm \n",
+             dp*1e2, globval.CODvect[0]*1e3, globval.CODvect[2]*1e3);
+
+  /* Tracking coordinates around the closed orbit */
+    x1[0] =  x + globval.CODvect[0]; x1[1] = px   + globval.CODvect[1];
+    x1[2] =  y + globval.CODvect[2]; x1[3] = py   + globval.CODvect[3];
+    
+    if (globval.Cavity_on){
+        x1[4] = dp + globval.CODvect[4]; x1[5] = ctau + globval.CODvect[5];
+    }else{
+        x1[4] = dp; x1[5] = ctau; // line true in 4D tracking
+    }
+    
+    lastn = 0;
+    (lastpos) = 0;
+
+    do{
+      (lastn)++;
+      if (trace) { // print initial conditions
+        fprintf(stdout, "%6ld %+10.5e %+10.5e %+10.5e %+10.5e"
+		" %+10.5e %+10.5e \n",
+		lastn, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
+      }
+
+    //  Cell_Pass(pos-1L, globval.Cell_nLoc, x1, lastpos);
+      Cell_Pass(0, globval.Cell_nLoc, x1, lastpos);
+    }
+    while (((lastn) < nmax) && ((lastpos) == globval.Cell_nLoc));
+}
+
 /****************************************************************************/
 /* void TunesShiftWithEnergy(long Nb, long Nbtour, double emax)
 
@@ -3352,97 +3623,6 @@ void spectrum(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
  fclose(xoutf);
  fclose(zoutf);
 }
-
-/****************************************************************************/
-/* void TracCO(double x, double px, double y, double py, double dp, double ctau,
-          long nmax, long pos, long *lastn, long *lastpos, FILE *outf1)
-
-   Purpose:
-      Single particle tracking
-      Same as Trac but with respect to closed orbit
-
-   Input:
-      x, px, y, py 4 transverses coordinates
-      dp           energy offset
-      nmax         number of turns
-      pos          starting position for tracking
-      aperture     global physical aperture
-
-
-   Output:
-      lastn       last n (should be nmax if  not lost)
-      lastpos     last position in the ring
-
-   Return:
-       none
-
-   Global variables:
-       globval
-
-   specific functions:
-       Cell_Pass
-
-   Comments:
-       BUG: last printout is wrong because not at pos but at the end of the ring
-       26/04/03 print output for phase space is for position pos now
-
-****************************************************************************/
-void TracCO(double x, double px, double y, double py, double dp, double ctau,
-	    long nmax, long pos, long &lastn, long &lastpos, FILE *outf1)
-{
-  bool lostF; /* Lost particle Flag */
-  Vector x1;     /* tracking coordinates */
-  Vector2  aperture;
-  CellType Cell;
-
-  aperture[0] = 1e0;
-  aperture[1] = 1e0;
-
-  /* Get closed orbit */
-  Ring_GetTwiss(true, 0.0);
-  getcod(dp, lastpos);
-  getelem(pos-1,&Cell);
-
-  if (!trace) printf("dp= % .5e %% xcod= % .5e mm zcod= % .5e mm \n",
-             dp*1e2, Cell.BeamPos[0]*1e3, Cell.BeamPos[2]*1e3);
-
-  /* Tracking coordinates around the closed orbit */
-    x1[0] =  x + Cell.BeamPos[0]; x1[1] = px   + Cell.BeamPos[1];
-    x1[2] =  y + Cell.BeamPos[2]; x1[3] = py   + Cell.BeamPos[3];
-    x1[4] = dp; x1[5] = ctau; // line true in 4D tracking
-//    x1[4] = dp + Cell.BeamPos[4]; x1[5] = ctau + Cell.BeamPos[5];
-
-    lastn = 0;
-    lostF = true;
-
-    (lastpos) = pos;
-
-    if (!trace) fprintf(outf1, "\n");
-
-    do
-    {
-      (lastn)++;
-      if (!trace) { // print initial conditions
-        fprintf(outf1, "%6ld %+10.5e %+10.5e %+10.5e %+10.5e"
-		" %+10.5e %+10.5e \n",
-		lastn, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
-      }
-
-    //  Cell_Pass(pos-1L, globval.Cell_nLoc, x1, lastpos);
-      Cell_Pass(pos, globval.Cell_nLoc, x1, lastpos);
-      Cell_Pass(0,pos-1L, x1, lastpos);
-    }
-    while (((lastn) < nmax) && ((lastpos) == pos-1L));
-
-    if (lastpos != pos-1L)
-    {
-      printf("TracCO: Particle lost \n");
-      fprintf(stdout, "turn=%6ld %+10.5g %+10.5g %+10.5g"
-	      " %+10.5g %+10.5g %+10.5g \n",
-	      lastn, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
-    }
-  }
-
 
 /****************************************************************************/
 /*   void getA4antidamping()

@@ -20,7 +20,7 @@ extern bool freq_map;
 int main(int argc, char *argv []) {
     
     
-    printf("\nTracy3 - LNLS:  22/05/2014\n");
+    printf("\nTracy3 - LNLS:  27/05/2014\n");
 	/* for time handling */
 	uint32_t start, stop;
 
@@ -558,8 +558,40 @@ int main(int argc, char *argv []) {
 						UserCommandFlag[i]._FmapdpFlag_emin, UserCommandFlag[i]._FmapdpFlag_emax,
 						UserCommandFlag[i]._FmapdpFlag_z,
 						UserCommandFlag[i]._FmapdpFlag_diffusion);
+		   }
+		}
+		// Computes Dynamic Aperture on XY axis
+		else if(strcmp(CommandStr,"DynApXYFlag") == 0) {
+			printf("\n begin XY Dynamic Aperture search: \n\n");
+			if (globval.nr_cpus > 1) {
+/*				DAXY_mp(globval.nr_cpus, UserCommandFlag[i]._DAXY_nxpoint, UserCommandFlag[i]._DAXY_nypoint, UserCommandFlag[i]._DAXY_nturn,
+						UserCommandFlag[i]._DAXY_x0, UserCommandFlag[i]._DAXY_xmax,
+						UserCommandFlag[i]._DAXY_y0, UserCommandFlag[i]._DAXY_ymax,
+						UserCommandFlag[i]._DAXY_delta); */
+			} else {
+				daxy(UserCommandFlag[i]._DAXY_nxpoint, UserCommandFlag[i]._DAXY_nypoint, UserCommandFlag[i]._DAXY_nturn,
+						UserCommandFlag[i]._DAXY_x0, UserCommandFlag[i]._DAXY_xmax,
+						UserCommandFlag[i]._DAXY_y0, UserCommandFlag[i]._DAXY_ymax,
+						UserCommandFlag[i]._DAXY_delta);
 			}
 		}
+
+		// Compute FMA dp
+		else if(strcmp(CommandStr,"DynApEXFlag") == 0) {
+			printf("\n begin EX Dynamic Aperture search: \n\n");
+			if (globval.nr_cpus > 1) {
+/*				DAEX_mp(globval.nr_cpus, UserCommandFlag[i]._DAEX_nxpoint, UserCommandFlag[i]._DAEX_nepoint, UserCommandFlag[i]._DAEX_nturn,
+						UserCommandFlag[i]._DAEX_x0, UserCommandFlag[i]._DAEX_xmax,
+						UserCommandFlag[i]._DAEX_emin, UserCommandFlag[i]._DAEX_emax,
+						UserCommandFlag[i]._DAEX_z);*/
+			} else {
+				daex(UserCommandFlag[i]._DAEX_nxpoint, UserCommandFlag[i]._DAEX_nepoint, UserCommandFlag[i]._DAEX_nturn,
+						UserCommandFlag[i]._DAEX_x0, UserCommandFlag[i]._DAEX_xmax,
+						UserCommandFlag[i]._DAEX_emin, UserCommandFlag[i]._DAEX_emax,
+						UserCommandFlag[i]._DAEX_z);
+		    }	
+		}
+
 
 		//  // if (CodeComparaisonFlag) {
 		//   else if(strcmp(CommandStr,"CodeComparaisonFlag") == 0) {
