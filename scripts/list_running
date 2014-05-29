@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# users
+users=(fernando ximenes liu afonso.mukai natalia.milas)
+maq_file=~/rodar_tracy/maquinas
+
+
+# initializations
+total_cnt=0
+users_cnt=() # creates list of user count
+for i in `seq 1 ${#users[@]}`; do
+    users_cnt=(${users_cnt[@]} 0)
+done
+script_name=`basename $0`
+if [ "$1" = "help" ]; then
+    printf "NAME:\n"
+    printf "\t$script_name - lists running jobs at other workstations\n"
+    printf "SYNOPSIS\n"
+    printf "\t$script_name [ARG]\n"
+    printf "DESCRIPTION\n"
+    printf "\tIf [ARG] is given the script lists all running processes running at \n"
+    printf "\tworkstations whose command name matches the argument, otherwise [ARG] \n"
+    printf "\ttakes the default 'lnlstracy'\n"
+    exit
+fi
+if [ "$1" = "" ]; then
+    job_str="lnlstracy"
+else
+    job_str=$1
+fi
+
+rmt_cmd="ps -A r -o user:20,comm | grep $job_str"
+maquinas=$(cat  $maq_file | grep "lnls\|sgi" | grep -v "#")
+
+# print header line
+printf "listing '$job_str' jobs that are currently running...\n"
+printf "%-15s: %-8s | " "HOST" "TOTAL"
+for user in ${users[*]}; do
+    printf "%-8s | " ${user:0:8}
+done
+printf "\n"
+
+# ---- line
+printf "%-14s--%-8s---" "--------------" "--------"
+for i in `seq 1 ${#users[@]}`; do
+    printf "%-8s---" "--------"
+done
+printf "\n"
+
+
+# print running jobs
+for maq in $maquinas; do
+    if [ $maq == "fernando.sa@sgi" ]; then
+    	reply=$(ssh $maq "qstat | grep $job_str")
+    else
+	reply=$(ssh $maq $rmt_cmd)
+    fi
+    total=$(echo $reply | grep -o $job_str | wc -l)
+    total_cnt=$[total_cnt + total]
+    printf "%-15s: %-8s | " $maq $total
+    for i in `seq 1 ${#users[@]}`; do
+    #for user in ${users[*]}; do
+        #user_count=$(echo $reply | grep -o $user | wc -l)
+        idx=$[i-1]
+        user=${users[idx]}
+        user_count=$(echo $reply | grep -o $user | wc -l)
+        users_cnt[idx]=$[${users_cnt[idx]} + user_count]
+        printf "%-8s | " $user_count
+    done
+    printf "\n"
+done
+
+# ---- line
+printf "%-14s--%-8s---" "--------------" "--------"
+for i in `seq 1 ${#users[@]}`; do
+    printf "%-8s---" "--------"
+done
+printf "\n"
+
+
+# sum line
+printf "%-15s: %-8s | " "SUM" $total_cnt
+for i in `seq 1 ${#users[@]}`; do
+    idx=$[i-1]
+    printf "%-8s | " ${users_cnt[idx]}
+done
+printf "\n"
+
+

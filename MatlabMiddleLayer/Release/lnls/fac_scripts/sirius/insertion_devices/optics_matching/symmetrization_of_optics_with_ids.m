@@ -33,6 +33,8 @@ fitting_tol_tune = 3.0;
 
 ids_def = create_ids_def_PH_new_order;
 ids = [];
+
+% --- phase 1 ---
 ids = [ids ids_def.caterete];
 ids = [ids ids_def.ema];
 ids = [ids ids_def.manaca];
@@ -41,19 +43,31 @@ ids = [ids ids_def.jatoba];
 ids = [ids ids_def.inga];
 ids = [ids ids_def.sabia];
 ids = [ids ids_def.ipe];
+% --- phase 2 ---
+ids = [ids ids_def.caterete2];
+ids = [ids ids_def.ema2];
+ids = [ids ids_def.manaca2];
+ids = [ids ids_def.carnauba2];
+ids = [ids ids_def.inga2];
+ids = [ids ids_def.sabia2];
+ids = [ids ids_def.ipe2];
 
 % loads initial SIRIUS lattice model
-% global THERING
+%global THERING
 %sirius('_V402');
-sirius;
+%sirius;
 % the_ring0 = THERING;
+% data = load('the_ring_withids_ac10_5_2014-05-15.mat');
+%the_ring0 = data.the_ring;
 the_ring0 = sirius_lattice('ac10_5');
+
 the_ring0 = start_at_last_element(the_ring0, 'mc'); % shifts model to start at center of 2T bending magnets
 twiss0 = calc_short_twiss(the_ring0); % calcs original twiss parameters
-
+fprintf('tunes: %9.6f %9.6f\n', twiss0.tunes(1), twiss0.tunes(2));
 
 % inserts IDs and does initial symmetrization
 the_ring = insert_ids_set(the_ring0, ids, 1.0);
+%the_ring = insert_ids_set(the_ring0, ids2, 1.0);
 the_ring = locally_symmetrize_ids(the_ring, twiss0, ids, fitting_tol_symm, max_nr_iters);
 
 
@@ -75,7 +89,7 @@ end
 
 % saves lattice model with ids
 the_ring = restore_lattice_ordering(the_ring);
-save('the_ring_withids.mat', 'the_ring');
+save('the_ring_withids_ac10_5_2014-05-15_phase2.mat', 'the_ring');
 
 
 
@@ -116,6 +130,8 @@ for i=1:length(ids)
         residue(i) = calc_rms(residue_vector);
         nr_iters(i) = nr_iters(i) + 1;
     end
+    %t = calctwiss(the_ring);
+    %fprintf('tunes: %9.6f %9.6f\n', t.mux(end)/2/pi, t.muy(end)/2/pi);
 end
 
 
@@ -428,8 +444,71 @@ end;
 
 function ids_def = create_ids_def_PH_new_order
 
+% trechos impares - Betas Baixos
+
+% --- phase 1 ---
+ids_def.caterete.label           = 'caterete';
+ids_def.caterete.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.caterete.nr_segs         = 20;
+ids_def.caterete.straight_label  = 'mib';
+ids_def.caterete.straight_number = 5;
+ids_def.caterete.strength        = 1;
+
+ids_def.ema.label                = 'ema';
+ids_def.ema.kicktable_file       = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.ema.nr_segs              = 20;
+ids_def.ema.straight_label       = 'mib';
+ids_def.ema.straight_number      = 4;
+ids_def.ema.strength             = 1;
+
+ids_def.manaca.label             = 'manaca';
+ids_def.manaca.kicktable_file    = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.manaca.nr_segs           = 20;
+ids_def.manaca.straight_label    = 'mib';
+ids_def.manaca.straight_number   = 6;
+ids_def.manaca.strength          = 1;
+
+ids_def.carnauba.label           = 'carnauba';
+ids_def.carnauba.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.carnauba.nr_segs         = 20;
+ids_def.carnauba.straight_label  = 'mib';
+ids_def.carnauba.straight_number = 3;
+ids_def.carnauba.strength        = 1;
+
+% --- phase 2 ---
+ids_def.caterete2.label           = 'caterete2';
+ids_def.caterete2.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.caterete2.nr_segs         = 20;
+ids_def.caterete2.straight_label  = 'mib';
+ids_def.caterete2.straight_number = 1;
+ids_def.caterete2.strength        = 1;
+
+ids_def.ema2.label                = 'ema2';
+ids_def.ema2.kicktable_file       = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.ema2.nr_segs              = 20;
+ids_def.ema2.straight_label       = 'mib';
+ids_def.ema2.straight_number      = 2;
+ids_def.ema2.strength             = 1;
+
+ids_def.manaca2.label             = 'manaca2';
+ids_def.manaca2.kicktable_file    = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.manaca2.nr_segs           = 20;
+ids_def.manaca2.straight_label    = 'mib';
+ids_def.manaca2.straight_number   = 7;
+ids_def.manaca2.strength          = 1;
+
+ids_def.carnauba2.label           = 'carnauba2';
+ids_def.carnauba2.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
+ids_def.carnauba2.nr_segs         = 20;
+ids_def.carnauba2.straight_label  = 'mib';
+ids_def.carnauba2.straight_number = 8;
+ids_def.carnauba2.strength        = 1;
+
+
+
 % trechos impares - Betas Altos
 
+% --- phase 1 ---
 ids_def.jatoba.label             = 'jatoba';
 ids_def.jatoba.kicktable_file    = '../id_modelling/SCW4T/SCW4T_kicktable.txt';
 ids_def.jatoba.nr_segs           = 20;
@@ -444,13 +523,6 @@ ids_def.inga.straight_label      = 'mia';
 ids_def.inga.straight_number     = 5;
 ids_def.inga.strength            = 2; % two IDs in series
 
-ids_def.ipe.label                = 'ipe';
-ids_def.ipe.kicktable_file       = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';
-ids_def.ipe.nr_segs              = 40;
-ids_def.ipe.straight_label       = 'mia';
-ids_def.ipe.straight_number      = 6;
-ids_def.ipe.strength             = 2; % two IDs in series
-
 ids_def.sabia.label              = 'sabia';
 ids_def.sabia.kicktable_file     = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';
 ids_def.sabia.nr_segs            = 40;
@@ -458,35 +530,35 @@ ids_def.sabia.straight_label     = 'mia';
 ids_def.sabia.straight_number    = 7;
 ids_def.sabia.strength           = 2; % two IDs in series
 
-% trechos impares - Betas Baixos
+ids_def.ipe.label                = 'ipe';
+ids_def.ipe.kicktable_file       = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';
+ids_def.ipe.nr_segs              = 40;
+ids_def.ipe.straight_label       = 'mia';
+ids_def.ipe.straight_number      = 6;
+ids_def.ipe.strength             = 2; % two IDs in series
 
-ids_def.carnauba.label           = 'carnauba';
-ids_def.carnauba.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
-ids_def.carnauba.nr_segs         = 20;
-ids_def.carnauba.straight_label  = 'mib';
-ids_def.carnauba.straight_number = 3;
-ids_def.carnauba.strength        = 1;
+% --- phase 2 ---
+ids_def.inga2.label               = 'inga2';
+ids_def.inga2.kicktable_file      = '../id_modelling/U25/U25_kicktable_4meters.txt';
+ids_def.inga2.nr_segs             = 40;
+ids_def.inga2.straight_label      = 'mia';
+ids_def.inga2.straight_number     = 3;
+ids_def.inga2.strength            = 2; % two IDs in series
 
-ids_def.ema.label                = 'ema';
-ids_def.ema.kicktable_file       = '../id_modelling/U19/U19_kicktable.txt';
-ids_def.ema.nr_segs              = 20;
-ids_def.ema.straight_label       = 'mib';
-ids_def.ema.straight_number      = 4;
-ids_def.ema.strength             = 1;
+ids_def.sabia2.label              = 'sabia2';
+ids_def.sabia2.kicktable_file     = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';
+ids_def.sabia2.nr_segs            = 40;
+ids_def.sabia2.straight_label     = 'mia';
+ids_def.sabia2.straight_number    = 8;
+ids_def.sabia2.strength           = 2; % two IDs in series
 
-ids_def.caterete.label           = 'caterete';
-ids_def.caterete.kicktable_file  = '../id_modelling/U19/U19_kicktable.txt';
-ids_def.caterete.nr_segs         = 20;
-ids_def.caterete.straight_label  = 'mib';
-ids_def.caterete.straight_number = 5;
-ids_def.caterete.strength        = 1;
+ids_def.ipe2.label                = 'ipe2';
+ids_def.ipe2.kicktable_file       = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';
+ids_def.ipe2.nr_segs              = 40;
+ids_def.ipe2.straight_label       = 'mia';
+ids_def.ipe2.straight_number      = 9;
+ids_def.ipe2.strength             = 2; % two IDs in series
 
-ids_def.manaca.label             = 'manaca';
-ids_def.manaca.kicktable_file    = '../id_modelling/U19/U19_kicktable.txt';
-ids_def.manaca.nr_segs           = 20;
-ids_def.manaca.straight_label    = 'mib';
-ids_def.manaca.straight_number   = 6;
-ids_def.manaca.strength          = 1;
 
 
 function ids_def = create_ids_def_PH

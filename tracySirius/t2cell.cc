@@ -858,9 +858,9 @@ bool Cell_getCOD(long imax, double eps, double dP, long &lastpos)
 	x0 += dx0.cst();
         } 
       else{
-        prt_beampos("beampos.dat");
+        prt_beampos("beampos.out");
         prt_cod("cod.out", globval.bpm, true);
-        prtmfile("flat_file_dbg.dat");
+        prtmfile("flat_file_dbg.out");
 //      prt_trace();
         dxabs = 1e30; 
 	break;

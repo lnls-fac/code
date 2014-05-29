@@ -913,7 +913,6 @@ void Trac(double x, double px, double y, double py, double dp, double ctau,
     Vector2 aperture;
 
     /* Compute closed orbit: useful if insertion devices */
-
     aperture[0] = 1e0;
     aperture[1] = 1e0;
 
@@ -958,12 +957,12 @@ void Trac(double x, double px, double y, double py, double dp, double ctau,
     if (lastpos == globval.Cell_nLoc)
         Cell_Pass(0L, pos, x1, lastpos);
 
-    if (lastpos != pos) {
+/*    if (lastpos != pos) {
         printf("Trac: Particle lost \n");
         fprintf(stdout, "turn:%6ld plane: %1d"
             " %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g %+10.5g \n", lastn,
                 status.lossplane, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
-    }
+    }*/
 }
 
 /****************************************************************************/
@@ -2674,12 +2673,12 @@ void PrintCh(void) {
     struct tm *newtime;
     FILE *f;
 
-    const char *fic = "chambre.out";
+    const char *fic = "chamber.out";
 
     newtime = GetTime();
 
     f = file_write(fic);
-    fprintf(f, "# TRACY III Synchrotron SOLEIL -- %s -- %s \n", fic, asctime2(
+    fprintf(f, "# TRACY III Synchrotron LNLS -- %s -- %s \n", fic, asctime2(
             newtime));
     fprintf(f,
             "#  i  name               s    -xch(mm) +xch(mm)  -ych(mm) +ych(mm)\n#\n");

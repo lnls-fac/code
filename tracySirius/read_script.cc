@@ -180,6 +180,10 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 				sscanf(line, "%*s %s", UserCommandFlag[CommNo].CavityFlag);
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
+			else if (strcmp("VacuumChamberFlag", name) == 0){
+				sscanf(line, "%*s %s", UserCommandFlag[CommNo].VacuumChamberFlag);
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
 			else if (strcmp("RadiationFlag", name) == 0){
 				sscanf(line, "%*s %s", UserCommandFlag[CommNo].RadiationFlag);
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
@@ -241,6 +245,30 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 			else if (strcmp("ChromTracFlag", name) == 0){
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
+			
+			else if (strcmp("DynApXYFlag", name) == 0){
+				strcpy(dummy, "");
+				sscanf(line, "%*s %ld %ld %ld %lf %lf %lf %lf %lf",
+						&(UserCommandFlag[CommNo]._DAXY_nxpoint),
+						&(UserCommandFlag[CommNo]._DAXY_nypoint), &(UserCommandFlag[CommNo]._DAXY_nturn),
+						&(UserCommandFlag[CommNo]._DAXY_x0), &(UserCommandFlag[CommNo]._DAXY_xmax),
+						&(UserCommandFlag[CommNo]._DAXY_y0), &(UserCommandFlag[CommNo]._DAXY_ymax),
+						&(UserCommandFlag[CommNo]._DAXY_delta));
+
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
+			else if (strcmp("DynApEXFlag", name) == 0){
+				strcpy(dummy, "");
+				sscanf(line, "%*s %ld %ld %ld %lf %lf %lf %lf %lf",
+						&(UserCommandFlag[CommNo]._DAEX_nxpoint),
+						&(UserCommandFlag[CommNo]._DAEX_nepoint), &(UserCommandFlag[CommNo]._DAEX_nturn),
+						&(UserCommandFlag[CommNo]._DAEX_x0), &(UserCommandFlag[CommNo]._DAEX_xmax),
+						&(UserCommandFlag[CommNo]._DAEX_emin),&(UserCommandFlag[CommNo]._DAEX_emax),
+						&(UserCommandFlag[CommNo]._DAEX_z));
+
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
+			
 			// FMA
 			else if (strcmp("FmapFlag", name) == 0){
 				strcpy(dummy, "");
@@ -318,17 +346,31 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 
 			}
 			else if (strcmp("MomentumAccFlag", name) == 0){
-				sscanf(line, "%*s  %s %ld %ld %lf %lf %ld %lf %lf %ld",
+				UserCommandFlag[CommNo]._MomentumAccFlag_nnames = 
+				  sscanf(line, "%*s  %s %ld %lf %lf %ld %lf %lf %ld %lf %lf %s %s %s %s %s %s %s %s %s %s %s %s",
 						UserCommandFlag[CommNo].TrackDim,
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_istart),
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_istop),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_nturn),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltaminp),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltamaxp),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_nstepp),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltaminn),
 						&(UserCommandFlag[CommNo]._MomentumAccFlag_deltamaxn),
-						&(UserCommandFlag[CommNo]._MomentumAccFlag_nstepn)
-				);
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_nstepn),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_sstart),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_sstop),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[0]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[1]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[2]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[3]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[4]),
+					    &(UserCommandFlag[CommNo]._MomentumAccFlag_names[5]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[6]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[7]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[8]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[9]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[10]),
+						&(UserCommandFlag[CommNo]._MomentumAccFlag_names[11]));
+				UserCommandFlag[CommNo]._MomentumAccFlag_nnames -= 10;
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
 

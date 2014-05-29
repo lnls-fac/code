@@ -129,7 +129,6 @@ r.params.static.cod_nr_iter    = 3;
 %coupling
 r.params.static.scm_idx = [];
 r.params.static.scm_idx = [r.params.static.scm_idx findcells(r.params.the_ring, 'FamName', 'sd2')];
-r.params.static.scm_idx = [r.params.static.scm_idx findcells(r.params.the_ring, 'FamName', 'sd2')];
 r.params.static.coup_correction_flag = false;
 r.params.static.coup_svs       = 'all';
 r.params.static.coup_nr_iter   = 3;

@@ -48,7 +48,9 @@ if r.config.simulate_static
             params.static.cod_respm = data.cod_respm;
         end
         if (~read_cod_respm || ~exist(fname, 'file') || ~isfield(data, 'the_ring') || ~isequal(data.the_ring,  params.the_ring))
-            cod_respm = calc_respm_cod(params.the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx);
+            the_ring = set_ids(params.the_ring, 'off');
+            cod_respm = calc_respm_cod(the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx);
+            %cod_respm = calc_respm_cod(params.the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx);
             params.static.cod_respm = cod_respm.respm;
             the_ring = params.the_ring;
             cod_respm = params.static.cod_respm;

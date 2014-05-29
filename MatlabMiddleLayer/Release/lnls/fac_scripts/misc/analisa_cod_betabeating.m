@@ -3,10 +3,14 @@ function analisa_cod_betabeating(varargin)
 % path = '/home/fac_files/data/sirius_mml/lattice_errors/CONFIG_V500_AC10_6_40ums';
 % name = 'CONFIG_V500_AC10_6_40ums';
 % path = '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_6/study_6D_tracking/no_corr_small_errors/multi_cod_tune/cod_matlab';
-path = '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_6/study_6D_tracking/test_lesscorr/80cvch_allbpms/multi_cod_tune/cod_matlab';
+% path = '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_6/study_6D_tracking/test_lesscorr/80cvch_allbpms/multi_cod_tune/cod_matlab';
+path = '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_5/study_offset_bpms/100ums/multi_cod_tune/cod_matlab';
 name = 'CONFIG';
-machines = load(fullfile(path,  [name '_machines_cod_corrected'])); machines = machines.machine;
-the_ring0 = load(fullfile(path,  [name '_the_ring'])); the_ring0 = the_ring0.the_ring;
+% data = load(fullfile(path,  [name '_machines_cod_corrected'])); machines = data.machine;
+% the_ring0 = load(fullfile(path,  [name '_the_ring'])); the_ring0 = the_ring0.the_ring;
+data = load(fullfile(path,name)); data = data.r;
+machines = data.machine;
+the_ring0 = data.params.the_ring;
 
 
 cod4d = zeros(4,length(machines{1}),length(machines));

@@ -1,4 +1,4 @@
-function [the_ring hkicks vkicks codx cody] = cod_sg(params, nr_sing_values, the_ring0, nr_iterations, goal_codx, goal_cody)
+function [the_ring, hkicks, vkicks, codx, cody] = cod_sg(params, nr_sing_values, the_ring0, nr_iterations, goal_codx, goal_cody)
 
 the_ring = the_ring0;
 
@@ -15,7 +15,7 @@ CM = -(V*iS*U');
 
 for k=1:nr_iterations
     % calcs kicks
-    [codx cody] = calc_cod(the_ring);
+    [codx, cody] = calc_cod(the_ring);
     delta_kick = CM * [codx(params.bpm_idx)' - goal_codx(:); cody(params.bpm_idx)' - goal_cody(:)];
     % sets kicks
     delt_hkicks = delta_kick(1:length(params.hcm_idx));
@@ -29,4 +29,4 @@ for k=1:nr_iterations
 end
 hkicks = getcellstruct(the_ring, 'KickAngle', params.hcm_idx, 1, 1);
 vkicks = getcellstruct(the_ring, 'KickAngle', params.vcm_idx, 1, 2);
-[codx cody] = calc_cod(the_ring);
+[codx, cody] = calc_cod(the_ring);

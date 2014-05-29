@@ -1,0 +1,18 @@
+#!/bin/bash
+
+maq_file=~/rodar_tracy/maquinas
+
+printf "\tPrint Version of 'lnlstracy' in hosts\n"
+
+maquinas=$(cat  $maq_file | grep "lnls\|sgi" | grep -v "#")
+
+# print running jobs
+for maq in $maquinas; do
+    if [ $maq == "fernando.sa@sgi" ]; then
+    	reply=$(ssh $maq "echo 'lnlstracy' | qsub -q serial -o output.txt -j oe > /dev/null && cat output.txt | grep Tracy3 && rm output.txt")
+    else
+	reply=$(ssh $maq "lnlstracy | grep Tracy3")
+    fi
+    printf "%-15s : %-28s \n" $maq "$reply"
+done
+

@@ -12,6 +12,7 @@
     //RFVoltFlag
    double RFvolt;   // RF voltage
    char CavityFlag[max_str]; // Turn cavity on and off
+   char VacuumChamberFlag[max_str]; // Turn cavity on and off
    char RadiationFlag[max_str]; // Turn radiation on and off
    
    //chamber file
@@ -53,14 +54,24 @@
    long _FmapdpFlag_nxpoint, _FmapdpFlag_nepoint, _FmapdpFlag_nturn;
    double _FmapdpFlag_x0, _FmapdpFlag_xmax, _FmapdpFlag_emin, _FmapdpFlag_emax, _FmapdpFlag_z;
    bool _FmapdpFlag_diffusion;	
+   
+   
+ //extern bool DynamicAperXY;
+   long _DAXY_nxpoint, _DAXY_nypoint, _DAXY_nturn;
+   double _DAXY_x0, _DAXY_xmax, _DAXY_y0,_DAXY_ymax, _DAXY_delta;
+ 
+ //extern bool DynamicAperEX;
+   long _DAEX_nxpoint, _DAEX_nepoint, _DAEX_nturn;
+   double _DAEX_x0, _DAEX_xmax, _DAEX_emin, _DAEX_emax, _DAEX_z;	
 
    
   //MomentumAccFlag;
-   char TrackDim[3];
-   long  _MomentumAccFlag_istart, _MomentumAccFlag_istop,
-         _MomentumAccFlag_nstepn, _MomentumAccFlag_nstepp;
+   char TrackDim[3], _MomentumAccFlag_names[12][max_str];
+   long  _MomentumAccFlag_nturn, _MomentumAccFlag_nstepn,
+      _MomentumAccFlag_nstepp, _MomentumAccFlag_nnames;
    double _MomentumAccFlag_deltaminn, _MomentumAccFlag_deltamaxn;
    double _MomentumAccFlag_deltaminp, _MomentumAccFlag_deltamaxp;
+   double _MomentumAccFlag_sstart, _MomentumAccFlag_sstop;
  
   // /* Phase space */
    double _Phase_X, _Phase_Px, _Phase_Y, _Phase_Py,_Phase_delta, _Phase_ctau;
@@ -86,6 +97,15 @@
  _FmapdpFlag_nxpoint=31L, _FmapdpFlag_nepoint=21L, _FmapdpFlag_nturn=516L;
  _FmapdpFlag_x0=0.0, _FmapdpFlag_xmax=0.025, _FmapdpFlag_emin=-0.005, _FmapdpFlag_emax=0.005, _FmapdpFlag_z=0.0;
  _FmapdpFlag_diffusion = true;			
+ 
+ 
+//  Dynamic Aperture in the plane X Y
+   _DAXY_nxpoint=31L, _DAXY_nypoint=21L, _DAXY_nturn=516L;
+   _DAXY_x0=0.0, _DAXY_xmax=0.025, _DAXY_x0=0.0, _DAXY_ymax=0.005, _DAXY_delta=0.0;
+
+//  Dynamic Aperture in the plane E X
+ _DAEX_nxpoint=31L, _DAEX_nepoint=21L, _DAEX_nturn=516L;
+ _DAEX_x0=0.0, _DAEX_xmax=0.025, _DAEX_emin=-0.005, _DAEX_emax=0.005, _DAEX_z=0.0;		
 
 /* tune shift with amplitude*/
  _AmplitudeTuneShift_nxpoint=31L;  _AmplitudeTuneShift_nypoint=21L;
@@ -101,7 +121,8 @@
 
 /* momentum acceptance */
  TrackDim[3] = '6D';
- _MomentumAccFlag_istart=1L, _MomentumAccFlag_istop=108L,
+ _MomentumAccFlag_nturn=5000L,  _MomentumAccFlag_nnames=12L;
+ _MomentumAccFlag_sstart=0.00, _MomentumAccFlag_sstop=52.0;
  _MomentumAccFlag_nstepn=100L, _MomentumAccFlag_nstepp=100L;
  _MomentumAccFlag_deltaminn=-0.01, _MomentumAccFlag_deltamaxn=-0.05;
  _MomentumAccFlag_deltaminp=0.01, _MomentumAccFlag_deltamaxp=0.05;

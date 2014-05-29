@@ -26,32 +26,20 @@ end
 % gets number of random machines (= number of rms folders)
 [~, result] = system(['ls ' pathname '| grep rms | wc -l']);
 n_pastas = str2double(result);
+%n_pastas = 12;
 
 % loops over random machine, loading and plotting data
 count = 0; countdp = 0;
+% v1 = zeros(1,90);
+% v2 = zeros(1,49);
+
 for i=1:n_pastas
     % -- FMAP --
-    full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmap.out');
+    full_name = fullfile(pathname, ['rms', num2str(i, '%02i')]);
     try
-        [~, fmap] = hdrload(full_name);
-        % Agora, eu tenho que encontrar a DA
-        %primeiro eu identifico quantos x e y existem
-        npx = length(unique(fmap(:,1)));
-        npy = size(fmap,1)/npx;
-        %agora eu pego a coluna da frequencia x
-        x = fmap(:,1);
-        y = fmap(:,2);
-        fx = fmap(:,3);
-        fy = fmap(:,4);
-        % e a redimensiono para que todos os valores calculados para x iguais
-        %fiquem na mesma coluna:
-        x = reshape(x,npy,npx);
-        y = reshape(y,npy,npx);
-        fx = reshape(fx,npy,npx);
-        fy = reshape(fy,npy,npx);
-        % vejo quais pontos sobreviveram.
-        ind = fx ~= 0;
-        if ~ exist('idx_fmap','var')
+        [~, dados1] = tracy3_load_daxy_data(full_name);
+        ind = dados1.plane == -1;
+        if ~exist('idx_fmap','var')
             idx_fmap = ind;
         else
             idx_fmap = idx_fmap + ind;
@@ -62,27 +50,11 @@ for i=1:n_pastas
     end
     
     if (fmapdpFlag)
-        full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmapdp.out');
         try
-            [~, fmapdp] = hdrload(full_name);
-            %primeiro eu identifico quantos x e y existem
-            npe = length(unique(fmapdp(:,1)));
-            npx = size(fmapdp,1)/npe;
-            %agora eu pego a coluna da frequencia x
-            en = fmapdp(:,1);
-            xe = fmapdp(:,2);
-            fxe = fmapdp(:,3);
-            fye = fmapdp(:,4);
-            % e a redimensiono para que todos os valores calculados para x iguais
-            %fiquem na mesma coluna:
-            en = reshape(en,npx,npe);
-            xe = reshape(xe,npx,npe);
-            fxe = reshape(fxe,npx,npe);
-            fye = reshape(fye,npx,npe);
-            % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
-            % a borda da DA
-            inddp = fxe ~= 0;
-            if ~ exist('idx_fmapdp','var')
+            [~, dados2] = tracy3_load_daex_data(full_name);
+
+            inddp = dados2.plane == -1;
+            if ~exist('idx_fmapdp','var')
                 idx_fmapdp = inddp;
             else
                 idx_fmapdp = idx_fmapdp + inddp;
@@ -94,18 +66,24 @@ for i=1:n_pastas
     end
 end
 
+% v1 = v1 / count;
+% v2 = v2 / count;
+% 
 idx_fmap = (count-idx_fmap)/count*100;
+idx_fmap(1,1) = 100; idx_fmap(1,2) = 0;
 idx_fmapdp = (count-idx_fmapdp)/countdp*100;
+idx_fmapdp(1,1) = 100; idx_fmapdp(1,2) = 0;
 
 scrsz = get(0,'ScreenSize');
 xi = scrsz(4)/12;
 yi = scrsz(4)/20;
 xf = xi + scrsz(4);
 yf = yi + scrsz(4);
+
 f=figure('OuterPosition',[xi yi xf yf]);
 sb(1,1) = subplot(2,2,1,'Parent',f,'FontSize',size_font,...
     'Position',[0.065 0.60 0.368 0.382]);
-pcolor(sb(1,1), 1000*x, 1000*y, idx_fmap);
+pcolor(sb(1,1), 1000*dados1.x, 1000*dados1.y, idx_fmap);
 colormap(sb(1,1), 'Gray'); shading(sb(1,1), 'interp');
 box(sb(1,1),'on');
 xlabel(sb(1,1), 'x (mm)','FontSize',size_font);
@@ -118,10 +96,11 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(1000*x(1,:),1000*v1,'r', 'LineWidth', 2);
 
 sb(1,2) = subplot(2,2,2,'Parent',f,'FontSize',size_font,...
     'Position',[0.53 0.60 0.368 0.382]);
-pcolor(sb(1,2), 100*en, 1000*xe, idx_fmapdp);
+pcolor(sb(1,2), 100*dados2.en, 1000*dados2.x, idx_fmapdp);
 colormap(sb(1,2), 'Gray'); shading(sb(1,2), 'interp');
 box(sb(1,2),'on');
 xlabel(sb(1,2), '\delta (%)','FontSize',size_font);
@@ -134,6 +113,7 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(100*en(1,:),1000*v2,'r', 'LineWidth', 2);
 
 clear idx_fmap idx_fmapdp;
 
@@ -149,32 +129,20 @@ end
 % gets number of random machines (= number of rms folders)
 [~, result] = system(['ls ' pathname '| grep rms | wc -l']);
 n_pastas = str2double(result);
+%n_pastas = 12;
 
 % loops over random machine, loading and plotting data
 count = 0; countdp = 0;
+% v1 = zeros(1,90);
+% v2 = zeros(1,49);
+
 for i=1:n_pastas
     % -- FMAP --
-    full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmap.out');
+    full_name = fullfile(pathname, ['rms', num2str(i, '%02i')]);
     try
-        [~, fmap] = hdrload(full_name);
-        % Agora, eu tenho que encontrar a DA
-        %primeiro eu identifico quantos x e y existem
-        npx = length(unique(fmap(:,1)));
-        npy = size(fmap,1)/npx;
-        %agora eu pego a coluna da frequencia x
-        x = fmap(:,1);
-        y = fmap(:,2);
-        fx = fmap(:,3);
-        fy = fmap(:,4);
-        % e a redimensiono para que todos os valores calculados para x iguais
-        %fiquem na mesma coluna:
-        x = reshape(x,npy,npx);
-        y = reshape(y,npy,npx);
-        fx = reshape(fx,npy,npx);
-        fy = reshape(fy,npy,npx);
-        % vejo quais pontos sobreviveram.
-        ind = fx ~= 0;
-        if ~ exist('idx_fmap','var')
+        [~, dados1 ] = tracy3_load_daxy_data(full_name);
+        ind = dados1.plane == -1;
+        if ~exist('idx_fmap','var')
             idx_fmap = ind;
         else
             idx_fmap = idx_fmap + ind;
@@ -185,27 +153,11 @@ for i=1:n_pastas
     end
     
     if (fmapdpFlag)
-        full_name = fullfile(pathname, ['rms', num2str(i, '%02i')], 'fmapdp.out');
         try
-            [~, fmapdp] = hdrload(full_name);
-            %primeiro eu identifico quantos x e y existem
-            npe = length(unique(fmapdp(:,1)));
-            npx = size(fmapdp,1)/npe;
-            %agora eu pego a coluna da frequencia x
-            en = fmapdp(:,1);
-            xe = fmapdp(:,2);
-            fxe = fmapdp(:,3);
-            fye = fmapdp(:,4);
-            % e a redimensiono para que todos os valores calculados para x iguais
-            %fiquem na mesma coluna:
-            en = reshape(en,npx,npe);
-            xe = reshape(xe,npx,npe);
-            fxe = reshape(fxe,npx,npe);
-            fye = reshape(fye,npx,npe);
-            % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
-            % a borda da DA
-            inddp = fxe ~= 0;
-            if ~ exist('idx_fmapdp','var')
+            [~, dados2] = tracy3_load_daex_data(full_name);
+
+            inddp = dados2.plane == -1;
+            if ~exist('idx_fmapdp','var')
                 idx_fmapdp = inddp;
             else
                 idx_fmapdp = idx_fmapdp + inddp;
@@ -217,12 +169,17 @@ for i=1:n_pastas
     end
 end
 
+% v1 = v1 / count;
+% v2 = v2 / count;
+
 idx_fmap = (count-idx_fmap)/count*100;
+idx_fmap(1,1) = 100; idx_fmap(1,2) = 0;
 idx_fmapdp = (count-idx_fmapdp)/countdp*100;
+idx_fmapdp(1,1) = 100; idx_fmapdp(1,2) = 0;
 
 sb(2,1) = subplot(2,2,3,'Parent',f,'FontSize',size_font,...
     'Position',[0.065 0.1 0.368 0.382]);
-pcolor(sb(2,1), 1000*x, 1000*y, idx_fmap);
+pcolor(sb(2,1), 1000*dados1.x, 1000*dados1.y, idx_fmap);
 colormap(sb(2,1), 'Gray'); shading(sb(2,1), 'interp');
 box(sb(2,1),'on');
 xlabel(sb(2,1), 'x (mm)','FontSize',size_font);
@@ -235,10 +192,11 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(1000*x(1,:),1000*v1,'r', 'LineWidth', 2);
 
 sb(2,2) = subplot(2,2,4,'Parent',f,'FontSize',size_font,...
     'Position',[0.53 0.1 0.368 0.382]);
-pcolor(sb(2,2), 100*en, 1000*xe, idx_fmapdp);
+pcolor(sb(2,2), 100*dados2.en, 1000*dados2.x, idx_fmapdp);
 colormap(sb(2,2), 'Gray'); shading(sb(2,2), 'interp');
 box(sb(2,2),'on');
 xlabel(sb(2,2), '\delta (%)','FontSize',size_font);
@@ -251,6 +209,8 @@ annotation(f,'textbox',...
     'FontSize',24,...
     'FitBoxToText','off',...
     'LineStyle','none');
+%hold all; plot(100*en(1,:),1000*v2,'r', 'LineWidth', 2);
+
 
 colorbar('peer',sb(2,2),...
     [0.91 0.1 0.013 0.88],...

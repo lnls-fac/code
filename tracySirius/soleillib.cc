@@ -1097,6 +1097,277 @@ void fmapdp(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
 }
 #undef NTERM2
 
+
+/****************************************************************************/
+/* void daxy(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
+   double energy)
+
+   Purpose:
+       Compute dynamic aperture at the beginning of the lattice in the plane XY
+       For each set of initial conditions the particle is tracked over
+       Nbtour for an energy offset dp
+
+       The stepsize is linear
+
+       Results in daxy.out
+
+   Input:
+       Nbx    horizontal step number
+       Nby    vertical step number
+       xmax   horizontal maximum amplitude
+       zmax   vertical maximum amplitude
+       Nbtour number of turn for tracking
+       energy particle energy offset
+
+   Output:
+       status true if stable
+              false otherwise
+
+   Return:
+       none
+
+   Global variables:
+       none
+
+   Specific functions:
+       Trac_COD
+
+   Comments:
+       26/05/2014 Created
+
+****************************************************************************/
+void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
+		  double z0, double zmax, double energy)
+{
+	FILE * outf;
+	const char fic[] = "daxy.out";
+	long i = 0L, j = 0L, lastn = 0L, lastpos = 0L;
+	double x = 0.0, z = 0.0, xstep = 0.0, zstep = 0.0;
+	struct tm *newtime;
+
+	/* Get time and date */
+	time_t aclock;
+	time(&aclock);                 /* Get time in seconds */
+	newtime = localtime(&aclock);  /* Convert time to struct */
+
+	if (trace) printf("Entering fmap ... results in %s\n\n",fic);
+
+	/* Opening file */
+	if ((outf = fopen(fic, "w")) == NULL) {
+		fprintf(stdout, "daxy: error while opening file %s\n", fic);
+		exit_(1);
+	}
+
+	fprintf(outf,"# TRACY III SYNCHROTRON LNLS-- %s -- %s \n", fic, asctime2(newtime));
+	fprintf(outf,"#     x               y                 plane_lost         turn_lost     s_lost  \n");
+	fprintf(outf,"#    [m]             [m]         (1=x,2=y,-1=not_lost)         #           [m]  \n");
+
+	fprintf(stdout,"#    x[m]          y[m]           lost?(0=nao 1=sim)\n");
+
+
+	if ((Nbx < 1) || (Nbz < 1)) // <=
+		fprintf(stdout,"fmap: Error Nbx=%ld Nbz=%ld\n",Nbx,Nbz);
+
+
+	// steps in both planes
+	xstep = (xmax-x0)/((double)Nbx);
+	zstep = (zmax-z0)/((double)Nbz);
+	
+	/* Get closed orbit */
+    getcod(0.0, lastpos);
+
+	// Tracking part 
+	for (i = 1; i <= Nbx; i++) {
+		x  = 1e-6 + x0 + ((double)i)*xstep;
+
+		fprintf(stdout,"\n");
+		for (j = 0; j<= Nbz; j++) {
+			z  =1e-6 + z0 + ((double)(Nbz-j))*zstep;
+    		Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+			// printout value
+		    if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)){
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", x, z, -1, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", x, z, 0);
+			}else{
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", x, z, status.lossplane, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", x, z, 1);
+			}
+		}
+	}
+	fclose(outf);
+}
+
+
+/****************************************************************************/
+/* void daex(long Nbx, long Nbe, long Nbtour, double xmax, double emax,
+   double z)
+
+   Purpose:
+       Compute dynamic aperture at the beginning of the lattice in the plane EX
+       For each set of initial conditions the particle is tracked over
+       Nbtour for an vertical offset z
+
+       The stepsize is linear
+
+       Results in daex.out
+
+   Input:
+       Nbx              horizontal step number
+       Nbe              energy step number
+       Nbtour           number of turns for tracking
+       xmax             horizontal maximum amplitude
+       emax             maximum energy
+       z                vertical amplitude
+
+   Output:
+
+
+   Return:
+       none
+
+   Global variables:
+       none
+
+   Specific functions:
+       Trac_COD
+
+   Comments:
+       26/05/2014 Created
+
+****************************************************************************/
+void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
+		double emin, double emax, double z)
+{
+	FILE * outf;
+	const char fic[] = "daex.out";
+	long i = 0L, j = 0L, lastn = 0L, lastpos = 0L;
+	double x = 0.0, dp = 0.0;
+	double xstep = 0.0, estep = 0.0;
+	struct tm *newtime;
+
+	/* Get time and date */
+	time_t aclock;
+	time(&aclock);                 /* Get time in seconds */
+	newtime = localtime(&aclock);  /* Convert time to struct */
+
+	if (trace) printf("Entering fmap ... results in %s\n\n",fic);
+
+	/* Opening file */
+	if ((outf = fopen(fic, "w")) == NULL) {
+		fprintf(stdout, "fmap: error while opening file %s\n", fic);
+		exit_(1);
+	}
+
+	fprintf(outf,"# TRACY III SYNCHROTRON LNLS-- %s -- %s \n", fic, asctime2(newtime));
+	fprintf(outf,"#     dp               x                 plane_lost         turn_lost     s_lost  \n");
+	fprintf(outf,"#    [%%]             [m]         (1=x,2=y,-1=not_lost)         #           [m]  \n");
+
+	fprintf(stdout,"#    dp[%%]          x[m]           lost?(0=nao 1=sim)\n");
+
+	if ((Nbx < 1) || (Nbe < 1)) //<=
+		fprintf(stdout,"fmap: Error Nbx=%ld Nbe=%ld\n",Nbx,Nbe);
+
+
+	xstep = (xmax-x0)/((double)Nbx);
+	estep = (emax-emin)/Nbe;
+	
+	/* Get closed orbit */
+    getcod(0.0, lastpos);
+
+	for (i = 0; i <= Nbe; i++) {
+		dp  = emin + i*estep;
+		fprintf(stdout,"\n");
+		for (j = 1; j<= Nbx; j++){
+			x  = 1e-6 + x0 + ((double)j)*xstep;
+		    Trac_COD(x, 0.0, z, 0.0, dp, 0.0, Nbtour, lastn, lastpos);
+		    // printout value
+		    
+		    if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)){
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", dp, x, -1, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", dp, x, 0);
+			}else{
+			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", dp, x, status.lossplane, lastn, Cell[lastpos].S);
+			    fprintf(stdout,"%14.6e %14.6e %10d \n", dp, x, 1);
+			}
+		}
+	}
+	fclose(outf);
+}
+
+
+/****************************************************************************/
+/* void Trac_COD(double x, double px, double y, double py, double dp, double ctau,
+          long nmax, long *lastn, long *lastpos)
+
+   Purpose:
+      Single particle tracking
+      Same as Trac but with respect to closed orbit
+
+   Input:
+      x, px, y, py 4 transverses coordinates
+      dp           energy offset
+      nmax         number of turns
+      pos          starting position for tracking
+      aperture     global physical aperture
+
+
+   Output:
+      lastn       last n (should be nmax if  not lost)
+      lastpos     last position in the ring
+
+   Return:
+       none
+
+   Global variables:
+       globval
+
+   specific functions:
+       Cell_Pass
+
+   Comments:
+       BUG: last printout is wrong because not at pos but at the end of the ring
+       26/04/03 print output for phase space is for position pos now
+       26/05/2014 Tirei todas as impressões, o arquivo que é passado para ela,
+                  mudei o nome de TracCO para Trac_COD e tirei a opção de fazer
+                  tracking começando de posição arbitrária do anel
+
+****************************************************************************/
+void Trac_COD(double x, double px, double y, double py, double dp, double ctau,
+	    long nmax, long &lastn, long &lastpos)
+{
+  Vector x1;     /* tracking coordinates */
+
+
+  if (trace) printf("dp= % .5e %% xcod= % .5e mm zcod= % .5e mm \n",
+             dp*1e2, globval.CODvect[0]*1e3, globval.CODvect[2]*1e3);
+
+  /* Tracking coordinates around the closed orbit */
+    x1[0] =  x + globval.CODvect[0]; x1[1] = px   + globval.CODvect[1];
+    x1[2] =  y + globval.CODvect[2]; x1[3] = py   + globval.CODvect[3];
+    
+    if (globval.Cavity_on){
+        x1[4] = dp + globval.CODvect[4]; x1[5] = ctau + globval.CODvect[5];
+    }else{
+        x1[4] = dp; x1[5] = ctau; // line true in 4D tracking
+    }
+    
+    lastn = 0;
+    (lastpos) = 0;
+
+    do{
+      (lastn)++;
+      if (trace) { // print initial conditions
+        fprintf(stdout, "%6ld %+10.5e %+10.5e %+10.5e %+10.5e"
+		" %+10.5e %+10.5e \n",
+		lastn, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
+      }
+
+    //  Cell_Pass(pos-1L, globval.Cell_nLoc, x1, lastpos);
+      Cell_Pass(0, globval.Cell_nLoc, x1, lastpos);
+    }
+    while (((lastn) < nmax) && ((lastpos) == globval.Cell_nLoc));
+}
+
 /****************************************************************************/
 /* void TunesShiftWithEnergy(long Nb, long Nbtour, double emax)
 
@@ -2926,9 +3197,10 @@ void SetSkewQuad(void)
 // }
 
 /****************************************************************************/
-/* void MomentumAcceptance(long deb, long fin,
+/* void MomentumAcceptance(double deb, double fin,
                            double ep_min, double ep_max, long nstepp,
-                           double em_min, double em_max, long nstepm)
+                           double em_min, double em_max, long nstepm,
+                           long nnames  , char names[12][max_str])
    Purpose:
         Compute momemtum acceptance along the ring, track the particle with
 	different energy, momentum acceptance is the energy when the particle
@@ -2937,17 +3209,19 @@ void SetSkewQuad(void)
          Based on the version in tracy 2.
 
    Input:
-       deb   first element for momentum acceptance,"debut" is beginning in French
-       fin   last element for momentum acceptance,"fin"   is end in French
+       sdeb     minimum position for momentum acceptance,"debut" is beginning in French
+       sfin     maximum position for momentum acceptance,"fin"   is end in French
 
        ep_min   minimum energy deviation for positive momentum acceptance
        ep_max   maximum energy deviation for positive momentum acceptance
        nstepp   number of energy steps for positive momentum acceptance
 
-       em_min minimum energy deviation for negative momentum acceptance
-       em_max maximum energy deviation for negative momentum acceptance
-       nstepm number of energy steps for negative momentum acceptance
-
+       em_min   minimum energy deviation for negative momentum acceptance
+       em_max   maximum energy deviation for negative momentum acceptance
+       nstepm   number of energy steps for negative momentum acceptance
+       
+       nnames   number of families or types of elements for calculations
+       names    name of the families or types of elements for calculations
 
        * 1 grande section droite
        * 13 entree premier bend
@@ -2956,8 +3230,8 @@ void SetSkewQuad(void)
        * 173 fin superperiode
 
    Output:
-       output file soleil.out : file of results
-       output file phase.out : file of tracking results during the process
+       output file momAccept.out : file of results
+       output file momAcceptPhase.out : file of tracking results during the process
 
    Return:
        none
@@ -2965,8 +3239,6 @@ void SetSkewQuad(void)
    Global variables:
        none
 
-   specific functions:
-       set_vectorcod
 
    Comments:
        30/06/03 add fflush(NULL) to force writing at the end to correct
@@ -2981,156 +3253,103 @@ void SetSkewQuad(void)
 		       the Cell_Pass( ) is tracking from element i0+1L to i1(tracy 2).
 
 ****************************************************************************/
-void MomentumAcceptance(long deb, long fin, double ep_min, double ep_max,
-			long nstepp, double em_min, double em_max, long nstepm)
+void MomentumAcceptance(long nturn, double sdeb, double sfin, double ep_min, double ep_max,
+			long nstepp, double em_min, double em_max, long nstepm, long nnames, char names[12][max_str])
 {
   double        dP = 0.0, dp1 = 0.0, dp2 = 0.0;
-  long          lastpos = 0L,lastn = 0L;
-  long          i = 0L, j = 0L, pos = 0L;
-  CellType      Cell, Clost;
+  long          lastpos = 0L, lastn = 0L, type_mo[12], fam_mo[12], num_points = 0L, Fnum=0L;
+  long          i = 0L, j = 0L, pos = 0L, type_jj=0L, fam_jj=0L, vec_ind[Cell_nLocMax];
   double        x = 0.0, px = 0.0, z = 0.0, pz = 0.0, ctau0 = 0.0, delta = 0.0;
   Vector        x0;
-  const long    nturn = 1000L;
   FILE          *outf2, *outf1;
   // Nonzero vertical amplitude
-  const double  zmax = 0.3e-3; // 0.3 mm at the ring entrance (element 1)
-  double        **tabz0, **tabpz0;
+  const double  zmax = 0.3e-4; // 30 um at each element
   struct tm     *newtime;  // for time
-  Vector        codvector[Cell_nLocMax];
-  bool          cavityflag, radiationflag;
-  bool          trace=true;
+  bool          calc_ind, trace=true, all_elem=false;
 
   x0.zero();
 
   /* Get time and date */
   newtime = GetTime();
+// Determine which families or types of elements will be used to calculations;
+for (i = 0L; i < nnames; i++){
+      if (strcmp("all", names[i]) == 0) {
+            all_elem = true;
+      } else if (strcmp("dip", names[i]) == 0) {
+            type_mo[type_jj] = Dip;
+            type_jj++;
+      } else if (strcmp("quad", names[i]) == 0) {
+            type_mo[type_jj] = Quad;
+            type_jj++;
+      } else if (strcmp("sext", names[i]) == 0) {
+            type_mo[type_jj] = Sext;
+            type_jj++;
+      } else if (strcmp("corr", names[i]) == 0) { 
+            type_mo[type_jj] = Corr;
+            type_jj++;
+      } else {
+            Fnum = ElemIndex(names[i]);
+            if(Fnum > 0){
+                fam_mo[fam_jj]=Fnum;
+                fam_jj++;
+            }
+            else
+                printf("SetFieldErrors: undefined element %s\n", names[i]);
+      }
+}
 
-  /************************/
-  /* Fin des declarations */
+// Find out the indices of the elements to calculate the mom_accep.
+for (i = 0L; i < globval.Cell_nLoc; i++){
+    if (Cell[i].S > sfin){
+        break;
+    } else if (Cell[i].S >= sdeb) {
+	    calc_ind = all_elem;
+        for (j = 0L; j < type_jj; j++){
+            calc_ind = (calc_ind || ( (Cell[i].Elem.Pkind == Mpole) && (Cell[i].Elem.M->n_design == type_mo[j]) ));
+        }
+        for (j = 0L; j < fam_jj; j++){
+            calc_ind = (calc_ind || ( Cell[i].Fnum == fam_mo[j] ));
+        }
+        if ( calc_ind ){
+            vec_ind[num_points] = i;
+            num_points++;
+        }
+    }
+}
 
   /* File opening for writing */
 
-  outf1 = fopen("phase.out", "w");
-  outf2 = fopen("soleil.out", "w");
+  outf1 = fopen("momAcceptPhase.out", "w");
+  outf2 = fopen("momAccept.out", "w");
 
-  fprintf(outf2,"# TRACY III v. SYNCHROTRON SOLEIL -- %s \n", asctime2(newtime));
-  fprintf(outf2,"#  i        s         dp      s_lost  name_lost \n#\n");
+  fprintf(outf2,"# TRACY III v. SYNCHROTRON LNLS -- %s \n", asctime2(newtime));
+  fprintf(outf2,"#  name        s        dp     s_lost    name_lost  plane_lost(1=x,2=y)   turn_lost\n#\n");
 
-  fprintf(outf1,"# TRACY III v. SYNCHROTRON SOLEIL -- %s \n", asctime2(newtime));
+  fprintf(outf1,"# TRACY III v. SYNCHROTRON LNLS -- %s \n", asctime2(newtime));
   fprintf(outf1,"#  i        x           xp            z           zp           dp          ctau\n#\n");
 
 
-  pos = deb; /* starting position or element index in the ring */
-
   /***************************************************************/
-  fprintf(stdout,"Computing initial conditions ... \n");
-  /***************************************************************/
-
-  // cod search has to be done in 4D since in 6D it is zero
-  cavityflag = globval.Cavity_on;
-  radiationflag = globval.radiation;
-  globval.Cavity_on = false;  /* Cavity on/off */
-  globval.radiation = false;  /* radiation on/off */
-
-   // Allocation of an array of pointer array
-  tabz0  = (double **)malloc((nstepp)*sizeof(double*));
-  tabpz0 = (double **)malloc((nstepp)*sizeof(double*));
-  if (tabz0 == NULL || tabpz0 == NULL){
-    fprintf(stdout,"1 out of memory \n"); return;
-  }
-
-  for (i = 1L; i <= nstepp; i++){ // loop over energy
-    // Dynamical allocation 0 to nstepp -1
-    tabz0[i-1L]  = (double *)malloc((fin+1L)*sizeof(double));
-    tabpz0[i-1L] = (double *)malloc((fin+1L)*sizeof(double));
-    if (tabz0[i-1L] == NULL || tabpz0[i-1L] == NULL)
-    {
-      fprintf(stdout,"2 out of memory \n");
-      return;
-    }
-
-    // compute dP
-    if (nstepp != 1L)
-      dP = ep_max - (nstepp - i)*(ep_max - ep_min)/(nstepp - 1L);
-    else
-      dP = ep_max;
-
-    // find and store closed orbit for dP energy offset
-    set_vectorcod(codvector, dP);
-
-   // coordinates around closed orbit specially useful for 6D
-    x0[0] = codvector[0][0];
-    x0[1] = codvector[0][1];
-    x0[2] = codvector[0][2] + zmax;
-    x0[3] = codvector[0][3];
-    x0[4] = codvector[0][4];
-    x0[5] = codvector[0][5];
-
-  if (0) fprintf(stdout,"dP=% e : %e %e %e %e %e %e\n",
-          dP,x0[0],x0[1],x0[2],x0[3],x0[4],x0[5]);
-    // Store vertical initial conditions
-    // case where deb is not element 1
-    if (deb > 1L)
-    {
-       Cell_Pass(1L, deb - 1L, x0, lastpos); // track from 1 to deb-1L element
-       j = deb -1L;
-
-       if (lastpos != j)
-       { // look if stable
-         tabz0 [i- 1L][j] = 1.0;
-         tabpz0[i- 1L][j] = 1.0;
-       }
-       else
-       { // stable case
-         tabz0 [i - 1L][j] = x0[2] - codvector[deb-1L][2];
-         tabpz0[i - 1L][j] = x0[3] - codvector[deb-1L][3];
-       }
-    }
-    else
-    { // case where deb is element 1
-      j = deb - 1L;
-      tabz0 [i - 1L][j] = x0[2] - codvector[j][2];
-      tabpz0[i - 1L][j] = x0[3] - codvector[j][3];
-   }
-
-    for (j = deb; j < fin; j++)
-    { // loop over elements
-      Cell_Pass(j, j, x0, lastpos);
-    //   Cell_Pass(j -1L, j, x0, lastpos);
-
-      if (lastpos != j){ // look if stable
-        tabz0 [i - 1L][j] = 1.0;
-        tabpz0[i - 1L][j] = 1.0;
-      }
-      else{ // stable case
-        tabz0 [i - 1L][j] = x0[2] - codvector[j][2];
-        tabpz0[i - 1L][j] = x0[3] - codvector[j][3];
-//        fprintf(stdout,"z0= % e pz0= % e\n", tabz0 [i - 1L][j], tabpz0 [i - 1L][j]);
-      }
-    }
-  }
-
-  globval.Cavity_on = cavityflag;
-  globval.radiation = radiationflag;
-
+  fprintf(stdout,"\nBeginning calculation of momentum acceptance for %ld elements \n\n", num_points);
   /***************************************************************/
   fprintf(stdout,"Computing positive momentum acceptance ... \n");
   /***************************************************************/
-
-  do
-  {
+  fprintf(stdout,"#  name       s          dp    \n"); 
+  
+  for ( j = 0L; j < num_points; j++ ){
+  
+    pos = vec_ind[j];
     getcod(dP=0.0, lastpos);       /* determine closed orbit */
 
-    getelem(pos,&Cell);
     // coordinates around closed orbit which is non zero for 6D tracking
-    x     = Cell.BeamPos[0];
-    px    = Cell.BeamPos[1];
-    z     = Cell.BeamPos[2];
-    pz    = Cell.BeamPos[3];
-    delta = Cell.BeamPos[4];
-    ctau0 = Cell.BeamPos[5];
-    fprintf(stdout,"%3ld %6.4g %6.4g %6.4g %6.4g %6.4g %6.4g\n",
-            pos, x, px, z, pz, delta, ctau0);
+    x     = Cell[pos].BeamPos[0];
+    px    = Cell[pos].BeamPos[1];
+    z     = Cell[pos].BeamPos[2] + zmax;
+    pz    = Cell[pos].BeamPos[3];
+    delta = Cell[pos].BeamPos[4];
+    ctau0 = Cell[pos].BeamPos[5];
+    //fprintf(stdout,"%3ld %6.4g %6.4g %6.4g %6.4g %6.4g %6.4g\n",
+    //        pos, x, px, z, pz, delta, ctau0);
 
     dp1 = 0.0;
     dp2 = 0.0;
@@ -3145,35 +3364,19 @@ void MomentumAcceptance(long deb, long fin, double ep_min, double ep_max,
         dp2= ep_max - (nstepp - i)*(ep_max - ep_min)/(nstepp - 1L);
       else
         dp2 = ep_max;
-
-      if (trace)  printf("i=%4ld pos=%4ld dp=%6.4g\n",i,pos,dp2);
-      if (0) fprintf(stdout,"pos=%4ld z0 =% 10.5f  pz0 =% 10.5f  \n", pos, tabz0[i-1L][pos-1L], tabpz0[i-1L][pos-1L]);
-
-      Trac(x, px, tabz0[i-1L][pos], tabpz0[i-1L][pos-1L], dp2+delta , ctau0, nturn, pos, lastn, lastpos, outf1);
-
+    
+    // Calcula a abertura em momemtum no final do elemento (pos+1L);
+      Trac(x, px, z, pz, dp2+delta , ctau0, nturn, pos+1L, lastn, lastpos, outf1);
     }while (((lastn) == nturn) && (i != nstepp));
 
     if ((lastn) == nturn)
       dp1 = dp2;
 
-    getelem(lastpos,&Clost);
-    getelem(pos,&Cell);
+    fprintf(stdout,"  %-7s %10.5f %10.5f\n", Cell[pos].Elem.PName, Cell[pos].S, dp1);
+    fprintf(outf2,"  %-7s %10.5f %8.5f %10.5f   %-8s           %-10d   %6ld\n", Cell[pos].Elem.PName,
+        Cell[pos].S, dp1, Cell[lastpos].S, Cell[lastpos].Elem.PName,status.lossplane, lastn);
 
-    fprintf(stdout,"pos=%4ld z0 =% 10.5f  pz0 =% 10.5f  \n", pos, tabz0[i-1L][pos-1L], tabpz0[i-1L][pos-1L]);
-    fprintf(stdout,"%4ld %10.5f %10.5f %10.5f %*s\n", pos,Cell.S,dp1,Clost.S,5,Clost.Elem.PName);
-    fprintf(outf2,"%4ld %10.5f %10.5f %10.5f %*s\n", pos,Cell.S,dp1,Clost.S,5,Clost.Elem.PName);
-
-    pos++;
-
-  }while(pos != fin);
-
-  // free memory
-  for (i = 1L; i <= nstepp; i++){
-    free(tabz0 [i - 1L]);
-    free(tabpz0[i - 1L]);
   }
-  free(tabz0);
-  free(tabpz0);
 
   /***************************************************************/
   /***************************************************************/
@@ -3183,107 +3386,25 @@ void MomentumAcceptance(long deb, long fin, double ep_min, double ep_max,
 
   fprintf(outf2,"\n"); /* A void line */
 
-  pos = deb; /* starting position in the ring */
 
   /***************************************************************/
-  fprintf(stdout,"Computing initial conditions ... \n");
+  fprintf(stdout,"\nComputing negative momentum acceptance ... \n");
   /***************************************************************/
-
-  // cod search has to be done in 4D since in 6D it is zero
-  cavityflag        = globval.Cavity_on;
-  radiationflag     = globval.radiation;
-  globval.Cavity_on = false;  /* Cavity on/off */
-  globval.radiation = false;  /* radiation on/off */
-
-   // Allocation of an array of pointer array
-  tabz0  = (double **)malloc((nstepm)*sizeof(double*));
-  tabpz0 = (double **)malloc((nstepm)*sizeof(double*));
-  if (tabz0 == NULL || tabpz0 == NULL){
-    fprintf(stdout,"1 out of memory \n"); return;
-  }
-
-  for (i = 1L; i <= nstepm; i++){ // loop over energy
-    // Dynamical allocation
-    tabz0[i-1L]  = (double *)malloc((fin+1L)*sizeof(double));
-    tabpz0[i-1L] = (double *)malloc((fin+1L)*sizeof(double));
-    if (tabz0[i-1L] == NULL || tabpz0[i-1L] == NULL){
-      fprintf(stdout,"2 out of memory \n"); return;
-    }
-
-    // compute dP
-    if (nstepm != 1L) {
-      dP = em_max - (nstepm - i)*(em_max - em_min)/(nstepm - 1L);
-    }
-    else {
-      dP = em_max;
-    }
-    // store closed orbit
-    set_vectorcod(codvector, dP);
-
-   // coordinates around closed orbit specially usefull for 6D
-    x0[0] = codvector[0][0];
-    x0[1] = codvector[0][1];
-    x0[2] = codvector[0][2] + zmax;
-    x0[3] = codvector[0][3];
-    x0[4] = codvector[0][4];
-    x0[5] = codvector[0][5];
-
-    // Store vertical initial conditions
-    // case where deb is not element 1
-    if (deb > 1L){
-       Cell_Pass(1L, deb - 1L, x0, lastpos); // track from 1 to deb-1L element
-       j = deb -1L;
-       if (lastpos != j){ // look if stable
-         tabz0 [i- 1L][j] = 1.0;
-         tabpz0[i- 1L][j] = 1.0;
-       }
-       else{ // stable case
-         tabz0 [i - 1L][j] = x0[2] - codvector[deb-1L][2];
-         tabpz0[i - 1L][j] = x0[3] - codvector[deb-1L][3];
-       }
-    }
-    else { // case where deb is element 1
-      j = deb - 1L;
-      tabz0 [i - 1L][j] = x0[2] - codvector[j][2];
-      tabpz0[i - 1L][j] = x0[3] - codvector[j][3];
-//      fprintf(stdout,"z0= % e pz0= % e\n", tabz0 [i - 1L][j], tabpz0 [i - 1L][j]);
-   }
-
-    for (j = deb; j < fin; j++){ // loop over elements
-      Cell_Pass(j, j, x0, lastpos);
-     //   Cell_Pass(j -1L, j, x0, lastpos);
-      if (lastpos != j){ // look if stable
-        tabz0 [i - 1L][j] = 1.0;
-        tabpz0[i - 1L][j] = 1.0;
-      }
-      else{ // stable case
-        tabz0 [i - 1L][j] = x0[2] - codvector[j][2];
-        tabpz0[i - 1L][j] = x0[3] - codvector[j][3];
-//        fprintf(stdout,"dP= % e pos= %ld z0= % e pz0= % e\n", dP, j, tabz0 [i - 1L][j], tabpz0 [i - 1L][j]);
-      }
-    }
-  }
-
-  globval.Cavity_on = cavityflag;
-  globval.radiation = radiationflag;
-
-  /***************************************************************/
-  fprintf(stdout,"Computing negative momentum acceptance ... \n");
-  /***************************************************************/
-
-  do {
+  fprintf(stdout,"#  name       s          dp    \n");
+  
+for ( j = 0L; j < num_points; j++ ){
+    pos = vec_ind[j];
     getcod(dP=0.0, lastpos);       /* determine closed orbit */
 
-  getelem(pos,&Cell);
     // coordinates around closed orbit which is non zero for 6D tracking
-    x     = Cell.BeamPos[0];
-    px    = Cell.BeamPos[1];
-    z     = Cell.BeamPos[2];
-    pz    = Cell.BeamPos[3];
-    delta = Cell.BeamPos[4];
-    ctau0 = Cell.BeamPos[5];
-    fprintf(stdout,"%3ld %6.4g %6.4g %6.4g %6.4g %6.4g %6.4g\n",
-            pos, x, px, z, pz, delta, ctau0);
+    x     = Cell[pos].BeamPos[0];
+    px    = Cell[pos].BeamPos[1];
+    z     = Cell[pos].BeamPos[2] + zmax;
+    pz    = Cell[pos].BeamPos[3];
+    delta = Cell[pos].BeamPos[4];
+    ctau0 = Cell[pos].BeamPos[5];
+    // fprintf(stdout,"%3ld %6.4g %6.4g %6.4g %6.4g %6.4g %6.4g\n",
+    //        pos, x, px, z, pz, delta, ctau0);
 
     dp1 = 0.0;
     dp2 = 0.0;
@@ -3298,30 +3419,18 @@ void MomentumAcceptance(long deb, long fin, double ep_min, double ep_max,
       else {
         dp2 = em_max;
       }
-      if (trace) printf("i=%4ld pos=%4ld dp=%6.4g\n",i,pos,dp2);
-      Trac(x, px, tabz0[i-1L][pos], tabpz0[i-1L][pos-1L], dp2+delta , ctau0, nturn, pos, lastn, lastpos, outf1);
-    }
-    while (((lastn) == nturn) && (i != nstepm));
+
+    // Calcula a abertura em momemtum no final do elemento (pos+1L);
+      Trac(x, px, z, pz, dp2+delta, ctau0, nturn, pos+1L, lastn, lastpos, outf1);
+      
+    }while (((lastn) == nturn) && (i != nstepm));
 
     if ((lastn) == nturn) dp1 = dp2;
-
-    getelem(lastpos,&Clost);
-    getelem(pos,&Cell);
-    if (!trace)  printf("i=%4ld pos=%4ld dp=%6.4g\n",i,pos,dp2);
-    fprintf(stdout,"pos=%4ld z0 =% 10.5f  pz0 =% 10.5f  \n", pos, tabz0[i-1L][pos-1L], tabpz0[i-1L][pos-1L]);
-    fprintf(stdout,"%4ld %10.5f %10.5f %10.5f %*s\n", pos,Cell.S,dp1,Clost.S, 5, Clost.Elem.PName);
-    fprintf(outf2,"%4ld %10.5f %10.5f %10.5f %*s\n", pos,Cell.S,dp1,Clost.S, 5, Clost.Elem.PName);
-    pos++;
-  }
-  while(pos != fin);
-
-  // free memory
-  for (i = 1L; i <= nstepp; i++){
-    free(tabz0 [i - 1L]);
-    free(tabpz0[i - 1L]);
-  }
-  free(tabz0);
-  free(tabpz0);
+    
+    fprintf(stdout,"  %-7s %10.5f %10.5f\n", Cell[pos].Elem.PName, Cell[pos].S, dp1);
+    fprintf(outf2,"  %-7s %10.5f %8.5f %10.5f   %-8s           %-10d   %6ld\n", Cell[pos].Elem.PName,
+        Cell[pos].S, dp1, Cell[lastpos].S, Cell[lastpos].Elem.PName,status.lossplane, lastn);
+}
 
   fflush(NULL); // force writing at the end (BUG??)
   fclose(outf1);
@@ -3514,97 +3623,6 @@ void spectrum(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
  fclose(xoutf);
  fclose(zoutf);
 }
-
-/****************************************************************************/
-/* void TracCO(double x, double px, double y, double py, double dp, double ctau,
-          long nmax, long pos, long *lastn, long *lastpos, FILE *outf1)
-
-   Purpose:
-      Single particle tracking
-      Same as Trac but with respect to closed orbit
-
-   Input:
-      x, px, y, py 4 transverses coordinates
-      dp           energy offset
-      nmax         number of turns
-      pos          starting position for tracking
-      aperture     global physical aperture
-
-
-   Output:
-      lastn       last n (should be nmax if  not lost)
-      lastpos     last position in the ring
-
-   Return:
-       none
-
-   Global variables:
-       globval
-
-   specific functions:
-       Cell_Pass
-
-   Comments:
-       BUG: last printout is wrong because not at pos but at the end of the ring
-       26/04/03 print output for phase space is for position pos now
-
-****************************************************************************/
-void TracCO(double x, double px, double y, double py, double dp, double ctau,
-	    long nmax, long pos, long &lastn, long &lastpos, FILE *outf1)
-{
-  bool lostF; /* Lost particle Flag */
-  Vector x1;     /* tracking coordinates */
-  Vector2  aperture;
-  CellType Cell;
-
-  aperture[0] = 1e0;
-  aperture[1] = 1e0;
-
-  /* Get closed orbit */
-  Ring_GetTwiss(true, 0.0);
-  getcod(dp, lastpos);
-  getelem(pos-1,&Cell);
-
-  if (!trace) printf("dp= % .5e %% xcod= % .5e mm zcod= % .5e mm \n",
-             dp*1e2, Cell.BeamPos[0]*1e3, Cell.BeamPos[2]*1e3);
-
-  /* Tracking coordinates around the closed orbit */
-    x1[0] =  x + Cell.BeamPos[0]; x1[1] = px   + Cell.BeamPos[1];
-    x1[2] =  y + Cell.BeamPos[2]; x1[3] = py   + Cell.BeamPos[3];
-    x1[4] = dp; x1[5] = ctau; // line true in 4D tracking
-//    x1[4] = dp + Cell.BeamPos[4]; x1[5] = ctau + Cell.BeamPos[5];
-
-    lastn = 0;
-    lostF = true;
-
-    (lastpos) = pos;
-
-    if (!trace) fprintf(outf1, "\n");
-
-    do
-    {
-      (lastn)++;
-      if (!trace) { // print initial conditions
-        fprintf(outf1, "%6ld %+10.5e %+10.5e %+10.5e %+10.5e"
-		" %+10.5e %+10.5e \n",
-		lastn, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
-      }
-
-    //  Cell_Pass(pos-1L, globval.Cell_nLoc, x1, lastpos);
-      Cell_Pass(pos, globval.Cell_nLoc, x1, lastpos);
-      Cell_Pass(0,pos-1L, x1, lastpos);
-    }
-    while (((lastn) < nmax) && ((lastpos) == pos-1L));
-
-    if (lastpos != pos-1L)
-    {
-      printf("TracCO: Particle lost \n");
-      fprintf(stdout, "turn=%6ld %+10.5g %+10.5g %+10.5g"
-	      " %+10.5g %+10.5g %+10.5g \n",
-	      lastn, x1[0], x1[1], x1[2], x1[3], x1[4], x1[5]);
-    }
-  }
-
 
 /****************************************************************************/
 /*   void getA4antidamping()
