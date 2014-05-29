@@ -93,10 +93,7 @@ for i=1:n_calls
     fprintf('\n Configuração:        %-s  \n',upper(text_leg{i}));
     fprintf(' Tempo de vida médio: %10.5f h \n',aveLT);
     if rms_mode; fprintf(' Desvio Padrão:       %10.5f h \n',rmsLT); end;
-    
-    
-    % [~, ele] = hdrload('MA_ele.txt');
-    
+
     if i == 1
         f=figure('OuterPosition',[xi yi xf yf]);
         fa = axes('Parent',f,'YGrid','on','XGrid','on','FontSize',size_font);
@@ -112,17 +109,9 @@ for i=1:n_calls
         plot(fa,spos,aveAccep + rmsAccep, 'Marker','.','Color', color{i},'LineWidth',2,'LineStyle','--');
         plot(fa,spos,aveAccep - rmsAccep, 'Marker','.','Color', color{i},'LineWidth',2,'LineStyle','--');
     end
+    % [~, ele] = hdrload('MA_ele.txt');
     % plot(ele(:,1), ele(:,[2 4])*100,'r','Marker','.','DisplayName',{'elegantpos', 'elegantneg'});
-    
-    
-    
-    % figure; semilogy(spos,n_lost, 'Marker','.','DisplayName',{'tracypos', 'tracyneg'});
-    % hold all
-    % % semilogy(ele(:,1), ele(:,[3 5]),'r','Marker','.','DisplayName',{'elegantpos', 'elegantneg'});
-    % xlim([0, 52])
-    % xlabel('Pos [m]'); ylabel('Turn loss[%]');
-    % legend('show')
-    
+
     f2=figure('OuterPosition',[xi yi xf yf]);
     fb = axes('Parent',f2,'FontSize',size_font);
     [n, xout] = hist(modSLost',12); bar(fb,xout,n);

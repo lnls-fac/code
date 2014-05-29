@@ -78,22 +78,20 @@ if r.config.simulate_static
         
         r.machine = apply_errors(r, r.config.static.errors_delta(i),'static');
         
+        % desliga IDS para eliminar restrição física
         if (i == 1)
-            sext_idx = getappdata(0, 'Sextupole_Idx');
-            % desliga IDS para eliminar restrição física
             for m=selection
                 r.machine{m} = set_ids(r.machine{m}, 'off');
-                sext_str{m}  = getcellstruct(r.machine{m}, 'PolynomB', sext_idx, 1, 3);
-                r.machine{m} = set_sextupoles(r.machine{m}, 0, sext_str{m});
             end
             % faz calculo da trajetoria distorcida (com sextupolos e IDs zerados)
             fprintf('< calculating COD with sextupoles off... > \n\n');
             r.init_cod = calc_init_cod(r, selection);
-        elseif (i == length(r.config.static.errors_delta))
-            % liga IDS para eliminar restrição física
+        end
+        
+        % liga IDS para eliminar restrição física
+        if (i == length(r.config.static.errors_delta))
             for m=selection
                 r.machine{m} = set_ids(r.machine{m}, 'on');
-                r.machine{m} = set_sextupoles(r.machine{m}, 1, sext_str{m});
             end
         end
         

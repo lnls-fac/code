@@ -45,8 +45,11 @@ for i=1:n_calls
         if rms_mode, pathname = fullfile(path,sprintf('rms%02d',k)); end
         
         try
-%             onda(j,:,:) = tracy3_load_fmap_data(pathname);
-            onda(j,:,:) = tracy3_load_daxy_data(pathname);
+            try
+                [onda(j,:,:),~] = tracy3_load_daxy_data(pathname);
+            catch
+                onda(j,:,:) = tracy3_load_fmap_data(pathname);
+            end
             j = j + 1;
         catch
             fprintf('%-2d-%-3d: xy nao carregou\n',i,k);
@@ -54,8 +57,11 @@ for i=1:n_calls
         
         if (fmapdpFlag)
             try
-%                 offda(m,:,:) = tracy3_load_fmapdp_data(pathname);
-                offda(m,:,:) = tracy3_load_daex_data(pathname);
+                try
+                    [offda(m,:,:), ~] = tracy3_load_daex_data(pathname);
+                catch
+                    offda(m,:,:) = tracy3_load_fmapdp_data(pathname);
+                end
                 m = m + 1;
             catch
                 fprintf('%-2d-%-3d: ex nao carregou\n',i,k);
