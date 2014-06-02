@@ -39,7 +39,10 @@ cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 
 % remove toolbox/finance/finsupport/ do path para previnir conflito com
 % funcao drift da Financial Toolbox
-rmpath(fullfile(matlabroot, 'toolbox', 'finance', 'finsupport'));
+fname = fullfile(matlabroot, 'toolbox', 'finance', 'finsupport');
+if exist(fname, 'file')
+    rmpath(fname);
+end
 
 setpathlnls('LNLS1', 'StorageRing', 'lnls1_link');
 cd(cdir);

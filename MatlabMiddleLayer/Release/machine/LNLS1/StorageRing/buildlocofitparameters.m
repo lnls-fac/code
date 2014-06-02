@@ -37,7 +37,7 @@ load(FileName);
 
 % Quads
 if nargin < 2
-    ModeCell = {'No parameter setup', 'Fit quadrupoles by power supply','Fit quadrupoles by magnet'};
+    ModeCell = {'No parameter setup', 'Fit quadrupoles by power supply','Fit quadrupoles by magnet','Fit quadrupoles by magnet (including sexts)'};
     [QuadFit, OKFlag] = listdlg('Name','BUILDLOCOINPUT','PromptString',{'Fit Parameter Selection:','(Not including skew quadrupoles)'}, 'SelectionMode','single', 'ListString', ModeCell, 'ListSize', [435 110], 'InitialValue', 1);
     QuadFit = QuadFit - 1;
     drawnow;
@@ -268,6 +268,28 @@ switch QuadFit
                 AT_Index = family2atindex(MMLFamily);
                 for loop = 1:size(AT_Index,1)
                     N = N + 1;
+                    FitParameters.Params{N} = mkparamgroup(RINGData.Lattice, AT_Index(loop,:), 'K');
+                    FitParameters.Values = [FitParameters.Values; getcellstruct(RINGData.Lattice, 'K', AT_Index(loop,1))];
+                    FitParameters.Deltas = [FitParameters.Deltas; NaN];
+                end
+            end
+        end
+        
+     case 3 % Fit by magnet (including sextupoles)
+        % Quadrupole K-values by magnet
+        
+        fprintf('\n   Quadrupole parameter fits by magnet (including sextupoles) \n');
+        
+        ATFamilies = {'QF','QD','QFC','SD'};
+        for iFamily = 1:length(ATFamilies)
+            ATFamily = ATFamilies{iFamily};
+            MMLFamilies = findmemberof(ATFamily);
+            for jFamily = 1:length(MMLFamilies)
+                MMLFamily = MMLFamilies{jFamily};
+                AT_Index = family2atindex(MMLFamily);
+                for loop = 1:size(AT_Index,1)
+                    N = N + 1;
+                    RINGData.Lattice = setcellstruct(RINGData.Lattice, 'K', AT_Index(loop,:), getcellstruct(RINGData.Lattice, 'PolynomB', AT_Index(loop,:), 1, 2));
                     FitParameters.Params{N} = mkparamgroup(RINGData.Lattice, AT_Index(loop,:), 'K');
                     FitParameters.Values = [FitParameters.Values; getcellstruct(RINGData.Lattice, 'K', AT_Index(loop,1))];
                     FitParameters.Deltas = [FitParameters.Deltas; NaN];
