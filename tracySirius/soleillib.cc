@@ -1277,7 +1277,7 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
 	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
 		    break;
 	        } else {
-	            r_stable /= 1.3;
+	            r_stable /= 2.0;
 		    fprintf(stdout, "\/"); fflush(stdout);
 	        }
 	}
@@ -1287,7 +1287,7 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
             double z = r_unstable * sa;
             Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
 	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
-	            r_unstable *= 1.3;
+	            r_unstable *= 2.0;
 		    fprintf(stdout, "*"); fflush(stdout);
 	        } else {
 	            break;

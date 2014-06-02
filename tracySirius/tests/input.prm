@@ -1,0 +1,20 @@
+ in_dir ./
+ lat_file flat_file_rms01.dat
+ 
+ TuneTracFlag
+ CouplingFlag 
+
+# multipole error file
+#multipole_file multipole_Sirius_v500.dat
+ 
+# ReadChamberFlag Chamber_Sirius_v500.dat
+#ReadMultipoleFlag
+
+#FitTuneFlag     46.17987   14.15001 qaf qad qbd1 qbf qbd2
+# FitChromFlag	 sd1	sf1	0.0	0.0
+
+CavityFlag      true
+RadiationFlag   true
+
+DynApXYRadialFlag 5000 21 0.0 0.010 0.003 0.0001
+

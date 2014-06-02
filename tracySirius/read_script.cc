@@ -264,7 +264,6 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 						&(UserCommandFlag[CommNo]._DAXY_delta),
 						&(UserCommandFlag[CommNo]._DAXY_xscale), &(UserCommandFlag[CommNo]._DAXY_yscale),
                         &(UserCommandFlag[CommNo]._DAXY_r_tol));
-                printf("ok - ximenes\n");
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
 			else if (strcmp("DynApEXFlag", name) == 0){
