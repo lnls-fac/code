@@ -18,7 +18,7 @@ xi = scrsz(4)/12;
 yi = scrsz(4)/20;
 xf = xi + scrsz(4);
 yf = yi + scrsz(4);
-size_font = 24;
+size_font = 28;
 type_colormap = 'Jet';
 limx = 12;
 limy = 3.0;
@@ -50,8 +50,10 @@ for j = 1:2
         % -- FMAP --
         full_name = fullfile(pathname, ['rms', num2str(i, '%02i')]);
         try
-            [~, dados1] = tracy3_load_daxy_data(full_name);
-            ind = dados1.plane == -1;
+            %[~, dados1] = tracy3_load_daxy_data(full_name);
+            %ind = dados1.plane == -1;
+            [~, dados1] = tracy3_load_fmap_data(full_name);
+            ind = (dados1.fx ~= 0);
             if i == 1, idx_daxy = zeros(size(ind));end;
             switch mostra
                 case 0
@@ -68,8 +70,10 @@ for j = 1:2
         
         if (fmapdpFlag)
             try
-                [~, dados2] = tracy3_load_daex_data(full_name);
-                inddp = dados2.plane == -1;
+                %[~, dados2] = tracy3_load_daex_data(full_name);
+                %inddp = dados2.plane == -1;
+                [~, dados2] = tracy3_load_fmapdp_data(full_name);
+                inddp = (dados2.fen ~= 0);
                 if i == 1, idx_daex = zeros(size(inddp));end;
                 switch mostra
                     case 0
@@ -111,7 +115,7 @@ for j = 1:2
     ylabel(sb(j,2), 'x (mm)','FontSize',size_font);
     xlim(sb(j,2), [-lime lime]);
     ylim(sb(j,2),[-limx,0]);
-    
+
 end
 
 annotation(f,'textbox',[0.392 0.604 0.040 0.0402],'String',{'(a)'},...
@@ -129,10 +133,10 @@ annotation(f,'textbox', [0.855 0.102 0.0418 0.0402],'String',{'(d)'},...
 colorbar('peer',sb(2,2), [0.91 0.1 0.013 0.88], 'FontSize',24,...
     'YTick',[0,20,40,60,80,100],'YTickLabel',...
     {'100%','80%','60%','40%','20%','0%'});
+
 % Create textbox
 annotation(f,'textbox', [0.317 0.879 0.074 0.048],'String',{'\delta = 0'},...
-    'FontSize',24, 'FitBoxToText','off', 'LineStyle','none');
+'FontSize',24, 'FitBoxToText','off', 'LineStyle','none');
 % Create textbox
 annotation(f,'textbox', [0.545 0.619 0.127 0.046],'String',{'y = 1 mm'},...
-    'FontSize',24, 'FitBoxToText','off', 'LineStyle','none');
-
+'FontSize',24, 'FitBoxToText','off', 'LineStyle','none');

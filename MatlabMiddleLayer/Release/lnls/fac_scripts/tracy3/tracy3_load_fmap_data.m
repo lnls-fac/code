@@ -1,4 +1,4 @@
-function dynapt = tracy3_load_fmap_data(pathname, var_plane)
+function [dynapt, dados] = tracy3_load_fmap_data(pathname, var_plane)
 
 fname = fullfile(pathname, 'fmap.out');
 
@@ -19,9 +19,9 @@ y = fmap(:,2);
 fx = fmap(:,3);
 % e a redimensiono para que todos os valores calculados para x iguais
 %fiquem na mesma coluna:
-x = reshape(x,npy,npx);
-y = reshape(y,npy,npx);
-fx = reshape(fx,npy,npx);
+x = reshape(x,npy,npx); dados.x = x;
+y = reshape(y,npy,npx); dados.y = y;
+fx = reshape(fx,npy,npx); dados.fx = fx;
 % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
 % a borda da DA
 if var_plane

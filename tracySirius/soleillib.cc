@@ -1253,7 +1253,7 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
   	fprintf(outf,   "# TRACY III SYNCHROTRON LNLS-- %s -- %s \n", fic, asctime2(newtime));
 	fprintf(outf,   "#    x               y  \n");
 	fprintf(outf,   "#   [m]             [m] \n");
-    fprintf(stdout, "#    x               y  \n");
+        fprintf(stdout, "#    x               y  \n");
 	fprintf(stdout, "#   [m]             [m] \n");
 
 
@@ -1264,40 +1264,58 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
         double an = 1e-4 + (M_PI - 2e-4) * i / (nr_radial - 1.0);
         double ca = cos(an);
         double sa = sin(an);
-        double r_stable   = 0;
+	double r_stable   = sqrt((xscale * ca)*(xscale * ca) + (yscale * sa)*(yscale * sa));
         double r_unstable = sqrt((xscale * ca)*(xscale * ca) + (yscale * sa)*(yscale * sa));
-        /* search initial unstable radius */
+	
+	fprintf(stdout, "(%03i/%03i): ", i+1, nr_radial);
+        
+	/* search initial stable radius */
+        while (true) {
+            double x = r_stable * ca;
+            double z = r_stable * sa;
+            Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
+		    break;
+	        } else {
+	            r_stable /= 1.3;
+		    fprintf(stdout, "\/"); fflush(stdout);
+	        }
+	}
+	/* search initial unstable radius */
         while (true) {
             double x = r_unstable * ca;
             double z = r_unstable * sa;
             Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
 	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
-	            r_unstable *= 2;
+	            r_unstable *= 1.3;
+		    fprintf(stdout, "*"); fflush(stdout);
 	        } else {
 	            break;
 	        }
-	    }
-	    /* does bisection search */
-	    while (r_unstable - r_stable > r_tol) {
+	}
+	/* does bisection search */
+	while (r_unstable - r_stable > r_tol) {
 	        double r = 0.5 * (r_stable + r_unstable);
 	        double x = r * ca;
-            double z = r * sa;
-            Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+            	double z = r * sa;
+            	Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
 	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
 	            r_stable = r;
+		    fprintf(stdout, "+"); fflush(stdout);
 	        } else {
 	            r_unstable = r;
+		    fprintf(stdout, "-"); fflush(stdout);
 	        }  
-	    }
-	    /* prints final solution */
-	    double r = 0.5 * (r_stable + r_unstable);
+	}
+        fprintf(stdout, " ");
+	/* prints final solution */
+	double r = r_stable;
         double x = r * ca;
         double z = r * sa;
-	    fprintf(outf,   "%-15.6e %-15.6e \n", x, z);
-	    fprintf(stdout, "%-15.6e %-15.6e \n", x, z);
+	fprintf(outf,   "%-15.6e %-15.6e \n", x, z);
+	fprintf(stdout, "%-15.6e %-15.6e \n", x, z);
     }
-    
-	fclose(outf);
+    fclose(outf);
 }
 
 /****************************************************************************/

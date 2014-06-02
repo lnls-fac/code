@@ -1,4 +1,4 @@
-function dynapt = tracy3_load_fmapdp_data(pathname)
+function [dynapt, dados] = tracy3_load_fmapdp_data(pathname)
 
 fname = fullfile(pathname, 'fmapdp.out');
 
@@ -14,9 +14,9 @@ x = fmapdp(:,2);
 fen = fmapdp(:,3);
 % e a redimensiono para que todos os valores calculados para x iguais
 %fiquem na mesma coluna:
-en = reshape(en,npx,npe);
-x = reshape(x,npx,npe);
-fen = reshape(fen,npx,npe);
+en = reshape(en,npx,npe); dados.en = en;
+x = reshape(x,npx,npe); dados.x = x;
+fen = reshape(fen,npx,npe); dados.fen = fen;
 % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
 % a borda da DA
 [~,ind] = min(fen,[],1);
