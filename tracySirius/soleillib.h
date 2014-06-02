@@ -48,6 +48,8 @@ void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
 void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
 		double emin, double emax, double z);
                             
+void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, double zscale, double r_tol);
+
 /* Frequency map analysis */
 void TunesShiftWithEnergy(long Nb, long Nbtour, double emax);
 //void fmap(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,

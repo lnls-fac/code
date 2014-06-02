@@ -575,6 +575,21 @@ int main(int argc, char *argv []) {
 						UserCommandFlag[i]._DAXY_delta);
 			}
 		}
+		
+		// Computes Dynamic Aperture on XY axis
+		else if(strcmp(CommandStr,"DynApXYRadialFlag") == 0) {
+			printf("\n begin XY Dynamic Aperture search (radial): \n\n");
+			if (globval.nr_cpus > 1) {
+/*				DAXY_mp(globval.nr_cpus, UserCommandFlag[i]._DAXY_nxpoint, UserCommandFlag[i]._DAXY_nypoint, UserCommandFlag[i]._DAXY_nturn,
+						UserCommandFlag[i]._DAXY_x0, UserCommandFlag[i]._DAXY_xmax,
+						UserCommandFlag[i]._DAXY_y0, UserCommandFlag[i]._DAXY_ymax,
+						UserCommandFlag[i]._DAXY_delta); */
+			} else {
+				daxy_radial(UserCommandFlag[i]._DAXY_nturn, UserCommandFlag[i]._DAXY_nr_radial, 
+						UserCommandFlag[i]._DAXY_delta, UserCommandFlag[i]._DAXY_xscale, UserCommandFlag[i]._DAXY_yscale, 
+						UserCommandFlag[i]._DAXY_r_tol);
+			}
+		}
 
 		// Compute FMA dp
 		else if(strcmp(CommandStr,"DynApEXFlag") == 0) {

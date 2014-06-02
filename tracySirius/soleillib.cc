@@ -1199,6 +1199,108 @@ void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
 
 
 /****************************************************************************/
+/* void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, double zscale, double r_tol)
+
+   Purpose:
+       Compute dynamic aperture at the beginning of the lattice in the plane XY
+       along radial directions. 
+       the particle is tracked over Nbtour for an energy offset dp
+       
+       Results in daxy_radial.out
+
+   Input:
+       Nbtour       number of turn for tracking
+       nr_radial    number of radial lines to search for DA
+       energy       particle energy offset
+       xscale       horizontal scale (used to define equally spaced angle between radial lines)
+       yscale       vertical scale (used to define equally spaced angle between radial lines)
+       r_tol        tolerance for the DA search in each line [m]
+       
+
+   Return:
+       none
+
+   Global variables:
+       none
+
+   Specific functions:
+       Trac_COD
+
+   Comments:
+       30/05/2014 Created
+
+****************************************************************************/
+void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, double yscale, double r_tol)
+{
+
+	FILE*  outf;
+	const  char fic[] = "daxy_radial.out";
+	long   lastn = 0L, lastpos = 0L;
+	struct tm *newtime;
+
+	/* Get time and date */
+	time_t aclock;
+	time(&aclock);                 /* Get time in seconds */
+	newtime = localtime(&aclock);  /* Convert time to struct */
+
+	if (trace) printf("Entering fmap ... results in %s\n\n",fic);
+
+	/* Opening file and header */
+	if ((outf = fopen(fic, "w")) == NULL) {
+		fprintf(stdout, "daxy_radial: error while opening file %s\n", fic);
+		exit_(1);
+	}
+  	fprintf(outf,   "# TRACY III SYNCHROTRON LNLS-- %s -- %s \n", fic, asctime2(newtime));
+	fprintf(outf,   "#    x               y  \n");
+	fprintf(outf,   "#   [m]             [m] \n");
+    fprintf(stdout, "#    x               y  \n");
+	fprintf(stdout, "#   [m]             [m] \n");
+
+
+    /* Get closed orbit */
+    getcod(0.0, lastpos);
+    
+    for(long i = 0; i < nr_radial; ++i) {
+        double an = 1e-4 + (M_PI - 2e-4) * i / (nr_radial - 1.0);
+        double ca = cos(an);
+        double sa = sin(an);
+        double r_stable   = 0;
+        double r_unstable = sqrt((xscale * ca)*(xscale * ca) + (yscale * sa)*(yscale * sa));
+        /* search initial unstable radius */
+        while (true) {
+            double x = r_unstable * ca;
+            double z = r_unstable * sa;
+            Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
+	            r_unstable *= 2;
+	        } else {
+	            break;
+	        }
+	    }
+	    /* does bisection search */
+	    while (r_unstable - r_stable > r_tol) {
+	        double r = 0.5 * (r_stable + r_unstable);
+	        double x = r * ca;
+            double z = r * sa;
+            Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+	        if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)) {
+	            r_stable = r;
+	        } else {
+	            r_unstable = r;
+	        }  
+	    }
+	    /* prints final solution */
+	    double r = 0.5 * (r_stable + r_unstable);
+        double x = r * ca;
+        double z = r * sa;
+	    fprintf(outf,   "%-15.6e %-15.6e \n", x, z);
+	    fprintf(stdout, "%-15.6e %-15.6e \n", x, z);
+    }
+    
+	fclose(outf);
+}
+
+/****************************************************************************/
 /* void daex(long Nbx, long Nbe, long Nbtour, double xmax, double emax,
    double z)
 
