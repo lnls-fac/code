@@ -431,10 +431,10 @@ def bar_plot_multipoles(data,
                 idx          = data[j].harmonics.index(harmonics[i]) 
                 if plot_type == 'skew_multipoles':
                     error        = data[j].relative_LS_std[idx]
-                    multipole_0  = abs(data[j].relative_LS_avg[idx])
+                    multipole_0  = data[j].relative_LS_avg[idx]
                 elif plot_type == 'normal_multipoles':
                     error        = data[j].relative_LN_std[idx]
-                    multipole_0  = abs(data[j].relative_LN_avg[idx])
+                    multipole_0  = data[j].relative_LN_avg[idx]
                 elif plot_type == 'skew_angle':
                     try:
                         error        = 1000 * data[j].skew_angle_std[idx]
@@ -571,9 +571,10 @@ def bar_plot_multipoles_repetibility(multipoles,
                                       
 def read_measurements_from_folder(folder):
     """ reads all data files within a folder and stores measurement objects in a list which is then returned """
-    fnames = [os.path.join(folder, f) for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+    fnames = sorted([os.path.join(folder, f) for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))])
     data = []
     for fname in fnames:
+        print(fname)
         m = measurement(fname)
         data.append(m)
     return data
