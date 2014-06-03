@@ -1,4 +1,4 @@
-import rotcoil
+import analysis.rotcoil as rotcoil
 
 #default_energy        = 3.0        # [GeV]
 default_r0             = 17.5/1000  # [m]

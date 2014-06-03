@@ -1,6 +1,6 @@
-import rotcoil
-import booster
-import test_dipole
+#import rotcoil
+import analysis.booster as booster
+import analysis.test_dipole as test_dipole
 
 ''' rotating_coil_measurements symbols '''
 

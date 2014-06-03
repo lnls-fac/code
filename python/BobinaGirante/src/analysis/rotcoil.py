@@ -322,9 +322,9 @@ def bar_print_summary(data, base_bar = False):
             std_relative_LN_avg[h] += data[i].relative_LN_avg[h] ** 2
             avg_relative_LS_avg[h] += data[i].relative_LS_avg[h]
             std_relative_LS_avg[h] += data[i].relative_LS_avg[h] ** 2
-            if (data[i].relative_LN_std[h] > max_relative_LN_std) or (data[i].relative_LN_std[h] is None):
+            if (max_relative_LN_std is None) or (data[i].relative_LN_std[h] > max_relative_LN_std) or (data[i].relative_LN_std[h] is None):
                 max_relative_LN_std = data[i].relative_LN_std[h]
-            if (data[i].relative_LS_std[h] > max_relative_LS_std) or (data[i].relative_LS_std[h] is None):
+            if (max_relative_LS_std is None) or (data[i].relative_LS_std[h] > max_relative_LS_std) or (data[i].relative_LS_std[h] is None):
                 max_relative_LS_std = data[i].relative_LS_std[h]
         avg_relative_LN_avg[h] /= nrpts
         std_relative_LN_avg[h] = math.sqrt(std_relative_LN_avg[h]/nrpts - avg_relative_LN_avg[h] ** 2)
