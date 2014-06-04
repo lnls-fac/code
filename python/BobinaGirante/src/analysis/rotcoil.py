@@ -10,7 +10,7 @@ import os
 
 colors_redline   = [(1,0,0),]
 colors_greenline = [(0,1,0),]
-colors_blueline  = [(0,0.2,0.8),]
+colors_blueline  = [(0,0,1),]
 
 
   
@@ -61,11 +61,11 @@ class multipoles:
         if self.absolute_LN_avg is not None:
             for i in range(len(self.harmonics)):
                 n = self.harmonics[i]
-                r += '{0:30s}: '.format('abs_mpole  (n={0:02d}) [{1:s}]'.format(n, self.calc_multipole_units(n))) + u'{0:+10.4e} \u00B1 {1:10.4e}'.format(self.absolute_LN_avg[i], self.absolute_LN_std[i]) + ', ' + u'{0:+10.4e} \u00B1 {1:10.4e}'.format(self.absolute_LS_avg[i], self.absolute_LS_std[i]) + '\n'
+                r += '{0:30s}: '.format('abs_mpole  (n={0:02d}) [{1:s}]'.format(n, self.calc_multipole_units(n))) + '{0:+10.4e} \u00B1 {1:10.4e}'.format(self.absolute_LN_avg[i], self.absolute_LN_std[i]) + ', ' + '{0:+10.4e} \u00B1 {1:10.4e}'.format(self.absolute_LS_avg[i], self.absolute_LS_std[i]) + '\n'
         if self.skew_angle_avg is not None:
             for i in range(len(self.harmonics)):
                 n = self.harmonics[i]
-                r += '{0:30s}: '.format('skew_angle (n={0:02d}) [rad]'.format(n)) + u'{0:+10.4e} \u00B1 {1:10.4e}'.format(self.skew_angle_avg[i], self.skew_angle_std[i]) + '\n'     
+                r += '{0:30s}: '.format('skew_angle (n={0:02d}) [rad]'.format(n)) + '{0:+10.4e} \u00B1 {1:10.4e}'.format(self.skew_angle_avg[i], self.skew_angle_std[i]) + '\n'     
         if self.r0 is not None:
             r += '{0:30s}: '.format('r0[m]') +  str(self.r0) + '\n'
         if self.main_multipole is not None:
@@ -74,7 +74,7 @@ class multipoles:
         if self.relative_LN_avg is not None:
             for i in range(len(self.harmonics)):
                 n = self.harmonics[i]
-                r += '{0:30s}: '.format('rel_mpole  (n={0:02d})'.format(n)) + u'{0:+10.4e} \u00B1 {1:10.4e}'.format(self.relative_LN_avg[i], self.relative_LN_std[i]) + ', ' + u'{0:+10.4e} \u00B1 {1:10.4e}'.format(self.relative_LS_avg[i], self.relative_LS_std[i]) + '\n'
+                r += '{0:30s}: '.format('rel_mpole  (n={0:02d})'.format(n)) + '{0:+10.4e} \u00B1 {1:10.4e}'.format(self.relative_LN_avg[i], self.relative_LN_std[i]) + ', ' + '{0:+10.4e} \u00B1 {1:10.4e}'.format(self.relative_LS_avg[i], self.relative_LS_std[i]) + '\n'
         return r
     
     @staticmethod
@@ -399,7 +399,7 @@ def bar_plot_multipoles(data,
                         ymin = default_ymin,
                         legend = None,
                         plot_type = 'normal_multipoles',
-                        base_bar = False,
+                        base_bar = 0,
                         ):  
     """ generic drive routine that plots multipole (and skew angle) comparisons """
     if harmonics is None:
@@ -426,6 +426,7 @@ def bar_plot_multipoles(data,
     for j in range(nr_bars):
         x, y, n = [], [], 1
         for i in range(len(harmonics)):
+            x, y = [], []
             try:
                 ''' selects data to plot and errorbars '''
                 idx          = data[j].harmonics.index(harmonics[i]) 
@@ -448,15 +449,19 @@ def bar_plot_multipoles(data,
                 ''' checks bars sign acts accordingly (color settings) '''
                 if multipole_0 < 0:
                     ''' negative multipoles get painted represented with red bars '''
-                    c = colors_redline[j%len(colors_blueline)]    
+                    c = colors_redline[j%len(colors_redline)]    
                     ''' bars are plotted with absolute values '''
                     multipole_0 = abs(multipole_0) 
                 else:
                     ''' positive multipoles get painted represented with blue bars '''
                     c = colors_blueline[j%len(colors_blueline)]
                     
-                if (j == 0) and (base_bar == True):
-                    c = colors_greenline[0]
+                if (j < base_bar):
+                    factor  = 0.5
+                    #c = colors_greenline[0]
+                else:
+                    factor = 1.0 
+                    
 
                 multipole_p  = multipole_0 + error
                 multipole_n  = multipole_0 - error
@@ -479,13 +484,17 @@ def bar_plot_multipoles(data,
                     plt.plot([x0, x0], [multipole_n, multipole_p], color = black)
                     plt.plot([x0-0.25*dx, x0+0.25*dx], [multipole_n, multipole_n], color = black)
                     plt.plot([x0-0.25*dx, x0+0.25*dx], [multipole_p, multipole_p], color = black)
+                    ''' plots bars '''
+                    c = (factor*c[0],factor*c[1],factor*c[2])
+                    plt.fill(x,y, color = c)
+                    plt.plot(x,y, color = black)
             except ValueError:
                 pass
             finally:
                 n += 1
         ''' plots bars '''
-        plt.fill(x,y, color = c)
-        plt.plot(x,y, color = black)
+        #plt.fill(x,y, color = c)
+        #plt.plot(x,y, color = black)
     ax.grid(True)
     ax.xaxis.set_ticks(xticks)
     ax.xaxis.set_ticklabels(['{0:d}'.format(i) for i in harmonics])

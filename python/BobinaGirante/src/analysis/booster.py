@@ -6,16 +6,38 @@ default_harmonics      = [1,2,3,4,5,6,7]
 default_quad_harmonics = [1,2,3,4,5,6,7,8,9,10,14]
 default_plot_label     = 'multipoles'
 
+
+''' SIMULATION '''
+''' ---------- '''
+def quadrupole_multipole_simulation():
+    
+    harmonics       = [3,    4,    5,    6,    7,    8,    9,    10,     14  ]
+    relative_LN_avg = [0,    0,    0,   -1.0310e-3, 0,    0,    0,    1.18022e-3, 3e-5] # integracao em toda regiao da simulacao
+    relative_LN_std = [7e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4,   0   ]
+    #relative_LN_std = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
+    relative_LS_avg = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
+    relative_LS_std = [1e-4, 5e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4,   0   ]
+    #relative_LS_std = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
+    m = rotcoil.multipoles(                        
+                 harmonics = harmonics, r0 = default_r0,  
+                 relative_LN_avg = relative_LN_avg,
+                 relative_LS_avg = relative_LS_avg,
+                 relative_LN_std = relative_LN_std,
+                 relative_LS_std = relative_LS_std,
+                 )
+    return m
+        
+
 ''' SPECS '''
 ''' ----- '''
 
 def quadrupole_multipole_specs():
     
-    harmonics       = [3,4,5,6,7,8,9,10,14]
-    relative_LN_avg = [0,0,0,-1e-3,0,0,0,1.1e-3,8e-5]
-    relative_LN_std = [7e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4]
-    relative_LS_avg = [0,0,0,0,0,0,0,0,0]
-    relative_LS_std = [1e-4,5e-4,1e-4,1e-4,1e-4,1e-4,1e-4,1e-4,1e-4]
+    harmonics       = [3,    4,    5,    6,    7,    8,    9,    10,     14  ]
+    relative_LN_avg = [0,    0,    0,   -1e-3, 0,    0,    0,    1.1e-3, 8e-5]
+    relative_LN_std = [7e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4,   0   ]
+    relative_LS_avg = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
+    relative_LS_std = [1e-4, 5e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4,   0   ]
     m = rotcoil.multipoles(                        
                  harmonics = harmonics, r0 = default_r0,  
                  relative_LN_avg = relative_LN_avg,
@@ -49,23 +71,28 @@ def quadrupoles_repetibility(folder,
     main_multipole  = multipole.select_main_multipole(2)
     ''' does multipolar analysis on raw data '''
     multipoles      = rotcoil.calc_multipoles_from_measurements(measurements, harmonics, r0, main_multipole = main_multipole)
+    ''' loads quadrupolar simulation from database '''
+    quad_sim = quadrupole_multipole_simulation()
+    ''' inserts simulation in data set '''
+    multipoles      = [quad_sim] + multipoles
     ''' loads quadrupolar specifications from database '''
-    quad_specs = quadrupole_multipole_specs()
+    quad_specs      = quadrupole_multipole_specs()
     ''' inserts specs in data set '''
     multipoles      = [quad_specs] + multipoles
 
+
     ''' summary '''
-    rotcoil.bar_print_summary(data = multipoles[1:])
+    rotcoil.bar_print_summary(data = multipoles[2:])
     
     ''' excitation curve '''
-    rotcoil.current_plot_multipoles(data = multipoles[1:],  
-                            harmonic_order = 1,
-                            plot_label = '', 
-                            legend = None,
-                            plot_type = 'normal_multipoles',
-                            current_range = None
-                            )  
-     
+#     rotcoil.current_plot_multipoles(data = multipoles[1:],  
+#                             harmonic_order = 1,
+#                             plot_label = '', 
+#                             legend = None,
+#                             plot_type = 'normal_multipoles',
+#                             current_range = None
+#                             )  
+#      
     ''' plots normal and skew multipoles for comparison '''
     if plot_normal_multipoles_flag or plot_skew_multipoles_flag:
         rotcoil.bar_plot_multipoles_repetibility(multipoles, harmonics = harmonics, r0 = r0,                                  
@@ -73,7 +100,7 @@ def quadrupoles_repetibility(folder,
                                                  plot_normal_multipoles_flag = plot_normal_multipoles_flag, 
                                                  plot_skew_multipoles_flag = plot_skew_multipoles_flag,
                                                  plot_skew_angle_flag = False,
-                                                 base_bar = True)
+                                                 base_bar = 2)
     
     ''' plots skew angle for all multipoles '''
     if plot_skew_angle_flag:
