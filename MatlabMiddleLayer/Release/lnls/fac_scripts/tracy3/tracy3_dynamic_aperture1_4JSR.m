@@ -98,7 +98,7 @@ for j = 1:2
     sb(j,1) = subplot(2,2,(2*j-1),'Parent',f,'FontSize',size_font,...
         'Position',[0.065 (0.60-(j-1)*0.5) 0.368 0.382]);
     pcolor(sb(j,1), 1000*dados1.x, 1000*dados1.y, idx_daxy);
-    colormap(sb(j,1), type_colormap); shading(sb(j,1), 'interp');
+    colormap(sb(j,1), type_colormap); shading(sb(j,1), 'flat');%'interp');
     box(sb(j,1),'on');
     xlabel(sb(j,1), 'x (mm)','FontSize',size_font);
     ylabel(sb(j,1), 'y (mm)','FontSize',size_font);
@@ -109,7 +109,7 @@ for j = 1:2
     sb(j,2) = subplot(2,2,2*j,'Parent',f,'FontSize',size_font,...
         'Position',[0.53 (0.60-(j-1)*0.5) 0.368 0.382]);
     pcolor(sb(j,2), 100*dados2.en, 1000*dados2.x, idx_daex);
-    colormap(sb(j,2), type_colormap); shading(sb(j,2), 'interp');
+    colormap(sb(j,2), type_colormap); shading(sb(j,2), 'flat');%'interp');
     box(sb(j,2),'on');
     xlabel(sb(j,2), '\delta (%)','FontSize',size_font);
     ylabel(sb(j,2), 'x (mm)','FontSize',size_font);
@@ -119,16 +119,16 @@ for j = 1:2
 end
 
 annotation(f,'textbox',[0.392 0.604 0.040 0.0402],'String',{'(a)'},...
-    'FontSize',24,'FitBoxToText','off','LineStyle','none');
+    'FontSize',24,'FitBoxToText','off','LineStyle','none','Color','w');
 
 annotation(f,'textbox',[0.856 0.602 0.0409 0.0402],'String',{'(b)'},...
-    'FontSize',24,'FitBoxToText','off','LineStyle','none');
+    'FontSize',24,'FitBoxToText','off','LineStyle','none','Color','w');
 
 annotation(f,'textbox',[0.392 0.104 0.0383 0.0402],'String',{'(c)'},...
-    'FontSize',24,'FitBoxToText','off','LineStyle','none');
+    'FontSize',24,'FitBoxToText','off','LineStyle','none','Color','w');
 
 annotation(f,'textbox', [0.855 0.102 0.0418 0.0402],'String',{'(d)'},...
-    'FontSize',24,'FitBoxToText','off','LineStyle','none');
+    'FontSize',24,'FitBoxToText','off','LineStyle','none','Color','w');
 
 colorbar('peer',sb(2,2), [0.91 0.1 0.013 0.88], 'FontSize',24,...
     'YTick',[0,20,40,60,80,100],'YTickLabel',...
@@ -136,7 +136,7 @@ colorbar('peer',sb(2,2), [0.91 0.1 0.013 0.88], 'FontSize',24,...
 
 % Create textbox
 annotation(f,'textbox', [0.317 0.879 0.074 0.048],'String',{'\delta = 0'},...
-'FontSize',24, 'FitBoxToText','off', 'LineStyle','none');
+'FontSize',24, 'FitBoxToText','off', 'LineStyle','none','Color','w');
 % Create textbox
 annotation(f,'textbox', [0.545 0.619 0.127 0.046],'String',{'y = 1 mm'},...
-'FontSize',24, 'FitBoxToText','off', 'LineStyle','none');
+'FontSize',24, 'FitBoxToText','off', 'LineStyle','none','Color','w');

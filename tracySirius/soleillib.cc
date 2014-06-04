@@ -1261,15 +1261,16 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
     getcod(0.0, lastpos);
     
     for(long i = 0; i < nr_radial; ++i) {
+        
         double an = 1e-4 + (M_PI - 2e-4) * i / (nr_radial - 1.0);
         double ca = cos(an);
         double sa = sin(an);
-	double r_stable   = sqrt((xscale * ca)*(xscale * ca) + (yscale * sa)*(yscale * sa));
+	    double r_stable   = sqrt((xscale * ca)*(xscale * ca) + (yscale * sa)*(yscale * sa));
         double r_unstable = sqrt((xscale * ca)*(xscale * ca) + (yscale * sa)*(yscale * sa));
 	
-	fprintf(stdout, "(%03i/%03i): ", i+1, nr_radial);
+	    fprintf(stdout, "(%03i/%03i): ", i+1, nr_radial);
         
-	/* search initial stable radius */
+	    /* search initial stable radius */
         while (true) {
             double x = r_stable * ca;
             double z = r_stable * sa;
@@ -1280,8 +1281,9 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
 	            r_stable /= 2.0;
 		    fprintf(stdout, "\/"); fflush(stdout);
 	        }
-	}
-	/* search initial unstable radius */
+	    }
+	    
+	    /* search initial unstable radius */
         while (true) {
             double x = r_unstable * ca;
             double z = r_unstable * sa;
@@ -1292,9 +1294,10 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
 	        } else {
 	            break;
 	        }
-	}
-	/* does bisection search */
-	while (r_unstable - r_stable > r_tol) {
+	    }
+	
+	    /* does bisection search */
+	    while (r_unstable - r_stable > r_tol) {
 	        double r = 0.5 * (r_stable + r_unstable);
 	        double x = r * ca;
             	double z = r * sa;
@@ -1306,14 +1309,14 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
 	            r_unstable = r;
 		    fprintf(stdout, "-"); fflush(stdout);
 	        }  
-	}
+	    }
         fprintf(stdout, " ");
-	/* prints final solution */
-	double r = r_stable;
+	    /* prints final solution */
+	    double r = r_stable;
         double x = r * ca;
         double z = r * sa;
-	fprintf(outf,   "%-15.6e %-15.6e \n", x, z);
-	fprintf(stdout, "%-15.6e %-15.6e \n", x, z);
+	    fprintf(outf,   "%-15.6e %-15.6e \n", x, z);
+	    fprintf(stdout, "%-15.6e %-15.6e \n", x, z);
     }
     fclose(outf);
 }
