@@ -5,4 +5,3 @@ analysis.test_dipole.test_dipole_repetibility(folder, plot_label = 'TEST DIPOLE'
 
 folder = '/home/ximenes/Desktop/TESTES-BOBINA/Quadrupolo'
 analysis.booster.quadrupoles_repetibility(folder, plot_label = 'QUADRUPOLES', harmonics = analysis.booster.default_quad_harmonics, ymin_multipoles = 1e-6, ymin_skew_angle = 1e-2, plot_normal_multipoles_flag = True, plot_skew_multipoles_flag = True, plot_skew_angle_flag = True)
-

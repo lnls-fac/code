@@ -1,5 +1,5 @@
 import numpy
-import rotcoil
+import analysis.rotcoil as rotcoil
 import matplotlib.pyplot as plt
 
 default_r0             = 17.5/1000  # [m]
