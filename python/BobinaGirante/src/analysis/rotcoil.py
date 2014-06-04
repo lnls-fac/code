@@ -178,7 +178,7 @@ class multipoles:
         ''' Fourier transform of integrated voltage '''
         F = [0] * nr_turns
         for i in range(nr_turns):
-            F[i] = (numpy.fft.fft(self.measurement.raw[:,i]))/(nr_points/2)
+            F[i] = (numpy.fft.fft(self.measurement.raw[:,i]))/(nr_points/2.0)
             
         ''' calcs Jn (skew multipole), Kn (normal multipole) and An (skew angle) from FFT of integrated voltage '''
         dtheta = 2*numpy.pi/nr_points
@@ -468,7 +468,7 @@ def bar_plot_multipoles(data,
                 if multipole_p < ymin:
                     multipole_p = ymin 
                 x0 = n * (nr_bars+2) + j
-                if j == nr_bars/2:
+                if j == nr_bars//2:
                     xticks.append(x0)
                 x.append(x0-0.5*dx), y.append(ymin)
                 x.append(x0-0.5*dx), y.append(multipole_0)
