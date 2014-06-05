@@ -119,7 +119,7 @@ class multipoles:
         if self.absolute_LN_avg is None:
             self.calc_absolute_multipoles()
         
-        main = self.main_multipole[1] * (self.r0 ** self.main_multipole[0])
+        main = self.main_multipole[1] * (self.r0 ** (self.main_multipole[0]-1))
         
         if self.absolute_LN is None:
             self.relative_LN_avg = [0] * len(self.harmonics)
@@ -128,10 +128,10 @@ class multipoles:
             self.relative_LS_std = [0] * len(self.harmonics)
             for j in range(len(self.harmonics)):
                 n = self.harmonics[j]
-                self.relative_LN_avg[j]  = self.absolute_LN_avg[j] * (self.r0 ** n) / main
-                self.relative_LS_avg[j]  = self.absolute_LS_avg[j] * (self.r0 ** n) / main
-                self.relative_LN_std[j]  = self.absolute_LN_std[j] * (self.r0 ** n) / main
-                self.relative_LS_std[j]  = self.absolute_LS_std[j] * (self.r0 ** n) / main
+                self.relative_LN_avg[j]  = self.absolute_LN_avg[j] * (self.r0 ** (n-1)) / main
+                self.relative_LS_avg[j]  = self.absolute_LS_avg[j] * (self.r0 ** (n-1)) / main
+                self.relative_LN_std[j]  = self.absolute_LN_std[j] * (self.r0 ** (n-1)) / main
+                self.relative_LS_std[j]  = self.absolute_LS_std[j] * (self.r0 ** (n-1)) / main
         else:
             nr_turns  = self.measurement.nr_turns
             self.relative_LN = numpy.zeros((len(self.harmonics), nr_turns))
@@ -139,8 +139,8 @@ class multipoles:
             for j in range(len(self.harmonics)):
                 n = self.harmonics[j]
                 for i in range(nr_turns):
-                    self.relative_LN[j,i] = self.absolute_LN[j,i] * (self.r0 ** n) / main
-                    self.relative_LS[j,i] = self.absolute_LS[j,i] * (self.r0 ** n) / main
+                    self.relative_LN[j,i] = self.absolute_LN[j,i] * (self.r0 ** (n-1)) / main
+                    self.relative_LS[j,i] = self.absolute_LS[j,i] * (self.r0 ** (n-1)) / main
         
             ''' Calculates average and std of the Normal and Skew relative multipoles '''  
             self.relative_LN_avg  = numpy.mean(self.relative_LN,axis=1)   
@@ -163,10 +163,10 @@ class multipoles:
             self.absolute_LS_std = [0] * len(self.harmonics)
             for j in range(len(self.harmonics)):
                 n = self.harmonics[j]
-                self.absolute_LN_avg[j] = main * self.relative_LN_avg[j] / (self.r0 ** n)
-                self.absolute_LS_avg[j] = main * self.relative_LS_avg[j] / (self.r0 ** n)
-                self.absolute_LN_std[j] = main * self.relative_LN_std[j] / (self.r0 ** n)
-                self.absolute_LS_std[j] = main * self.relative_LS_std[j] / (self.r0 ** n)
+                self.absolute_LN_avg[j] = main * self.relative_LN_avg[j] / (self.r0 ** (n-1))
+                self.absolute_LS_avg[j] = main * self.relative_LS_avg[j] / (self.r0 ** (n-1))
+                self.absolute_LN_std[j] = main * self.relative_LN_std[j] / (self.r0 ** (n-1))
+                self.absolute_LS_std[j] = main * self.relative_LS_std[j] / (self.r0 ** (n-1))
             return  
             
         Ne = self.measurement.rcoil_Ne # Numero de Espiras
@@ -295,6 +295,9 @@ def calc_alpha_blending(fg, alpha, bg=(1,1,1)):
     """ does color linear combination for alpha-blending (ps figures loose alpha-blending props unless it is hard-coded in colors) """
     return (alpha*fg[0]+(1-alpha)*bg[0],alpha*fg[1]+(1-alpha)*bg[1],alpha*fg[2]+(1-alpha)*bg[2])
     
+def excitation_print_summary(data, base_bar = False):
+    pass
+
 def bar_print_summary(data, base_bar = False):
     
     if base_bar:
@@ -588,16 +591,15 @@ def read_measurements_from_folder(folder):
         data.append(m)
     return data
 
-def calc_multipoles_from_measurements(measurements, harmonics, r0, main_multipole):
+def calc_multipoles_from_measurements(measurements, harmonics, r0, main_multipole = None, main_harmonic = None):
     """ calcs absolute and relative multipoles for a list of measurements """
     
     multip = []
-    #main_multipole = None
     for d in measurements:
         m = multipoles(measurement = d, harmonics = harmonics)
         m.calc_absolute_multipoles()
-        #if main_multipole is None:
-        #    main_multipole  = m.select_main_multipole(main_harmonic)
+        if main_multipole is None:
+            main_multipole  = m.select_main_multipole(main_harmonic)
         m.calc_relative_multipoles(r0 = r0, main_multipole = main_multipole)
         multip.append(m)
     return multip
