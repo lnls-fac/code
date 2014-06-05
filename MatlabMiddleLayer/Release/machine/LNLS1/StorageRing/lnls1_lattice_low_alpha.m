@@ -1,6 +1,10 @@
 function r = lnls1_lattice_low_alpha(energy)
 %LNLS1_LATTICE - LNLS1 Lattice Model (automatically created with <build_lattice_model>
 
+% Modelo calibrado pelo LOCO em 26-04-14
+% A6SD01, A6SD02 e A6SF do modelo ajustados de forma a fitar alpha2 da
+% medida nu_s vs delta_FreqRF de 29-05-14
+
 %%% HEADER SECTION %%%
 
 global THERING
@@ -114,19 +118,19 @@ e5 = rbend('BEND', 1.432*(15/30), (2*pi/12)*(15/30), 0, (2*pi/12)/2, 0, 'BndMPol
 A12DI_element = [e1 e2 e3 e4 e5];
 
 % A6SF Template %
-e1 = sextupole('A6SF', 0.1/2, 45.91, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SF', 0.1/2, 42.390381924315747, 'StrMPoleSymplectic4Pass');
 e2 = marker('SCENTER', 'IdentityPass');
-e3 = sextupole('A6SF', 0.1/2, 45.91, 'StrMPoleSymplectic4Pass');
+e3 = sextupole('A6SF', 0.1/2, 42.390381924315747, 'StrMPoleSymplectic4Pass');
 A6SF_element = [e1 e2 e3];
 
 % A6SD01 Template %
-e1 = sextupole('A6SD01', 0.1/2, -27.97, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD01', 0.1/2, -27.97, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD01', 0.1/2, -36.782590413506860, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD01', 0.1/2, -36.782590413506860, 'StrMPoleSymplectic4Pass');
 A6SD01_element = [e1 e2];
 
 % A6SD02 Template %
-e1 = sextupole('A6SD02', 0.1/2, -27.97, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD02', 0.1/2, -27.97, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD02', 0.1/2, -36.764522073472342, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD02', 0.1/2, -36.764522073472342, 'StrMPoleSymplectic4Pass');
 A6SD02_element = [e1 e2];
 
 % LCENTER Template %
