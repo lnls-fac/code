@@ -13,11 +13,11 @@ def quadrupole_multipole_simulation():
     
     harmonics       = [3,    4,    5,    6,    7,    8,    9,    10,     14  ]
     relative_LN_avg = [0,    0,    0,   -1.0310e-3, 0,    0,    0,    1.18022e-3, 3e-5] # integracao em toda regiao da simulacao
-    relative_LN_std = [7e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4,   0   ]
-    #relative_LN_std = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
+    #relative_LN_std = [7e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4, 4e-4,   0   ]
+    relative_LN_std = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
     relative_LS_avg = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
-    relative_LS_std = [1e-4, 5e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4,   0   ]
-    #relative_LS_std = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
+    #relative_LS_std = [1e-4, 5e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4, 1e-4,   0   ]
+    relative_LS_std = [0,    0,    0,    0,    0,    0,    0,    0,      0   ]
     m = rotcoil.multipoles(                        
                  harmonics = harmonics, r0 = default_r0,  
                  relative_LN_avg = relative_LN_avg,
@@ -54,7 +54,7 @@ def quadrupole_multipole_specs():
 def quadrupoles_excitation(folder,
                           harmonics = default_quad_harmonics,
                           r0 = default_r0,                                  
-                          plot_label = 'QUADRUPOLES',
+                          plot_label = 'BOOSTER QUADRUPOLES',
                           ymin_multipoles = 1e-6,
                           ymin_skew_angle = 1e-2,
                           legend = None,
@@ -79,6 +79,16 @@ def quadrupoles_excitation(folder,
     ''' summary '''
     rotcoil.excitation_print_summary(data = multipoles[2:])
     
+    ''' excitation curve '''
+    rotcoil.current_plot_multipoles(data = multipoles[3:],  # takes off first current value  
+                                    harmonic_order = 2,
+                                    plot_label = plot_label, 
+                                    legend = None,
+                                    plot_type = 'absolute_normal_multipoles',
+                                    current_range = None
+                                    )  
+      
+
     ''' plots normal and skew multipoles for comparison '''
     if plot_normal_multipoles_flag or plot_skew_multipoles_flag:
         rotcoil.bar_plot_multipoles_repetibility(multipoles, harmonics = harmonics, r0 = r0,                                  
@@ -95,7 +105,7 @@ def quadrupoles_excitation(folder,
                                                  plot_normal_multipoles_flag = False, 
                                                  plot_skew_multipoles_flag = False,
                                                  plot_skew_angle_flag = True,
-                                                 base_bar = False)
+                                                 base_bar = 0)
         
 def quadrupoles_repetibility(folder,
                              harmonics = default_quad_harmonics,
@@ -130,15 +140,7 @@ def quadrupoles_repetibility(folder,
     ''' summary '''
     rotcoil.bar_print_summary(data = multipoles[2:])
     
-    ''' excitation curve '''
-#     rotcoil.current_plot_multipoles(data = multipoles[1:],  
-#                             harmonic_order = 1,
-#                             plot_label = '', 
-#                             legend = None,
-#                             plot_type = 'normal_multipoles',
-#                             current_range = None
-#                             )  
-#      
+
     ''' plots normal and skew multipoles for comparison '''
     if plot_normal_multipoles_flag or plot_skew_multipoles_flag:
         rotcoil.bar_plot_multipoles_repetibility(multipoles, harmonics = harmonics, r0 = r0,                                  
