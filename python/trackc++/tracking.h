@@ -42,19 +42,21 @@ Status::type elementpass (const Element& el, std::vector<Pos<T> >& orig_pos) {
 		if ((status = pm_drift_pass<T>(orig_pos, el)) != Status::success) return status;
 		break;
 	case PassMethod::pm_str_mpole_symplectic4_pass:
-		//break;
-		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, false)) != Status::success) return status;
+		break;
+	case PassMethod::pm_str_mpole_symplectic4_rad_pass:
+		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, true)) != Status::success) return status;
 		break;
 	case PassMethod::pm_bnd_mpole_symplectic4_pass:
-		//break;
-		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, false)) != Status::success) return status;
+		break;
+	case PassMethod::pm_bnd_mpole_symplectic4_rad_pass:
+		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, true)) != Status::success) return status;
 		break;
 	case PassMethod::pm_corrector_pass:
-		//break;
 		if ((status = pm_corrector_pass<T>(orig_pos, el)) != Status::success) return status;
 		break;
 	case PassMethod::pm_cavity_pass:
-		//break;
 		if ((status = pm_cavity_pass<T>(orig_pos, el)) != Status::success) return status;
 		break;
 	case PassMethod::pm_thinquad_pass:
@@ -91,7 +93,7 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 			}
 		}
 
-		switch (line[e].pass_method) {
+		switch (element.pass_method) {
 			case PassMethod::pm_identity_pass:
 				if ((status = pm_identity_pass<T>(orig_pos, element)) != Status::success) return status;
 				break;
@@ -99,19 +101,21 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 				if ((status = pm_drift_pass<T>(orig_pos, element)) != Status::success) return status;
 				break;
 			case PassMethod::pm_str_mpole_symplectic4_pass:
-				//break;
-				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, false)) != Status::success) return status;
+				break;
+			case PassMethod::pm_str_mpole_symplectic4_rad_pass:
+				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, true)) != Status::success) return status;
 				break;
 			case PassMethod::pm_bnd_mpole_symplectic4_pass:
-				//break;
-				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, false)) != Status::success) return status;
+				break;
+			case PassMethod::pm_bnd_mpole_symplectic4_rad_pass:
+				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, true)) != Status::success) return status;
 				break;
 			case PassMethod::pm_corrector_pass:
-				//break;
 				if ((status = pm_corrector_pass<T>(orig_pos, element)) != Status::success) return status;
 				break;
 			case PassMethod::pm_cavity_pass:
-				//break;
 				if ((status = pm_cavity_pass<T>(orig_pos, element)) != Status::success) return status;
 				break;
 			case PassMethod::pm_thinquad_pass:
@@ -124,6 +128,9 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 				return Status::passmethod_not_defined;
 		}
 
+		if (((orig_pos[0].rx < -1) or (orig_pos[0].rx > 1)) or ((orig_pos[0].ry < -1) or (orig_pos[0].ry > 1))) {
+			std::cout << "kkk" << std::endl;
+		}
 		*element_offset = (*element_offset + 1) % nr_elements; // increment element index
 
 	}

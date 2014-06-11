@@ -67,20 +67,14 @@ def quadrupoles_excitation(folder,
     measurements    = rotcoil.read_measurements_from_folder(folder = folder)
     ''' does multipolar analysis on raw data '''
     multipoles      = rotcoil.calc_multipoles_from_measurements(measurements, harmonics, r0 = r0, main_harmonic = 2)
-    ''' loads quadrupolar simulation from database '''
-    quad_sim = quadrupole_multipole_simulation()
-    ''' inserts simulation in data set '''
-    multipoles      = [quad_sim] + multipoles
-    ''' loads quadrupolar specifications from database '''
-    quad_specs      = quadrupole_multipole_specs()
-    ''' inserts specs in data set '''
-    multipoles      = [quad_specs] + multipoles
+    ''' inserts specs and simulation data in data set '''
+    multipoles      = [quadrupole_multipole_specs(), quadrupole_multipole_simulation()] + multipoles
     
     ''' summary '''
     rotcoil.excitation_print_summary(data = multipoles[2:])
     
     ''' excitation curve '''
-    rotcoil.current_plot_multipoles(data = multipoles[3:],  # takes off first current value  
+    rotcoil.current_plot_multipoles(data = multipoles[2:],  
                                     harmonic_order = 2,
                                     plot_label = plot_label, 
                                     legend = None,
@@ -89,11 +83,20 @@ def quadrupoles_excitation(folder,
                                     )  
       
 
-    ''' plots normal and skew multipoles for comparison '''
-    if plot_normal_multipoles_flag or plot_skew_multipoles_flag:
-        rotcoil.bar_plot_multipoles_repetibility(multipoles, harmonics = harmonics, r0 = r0,                                  
+    ''' plots normal multipoles for comparison '''
+    if plot_normal_multipoles_flag:
+        rotcoil.bar_plot_multipoles_repetibility(multipoles, harmonics = [h for h in harmonics if h != 2], r0 = r0,                                  
                                                  plot_label = plot_label, ymin = ymin_multipoles, legend = legend,
                                                  plot_normal_multipoles_flag = plot_normal_multipoles_flag, 
+                                                 plot_skew_multipoles_flag = False,
+                                                 plot_skew_angle_flag = False,
+                                                 base_bar = 2)
+        
+    ''' plots skew multipoles for comparison '''
+    if plot_skew_multipoles_flag:
+        rotcoil.bar_plot_multipoles_repetibility(multipoles, harmonics = harmonics, r0 = r0,                                  
+                                                 plot_label = plot_label, ymin = ymin_multipoles, legend = legend,
+                                                 plot_normal_multipoles_flag = False, 
                                                  plot_skew_multipoles_flag = plot_skew_multipoles_flag,
                                                  plot_skew_angle_flag = False,
                                                  base_bar = 2)
