@@ -5,50 +5,65 @@
 // affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
-
 #include "trackc++.h"
 
-int create_model(std::vector<Element>& the_ring) {
+int test_linepass(const std::vector<Element>& the_ring) {
 
-	//return 0;
 
-	Element ds = Element::drift      ("ds", 1.1);
-	Element qd = Element::quadrupole ("qd", 1.2, 3.0);
-	Element sf = Element::sextupole  ("sf", 1.2, -3.2);
-	Element di = Element::rbend      ("di", 1.1, 0.1234, 0, 0, 0.1, 4.1);
+	std::vector<Pos<> > particles;
+	Pos<> pos;
+	pos.rx = 0.00100;
+	pos.ry = 0.00010;
+	particles.push_back(pos);
 
-	//std::vector<Element> the_ring;
-	//the_ring.clear();
+	std::vector<Pos<> > new_particles;
+	int element_offset = 0;
+	linepass(the_ring, particles, new_particles, &element_offset, true);
+	for(unsigned int i=0; i<new_particles.size(); ++i) {
+		const Pos<>& c = new_particles[i];
+		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, the_ring[i].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de);
+	}
 
-	the_ring.push_back(ds);
-	the_ring.push_back(qd);
-	the_ring.push_back(sf);
-	the_ring.push_back(di);
-
-//	printlattice(the_ring);
-//
-//	std::vector<Pos<> > particles;
-//	Pos<> pos;
-//	pos.rx = 0.001;
-//	particles.push_back(pos);
-//
-//	Status::type stat;
-//	int element_idx;
-//	std::vector<Pos<> > new_particles;
-//	if ((stat = linepass (the_ring, particles, new_particles, &element_idx, false)) != Status::success) {
-//		std::cerr << "Error: " << stat << std::endl;
-//	}
 
 	return 0;
+
 }
 
+int test_ringpass(const std::vector<Element>& the_ring) {
+
+
+	std::vector<Pos<> > particles;
+	Pos<> pos;
+	pos.rx = 0.00100;
+	pos.ry = 0.00010;
+	particles.push_back(pos);
+
+	std::vector<Pos<> > new_particles;
+	int element_offset = 0, turn_idx = 0;
+
+	ringpass(the_ring, particles, new_particles, 1000, &turn_idx, &element_offset);
+	for(unsigned int i=0; i<new_particles.size(); ++i) {
+		const Pos<>& c = new_particles[i];
+		//fprintf(stdout, "%03i: %+20.17E %+20.17E %+20.17E %+20.17E %+20.17E\n", i+1, c.rx, c.px, c.ry, c.py, c.de);
+		fprintf(stdout, "%03i: %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, c.rx, c.px, c.ry, c.py, c.de);
+	}
+
+//	particles.clear();
+//	particles.push_back(new_particles[new_particles.size()-1]);
+//	new_particles.clear();
+//	linepass(the_ring, particles, new_particles, &element_offset, true);
+//	for(unsigned int i=0; i<new_particles.size(); ++i) {
+//		const Pos<>& c = new_particles[i];
+//		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, the_ring[i].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de);
+//	}
+
+
+	return 0;
+
+}
 #include <cstdio>
 
-int test_findm66() {
-
-	std::vector<Element> the_ring;
-
-	create_model(the_ring);
+int test_findm66(const std::vector<Element>& the_ring) {
 
 	std::vector<double*> m66;
 
@@ -77,8 +92,19 @@ int test_findm66() {
 
 }
 
+
 int main() {
 
-	test_findm66();
+	std::vector<Element> the_ring;
+	sirius_v500(the_ring);
+
+	//std::vector<Element> the_ring2(the_ring);
+	//the_ring2.insert(the_ring2.begin(), the_ring.begin(), the_ring.end());
+	//latt_print(the_ring);
+	//std::cout << the_ring.size() << std::endl;
+	//test_findm66(the_ring);
+	//test_linepass(the_ring);
+
+	test_ringpass(the_ring);
 
 }

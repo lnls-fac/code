@@ -16,4 +16,6 @@
 #include "tracking.h"
 #include "tpsa.h"
 
+void sirius_v500(std::vector<Element>& the_ring);
+
 #endif

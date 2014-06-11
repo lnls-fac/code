@@ -20,7 +20,6 @@
 
 Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
 
-
 	Status::type status  = Status::success;
 
 	// checks consistency of data

@@ -351,11 +351,11 @@ def current_plot_multipoles(data,
         r0 = 0
         
     idx_attr_avg, idx_attr_std, idx_ylabel, idx_title = 0, 1, 2, 3
-    options = {'skew_multipoles'            : ('relative_LS_avg', 'relative_LS_std', 'relative skew multipole strength (r$_0$ = ' + str(r0*1000) + ' mm)', 'teste'),
-               'normal_multipoles'          : ('relative_LN_avg', 'relative_LN_std', 'relative normal multipole strength (r$_0$ = ' + str(r0*1000) + ' mm)', 'teste'),
+    options = {'skew_multipoles'            : ('relative_LS_avg', 'relative_LS_std', 'relative skew multipole strength (r$_0$ = ' + str(r0*1000) + ' mm)', plot_label),
+               'normal_multipoles'          : ('relative_LN_avg', 'relative_LN_std', 'relative normal multipole strength (r$_0$ = ' + str(r0*1000) + ' mm)', plot_label),
                'skew_angle'                 : ('skew_angle_avg',  'skew_angle_std',  'skew angle [mrad]', 'teste'),
-               'absolute_skew_multipoles'   : ('absolute_LS_avg', 'ansolute_LS_std', 'absolute skew multipole strength [' + data[0].calc_multipole_units(harmonic_order) + ']', 'teste'), 
-               'absolute_normal_multipoles' : ('absolute_LN_avg', 'ansolute_LN_std', 'absolute normal multipole strength [' + data[0].calc_multipole_units(harmonic_order) + ']', 'teste'),
+               'absolute_skew_multipoles'   : ('absolute_LS_avg', 'absolute_LS_std', 'absolute skew multipole strength [' + data[0].calc_multipole_units(harmonic_order) + ']', plot_label), 
+               'absolute_normal_multipoles' : ('absolute_LN_avg', 'absolute_LN_std', 'absolute normal multipole strength [' + data[0].calc_multipole_units(harmonic_order) + ']', plot_label),
                }
     
     ''' builds lists with current and multipoles values (and error bars) '''
@@ -598,7 +598,7 @@ def calc_multipoles_from_measurements(measurements, harmonics, r0, main_multipol
     for d in measurements:
         m = multipoles(measurement = d, harmonics = harmonics)
         m.calc_absolute_multipoles()
-        if main_multipole is None:
+        if main_harmonic is not None:
             main_multipole  = m.select_main_multipole(main_harmonic)
         m.calc_relative_multipoles(r0 = r0, main_multipole = main_multipole)
         multip.append(m)
