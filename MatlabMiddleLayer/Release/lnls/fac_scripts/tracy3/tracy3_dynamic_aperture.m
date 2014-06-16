@@ -1,4 +1,4 @@
-function tracy3_dynamic_aperture(fmapdpFlag, n_calls, nr_rms)
+function tracy3_dynamic_aperture(fmapdpFlag, n_calls, nr_rms, var_plane)
 
 color_vec = {'b','r','g','m','c','k','y'};
 esp_lin = 5;
@@ -12,13 +12,14 @@ yi = scrsz(4)/10;
 xf = xi + scrsz(4)*(2/3);
 yf = yi + scrsz(4)*(2/3);
 
-
+if ~exist('var_plane','var')
+    var_plane = 1; %determinaçao da abertura dinâmica por varreduda no plano y
+end
 path = '/home/fac_files/data/sirius_tracy/';
 
 cell_leg_text = cell(1,n_calls);
 pl = zeros(n_calls,3);
 pldp = zeros(n_calls,3);
-var_plane = 0; %determinaçao da abertura dinâmica por varreduda no plano x
 for i=1:n_calls
     path = uigetdir(path,'Em qual pasta estao os dados?');
     if (path==0);

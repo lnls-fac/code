@@ -2,20 +2,22 @@ function r = sirius_booster_lattice(varargin)
 %maquina com simetria 50, formada por dipolos e quadrupolos com sextupolos
 %integrados. 15/08/2012 - Fernando.
 % modelode segmentado dos dipolos. 10/04/2014
+% mudança de padrão para baixa energia.
 
 %%% HEADER SECTION %%%
 
 global THERING
 
 const = lnls_constants;
-energy = 3e9; % eV
+energy = 0.15e9; % eV
 
 for i=1:length(varargin)
 	energy = varargin{i} * 1e9;
 end
 
 harmonic_number = 828;
-RFC = rfcavity('CAV', 0, 0.95e+6, 499654000, harmonic_number, 'CavityPass');
+if energy == 0.15e9, voltage = 150e3; else voltage = 950e3; end
+RFC = rfcavity('CAV', 0, voltage, 499654000, harmonic_number, 'CavityPass');
 
 bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
@@ -51,7 +53,7 @@ b = [pb, b01, b02, b03, b04, b05, b06, b07, b07, b06, b05, b04, b03, b02, b01, p
 qd   = quadrupole('QD', 0.20, qd_strength, quad_pass_method);
 
 %coef do mapa de campo.
-polB = [[0 2.35824E-01], 1*[0 5.80904E+00 0 -1.10084E+05 0 +8.17767E+08 0 -3.13863E+12 ...
+polB = [[0 2.35824E-01], 0*[0 5.80904E+00 0 -1.10084E+05 0 +8.17767E+08 0 -3.13863E+12 ...
      0 +6.58302E+15 0 -7.11141E+18 0 +3.54236E+21 0 -6.05227E+23 ]];
  
 polB = polB/polB(2)* qf_strength;

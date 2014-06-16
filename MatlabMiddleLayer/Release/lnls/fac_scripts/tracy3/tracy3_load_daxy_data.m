@@ -31,7 +31,11 @@ pos = reshape(pos,npy,npx); dados.pos = pos;
 if var_plane
     y  = flipud(y);
     plane = flipud(plane);
-    [~,ind] = min(plane == -1,[],1);
+    lost = plane == -1;
+    [~,ind] = min(lost,[],1);
+    % para lidar com casos em que a abertura vertical é maior que o espaço
+    % calculado.
+    ind = ind.*any(~lost) + (~any(~lost)).*ones(1,npx)*npy; 
     % por fim, defino a DA
     x = x(1,:);
     y = unique(y(ind,:)','rows');
@@ -39,9 +43,15 @@ if var_plane
 else
     idx = x(1,:) > 0;
     x_ma = x(1,idx);
-    [~,ind_pos] = min(plane(:,idx) == - 1,[],2);
+    lost = plane(:,idx) == -1;
+    [~,ind_pos] = min(lost,[],2);
+    % para lidar com casos em que a abertura horizontal é maior que o espaço
+    ind_pos = ind_pos.*any(~lost,2) + (~any(~lost,2)).*ones(npy,1)*sum(idx); % calculado.
     dynapt = [x_ma(ind_pos)' y(:,1)];
     x_mi = fliplr(x(1,~idx));
-    [~,ind_neg] = min(fliplr(plane(:,~idx)) == - 1,[],2);
+    lost = fliplr(plane(:,~idx)) == - 1;
+    [~,ind_neg] = min(lost,[],2);
+    % para lidar com casos em que a abertura horizontal é maior que o espaço
+    ind_neg = ind_neg.*any(~lost,2) + (~any(~lost,2)).*ones(npy,1)*sum(~idx); % calculado.
     dynapt = [[fliplr(x_mi(ind_neg))' flipud(y(:,1))]; dynapt];
 end

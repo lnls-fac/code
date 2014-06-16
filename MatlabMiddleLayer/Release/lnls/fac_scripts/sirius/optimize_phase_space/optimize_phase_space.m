@@ -1,10 +1,14 @@
 clear all;
 RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
 % first, we load the lattice
-storage_ring_ref = sirius_lattice('test_inject_pmm');
-lattice_errors([pwd '/cod_matlab']);
-machines = load([pwd '/cod_matlab/CONFIG_machines_cod_corrected.mat']);
+storage_ring_ref = sirius_lattice('tests');
+[~, storage_ring_ref] = setcavity('on', storage_ring_ref);
+[~, ~, ~, ~, ~, ~, storage_ring_ref] = setradiation('on', storage_ring_ref);
+% lattice_errors([pwd '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_5/possible_change/low_2chrom/multi_cod_tune/cod_matlab']);
+machines = load('/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_5/possible_change/low_2chrom374/multi_cod_tune/cod_matlab/CONFIG_machines_cod_corrected.mat');
 storage_ring = machines.machine{3};
+[~, storage_ring] = setcavity('on', storage_ring);
+[~, ~, ~, ~, ~, ~, storage_ring] = setradiation('on', storage_ring);
 
 % now, we define which families will be used to optimize the phase space
 % and which will be used to correct chromaticity;
@@ -16,10 +20,12 @@ chr.value = [0,0];
 
 % now we find the indexes of the elements in the ring:
 opt.ind = cell(1,length(opt.fam));
+opt.vec_ini = zeros(1,length(opt.fam));
 opt.size = zeros(length(opt.fam),1);
 chr.ind = cell(1,length(chr.fam));
 for ii=1:length(opt.fam)
     opt.ind{ii} = findcells(storage_ring,'FamName',opt.fam{ii});
+    opt.vec_ini(ii) = getcellstruct(storage_ring_ref,'PolynomB',opt.ind{ii}(1),3);
     opt.size(ii) = length(opt.ind{ii}); % get the number of elements in each family
 end
 for ii=1:length(chr.fam)
@@ -36,8 +42,9 @@ opt.ind = cell2mat(opt.ind); % transform to vector;
 %4k
 % vec =[-60.9192  26.3203 -105.5614  62.0680 -69.5216 -133.7175  150.2310];
 
-vec = [-52.632126  23.963083 -82.087662  67.612541  -95.818807 -163.258854 179.730185];
- 
+% vec = [-52.632126  23.963083 -82.087662  67.612541  -95.818807 -163.258854 179.730185];
+
+vec = opt.vec_ini;
  
 % what will be our error level:
 err_level = 5/100;
@@ -45,7 +52,7 @@ err_level = 5/100;
 %% now we begin the optimization:
 
 % first we calculate the initial parameters 
-[res chr.val] = optimize_fun(storage_ring, storage_ring_ref, vec, opt, chr)
+[res chr.val] = optimize_fun(storage_ring, storage_ring_ref, vec, opt, chr);
 
 % and begin the main loop
 fp = fopen('solucoes.txt','w');

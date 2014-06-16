@@ -1,7 +1,7 @@
 function tracy3_momAccep_TousLT(the_ring, varargin)
 
 n_calls = 1;
-if nargin >= 1
+if nargin > 1
     n_calls = varargin{1};
 end
 
@@ -64,7 +64,8 @@ for i=1:n_calls
         accep2 = reshape(accep(j,:), length(accep(j,:))/2, 2)';
         
         Accep(1,:) = spos;
-        Accep(2,:) = min(min(abs(accep2)), accepRF);
+        Accep(2,:) = min(accep2(1,:), accepRF);
+        Accep(3,:) = max(accep2(2,:), -accepRF);
         % não estou usando alguns outputs
         LT = lnls_tau_touschek_inverso(params,Accep,twi);
         lifetime(j) = 1/LT.AveRate/60/60; % em horas
@@ -112,13 +113,13 @@ for i=1:n_calls
     % [~, ele] = hdrload('MA_ele.txt');
     % plot(ele(:,1), ele(:,[2 4])*100,'r','Marker','.','DisplayName',{'elegantpos', 'elegantneg'});
 
-    f2=figure('OuterPosition',[xi yi xf yf]);
-    fb = axes('Parent',f2,'FontSize',size_font);
-    [n, xout] = hist(modSLost',12); bar(fb,xout,n);
-    xlim([0, 52]);
-    xlabel('Pos [m]','FontSize',size_font);
-    ylabel('Number of particles lost','FontSize',size_font);
-    title(fb,['Histograma - ' text_leg{i}]);
+%     f2=figure('OuterPosition',[xi yi xf yf]);
+%     fb = axes('Parent',f2,'FontSize',size_font);
+%     [n, xout] = hist(modSLost',12); bar(fb,xout,n);
+%     xlim([0, 52]);
+%     xlabel('Pos [m]','FontSize',size_font);
+%     ylabel('Number of particles lost','FontSize',size_font);
+%     title(fb,['Histograma - ' text_leg{i}]);
 end
 
 legend(pl(1:2:end),'show',text_leg, 'Location','Best');
