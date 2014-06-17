@@ -21,7 +21,8 @@ int main(int argc, char *argv []) {
     
     
     /*printf("\nTracy3 - LNLS:  27/05/2014\n");*/
-    printf("\nTracy3 - LNLS:  02/06/2014\n");
+    /*printf("\nTracy3 - LNLS:  02/06/2014\n");*/
+    printf("\nTracy3 - LNLS:  16/06/2014\n"); /* daxy_mp e daex_mp */
     
 	/* for time handling */
 	uint32_t start, stop;
@@ -566,10 +567,11 @@ int main(int argc, char *argv []) {
 		else if(strcmp(CommandStr,"DynApXYFlag") == 0) {
 			printf("\n begin XY Dynamic Aperture search: \n\n");
 			if (globval.nr_cpus > 1) {
-/*				DAXY_mp(globval.nr_cpus, UserCommandFlag[i]._DAXY_nxpoint, UserCommandFlag[i]._DAXY_nypoint, UserCommandFlag[i]._DAXY_nturn,
+				daxy_mp(globval.nr_cpus, UserCommandFlag[i]._DAXY_nxpoint, UserCommandFlag[i]._DAXY_nypoint, 
+				        UserCommandFlag[i]._DAXY_nturn,
 						UserCommandFlag[i]._DAXY_x0, UserCommandFlag[i]._DAXY_xmax,
 						UserCommandFlag[i]._DAXY_y0, UserCommandFlag[i]._DAXY_ymax,
-						UserCommandFlag[i]._DAXY_delta); */
+						UserCommandFlag[i]._DAXY_delta); 
 			} else {
 				daxy(UserCommandFlag[i]._DAXY_nxpoint, UserCommandFlag[i]._DAXY_nypoint, UserCommandFlag[i]._DAXY_nturn,
 						UserCommandFlag[i]._DAXY_x0, UserCommandFlag[i]._DAXY_xmax,
@@ -597,14 +599,14 @@ int main(int argc, char *argv []) {
 		else if(strcmp(CommandStr,"DynApEXFlag") == 0) {
 			printf("\n begin EX Dynamic Aperture search: \n\n");
 			if (globval.nr_cpus > 1) {
-/*				DAEX_mp(globval.nr_cpus, UserCommandFlag[i]._DAEX_nxpoint, UserCommandFlag[i]._DAEX_nepoint, UserCommandFlag[i]._DAEX_nturn,
-						UserCommandFlag[i]._DAEX_x0, UserCommandFlag[i]._DAEX_xmax,
+				daex_mp(globval.nr_cpus, UserCommandFlag[i]._DAEX_nxpoint, UserCommandFlag[i]._DAEX_nepoint, UserCommandFlag[i]._DAEX_nturn,
 						UserCommandFlag[i]._DAEX_emin, UserCommandFlag[i]._DAEX_emax,
-						UserCommandFlag[i]._DAEX_z);*/
+						UserCommandFlag[i]._DAEX_x0, UserCommandFlag[i]._DAEX_xmax,
+						UserCommandFlag[i]._DAEX_z);
 			} else {
 				daex(UserCommandFlag[i]._DAEX_nxpoint, UserCommandFlag[i]._DAEX_nepoint, UserCommandFlag[i]._DAEX_nturn,
-						UserCommandFlag[i]._DAEX_x0, UserCommandFlag[i]._DAEX_xmax,
 						UserCommandFlag[i]._DAEX_emin, UserCommandFlag[i]._DAEX_emax,
+						UserCommandFlag[i]._DAEX_x0, UserCommandFlag[i]._DAEX_xmax,
 						UserCommandFlag[i]._DAEX_z);
 		    }	
 		}

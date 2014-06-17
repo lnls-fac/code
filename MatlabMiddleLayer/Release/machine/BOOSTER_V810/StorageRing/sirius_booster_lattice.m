@@ -2,20 +2,22 @@ function r = sirius_booster_lattice(varargin)
 %maquina com simetria 50, formada por dipolos e quadrupolos com sextupolos
 %integrados. 15/08/2012 - Fernando.
 % modelode segmentado dos dipolos. 10/04/2014
+% mudança de padrão para baixa energia.
 
 %%% HEADER SECTION %%%
 
 global THERING
 
 const = lnls_constants;
-energy = 3e9; % eV
+energy = 0.15e9; % eV
 
 for i=1:length(varargin)
 	energy = varargin{i} * 1e9;
 end
 
 harmonic_number = 828;
-RFC = rfcavity('CAV', 0, 0.95e+6, 499654000, harmonic_number, 'CavityPass');
+if energy == 0.15e9, voltage = 150e3; else voltage = 950e3; end
+RFC = rfcavity('CAV', 0, voltage, 499654000, harmonic_number, 'CavityPass');
 
 bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';

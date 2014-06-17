@@ -24,9 +24,10 @@ limx = 12;
 limy = 3.0;
 lime = 5;
 
-mostra = 0; % 0 = porcentagem de part perdidas
+mostra = 3; % 0 = porcentagem de part perdidas
 % 1 = número medio de voltas
 % 2 = posicao em que foram perdidas
+% 3 = plano em que foram perdidas
 
 
 f=figure('OuterPosition',[xi yi xf yf]);
@@ -50,10 +51,13 @@ for j = 1:2
         % -- FMAP --
         full_name = fullfile(pathname, ['rms', num2str(i, '%02i')]);
         try
-            %[~, dados1] = tracy3_load_daxy_data(full_name);
-            %ind = dados1.plane == -1;
-            [~, dados1] = tracy3_load_fmap_data(full_name);
-            ind = (dados1.fx ~= 0);
+            try
+                [~, dados1] = tracy3_load_daxy_data(full_name);
+                ind = dados1.plane == -1;
+            catch
+                [~, dados1] = tracy3_load_fmap_data(full_name);
+                ind = (dados1.fx ~= 0);
+            end
             if i == 1, idx_daxy = zeros(size(ind));end;
             switch mostra
                 case 0
@@ -62,6 +66,8 @@ for j = 1:2
                     idx_daxy = idx_daxy + dados1.turn;
                 case 2
                     idx_daxy = idx_daxy + mod(dados1.pos,51.8396);
+                case 3
+                    idx_daxy = idx_daxy + dados1.plane;
             end
             count = count + 1;
         catch
@@ -70,10 +76,13 @@ for j = 1:2
         
         if (fmapdpFlag)
             try
-                %[~, dados2] = tracy3_load_daex_data(full_name);
-                %inddp = dados2.plane == -1;
-                [~, dados2] = tracy3_load_fmapdp_data(full_name);
-                inddp = (dados2.fen ~= 0);
+                try
+                    [~, dados2] = tracy3_load_daex_data(full_name);
+                    inddp = dados2.plane == -1;
+                catch
+                    [~, dados2] = tracy3_load_fmapdp_data(full_name);
+                    inddp = (dados2.fen ~= 0);
+                end
                 if i == 1, idx_daex = zeros(size(inddp));end;
                 switch mostra
                     case 0
@@ -82,6 +91,8 @@ for j = 1:2
                         idx_daex = idx_daex + dados2.turn;
                     case 2
                         idx_daex = idx_daex + mod(dados2.pos,51.8396);
+                    case 3
+                        idx_daex = idx_daex + dados2.plane;
                 end
                 countdp = countdp+1;
             catch
@@ -90,10 +101,13 @@ for j = 1:2
         end
     end
     
-    idx_daxy = (count-idx_daxy)/count*100;
-    idx_daxy(1,1) = 100; idx_daxy(1,2) = 0;
-    idx_daex = (count-idx_daex)/countdp*100;
-    idx_daex(1,1) = 100; idx_daex(1,2) = 0;
+    switch mostra
+        case 0
+            idx_daxy = (count-idx_daxy)/count*100;
+            idx_daxy(1,1) = 100; idx_daxy(1,2) = 0;
+            idx_daex = (count-idx_daex)/countdp*100;
+            idx_daex(1,1) = 100; idx_daex(1,2) = 0;
+    end
     
     sb(j,1) = subplot(2,2,(2*j-1),'Parent',f,'FontSize',size_font,...
         'Position',[0.065 (0.60-(j-1)*0.5) 0.368 0.382]);

@@ -9,5 +9,7 @@
 
 #include "fmap_mp.h"
 #include "fmapdp_mp.h"
+#include "daxy_mp.h"
+#include "daex_mp.h"
 
 #endif
