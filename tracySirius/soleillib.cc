@@ -10,7 +10,6 @@
 */
 
 
-/****************************************************************************/
 /* void Get_Disp_dp(void)
 
    Purpose:
@@ -1175,15 +1174,25 @@ void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
 	
 	/* Get closed orbit */
     getcod(0.0, lastpos);
-
+           
+   	double tiny_amp = 1e-6;  // meters
+    	
 	// Tracking part 
-	for (i = 1; i <= Nbx; i++) {
-		x  = 1e-6 + x0 + ((double)i)*xstep;
+	for (i = 0; i < Nbx; i++) {
 
+        //x  = 1e-6 + x0 + ((double)i)*xstep; // 2014-06-16 alterado para compatibilizar com daxy_mp
+        x = x0 + i * (xmax - x0) / (Nbx - 1.0);
+		if (fabs(x) < tiny_amp) { x = tiny_amp; }
+        
 		fprintf(stdout,"\n");
-		for (j = 0; j<= Nbz; j++) {
-			z  =1e-6 + z0 + ((double)(Nbz-j))*zstep;
+		for (j = Nbz-1; j>=0; j--) {
+			
+			//z  =1e-6 + z0 + ((double)(Nbz-j))*zstep; // 2014-06-16 alterado para compatibilizar com daxy_mp
+			z = z0 + j * (zmax - z0) / (Nbz - 1.0);
+			if (fabs(z) < tiny_amp) { z = tiny_amp; }
+			
     		Trac_COD(x, 0.0, z, 0.0, energy, 0.0, Nbtour, lastn, lastpos);
+			
 			// printout value
 		    if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)){
 			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", x, z, -1, lastn, Cell[lastpos].S);
@@ -1358,8 +1367,7 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
        26/05/2014 Created
 
 ****************************************************************************/
-void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
-		double emin, double emax, double z)
+void daex(long Nbx, long Nbe, long Nbtour, double emin, double emax, double x0, double xmax, double z) 
 {
 	FILE * outf;
 	const char fic[] = "daex.out";
@@ -1390,21 +1398,19 @@ void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
 	if ((Nbx < 1) || (Nbe < 1)) //<=
 		fprintf(stdout,"fmap: Error Nbx=%ld Nbe=%ld\n",Nbx,Nbe);
 
-
-	xstep = (xmax-x0)/((double)Nbx);
-	estep = (emax-emin)/Nbe;
-	
 	/* Get closed orbit */
     getcod(0.0, lastpos);
 
-	for (i = 0; i <= Nbe; i++) {
-		dp  = emin + i*estep;
+   	double tiny_amp = 1e-6;  // meters
+       	
+	for (i = 0; i<Nbe; i++) {
+		dp  = emin +  i * (emax - emin) / (Nbe - 1.0);
 		fprintf(stdout,"\n");
-		for (j = 1; j<= Nbx; j++){
-			x  = 1e-6 + x0 + ((double)j)*xstep;
+		for (j = 0; j<Nbx; j++){
+		    x = x0 + j * (xmax - x0) / (Nbx - 1.0);
+		    if (fabs(x) < tiny_amp) { x = tiny_amp; }
 		    Trac_COD(x, 0.0, z, 0.0, dp, 0.0, Nbtour, lastn, lastpos);
 		    // printout value
-		    
 		    if ((lastn == Nbtour) && (lastpos == globval.Cell_nLoc)){
 			    fprintf(outf,"%-15.6e %-15.6e %12d %22d %15.5f \n", dp, x, -1, lastn, Cell[lastpos].S);
 			    fprintf(stdout,"%14.6e %14.6e %10d \n", dp, x, 0);
