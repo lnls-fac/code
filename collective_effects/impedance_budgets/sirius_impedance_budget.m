@@ -20,7 +20,7 @@ if (any(strcmp(select,'rw_with_coating')) || any(strcmp(select,'all')) || any(st
     ange    = [0 0 0 0];
     angm    = [0 0 0 0];
     sigmadc = [0 4e6 5.9e7 1]; % Not sure about NEG resistivity
-    tau     = [0 0 0 0]*27e-15;
+    tau     = [0 0 1 0]*27e-15;
     b       = [12.000 12.001 13.000]*1e-3;
     L       = 480;
     budget{i}.mub = mub;
@@ -46,7 +46,7 @@ end
 
 %% Resistive wall from in-vaccum ondulators;
 if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'In-vac. Und. @ low betax';
+    budget{i}.name = 'IVUs @ low betax';
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
     if strcmp(phase,'phase_2')
@@ -89,7 +89,7 @@ end
 
 
 if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'In-vac. Und. @ high betax';
+    budget{i}.name = 'IVUs @ high betax';
     budget{i}.type = 'rw';
     budget{i}.quantity = 2;
     if strcmp(phase,'phase_2')
@@ -140,14 +140,32 @@ if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) || any(strcmp(select
     end
     budget{i}.betax = 16.9;
     budget{i}.betay = 5;
-    budget{i}.thick = 0.2e-3;
-    budget{i}.cond = 5.94e7;
-    budget{i}.perm = 1;
-    budget{i}.h = 12e-3;
-    budget{i}.L = 3;
-    [Zv Zh Zl w_val] = lnls_calc_impedance_flat_chamber(budget{i}.thick, ...
-        budget{i}.cond, budget{i}.perm, budget{i}.h, budget{i}.L, 0, w);
     
+    epb     = [1 1 1];
+    mub     = [1 1 1];
+    ange    = [0 0 0];
+    angm    = [0 0 0];
+    sigmadc = [0 5.9e7 1]; % Copper Sheet
+    tau     = [0 1 0 ]*27e-15;
+    b       = [12 14]/2*1e-3;
+    L       = 2.7;
+    budget{i}.mub = mub;
+    budget{i}.ange = ange;
+    budget{i}.angm = angm;
+    budget{i}.tau   = tau;
+    budget{i}.sigmadc = sigmadc;
+    budget{i}.epb = epb;
+    budget{i}.b = b;
+    budget{i}.L = L;
+    
+    for j = 1: length(epb)
+        epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
+        mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
+    end
+    
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E);
+    Zv = pi^2/12*Zv;
+    Zh = pi^2/24*Zh;
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
@@ -414,3 +432,25 @@ if (any(strcmp(select,'broad_band')) || any(strcmp(select,'all')) || any(strcmp(
     budget{i}.escala = 'linear';
     i=i+1;
 end
+
+% %% feedback
+% 
+% if (any(strcmp(select,'broad_band')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
+%     budget{i}.name = 'Feedback';
+%     budget{i}.type = 'geo';
+%     budget{i}.quantity = 1;
+%     budget{i}.betax = 6.8;
+%     budget{i}.betay = 11;  
+%              
+%     Zv = -0.2e6*(1*sign(w)+0*w);
+%     Zh = -0.2e6*(0*w);
+%     Zl = 0.2e6*(0*w);
+%     
+%     budget{i}.Zv = Zv;
+%     budget{i}.Zh = Zh;
+%     budget{i}.Zl = Zl;
+%     
+%     budget{i}.escala = 'linear';
+%     i=i+1;
+% end
+

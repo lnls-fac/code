@@ -3,7 +3,7 @@ function ringdata = sirius_ringdata(phase)
 ringdata.lattice_version = 'Sirius_v403-ac10_5';
 
 w = logspace(5,10,3000);
-w2= logspace(10,12.1,8000); % limites determinados atraves de estudo do
+w2= logspace(10,12.4,8000); % limites determinados atraves de estudo do
 w = [w w2(2:end)];
 ringdata.w = [-fliplr(w) w];
 
