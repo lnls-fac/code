@@ -107,10 +107,6 @@ for j = 1:2
             idx_daxy(1,1) = 100; idx_daxy(1,2) = 0;
             idx_daex = (count-idx_daex)/countdp*100;
             idx_daex(1,1) = 100; idx_daex(1,2) = 0;
-        case 1
-            
-        case 2
-        case 3
     end
     
     sb(j,1) = subplot(2,2,(2*j-1),'Parent',f,'FontSize',size_font,...

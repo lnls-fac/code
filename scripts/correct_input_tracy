@@ -2,27 +2,28 @@
 
 #rm -fr rms*;
 
-if [ "$2" == "50" ];then
+if [ "$1" == "50" ];then
 	mkdir rms{{0,1,2,3,4}{1,2,3,4,5,6,7,8,9},{1,2,3,4,5}0};
-elif [ "$2" == "20" ]; then
+elif [ "$1" == "20" ]; then
 	mkdir rms{{0,1}{1,2,3,4,5,6,7,8,9},{1,2}0}
-elif [ "$2" == "10" ]; then
+elif [ "$1" == "10" ]; then
 	mkdir rms{0{1,2,3,4,5,6,7,8,9},10}
+elif [ "$1" == "boo" -o "$1" == "sr" ]; then
+	echo "Erro: agora não é mais necessário especificar se é booster ou anel."
+	echo "Se quiser gerar as pastas rode correct_input_tracy {10,20,50}"
+	echo "Se quiser apenas atualizar os arquivos de input do tracy rode sem argumentos"
 fi
 
 pastas=($( ls | grep rms ));
 j=0;
+multi_file=$( ls | grep multipole_ )
 for i in ${pastas[@]}; do
-	cp *.lat *.dat *.prm *.txt $i 2>/dev/null;
+	cp *.lat *.dat *.txt $i 2>/dev/null;
 	cd $i;
 	sed "s/rms01/$i/" <../input.prm >input.prm;
 	j=$(($j+1));
-	if [ "$1" == "sr" ];then
-		sed "s/seed 100/seed ${j}00/" <../multipole_Sirius_v500.dat >multipole_Sirius_v500.dat;
-	elif [ "$1" == "boo" ];then
-		sed "s/seed 100/seed ${j}00/" <../multipole_Booster_v800.dat >multipole_Booster_v800.dat;
-    else
-        echo "erro: boo ou sr"
-	fi
+    if [ -f $multi_file ];then
+        sed "s/seed 100/seed ${j}00/" <../$multi_file > $multi_file;
+    fi
 	cd ..;
 done

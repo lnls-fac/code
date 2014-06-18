@@ -30,7 +30,7 @@
 trackc++-debug
 tracy
 tracyd
-lnlstracy
+lnlstracy*
 .depend
 COMMIT_EDITMSG
 *DS_Store

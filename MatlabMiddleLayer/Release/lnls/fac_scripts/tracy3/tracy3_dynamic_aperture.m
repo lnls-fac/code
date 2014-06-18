@@ -13,7 +13,7 @@ xf = xi + scrsz(4)*(2/3);
 yf = yi + scrsz(4)*(2/3);
 
 if ~exist('var_plane','var')
-    var_plane = 1; %determinaçao da abertura dinâmica por varreduda no plano y
+    var_plane = 'y'; %determinaçao da abertura dinâmica por varreduda no plano y
 end
 path = '/home/fac_files/data/sirius_tracy/';
 

@@ -31,24 +31,27 @@ fi
 
 rmt_cmd="ps -A r -o user:20,comm | grep $job_str"
 maquinas=$(cat  $maq_file | grep "lnls\|sgi" | grep -v "#")
-#nrjobs=$(cat $maq_file | grep "^[0-9]")
+nrjobs=($(cat $maq_file | grep "^[0-9]"))
 
 # print header line
 printf "listing '$job_str' jobs that are currently running...\n"
-printf "%-15s    : %-8s | " "HOST" "TOTAL"
+printf "%-15s          : %-8s | " "HOST" "TOTAL"
 for user in ${users[*]}; do
     printf "%-8s | " ${user:0:8}
 done
 printf "\n"
 
 # ---- line
-printf "%-14s------%-8s---" "--------------" "--------"
+printf "%-14s------%-8s---" "--------------" "--------------"
 for i in `seq 1 ${#users[@]}`; do
     printf "%-8s---" "--------"
 done
 printf "\n"
 
 
+reply3=0
+tnrjobs=0
+ii=0
 # print running jobs
 for maq in $maquinas; do
     if [ $maq == "fernando.sa@sgi" ]; then
@@ -56,10 +59,12 @@ for maq in $maquinas; do
     else
 	reply=$(ssh $maq $rmt_cmd)
 	reply2=$(ssh $maq "cat /proc/cpuinfo | grep processor | wc -l") 
+	reply3=$(( $reply3 + $reply2 ))
+	tnrjobs=$(( $tnrjobs + ${nrjobs[$ii]} ))
     fi
     total=$(echo $reply | grep -o $job_str | wc -l)
     total_cnt=$[total_cnt + total]
-    printf "%-15s(%-2s): %-8s | " $maq $reply2 $total
+    printf "%-15s (%03i/%03i): %-8s | " $maq ${nrjobs[$ii]} $reply2  $total
     #printf "%-15s: %-8s | " $maq $total
     for i in `seq 1 ${#users[@]}`; do
     #for user in ${users[*]}; do
@@ -71,10 +76,11 @@ for maq in $maquinas; do
         printf "%-8s | " $user_count
     done
     printf "\n"
+    ii=$(( $ii + 1 ))
 done
 
 # ---- line
-printf "%-14s------%-8s---" "--------------" "--------"
+printf "%-14s------%-8s---" "--------------" "--------------"
 for i in `seq 1 ${#users[@]}`; do
     printf "%-8s---" "--------"
 done
@@ -82,7 +88,7 @@ printf "\n"
 
 
 # sum line
-printf "%-15s    : %-8s | " "SUM" $total_cnt
+printf "%-13s   (%03i/%03i): %-8s | " "SUM" $tnrjobs $reply3  $total_cnt
 for i in `seq 1 ${#users[@]}`; do
     idx=$[i-1]
     printf "%-8s | " ${users_cnt[idx]}

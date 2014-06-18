@@ -4,7 +4,7 @@ fname = fullfile(pathname, 'daxy.out');
 
 %variável para determinar o tipo de varredura no calculo da abertura;
 if ~exist('var_plane','var');
-     var_plane = 1;  % 1 = varredura em y; 0 = varredura em x;
+     var_plane = 'y';  % varredura em y ou varredura em x;
 end
 
 [~, data] = hdrload(fname);
@@ -28,7 +28,7 @@ turn = reshape(turn,npy,npx); dados.turn = turn;
 pos = reshape(pos,npy,npx); dados.pos = pos;
 % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
 % a borda da DA
-if var_plane
+if strcmp(var_plane,'y')
     y  = flipud(y);
     plane = flipud(plane);
     lost = plane == -1;

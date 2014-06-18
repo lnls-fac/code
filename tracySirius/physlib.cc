@@ -212,7 +212,7 @@ void printglob(void) {
     }
 //    printf("  bpm          =  %3d        qt           = %3d        ", GetnKid(
 //            globval.bpm), GetnKid(globval.qt));
-    printf(" Chambre_On   = %s     \n", globval.Aperture_on ? "TRUE " : "FALSE");
+    printf("  Chambre_On   = %s     \n", globval.Aperture_on ? "TRUE " : "FALSE");
     if (globval.hcorr != 0) {
 	printf("  hcorr        =  %3d        ", GetnKid(globval.hcorr));
     };
