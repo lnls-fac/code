@@ -97,12 +97,12 @@ for i=1:n_calls
     
     
     pl(i,2) = plot(fa, 1000*aveOnda(1,:,1), 1000*aveOnda(1,:,2), ...
-        'LineWidth',esp_lin,'Color',color, 'LineStyle','-');
+         'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
     if rms_mode
         pl(i,1) = plot(fa, 1000*(rmsOnda(1,:,1)+aveOnda(1,:,1)),1000*(rmsOnda(1,:,2)+aveOnda(1,:,2)),...
-            'LineWidth',2,'LineStyle','--','Color', color);
+             'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
         pl(i,3) = plot(fa, 1000*(aveOnda(1,:,1)-rmsOnda(1,:,1)),1000*(aveOnda(1,:,2)-rmsOnda(1,:,2)),...
-            'LineWidth',2,'LineStyle','--','Color', color);
+             'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
     end
     
     if fmapdpFlag
@@ -118,12 +118,12 @@ for i=1:n_calls
         end
         
         pldp(i,2) = plot(fdpa, 100*aveOffda(1,:,1),1000*aveOffda(1,:,2),...
-            'LineWidth',esp_lin,'Color',color, 'LineStyle','-');
+             'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
         if rms_mode
             pldp(i,1) = plot(fdpa, 100*aveOffda(1,:,1), 1000*(rmsOffda(1,:,2)+aveOffda(1,:,2)),...
-                'LineWidth',2,'LineStyle','--','Color', color);
+                 'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
             pldp(i,3) = plot(fdpa, 100*aveOffda(1,:,1),1000*(aveOffda(1,:,2)-rmsOffda(1,:,2)),...
-                'LineWidth',2,'LineStyle','--','Color', color);
+                 'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
         end
     end
     
