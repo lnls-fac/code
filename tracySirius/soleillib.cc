@@ -1288,7 +1288,7 @@ void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, doub
 		    break;
 	        } else {
 	            r_stable /= 2.0;
-		    fprintf(stdout, "\/"); fflush(stdout);
+		    fprintf(stdout, "/"); fflush(stdout);
 	        }
 	    }
 	    
