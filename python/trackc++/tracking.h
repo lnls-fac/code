@@ -128,8 +128,8 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 				return Status::passmethod_not_defined;
 		}
 
-		if (((orig_pos[0].rx < -1) or (orig_pos[0].rx > 1)) or ((orig_pos[0].ry < -1) or (orig_pos[0].ry > 1))) {
-			std::cout << "kkk" << std::endl;
+		if (((orig_pos[0].rx < -element.hmax) or (orig_pos[0].rx > element.hmax)) or ((orig_pos[0].ry < -element.vmax) or (orig_pos[0].ry > element.vmax))) {
+			return Status::particle_lost;
 		}
 		*element_offset = (*element_offset + 1) % nr_elements; // increment element index
 

@@ -61,7 +61,8 @@ void sirius_v500(std::vector<Element>& the_ring) {
 	Element mb3    = Element::marker("mb3");
 	Element inicio = Element::marker("inicio");
 	Element fim    = Element::marker("fim");
-	Element mid    = Element::marker("id_end");
+	Element mida   = Element::marker("id_enda");
+	Element midb   = Element::marker("id_endb");
 
     //""" --- beam position monitors --- """
 	Element mon    = Element::marker("BPM");
@@ -145,8 +146,8 @@ void sirius_v500(std::vector<Element>& the_ring) {
     Element cav = Element::rfcavity("cav", 0, 500e6, 2.5e6, energy);
 
     //""" lines """
-    std::vector<Element> insa   = { dia1, mid, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17};
-    std::vector<Element> insb   = { dib1, mid, dib2, d10, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17};
+    std::vector<Element> insa   = { dia1, mida, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17};
+    std::vector<Element> insb   = { dib1, midb, dib2, d10, crhv, qbd2, d12, cv, d12, ch, d12, sb2, d12, mon, d12, qbf, d23, qbd1, d17, sb1, d17};
     std::vector<Element> cline1 = { d32, cv,  d12, ch,  d15, sd1, d17, qf1, d12, mon, d11, sf1, d20, qf2, d17, sd2, d12, ch, d10, mon, d10};
     std::vector<Element> cline2 = { d18, cv,  d26, sd3, d17, qf3, d12, mon, d11, sf2, d20, qf4, d15, ch,  crhv, d12, mon, d44};
     std::vector<Element> cline3 = { d44, mon, d12, ch,  d15, qf4, d20, sf2, d11, mon, d12, qf3, d17, sd3, d26, cv, crhv, d18};

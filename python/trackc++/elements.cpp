@@ -8,6 +8,7 @@
 
 #include "auxiliary.h"
 #include "elements.h"
+#include <cfloat>
 
 const std::vector<double> Element::default_polynom = std::vector<double>(3,0);
 
@@ -21,7 +22,8 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 	gap(0), fint_in(0), fint_out(0),
 	thin_KL(0), thin_SL(0),
 	frequency(0), voltage(0), energy(0),
-	polynom_a(default_polynom), polynom_b(default_polynom)
+	polynom_a(default_polynom), polynom_b(default_polynom),
+	hmax(DBL_MAX), vmax(DBL_MAX)
 {
 	//polynom_a.clear();
 	//polynom_b.clear();
@@ -43,6 +45,7 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 
 Element Element::marker (const std::string& fam_name_) {
 	Element e = Element(fam_name_, 0);
+	e.pass_method = PassMethod::pm_identity_pass;
 	return e;
 }
 

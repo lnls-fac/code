@@ -24,8 +24,10 @@ public:
 	double				thin_KL, thin_SL;
 	double              frequency, voltage, energy;
 	std::vector<double> polynom_a, polynom_b;
+	double              hmax, vmax;
 	double				t_in[6],  t_out[6];
 	double				r_in[36], r_out[36];
+
 
 	// default constructor (builds a drift-type element)
 	Element(const std::string& fam_name_ = "", const double& length_ = 0);

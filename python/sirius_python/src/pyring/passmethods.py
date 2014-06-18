@@ -1,14 +1,17 @@
 import mathphysicslibs.functions as mfuncs
 import mathphysicslibs.constants as consts
 
-identity_pass              = 0
-drift_pass                 = 1
-str_mpole_symplectic4_pass = 2
-bnd_mpole_symplectic4_pass = 3
-corrector_pass             = 4
-cavity_pass                = 5
-thinquad_pass              = 6
-thinsext_pass              = 7
+''' These passmethod indices have to be consistent with corresponding indices from trackc++ passmethods '''
+identity_pass                  = 0
+drift_pass                     = 1
+str_mpole_symplectic4_pass     = 2
+bnd_mpole_symplectic4_pass     = 3
+corrector_pass                 = 4
+cavity_pass                    = 5
+thinquad_pass                  = 6
+thinsext_pass                  = 7
+str_mpole_symplectic4_rad_pass = 8
+bnd_mpole_symplectic4_rad_pass = 9
 
 class PassMethods:
 

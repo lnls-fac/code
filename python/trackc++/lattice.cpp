@@ -6,11 +6,13 @@
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
 
+#include "flat_file.h"
 #include "lattice.h"
 #include "elements.h"
 #include "auxiliary.h"
 #include <algorithm>
 #include <numeric>
+#include <fstream>
 
 std::vector<Element> latt_join(const std::vector<std::vector<Element> >& v_) {
 	std::vector<Element> v;
@@ -182,5 +184,9 @@ std::vector<Element> latt_set_num_integ_steps(const std::vector<Element>& orig_l
 }
 
 std::vector<Element> latt_read_flat_file(const std::string& filename) {
+
+	std::vector<Element> the_ring;
+	read_flat_file_tracy(filename, the_ring);
+	return the_ring;
 
 }

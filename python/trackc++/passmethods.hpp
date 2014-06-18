@@ -195,9 +195,7 @@ Status::type pm_str_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Eleme
 	const std::vector<double> &polynom_a = elem.polynom_a;
 	const std::vector<double> &polynom_b = elem.polynom_b;
 	for(unsigned int p=0; p<pos.size(); ++p) {
-		//T &de = pos[p].de;
 		for(unsigned int i=0; i<elem.nr_steps; ++i) {
-			//T norm   = 1/(1 + de);
 			drift(pos[p], l1);
 	        strthinkick<T>(pos[p], k1, polynom_a, polynom_b, elem.energy, radiation);
 	        drift(pos[p], l2);
@@ -336,5 +334,6 @@ Status::type pm_thinsext_pass(std::vector<Pos<T> >&pos, const Element &elem) {
 #undef KICK2
 #undef SQR
 #undef TWOPI
+#undef CGAMMA
 
 #endif
