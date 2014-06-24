@@ -3,10 +3,10 @@
 #include "auxiliary.h"
 #include <fstream>
 
-void read_flat_file_tracy(const std::string& filename, std::vector<Element>& the_ring) {
+Status::type read_flat_file_tracy(const std::string& filename, std::vector<Element>& the_ring) {
 
 	std::ifstream fp(filename);
-	if (fp.fail()) return;
+	if (fp.fail()) return Status::file_not_found;
 
 	int Fnum, Knum, idx, type, method;
 	the_ring.clear();
@@ -76,6 +76,7 @@ void read_flat_file_tracy(const std::string& filename, std::vector<Element>& the
 
 	};
 
+	return Status::success;
 
 }
 

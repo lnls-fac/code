@@ -54,11 +54,15 @@ struct Status {
 		passmethod_not_implemented = 2,
 		particle_lost = 3,
 		inconsistent_dimensions = 4,
-		uninitialized_memory = 5
+		uninitialized_memory = 5,
+		findorbit_not_converged = 6,
+		findorbit_one_turn_matrix_problem = 7,
+		file_not_found = 8
 	};
 };
 
-extern std::string passmethods[];
+extern std::string string_passmethods[];
+extern std::string string_error_messages[];
 
 template <typename T> class Pos;
 class Element;
@@ -70,6 +74,15 @@ const double electron_mass        = 9.1093829140e-31;  // [Kg]    - 2014-06-11
 const double electron_rest_energy = electron_mass * pow(light_speed,2);           // [Kg.m^2/s^2] - derived
 const double vaccum_permitticity  = 1/(vacuum_permeability * pow(light_speed,2)); // [V.s/(A.m)]  - derived
 const double electron_radius      = pow(electron_charge,2)/(4*M_PI*vaccum_permitticity*electron_rest_energy); // [m] - derived
+
+template <typename T>
+int sgn(T val) {
+	if (val >= 0) return 1; else return -1;
+    //return (T(0) < val) - (val < T(0));
+}
+
+
+bool isfinite(const double& v);
 
 
 typedef double Vector4[4];

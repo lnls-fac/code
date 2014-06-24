@@ -8,10 +8,17 @@
 // affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
-#include "trackc++.h"
+#include "passmethods.h"
+#include "elements.h"
+#include "auxiliary.h"
+#include <vector>
+#include <limits>
+#include <cmath>
 
+Status::type track_findorbit6(const std::vector<Element>& the_ring, const int harmonic_number, std::vector<Pos<double> >& orb);
+Pos<double> linalg_solve(const std::vector<Pos<double> >& M, const Pos<double>& b);
 
-Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66);
+Status::type track_findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66);
 
 
 // linepass
@@ -30,7 +37,7 @@ Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<do
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 template <typename T>
-Status::type elementpass (const Element& el, std::vector<Pos<T> >& orig_pos) {
+Status::type track_elementpass (const Element& el, Pos<T> &orig_pos) {
 
 	Status::type status = Status::success;
 
@@ -74,24 +81,18 @@ Status::type elementpass (const Element& el, std::vector<Pos<T> >& orig_pos) {
 }
 
 template <typename T>
-Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, int *element_offset, bool trajectory) {
+Status::type track_linepass (const std::vector<Element>& line, Pos<T>& orig_pos, std::vector<Pos<T> >& pos, int& element_offset, bool trajectory) {
 
 	Status::type status = Status::success;
 
 	int nr_elements  = line.size();
-	int nr_particles = orig_pos.size();
 
 	for(int i=0; i<nr_elements; ++i) {
 
-		const int& e = *element_offset;    // syntactic-sugar for read-only access to element index
-		const Element& element = line[e];  // syntactic-sugar for read-only access to element object parameters
+		const Element& element = line[element_offset];  // syntactic-sugar for read-only access to element object parameters
 
 		// stores trajectory at entrance of each element
-		if (trajectory) {
-			for(int j=0; j<nr_particles;++j) {
-				pos.push_back(orig_pos[j]);
-			}
-		}
+		if (trajectory) pos.push_back(orig_pos);
 
 		switch (element.pass_method) {
 			case PassMethod::pm_identity_pass:
@@ -128,17 +129,21 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 				return Status::passmethod_not_defined;
 		}
 
-		if (((orig_pos[0].rx < -element.hmax) or (orig_pos[0].rx > element.hmax)) or ((orig_pos[0].ry < -element.vmax) or (orig_pos[0].ry > element.vmax))) {
-			return Status::particle_lost;
-		}
-		*element_offset = (*element_offset + 1) % nr_elements; // increment element index
+		// checks if particle is lost
+		if ((not isfinite(orig_pos.rx)) or
+			(not isfinite(orig_pos.ry)) or
+			(orig_pos.rx < -element.hmax) or
+			(orig_pos.rx >  element.hmax) or
+			(orig_pos.ry < -element.vmax) or
+			(orig_pos.ry >  element.vmax)) return Status::particle_lost;
+
+		// moves to next element index
+		element_offset = (element_offset + 1) % nr_elements;
 
 	}
 
-	// stores final particles' positions at the end of the line
-	for(int j=0; j<nr_particles;++j) {
-		pos.push_back(orig_pos[j]);
-	}
+	// stores final particle position at the end of the line
+	pos.push_back(orig_pos);
 
 	return status;
 
@@ -162,19 +167,21 @@ Status::type linepass (const std::vector<Element>& line, std::vector<Pos<T> >& o
 
 
 template <typename T>
-Status::type ringpass (const std::vector<Element>& ring, std::vector<Pos<T> >& orig_pos, std::vector<Pos<T> >& pos, const int nr_turns, int *turn_idx, int *element_offset) {
+Status::type track_ringpass (const std::vector<Element>& ring, Pos<T> &orig_pos, std::vector<Pos<T> > &pos, const int nr_turns, int &lost_turn, int &element_offset, bool trajectory) {
 
 	Status::type status  = Status::success;
 
-	*turn_idx = 0;
-	for(int n=0; n<nr_turns; ++n) {
-		std::vector<Pos<T> > tmp_pos;
-		if ((status = linepass (ring, orig_pos, tmp_pos, element_offset, false)) != Status::success) return status;
-		// records turn-by-turn data
-		for(int j=0; j<tmp_pos.size();++j) {
-			pos.push_back(orig_pos[j]);
+	for(lost_turn=0; lost_turn<nr_turns; ++lost_turn) {
+		std::vector<Pos<T> > final_pos;
+		if ((status = track_linepass (ring, orig_pos, final_pos, element_offset, false)) != Status::success) return status;
+		if (trajectory) {
+			pos.push_back(orig_pos);
 		}
-		*turn_idx += 1;
+	}
+
+	if (not trajectory) {
+		// stores only final position if trajectory is not requested
+		pos.push_back(orig_pos);
 	}
 	return status;
 }

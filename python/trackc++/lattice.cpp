@@ -55,7 +55,7 @@ std::vector<double> latt_findspos(const std::vector<Element>& lattice, const std
 		}
 		len += lattice[i].length;
 	}
-	if (idx[idx.size()-1] == (int) lattice.size())
+	if (idx[idx.size()-1] == (int) (1+lattice.size()))
 		r.push_back(len);
 	return r;
 }
@@ -108,6 +108,16 @@ std::vector<int> latt_findcells_fam_name(const std::vector<Element>& lattice, co
 	std::vector<int> r;
 	for(unsigned int i=0; i<lattice.size(); ++i) {
 		if ((reverse and (lattice[i].fam_name != value)) or (!reverse and (lattice[i].fam_name == value))) {
+			r.push_back(i);
+		}
+	};
+	return r;
+};
+
+std::vector<int> latt_findcells_frequency(const std::vector<Element>& lattice, const double& value, bool reverse) {
+	std::vector<int> r;
+	for(unsigned int i=0; i<lattice.size(); ++i) {
+		if ((reverse and (lattice[i].frequency != value)) or (!reverse and (lattice[i].frequency == value))) {
 			r.push_back(i);
 		}
 	};

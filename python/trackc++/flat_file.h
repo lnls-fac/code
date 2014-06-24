@@ -2,6 +2,7 @@
 #define _FLAT_FILE_H
 
 #include "elements.h"
+#include "auxiliary.h"
 #include <string>
 #include <vector>
 
@@ -18,7 +19,7 @@ struct FlatFileType {
 	};
 
 
-void read_flat_file_tracy(const std::string& filename, std::vector<Element>& the_ring);
+Status::type read_flat_file_tracy(const std::string& filename, std::vector<Element>& the_ring);
 void read_polynomials(std::ifstream& fp, Element& e);
 
 #endif

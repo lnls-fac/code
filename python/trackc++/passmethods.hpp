@@ -25,10 +25,13 @@
 
 #define SQR(X) ((X)*(X))
 
-#define TWOPI   2*M_PI
-static const double CGAMMA = 4*M_PI*electron_radius/pow(electron_rest_energy/electron_charge/1e9,3)/3;
-//#define TWOPI   6.28318530717959 // AT implementation of 2*PI...
-//#define CGAMMA  8.846056192e-05  // AT implementation
+#ifdef ATCOMPATIBLE
+	#define TWOPI   6.28318530717959 // AT implementation of 2*PI...
+	#define CGAMMA  8.846056192e-05  // AT implementation
+#else
+	#define TWOPI   2*M_PI
+	static const double CGAMMA = 4*M_PI*electron_radius/pow(electron_rest_energy/electron_charge/1e9,3)/3;
+#endif
 
 template <typename T>
 inline void drift(Pos<T>& pos, const double& length) {
@@ -39,12 +42,10 @@ inline void drift(Pos<T>& pos, const double& length) {
      pos.dl += 0.5 * norml * pnorm * (pos.px*pos.px + pos.py*pos.py);
 }
 
-template <typename T>
-inline void drift(std::vector<Pos<T> > &pos, const double& length) {
-	for(unsigned int p=0; p<pos.size(); ++p) {
-		drift(pos[p], length);
-	}
-}
+//template <typename T>
+//inline void drift(Pos<T> &pos, const double& length) {
+//	drift(pos, length);
+//}
 
 template <typename T>
 inline void calcpolykick(const Pos<T> &pos, const std::vector<double>& polynom_a, const std::vector<double>& polynom_b, T& real_sum, T& imag_sum) {
@@ -122,16 +123,14 @@ void bndthinkick(Pos<T>& pos, const double& length, const std::vector<double>& p
 }
 
 template <typename T>
-void edge_fringe(std::vector<Pos<T> >& pos, const double& inv_rho, const double& edge_angle, const double& fint, const double& gap) {
-	for(unsigned int p=0; p<pos.size(); ++p) {
-		const T &rx = pos[p].rx, &ry = pos[p].ry, &de = pos[p].de;
-		T       &px = pos[p].px, &py = pos[p].py;
-		T fx      = inv_rho * std::tan(edge_angle)/(1 + de);
-		T psi_bar = edge_angle - inv_rho * gap * fint * (1 + std::sin(edge_angle) * std::sin(edge_angle)) / std::cos(edge_angle) / (1 + de);
-		T fy      = inv_rho * tan(psi_bar) / (1 + de);
-		px       += rx * fx;
-		py       -= ry * fy;
-	}
+void edge_fringe(Pos<T>& pos, const double& inv_rho, const double& edge_angle, const double& fint, const double& gap) {
+	const T &rx = pos.rx, &ry = pos.ry, &de = pos.de;
+	T       &px = pos.px, &py = pos.py;
+	T fx      = inv_rho * std::tan(edge_angle)/(1 + de);
+	T psi_bar = edge_angle - inv_rho * gap * fint * (1 + std::sin(edge_angle) * std::sin(edge_angle)) / std::cos(edge_angle) / (1 + de);
+	T fy      = inv_rho * tan(psi_bar) / (1 + de);
+	px       += rx * fx;
+	py       -= ry * fy;
 }
 
 template <typename T>
@@ -153,38 +152,31 @@ inline void rotate_pos(Pos<T> &pos, const double* R) {
 }
 
 template <typename T>
-void global_2_local(std::vector<Pos<T> > &pos, const Element &elem) {
-	//return;
-	for(unsigned int p=0; p<pos.size(); ++p) {
-		translate_pos(pos[p], elem.t_in);
-		rotate_pos(pos[p], elem.r_in);
-	}
+void global_2_local(Pos<T> &pos, const Element &elem) {
+	translate_pos(pos, elem.t_in);
+	rotate_pos(pos, elem.r_in);
 }
 
 template <typename T>
-void local_2_global(std::vector<Pos<T> > &pos, const Element &elem) {
-	//return;
-	for(unsigned int p=0; p<pos.size(); ++p) {
-		rotate_pos(pos[p], elem.r_out);
-		translate_pos(pos[p], elem.t_out);
-	}
+void local_2_global(Pos<T> &pos, const Element &elem) {
+	rotate_pos(pos, elem.r_out);
+	translate_pos(pos, elem.t_out);
 }
 
 
-
 template <typename T>
-Status::type pm_identity_pass(std::vector<Pos<T> >&pos, const Element &elem) {
+Status::type pm_identity_pass(Pos<T> &pos, const Element &elem) {
 	return Status::success;
 }
 
 template <typename T>
-Status::type pm_drift_pass(std::vector<Pos<T> >&pos, const Element &elem) {
+Status::type pm_drift_pass(Pos<T> &pos, const Element &elem) {
 	drift<T>(pos, elem.length);
 	return Status::success;
 }
 
 template <typename T>
-Status::type pm_str_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Element &elem, bool radiation = true) {
+Status::type pm_str_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, bool radiation = true) {
 
 	global_2_local(pos, elem);
 	double sl = elem.length / float(elem.nr_steps);
@@ -194,25 +186,21 @@ Status::type pm_str_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Eleme
 	double k2 = sl * KICK2;
 	const std::vector<double> &polynom_a = elem.polynom_a;
 	const std::vector<double> &polynom_b = elem.polynom_b;
-	for(unsigned int p=0; p<pos.size(); ++p) {
-		for(unsigned int i=0; i<elem.nr_steps; ++i) {
-			drift(pos[p], l1);
-	        strthinkick<T>(pos[p], k1, polynom_a, polynom_b, elem.energy, radiation);
-	        drift(pos[p], l2);
-	        strthinkick<T>(pos[p], k2, polynom_a, polynom_b, elem.energy, radiation);
-	        drift<T>(pos[p], l2);
-	        strthinkick<T>(pos[p], k1, polynom_a, polynom_b, elem.energy, radiation);
-	        drift<T>(pos[p], l1);
-		}
+	for(unsigned int i=0; i<elem.nr_steps; ++i) {
+		drift(pos, l1);
+		strthinkick<T>(pos, k1, polynom_a, polynom_b, elem.energy, radiation);
+		drift(pos, l2);
+		strthinkick<T>(pos, k2, polynom_a, polynom_b, elem.energy, radiation);
+		drift<T>(pos, l2);
+		strthinkick<T>(pos, k1, polynom_a, polynom_b, elem.energy, radiation);
+		drift<T>(pos, l1);
 	}
-
 	local_2_global(pos, elem);
-
 	return Status::success;
 }
 
 template <typename T>
-Status::type pm_bnd_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Element &elem, bool radiation = true) {
+Status::type pm_bnd_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, bool radiation = true) {
 
 	double sl = elem.length / float(elem.nr_steps);
 	double l1 = sl * DRIFT1;
@@ -226,17 +214,15 @@ Status::type pm_bnd_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Eleme
     global_2_local(pos, elem);
     edge_fringe(pos, irho, elem.angle_in, elem.fint_in, elem.gap);
 
-    for(unsigned int p=0; p<pos.size(); ++p) {
-    	for(unsigned int i=0; i<elem.nr_steps; ++i) {
-            drift<T>(pos[p], l1);
-            bndthinkick<T>(pos[p], k1, polynom_a, polynom_b, irho, elem.energy, radiation);
-            drift<T>(pos[p], l2);
-            bndthinkick<T>(pos[p], k2, polynom_a, polynom_b, irho, elem.energy, radiation);
-            drift<T>(pos[p], l2);
-            bndthinkick<T>(pos[p], k1, polynom_a, polynom_b, irho, elem.energy, radiation);
-            drift<T>(pos[p], l1);
-    	}
-    }
+	for(unsigned int i=0; i<elem.nr_steps; ++i) {
+		drift<T>(pos, l1);
+		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, elem.energy, radiation);
+		drift<T>(pos, l2);
+		bndthinkick<T>(pos, k2, polynom_a, polynom_b, irho, elem.energy, radiation);
+		drift<T>(pos, l2);
+		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, elem.energy, radiation);
+		drift<T>(pos, l1);
+	}
 
     edge_fringe(pos, irho, elem.angle_out, elem.fint_out, elem.gap);
     local_2_global(pos, elem);
@@ -247,7 +233,7 @@ Status::type pm_bnd_mpole_symplectic4_pass(std::vector<Pos<T> >&pos, const Eleme
 
 
 template <typename T>
-Status::type pm_corrector_pass(std::vector<Pos<T> >&pos, const Element &elem) {
+Status::type pm_corrector_pass(Pos<T> &pos, const Element &elem) {
 
 
 	global_2_local(pos, elem);
@@ -255,26 +241,22 @@ Status::type pm_corrector_pass(std::vector<Pos<T> >&pos, const Element &elem) {
 	const double& xkick = elem.hkick;
 	const double& ykick = elem.vkick;
 	if (elem.length == 0) {
-		for(unsigned int p=0; p<pos.size(); ++p) {
-			T &px = pos[p].px, &py = pos[p].py;
-			px += xkick;
-			py += ykick;
-		}
+		T &px = pos.px, &py = pos.py;
+		px += xkick;
+		py += ykick;
 	} else {
-		for(unsigned int p=0; p<pos.size(); ++p) {
-			T &rx = pos[p].rx, &px = pos[p].px, &ry = pos[p].ry, &py = pos[p].py, &de = pos[p].de, &dl = pos[p].dl;
-			T pnorm   = 1 / (1 + de);
-			T norml   = elem.length * pnorm;
-			dl += norml * pnorm * 0.5 * (
-					xkick * xkick/3.0 + ykick * ykick/3.0 +
-				    px*px + py*py +
-				    px * xkick + py * ykick
-				  );
-			rx += norml * (px + 0.5 * xkick);
-			px += xkick;
-			ry += norml * (py + 0.5 * ykick);
-			py += ykick;
-		}
+		T &rx = pos.rx, &px = pos.px, &ry = pos.ry, &py = pos.py, &de = pos.de, &dl = pos.dl;
+		T pnorm   = 1 / (1 + de);
+		T norml   = elem.length * pnorm;
+		dl += norml * pnorm * 0.5 * (
+				xkick * xkick/3.0 + ykick * ykick/3.0 +
+				px*px + py*py +
+				px * xkick + py * ykick
+			  );
+		rx += norml * (px + 0.5 * xkick);
+		px += xkick;
+		ry += norml * (py + 0.5 * ykick);
+		py += ykick;
 	}
 	local_2_global(pos, elem);
 
@@ -283,34 +265,30 @@ Status::type pm_corrector_pass(std::vector<Pos<T> >&pos, const Element &elem) {
 
 
 template <typename T>
-Status::type pm_cavity_pass(std::vector<Pos<T> >&pos, const Element &elem) {
+Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem) {
 
 	global_2_local(pos, elem);
 
     double nv = elem.voltage / elem.energy;
     if (elem.length == 0) {
-    	for(unsigned int p=0; p<pos.size(); ++p) {
-    		T &de = pos[p].de, &dl = pos[p].dl;
-    		de +=  -nv * sin(TWOPI*elem.frequency * dl/ light_speed);
-    	}
+		T &de = pos.de, &dl = pos.dl;
+		de +=  -nv * sin(TWOPI*elem.frequency * dl/ light_speed);
     } else {
-    	for(unsigned int p=0; p<pos.size(); ++p) {
-    		T &rx = pos[p].rx, &px = pos[p].px, &ry = pos[p].ry, &py = pos[p].py, &de = pos[p].de, &dl = pos[p].dl;
-    		// drift half length
-    		T pnorm   = 1 / (1 + de);
-    		T norml   = (0.5 * elem.length) * pnorm;
-    		rx += norml * px;
-    		ry += norml * py;
-    		dl += 0.5 * norml * pnorm * (px*px + py*py);
-    		// longitudinal momentum kick
-    		de += -nv * sin(TWOPI*elem.frequency*dl/light_speed);
-    		// drift half length
-    		pnorm   = 1.0 / (1.0 + de);
-    		norml   = (0.5 * elem.length) * pnorm;
-    		rx += norml * px;
-    		ry += norml * py;
-    		dl += 0.5 * norml * pnorm * (px*px + py*py);
-    	}
+		T &rx = pos.rx, &px = pos.px, &ry = pos.ry, &py = pos.py, &de = pos.de, &dl = pos.dl;
+		// drift half length
+		T pnorm   = 1 / (1 + de);
+		T norml   = (0.5 * elem.length) * pnorm;
+		rx += norml * px;
+		ry += norml * py;
+		dl += 0.5 * norml * pnorm * (px*px + py*py);
+		// longitudinal momentum kick
+		de += -nv * sin(TWOPI*elem.frequency*dl/light_speed);
+		// drift half length
+		pnorm   = 1.0 / (1.0 + de);
+		norml   = (0.5 * elem.length) * pnorm;
+		rx += norml * px;
+		ry += norml * py;
+		dl += 0.5 * norml * pnorm * (px*px + py*py);
     }
     local_2_global(pos, elem);
 
@@ -319,12 +297,12 @@ Status::type pm_cavity_pass(std::vector<Pos<T> >&pos, const Element &elem) {
 }
 
 template <typename T>
-Status::type pm_thinquad_pass(std::vector<Pos<T> >&pos, const Element &elem) {
+Status::type pm_thinquad_pass(Pos<T> &pos, const Element &elem) {
 	return Status::passmethod_not_implemented;
 }
 
 template <typename T>
-Status::type pm_thinsext_pass(std::vector<Pos<T> >&pos, const Element &elem) {
+Status::type pm_thinsext_pass(Pos<T> &pos, const Element &elem) {
 	return Status::passmethod_not_implemented;
 }
 

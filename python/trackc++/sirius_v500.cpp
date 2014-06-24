@@ -242,7 +242,7 @@ void sirius_v500(std::vector<Element>& the_ring) {
     }
 
     //""" sets cavity frequency according to lattice length """
-    double C = latt_findspos(the_ring, the_ring.size());
+    double C = latt_findspos(the_ring, 1+the_ring.size());
 
     double rev_freq = light_speed / C;
     std::vector<int> rf_idx = latt_findcells_fam_name(the_ring, "cav");
