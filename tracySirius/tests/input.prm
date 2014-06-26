@@ -1,36 +1,24 @@
  in_dir ./
- lat_file flat_file_rms05.dat
+ lat_file flat_file_rms01.dat
  
-# nr_cpus 4
-
 # TuneTracFlag
 # CouplingFlag 
 
 # multipole error file
 # multipole_file multipole_Sirius_v500.dat
-
+ 
 # ReadMultipoleFlag
 
-#FitTuneFlag     46.17987   14.15001 qaf qad qbd1 qbf qbd2
+# ReadChamberFlag Chamber_Sirius_v500.dat
+
+# FitTuneFlag     46.17987   14.15001 qaf qad qbd1 qbf qbd2
 # FitChromFlag	sd1	sf1	0.0	0.0
 
-# AmplitudeTuneShiftFlag	30	30	1026	0.03	0.010	0.0
-# EnergyTuneShiftFlag	30	1026	0.04 
+nr_cpus           10
+CavityFlag        true
+RadiationFlag     true
+VacuumChamberFlag true
 
- CavityFlag        true
- RadiationFlag     true
- VacuumChamberFlag false
+#DynApXYFlag 9	4	5000	-0.012	0.012	0.0	0.0041	0.0
+DynApEXFlag 9	4	5000	-0.012	0.012	0.0	0.0041	0.0
 
- FmapFlag	15	15	5000	-0.015	0.015	0.0	0.0042	0.0	false
- FmapdpFlag	15	15	3500	0.0	-0.015	-0.06	0.06	0.001	false
-
- DynApXYFlag	15	15	5000	-0.015	0.015	0.0	0.0042	0.0	
- DynApEXFlag	15	15	3500	0.0	-0.015	-0.06	0.06	0.001
-
-# a variável name pode ser um conjunto de até dozes palavras, podendo assumir qualquer uma das seguintes
-# palavras: "dip, quad, sext, corr, all" ou então nomes de famílias de elementos da rede
-#MomentumAccFlag Dim  nturn deminp  demaxp nstepp deminn  demaxn nstepn sstart sstop name(1-12)
-# MomentumAccFlag 6D   500   0.021   0.061   20    -0.021  -0.061   20   0.00   52.0  qaf qad qbf qbd1 qbd2 mia mib mc
-
-
-# PhaseSpaceFlag	6D	1e-6	0.0	1e-6	0.0	0.05	0.0	1000	true

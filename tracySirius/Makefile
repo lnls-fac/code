@@ -8,7 +8,7 @@ else
 endif
 
 MACHINE		= -m64
-OPT_FLAG	= -O3
+OPT_FLAG	= -O3 -w
 DBG_FLAG	= -O0 -g3
 
 SOURCES_C	= nrutil.c nrcheck.c nrframe.c nrlinwww.c

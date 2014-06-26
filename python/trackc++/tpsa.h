@@ -662,6 +662,11 @@ std::ostream& operator << (std::ostream& out, const Tpsa<V,N,TYPE>& o) {
 	return out;
 }
 
+template <unsigned int V, unsigned int N, typename TYPE>
+bool isfinite(const Tpsa<V,N,TYPE>& a_) {
+	return std::isfinite(a_.c[0]);
+}
+
 
 
 #endif

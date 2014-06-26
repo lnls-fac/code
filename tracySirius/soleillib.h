@@ -41,19 +41,13 @@ void Trac_Tab(double x, double px, double y, double py, double dp,
 void SetSkewQuad(void);
 void Trac_COD(double x, double px, double y, double py, double dp, double ctau,
                  long nmax, long &lastn, long &lastpos);
-void Dyna(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
-               double energy, bool diffusion);
-void daxy(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
-		double z0, double zmax, double energy);
-void daex(long Nbx, long Nbe, long Nbtour, double x0, double xmax,
-		double emin, double emax, double z);
-                            
+void Dyna(long Nbx, long Nbz, long Nbtour, double xmax, double zmax, double energy, bool diffusion);
+void daxy(long Nbx, long Nbz, long Nbtour, double x0,   double xmax, double z0, double zmax, double energy);
+void daex(long Nbx, long Nbe, long Nbtour, double emin, double emax, double x0, double xmax, double z);
+void daxy_radial(long Nbtour, long nr_radial, double energy, double xscale, double zscale, double r_tol);
+
 /* Frequency map analysis */
 void TunesShiftWithEnergy(long Nb, long Nbtour, double emax);
-//void fmap(long Nbx, long Nbz, long Nbtour, double xmax, double zmax,
-//                 double energy, bool diffusion, bool matlab);
-//void fmapdp(long Nbx, long Nbe, long Nbtour, double xmax, double emax,
-//              double z, bool diffusion, bool matlab);
 void fmap(long Nbx, long Nbz, long Nbtour, double x0, double xmax,
 		double z0, double zmax, double energy, bool diffusion);
 void fmapdp(long Nbx, long Nbe, long Nbtour, double x0, double xmax,

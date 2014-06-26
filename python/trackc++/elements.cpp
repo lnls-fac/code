@@ -8,6 +8,7 @@
 
 #include "auxiliary.h"
 #include "elements.h"
+#include <cfloat>
 
 const std::vector<double> Element::default_polynom = std::vector<double>(3,0);
 
@@ -21,14 +22,14 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 	gap(0), fint_in(0), fint_out(0),
 	thin_KL(0), thin_SL(0),
 	frequency(0), voltage(0), energy(0),
-	//err_dx(0), err_dy(0), err_excit(0),
-	//err_roll(0), err_yaw(0), err_pitch(0),
-	polynom_a(default_polynom), polynom_b(default_polynom)
+	polynom_a(default_polynom), polynom_b(default_polynom),
+	hmax(DBL_MAX), vmax(DBL_MAX)
 {
 	//polynom_a.clear();
 	//polynom_b.clear();
 	//t1.set_zero(); t2.set_zero();
 	//r1.set_identity(); r2.set_identity();
+
 	for(unsigned int i=0; i<6; i++) {
 		t_in[i] = t_out[i] = 0.0;
 		for(unsigned int j=0; j<6; ++j) {
@@ -42,22 +43,51 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 
 };
 
+Element Element::marker (const std::string& fam_name_) {
+	Element e = Element(fam_name_, 0);
+	e.pass_method = PassMethod::pm_identity_pass;
+	return e;
+}
+
 Element Element::drift (const std::string& fam_name_, const double& length_) {
 	Element e = Element(fam_name_, length_);
 	e.pass_method = PassMethod::pm_drift_pass;
 	return e;
 }
 
+Element Element::hcorrector(const std::string& fam_name_, const double& length_, const double& hkick_) {
+	Element e = Element(fam_name_, length_);
+	e.pass_method = PassMethod::pm_corrector_pass;
+	e.hkick = hkick_;
+	return e;
+}
 
-Element Element::quadrupole (const std::string& fam_name_, const double& length_, const double& K_) {
+Element Element::vcorrector(const std::string& fam_name_, const double& length_, const double& vkick_) {
+	Element e = Element(fam_name_, length_);
+	e.pass_method = PassMethod::pm_corrector_pass;
+	e.vkick = vkick_;
+	return e;
+}
+
+Element Element::corrector(const std::string& fam_name_, const double& length_, const double& hkick_, const double& vkick_) {
+	Element e = Element(fam_name_, length_);
+	e.pass_method = PassMethod::pm_corrector_pass;
+	e.hkick = hkick_;
+	e.vkick = vkick_;
+	return e;
+}
+
+
+Element Element::quadrupole (const std::string& fam_name_, const double& length_, const double& K_, const int nr_steps_) {
 	Element e = Element(fam_name_, length_);
 	e.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
 	e.polynom_b[1] = K_;
 	return e;
 }
 
-Element Element::sextupole (const std::string& fam_name_, const double& length_, const double& S_) {
+Element Element::sextupole (const std::string& fam_name_, const double& length_, const double& S_, const int nr_steps_) {
 	Element e = Element(fam_name_, length_);
+	e.nr_steps = nr_steps_;
 	e.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
 	e.polynom_b[2] = S_;
 	return e;
@@ -96,27 +126,27 @@ void print_polynom(std::ostream& out, const std::string& label, const std::vecto
 	if (order > 0) out << std::endl;
 }
 
-std::ostream& operator<< (std::ostream &out, Element& el) {
+std::ostream& operator<< (std::ostream &out, const Element& el) {
 
-	out << "FamName      : " << el.fam_name << std::endl;
-	if (el.length != 0) out << "Length       : " << el.length << std::endl;
-	out << "PassMethod   : " << passmethods[el.pass_method] << std::endl;
-	if (el.nr_steps > 1) out << "NrSteps      : " << el.nr_steps << std::endl;
-	if (el.thin_KL != 0)  out << "ThinKL       : " << el.thin_KL << std::endl;
-	if (el.thin_SL != 0)  out << "ThinSL       : " << el.thin_SL << std::endl;
-	if (el.angle != 0)  out << "BendingAngle : " << el.angle << std::endl;
-	if (el.angle != 0)  out << "EntranceAngle: " << el.angle_in << std::endl;
-	if (el.angle != 0)  out << "ExitAngle    : " << el.angle_out << std::endl;
+	                      out << "fam_name      : " << el.fam_name << std::endl;
+	if (el.length != 0)   out << "length        : " << el.length << std::endl;
+	                      out << "pass_method   : " << pm_dict[el.pass_method] << std::endl;
+	if (el.nr_steps > 1)  out << "nr_steps      : " << el.nr_steps << std::endl;
+	if (el.thin_KL != 0)  out << "thin_KL       : " << el.thin_KL << std::endl;
+	if (el.thin_SL != 0)  out << "thin_SL       : " << el.thin_SL << std::endl;
+	if (el.angle != 0)    out << "bending_angle : " << el.angle << std::endl;
+	if (el.angle != 0)    out << "entrance_angle: " << el.angle_in << std::endl;
+	if (el.angle != 0)    out << "exit_angle    : " << el.angle_out << std::endl;
 	if ((el.gap != 0) and ((el.fint_in != 0) or (el.fint_out != 0))) {
-		out << "Gap          : " << el.gap << std::endl;
-		out << "FInt1        : " << el.fint_in << std::endl;
-		out << "FInt2        : " << el.fint_out << std::endl;
+		                  out << "gap           : " << el.gap << std::endl;
+		                  out << "fint_in       : " << el.fint_in << std::endl;
+		                  out << "fint_out      : " << el.fint_out << std::endl;
 	}
-	print_polynom(out, "PolynomA     : ", el.polynom_a);
-	print_polynom(out, "PolynomB     : ", el.polynom_b);
-	if (el.frequency != 0) out << "Frequency    : " << el.frequency << std::endl;
-	if (el.voltage != 0)   out << "Voltage      : " << el.voltage << std::endl;
-	if (el.energy != 0)    out << "Frequency    : " << el.energy << std::endl;
+	print_polynom(        out,   "polynom_a     : ", el.polynom_a);
+	print_polynom(        out,   "polynom_b     : ", el.polynom_b);
+	if (el.frequency != 0)out << "frequency     : " << el.frequency << std::endl;
+	if (el.voltage != 0)  out << "voltage       : " << el.voltage << std::endl;
+	if (el.energy != 0)   out << "energy        : " << el.energy << std::endl;
 	return out;
 }
 

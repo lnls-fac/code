@@ -257,6 +257,15 @@ void read_script(const char *param_file_name, bool rd_lat, long& CommNo, UserCom
 
 				strcpy(UserCommandFlag[CommNo].CommandStr,name);
 			}
+			else if (strcmp("DynApXYRadialFlag", name) == 0){
+				strcpy(dummy, "");				
+				sscanf(line, "%*s %ld %ld %lf %lf %lf %lf",
+						&(UserCommandFlag[CommNo]._DAXY_nturn), &(UserCommandFlag[CommNo]._DAXY_nr_radial),
+						&(UserCommandFlag[CommNo]._DAXY_delta),
+						&(UserCommandFlag[CommNo]._DAXY_xscale), &(UserCommandFlag[CommNo]._DAXY_yscale),
+                        &(UserCommandFlag[CommNo]._DAXY_r_tol));
+				strcpy(UserCommandFlag[CommNo].CommandStr,name);
+			}
 			else if (strcmp("DynApEXFlag", name) == 0){
 				strcpy(dummy, "");
 				sscanf(line, "%*s %ld %ld %ld %lf %lf %lf %lf %lf",

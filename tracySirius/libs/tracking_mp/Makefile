@@ -5,6 +5,8 @@ tracking_mp-m32:
 	g++ -m32 -O2 -c mp_task_mgr.cc
 	g++ -m32 -O2 -c fmap_mp.cc
 	g++ -m32 -O2 -c fmapdp_mp.cc
+	g++ -m32 -O2 -c daxy_mp.cc
+	g++ -m32 -O2 -c daex_mp.cc
 	ar r tracking_mp-m32.a *.o 
 
 
@@ -13,6 +15,8 @@ tracking_mp-m64:
 	g++ -m64 -O2 -c mp_task_mgr.cc
 	g++ -m64 -O2 -c fmap_mp.cc
 	g++ -m64 -O2 -c fmapdp_mp.cc
+	g++ -m64 -O2 -c daxy_mp.cc
+	g++ -m64 -O2 -c daex_mp.cc
 	ar r tracking_mp-m64.a *.o 
 
 tracking_mp-debug-m32:

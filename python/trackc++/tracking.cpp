@@ -1,7 +1,10 @@
 #include "trackc++.h"
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_permutation.h>
+#include <gsl/gsl_linalg.h>
 
-// findm66
-// -------
+// track_findm66
+// -------------
 // returns a vector with 6-d transfer matrices, one for each element
 //
 // inputs:
@@ -18,8 +21,7 @@
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 
-Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
-
+Status::type track_findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
 
 	Status::type status  = Status::success;
 
@@ -31,14 +33,13 @@ Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<do
 
 	for(unsigned int i=0; i<line.size(); ++i) {
 
-		std::vector<Pos<Tpsa<6,1> > > particle;
-		particle.push_back(Tpsa<6,1>());
-		particle[0].rx = Tpsa<6,1>(closed_orbit[i].rx, 0); particle[0].px = Tpsa<6,1>(closed_orbit[i].px, 1);
-		particle[0].ry = Tpsa<6,1>(closed_orbit[i].ry, 2); particle[0].py = Tpsa<6,1>(closed_orbit[i].py, 3);
-		particle[0].de = Tpsa<6,1>(closed_orbit[i].de, 4); particle[0].dl = Tpsa<6,1>(closed_orbit[i].dl, 5);
+		Pos<Tpsa<6,1> > tpsa;
+		tpsa.rx = Tpsa<6,1>(closed_orbit[i].rx, 0); tpsa.px = Tpsa<6,1>(closed_orbit[i].px, 1);
+		tpsa.ry = Tpsa<6,1>(closed_orbit[i].ry, 2); tpsa.py = Tpsa<6,1>(closed_orbit[i].py, 3);
+		tpsa.de = Tpsa<6,1>(closed_orbit[i].de, 4); tpsa.dl = Tpsa<6,1>(closed_orbit[i].dl, 5);
 
 		// track through element
-		if ((status = elementpass (line[i], particle)) != Status::success) return status;
+		if ((status = track_elementpass (line[i], tpsa)) != Status::success) return status;
 
 		// minimum  check to see if memory of allocated for each transfer matrix
 		if (m66[i] == NULL) {
@@ -47,32 +48,138 @@ Status::type findm66 (const std::vector<Element>& line, const std::vector<Pos<do
 		}
 
 		// RX
-		*(m66[i] + 0*6+0) = particle[0].rx.c[1];*(m66[i] + 0*6+1) = particle[0].rx.c[2];
-		*(m66[i] + 0*6+2) = particle[0].rx.c[3];*(m66[i] + 0*6+3) = particle[0].rx.c[4];
-		*(m66[i] + 0*6+4) = particle[0].rx.c[5];*(m66[i] + 0*6+5) = particle[0].rx.c[6];
+		*(m66[i] + 0*6+0) = tpsa.rx.c[1];*(m66[i] + 0*6+1) = tpsa.rx.c[2];
+		*(m66[i] + 0*6+2) = tpsa.rx.c[3];*(m66[i] + 0*6+3) = tpsa.rx.c[4];
+		*(m66[i] + 0*6+4) = tpsa.rx.c[5];*(m66[i] + 0*6+5) = tpsa.rx.c[6];
 		// PX
-		*(m66[i] + 1*6+0) = particle[0].px.c[1];*(m66[i] + 1*6+1) = particle[0].px.c[2];
-		*(m66[i] + 1*6+2) = particle[0].px.c[3];*(m66[i] + 1*6+3) = particle[0].px.c[4];
-		*(m66[i] + 1*6+4) = particle[0].px.c[5];*(m66[i] + 1*6+5) = particle[0].px.c[6];
+		*(m66[i] + 1*6+0) = tpsa.px.c[1];*(m66[i] + 1*6+1) = tpsa.px.c[2];
+		*(m66[i] + 1*6+2) = tpsa.px.c[3];*(m66[i] + 1*6+3) = tpsa.px.c[4];
+		*(m66[i] + 1*6+4) = tpsa.px.c[5];*(m66[i] + 1*6+5) = tpsa.px.c[6];
 		// RY
-		*(m66[i] + 2*6+0) = particle[0].ry.c[1];*(m66[i] + 2*6+1) = particle[0].ry.c[2];
-		*(m66[i] + 2*6+2) = particle[0].ry.c[3];*(m66[i] + 2*6+3) = particle[0].ry.c[4];
-		*(m66[i] + 2*6+4) = particle[0].ry.c[5];*(m66[i] + 2*6+5) = particle[0].ry.c[6];
+		*(m66[i] + 2*6+0) = tpsa.ry.c[1];*(m66[i] + 2*6+1) = tpsa.ry.c[2];
+		*(m66[i] + 2*6+2) = tpsa.ry.c[3];*(m66[i] + 2*6+3) = tpsa.ry.c[4];
+		*(m66[i] + 2*6+4) = tpsa.ry.c[5];*(m66[i] + 2*6+5) = tpsa.ry.c[6];
 		// PY
-		*(m66[i] + 3*6+0) = particle[0].py.c[1];*(m66[i] + 3*6+1) = particle[0].py.c[2];
-		*(m66[i] + 3*6+2) = particle[0].py.c[3];*(m66[i] + 3*6+3) = particle[0].py.c[4];
-		*(m66[i] + 3*6+4) = particle[0].py.c[5];*(m66[i] + 3*6+5) = particle[0].py.c[6];
+		*(m66[i] + 3*6+0) = tpsa.py.c[1];*(m66[i] + 3*6+1) = tpsa.py.c[2];
+		*(m66[i] + 3*6+2) = tpsa.py.c[3];*(m66[i] + 3*6+3) = tpsa.py.c[4];
+		*(m66[i] + 3*6+4) = tpsa.py.c[5];*(m66[i] + 3*6+5) = tpsa.py.c[6];
 		// DE
-		*(m66[i] + 4*6+0) = particle[0].de.c[1];*(m66[i] + 4*6+1) = particle[0].de.c[2];
-		*(m66[i] + 4*6+2) = particle[0].de.c[3];*(m66[i] + 4*6+3) = particle[0].de.c[4];
-		*(m66[i] + 4*6+4) = particle[0].de.c[5];*(m66[i] + 4*6+5) = particle[0].de.c[6];
+		*(m66[i] + 4*6+0) = tpsa.de.c[1];*(m66[i] + 4*6+1) = tpsa.de.c[2];
+		*(m66[i] + 4*6+2) = tpsa.de.c[3];*(m66[i] + 4*6+3) = tpsa.de.c[4];
+		*(m66[i] + 4*6+4) = tpsa.de.c[5];*(m66[i] + 4*6+5) = tpsa.de.c[6];
 		// DL
-		*(m66[i] + 5*6+0) = particle[0].dl.c[1];*(m66[i] + 5*6+1) = particle[0].dl.c[2];
-		*(m66[i] + 5*6+2) = particle[0].dl.c[3];*(m66[i] + 5*6+3) = particle[0].dl.c[4];
-		*(m66[i] + 5*6+4) = particle[0].dl.c[5];*(m66[i] + 5*6+5) = particle[0].dl.c[6];
+		*(m66[i] + 5*6+0) = tpsa.dl.c[1];*(m66[i] + 5*6+1) = tpsa.dl.c[2];
+		*(m66[i] + 5*6+2) = tpsa.dl.c[3];*(m66[i] + 5*6+3) = tpsa.dl.c[4];
+		*(m66[i] + 5*6+4) = tpsa.dl.c[5];*(m66[i] + 5*6+5) = tpsa.dl.c[6];
 
 	}
 
 	return status;
 
 }
+
+Status::type track_findorbit6(
+		const std::vector<Element>& the_ring,
+		const int harmonic_number,
+		std::vector<Pos<double> >& orb) {
+
+	double delta        = 1e-9;              // [m],[rad],[dE/E]
+	double tolerance    = 2.22044604925e-14;
+	int    max_nr_iters = 50;
+
+	// calcs longitudinal fixed point
+	double L0 = latt_findspos(the_ring, 1+the_ring.size());
+	double T0 = L0 / light_speed;
+	std::vector<int>    cav_idx = latt_findcells_frequency(the_ring, 0, true);
+	double frf = the_ring[cav_idx[0]].frequency;
+	double fixedpoint = light_speed*((1.0*harmonic_number)/frf - T0);
+
+	// temporary vectors and matrices
+	std::vector<Pos<double> > co(7,0);
+	std::vector<Pos<double> > co2(7,0);
+	std::vector<Pos<double> > D(7,0);
+	std::vector<Pos<double> > M(6,0);
+	Pos<double> dco(1.0,1.0,1.0,1.0,1.0,1.0);
+	Pos<double> theta(0.0,0.0,0.0,0.0,0.0,0.0);
+
+	theta.dl = fixedpoint;
+	matrix6_set_identity(D, delta);
+
+	int nr_iter = 0;
+	while ((get_max(dco) > tolerance) and (nr_iter <= max_nr_iters)) {
+		co = co + D;
+		Pos<double> Ri = co[6];
+		std::vector<Pos<double> > co2;
+		int element_offset;
+		Status::type status;
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[0], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[1], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[2], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[3], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[4], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[5], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[6], co2, element_offset, false));
+		if (status != Status::success) {
+			return Status::findorbit_one_turn_matrix_problem;
+		}
+		//print(co2);
+		Pos<double> Rf = co2[6];
+		M[0] = (co2[0] - Rf) / delta;
+		M[1] = (co2[1] - Rf) / delta;
+		M[2] = (co2[2] - Rf) / delta;
+		M[3] = (co2[3] - Rf) / delta;
+		M[4] = (co2[4] - Rf) / delta;
+		M[5] = (co2[5] - Rf) / delta;
+		//print(M);
+		Pos<double> b = Rf - Ri - theta;
+		std::vector<Pos<double> > M_1(6,0);
+		matrix6_set_identity(M_1);
+		M_1 = M_1 - M;
+		dco = linalg_solve(M_1, b);
+		co[6] = dco + Ri;
+		co[0] = co[6]; co[1] = co[6];
+		co[2] = co[6]; co[3] = co[6];
+		co[4] = co[6]; co[5] = co[6];
+		nr_iter++;
+	}
+
+	if (nr_iter > max_nr_iters) {
+		return Status::findorbit_not_converged;
+	}
+
+	// propagates fixed point throught the_ring
+	orb.clear();
+	int element_offset = 0;
+	track_linepass(the_ring, co[6], orb, element_offset, true);
+	return Status::success;
+
+}
+
+
+Pos<double> linalg_solve(const std::vector<Pos<double> >& M, const Pos<double>& B) {
+
+	gsl_matrix* m = gsl_matrix_alloc(6,6);
+	gsl_vector* b = gsl_vector_alloc(6);
+	gsl_vector* x = gsl_vector_alloc(6);
+	gsl_permutation* p = gsl_permutation_alloc(6);
+
+	gsl_vector_set(b,0,B.rx); gsl_vector_set(b,1,B.px);
+	gsl_vector_set(b,2,B.ry); gsl_vector_set(b,3,B.py);
+	gsl_vector_set(b,4,B.de); gsl_vector_set(b,5,B.dl);
+	for(unsigned int i=0; i<6; ++i) {
+		gsl_matrix_set(m,0,i,M[i].rx); gsl_matrix_set(m,1,i,M[i].px);
+		gsl_matrix_set(m,2,i,M[i].ry); gsl_matrix_set(m,3,i,M[i].py);
+		gsl_matrix_set(m,4,i,M[i].de); gsl_matrix_set(m,5,i,M[i].dl);
+	}
+
+	int s; gsl_linalg_LU_decomp(m, p, &s);
+	gsl_linalg_LU_solve(m, p, b, x);
+	Pos<double> X(gsl_vector_get(x,0),gsl_vector_get(x,1),gsl_vector_get(x,2),gsl_vector_get(x,3),gsl_vector_get(x,4),gsl_vector_get(x,5));
+
+	gsl_matrix_free(m);
+	gsl_vector_free(b);
+	gsl_vector_free(x);
+	gsl_permutation_free(p);
+	return X;
+}
+

@@ -59,10 +59,15 @@
  //extern bool DynamicAperXY;
    long _DAXY_nxpoint, _DAXY_nypoint, _DAXY_nturn;
    double _DAXY_x0, _DAXY_xmax, _DAXY_y0,_DAXY_ymax, _DAXY_delta;
+
+ //extern bool DynamicAperXYRadial;
+   long _DAXY_nr_radial;
+   double _DAXY_xscale, _DAXY_yscale, _DAXY_r_tol;
  
  //extern bool DynamicAperEX;
    long _DAEX_nxpoint, _DAEX_nepoint, _DAEX_nturn;
-   double _DAEX_x0, _DAEX_xmax, _DAEX_emin, _DAEX_emax, _DAEX_z;	
+   double _DAEX_x0, _DAEX_xmax, _DAEX_emin, _DAEX_emax, _DAEX_z;
+   	
 
    
   //MomentumAccFlag;

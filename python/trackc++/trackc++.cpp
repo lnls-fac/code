@@ -1,84 +1,50 @@
-// TRACKC++
-// ========
-// Author: 		Ximenes R. Resende
-// email:  		xresende@gmail.com, ximenes.resende@lnls.br
-// affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
-// Date: 		Tue Dec 10 17:57:20 BRST 2013
+#include "commands.h"
+#include <string>
+#include <cmath>
+#include <iostream>
+#include <cstdlib>
 
+std::string string_passmethods[] = {
+		"pm_identity_pass",
+		"pm_drift_pass",
+		"pm_str_mpole_symplectic_pass",
+		"pm_bnd_mpole_symplectic_pass",
+		"pm_corrector_pass",
+		"pm_cavity_pass",
+		"pm_thinquad_pass",
+		"pm_thinsext_pass",
+		"pm_str_mpole_symplectic_pass",
+		"pm_bnd_mpole_symplectic_pass",
+};
 
-#include "trackc++.h"
+std::string string_error_messages[] = {
+		"success",
+		"passmethod_not_defined",
+		"passmethod_not_implemented",
+		"particle_lost",
+		"inconsistent_dimensions",
+		"uninitialized_memory",
+		"findorbit_not_converged",
+		"findorbit_one_turn_matrix_problem",
+		"file_not_found"
+};
 
-int create_model(std::vector<Element>& the_ring) {
-
-	//return 0;
-
-	Element ds = Element::drift      ("ds", 1.1);
-	Element qd = Element::quadrupole ("qd", 1.2, 3.0);
-	Element sf = Element::sextupole  ("sf", 1.2, -3.2);
-	Element di = Element::rbend      ("di", 1.1, 0.1234, 0, 0, 0.1, 4.1);
-
-	//std::vector<Element> the_ring;
-	//the_ring.clear();
-
-	the_ring.push_back(ds);
-	the_ring.push_back(qd);
-	the_ring.push_back(sf);
-	the_ring.push_back(di);
-
-//	printlattice(the_ring);
-//
-//	std::vector<Pos<> > particles;
-//	Pos<> pos;
-//	pos.rx = 0.001;
-//	particles.push_back(pos);
-//
-//	Status::type stat;
-//	int element_idx;
-//	std::vector<Pos<> > new_particles;
-//	if ((stat = linepass (the_ring, particles, new_particles, &element_idx, false)) != Status::success) {
-//		std::cerr << "Error: " << stat << std::endl;
-//	}
-
-	return 0;
+bool isfinite(const double& v) {
+	return std::isfinite(v);
 }
 
-#include <cstdio>
-
-int test_findm66() {
-
-	std::vector<Element> the_ring;
-
-	create_model(the_ring);
-
-	std::vector<double*> m66;
-
-	std::vector<Pos<double> > cod;
-	for(unsigned int i=0; i<the_ring.size(); ++i) {
-		cod.push_back(Pos<double>());
-		double *m = new double [36];
-		m66.push_back(m);
-	}
-
-	findm66 (the_ring, cod, m66);
-
-	for(unsigned int i=0; i<the_ring.size(); ++i) {
-		std::cout << "element#     : " << i+1 << std::endl;
-		std::cout << the_ring[i];
-		for(unsigned int r=0; r<6; ++r) {
-			for(unsigned int c=0; c<6; ++c) {
-				printf("%+10.4E ", (m66[i])[6*r+c]);
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-	}
-
-	return 0;
-
+int main(int argc, char *argv[]) {
+	if (argc == 1) {
+		fprintf(stdout, "TRACKC++ [%s %s]\n", __DATE__, __TIME__);
+		fprintf(stdout, "Accelerator Physics Group - LNLS\n");
+		fprintf(stdout, "Campinas BRAZIL\n");
+		fprintf(stdout, "contact: xresende@gmail.com\n");
+		return EXIT_SUCCESS;
+	};
+	std::string cmd(argv[1]);
+	if (cmd == "tests")    return cmd_tests(argc, argv);
+	if (cmd == "dynap_xy") return cmd_dynap_xy(argc, argv);
+	std::cerr << "trackc++: invalid command!" << std::endl;
+	return EXIT_FAILURE;
 }
 
-int main() {
-
-	test_findm66();
-
-}

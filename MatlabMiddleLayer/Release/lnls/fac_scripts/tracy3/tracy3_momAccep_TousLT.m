@@ -1,7 +1,7 @@
 function tracy3_momAccep_TousLT(the_ring, varargin)
 
 n_calls = 1;
-if nargin >= 1
+if nargin > 1
     n_calls = varargin{1};
 end
 
@@ -46,47 +46,34 @@ for i=1:n_calls
     
     j=0;
     for k = 1:n_pastas
-        if rms_mode
-            full_name = fullfile(path, sprintf('rms%02d/momAccept.out',k));
-        else
-            full_name = fullfile(path,'momAccept.out');
-        end
+        pathname = path;
+        if rms_mode, pathname = fullfile(path, sprintf('rms%02d',k)); end
         
         try
-            a = importdata(full_name, ' ', 3);
+            [spos, accep(j+1,:,:), nLost(j+1,:,:), sLost(j+1,:,:)] = tracy3_load_ma_data(pathname);
             j = j + 1;
         catch
             fprintf('%-d-%-3d: nao carregou',i,k);
         end
-        
-        spos  = str2num(char(a.textdata{:,2}))'; spos = spos(1:end/2);
-        accep(j,:) = str2num(char(a.textdata{:,3}));
-        accep2 = reshape(accep(j,:), length(accep(j,:))/2, 2)';
-        
+
         Accep(1,:) = spos;
-        Accep(2,:) = min(min(abs(accep2)), accepRF);
+        Accep([2 3],:) = min(accep(j,:,:), accepRF);
         % não estou usando alguns outputs
         LT = lnls_tau_touschek_inverso(params,Accep,twi);
         lifetime(j) = 1/LT.AveRate/60/60; % em horas
-        
-        n_lost(j,:) = a.data(:,2);
-        sLost(j,:) = str2num(char(a.textdata{:,4}));
     end
     
-    aveAccep = mean(accep,1)*100; % em %
-    aveAccep = reshape(aveAccep, length(aveAccep)/2, 2)';
-    if rms_mode; 
-        rmsAccep = std(accep,0,1)*100;
-        rmsAccep = reshape(rmsAccep, length(rmsAccep)/2, 2)';
-    end
-    
+    aveAccep = squeeze(mean(accep,1))*100; % em %
     aveLT = mean(lifetime);
-    if rms_mode; rmsLT = std(lifetime); end;
-    
+    if rms_mode; 
+        rmsAccep = squeeze(std(accep,0,1))*100;
+        rmsLT = std(lifetime);
+    end
+   
     sLost = sLost(:)';
     modSLost = mod(sLost,518.396/10);
     
-    clear sLost n_lost lifetime accep Accep
+    clear sLost nLost lifetime accep Accep
     %% exposicao dos resultados
     
     %imprime o tempo de vida
@@ -112,13 +99,13 @@ for i=1:n_calls
     % [~, ele] = hdrload('MA_ele.txt');
     % plot(ele(:,1), ele(:,[2 4])*100,'r','Marker','.','DisplayName',{'elegantpos', 'elegantneg'});
 
-    f2=figure('OuterPosition',[xi yi xf yf]);
-    fb = axes('Parent',f2,'FontSize',size_font);
-    [n, xout] = hist(modSLost',12); bar(fb,xout,n);
-    xlim([0, 52]);
-    xlabel('Pos [m]','FontSize',size_font);
-    ylabel('Number of particles lost','FontSize',size_font);
-    title(fb,['Histograma - ' text_leg{i}]);
+%     f2=figure('OuterPosition',[xi yi xf yf]);
+%     fb = axes('Parent',f2,'FontSize',size_font);
+%     [n, xout] = hist(modSLost',12); bar(fb,xout,n);
+%     xlim([0, 52]);
+%     xlabel('Pos [m]','FontSize',size_font);
+%     ylabel('Number of particles lost','FontSize',size_font);
+%     title(fb,['Histograma - ' text_leg{i}]);
 end
 
 legend(pl(1:2:end),'show',text_leg, 'Location','Best');

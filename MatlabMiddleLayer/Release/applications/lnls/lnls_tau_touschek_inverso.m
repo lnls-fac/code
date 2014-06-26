@@ -18,8 +18,9 @@ function Resp = lnls_tau_touschek_inverso(params,Accep,optics)
 %           sigS  = comprimento do bunch [m]
 %           K     = fator de acoplamento (emity = K*emitx)
 %
-%       Accep(2,:) = aceitância de energia para uma seleção de pontos
-%                    do anel (lembrar: min(accep_din, accep_rf))
+%       Accep([2 3],:) = aceitância de energia positiva(2) e negativa(3)
+%                    para uma seleção de pontos do anel.
+%                    (lembrar: min(accep_din, accep_rf))
 %       Accep(1,:) = posição longitudinal dos pontos para os quais a
 %                    aceitância foi calculada.
 %
@@ -58,7 +59,8 @@ end
 npoints = ceil((Accep(1,end) - Accep(1,1))/0.1);
 s_calc = linspace(Accep(1,1), Accep(1,end), npoints);
 
-d_acc  = interp1(Accep(1,:), Accep(2,:), s_calc);
+d_accp  = interp1(Accep(1,:), Accep(2,:), s_calc);
+d_accn  = interp1(Accep(1,:), -Accep(3,:), s_calc);
 
 [~, ind, ~] = unique(optics.pos);
 
@@ -86,13 +88,17 @@ B1 = betax.*fator./(2*Sx2);
 C1 = betax.^2./(4*Sx2) - B1.^2./(4*A1);
 
 % Limite de integração inferior
-ksi = (2*sqrt(C1)/gamma .* d_acc).^2;
+ksip = (2*sqrt(C1)/gamma .* d_accp).^2;
+ksin = (2*sqrt(C1)/gamma .* d_accn).^2;
 
 % Interpola d_touschek
-D = interp1(x_tabela,y_tabela,ksi);
+Dp = interp1(x_tabela,y_tabela,ksip);
+Dn = interp1(x_tabela,y_tabela,ksin);
 
 % Tempo de vida touschek inverso
-Resp.Rate = (r0^2*c/8/pi)*N/gamma^2 ./ d_acc.^3 .* D ./ V;
+Ratep = (r0^2*c/8/pi)*N/gamma^2 ./ d_accp.^3 .* Dp ./ V;
+Raten = (r0^2*c/8/pi)*N/gamma^2 ./ d_accn.^3 .* Dn ./ V;
+Resp.Rate = (Ratep + Raten) / 2;
 
 % Tempo de vida touschek inverso m�dio
 Resp.AveRate = trapz(s_calc, Resp.Rate) / ( s_calc(end) - s_calc(1) );

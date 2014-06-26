@@ -1,4 +1,4 @@
-function tracy3_dynamic_aperture(fmapdpFlag, n_calls, nr_rms)
+function tracy3_dynamic_aperture(fmapdpFlag, n_calls, nr_rms, var_plane)
 
 color_vec = {'b','r','g','m','c','k','y'};
 esp_lin = 5;
@@ -12,7 +12,9 @@ yi = scrsz(4)/10;
 xf = xi + scrsz(4)*(2/3);
 yf = yi + scrsz(4)*(2/3);
 
-
+if ~exist('var_plane','var')
+    var_plane = 'y'; %determinaçao da abertura dinâmica por varreduda no plano y
+end
 path = '/home/fac_files/data/sirius_tracy/';
 
 cell_leg_text = cell(1,n_calls);
@@ -46,10 +48,11 @@ for i=1:n_calls
         
         try
             try
-                [onda(j,:,:),~] = tracy3_load_daxy_data(pathname);
+                [a,~] = tracy3_load_daxy_data(pathname,var_plane);
             catch
-                onda(j,:,:) = tracy3_load_fmap_data(pathname);
+                a = tracy3_load_fmap_data(pathname,var_plane);
             end
+            onda(j,:,:) = a;
             j = j + 1;
         catch
             fprintf('%-2d-%-3d: xy nao carregou\n',i,k);
@@ -94,12 +97,12 @@ for i=1:n_calls
     
     
     pl(i,2) = plot(fa, 1000*aveOnda(1,:,1), 1000*aveOnda(1,:,2), ...
-        'LineWidth',esp_lin,'Color',color, 'LineStyle','-');
+         'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
     if rms_mode
-        pl(i,1) = plot(fa, 1000*aveOnda(1,:,1),1000*(rmsOnda(1,:,2)+aveOnda(1,:,2)),...
-            'LineWidth',2,'LineStyle','--','Color', color);
-        pl(i,3) = plot(fa, 1000*aveOnda(1,:,1), 1000*(aveOnda(1,:,2)-rmsOnda(1,:,2)),...
-            'LineWidth',2,'LineStyle','--','Color', color);
+        pl(i,1) = plot(fa, 1000*(rmsOnda(1,:,1)+aveOnda(1,:,1)),1000*(rmsOnda(1,:,2)+aveOnda(1,:,2)),...
+             'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
+        pl(i,3) = plot(fa, 1000*(aveOnda(1,:,1)-rmsOnda(1,:,1)),1000*(aveOnda(1,:,2)-rmsOnda(1,:,2)),...
+             'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
     end
     
     if fmapdpFlag
@@ -115,12 +118,12 @@ for i=1:n_calls
         end
         
         pldp(i,2) = plot(fdpa, 100*aveOffda(1,:,1),1000*aveOffda(1,:,2),...
-            'LineWidth',esp_lin,'Color',color, 'LineStyle','-');
+             'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
         if rms_mode
             pldp(i,1) = plot(fdpa, 100*aveOffda(1,:,1), 1000*(rmsOffda(1,:,2)+aveOffda(1,:,2)),...
-                'LineWidth',2,'LineStyle','--','Color', color);
+                 'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
             pldp(i,3) = plot(fdpa, 100*aveOffda(1,:,1),1000*(aveOffda(1,:,2)-rmsOffda(1,:,2)),...
-                'LineWidth',2,'LineStyle','--','Color', color);
+                 'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
         end
     end
     
