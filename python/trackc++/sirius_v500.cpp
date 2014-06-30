@@ -7,7 +7,7 @@ void sirius_v500(std::vector<Element>& the_ring) {
 
 	int  harmonic_number = 864;
 
-	double energy = 3e9;
+	//double energy = 3e9;
 
 	// AC10_5
 	double qaf_strength       =  2.536876;
@@ -143,7 +143,7 @@ void sirius_v500(std::vector<Element>& the_ring) {
     Element sf2      = Element::sextupole("sf2", 0.150000, sf2_strength);
 
     //""" --- rf cavity --- """
-    Element cav = Element::rfcavity("cav", 0, 500e6, 2.5e6, energy);
+    Element cav = Element::rfcavity("cav", 0, 500e6, 2.5e6);
 
     //""" lines """
     std::vector<Element> insa   = { dia1, mida, dia2, crhv, cv, d12, ch, d12, sa2, d12, mon, d12, qaf, d23, qad, d17, sa1, d17};
@@ -251,7 +251,7 @@ void sirius_v500(std::vector<Element>& the_ring) {
     	the_ring[rf_idx[idx]].frequency = rev_freq * harmonic_number;
     }
     latt_setcavity(the_ring, "on");
-    latt_setradiation(the_ring, "on", 3e9);
+    //latt_setradiation(the_ring, "on", 3e9);
 
     //""" adjusts number of integraton steps for each element family """
     the_ring = latt_set_num_integ_steps(the_ring);

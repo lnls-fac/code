@@ -3,13 +3,15 @@
 #include "auxiliary.h"
 #include <fstream>
 
-Status::type read_flat_file_tracy(const std::string& filename, std::vector<Element>& the_ring) {
+static void read_polynomials(std::ifstream& fp, Element& e);
+
+Status::type read_flat_file_tracy(const std::string& filename, Accelerator& accelerator) {
 
 	std::ifstream fp(filename);
 	if (fp.fail()) return Status::file_not_found;
 
 	int Fnum, Knum, idx, type, method;
-	the_ring.clear();
+	accelerator.lattice.clear();
 	while (not fp.eof()) {
 
 		Element e;
@@ -44,8 +46,11 @@ Status::type read_flat_file_tracy(const std::string& filename, std::vector<Eleme
 			break;
 		case FlatFileType::cavity:
 			e.pass_method = PassMethod::pm_cavity_pass;
-			int hnumber; fp >> e.voltage >> e.frequency >> hnumber >> e.energy;
-			e.voltage *= e.energy; e.frequency *= light_speed / (2*M_PI);
+			int hnumber; double energy;
+			fp >> e.voltage >> e.frequency >> hnumber >> energy;
+			e.voltage *= energy; e.frequency *= light_speed / (2*M_PI);
+			accelerator.harmonic_number = hnumber;
+			accelerator.energy = energy;
 			break;
 		case FlatFileType::mpole:
 			double PdTPar, PdTerr;
@@ -72,7 +77,7 @@ Status::type read_flat_file_tracy(const std::string& filename, std::vector<Eleme
 		}
 
 
-		the_ring.push_back(e); idx++;
+		accelerator.lattice.push_back(e); idx++;
 
 	};
 
@@ -80,7 +85,7 @@ Status::type read_flat_file_tracy(const std::string& filename, std::vector<Eleme
 
 }
 
-void read_polynomials(std::ifstream& fp, Element& e) {
+static void read_polynomials(std::ifstream& fp, Element& e) {
 	unsigned int nr_monomials, n_design, order;
 	e.polynom_a = std::vector<double>(Element::default_polynom);
 	e.polynom_b = std::vector<double>(Element::default_polynom);

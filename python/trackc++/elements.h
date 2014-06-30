@@ -22,7 +22,7 @@ public:
 	double				angle, angle_in, angle_out;
 	double				gap, fint_in, fint_out;
 	double				thin_KL, thin_SL;
-	double              frequency, voltage, energy;
+	double              frequency, voltage;
 	std::vector<double> polynom_a, polynom_b;
 	double              hmax, vmax;
 	double				t_in[6],  t_out[6];
@@ -44,7 +44,7 @@ public:
 	static Element rbend      (const std::string& fam_name_, const double& length_, const double& angle_, const double& angle_in_ = 0, const double& angle_out_ = 0, const double& K_ = 0, const double& S_ = 0);
 	static Element quadrupole (const std::string& fam_name_, const double& length_, const double& K_, const int nt_steps_ = 1);
 	static Element sextupole  (const std::string& fam_name_, const double& length_, const double& S_, const int nr_steps_ = 1);
-	static Element rfcavity   (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_, const double& energy_);
+	static Element rfcavity   (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_);
 
 	friend std::ostream& operator<< (std::ostream &out, const Element& el);
 

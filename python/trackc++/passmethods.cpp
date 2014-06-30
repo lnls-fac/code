@@ -5,6 +5,5 @@
 // affiliation:		LNLS - Laboratorio Nacional de Luz Sincrotron
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
-#include "auxiliary.h"
 #include "passmethods.h"
-
+#include "auxiliary.h"

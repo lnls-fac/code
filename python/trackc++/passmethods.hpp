@@ -12,10 +12,12 @@
 //      apart from discrepancies between math library implementations and TWOPI,CGAMMA constants
 //      these passmethods agree with AT passmethods up to machine 64-bit precision.
 
-#include "auxiliary.h"
-#include "pos.h"
-#include "elements.h"
+
 #include "passmethods.h"
+#include "accelerator.h"
+#include "elements.h"
+#include "pos.h"
+#include "auxiliary.h"
 
 // constants for 4th-order symplectic integrator
 #define DRIFT1 ( 0.6756035959798286638e00)
@@ -165,18 +167,18 @@ void local_2_global(Pos<T> &pos, const Element &elem) {
 
 
 template <typename T>
-Status::type pm_identity_pass(Pos<T> &pos, const Element &elem) {
+Status::type pm_identity_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 	return Status::success;
 }
 
 template <typename T>
-Status::type pm_drift_pass(Pos<T> &pos, const Element &elem) {
+Status::type pm_drift_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 	drift<T>(pos, elem.length);
 	return Status::success;
 }
 
 template <typename T>
-Status::type pm_str_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, bool radiation = true) {
+Status::type pm_str_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 
 	global_2_local(pos, elem);
 	double sl = elem.length / float(elem.nr_steps);
@@ -188,11 +190,11 @@ Status::type pm_str_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, boo
 	const std::vector<double> &polynom_b = elem.polynom_b;
 	for(unsigned int i=0; i<elem.nr_steps; ++i) {
 		drift(pos, l1);
-		strthinkick<T>(pos, k1, polynom_a, polynom_b, elem.energy, radiation);
+		strthinkick<T>(pos, k1, polynom_a, polynom_b, accelerator.energy, accelerator.radiation_on);
 		drift(pos, l2);
-		strthinkick<T>(pos, k2, polynom_a, polynom_b, elem.energy, radiation);
+		strthinkick<T>(pos, k2, polynom_a, polynom_b, accelerator.energy, accelerator.radiation_on);
 		drift<T>(pos, l2);
-		strthinkick<T>(pos, k1, polynom_a, polynom_b, elem.energy, radiation);
+		strthinkick<T>(pos, k1, polynom_a, polynom_b, accelerator.energy, accelerator.radiation_on);
 		drift<T>(pos, l1);
 	}
 	local_2_global(pos, elem);
@@ -200,7 +202,7 @@ Status::type pm_str_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, boo
 }
 
 template <typename T>
-Status::type pm_bnd_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, bool radiation = true) {
+Status::type pm_bnd_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 
 	double sl = elem.length / float(elem.nr_steps);
 	double l1 = sl * DRIFT1;
@@ -216,11 +218,11 @@ Status::type pm_bnd_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, boo
 
 	for(unsigned int i=0; i<elem.nr_steps; ++i) {
 		drift<T>(pos, l1);
-		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, elem.energy, radiation);
+		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, accelerator.energy, accelerator.radiation_on);
 		drift<T>(pos, l2);
-		bndthinkick<T>(pos, k2, polynom_a, polynom_b, irho, elem.energy, radiation);
+		bndthinkick<T>(pos, k2, polynom_a, polynom_b, irho, accelerator.energy, accelerator.radiation_on);
 		drift<T>(pos, l2);
-		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, elem.energy, radiation);
+		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, accelerator.energy, accelerator.radiation_on);
 		drift<T>(pos, l1);
 	}
 
@@ -233,7 +235,7 @@ Status::type pm_bnd_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, boo
 
 
 template <typename T>
-Status::type pm_corrector_pass(Pos<T> &pos, const Element &elem) {
+Status::type pm_corrector_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 
 
 	global_2_local(pos, elem);
@@ -265,11 +267,12 @@ Status::type pm_corrector_pass(Pos<T> &pos, const Element &elem) {
 
 
 template <typename T>
-Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem) {
+Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 
 	global_2_local(pos, elem);
 
-    double nv = elem.voltage / elem.energy;
+    //double nv = elem.voltage / elem.energy;
+	double nv = elem.voltage / accelerator.energy;
     if (elem.length == 0) {
 		T &de = pos.de, &dl = pos.dl;
 		de +=  -nv * sin(TWOPI*elem.frequency * dl/ light_speed);
@@ -297,12 +300,12 @@ Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem) {
 }
 
 template <typename T>
-Status::type pm_thinquad_pass(Pos<T> &pos, const Element &elem) {
+Status::type pm_thinquad_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 	return Status::passmethod_not_implemented;
 }
 
 template <typename T>
-Status::type pm_thinsext_pass(Pos<T> &pos, const Element &elem) {
+Status::type pm_thinsext_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 	return Status::passmethod_not_implemented;
 }
 

@@ -57,12 +57,14 @@ struct Status {
 		uninitialized_memory = 5,
 		findorbit_not_converged = 6,
 		findorbit_one_turn_matrix_problem = 7,
-		file_not_found = 8
+		file_not_found = 8,
+		file_not_opened = 9
 	};
 };
 
 extern std::string string_passmethods[];
 extern std::string string_error_messages[];
+extern std::string string_version;
 
 template <typename T> class Pos;
 class Element;
@@ -83,7 +85,7 @@ int sgn(T val) {
 
 
 bool isfinite(const double& v);
-
+std::string get_timestamp();
 
 typedef double Vector4[4];
 typedef double Vector6[6];

@@ -10,16 +10,20 @@
 
 #define ATCOMPATIBLE 1
 
+#include "output.h"
 #include "commands.h"
 #include "optics.h"
 #include "dynap.h"
 #include "tracking.h"
 #include "lattice.h"
 #include "passmethods.h"
-#include "pos.h"
+#include "accelerator.h"
 #include "elements.h"
-#include "auxiliary.h"
+#include "pos.h"
 #include "tpsa.h"
+#include "auxiliary.h"
+
+extern bool verbose_on;
 
 void sirius_v500(std::vector<Element>& the_ring);
 

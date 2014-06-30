@@ -12,7 +12,7 @@ OPT_FLAG	= -O2 -std=c++11
 DBG_FLAG	= -O0 -g3 -std=c++11
 DFLAGS          =
 SOURCES_C       = 
-SOURCES_CPP	= lattice.cpp elements.cpp passmethods.cpp tracking.cpp trackc++.cpp tests.cpp sirius_v500.cpp flat_file.cpp optics.cpp dynap.cpp commands.cpp
+SOURCES_CPP	= lattice.cpp elements.cpp passmethods.cpp tracking.cpp trackc++.cpp tests.cpp sirius_v500.cpp flat_file.cpp optics.cpp dynap.cpp commands.cpp output.cpp
 
 ifeq ($(MAKECMDGOALS),trackc++-debug)
 	CFLAGS		= $(MACHINE) $(DBG_FLAG) $(DFLAGS)

@@ -291,7 +291,7 @@ def run_tests():
     #test_findorbit4(the_ring)
     
     ''' tests findorbit6 '''
-    #test_findorbit6(the_ring)
+    test_findorbit6(the_ring)
     
     ''' tests findm66 '''
     #test_findm66(the_ring)
@@ -300,7 +300,7 @@ def run_tests():
     #test_calcm66(the_ring)
     
     ''' tests twiss '''
-    test_twiss(the_ring)
+    #test_twiss(the_ring)
     
     ''' tests simpletracking '''
     #test_trackingsimple(the_ring)

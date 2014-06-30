@@ -21,7 +21,7 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 	angle(0), angle_in(0), angle_out(0),
 	gap(0), fint_in(0), fint_out(0),
 	thin_KL(0), thin_SL(0),
-	frequency(0), voltage(0), energy(0),
+	frequency(0), voltage(0),
 	polynom_a(default_polynom), polynom_b(default_polynom),
 	hmax(DBL_MAX), vmax(DBL_MAX)
 {
@@ -103,12 +103,11 @@ Element Element::rbend (const std::string& fam_name_, const double& length_, con
 	return e;
 }
 
-Element Element::rfcavity (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_, const double& energy_) {
+Element Element::rfcavity (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_) {
 	Element e = Element(fam_name_, length_);
 	e.pass_method = PassMethod::pm_cavity_pass;
 	e.frequency = frequency_;
 	e.voltage = voltage_;
-	e.energy = energy_;
 	return e;
 }
 
@@ -146,7 +145,6 @@ std::ostream& operator<< (std::ostream &out, const Element& el) {
 	print_polynom(        out,   "polynom_b     : ", el.polynom_b);
 	if (el.frequency != 0)out << "frequency     : " << el.frequency << std::endl;
 	if (el.voltage != 0)  out << "voltage       : " << el.voltage << std::endl;
-	if (el.energy != 0)   out << "energy        : " << el.energy << std::endl;
 	return out;
 }
 

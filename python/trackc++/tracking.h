@@ -9,16 +9,16 @@
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
 #include "passmethods.h"
+#include "accelerator.h"
 #include "elements.h"
 #include "auxiliary.h"
 #include <vector>
 #include <limits>
 #include <cmath>
 
-Status::type track_findorbit6(const std::vector<Element>& the_ring, const int harmonic_number, std::vector<Pos<double> >& orb);
-Pos<double> linalg_solve(const std::vector<Pos<double> >& M, const Pos<double>& b);
-
-Status::type track_findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66);
+Status::type track_findorbit6 (const Accelerator& accelerator, std::vector<Pos<double> >& close_orbit);
+Status::type track_findm66    (const Accelerator& accelerator, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66);
+Pos<double>  linalg_solve     (const std::vector<Pos<double> >& M, const Pos<double>& b);
 
 
 // linepass
@@ -37,40 +37,40 @@ Status::type track_findm66 (const std::vector<Element>& line, const std::vector<
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 template <typename T>
-Status::type track_elementpass (const Element& el, Pos<T> &orig_pos) {
+Status::type track_elementpass (const Element& el, Pos<T> &orig_pos, const Accelerator& accelerator) {
 
 	Status::type status = Status::success;
 
 	switch (el.pass_method) {
 	case PassMethod::pm_identity_pass:
-		if ((status = pm_identity_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_identity_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_drift_pass:
-		if ((status = pm_drift_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_drift_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_str_mpole_symplectic4_pass:
-		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, false)) != Status::success) return status;
+		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_str_mpole_symplectic4_rad_pass:
-		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, true)) != Status::success) return status;
+		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_bnd_mpole_symplectic4_pass:
-		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, false)) != Status::success) return status;
+		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_bnd_mpole_symplectic4_rad_pass:
-		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, true)) != Status::success) return status;
+		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_corrector_pass:
-		if ((status = pm_corrector_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_corrector_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_cavity_pass:
-		if ((status = pm_cavity_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_cavity_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_thinquad_pass:
-		if ((status = pm_thinquad_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_thinquad_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_thinsext_pass:
-		if ((status = pm_thinsext_pass<T>(orig_pos, el)) != Status::success) return status;
+		if ((status = pm_thinsext_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	default:
 		return Status::passmethod_not_defined;
@@ -81,9 +81,11 @@ Status::type track_elementpass (const Element& el, Pos<T> &orig_pos) {
 }
 
 template <typename T>
-Status::type track_linepass (const std::vector<Element>& line, Pos<T>& orig_pos, std::vector<Pos<T> >& pos, int& element_offset, bool trajectory) {
+Status::type track_linepass (const Accelerator& accelerator, Pos<T>& orig_pos, std::vector<Pos<T> >& pos, int& element_offset, bool trajectory) {
 
 	Status::type status = Status::success;
+
+	const std::vector<Element>& line = accelerator.lattice;
 
 	int nr_elements  = line.size();
 
@@ -96,34 +98,34 @@ Status::type track_linepass (const std::vector<Element>& line, Pos<T>& orig_pos,
 
 		switch (element.pass_method) {
 			case PassMethod::pm_identity_pass:
-				if ((status = pm_identity_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_identity_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_drift_pass:
-				if ((status = pm_drift_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_drift_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_str_mpole_symplectic4_pass:
-				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, false)) != Status::success) return status;
+				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_str_mpole_symplectic4_rad_pass:
-				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, true)) != Status::success) return status;
+				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_bnd_mpole_symplectic4_pass:
-				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, false)) != Status::success) return status;
+				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_bnd_mpole_symplectic4_rad_pass:
-				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, true)) != Status::success) return status;
+				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_corrector_pass:
-				if ((status = pm_corrector_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_corrector_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_cavity_pass:
-				if ((status = pm_cavity_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_cavity_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_thinquad_pass:
-				if ((status = pm_thinquad_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_thinquad_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_thinsext_pass:
-				if ((status = pm_thinsext_pass<T>(orig_pos, element)) != Status::success) return status;
+				if ((status = pm_thinsext_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			default:
 				return Status::passmethod_not_defined;
@@ -132,10 +134,13 @@ Status::type track_linepass (const std::vector<Element>& line, Pos<T>& orig_pos,
 		// checks if particle is lost
 		if ((not isfinite(orig_pos.rx)) or
 			(not isfinite(orig_pos.ry)) or
-			(orig_pos.rx < -element.hmax) or
-			(orig_pos.rx >  element.hmax) or
-			(orig_pos.ry < -element.vmax) or
-			(orig_pos.ry >  element.vmax)) return Status::particle_lost;
+			((accelerator.vchamber_on) and
+			 ((orig_pos.rx < -element.hmax) or
+			  (orig_pos.rx >  element.hmax) or
+			  (orig_pos.ry < -element.vmax) or
+			  (orig_pos.ry >  element.vmax))
+			 )
+			) return Status::particle_lost;
 
 		// moves to next element index
 		element_offset = (element_offset + 1) % nr_elements;
@@ -167,13 +172,13 @@ Status::type track_linepass (const std::vector<Element>& line, Pos<T>& orig_pos,
 
 
 template <typename T>
-Status::type track_ringpass (const std::vector<Element>& ring, Pos<T> &orig_pos, std::vector<Pos<T> > &pos, const int nr_turns, int &lost_turn, int &element_offset, bool trajectory) {
+Status::type track_ringpass (const Accelerator& accelerator, const std::vector<Element>& ring, Pos<T> &orig_pos, std::vector<Pos<T> > &pos, const int nr_turns, int &lost_turn, int &element_offset, bool trajectory) {
 
 	Status::type status  = Status::success;
 
 	for(lost_turn=0; lost_turn<nr_turns; ++lost_turn) {
 		std::vector<Pos<T> > final_pos;
-		if ((status = track_linepass (ring, orig_pos, final_pos, element_offset, false)) != Status::success) return status;
+		if ((status = track_linepass (accelerator, orig_pos, final_pos, element_offset, false)) != Status::success) return status;
 		if (trajectory) {
 			pos.push_back(orig_pos);
 		}

@@ -8,8 +8,9 @@
 // affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
-#include "auxiliary.h"
+#include "accelerator.h"
 #include "elements.h"
+#include "auxiliary.h"
 #include <vector>
 
 std::vector<Element> latt_join(const std::vector<std::vector<Element> >& v_);
@@ -22,6 +23,7 @@ void                 latt_setcavity(std::vector<Element>& lattice, const std::st
 void                 latt_setradiation(std::vector<Element>& lattice, const std::string& state, const double& energy = 0);
 std::vector<Element> latt_set_num_integ_steps(const std::vector<Element>& orig_lattice);
 std::vector<Element> latt_read_flat_file(const std::string& filename);
+Status::type         latt_read_flat_file(const std::string& filename, Accelerator& accelerator);
 std::vector<int>     latt_findcells_fam_name    (const std::vector<Element>& lattice, const std::string& value, bool reverse = false);
 std::vector<int>     latt_findcells_angle       (const std::vector<Element>& lattice, const double& value,      bool reverse = false);
 std::vector<int>     latt_findcells_frequency   (const std::vector<Element>& lattice, const double& value,      bool reverse = false);

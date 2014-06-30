@@ -21,17 +21,18 @@
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 
-Status::type track_findm66 (const std::vector<Element>& line, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
+Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
 
 	Status::type status  = Status::success;
+	const std::vector<Element>& lattice = accelerator.lattice;
 
 	// checks consistency of data
-	if (m66.size() != line.size()) {
+	if (m66.size() != lattice.size()) {
 		status = Status::inconsistent_dimensions;
 		return status;
 	}
 
-	for(unsigned int i=0; i<line.size(); ++i) {
+	for(unsigned int i=0; i<lattice.size(); ++i) {
 
 		Pos<Tpsa<6,1> > tpsa;
 		tpsa.rx = Tpsa<6,1>(closed_orbit[i].rx, 0); tpsa.px = Tpsa<6,1>(closed_orbit[i].px, 1);
@@ -39,7 +40,7 @@ Status::type track_findm66 (const std::vector<Element>& line, const std::vector<
 		tpsa.de = Tpsa<6,1>(closed_orbit[i].de, 4); tpsa.dl = Tpsa<6,1>(closed_orbit[i].dl, 5);
 
 		// track through element
-		if ((status = track_elementpass (line[i], tpsa)) != Status::success) return status;
+		if ((status = track_elementpass (lattice[i], tpsa, accelerator)) != Status::success) return status;
 
 		// minimum  check to see if memory of allocated for each transfer matrix
 		if (m66[i] == NULL) {
@@ -79,9 +80,10 @@ Status::type track_findm66 (const std::vector<Element>& line, const std::vector<
 }
 
 Status::type track_findorbit6(
-		const std::vector<Element>& the_ring,
-		const int harmonic_number,
-		std::vector<Pos<double> >& orb) {
+		const Accelerator& accelerator,
+		std::vector<Pos<double> >& cod) {
+
+	const std::vector<Element>& the_ring = accelerator.lattice;
 
 	double delta        = 1e-9;              // [m],[rad],[dE/E]
 	double tolerance    = 2.22044604925e-14;
@@ -92,7 +94,7 @@ Status::type track_findorbit6(
 	double T0 = L0 / light_speed;
 	std::vector<int>    cav_idx = latt_findcells_frequency(the_ring, 0, true);
 	double frf = the_ring[cav_idx[0]].frequency;
-	double fixedpoint = light_speed*((1.0*harmonic_number)/frf - T0);
+	double fixedpoint = light_speed*((1.0*accelerator.harmonic_number)/frf - T0);
 
 	// temporary vectors and matrices
 	std::vector<Pos<double> > co(7,0);
@@ -110,15 +112,15 @@ Status::type track_findorbit6(
 		co = co + D;
 		Pos<double> Ri = co[6];
 		std::vector<Pos<double> > co2;
-		int element_offset;
-		Status::type status;
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[0], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[1], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[2], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[3], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[4], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[5], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(the_ring, co[6], co2, element_offset, false));
+		int element_offset = 0;
+		Status::type status = Status::success;
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[0], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[1], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[2], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[3], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[4], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[5], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[6], co2, element_offset, false));
 		if (status != Status::success) {
 			return Status::findorbit_one_turn_matrix_problem;
 		}
@@ -148,9 +150,10 @@ Status::type track_findorbit6(
 	}
 
 	// propagates fixed point throught the_ring
-	orb.clear();
+	cod.clear();
 	int element_offset = 0;
-	track_linepass(the_ring, co[6], orb, element_offset, true);
+	track_linepass(accelerator, co[6], cod, element_offset, true);
+	cod.pop_back(); // eliminates last element which is the same as first
 	return Status::success;
 
 }

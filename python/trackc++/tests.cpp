@@ -13,7 +13,7 @@ int test_printlattice(const std::vector<Element>& the_ring) {
 	return 0;
 }
 
-int test_linepass(const std::vector<Element>& the_ring) {
+int test_linepass(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
 
 	Pos<> pos;
@@ -22,7 +22,7 @@ int test_linepass(const std::vector<Element>& the_ring) {
 
 	std::vector<Pos<> > new_pos;
 	int element_offset = 0;
-	track_linepass(the_ring, pos, new_pos, element_offset, true);
+	track_linepass(accelerator, pos, new_pos, element_offset, true);
 	for(unsigned int i=0; i<new_pos.size(); ++i) {
 		const Pos<>& c = new_pos[i];
 		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, the_ring[i % the_ring.size()].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de);
@@ -33,7 +33,7 @@ int test_linepass(const std::vector<Element>& the_ring) {
 
 }
 
-int test_linepass_tpsa(const std::vector<Element>& the_ring) {
+int test_linepass_tpsa(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
 	const int order = 3;
 	Pos<Tpsa<6,order> > tpsa;
@@ -43,7 +43,7 @@ int test_linepass_tpsa(const std::vector<Element>& the_ring) {
 	tpsa.de = Tpsa<6,order>(0, 4); tpsa.dl = Tpsa<6,order>(0, 5);
 	std::vector<Pos<Tpsa<6,order> > > new_tpsa;
 	int element_offset = 0;
-	track_linepass(the_ring, tpsa, new_tpsa, element_offset, false);
+	track_linepass(accelerator, tpsa, new_tpsa, element_offset, false);
 	for(unsigned int i=0; i<new_tpsa.size(); ++i) {
 		//const Pos<Tpsa<6,1> >& c = new_particles[i];
 		//std::cout << c.rx << std::endl;
@@ -55,7 +55,7 @@ int test_linepass_tpsa(const std::vector<Element>& the_ring) {
 }
 
 #include <cstdlib>
-int test_ringpass(const std::vector<Element>& the_ring) {
+int test_ringpass(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
 
 	Pos<> pos;
@@ -68,7 +68,7 @@ int test_ringpass(const std::vector<Element>& the_ring) {
 	clock_t begin, end;
 	double time_spent;
 	begin = clock();
-	Status::type status = track_ringpass(the_ring, pos, new_pos, 5000, lost_turn, element_offset, true);
+	Status::type status = track_ringpass(accelerator, the_ring, pos, new_pos, 5000, lost_turn, element_offset, true);
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -85,11 +85,10 @@ int test_ringpass(const std::vector<Element>& the_ring) {
 
 }
 
-int test_findorbit6(const std::vector<Element>& the_ring) {
+int test_findorbit6(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
 	std::vector<Pos<double> > orbit;
-	unsigned int harmonic_number = 864;
-	Status::type status = track_findorbit6(the_ring, harmonic_number, orbit);
+	Status::type status = track_findorbit6(accelerator, orbit);
 	if (status == Status::findorbit_not_converged) {
 		std::cerr << "findorbit not converged!" << std::endl;
 	} else {
@@ -100,7 +99,7 @@ int test_findorbit6(const std::vector<Element>& the_ring) {
 }
 
 #include <cstdio>
-int test_findm66(const std::vector<Element>& the_ring) {
+int test_findm66(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
 	std::vector<double*> m66;
 
@@ -111,7 +110,7 @@ int test_findm66(const std::vector<Element>& the_ring) {
 		m66.push_back(m);
 	}
 
-	track_findm66 (the_ring, cod, m66);
+	track_findm66 (accelerator, cod, m66);
 
 	for(unsigned int i=0; i<the_ring.size(); ++i) {
 		std::cout << "element#     : " << i+1 << std::endl;
@@ -129,9 +128,8 @@ int test_findm66(const std::vector<Element>& the_ring) {
 
 }
 
-int test_dynap_xy(const std::vector<Element>& the_ring) {
+int test_dynap_xy(const Accelerator& accelerator) {
 
-	unsigned int harmonic_number = 864;
 	std::vector<Pos<double> > closed_orbit;
 	unsigned int nr_turns = 5000;
 	Pos<double> p0(0,0,0,0,0,0);
@@ -139,8 +137,8 @@ int test_dynap_xy(const std::vector<Element>& the_ring) {
 	double x_min = -0.015, x_max = +0.015;
 	unsigned int nrpts_y = 10;
 	double y_min = 0, y_max = +0.0035;
-	std::vector<DynApPoint> points;
-	dynap_xy(the_ring, harmonic_number, closed_orbit, nr_turns, p0, nrpts_x, x_min, x_max, nrpts_y, y_min, y_max, true, points);
+	std::vector<DynApGridPoint> points;
+	dynap_xy(accelerator, closed_orbit, nr_turns, p0, nrpts_x, x_min, x_max, nrpts_y, y_min, y_max, true, points);
 
 	return 0;
 }
@@ -150,12 +148,44 @@ int test_cmd_dynap_xy() {
 	char *argv[] = {
 			(char*)"trackc++",
 			(char*)"dynap_xy",
-			(char*)"/home/ximenes/Desktop/flat_file_test.txt",
+			(char*)"/home/fac_files/code/python/trackc++/tests/flat_file_v500_ac10_5_bare_in.txt",
 			(char*)"3e9",
 			(char*)"864",
 			(char*)"on",
 			(char*)"on",
+			(char*)"0.0",
 			(char*)"5000",
+			(char*)"2",
+			(char*)"-0.015",
+			(char*)"+0.015",
+			(char*)"2",
+			(char*)"0.0",
+			(char*)"+0.0035",
+			NULL};
+	int argc = 0; while(argv[argc] != NULL) argc++;
+	return cmd_dynap_xy(argc,argv);
+
+}
+
+
+int test_cmd_dynap_ex() {
+
+	char *argv[] = {
+			(char*)"trackc++",
+			(char*)"dynap_ex",
+			(char*)"/home/fac_files/code/python/trackc++/tests/flat_file_v500_ac10_5_bare_in.txt",
+			(char*)"3e9",
+			(char*)"864",
+			(char*)"on",
+			(char*)"on",
+			(char*)"1e-6",
+			(char*)"5000",
+			(char*)"2",
+			(char*)"-0.05",
+			(char*)"+0.05",
+			(char*)"2",
+			(char*)"-0.015",
+			(char*)"+0.015",
 			NULL};
 	int argc = 0; while(argv[argc] != NULL) argc++;
 	return cmd_dynap_xy(argc,argv);
@@ -165,10 +195,11 @@ int test_cmd_dynap_xy() {
 int cmd_tests(int argc, char* argv[]) {
 
 
-	//std::vector<Element> the_ring;
-	//sirius_v500(the_ring);
+	//Accelerator accelerator
+	//sirius_v500(accelerator.line);
+	//accelerator.line = latt_read_flat_file("/home/ximenes/Desktop/flat_file_test.txt");
+	//accelerator.harmonic_number = 864;
 
-	//the_ring = latt_read_flat_file("/home/ximenes/Desktop/flat_file_test.txt");
 
 	//latt_setcavity(the_ring, "on");
 	//latt_setradiation(the_ring, "on", 3e9);
@@ -188,6 +219,7 @@ int cmd_tests(int argc, char* argv[]) {
 	//test_dynap_xy(the_ring);
 
 	test_cmd_dynap_xy();
+	//test_cmd_dynap_ex();
 	return 0;
 
 }

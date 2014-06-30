@@ -1,6 +1,7 @@
 #ifndef _FLAT_FILE_H
 #define _FLAT_FILE_H
 
+#include "accelerator.h"
 #include "elements.h"
 #include "auxiliary.h"
 #include <string>
@@ -19,7 +20,6 @@ struct FlatFileType {
 	};
 
 
-Status::type read_flat_file_tracy(const std::string& filename, std::vector<Element>& the_ring);
-void read_polynomials(std::ifstream& fp, Element& e);
+Status::type read_flat_file_tracy(const std::string& filename, Accelerator& accelerator);
 
 #endif

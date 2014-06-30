@@ -82,6 +82,7 @@ void latt_setcavity(std::vector<Element>& lattice, const std::string& state) {
 	}
 }
 
+/*
 void latt_setradiation(std::vector<Element>& lattice, const std::string& state, const double& energy) {
 
 	if (state == "on") {
@@ -103,6 +104,7 @@ void latt_setradiation(std::vector<Element>& lattice, const std::string& state, 
 	}
 
 }
+*/
 
 std::vector<int> latt_findcells_fam_name(const std::vector<Element>& lattice, const std::string& value, bool reverse) {
 	std::vector<int> r;
@@ -193,10 +195,8 @@ std::vector<Element> latt_set_num_integ_steps(const std::vector<Element>& orig_l
 	return lattice;
 }
 
-std::vector<Element> latt_read_flat_file(const std::string& filename) {
+Status::type latt_read_flat_file(const std::string& filename, Accelerator& accelerator) {
 
-	std::vector<Element> the_ring;
-	read_flat_file_tracy(filename, the_ring);
-	return the_ring;
+	return read_flat_file_tracy(filename, accelerator);
 
 }
