@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
 	if (cmd == "tests")    return cmd_tests(argc, argv);
 	if (cmd == "dynap_xy") return cmd_dynap_xy(argc, argv);
 	if (cmd == "dynap_ex") return cmd_dynap_ex(argc, argv);
+	if (cmd == "dynap_ma") return cmd_dynap_ma(argc, argv);
 	std::cerr << "trackc++: invalid command!" << std::endl;
 	return EXIT_FAILURE;
 }
@@ -58,3 +59,4 @@ std::string get_timestamp() {
 	sprintf(buffer, "[%04i-%02i-%02i %02i:%02i:%02i]", 1900+now->tm_year, 1+now->tm_mon, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
 	return std::string(buffer);
 }
+

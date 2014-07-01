@@ -1,4 +1,4 @@
-function [dynapt, dados] = tracy3_load_daxy_data(pathname,var_plane)
+function [dynapt, dados] = tracy3_load_daxy_data(pathname,var_plane, trackcpp)
 
 fname = fullfile(pathname, 'daxy.out');
 
@@ -7,7 +7,11 @@ if ~exist('var_plane','var');
      var_plane = 'y';  % varredura em y ou varredura em x;
 end
 
-[~, data] = hdrload(fname);
+if exists('trackcpp','var')
+    data = tracy3_convert_dynap_xy_from_trackcpp(fname);
+else
+    [~, data] = hdrload(fname);
+end
 
 % Agora, eu tenho que encontrar a DA
 %primeiro eu identifico quantos x e y existem

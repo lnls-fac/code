@@ -112,15 +112,16 @@ Status::type track_findorbit6(
 		co = co + D;
 		Pos<double> Ri = co[6];
 		std::vector<Pos<double> > co2;
-		int element_offset = 0;
+		unsigned int element_offset = 0;
+		Plane::type lost_plane;
 		Status::type status = Status::success;
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[0], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[1], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[2], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[3], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[4], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[5], co2, element_offset, false));
-		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[6], co2, element_offset, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[0], co2, element_offset, lost_plane, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[1], co2, element_offset, lost_plane, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[2], co2, element_offset, lost_plane, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[3], co2, element_offset, lost_plane, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[4], co2, element_offset, lost_plane, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[5], co2, element_offset, lost_plane, false));
+		status = (Status::type) ((int) status | (int) track_linepass(accelerator, co[6], co2, element_offset, lost_plane, false));
 		if (status != Status::success) {
 			return Status::findorbit_one_turn_matrix_problem;
 		}
@@ -151,8 +152,9 @@ Status::type track_findorbit6(
 
 	// propagates fixed point throught the_ring
 	cod.clear();
-	int element_offset = 0;
-	track_linepass(accelerator, co[6], cod, element_offset, true);
+	unsigned int element_offset = 0;
+	Plane::type lost_plane;
+	track_linepass(accelerator, co[6], cod, element_offset, lost_plane, true);
 	cod.pop_back(); // eliminates last element which is the same as first
 	return Status::success;
 

@@ -21,8 +21,9 @@ int test_linepass(const Accelerator& accelerator, const std::vector<Element>& th
 	pos.ry = 0*0.00010; pos.py = 0*0.00001;
 
 	std::vector<Pos<> > new_pos;
-	int element_offset = 0;
-	track_linepass(accelerator, pos, new_pos, element_offset, true);
+	unsigned int element_offset = 0;
+	Plane::type lost_plane;
+	track_linepass(accelerator, pos, new_pos, element_offset, lost_plane, true);
 	for(unsigned int i=0; i<new_pos.size(); ++i) {
 		const Pos<>& c = new_pos[i];
 		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, the_ring[i % the_ring.size()].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de);
@@ -42,8 +43,9 @@ int test_linepass_tpsa(const Accelerator& accelerator, const std::vector<Element
 	tpsa.ry = Tpsa<6,order>(0, 2); tpsa.py = Tpsa<6,order>(0, 3);
 	tpsa.de = Tpsa<6,order>(0, 4); tpsa.dl = Tpsa<6,order>(0, 5);
 	std::vector<Pos<Tpsa<6,order> > > new_tpsa;
-	int element_offset = 0;
-	track_linepass(accelerator, tpsa, new_tpsa, element_offset, false);
+	unsigned int element_offset = 0;
+	Plane::type lost_plane;
+	track_linepass(accelerator, tpsa, new_tpsa, element_offset, lost_plane, false);
 	for(unsigned int i=0; i<new_tpsa.size(); ++i) {
 		//const Pos<Tpsa<6,1> >& c = new_particles[i];
 		//std::cout << c.rx << std::endl;
@@ -63,12 +65,13 @@ int test_ringpass(const Accelerator& accelerator, const std::vector<Element>& th
 	pos.ry = 0.00010;
 
 	std::vector<Pos<double> > new_pos;
-	int element_offset = 0, lost_turn = 0;
+	unsigned int element_offset = 0, lost_turn = 0;
+	Plane::type lost_plane;
 
 	clock_t begin, end;
 	double time_spent;
 	begin = clock();
-	Status::type status = track_ringpass(accelerator, the_ring, pos, new_pos, 5000, lost_turn, element_offset, true);
+	Status::type status = track_ringpass(accelerator, pos, new_pos, 5000, lost_turn, element_offset, lost_plane, true);
 	end = clock();
 	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -153,6 +156,7 @@ int test_cmd_dynap_xy() {
 			(char*)"864",
 			(char*)"on",
 			(char*)"on",
+			(char*)"on",
 			(char*)"0.0",
 			(char*)"5000",
 			(char*)"2",
@@ -178,6 +182,7 @@ int test_cmd_dynap_ex() {
 			(char*)"864",
 			(char*)"on",
 			(char*)"on",
+			(char*)"on",
 			(char*)"1e-6",
 			(char*)"5000",
 			(char*)"2",
@@ -189,6 +194,32 @@ int test_cmd_dynap_ex() {
 			NULL};
 	int argc = 0; while(argv[argc] != NULL) argc++;
 	return cmd_dynap_xy(argc,argv);
+
+}
+
+
+int test_cmd_dynap_ma() {
+
+	char *argv[] = {
+			(char*)"trackc++",
+			(char*)"dynap_ma",
+			(char*)"/home/fac_files/code/python/trackc++/tests/flat_file_v500_ac10_5_bare_in.txt",
+			(char*)"3e9",
+			(char*)"864",
+			(char*)"on",
+			(char*)"on",
+			(char*)"on",
+			(char*)"5000",
+			(char*)"30e-6",   // y0
+			(char*)"0.01",    // e0
+			(char*)"0.0001",  // tol_e
+			(char*)"0",       // s_min [m]
+			(char*)"30",      // s_max [m]
+			(char*)"qaf",
+			(char*)"qad",
+			NULL};
+	int argc = 0; while(argv[argc] != NULL) argc++;
+	return cmd_dynap_ma(argc,argv);
 
 }
 
@@ -218,8 +249,9 @@ int cmd_tests(int argc, char* argv[]) {
 	//test_findorbit6(the_ring);
 	//test_dynap_xy(the_ring);
 
-	test_cmd_dynap_xy();
+	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
+	test_cmd_dynap_ma();
 	return 0;
 
 }

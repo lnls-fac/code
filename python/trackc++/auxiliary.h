@@ -19,6 +19,15 @@
 //				so that python can correctly call trackcpp
 //				module.
 
+struct Plane {
+	enum type {
+		no_plane = 0,
+		x = 1,
+		y = 2,
+		z = 3
+	};
+};
+
 struct PassMethod {
 	enum type {
 		pm_identity_pass                  = 0,

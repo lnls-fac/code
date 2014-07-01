@@ -81,7 +81,13 @@ Status::type track_elementpass (const Element& el, Pos<T> &orig_pos, const Accel
 }
 
 template <typename T>
-Status::type track_linepass (const Accelerator& accelerator, Pos<T>& orig_pos, std::vector<Pos<T> >& pos, int& element_offset, bool trajectory) {
+Status::type track_linepass (
+		const Accelerator& accelerator,
+		Pos<T>& orig_pos,
+		std::vector<Pos<T> >& pos,
+		unsigned int& element_offset,
+		Plane::type& lost_plane,
+		bool trajectory) {
 
 	Status::type status = Status::success;
 
@@ -133,19 +139,28 @@ Status::type track_linepass (const Accelerator& accelerator, Pos<T>& orig_pos, s
 
 		// checks if particle is lost
 		if ((not isfinite(orig_pos.rx)) or
-			(not isfinite(orig_pos.ry)) or
 			((accelerator.vchamber_on) and
 			 ((orig_pos.rx < -element.hmax) or
-			  (orig_pos.rx >  element.hmax) or
-			  (orig_pos.ry < -element.vmax) or
-			  (orig_pos.ry >  element.vmax))
-			 )
-			) return Status::particle_lost;
+			 (orig_pos.rx >  element.hmax)))) {
+			lost_plane = Plane::x;
+			return Status::particle_lost;
+		}
+		if ((not isfinite(orig_pos.ry)) or
+			((accelerator.vchamber_on) and
+			 ((orig_pos.ry < -element.vmax) or
+			 (orig_pos.ry >  element.vmax)))) {
+			lost_plane = Plane::y;
+			return Status::particle_lost;
+		}
+
+
 
 		// moves to next element index
 		element_offset = (element_offset + 1) % nr_elements;
 
 	}
+
+	lost_plane = Plane::no_plane;
 
 	// stores final particle position at the end of the line
 	pos.push_back(orig_pos);
@@ -171,14 +186,23 @@ Status::type track_linepass (const Accelerator& accelerator, Pos<T>& orig_pos, s
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 
+
 template <typename T>
-Status::type track_ringpass (const Accelerator& accelerator, const std::vector<Element>& ring, Pos<T> &orig_pos, std::vector<Pos<T> > &pos, const int nr_turns, int &lost_turn, int &element_offset, bool trajectory) {
+Status::type track_ringpass (
+		const Accelerator& accelerator,
+		Pos<T> &orig_pos,
+		std::vector<Pos<T> > &pos,
+		const unsigned int nr_turns,
+		unsigned int &lost_turn,
+		unsigned int &element_offset,
+		Plane::type& lost_plane,
+		bool trajectory) {
 
 	Status::type status  = Status::success;
 
 	for(lost_turn=0; lost_turn<nr_turns; ++lost_turn) {
 		std::vector<Pos<T> > final_pos;
-		if ((status = track_linepass (accelerator, orig_pos, final_pos, element_offset, false)) != Status::success) return status;
+		if ((status = track_linepass (accelerator, orig_pos, final_pos, element_offset, lost_plane, false)) != Status::success) return status;
 		if (trajectory) {
 			pos.push_back(orig_pos);
 		}
