@@ -21,7 +21,7 @@ public:
 	T dl;
 	typedef T type;
 	Pos(const T& rx_, const T& px_, const T& ry_, const T& py_, const T& de_, const T& dl_);
-	Pos(const T& v_);
+	Pos(const T& v_ = 0);
 	Pos& operator+=(const Pos<T>& v) {
 		this->rx += v.rx; this->px += v.px;
 		this->ry += v.ry; this->py += v.py;
@@ -41,7 +41,7 @@ de(de_), dl(dl_)
 }
 
 template <typename T>
-Pos<T>::Pos(const T& v_ = 0):
+Pos<T>::Pos(const T& v_):
 rx(v_), px(v_),
 ry(v_), py(v_),
 de(v_), dl(v_)
