@@ -27,7 +27,7 @@
 *.cproject
 *.pyc
 *.out
-trackc++-debug
+trackc++
 tracy
 tracyd
 lnlstracy*

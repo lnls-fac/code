@@ -122,7 +122,6 @@ if dynap_ma_run:
 			str(s_min), str(s_max)]
 		for famname in fam_names:
 			args.append(famname)
-		print(args)
 		subprocess.call(args)
 
 
