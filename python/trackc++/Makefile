@@ -15,6 +15,8 @@ DBG_FLAG	= -O0 -g3 -std=c++11
 DFLAGS          =
 SOURCES_C       = 
 SOURCES_CPP	= lattice.cpp elements.cpp passmethods.cpp tracking.cpp trackc++.cpp tests.cpp sirius_v500.cpp flat_file.cpp optics.cpp dynap.cpp commands.cpp output.cpp
+LIBS            = tracking_mp/tracking_mp.a -lpthread -lgsl -lgslcblas
+INC             = 
 
 ifeq ($(MAKECMDGOALS),trackc++-debug)
 	CFLAGS		= $(MACHINE) $(DBG_FLAG) $(DFLAGS)
@@ -24,8 +26,15 @@ endif
 
 OBJECTS		= $(SOURCES_CPP:.cpp=.o) $(SOURCES_C:.c=.o) 
 LDFLAGS		= $(MACHINE) 
-LIBS		= tracking_mp/tracking_mp.a -lpthread -lgsl -lgslcblas
 
+
+#### DERIVED CONDITIONALS AND VARIABLES ####
+ifeq ($(shell hostname), uv100)
+    CC          = /progs/users/gcc-4.7.3/bin/gcc
+    CXX         = /progs/users/gcc-4.7.3/bin/g++
+    LIBS        = -Wl,-rpath,/progs/users/gcc-4.7.3/lib64 tracking_mp/tracking_mp.a -lpthread ~/bin/GSL/lib/libgsl.a ~/bin/GSL/lib/libgslcblas.a
+    INC         = -I../bin/GSL/include/
+endif
 
 #### GENERATES DEPENDENCY FILE ####
 $(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) > .depend)
@@ -55,9 +64,9 @@ cleanall: clean
 #### RULES ####
 
 .c.o:
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $(INC) $<
 
 .cc.o:
-	$(CXX) -c $(CFLAGS) $<
+	$(CXX) -c $(CFLAGS) $(INC) $<
 .cpp.o:
-	$(CXX) -c $(CFLAGS) $<
+	$(CXX) -c $(CFLAGS) $(INC) $<
