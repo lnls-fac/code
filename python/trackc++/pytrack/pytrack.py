@@ -7,8 +7,12 @@ import os
 default_track_version = './trackc++-release'
 default_track_version = 'trackc++'
 
-if not len(sys.argv) == 2:
-	print('pytrackc++: invalid number of arguments!')
+if len(sys.argv) == 1:
+	subprocess.call([default_track_version])
+	sys.exit()
+
+if len(sys.argv) > 2:
+	print(sys.argv[0] + ': invalid number of arguments!')
 	sys.exit()
 
 # loads config
