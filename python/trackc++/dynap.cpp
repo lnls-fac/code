@@ -9,7 +9,7 @@
 #include <vector>
 #include <cfloat>
 
-static const double tiny_amp = 1e-7; // [m]
+static const double tiny_y_amp = 1e-7; // [m]
 
 static Status::type calc_closed_orbit(const Accelerator& accelerator, std::vector<Pos<double> >& cod, const char* function_name) {
 	if (verbose_on) {
@@ -51,7 +51,7 @@ Status::type dynap_xy(
 	for(unsigned int i=0; i<nrpts_x; ++i) {
 		double x = x_min + i * (x_max - x_min) / (nrpts_x - 1.0);
 		for(unsigned int j=0; j<nrpts_y; ++j) {
-			double y = y_min + j * (y_max - y_min) / (nrpts_y - 1.0);
+			double y = y_max + j * (y_min - y_max) / (nrpts_y - 1.0);
 
 			if (verbose_on) {
 				sprintf(buffer, "(%03i,%03i): x=%+11.4E [m], y=%+11.4E [m] -> ", i+1, j+1, x, y);
@@ -66,7 +66,7 @@ Status::type dynap_xy(
 
 			std::vector<Pos<double> > new_pos;
 			Pos<double> p = grid[idx].p + cod[0]; // adds closed-orbit
-			if (fabs(p.ry) < tiny_amp) p.ry = sgn(p.ry) * tiny_amp;
+			if (fabs(p.ry) < tiny_y_amp) p.ry = sgn(p.ry) * tiny_y_amp;
 			Status::type status = track_ringpass (accelerator, p, new_pos, nr_turns, grid[idx].lost_turn, grid[idx].lost_element, grid[idx].lost_plane, false);
 
 			if (verbose_on) {
@@ -110,7 +110,7 @@ Status::type dynap_ex(
 	for(unsigned int i=0; i<nrpts_e; ++i) {
 		double e = e_min + i * (e_max - e_min) / (nrpts_e - 1.0);
 		for(unsigned int j=0; j<nrpts_x; ++j) {
-			double x = x_min + j * (x_max - x_min) / (nrpts_x - 1.0);
+			double x = x_max + j * (x_min - x_max) / (nrpts_x - 1.0);
 
 			if (verbose_on) {
 				sprintf(buffer, "(%03i,%03i): e=%+11.4E, x=%+11.4E [m] -> ", i+1, j+1, e, x);
@@ -125,7 +125,7 @@ Status::type dynap_ex(
 
 			std::vector<Pos<double> > new_pos;
 			Pos<double> p = grid[idx].p + cod[0]; // adds closed-orbit
-			if (fabs(p.ry) < tiny_amp) p.ry = sgn(p.ry) * tiny_amp;
+			if (fabs(p.ry) < tiny_y_amp) p.ry = sgn(p.ry) * tiny_y_amp;
 			Status::type status = track_ringpass (accelerator, p, new_pos, nr_turns, grid[idx].lost_turn, grid[idx].lost_element, grid[idx].lost_plane, false);
 
 			if (verbose_on) {
@@ -165,7 +165,7 @@ DynApGridPoint find_momentum_acceptance(
 		point.start_element = element_idx; point.lost_turn = 0; point.lost_element = element_idx; point.lost_plane = Plane::no_plane;
 		std::vector<Pos<double> > new_pos;
 		Pos<double> p = point.p + cod[element_idx];  // p initial condition for tracking
-		if (fabs(p.ry) < tiny_amp) p.ry = sgn(p.ry) * tiny_amp;
+		if (fabs(p.ry) < tiny_y_amp) p.ry = sgn(p.ry) * tiny_y_amp;
 		Status::type status = track_ringpass (accelerator, p, new_pos, nr_turns, point.lost_turn, point.lost_element, point.lost_plane, false);
 		if (status == Status::success) {
 			//e_stable    = e_unstable;
@@ -183,7 +183,7 @@ DynApGridPoint find_momentum_acceptance(
 		point.start_element = element_idx; point.lost_turn = 0; point.lost_element = element_idx; point.lost_plane = Plane::no_plane;
 		std::vector<Pos<double> > new_pos;
 		Pos<double> p = point.p + cod[element_idx];  // p initial condition for tracking
-		if (fabs(p.ry) < tiny_amp) p.ry = sgn(p.ry) * tiny_amp;
+		if (fabs(p.ry) < tiny_y_amp) p.ry = sgn(p.ry) * tiny_y_amp;
 		Status::type status = track_ringpass (accelerator, p, new_pos, nr_turns, point.lost_turn, point.lost_element, point.lost_plane, false);
 		if (status == Status::success) {
 			e_stable = e;

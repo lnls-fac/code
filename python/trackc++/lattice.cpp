@@ -82,30 +82,6 @@ void latt_setcavity(std::vector<Element>& lattice, const std::string& state) {
 	}
 }
 
-/*
-void latt_setradiation(std::vector<Element>& lattice, const std::string& state, const double& energy) {
-
-	if (state == "on") {
-		for(unsigned int i=0; i<lattice.size(); ++i) {
-			if (lattice[i].pass_method == PassMethod::pm_str_mpole_symplectic4_pass) lattice[i].pass_method = PassMethod::pm_str_mpole_symplectic4_rad_pass;
-			if (lattice[i].pass_method == PassMethod::pm_bnd_mpole_symplectic4_pass) lattice[i].pass_method = PassMethod::pm_bnd_mpole_symplectic4_rad_pass;
-		}
-	} else {
-		for(unsigned int i=0; i<lattice.size(); ++i) {
-			if (lattice[i].pass_method == PassMethod::pm_str_mpole_symplectic4_rad_pass) lattice[i].pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
-			if (lattice[i].pass_method == PassMethod::pm_bnd_mpole_symplectic4_rad_pass) lattice[i].pass_method = PassMethod::pm_bnd_mpole_symplectic4_pass;
-		}
-	}
-
-	if (energy > 0) {
-		for(unsigned int i=0; i<lattice.size(); ++i) {
-			lattice[i].energy = energy;
-		}
-	}
-
-}
-*/
-
 std::vector<int> latt_findcells_fam_name(const std::vector<Element>& lattice, const std::string& value, bool reverse) {
 	std::vector<int> r;
 	for(unsigned int i=0; i<lattice.size(); ++i) {

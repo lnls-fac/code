@@ -37,9 +37,7 @@ struct PassMethod {
 		pm_corrector_pass                 = 4,
 		pm_cavity_pass                    = 5,
 		pm_thinquad_pass                  = 6,
-		pm_thinsext_pass                  = 7,
-		pm_str_mpole_symplectic4_rad_pass = 8,
-		pm_bnd_mpole_symplectic4_rad_pass = 9
+		pm_thinsext_pass                  = 7
 	};
 };
 
@@ -52,8 +50,6 @@ const std::string pm_dict[] = {
 		"cavity_pass",
 		"thinquad_pass",
 		"thinsext_pass",
-		"str_mpole_symplectic4_rad_pass",
-		"bnd_mpole_symplectic4_rad_pass"
 };
 
 struct Status {

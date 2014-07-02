@@ -20,7 +20,6 @@ std::vector<int>     latt_range(const std::vector<Element>& lattice);
 std::vector<double>  latt_findspos(const std::vector<Element>& lattice, const std::vector<int>& idx);
 double               latt_findspos(const std::vector<Element>& lattice, const int idx);
 void                 latt_setcavity(std::vector<Element>& lattice, const std::string& state);
-void                 latt_setradiation(std::vector<Element>& lattice, const std::string& state, const double& energy = 0);
 std::vector<Element> latt_set_num_integ_steps(const std::vector<Element>& orig_lattice);
 std::vector<Element> latt_read_flat_file(const std::string& filename);
 Status::type         latt_read_flat_file(const std::string& filename, Accelerator& accelerator);

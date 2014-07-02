@@ -51,13 +51,7 @@ Status::type track_elementpass (const Element& el, Pos<T> &orig_pos, const Accel
 	case PassMethod::pm_str_mpole_symplectic4_pass:
 		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
-	case PassMethod::pm_str_mpole_symplectic4_rad_pass:
-		if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
-		break;
 	case PassMethod::pm_bnd_mpole_symplectic4_pass:
-		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
-		break;
-	case PassMethod::pm_bnd_mpole_symplectic4_rad_pass:
 		if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
 	case PassMethod::pm_corrector_pass:
@@ -112,13 +106,7 @@ Status::type track_linepass (
 			case PassMethod::pm_str_mpole_symplectic4_pass:
 				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
-			case PassMethod::pm_str_mpole_symplectic4_rad_pass:
-				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
 			case PassMethod::pm_bnd_mpole_symplectic4_pass:
-				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_bnd_mpole_symplectic4_rad_pass:
 				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
 				break;
 			case PassMethod::pm_corrector_pass:
