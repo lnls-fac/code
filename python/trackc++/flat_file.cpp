@@ -30,50 +30,65 @@ Status::type read_flat_file_tracy(const std::string& filename, Accelerator& acce
 
 		// element-type specifics
 		switch (type) {
-		case FlatFileType::marker:
-			e.pass_method = PassMethod::pm_identity_pass;
-			break;
-		case FlatFileType::drift:
-			e.pass_method = PassMethod::pm_drift_pass;
-			fp >> e.length;
-			break;
-		case FlatFileType::corrector:
-			e.pass_method = PassMethod::pm_corrector_pass;
-			double tmpdbl; fp >> tmpdbl >> tmpdbl >> tmpdbl;
-			int    tmpint; fp >> tmpint >> tmpint;
-			fp >> tmpint >> e.hkick >> e.vkick;
-			e.hkick = - e.hkick; // AT idiosyncrasies...
-			break;
-		case FlatFileType::cavity:
-			e.pass_method = PassMethod::pm_cavity_pass;
-			int hnumber; double energy;
-			fp >> e.voltage >> e.frequency >> hnumber >> energy;
-			e.voltage *= energy; e.frequency *= light_speed / (2*M_PI);
-			accelerator.harmonic_number = hnumber;
-			accelerator.energy = energy;
-			break;
-		case FlatFileType::mpole:
-			double PdTPar, PdTerr;
-			fp >> e.t_out[0] >> e.t_out[2] >> PdTPar >> PdTerr;
-			fp >> e.length >> e.angle >> e.angle_in >> e.angle_out >> e.gap;
-			e.angle *= e.length; e.angle_in *= M_PI/180.0; e.angle_out *= M_PI/180.0;
-			if (e.angle != 0)
-				e.pass_method = PassMethod::pm_bnd_mpole_symplectic4_pass;
-			else
-				e.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
-			read_polynomials(fp, e);
-			e.t_in[0] = -e.t_out[0]; e.t_in[2] = -e.t_out[2];
-			double ang = M_PI*(PdTPar+PdTerr)/180.0;
-			double C = cos(ang);
-			double S = sin(ang);
-			e.r_in [0*6+0] =  C; e.r_in [0*6+2] =  S;
-			e.r_in [2*6+0] = -S; e.r_in [2*6+2] =  C;
-			e.r_in [1*6+1] =  C; e.r_in [1*6+3] =  S;
-			e.r_in [3*6+1] = -S; e.r_in [3*6+3] =  C;
-			e.r_out[0*6+0] =  C; e.r_out[0*6+2] = -S;
-			e.r_out[2*6+0] =  S; e.r_out[2*6+2] =  C;
-			e.r_out[1*6+1] =  C; e.r_out[1*6+3] = -S;
-			e.r_out[3*6+1] =  S; e.r_out[3*6+3] =  C;
+			case FlatFileType::marker:
+			{
+				e.pass_method = PassMethod::pm_identity_pass;
+			}; break;
+			case FlatFileType::drift:
+			{
+				e.pass_method = PassMethod::pm_drift_pass;
+				fp >> e.length;
+			}; break;
+			case FlatFileType::corrector:
+			{
+				e.pass_method = PassMethod::pm_corrector_pass;
+				double tmpdbl; fp >> tmpdbl >> tmpdbl >> tmpdbl;
+				int    tmpint; fp >> tmpint >> tmpint;
+				fp >> tmpint >> e.hkick >> e.vkick;
+				e.hkick = - e.hkick; // AT idiosyncrasies...
+			}; break;
+			case FlatFileType::cavity:
+			{
+				e.pass_method = PassMethod::pm_cavity_pass;
+				int hnumber; double energy;
+				fp >> e.voltage >> e.frequency >> hnumber >> energy;
+				e.voltage *= energy; e.frequency *= light_speed / (2*M_PI);
+				accelerator.harmonic_number = hnumber;
+				accelerator.energy = energy;
+			}; break;
+			case FlatFileType::mpole:
+			{
+				double PdTPar, PdTerr;
+				fp >> e.t_out[0] >> e.t_out[2] >> PdTPar >> PdTerr;
+				fp >> e.length >> e.angle >> e.angle_in >> e.angle_out >> e.gap;
+				e.angle *= e.length; e.angle_in *= M_PI/180.0; e.angle_out *= M_PI/180.0;
+				if (e.angle != 0)
+					e.pass_method = PassMethod::pm_bnd_mpole_symplectic4_pass;
+				else
+					e.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
+				read_polynomials(fp, e);
+				e.t_in[0] = -e.t_out[0]; e.t_in[2] = -e.t_out[2];
+				double ang = M_PI*(PdTPar+PdTerr)/180.0;
+				double C = cos(ang);
+				double S = sin(ang);
+				e.r_in [0*6+0] =  C; e.r_in [0*6+2] =  S;
+				e.r_in [2*6+0] = -S; e.r_in [2*6+2] =  C;
+				e.r_in [1*6+1] =  C; e.r_in [1*6+3] =  S;
+				e.r_in [3*6+1] = -S; e.r_in [3*6+3] =  C;
+				e.r_out[0*6+0] =  C; e.r_out[0*6+2] = -S;
+				e.r_out[2*6+0] =  S; e.r_out[2*6+2] =  C;
+				e.r_out[1*6+1] =  C; e.r_out[1*6+3] = -S;
+				e.r_out[3*6+1] =  S; e.r_out[3*6+3] =  C;
+			}; break;
+			case FlatFileType::kicktable:
+			{
+				double tmpdbl; std::string filename;
+				fp >> tmpdbl >> tmpdbl >> filename;
+				add_kicktable(filename, accelerator.kicktables, e.kicktable);
+			}; break;
+			default:
+				break;
+
 		}
 
 

@@ -8,8 +8,11 @@
 // affiliation:		LNLS - Laboratorio Nacional de Luz Sincrotron
 // Date: 		Tue Dec 10 17:57:20 BRST 2013
 
+#include "kicktable.h"
 #include "auxiliary.h"
-
+#include <vector>
+#include <string>
+#include <fstream>
 
 class Element {
 public:
@@ -27,6 +30,7 @@ public:
 	double              hmax, vmax;
 	double				t_in[6],  t_out[6];
 	double				r_in[36], r_out[36];
+	const Kicktable*    kicktable;
 
 
 	// default constructor (builds a drift-type element)

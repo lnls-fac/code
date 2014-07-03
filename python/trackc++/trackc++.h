@@ -16,6 +16,7 @@
 #include "dynap.h"
 #include "tracking.h"
 #include "lattice.h"
+#include "kicktable.h"
 #include "passmethods.h"
 #include "accelerator.h"
 #include "elements.h"

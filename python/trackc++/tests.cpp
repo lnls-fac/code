@@ -151,7 +151,7 @@ int test_cmd_dynap_xy() {
 	char *argv[] = {
 			(char*)"trackc++",
 			(char*)"dynap_xy",
-			(char*)"/home/fac_files/code/python/trackc++/tests/flat_file_v500_ac10_5_bare_in.txt",
+			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
 			(char*)"3e9",
 			(char*)"864",
 			(char*)"on",
@@ -165,8 +165,8 @@ int test_cmd_dynap_xy() {
 			(char*)"2",
 			(char*)"0.0",
 			(char*)"+0.0035",
-			NULL};
-	int argc = 0; while(argv[argc] != NULL) argc++;
+			nullptr};
+	int argc = 0; while(argv[argc] != nullptr) argc++;
 	return cmd_dynap_xy(argc,argv);
 
 }
@@ -177,7 +177,7 @@ int test_cmd_dynap_ex() {
 	char *argv[] = {
 			(char*)"trackc++",
 			(char*)"dynap_ex",
-			(char*)"/home/fac_files/code/python/trackc++/tests/flat_file_v500_ac10_5_bare_in.txt",
+			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
 			(char*)"3e9",
 			(char*)"864",
 			(char*)"on",
@@ -191,8 +191,8 @@ int test_cmd_dynap_ex() {
 			(char*)"2",
 			(char*)"-0.015",
 			(char*)"+0.015",
-			NULL};
-	int argc = 0; while(argv[argc] != NULL) argc++;
+			nullptr};
+	int argc = 0; while(argv[argc] != nullptr) argc++;
 	return cmd_dynap_xy(argc,argv);
 
 }
@@ -203,7 +203,7 @@ int test_cmd_dynap_ma() {
 	char *argv[] = {
 			(char*)"trackc++",
 			(char*)"dynap_ma",
-			(char*)"/home/fac_files/code/python/trackc++/tests/flat_file_v500_ac10_5_bare_in.txt",
+			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
 			(char*)"3e9",
 			(char*)"864",
 			(char*)"on",
@@ -217,19 +217,33 @@ int test_cmd_dynap_ma() {
 			(char*)"30",      // s_max [m]
 			(char*)"qaf",
 			(char*)"qad",
-			NULL};
-	int argc = 0; while(argv[argc] != NULL) argc++;
+			nullptr};
+	int argc = 0; while(argv[argc] != nullptr) argc++;
 	return cmd_dynap_ma(argc,argv);
+
+}
+
+int test_kicktable(Accelerator& accelerator) {
+
+	Kicktable t;
+	const Kicktable *ptrKicktable = nullptr;
+	add_kicktable("/home/fac_files/code/python/trackc++/pytrack/id_kicktable.txt", accelerator.kicktables, ptrKicktable);
+	add_kicktable("/home/fac_files/code/python/trackc++/pytrack/id_kicktable2.txt", accelerator.kicktables, ptrKicktable);
+	return 0;
 
 }
 
 int cmd_tests(int argc, char* argv[]) {
 
 
-	//Accelerator accelerator
-	//sirius_v500(accelerator.line);
-	//accelerator.line = latt_read_flat_file("/home/ximenes/Desktop/flat_file_test.txt");
-	//accelerator.harmonic_number = 864;
+	Accelerator accelerator;
+	//sirius_v500(accelerator.lattice);
+	Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_with_ids_in.txt", accelerator);
+	if (status != Status::success) {
+		return EXIT_FAILURE;
+	}
+	accelerator.radiation_on = true;
+	accelerator.cavity_on = true;
 
 
 	//latt_setcavity(the_ring, "on");
@@ -251,7 +265,9 @@ int cmd_tests(int argc, char* argv[]) {
 
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
-	test_cmd_dynap_ma();
+	// test_cmd_dynap_ma();
+	test_kicktable(accelerator);
+
 	return 0;
 
 }

@@ -17,10 +17,7 @@ static Status::type calc_closed_orbit(const Accelerator& accelerator, std::vecto
 		std::cout.flush();
 	}
 	Status::type status = track_findorbit6(accelerator, cod);
-	if (status != Status::success) return status;
-	if (verbose_on) {
-		std::cout << "ok" << std::endl;
-	}
+	if (verbose_on) std::cout << string_error_messages[status] <<  std::endl;
 	return Status::success;
 }
 
@@ -234,7 +231,9 @@ Status::type dynap_ma(
 	for(unsigned int i=0; i<the_ring.size(); ++i) {
 		if ((s >= s_min) and (s <= s_max)) {
 			if (std::find(fam_names.begin(), fam_names.end(), the_ring[i].fam_name) != fam_names.end()) {
-				elements.push_back(i);
+				elements.push_back(i);                      // calcs at start of element
+//#pragma message("temporary: elements.push_back(i+1) !!!!")
+//				elements.push_back((i+1) % the_ring.size()); // calcs at end of element
 			}
 		}
 		s += the_ring[i].length;

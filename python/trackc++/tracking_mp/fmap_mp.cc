@@ -54,7 +54,7 @@ void fmap_mp(int nr_cpus, long Nbx, long Nbz, long Nbtour, double x0, double xma
 	// salva resultado em arquivo
 	FILE * outf;
 	/* Opening file */
-	if ((outf = fopen(fic, "w")) == NULL) {
+	if ((outf = fopen(fic, "w")) == nullptr) {
 		fprintf(stdout, "fmap: error while opening file %s\n", fic);
 		exit(1);
 	}

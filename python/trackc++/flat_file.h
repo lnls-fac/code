@@ -15,7 +15,7 @@ struct FlatFileType {
 			cavity    =  2,
 			corrector =  3,
 			thin_kick =  3,
-			insertion =  6
+			kicktable =  6
 		};
 	};
 
