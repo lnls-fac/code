@@ -27,13 +27,13 @@
 *.cproject
 *.pyc
 *.out
-trackc++
 tracy
 tracyd
 lnlstracy*
 .depend
 COMMIT_EDITMSG
 *DS_Store
+
 ## directories not to be tracked
 
 gitrepo/
