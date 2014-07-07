@@ -40,7 +40,7 @@ Status::type Kicktable::load_from_file(const std::string& filename_) {
 	getline(fp, str);   // advances to new line
 
 	this->x_kick.resize(x_nrpts * y_nrpts, 0);
-	this->x_kick.resize(x_nrpts * y_nrpts, 0);
+	this->y_kick.resize(x_nrpts * y_nrpts, 0);
 
 	// HORIZONTAL KICK TABLE
 	getline(fp, str);   // label 'Horizontal KickTable in T^2.m^2'
@@ -56,6 +56,7 @@ Status::type Kicktable::load_from_file(const std::string& filename_) {
 		if (isnan(y_max) or posy > y_max) y_max = posy;
 		for(unsigned int i=0; i<x_nrpts; ++i) fp >> x_kick[this->get_idx(i,j)];
 	}
+	getline(fp, str);   // advances to new line
 
 	// VERTICAL KICK TABLE
 	getline(fp, str);   // label 'Vertical KickTable in T^2.m^2'
@@ -66,28 +67,37 @@ Status::type Kicktable::load_from_file(const std::string& filename_) {
 		for(unsigned int i=0; i<x_nrpts; ++i) fp >> y_kick[this->get_idx(i,j)];
 	}
 
-	fp.close();
 	return Status::success;
 
 }
 
-Status::type add_kicktable(const std::string& filename, std::vector<Kicktable>& kicktable_list, const Kicktable*& kicktable_pointer) {
+Status::type add_kicktable(const std::string& filename, std::vector<Kicktable*>& kicktable_list, const Kicktable*& kicktable_pointer) {
 
 	// looks through vector of kickmaps...
 	for(unsigned int i=0; i<kicktable_list.size(); ++i) {
-		if (kicktable_list[i].filename == filename) {
-			kicktable_pointer = &(kicktable_list[i]);
+		if (kicktable_list[i]->filename == filename) {
+			kicktable_pointer = kicktable_list[i];
 			return Status::success;
 		}
 	}
 
 	// loads a new kicktable from file and inserts it into vector of kicktables
-	Kicktable new_kicktable;
-	Status::type status = new_kicktable.load_from_file(filename);
+	Kicktable* new_kicktable = new Kicktable();
+	Status::type status = new_kicktable->load_from_file(filename);
 	if (status == Status::success) {
 		kicktable_list.push_back(new_kicktable);
-		kicktable_pointer = &(kicktable_list[kicktable_list.size()-1]);
+		kicktable_pointer = new_kicktable;
+	} else {
+		kicktable_pointer = nullptr;
 	}
 	return status;
 
 }
+
+
+void del_kicktables(std::vector<Kicktable*>& kicktable_list) {
+	for(unsigned int i=0; i<kicktable_list.size(); ++i) {
+		delete [] kicktable_list[i];
+	}
+}
+

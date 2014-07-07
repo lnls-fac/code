@@ -13,7 +13,7 @@ struct Accelerator {
 	bool                    vchamber_on;
 	int                     harmonic_number;
 	std::vector<Element>    lattice;
-	std::vector<Kicktable>  kicktables;
+	std::vector<Kicktable*> kicktables;
 
 };
 

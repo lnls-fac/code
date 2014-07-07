@@ -14,22 +14,7 @@ const std::vector<double> Element::default_polynom = std::vector<double>(3,0);
 
 
 // default constructor (constructs a drift element)
-Element::Element(const std::string& fam_name_, const double& length_) :
-	fam_name(fam_name_), pass_method(PassMethod::pm_drift_pass),
-	nr_steps(1), length(length_),
-	hkick(0), vkick(0),
-	angle(0), angle_in(0), angle_out(0),
-	gap(0), fint_in(0), fint_out(0),
-	thin_KL(0), thin_SL(0),
-	frequency(0), voltage(0),
-	polynom_a(default_polynom), polynom_b(default_polynom),
-	hmax(DBL_MAX), vmax(DBL_MAX)
-{
-	//polynom_a.clear();
-	//polynom_b.clear();
-	//t1.set_zero(); t2.set_zero();
-	//r1.set_identity(); r2.set_identity();
-
+Element::Element(const std::string& fam_name_, const double& length_) {
 	for(unsigned int i=0; i<6; i++) {
 		t_in[i] = t_out[i] = 0.0;
 		for(unsigned int j=0; j<6; ++j) {

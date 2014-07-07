@@ -12,7 +12,6 @@
 //      apart from discrepancies between math library implementations and TWOPI,CGAMMA constants
 //      these passmethods agree with AT passmethods up to machine 64-bit precision.
 
-
 #include "passmethods.h"
 #include "accelerator.h"
 #include "elements.h"
@@ -25,8 +24,6 @@
 #define KICK1  ( 0.1351207191959657328e01)
 #define KICK2  (-0.1702414383919314656e01)
 
-#define SQR(X) ((X)*(X))
-
 #ifdef ATCOMPATIBLE
 	#define TWOPI   6.28318530717959 // AT implementation of 2*PI...
 	#define CGAMMA  8.846056192e-05  // AT implementation
@@ -34,6 +31,10 @@
 	#define TWOPI   2*M_PI
 	static const double CGAMMA = 4*M_PI*electron_radius/pow(electron_rest_energy/electron_charge/1e9,3)/3;
 #endif
+
+
+template <typename T> inline T SQR(const T& X) { return X*X; }
+template <typename T> inline T POW3(const T& X) { return X*X*X; }
 
 template <typename T>
 inline void drift(Pos<T>& pos, const double& length) {
@@ -61,7 +62,6 @@ inline void calcpolykick(const Pos<T> &pos, const std::vector<double>& polynom_a
     }
 }
 
-
 template <typename T>
 void fastdrift(Pos<T> &pos, const T& norml) {
 	T dx = norml * pos.px;
@@ -79,17 +79,37 @@ T b2_perp(const T& bx, const T& by, const T& rx, const T& px, const T& ry, const
 }
 
 template <typename T>
-void strthinkick(Pos<T>& pos, const double& length, const std::vector<double>& polynom_a, const std::vector<double>& polynom_b, const double& energy, bool radiation = true) {
+Status::type kicktablethinkick(Pos<T>& pos, const Kicktable* kicktable, const double& brho) {
+
+	T hkick, vkick;
+	Status::type status = kicktable_getkicks(kicktable, pos.rx, pos.ry, hkick, vkick);
+	pos.px += hkick / (brho * brho);
+	pos.py += vkick / (brho * brho);
+	if (status == Status::kicktable_out_of_range) {
+		if (not isfinite(pos.px)) {
+			pos.rx = nan("");
+		}
+		if (not isfinite(pos.py)) {
+			pos.ry = nan("");
+		}
+	}
+	return status;
+
+}
+
+template <typename T>
+void strthinkick(Pos<T>& pos, const double& length, const std::vector<double>& polynom_a, const std::vector<double>& polynom_b, const Accelerator& accelerator) {
+
         T real_sum, imag_sum;
         calcpolykick<T>(pos, polynom_a, polynom_b, real_sum, imag_sum);
-        if (radiation) {
+        if (accelerator.radiation_on) {
         	      T pnorm = 1 / (1 + pos.de);
         	const T& rx = pos.rx;
 		      	  T  px = pos.px * pnorm;
 		    const T& ry = pos.ry;
 		      	  T  py = pos.py * pnorm;
 		      	  T b2p = b2_perp(imag_sum, real_sum, rx, px, ry, py, 0);
-		    double radiation_constant = CGAMMA*energy*energy*energy/(TWOPI*1e27);	/* [m]/[GeV^3] M.Sands (4.1)  */
+		    double radiation_constant = CGAMMA*POW3(accelerator.energy)/(TWOPI*1e27);	/* [m]/[GeV^3] M.Sands (4.1)  */
 		    pos.de -= radiation_constant * SQR(1 + pos.de) * b2p * (1 + (px*px + py*py)/2) * length;
 		    pnorm  = 1 / (1 + pos.de);
 		    pos.px = px / pnorm;
@@ -102,18 +122,18 @@ void strthinkick(Pos<T>& pos, const double& length, const std::vector<double>& p
 
 
 template <typename T>
-void bndthinkick(Pos<T>& pos, const double& length, const std::vector<double>& polynom_a, const std::vector<double>& polynom_b, const double& irho, const double& energy, bool radiation) {
+void bndthinkick(Pos<T>& pos, const double& length, const std::vector<double>& polynom_a, const std::vector<double>& polynom_b, const double& irho, const Accelerator& accelerator) {
 	T real_sum, imag_sum;
 	calcpolykick<T>(pos, polynom_a, polynom_b, real_sum, imag_sum);
 	T de = pos.de;
-	if (radiation) {
+	if (accelerator.radiation_on) {
 			  T pnorm = 1 / (1 + pos.de);
 		const T& rx = pos.rx;
 		  	  T  px = pos.px * pnorm;
 		const T& ry = pos.ry;
 	   	  	  T  py = pos.py * pnorm;
 	   	  	  T b2p = b2_perp(imag_sum, real_sum + irho, rx, px, ry, py, irho);
-	   	double radiation_constant = CGAMMA*energy*energy*energy/(TWOPI*1e27);	/* [m]/[GeV^3] M.Sands (4.1)  */
+	   	double radiation_constant = CGAMMA*POW3(accelerator.energy)/(TWOPI*1e27);	/* [m]/[GeV^3] M.Sands (4.1)  */
 	   	pos.de -= radiation_constant * SQR(1 + pos.de) * b2p * (1 + irho * rx + (px*px + py*py)/2) * length;
 	   	pnorm = 1 / (1 + pos.de);
 	   	pos.px = px / pnorm;
@@ -190,11 +210,11 @@ Status::type pm_str_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, con
 	const std::vector<double> &polynom_b = elem.polynom_b;
 	for(unsigned int i=0; i<elem.nr_steps; ++i) {
 		drift(pos, l1);
-		strthinkick<T>(pos, k1, polynom_a, polynom_b, accelerator.energy, accelerator.radiation_on);
+		strthinkick<T>(pos, k1, polynom_a, polynom_b, accelerator);
 		drift(pos, l2);
-		strthinkick<T>(pos, k2, polynom_a, polynom_b, accelerator.energy, accelerator.radiation_on);
+		strthinkick<T>(pos, k2, polynom_a, polynom_b, accelerator);
 		drift<T>(pos, l2);
-		strthinkick<T>(pos, k1, polynom_a, polynom_b, accelerator.energy, accelerator.radiation_on);
+		strthinkick<T>(pos, k1, polynom_a, polynom_b, accelerator);
 		drift<T>(pos, l1);
 	}
 	local_2_global(pos, elem);
@@ -218,11 +238,11 @@ Status::type pm_bnd_mpole_symplectic4_pass(Pos<T> &pos, const Element &elem, con
 
 	for(unsigned int i=0; i<elem.nr_steps; ++i) {
 		drift<T>(pos, l1);
-		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, accelerator.energy, accelerator.radiation_on);
+		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, accelerator);
 		drift<T>(pos, l2);
-		bndthinkick<T>(pos, k2, polynom_a, polynom_b, irho, accelerator.energy, accelerator.radiation_on);
+		bndthinkick<T>(pos, k2, polynom_a, polynom_b, irho, accelerator);
 		drift<T>(pos, l2);
-		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, accelerator.energy, accelerator.radiation_on);
+		bndthinkick<T>(pos, k1, polynom_a, polynom_b, irho, accelerator);
 		drift<T>(pos, l1);
 	}
 
@@ -307,6 +327,36 @@ Status::type pm_thinquad_pass(Pos<T> &pos, const Element &elem, const Accelerato
 template <typename T>
 Status::type pm_thinsext_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
 	return Status::passmethod_not_implemented;
+}
+
+
+template <typename T>
+Status::type pm_kicktable_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
+
+	if (elem.kicktable == nullptr) return Status::kicktable_not_defined;
+
+	Status::type status = Status::success;
+
+	double sl   = elem.length / float(elem.nr_steps);
+	double brho = get_magnetic_rigidity(accelerator.energy);
+
+    global_2_local(pos, elem);
+
+    if (elem.kicktable == nullptr) {
+    	drift<T>(pos, sl);
+    } else {
+    	for(unsigned int i=0; i<elem.nr_steps; ++i) {
+    		drift<T>(pos, sl / 2);
+    		Status::type status = kicktablethinkick(pos, elem.kicktable, brho);
+    		if (status != Status::success) return status;
+    		drift<T>(pos, sl / 2);
+    	}
+    }
+
+    local_2_global(pos, elem);
+
+    return status;
+
 }
 
 #undef DRIFT1

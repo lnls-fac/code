@@ -128,6 +128,8 @@ public:
 	bool operator == (const Tpsa& o_) const;
 	bool operator != (const Tpsa& o_) const;
 
+	explicit operator int()    const { return int(c[0]); }
+	explicit operator double() const { return double(c[0]); }
 
 	// auxiliary public functions
 	static unsigned int  get_n()         { return N; }
@@ -666,6 +668,7 @@ template <unsigned int V, unsigned int N, typename TYPE>
 bool isfinite(const Tpsa<V,N,TYPE>& a_) {
 	return std::isfinite(a_.c[0]);
 }
+
 
 
 

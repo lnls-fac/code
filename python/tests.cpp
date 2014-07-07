@@ -13,9 +13,8 @@ int test_printlattice(const std::vector<Element>& the_ring) {
 	return 0;
 }
 
-int test_linepass(const Accelerator& accelerator) {
+int test_linepass(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
-	const std::vector<Element>& the_ring = accelerator.lattice;
 
 	Pos<> pos;
 	pos.rx = 1*0.00100; pos.px = 0*0.00001;
@@ -24,8 +23,7 @@ int test_linepass(const Accelerator& accelerator) {
 	std::vector<Pos<> > new_pos;
 	unsigned int element_offset = 0;
 	Plane::type lost_plane;
-	Status::type status = track_linepass(accelerator, pos, new_pos, element_offset, lost_plane, true);
-	std::cout << "status: " << string_error_messages[status] << std::endl;
+	track_linepass(accelerator, pos, new_pos, element_offset, lost_plane, true);
 	for(unsigned int i=0; i<new_pos.size(); ++i) {
 		const Pos<>& c = new_pos[i];
 		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, the_ring[i % the_ring.size()].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de);
@@ -35,7 +33,6 @@ int test_linepass(const Accelerator& accelerator) {
 	return 0;
 
 }
-
 
 int test_linepass_tpsa(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
@@ -58,7 +55,6 @@ int test_linepass_tpsa(const Accelerator& accelerator, const std::vector<Element
 	return 0;
 
 }
-
 
 #include <cstdlib>
 int test_ringpass(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
@@ -106,9 +102,7 @@ int test_findorbit6(const Accelerator& accelerator, const std::vector<Element>& 
 }
 
 #include <cstdio>
-int test_findm66(const Accelerator& accelerator) {
-
-	const std::vector<Element>& the_ring = accelerator.lattice;
+int test_findm66(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
 
 	std::vector<double*> m66;
 
@@ -152,36 +146,12 @@ int test_dynap_xy(const Accelerator& accelerator) {
 	return 0;
 }
 
-int test_cmd_track_linepass() {
-
-	char *argv[] = {
-			(char*)"trackc++",
-			(char*)"track_linepass",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
-			(char*)"3e9",
-			(char*)"864",
-			(char*)"on",
-			(char*)"on",
-			(char*)"on",
-			(char*)"0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			nullptr};
-	int argc = 0; while(argv[argc] != nullptr) argc++;
-	return cmd_track_linepass(argc,argv);
-
-}
-
 int test_cmd_dynap_xy() {
 
 	char *argv[] = {
 			(char*)"trackc++",
 			(char*)"dynap_xy",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_with_ids_in.txt",
+			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
 			(char*)"3e9",
 			(char*)"864",
 			(char*)"on",
@@ -189,10 +159,10 @@ int test_cmd_dynap_xy() {
 			(char*)"on",
 			(char*)"0.0",
 			(char*)"5000",
-			(char*)"4",
+			(char*)"2",
 			(char*)"-0.015",
 			(char*)"+0.015",
-			(char*)"4",
+			(char*)"2",
 			(char*)"0.0",
 			(char*)"+0.0035",
 			nullptr};
@@ -233,7 +203,7 @@ int test_cmd_dynap_ma() {
 	char *argv[] = {
 			(char*)"trackc++",
 			(char*)"dynap_ma",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_with_ids_in.txt",
+			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
 			(char*)"3e9",
 			(char*)"864",
 			(char*)"on",
@@ -275,6 +245,7 @@ int cmd_tests(int argc, char* argv[]) {
 	accelerator.radiation_on = true;
 	accelerator.cavity_on = true;
 
+
 	//latt_setcavity(the_ring, "on");
 	//latt_setradiation(the_ring, "on", 3e9);
 	//the_ring[13].hkick = 1e-4;
@@ -285,8 +256,8 @@ int cmd_tests(int argc, char* argv[]) {
 	//std::cout << the_ring.size() << std::endl;
 
 	//test_printlattice(the_ring);
-	//test_findm66(accelerator);
-	//test_linepass(accelerator);
+	//test_findm66(the_ring);
+	//test_linepass(the_ring);
 	//test_ringpass(the_ring);
 	//test_linepass_tpsa(the_ring);
 	//test_findorbit6(the_ring);
@@ -295,8 +266,7 @@ int cmd_tests(int argc, char* argv[]) {
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
 	// test_cmd_dynap_ma();
-	test_cmd_track_linepass();
-	//test_kicktable(accelerator);
+	test_kicktable(accelerator);
 
 	return 0;
 

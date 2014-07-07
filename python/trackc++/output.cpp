@@ -36,6 +36,34 @@ Status::type print_closed_orbit(const Accelerator& accelerator, const std::vecto
 	return Status::success;
 }
 
+Status::type print_tracking_ringpass(const Accelerator& accelerator, const std::vector<Pos<double>>& points, const unsigned int start_element, const std::string& filename) {
+
+	FILE* fp;
+	fp = fopen(filename.c_str(), "w");
+	if (fp == nullptr) return Status::file_not_opened;
+
+	print_header(fp);
+	fprintf(fp, "# ebeam_energy[eV]  : %f\n", accelerator.energy);
+	fprintf(fp, "# harmonic_number   : %i\n", accelerator.harmonic_number);
+	fprintf(fp, "# cavity_state      : %s\n", accelerator.cavity_on ? "on" : "off");
+	fprintf(fp, "# radiation_state   : %s\n", accelerator.radiation_on ? "on" : "off");
+	fprintf(fp, "# chamber_state     : %s\n", accelerator.vchamber_on ? "on" : "off");
+	fprintf(fp, "\n");
+
+	unsigned int nr_elements = accelerator.lattice.size();
+	for(unsigned int i=0; i<nr_elements; ++i) {
+		unsigned int el_idx = (start_element + i) % nr_elements;
+		if (points.size()<=i) {
+			fprintf(fp, "%05i %-15s %+22.15E %+22.15E %+22.15E %+22.15E %+22.15E %+22.15E\n", el_idx, accelerator.lattice[el_idx].fam_name.c_str(), nan(""), nan(""), nan(""), nan(""), nan(""), nan(""));
+		} else {
+			fprintf(fp, "%05i %-15s %+22.15E %+22.15E %+22.15E %+22.15E %+22.15E %+22.15E\n", el_idx, accelerator.lattice[el_idx].fam_name.c_str(), points[i].rx, points[i].ry, points[i].de, points[i].px, points[i].py, points[i].dl);
+		}
+	}
+
+	fclose(fp);
+	return Status::success;
+}
+
 Status::type print_dynapgrid(const Accelerator& accelerator, const std::vector<DynApGridPoint>& grid, const std::string& label, const std::string& filename) {
 
 	FILE* fp;
