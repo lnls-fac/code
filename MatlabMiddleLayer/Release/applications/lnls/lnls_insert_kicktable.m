@@ -25,6 +25,7 @@ end
 
 half_id = idthickkickmap([famname '_kicktable'], id_length/2, (nsegs/2), posx, posy, (strength/2) * kickx, (strength/2) * kicky, 'LNLSThickEPUPass');
 half_id = buildlat(half_id);
+half_id{1}.VChamber = [max(abs(posx(:))) max(abs(posy(:))) 1];
 half_id = half_id(1);
 half_id{1}.Energy = the_ring0{idx_pos}.Energy;
 

@@ -9,8 +9,8 @@ twi = calctwiss(the_ring);
 params.emit0 = 2.8e-10;
 params.E     = 3e9;
 params.N     = 100e-3/864/1.601e-19*1.72e-6;
-params.sigE  = 0.8e-3;
-params.sigS  = 3.5e-3;
+params.sigE  = 0.833e-3;
+params.sigS  = 3.0e-3;
 params.K     = 0.01;
 accepRF      = 0.05;
 
@@ -34,7 +34,7 @@ for i=1:n_calls
     end;
     % full_name = '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_5/test_momAccep_fun/tracy3/momAccept.out';
     
-    [~, result] = system(['ls ' path '| grep rms | wc -l']);
+    [~, result] = system(['ls -la ' path ' | grep ''^d'' | grep rms | wc -l']);
     n_pastas = str2double(result);
     rms_mode = true;
     if n_pastas == 0
@@ -49,15 +49,19 @@ for i=1:n_calls
         pathname = path;
         if rms_mode, pathname = fullfile(path, sprintf('rms%02d',k)); end
         
-        try
-            [spos, accep(j+1,:,:), nLost(j+1,:,:), sLost(j+1,:,:)] = tracy3_load_ma_data(pathname);
+        if exist(fullfile(pathname,'momAccept.out'),'file');
+            [spos, accep(j+1,:,:), ~, ~] = tracy3_load_ma_data(pathname);
             j = j + 1;
-        catch
-            fprintf('%-d-%-3d: nao carregou',i,k);
+        elseif exist(fullfile(pathname,'dynap_ma_out.txt'),'file');
+            [spos, accep(j+1,:,:), ~, ~] = trackcpp_load_ma_data(pathname);
+            j = j + 1;
+        else
+            fprintf('%-2d-%-3d: ma nao carregou\n',i,k);
         end
-
+        
         Accep(1,:) = spos;
-        Accep([2 3],:) = min(accep(j,:,:), accepRF);
+        Accep(2,:) = min(accep(j,1,:), accepRF);
+        Accep(3,:) = max(accep(j,2,:), -accepRF);
         % não estou usando alguns outputs
         LT = lnls_tau_touschek_inverso(params,Accep,twi);
         lifetime(j) = 1/LT.AveRate/60/60; % em horas
@@ -70,10 +74,10 @@ for i=1:n_calls
         rmsLT = std(lifetime);
     end
    
-    sLost = sLost(:)';
-    modSLost = mod(sLost,518.396/10);
+%     sLost = sLost(:)';
+%     modSLost = mod(sLost,518.396/10);
     
-    clear sLost nLost lifetime accep Accep
+    clear lifetime accep Accep
     %% exposicao dos resultados
     
     %imprime o tempo de vida

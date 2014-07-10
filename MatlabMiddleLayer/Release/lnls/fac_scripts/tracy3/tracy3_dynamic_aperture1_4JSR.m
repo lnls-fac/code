@@ -3,11 +3,11 @@ function tracy3_dynamic_aperture1_4JSR(varargin)
 fmapdpFlag = true;
 
 % selects data folder
-pathname = lnls_get_root_folder();
-pathname = fullfile(pathname, 'data', 'sirius_tracy');
+path = lnls_get_root_folder();
+path = fullfile(path, 'data', 'sirius_tracy');
 for i=1:length(varargin)
     if (ischar(varargin{i}) && strcmpi(varargin{i}, 'local_dir'))
-        pathname = pwd();
+        path = pwd();
     else
         fmapdpFlag = varargin{i};
     end
@@ -24,7 +24,7 @@ limx = 12;
 limy = 3.0;
 lime = 5;
 
-mostra = 3; % 0 = porcentagem de part perdidas
+mostra = 0; % 0 = porcentagem de part perdidas
 % 1 = número medio de voltas
 % 2 = posicao em que foram perdidas
 % 3 = plano em que foram perdidas
@@ -38,66 +38,71 @@ for j = 1:2
     count = 0; countdp = 0;
     
     % selects data folder
-    pathname = uigetdir(pathname,'Em qual pasta estao os dados?');
-    if (pathname == 0);
+    path = uigetdir(path,'Em qual pasta estao os dados?');
+    if (path == 0);
         return
     end
     
     % gets number of random machines (= number of rms folders)
-    [~, result] = system(['ls ' pathname '| grep rms | wc -l']);
+    [~, result] = system(['ls ' path '| grep rms | wc -l']);
     n_pastas = str2double(result);
     
     for i=1:n_pastas
         % -- FMAP --
-        full_name = fullfile(pathname, ['rms', num2str(i, '%02i')]);
-        try
-            try
-                [~, dados1] = tracy3_load_daxy_data(full_name);
-                ind = dados1.plane == -1;
-            catch
-                [~, dados1] = tracy3_load_fmap_data(full_name);
-                ind = (dados1.fx ~= 0);
-            end
-            if i == 1, idx_daxy = zeros(size(ind));end;
-            switch mostra
-                case 0
-                    idx_daxy = idx_daxy + ind;
-                case 1
-                    idx_daxy = idx_daxy + dados1.turn;
-                case 2
-                    idx_daxy = idx_daxy + mod(dados1.pos,51.8396);
-                case 3
-                    idx_daxy = idx_daxy + dados1.plane;
-            end
-            count = count + 1;
-        catch
-            disp('fmap nao carregou');
+        pathname = fullfile(path, ['rms', num2str(i, '%02i')]);
+        
+        if exist(fullfile(pathname,'daxy.out'),'file')
+            [~, dados1] = tracy3_load_daxy_data(pathname);
+            ind = dados1.plane == -1;
+        elseif exist(fullfile(pathname, 'fmap.out'),'file')
+            [~, dados1] = tracy3_load_fmap_data(pathname);
+            ind = (dados1.fx ~= 0);
+        elseif exist(fullfile(pathname,'dynap_xy_out.txt'),'file');
+            [~, dados1] = trackcpp_load_dynap_xy(pathname);
+            ind = dados1.plane == 0;
+        else
+            fprintf('%-2d-%-3d: xy nao carregou\n',j,i);
         end
         
+        if i == 1, idx_daxy = zeros(size(ind));end;
+        switch mostra
+            case 0
+                idx_daxy = idx_daxy + ind;
+            case 1
+                idx_daxy = idx_daxy + dados1.turn;
+            case 2
+                idx_daxy = idx_daxy + mod(dados1.pos,51.8396);
+            case 3
+                idx_daxy = idx_daxy + dados1.plane;
+        end
+        count = count + 1;
+        
         if (fmapdpFlag)
-            try
-                try
-                    [~, dados2] = tracy3_load_daex_data(full_name);
-                    inddp = dados2.plane == -1;
-                catch
-                    [~, dados2] = tracy3_load_fmapdp_data(full_name);
-                    inddp = (dados2.fen ~= 0);
-                end
-                if i == 1, idx_daex = zeros(size(inddp));end;
-                switch mostra
-                    case 0
-                        idx_daex = idx_daex + inddp;
-                    case 1
-                        idx_daex = idx_daex + dados2.turn;
-                    case 2
-                        idx_daex = idx_daex + mod(dados2.pos,51.8396);
-                    case 3
-                        idx_daex = idx_daex + dados2.plane;
-                end
-                countdp = countdp+1;
-            catch
-                disp('fmapdp nao carregou');
+            if exist(fullfile(pathname, 'daex.out'),'file')
+                [~, dados2] = tracy3_load_daex_data(pathname);
+                inddp = dados2.plane == -1;
+            elseif exist(fullfile(pathname, 'fmapdp.out'),'file')
+                [~, dados2] = tracy3_load_fmapdp_data(pathname);
+                inddp = (dados2.fen ~= 0);
+            elseif exist(fullfile(pathname, 'dynap_ex_out.txt'),'file');
+                [~, dados2] = trackcpp_load_dynap_ex(pathname);
+                inddp = dados2.plane == 0;
+            else
+                fprintf('%-2d-%-3d: ex nao carregou\n',j,i);
             end
+            
+            if i == 1, idx_daex = zeros(size(inddp));end;
+            switch mostra
+                case 0
+                    idx_daex = idx_daex + inddp;
+                case 1
+                    idx_daex = idx_daex + dados2.turn;
+                case 2
+                    idx_daex = idx_daex + mod(dados2.pos,51.8396);
+                case 3
+                    idx_daex = idx_daex + dados2.plane;
+            end
+            countdp = countdp+1;
         end
     end
     

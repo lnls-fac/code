@@ -46,27 +46,30 @@ for i=1:n_calls
         pathname = path;
         if rms_mode, pathname = fullfile(path,sprintf('rms%02d',k)); end
         
-        try
-            try
-                [a,~] = tracy3_load_daxy_data(pathname,var_plane);
-            catch
-                a = tracy3_load_fmap_data(pathname,var_plane);
-            end
-            onda(j,:,:) = a;
+        if exist(fullfile(pathname,'daxy.out'),'file')
+            [onda(j,:,:), ~] = tracy3_load_daxy_data(pathname);
             j = j + 1;
-        catch
+        elseif exist(fullfile(pathname, 'fmap.out'),'file')
+            [onda(j,:,:), ~] = tracy3_load_fmap_data(pathname);
+            j = j + 1;
+        elseif exist(fullfile(pathname,'dynap_xy_out.txt'),'file');
+            [onda(j,:,:), ~] = trackcpp_load_dynap_xy(pathname);
+            j = j + 1;
+        else
             fprintf('%-2d-%-3d: xy nao carregou\n',i,k);
         end
         
         if (fmapdpFlag)
-            try
-                try
-                    [offda(m,:,:), ~] = tracy3_load_daex_data(pathname);
-                catch
-                    offda(m,:,:) = tracy3_load_fmapdp_data(pathname);
-                end
+            if exist(fullfile(pathname, 'daex.out'),'file')
+                [offda(m,:,:), ~] = tracy3_load_daex_data(pathname);
                 m = m + 1;
-            catch
+            elseif exist(fullfile(pathname, 'fmapdp.out'),'file')
+                [offda(m,:,:), ~] = tracy3_load_fmapdp_data(pathname);
+                m = m + 1;
+            elseif exist(fullfile(pathname, 'dynap_ex_out.txt'),'file');
+                [offda(m,:,:), ~] = trackcpp_load_dynap_ex(pathname);
+                m = m + 1;
+            else
                 fprintf('%-2d-%-3d: ex nao carregou\n',i,k);
             end
         end
@@ -133,7 +136,9 @@ end
 
 title_text = inputdlg('Digite um Título para os Gráficos','Título',1);
 legend(pl(:,2),'show',cell_leg_text, 'Location','Best');
-legend(pldp(:,2),'show',cell_leg_text, 'Location','Best');
 title(fa,['DA - ' title_text{1}]);
-title(fdpa,['MA - ' title_text{1}]);
+if fmapdpFlag
+    legend(pldp(:,2),'show',cell_leg_text, 'Location','Best');
+    title(fdpa,['MA - ' title_text{1}]);
+end
 
