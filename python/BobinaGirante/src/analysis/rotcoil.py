@@ -215,6 +215,7 @@ class measurement:
         self.fname = fname
         self.config = {}
         self.read_file()
+        #self.read_file_old_format()
         self.nr_points = len(self.raw)
         self.nr_turns  = len(self.raw[0])
         self.rcoil_Ne = self.config['n_espiras_bobina_principal']     # Numero de Espiras
@@ -290,6 +291,89 @@ class measurement:
                     words[k] = float(words[k])
                 raw.append(words)
         self.raw = 1e-12 * numpy.array(raw)  # unidade em V.s
+        
+    
+    def read_file_old_format(self):
+        
+        ''' reads raw data into list '''
+        fp = open(self.fname)
+        lines = fp.readlines()
+        fp.close()
+        
+        section = None
+        ''' parses header file '''
+        for i in range(len(lines)):
+            line = lines[i].strip()
+            if not len(line):
+                continue
+            if 'Dados de Configura' in line: 
+                section = 'CONFIG'
+                continue
+            if 'Dados de Leitura' in line:
+                section = 'MULTIPOLES'
+                continue
+            #if '### DADOS ARMAZENADOS' in line.upper():
+            if 'Dados Armazenados' in line:
+                section = 'RAW'
+                raw = []
+                continue
+            if 'Angulo Volta' in line:
+                section = 'ANGULO'
+            if line[0] == '#':
+                continue
+            if section is None:
+                continue
+            if section is 'ANGULO':
+                continue
+            if section == 'CONFIG':
+                words = line.split()
+                words[0] = words[0].strip(':\.')
+                words[0] = words[0].lower()
+                if words[0] == 'corrente':
+                    words[0] = 'corrente_alim_principal_avg(A)'
+                    del words[3:]
+                    del words[1:2]
+                if words[0] == 'ganho': words[0] = 'ganho_integrador'
+                if words[0] == 'n' and words[1] == 'Pontos': 
+                    words[0] = 'nr_pontos_integracao'
+                    del words[1:3]
+                if words[0] == 'n' and words[2] == 'Coletas..........:': 
+                    words[0] = 'nr_voltas'
+                    del words[1:3]
+                self.config[words[0]] = ' '.join(words[1:])
+                try:
+                    self.config[words[0]] = float(self.config[words[0]])
+                except:
+                    pass
+                continue
+            if section == 'BOBINA':
+                words = line.split()
+                self.config[words[0]] = ' '.join(words[1:])
+                try:
+                    self.config[words[0]] = float(self.config[words[0]])
+                except:
+                    pass
+                continue
+            if section == 'MULTIPOLES':
+                words = line.split()
+                if words[0].upper() == 'N':
+                    continue
+                continue
+            if section == 'RAW':
+                if line == 'Brutos':
+                    continue
+                raw.append(float(line))
+        
+        #print(self.config)
+        self.config['nr_voltas'] = int(self.config['nr_voltas'])
+        self.raw = 1e-12 * numpy.array(raw)  # unidade em V.s
+        self.raw = numpy.reshape(self.raw, (self.config['nr_voltas'],-1))
+        self.raw = numpy.transpose(self.raw)
+        
+        self.config['n_espiras_bobina_principal']     = 10
+        self.config['raio_interno_bobina_princip(m)'] = 0.001
+        self.config['raio_externo_bobina_princip(m)'] = 0.01803
+        
         
 def calc_alpha_blending(fg, alpha, bg=(1,1,1)):
     """ does color linear combination for alpha-blending (ps figures loose alpha-blending props unless it is hard-coded in colors) """

@@ -66,6 +66,9 @@ Status::type track_elementpass (const Element& el, Pos<T> &orig_pos, const Accel
 	case PassMethod::pm_thinsext_pass:
 		if ((status = pm_thinsext_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
 		break;
+	case PassMethod::pm_kicktable_pass:
+		if ((status = pm_kicktable_pass<T>(orig_pos, el, accelerator)) != Status::success) return status;
+		break;
 	default:
 		return Status::passmethod_not_defined;
 	}
@@ -96,6 +99,10 @@ Status::type track_linepass (
 		// stores trajectory at entrance of each element
 		if (trajectory) pos.push_back(orig_pos);
 
+		Status::type status = track_elementpass (element, orig_pos, accelerator);
+		//if (status != Status::success) return status;
+
+		/*
 		switch (element.pass_method) {
 			case PassMethod::pm_identity_pass:
 				if ((status = pm_identity_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
@@ -124,24 +131,25 @@ Status::type track_linepass (
 			default:
 				return Status::passmethod_not_defined;
 		}
+		*/
 
 		// checks if particle is lost
 		if ((not isfinite(orig_pos.rx)) or
 			((accelerator.vchamber_on) and
 			 ((orig_pos.rx < -element.hmax) or
 			 (orig_pos.rx >  element.hmax)))) {
-			lost_plane = Plane::x;
-			return Status::particle_lost;
+			lost_plane   = Plane::x;
+			return (status == Status::success) ? Status::particle_lost : status;
 		}
 		if ((not isfinite(orig_pos.ry)) or
 			((accelerator.vchamber_on) and
 			 ((orig_pos.ry < -element.vmax) or
 			 (orig_pos.ry >  element.vmax)))) {
 			lost_plane = Plane::y;
-			return Status::particle_lost;
+			return (status == Status::success) ? Status::particle_lost : status;
 		}
 
-
+		if (status != Status::success) return status;
 
 		// moves to next element index
 		element_offset = (element_offset + 1) % nr_elements;
@@ -190,7 +198,9 @@ Status::type track_ringpass (
 
 	for(lost_turn=0; lost_turn<nr_turns; ++lost_turn) {
 		std::vector<Pos<T> > final_pos;
-		if ((status = track_linepass (accelerator, orig_pos, final_pos, element_offset, lost_plane, false)) != Status::success) return status;
+		if ((status = track_linepass (accelerator, orig_pos, final_pos, element_offset, lost_plane, false)) != Status::success) {
+			return status;
+		}
 		if (trajectory) {
 			pos.push_back(orig_pos);
 		}

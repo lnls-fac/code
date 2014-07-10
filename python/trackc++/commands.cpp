@@ -2,6 +2,7 @@
 #include "commands.h"
 #include "dynap.h"
 #include "flat_file.h"
+#include "tracking.h"
 #include "lattice.h"
 #include "accelerator.h"
 #include "elements.h"
@@ -21,7 +22,7 @@ int cmd_dynap_xy(int argc, char* argv[]) {
 	std::cout << "[cmd_dynap_xy]" << std::endl << std::endl;
 
 	std::string  flat_filename(argv[2]);
-	double       ring_energy      = std::atof(argv[3]);
+	double       ring_energy     = std::atof(argv[3]);
 	unsigned int harmonic_number = std::atoi(argv[4]);
 	std::string  cavity_state(argv[5]);
 	std::string  radiation_state(argv[6]);
@@ -245,6 +246,82 @@ int cmd_dynap_ma(int argc, char* argv[]) {
 	if (status == Status::file_not_opened) return status;
 	std::cout << get_timestamp() << " saving dynap_ex grid to file" << std::endl;
 	status = print_dynapgrid (accelerator, grid, "[dynap_ma]", "dynap_ma_out.txt");
+	if (status == Status::file_not_opened) return status;
+
+	std::cout << get_timestamp() << " end timestamp" << std::endl;
+	return EXIT_SUCCESS;
+
+}
+
+int cmd_track_linepass(int argc, char* argv[]) {
+
+	if (argc != 15) {
+		std::cerr << "cmd_track_linepass: invalid number of arguments!" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	std::cout << std::endl;
+	std::cout << "[cmd_track_linepass]" << std::endl << std::endl;
+
+	std::string  flat_filename(argv[2]);
+	double       ring_energy     = std::atof(argv[3]);
+	unsigned int harmonic_number = std::atoi(argv[4]);
+	std::string  cavity_state(argv[5]);
+	std::string  radiation_state(argv[6]);
+	std::string  vchamber_state(argv[7]);
+	unsigned int start_element = std::atoi(argv[8]);
+	double       rx0 = std::atof(argv[9]);
+	double       px0 = std::atof(argv[10]);
+	double       ry0 = std::atof(argv[11]);
+	double       py0 = std::atof(argv[12]);
+	double       de0 = std::atof(argv[13]);
+	double       dl0 = std::atof(argv[14]);
+
+	print_header(stdout);
+	std::cout << std::endl;
+	std::cout << "flat_filename   : " << flat_filename << std::endl;
+	std::cout << "energy[eV]      : " << ring_energy << std::endl;
+	std::cout << "harmonic_number : " << harmonic_number << std::endl;
+	std::cout << "cavity_state    : " << cavity_state << std::endl;
+	std::cout << "radiation_state : " << radiation_state << std::endl;
+	std::cout << "vchamber_state  : " << vchamber_state << std::endl;
+	std::cout << "start_element   : " << start_element << std::endl;
+	std::cout << "rx0[m]          : " << rx0 << std::endl;
+	std::cout << "px0[rad]        : " << px0 << std::endl;
+	std::cout << "ry0[m]          : " << ry0 << std::endl;
+	std::cout << "py0[rad]        : " << py0 << std::endl;
+	std::cout << "de0             : " << de0 << std::endl;
+	std::cout << "dl0[m]          : " << dl0 << std::endl;
+
+	std::cout << std::endl;
+	std::cout << get_timestamp() << " begin timestamp" << std::endl;
+
+	Accelerator accelerator;
+
+	// reads flat file
+	Status::type status = read_flat_file_tracy(flat_filename, accelerator);
+	if (status == Status::file_not_found) {
+		std::cerr << "track_linepass: flat file not found!" << std::endl;
+		return EXIT_FAILURE;
+	}
+	std::cout << get_timestamp() << " input file with flat lattice read." << std::endl;
+
+	// builds accelerator
+	accelerator.energy = ring_energy;
+	accelerator.harmonic_number = harmonic_number;
+	accelerator.cavity_on = (cavity_state == "on");
+	accelerator.radiation_on = (radiation_state == "on");
+	accelerator.vchamber_on = (vchamber_state == "on");
+
+	// does tracking
+	Pos<double> pos(rx0,px0,ry0,py0,de0,dl0);
+	std::vector<Pos<double>> pos_list;
+	Plane::type lost_plane;
+	unsigned int offset_element = start_element;
+	track_linepass(accelerator, pos, pos_list, offset_element, lost_plane, true);
+
+	std::cout << get_timestamp() << " saving track_linepass data to file" << std::endl;
+	status = print_tracking_ringpass(accelerator, pos_list, start_element, "track_linepass_out.txt");
 	if (status == Status::file_not_opened) return status;
 
 	std::cout << get_timestamp() << " end timestamp" << std::endl;

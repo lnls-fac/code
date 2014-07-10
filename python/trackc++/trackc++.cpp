@@ -26,7 +26,9 @@ std::string string_error_messages[] = {
 		"findorbit_not_converged",
 		"findorbit_one_turn_matrix_problem",
 		"file_not_found",
-		"file_not_opened"
+		"file_not_opened",
+		"kicktable_not_defined",
+		"kicktable_out_of_range"
 };
 
 std::string string_version = "TRACKC++ version(" + std::string(__DATE__) + " " + std::string(__TIME__) + ")";
@@ -36,6 +38,14 @@ bool verbose_on = true;
 bool isfinite(const double& v) {
 	return std::isfinite(v);
 }
+
+double get_magnetic_rigidity(const double energy) {
+	double gamma = (energy/1e6) / (electron_rest_energy_MeV);
+	double beta  = sqrt(1 - 1/(gamma*gamma));
+	double b_rho = beta * energy / light_speed; // [T.m]
+	return b_rho;
+}
+
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {

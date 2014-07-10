@@ -37,7 +37,8 @@ struct PassMethod {
 		pm_corrector_pass                 = 4,
 		pm_cavity_pass                    = 5,
 		pm_thinquad_pass                  = 6,
-		pm_thinsext_pass                  = 7
+		pm_thinsext_pass                  = 7,
+		pm_kicktable_pass                 = 8
 	};
 };
 
@@ -50,6 +51,7 @@ const std::string pm_dict[] = {
 		"cavity_pass",
 		"thinquad_pass",
 		"thinsext_pass",
+		"kicktable_pass"
 };
 
 struct Status {
@@ -63,7 +65,9 @@ struct Status {
 		findorbit_not_converged = 6,
 		findorbit_one_turn_matrix_problem = 7,
 		file_not_found = 8,
-		file_not_opened = 9
+		file_not_opened = 9,
+		kicktable_not_defined = 10,
+		kicktable_out_of_range = 11
 	};
 };
 
@@ -74,21 +78,21 @@ extern std::string string_version;
 template <typename T> class Pos;
 class Element;
 
-const double light_speed          = 299792458;         // [m/s]   - definition
-const double vacuum_permeability  = 4*M_PI*1e-7;       // [T.m/A] - definition
-const double electron_charge      = 1.60217656535e-19; // [C]     - 2014-06-11
-const double electron_mass        = 9.1093829140e-31;  // [Kg]    - 2014-06-11
-const double electron_rest_energy = electron_mass * pow(light_speed,2);           // [Kg.m^2/s^2] - derived
-const double vaccum_permitticity  = 1/(vacuum_permeability * pow(light_speed,2)); // [V.s/(A.m)]  - derived
+const double light_speed              = 299792458;         // [m/s]   - definition
+const double vacuum_permeability      = 4*M_PI*1e-7;       // [T.m/A] - definition
+const double electron_charge          = 1.60217656535e-19; // [C]     - 2014-06-11
+const double electron_mass            = 9.1093829140e-31;  // [Kg]    - 2014-06-11
+const double electron_rest_energy     = electron_mass * pow(light_speed,2);             // [Kg.m^2/s^2] - derived
+const double vaccum_permitticity      = 1/(vacuum_permeability * pow(light_speed,2));   // [V.s/(A.m)]  - derived
+const double electron_rest_energy_MeV = (electron_rest_energy / electron_charge) / 1e6; // [MeV] - derived
 const double electron_radius      = pow(electron_charge,2)/(4*M_PI*vaccum_permitticity*electron_rest_energy); // [m] - derived
 
 template <typename T>
 int sgn(T val) {
 	if (val >= 0) return 1; else return -1;
-    //return (T(0) < val) - (val < T(0));
 }
 
-
+double get_magnetic_rigidity(const double energy);
 bool isfinite(const double& v);
 std::string get_timestamp();
 

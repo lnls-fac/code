@@ -11,20 +11,21 @@ sexts   = ['sa1', 'sb1']
 allfams = bends + quads + mrkrs + sexts
 
 
+flat_filename         = 'flat_file_v500_ac10_5_bare_with_ids_in.txt'
 
-dynap_xy_run          = False
-dynap_xy_flatfilename = 'flat_file_v500_ac10_5_bare_in.txt'
+dynap_xy_run          = True
+dynap_xy_flatfilename = flat_filename
 dynap_xy_de           = 0
 dynap_xy_nr_turns     = 500
-dynap_xy_x_nrpts      = 4 #90
+dynap_xy_x_nrpts      = 7 #90
 dynap_xy_x_min	      = -0.0120 #[m]
 dynap_xy_x_max 	      = +0.0120 #[m]
-dynap_xy_y_nrpts      = 4 #40
+dynap_xy_y_nrpts      = 7 #40
 dynap_xy_y_min        = +0.0000 #[m]
 dynap_xy_y_max        = +0.0041 #[m]
 
 dynap_ex_run          = False
-dynap_ex_flatfilename = 'flat_file_v500_ac10_5_bare_in.txt'
+dynap_ex_flatfilename = flat_filename
 dynap_ex_y            = 0
 dynap_ex_nr_turns     = 500
 dynap_ex_e_nrpts      = 2 #90
@@ -34,8 +35,8 @@ dynap_ex_x_nrpts      = 2 #40
 dynap_ex_x_min        = -0.015 #[m]
 dynap_ex_x_max        = +0.000 #[m]
 
-dynap_ma_run          = True
-dynap_ma_flatfilename = 'flat_file_v500_ac10_5_bare_in.txt'
+dynap_ma_run          = False
+dynap_ma_flatfilename = flat_filename
 dynap_ma_nr_turns     = 20
 dynap_ma_e_e0         = 0.01
 dynap_ma_e_tol        = 0.001

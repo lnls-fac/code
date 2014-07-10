@@ -82,9 +82,15 @@ Status::type read_flat_file_tracy(const std::string& filename, Accelerator& acce
 			}; break;
 			case FlatFileType::kicktable:
 			{
+				e.pass_method = PassMethod::pm_kicktable_pass;
 				double tmpdbl; std::string filename;
 				fp >> tmpdbl >> tmpdbl >> filename;
-				add_kicktable(filename, accelerator.kicktables, e.kicktable);
+				Status::type status = add_kicktable(filename, accelerator.kicktables, e.kicktable);
+				if (status == Status::success) {
+					e.length = e.kicktable->length;
+					//std::cout << accelerator.lattice.size() << " " << e.fam_name << ": " << e.kicktable << " " << e.kicktable->x_nrpts << std::endl;
+				} else return status;
+
 			}; break;
 			default:
 				break;
