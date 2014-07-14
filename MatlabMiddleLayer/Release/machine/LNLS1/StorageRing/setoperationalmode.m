@@ -300,7 +300,7 @@ AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml
 AD.OperationalMode     = 'User Mode (1.37 GeV) BEDI';
 AD.Energy              = 1.37;
 AD.InjectionEnergy     = 0.49;
-AD.ModeName            = 'User';
+AD.ModeName            = 'BEDI';
 AD.OpsFileExtension    = '';
 
 THERING = lnls1_lattice_BEDI(AD.Energy);

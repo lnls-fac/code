@@ -22,13 +22,15 @@ knob_type  = 'QuadElements';
 constraints_function = @calc_constraints_AllSymmetries;
 etax_lss     = 0;
 eta_weight   = 5;
-tunes_weight = 40;
+tunes_weight = 1*40;
 
 % Look for flags
 for i = length(varargin):-1:1
     if ischar(varargin{i})
         if any(strcmpi(varargin{i}, {'QuadFamilies','QuadFamily','Families','Family'}))
             knob_type = 'QuadFamilies';
+        elseif any(strcmpi(varargin{i}, {'QuadFamiliesWithIDs'}))
+            knob_type = 'QuadFamiliesWithIDs';
         elseif any(strcmpi(varargin{i}, {'QuadElements','QuadElement','Quad','Quads','Quadrupole','Quadrupoles'}))
             knob_type = 'QuadElements';
         elseif any(strcmpi(varargin{i}, {'TuneCorrectors','TuneCorrector'}))
@@ -41,6 +43,8 @@ for i = length(varargin):-1:1
             knob_type = 'SimpleTuneEtaCorrectors';
         elseif any(strcmpi(varargin{i}, {'AllSymmetries','AllSymmetry'}))
             constraints_function = @calc_constraints_AllSymmetries;
+        elseif any(strcmpi(varargin{i}, {'AllSymmetriesWithIDs'}))
+            constraints_function = @calc_constraints_AllSymmetriesWithIDs;
         elseif any(strcmpi(varargin{i}, {'OnlyTunes','OnlyTune'}))
             constraints_function = @calc_constraints_OnlyTunes;
         elseif any(strcmpi(varargin{i}, {'SymmetryPoints','SymmetryPoint'}))
@@ -129,6 +133,23 @@ elseif strcmpi(knob_type, 'AWS07Quads')
         [IND.AQF01A IND.AQF01B IND.AQF09A IND.AQF09B IND.AQF11A IND.AQF11B IND.AQF03A IND.AQF03B IND.AQF05A IND.AQF05B]; ...
         [IND.AQD01A IND.AQD01B IND.AQD09A IND.AQD09B IND.AQD11A IND.AQD11B IND.AQD03A IND.AQD03B IND.AQD05A IND.AQD05B]; ...
         %[IND.AQF02A IND.AQF04B IND.AQF06A IND.AQF08B IND.AQF10A IND.AQF12B IND.AQF02B IND.AQF04A IND.AQF06B IND.AQF08A IND.AQF10B IND.AQF12A]; ...
+        };
+elseif strcmpi(knob_type, 'QuadFamiliesWithIDs')
+    QUADS = { ...
+        [IND.AQF01A IND.AQF01B]; ...
+        [IND.AQD01A IND.AQD01B]; ...
+        [IND.AQF03A IND.AQF03B]; ...
+        [IND.AQD03A IND.AQD03B]; ... 
+        [IND.AQF05A IND.AQF05B]; ...
+        [IND.AQD05A IND.AQD05B]; ... 
+        [IND.AQF07A IND.AQF07B]; ...
+        [IND.AQD07A IND.AQD07B]; ...
+        [IND.AQF09A IND.AQF09B]; ...
+        [IND.AQD09A IND.AQD09B]; ...
+        [IND.AQF11A IND.AQF11B]; ...
+        [IND.AQD11A IND.AQD11B]; ...
+        [IND.AQF02A IND.AQF04B IND.AQF06A IND.AQF08B IND.AQF10A IND.AQF12B];   ...
+        [IND.AQF02B IND.AQF04A IND.AQF06B IND.AQF08A IND.AQF10B IND.AQF12A]; ...
         };
 elseif strcmpi(knob_type, 'QuadFamilies')
     QUADS = { ...
@@ -316,6 +337,105 @@ i=i+1; r(i,1) = THERING{LCENTER(3)}.Twiss.Dispersion(2);  % etaxl centro do TR05
 i=i+1; r(i,1) = THERING{LCENTER(4)}.Twiss.Dispersion(2);  % etaxl centro do TR07
 i=i+1; r(i,1) = THERING{LCENTER(5)}.Twiss.Dispersion(2);  % etaxl centro do TR09
 i=i+1; r(i,1) = THERING{LCENTER(6)}.Twiss.Dispersion(2);  % etaxl centro do TR11
+
+function r = calc_constraints_AllSymmetriesWithIDs(IND)
+
+global THERING;
+LCENTER = findcells(THERING, 'FamName', 'LCENTER');
+SCENTER = findcells(THERING, 'FamName', 'SCENTER');
+
+
+calctwiss;
+i=0;
+
+i=i+1; r(i,1) = IND.tunes_weight*THERING{end}.Twiss.mu(1)/(2*pi);     % sintonia horizontal
+i=i+1; r(i,1) = IND.tunes_weight*THERING{end}.Twiss.mu(2)/(2*pi);     % sintonia vertical
+
+
+i=i+1; r(i,1) = THERING{LCENTER(1)}.Twiss.alpha(1);  % alphaX centro do TR01
+i=i+1; r(i,1) = THERING{LCENTER(2)}.Twiss.alpha(1);  % alphaX centro do TR03
+i=i+1; r(i,1) = THERING{LCENTER(3)}.Twiss.alpha(1);  % alphaX centro do TR05
+i=i+1; r(i,1) = THERING{LCENTER(4)}.Twiss.alpha(1);  % alphaX centro do TR07
+i=i+1; r(i,1) = THERING{LCENTER(5)}.Twiss.alpha(1);  % alphaX centro do TR09
+i=i+1; r(i,1) = THERING{LCENTER(6)}.Twiss.alpha(1);  % alphaX centro do TR11
+
+i=i+1; r(i,1) = THERING{LCENTER(1)}.Twiss.alpha(2); % alphaY centro do TR01
+i=i+1; r(i,1) = THERING{LCENTER(2)}.Twiss.alpha(2); % alphaY centro do TR03
+i=i+1; r(i,1) = THERING{LCENTER(3)}.Twiss.alpha(2); % alphaY centro do TR05
+i=i+1; r(i,1) = THERING{LCENTER(4)}.Twiss.alpha(2); % alphaY centro do TR07
+i=i+1; r(i,1) = THERING{LCENTER(5)}.Twiss.alpha(2); % alphaY centro do TR09
+i=i+1; r(i,1) = THERING{LCENTER(6)}.Twiss.alpha(2); % alphaY centro do TR11
+
+i=i+1; r(i,1) = THERING{SCENTER(1)}.Twiss.alpha(1);  % alphaX centro do TR02
+i=i+1; r(i,1) = THERING{SCENTER(2)}.Twiss.alpha(1);  % alphaX centro do TR04
+i=i+1; r(i,1) = THERING{SCENTER(3)}.Twiss.alpha(1);  % alphaX centro do TR06
+i=i+1; r(i,1) = THERING{SCENTER(4)}.Twiss.alpha(1);  % alphaX centro do TR08
+i=i+1; r(i,1) = THERING{SCENTER(5)}.Twiss.alpha(1);  % alphaX centro do TR10
+i=i+1; r(i,1) = THERING{SCENTER(6)}.Twiss.alpha(1);  % alphaX centro do TR12
+
+i=i+1; r(i,1) = THERING{SCENTER(1)}.Twiss.alpha(2);  % alphaY centro do TR02
+i=i+1; r(i,1) = THERING{SCENTER(2)}.Twiss.alpha(2);  % alphaY centro do TR04
+i=i+1; r(i,1) = THERING{SCENTER(3)}.Twiss.alpha(2);  % alphaY centro do TR06
+i=i+1; r(i,1) = THERING{SCENTER(4)}.Twiss.alpha(2);  % alphaY centro do TR08
+i=i+1; r(i,1) = THERING{SCENTER(5)}.Twiss.alpha(2);  % alphaY centro do TR10
+i=i+1; r(i,1) = THERING{SCENTER(6)}.Twiss.alpha(2);  % alphaY centro do TR12
+
+
+TR01 = LCENTER(1);
+TR03 = LCENTER(2);
+TR05 = LCENTER(3);
+TR07 = LCENTER(4);
+TR09 = LCENTER(5);
+TR11 = LCENTER(6);
+
+TR02 = SCENTER(1);
+TR04 = SCENTER(2);
+TR06 = SCENTER(3);
+TR08 = SCENTER(4);
+TR10 = SCENTER(5);
+TR12 = SCENTER(6);
+
+
+i=i+1; r(i,1) = THERING{TR03}.Twiss.beta(1)-THERING{TR05}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR05}.Twiss.beta(1)-THERING{TR07}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(1)-THERING{TR03}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR03}.Twiss.beta(2)-THERING{TR05}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR05}.Twiss.beta(2)-THERING{TR07}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(2)-THERING{TR03}.Twiss.beta(2);
+
+i=i+1; r(i,1) = THERING{TR02}.Twiss.beta(1)-THERING{TR04}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR04}.Twiss.beta(1)-THERING{TR06}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR06}.Twiss.beta(1)-THERING{TR08}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR08}.Twiss.beta(1)-THERING{TR10}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR10}.Twiss.beta(1)-THERING{TR12}.Twiss.beta(1);
+i=i+1; r(i,1) = THERING{TR12}.Twiss.beta(1)-THERING{TR02}.Twiss.beta(1);
+
+i=i+1; r(i,1) = THERING{TR02}.Twiss.beta(2)-THERING{TR04}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR04}.Twiss.beta(2)-THERING{TR06}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR06}.Twiss.beta(2)-THERING{TR08}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR08}.Twiss.beta(2)-THERING{TR10}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR10}.Twiss.beta(2)-THERING{TR12}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR12}.Twiss.beta(2)-THERING{TR02}.Twiss.beta(2);
+
+
+i=i+1; r(i,1) = THERING{TR03}.Twiss.beta(2)-THERING{TR05}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR05}.Twiss.beta(2)-THERING{TR07}.Twiss.beta(2);
+i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(2)-THERING{TR03}.Twiss.beta(2);
+
+% 
+%i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(1)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR01
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(2)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR03
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(3)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR05
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(4)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR07
+%i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(5)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR09
+%i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(6)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR11
+
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(1)}.Twiss.Dispersion(2);  % etaxl centro do TR01
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(2)}.Twiss.Dispersion(2);  % etaxl centro do TR03
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(3)}.Twiss.Dispersion(2);  % etaxl centro do TR05
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(4)}.Twiss.Dispersion(2);  % etaxl centro do TR07
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(5)}.Twiss.Dispersion(2);  % etaxl centro do TR09
+i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(6)}.Twiss.Dispersion(2);  % etaxl centro do TR11
 
 function r = calc_constraints_AllSymmetries(IND)
 
