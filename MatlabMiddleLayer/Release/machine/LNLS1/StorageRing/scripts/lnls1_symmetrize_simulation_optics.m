@@ -21,8 +21,8 @@ tunes = NaN;
 knob_type  = 'QuadElements';
 constraints_function = @calc_constraints_AllSymmetries;
 etax_lss     = 0;
-eta_weight   = 5;
-tunes_weight = 1*40;
+eta_weight   = 20;
+tunes_weight = 40;
 
 % Look for flags
 for i = length(varargin):-1:1
@@ -398,44 +398,41 @@ TR12 = SCENTER(6);
 
 i=i+1; r(i,1) = THERING{TR03}.Twiss.beta(1)-THERING{TR05}.Twiss.beta(1);
 i=i+1; r(i,1) = THERING{TR05}.Twiss.beta(1)-THERING{TR07}.Twiss.beta(1);
-i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(1)-THERING{TR03}.Twiss.beta(1);
+%i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(1)-THERING{TR03}.Twiss.beta(1);
 i=i+1; r(i,1) = THERING{TR03}.Twiss.beta(2)-THERING{TR05}.Twiss.beta(2);
 i=i+1; r(i,1) = THERING{TR05}.Twiss.beta(2)-THERING{TR07}.Twiss.beta(2);
-i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(2)-THERING{TR03}.Twiss.beta(2);
+%i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(2)-THERING{TR03}.Twiss.beta(2);
 
 i=i+1; r(i,1) = THERING{TR02}.Twiss.beta(1)-THERING{TR04}.Twiss.beta(1);
 i=i+1; r(i,1) = THERING{TR04}.Twiss.beta(1)-THERING{TR06}.Twiss.beta(1);
 i=i+1; r(i,1) = THERING{TR06}.Twiss.beta(1)-THERING{TR08}.Twiss.beta(1);
 i=i+1; r(i,1) = THERING{TR08}.Twiss.beta(1)-THERING{TR10}.Twiss.beta(1);
 i=i+1; r(i,1) = THERING{TR10}.Twiss.beta(1)-THERING{TR12}.Twiss.beta(1);
-i=i+1; r(i,1) = THERING{TR12}.Twiss.beta(1)-THERING{TR02}.Twiss.beta(1);
+%i=i+1; r(i,1) = THERING{TR12}.Twiss.beta(1)-THERING{TR02}.Twiss.beta(1);
 
 i=i+1; r(i,1) = THERING{TR02}.Twiss.beta(2)-THERING{TR04}.Twiss.beta(2);
 i=i+1; r(i,1) = THERING{TR04}.Twiss.beta(2)-THERING{TR06}.Twiss.beta(2);
 i=i+1; r(i,1) = THERING{TR06}.Twiss.beta(2)-THERING{TR08}.Twiss.beta(2);
 i=i+1; r(i,1) = THERING{TR08}.Twiss.beta(2)-THERING{TR10}.Twiss.beta(2);
 i=i+1; r(i,1) = THERING{TR10}.Twiss.beta(2)-THERING{TR12}.Twiss.beta(2);
-i=i+1; r(i,1) = THERING{TR12}.Twiss.beta(2)-THERING{TR02}.Twiss.beta(2);
+%i=i+1; r(i,1) = THERING{TR12}.Twiss.beta(2)-THERING{TR02}.Twiss.beta(2);
 
-
-i=i+1; r(i,1) = THERING{TR03}.Twiss.beta(2)-THERING{TR05}.Twiss.beta(2);
-i=i+1; r(i,1) = THERING{TR05}.Twiss.beta(2)-THERING{TR07}.Twiss.beta(2);
-i=i+1; r(i,1) = THERING{TR07}.Twiss.beta(2)-THERING{TR03}.Twiss.beta(2);
 
 % 
-%i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(1)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR01
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(2)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR03
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(3)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR05
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(4)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR07
-%i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(5)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR09
-%i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(6)}.Twiss.Dispersion(1) - IND.etax_lss;  % etax centro do TR11
+i=i+1; r(i,1) = IND.eta_weight*(THERING{TR01}.Twiss.Dispersion(1) - IND.etax_lss);  % etax centro do TR01
+i=i+1; r(i,1) = IND.eta_weight*(THERING{TR03}.Twiss.Dispersion(1) - IND.etax_lss);  % etax centro do TR03
+i=i+1; r(i,1) = IND.eta_weight*(THERING{TR05}.Twiss.Dispersion(1) - IND.etax_lss);  % etax centro do TR05
+i=i+1; r(i,1) = IND.eta_weight*(THERING{TR07}.Twiss.Dispersion(1) - IND.etax_lss);  % etax centro do TR07
+i=i+1; r(i,1) = IND.eta_weight*(THERING{LCENTER(5)}.Twiss.Dispersion(1) - IND.etax_lss);  % etax centro do TR09
+i=i+1; r(i,1) = IND.eta_weight*(THERING{LCENTER(6)}.Twiss.Dispersion(1) - IND.etax_lss);  % etax centro do TR11
 
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(1)}.Twiss.Dispersion(2);  % etaxl centro do TR01
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(2)}.Twiss.Dispersion(2);  % etaxl centro do TR03
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(3)}.Twiss.Dispersion(2);  % etaxl centro do TR05
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(4)}.Twiss.Dispersion(2);  % etaxl centro do TR07
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(5)}.Twiss.Dispersion(2);  % etaxl centro do TR09
-i=i+1; r(i,1) = IND.eta_weight*THERING{LCENTER(6)}.Twiss.Dispersion(2);  % etaxl centro do TR11
+i=i+1; r(i,1) = IND.eta_weight*THERING{TR01}.Twiss.Dispersion(2);  % etaxl centro do TR01
+i=i+1; r(i,1) = IND.eta_weight*THERING{TR03}.Twiss.Dispersion(2);  % etaxl centro do TR03
+i=i+1; r(i,1) = IND.eta_weight*THERING{TR05}.Twiss.Dispersion(2);  % etaxl centro do TR05
+i=i+1; r(i,1) = IND.eta_weight*THERING{TR07}.Twiss.Dispersion(2);  % etaxl centro do TR07
+i=i+1; r(i,1) = IND.eta_weight*THERING{TR09}.Twiss.Dispersion(2);  % etaxl centro do TR09
+i=i+1; r(i,1) = IND.eta_weight*THERING{TR11}.Twiss.Dispersion(2);  % etaxl centro do TR11
+
 
 function r = calc_constraints_AllSymmetries(IND)
 

@@ -1,6 +1,9 @@
 function r = lnls1_lattice_BEDI(energy)
 %LNLS1_LATTICE - LNLS1 Lattice Model (automatically created with <build_lattice_model>
 
+% Modelo calibrado pelo LOCO em 2014-07-16
+% Sextupolos calibrados pela medida de cromaticidade.
+
 %%% HEADER SECTION %%%
 
 global THERING
@@ -15,75 +18,75 @@ e1 = marker('MARKER', 'IdentityPass');
 MARKER_element = [e1];
 
 % A2QF01 Template %
-e1 = quadrupole('A2QF01', 0.27/2, 2.7995, 'QuadLinearPass');
-e2 = quadrupole('A2QF01', 0.27/2, 2.7995, 'QuadLinearPass');
+e1 = quadrupole('A2QF01', 0.27/2, 2.793439713926239, 'QuadLinearPass');
+e2 = quadrupole('A2QF01', 0.27/2, 2.793439713926239, 'QuadLinearPass');
 A2QF01_element = [e1 e2];
 
 % A2QF03 Template %
-e1 = quadrupole('A2QF03', 0.27/2, 2.7988, 'QuadLinearPass');
-e2 = quadrupole('A2QF03', 0.27/2, 2.7988, 'QuadLinearPass');
+e1 = quadrupole('A2QF03', 0.27/2, 2.791923490693014, 'QuadLinearPass');
+e2 = quadrupole('A2QF03', 0.27/2, 2.791923490693014, 'QuadLinearPass');
 A2QF03_element = [e1 e2];
 
 % A2QF05 Template %
-e1 = quadrupole('A2QF05', 0.27/2, 2.7988, 'QuadLinearPass');
-e2 = quadrupole('A2QF05', 0.27/2, 2.7988, 'QuadLinearPass');
+e1 = quadrupole('A2QF05', 0.27/2, 2.779976612797458, 'QuadLinearPass');
+e2 = quadrupole('A2QF05', 0.27/2, 2.779976612797458, 'QuadLinearPass');
 A2QF05_element = [e1 e2];
 
 % A2QF07 Template %
-e1 = quadrupole('A2QF07', 0.27/2, 2.7988, 'QuadLinearPass');
-e2 = quadrupole('A2QF07', 0.27/2, 2.7988, 'QuadLinearPass');
+e1 = quadrupole('A2QF07', 0.27/2, 2.765458949902937, 'QuadLinearPass');
+e2 = quadrupole('A2QF07', 0.27/2, 2.765458949902937, 'QuadLinearPass');
 A2QF07_element = [e1 e2];
 
 % A2QF09 Template %
-e1 = quadrupole('A2QF09', 0.27/2, 2.8069, 'QuadLinearPass');
-e2 = quadrupole('A2QF09', 0.27/2, 2.8069, 'QuadLinearPass');
+e1 = quadrupole('A2QF09', 0.27/2, 2.794376442635251, 'QuadLinearPass');
+e2 = quadrupole('A2QF09', 0.27/2, 2.794376442635251, 'QuadLinearPass');
 A2QF09_element = [e1 e2];
 
 % A2QF11 Template %
-e1 = quadrupole('A2QF11', 0.27/2, 2.7988, 'QuadLinearPass');
-e2 = quadrupole('A2QF11', 0.27/2, 2.7988, 'QuadLinearPass');
+e1 = quadrupole('A2QF11', 0.27/2, 2.785847002607071, 'QuadLinearPass');
+e2 = quadrupole('A2QF11', 0.27/2, 2.785847002607071, 'QuadLinearPass');
 A2QF11_element = [e1 e2];
 
 % A2QD01 Template %
-e1 = quadrupole('A2QD01', 0.27/2, -2.9625, 'QuadLinearPass');
-e2 = quadrupole('A2QD01', 0.27/2, -2.9625, 'QuadLinearPass');
+e1 = quadrupole('A2QD01', 0.27/2, -2.959075248306463, 'QuadLinearPass');
+e2 = quadrupole('A2QD01', 0.27/2, -2.959075248306463, 'QuadLinearPass');
 A2QD01_element = [e1 e2];
 
 % A2QD03 Template %
-e1 = quadrupole('A2QD03', 0.27/2, -2.9603, 'QuadLinearPass');
-e2 = quadrupole('A2QD03', 0.27/2, -2.9603, 'QuadLinearPass');
+e1 = quadrupole('A2QD03', 0.27/2, -2.946121118829100, 'QuadLinearPass');
+e2 = quadrupole('A2QD03', 0.27/2, -2.946121118829100, 'QuadLinearPass');
 A2QD03_element = [e1 e2];
 
 % A2QD05 Template %
-e1 = quadrupole('A2QD05', 0.27/2, -2.9603, 'QuadLinearPass');
-e2 = quadrupole('A2QD05', 0.27/2, -2.9603, 'QuadLinearPass');
+e1 = quadrupole('A2QD05', 0.27/2, -2.954817282142365, 'QuadLinearPass');
+e2 = quadrupole('A2QD05', 0.27/2, -2.954817282142365, 'QuadLinearPass');
 A2QD05_element = [e1 e2];
 
 % A2QD07 Template %
-e1 = quadrupole('A2QD07', 0.27/2, -2.9603, 'QuadLinearPass');
-e2 = quadrupole('A2QD07', 0.27/2, -2.9603, 'QuadLinearPass');
+e1 = quadrupole('A2QD07', 0.27/2, -2.948680759181681, 'QuadLinearPass');
+e2 = quadrupole('A2QD07', 0.27/2, -2.948680759181681, 'QuadLinearPass');
 A2QD07_element = [e1 e2];
 
 % A2QD09 Template %
-e1 = quadrupole('A2QD09', 0.27/2, -2.9859, 'QuadLinearPass');
-e2 = quadrupole('A2QD09', 0.27/2, -2.9859, 'QuadLinearPass');
+e1 = quadrupole('A2QD09', 0.27/2, -2.980526653488019, 'QuadLinearPass');
+e2 = quadrupole('A2QD09', 0.27/2, -2.980526653488019, 'QuadLinearPass');
 A2QD09_element = [e1 e2];
 
 % A2QD11 Template %
-e1 = quadrupole('A2QD11', 0.27/2, -2.9604, 'QuadLinearPass');
-e2 = quadrupole('A2QD11', 0.27/2, -2.9604, 'QuadLinearPass');
+e1 = quadrupole('A2QD11', 0.27/2, -2.950829645934168, 'QuadLinearPass');
+e2 = quadrupole('A2QD11', 0.27/2, -2.950829645934168, 'QuadLinearPass');
 A2QD11_element = [e1 e2];
 
 % A6QF01 Template %
-e1 = quadrupole('A6QF01', 0.27/2, 1.8723, 'QuadLinearPass');
+e1 = quadrupole('A6QF01', 0.27/2, 1.850386885051623, 'QuadLinearPass');
 e2 = corrector  ('VCM', 0.00000, [0 0], 'CorrectorPass');
-e3 = quadrupole('A6QF01', 0.27/2, 1.8723, 'QuadLinearPass');
+e3 = quadrupole('A6QF01', 0.27/2, 1.850386885051623, 'QuadLinearPass');
 A6QF01_element = [e1 e2 e3];
 
 % A6QF02 Template %
-e1 = quadrupole('A6QF02', 0.27/2, 1.8723, 'QuadLinearPass');
+e1 = quadrupole('A6QF02', 0.27/2, 1.826064805689932, 'QuadLinearPass');
 e2 = corrector  ('VCM', 0.00000, [0 0], 'CorrectorPass');
-e3 = quadrupole('A6QF02', 0.27/2, 1.8723, 'QuadLinearPass');
+e3 = quadrupole('A6QF02', 0.27/2, 1.826064805689932, 'QuadLinearPass');
 A6QF02_element = [e1 e2 e3];
 
 % SKEWQUAD Template %
@@ -105,19 +108,19 @@ e5 = rbend('BEND', 1.432*(15/30), (2*pi/12)*(15/30), 0, (2*pi/12)/2, 0, 'BndMPol
 A12DI_element = [e1 e2 e3 e4 e5];
 
 % A6SF Template %
-e1 = sextupole('A6SF', 0.1/2, 69.0618, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
 e2 = marker('SCENTER', 'IdentityPass');
-e3 = sextupole('A6SF', 0.1/2, 69.0618, 'StrMPoleSymplectic4Pass');
+e3 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
 A6SF_element = [e1 e2 e3];
 
 % A6SD01 Template %
-e1 = sextupole('A6SD01', 0.1/2, -46.0057, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD01', 0.1/2, -46.0057, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
 A6SD01_element = [e1 e2];
 
 % A6SD02 Template %
-e1 = sextupole('A6SD02', 0.1/2, -46.0057, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD02', 0.1/2, -46.0057, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
 A6SD02_element = [e1 e2];
 
 % LCENTER Template %
