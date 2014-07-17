@@ -8,6 +8,9 @@ energy = getenergymodel;
 
 % se campo � zero os elementos s�o transformados em drifts
 if (field == 0)
+    
+    %error('Buggy!!!');
+    
     for i=1:length(idx)
         
         if ~strcmpi(THERING{idx(i)}.PassMethod, 'DriftPass')

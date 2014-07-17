@@ -82,9 +82,9 @@ if ModeNumber == 1
 elseif ModeNumber == 2
     lnls1_simulation_mode_injection_500MeV;
 elseif ModeNumber == 3
-    lnls1_set_id_field('AWG01', 0.00);
-    lnls1_set_id_field('AWG09', 0.20);
-    lnls1_set_id_field('AON11', 0.00);
+    lnls1_set_id_field('AWG01', 2.00);
+    lnls1_set_id_field('AWG09', 3.50);
+    lnls1_set_id_field('AON11', 0.58);
 elseif ModeNumber == 4
     lnls1_simulation_mode_IDsOFF_1p37GeV;
 elseif ModeNumber == 5

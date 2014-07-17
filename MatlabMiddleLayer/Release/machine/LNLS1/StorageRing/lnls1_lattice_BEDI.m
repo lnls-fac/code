@@ -108,19 +108,27 @@ e5 = rbend('BEND', 1.432*(15/30), (2*pi/12)*(15/30), 0, (2*pi/12)/2, 0, 'BndMPol
 A12DI_element = [e1 e2 e3 e4 e5];
 
 % A6SF Template %
-e1 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
+% e1 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
+% e2 = marker('SCENTER', 'IdentityPass');
+% e3 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SF', 0.1/2, 69.061800000000005, 'StrMPoleSymplectic4Pass');
 e2 = marker('SCENTER', 'IdentityPass');
-e3 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
+e3 = sextupole('A6SF', 0.1/2, 69.061800000000005, 'StrMPoleSymplectic4Pass');
 A6SF_element = [e1 e2 e3];
 
 % A6SD01 Template %
-e1 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+% e1 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+% e2 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD01', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD01', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
 A6SD01_element = [e1 e2];
 
+
 % A6SD02 Template %
-e1 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+% e1 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+% e2 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD02', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD02', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
 A6SD02_element = [e1 e2];
 
 % LCENTER Template %
