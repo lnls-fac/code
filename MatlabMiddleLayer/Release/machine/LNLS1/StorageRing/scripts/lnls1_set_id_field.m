@@ -1,172 +1,97 @@
 function lnls1_set_id_field(id, field)
 
-global THERING;
+global THERING
 
-idx = findcells(THERING, 'FamName', id);
-energy = getenergymodel;
-[beta gamma b_rho] = lnls_beta_gamma(energy);
+% HARD EDGE model for the IDs
+% This model preserves:
+%   1. maximum deflection angle of the sinusoidal field
+%   2. intrinsic vertical focusing
+% [See. Wiedemann, "Particle Accelerator Physics", pg. 141. 3rd Edition]
+% [In this ref. HardEdge length is a factor of 2 smaller than correct value.]
 
-% se campo � zero os elementos s�o transformados em drifts
+% available IDs in UVX
+ids_label   =  {'AWG01', 'AWG09', 'AON11'};
+ids_lengths = [2.7, 1.02, 2.85];
+ids_period  = [0.18, 0.06, 0.05];
+ids_poles   = {...
+    [0.5 repmat([-1 1],1,14) -0.5]; ...
+    [0.5 repmat([-1 1],1,16) -0.5]; ...
+    [-0.5 repmat([-1 1],1,56) 0.5] ...
+    };
+
+% gets id index
+id_idx   = strcmpi(ids_label, id);
+idx      = findcells(THERING, 'FamName', id);
+
+% turns off id
 if (field == 0)
-    
-    %error('Buggy!!!');
-    
-    for i=1:length(idx)
-        
-        if ~strcmpi(THERING{idx(i)}.PassMethod, 'DriftPass')
-            try
-                THERING{idx(i)}.PassMethodOFF = THERING{idx(i)}.PassMethod;
-            catch
-            end
-            THERING = setcellstruct(THERING, 'PassMethod', idx, 'DriftPass');
-        end
-        
-        try
-            THERING{idx(i)}.BendingAngleOFF = THERING{idx(i)}.BendingAngle;
-            THERING{idx(i)} = rmfield(THERING{idx(i)}, 'BendingAngle');
-        catch
-        end
-        THERING{idx(i)}.Field = 0;
-        
-    end
-
+    % models zero field ID as a pure drift space
+    THERING = setcellstruct(THERING, 'PassMethod', idx, 'DriftPass');
+    THERING = setcellstruct(THERING, 'Length', idx, ids_lengths(id_idx)/length(idx));
     return;
 end
 
-if strcmpi(id, 'AWS07')
-    try
-        ang0     = getcellstruct(THERING, 'BendingAngle', idx);
-    catch
-        ang0     = getcellstruct(THERING, 'BendingAngleOFF', idx);
-    end
-    len0     = getcellstruct(THERING, 'Length', idx);
-    rho0     = len0 ./ ang0;
-    min_rho0 = min(abs(rho0));
-    min_rho  = b_rho / field;
-    rho      = rho0 * (min_rho / min_rho0);
-    ang      = len0 ./ rho;
-    THERING  = setcellstruct(THERING, 'BendingAngle', idx, ang);
-    try
-        pass_methods = getcellstruct(THERING, 'PassMethodOFF', idx);
-        THERING  = setcellstruct(THERING, 'PassMethod', idx, pass_methods);
-    catch
-    end
-    THERING  = setcellstruct(THERING, 'Field', idx, field);
-    THERING  = setcellstruct(THERING, 'PolynomA', idx, (min_rho0 / min_rho) * getcellstruct(THERING, 'PolynomA', idx));
-    THERING  = setcellstruct(THERING, 'PolynomB', idx, (min_rho0 / min_rho) * getcellstruct(THERING, 'PolynomB', idx));
-    return;
-end
-
-ids_label =  {'AWG01', 'AWG09', 'AON11'};
-ids_period = [0.18, 0.06, 0.05];
-ids_poles  = {...
-    [0.5 repmat([-1 1],1,14) -0.5]; ...
-    %[-1/4 3/4 repmat([-1 1],1,7) -1 repmat([1 -1],1,8) 3/4 -1/4]; ...
-    [0.5 repmat([-1 1],1,16) -0.5];
-    [-0.5 repmat([-1 1],1,56) 0.5] ...
-    };
-
-
-id_idx = strcmpi(ids_label, id);
-period = ids_period(id_idx);
-poles  = ids_poles{id_idx};
-lhe     = 4 * period / pi^2;
-
-idx1 = findcells(THERING, 'FamName', id);
-idx2 = [findcells(THERING, 'BendingAngle') findcells(THERING, 'BendingAngleOFF')];
-at_idx = intersect(idx1, idx2);
-for i=1:length(at_idx)
-    rho0       = b_rho / (poles(i)*field);
-    rho        = 4 * rho0 / pi;
-    this_angle = lhe/rho;
-    ldr        = (period/2) - 2*rho*sin(0.5*this_angle);
-    try
-        THERING{at_idx(i)} = rmfield(THERING{at_idx(i)}, 'BendingAngleOFF');
-    catch
-    end
-    THERING{at_idx(i)}.BendingAngle = this_angle;
-    THERING{at_idx(i)}.EntranceAngle = this_angle/2;
-    THERING{at_idx(i)}.ExitAngle = this_angle/2;
-    try
-        THERING{at_idx(i)}.PassMethod = THERING{at_idx(i)}.PassMethodOFF;
-        THERING{at_idx(i)} = rmfield(THERING{at_idx(i)}, 'PassMethodOFF');
-    catch
-    end
-    THERING{at_idx(i)-1}.Length = ldr/2;
-    THERING{at_idx(i)+1}.Length = ldr/2;
-    THERING{at_idx(i)-1}.Field = field;
-    THERING{at_idx(i)}.Field = field;
-    THERING{at_idx(i)+1}.Field = field;
-end
-
-
-%{
-function lnls1_set_id_field(id, field)
-
-global THERING;
-
-idx = findcells(THERING, 'FamName', id);
 energy = getenergymodel;
-[beta gamma b_rho] = lnls_beta_gamma(energy);
+[~, ~, b_rho] = lnls_beta_gamma(energy);
 
-% se campo � zero os elementos s�o transformados em drifts
-if (field == 0) field = 1e-16; end;
+id_label  = ids_label{id_idx};
+period    = ids_period(id_idx);
+poles_str = ids_poles{id_idx};
+lhe       = 4 * period / pi^2;
 
-if strcmpi(id, 'AWS07')
-    ang0     = getcellstruct(THERING, 'BendingAngle', idx);
-    len0     = getcellstruct(THERING, 'Length', idx);
-    rho0     = len0 ./ ang0;
-    min_rho0 = min(abs(rho0));
-    min_rho  = b_rho / field;
-    rho      = rho0 * (min_rho / min_rho0);
-    ang      = len0 ./ rho;
-    THERING  = setcellstruct(THERING, 'BendingAngle', idx, ang);
-    THERING  = setcellstruct(THERING, 'Field', idx, field);
-    THERING  = setcellstruct(THERING, 'PolynomA', idx, (min_rho0 / min_rho) * getcellstruct(THERING, 'PolynomA', idx));
-    THERING  = setcellstruct(THERING, 'PolynomB', idx, (min_rho0 / min_rho) * getcellstruct(THERING, 'PolynomB', idx));
-    return;
+% temporary lattices building blocks
+idperiod  = [drift(id_label, 0, 'DriftPass') rbend(id_label, 0, 0, 0, 0, 0, 'BndMPoleSymplectic4Pass') drift(id_label, 0, 'DriftPass')];
+idperiod  = buildlat(idperiod);
+idperiod{1}.Energy = energy; idperiod{2}.Energy = energy; idperiod{3}.Energy = energy;
+idperiod{1}.Field  = field;  idperiod{2}.Field  = field;  idperiod{3}.Figure = field;
+markers   = [marker('BEGIN', 'IdentityPass') marker('LCENTER', 'IdentityPass')];
+markers   = buildlat(markers);
+markers{1}.Energy = energy; markers{2}.Energy = energy; 
+markers{1}.Field  = field;  markers{2}.Field  = field;
+
+
+% builds the ID model
+idlattice = {};
+for p=1:length(poles_str)
+    pole_strength = poles_str(p);
+    pole_field    = field * pole_strength;
+    rho0          = b_rho / pole_field;
+    rho           = 4 * rho0 / pi;
+    bending_angle = lhe/rho;
+    drift_len     = (period/2) - 2*rho*sin(0.5*bending_angle);
+    % upstream drift
+    idperiod{1}.Length = drift_len / 2;
+    % bending dipole
+    idperiod{2}.Length        = lhe;
+    idperiod{2}.BendingAngle  = bending_angle;
+    idperiod{2}.EntranceAngle = bending_angle/2;
+    idperiod{2}.ExitAngle     = bending_angle/2;
+    % downstream drift
+    idperiod{3}.Length = drift_len / 2;
+    % adds to lattice being built
+    idlattice = [idlattice idperiod];
+    % adds marker at center
+    if (p == floor(length(poles_str)/2))
+        if strcmpi(id_label, 'AWG01')
+            % inserts markers 'BEGIN' and 'LCENTER' in the middle of AWG01
+            idlattice = [idlattice markers];
+        else
+            idlattice = [idlattice markers(2)];
+        end
+    end
 end
-     
-ids_label =  {'AWG01', 'AWG09', 'AON11'};
-ids_period = [0.18, 0.06, 0.05];
-ids_poles  = {...
-    [0.5 repmat([-1 1],1,14) -0.5]; ...
-    %[-1/4 3/4 repmat([-1 1],1,7) -1 repmat([1 -1],1,8) 3/4 -1/4]; ...
-    [0.5 repmat([-1 1],1,16) -0.5];
-    [-0.5 repmat([-1 1],1,56) 0.5] ...
-    };
 
 
-id_idx = strcmpi(ids_label, id);
-period = ids_period(id_idx);
-poles  = ids_poles{id_idx};
-lhe     = 4 * period / pi^2;
+% inserts de ID model into the lattice
 
-idx1 = findcells(THERING, 'FamName', id);
-idx2 = findcells(THERING, 'BendingAngle');
-at_idx = intersect(idx1, idx2);
-for i=1:length(at_idx)
-     rho0       = b_rho / (poles(i)*field);
-     rho        = 4 * rho0 / pi;
-     this_angle = lhe/rho;
-     ldr        = (period/2) - 2*rho*sin(0.5*this_angle);
-     THERING{at_idx(i)}.BendingAngle = this_angle;
-     THERING{at_idx(i)}.EntranceAngle = this_angle/2;
-     THERING{at_idx(i)}.ExitAngle = this_angle/2;
-     THERING{at_idx(i)-1}.Length = ldr/2;
-     THERING{at_idx(i)}.Length   = lhe;
-     THERING{at_idx(i)+1}.Length = ldr/2;
-     THERING{at_idx(i)-1}.Field = field;
-     THERING{at_idx(i)}.Field = field;
-     THERING{at_idx(i)+1}.Field = field;
-end
-%}
-
-
-
-
-
-
-
-
+% first moves first cavity as first element (this is needed because AWG01 is split in TR01)
+famname_first = THERING{1}.FamName;
+cav_idx  = findcells(THERING, 'FamName', 'RF');
+THERING = [THERING(cav_idx(1):end) THERING(1:(cav_idx(1)-1))]; 
+idx      = findcells(THERING, 'FamName', id);
+% inserts ID into lattice
+THERING = [THERING(1:(idx(1)-1)) idlattice THERING((idx(end)+1):end)];
+% shift lattice back to original position
+idx_first  = findcells(THERING, 'FamName', famname_first);
+THERING = [THERING(idx_first:end) THERING(1:idx_first-1)];
 

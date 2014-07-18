@@ -43,6 +43,8 @@ Ele.VChamber = ring{1}.VChamber;
 prtName(mfile, 0, drift, meth_drift, Ele,0, 0);
 fprintf(mfile, ' %23.16e\n', 0);
 
+kicktable_saved = {};
+
 for i = 1:length(ring)
      Fnum = ring{i}.Fnum;
      Knum = ring{i}.Knum;
@@ -50,7 +52,7 @@ for i = 1:length(ring)
         case 'DriftPass'
             prtName(mfile, i, drift, meth_drift, ring{i},Knum, Fnum);
             fprintf(mfile, ' %23.16e\n', ring{i}.Length);
-        case 'BndMPoleSymplectic4Pass'
+        case {'BndMPoleSymplectic4Pass','BndMPoleSymplectic4RadPass'}
             prtName(mfile, i, mpole, meth_mpole, ring{i},Knum, Fnum);
             [PdTpar PdTerr]=isskew(ring{i});
             fprintf(mfile, ' %23.16e %23.16e %23.16e %23.16e\n', -ring{i}.T1(1),...
@@ -60,7 +62,7 @@ for i = 1:length(ring)
                 ring{i}.ExitAngle*(180/pi), ring{i}.FullGap);
             prtHOM(mfile, 1, ring{i});
             
-        case 'StrMPoleSymplectic4Pass'
+        case {'StrMPoleSymplectic4Pass','StrMPoleSymplectic4RadPass'}
                 prtName(mfile, i, mpole, meth_mpole, ring{i},Knum, Fnum);
                 [PdTpar PdTerr]=isskew(ring{i});
                 fprintf(mfile, ' %23.16e %23.16e %23.16e %23.16e\n', -ring{i}.T1(1),...
@@ -103,17 +105,25 @@ for i = 1:length(ring)
             kicktable_filename = lower([ring{i}.FamName '.txt']);
             fprintf(mfile, ' 1.0 2 %s\n', kicktable_filename);
             kick_fullname = fullfile(path, kicktable_filename);
-            if ~(exist(kick_fullname,'file') == 2);
+            if ~any(strcmpi(kicktable_saved, kicktable_filename))
                 save_kicktable_file(ring{i}, kick_fullname);
+                kicktable_saved{end+1} = kicktable_filename;
             end
+%             if ~(exist(kick_fullname,'file') == 2);
+%                 save_kicktable_file(ring{i}, kick_fullname);
+%             end
         case 'LNLSThickEPUPass'
             prtName(mfile, i, insertion, meth_kicktable, ring{i}, Knum, Fnum);
             kicktable_filename = lower([ring{i}.FamName '.txt']);
             fprintf(mfile, ' 1.0 2 %s\n', kicktable_filename);
             kick_fullname = fullfile(path, kicktable_filename);
-            if ~(exist(kick_fullname,'file') == 2);
+            if ~any(strcmpi(kicktable_saved, kicktable_filename))
                 save_kicktable_file(ring{i}, kick_fullname);
+                kicktable_saved{end+1} = kicktable_filename;
             end
+%             if ~(exist(kick_fullname,'file') == 2);
+%                 save_kicktable_file(ring{i}, kick_fullname);
+%             end
         otherwise
             fprintf(mfile, 'prtmfile: unknown type\n');
             
@@ -226,13 +236,13 @@ fprintf(fp,  '# Horizontal KickTable in T2m2\r\n');
 fprintf(fp,  'START\r\n');
 fprintf(fp, '%11s', ''); fprintf(fp, sep_char);
 for i=1:length(posx)
-    fprintf(fp, '%+11.8f', posx(i)/1000); fprintf(fp, sep_char);
+    fprintf(fp, '%+22.15E', posx(i)/1000); fprintf(fp, sep_char);
 end
 fprintf(fp, '\r\n');
 for i=1:length(posz)
-    fprintf(fp, '%+11.8f', posz(i)/1000); fprintf(fp, sep_char);
+    fprintf(fp, '%+22.15E', posz(i)/1000); fprintf(fp, sep_char);
     for j=1:length(posx)
-        fprintf(fp, '%+6.3E', params.factor * dpsi_dx(i,j)); fprintf(fp, sep_char);
+        fprintf(fp, '%+22.15E', params.factor * dpsi_dx(i,j)); fprintf(fp, sep_char);
     end
     fprintf(fp, '\r\n');
 end
@@ -241,13 +251,13 @@ fprintf(fp,  '# Vertical KickTable in T2m2\r\n');
 fprintf(fp,  'START\r\n');
 fprintf(fp, '%11s', ''); fprintf(fp, sep_char);
 for i=1:length(posx)
-    fprintf(fp, '%+11.8f', posx(i)/1000); fprintf(fp, sep_char);
+    fprintf(fp, '%+22.15E', posx(i)/1000); fprintf(fp, sep_char);
 end
 fprintf(fp, '\r\n');
 for i=1:length(posz)
-    fprintf(fp, '%+11.8f', posz(i)/1000); fprintf(fp, sep_char);
+    fprintf(fp, '%+22.15E', posz(i)/1000); fprintf(fp, sep_char);
     for j=1:length(posx)
-        fprintf(fp, '%+6.3E', params.factor * dpsi_dz(i,j)); fprintf(fp, sep_char);
+        fprintf(fp, '%+22.15E', params.factor * dpsi_dz(i,j)); fprintf(fp, sep_char);
     end
     fprintf(fp, '\r\n');
 end
