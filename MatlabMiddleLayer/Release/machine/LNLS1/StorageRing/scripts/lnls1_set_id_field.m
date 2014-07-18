@@ -34,20 +34,23 @@ end
 energy = getenergymodel;
 [~, ~, b_rho] = lnls_beta_gamma(energy);
 
+% finds out what passmethod (with or without radiation) is being used for dipoles
+bend_passmethod = unique(getcellstruct(THERING, 'PassMethod', findcells(THERING, 'FamName', 'BEND')));
+bend_passmethod = bend_passmethod{1};
+
 id_label  = ids_label{id_idx};
 period    = ids_period(id_idx);
 poles_str = ids_poles{id_idx};
 lhe       = 4 * period / pi^2;
 
 % temporary lattices building blocks
-idperiod  = [drift(id_label, 0, 'DriftPass') rbend(id_label, 0, 0, 0, 0, 0, 'BndMPoleSymplectic4Pass') drift(id_label, 0, 'DriftPass')];
+idperiod  = [drift(id_label, 0, 'DriftPass') rbend(id_label, 0, 0, 0, 0, 0, bend_passmethod) drift(id_label, 0, 'DriftPass')];
 idperiod  = buildlat(idperiod);
-idperiod{1}.Energy = energy; idperiod{2}.Energy = energy; idperiod{3}.Energy = energy;
-idperiod{1}.Field  = field;  idperiod{2}.Field  = field;  idperiod{3}.Figure = field;
-markers   = [marker('BEGIN', 'IdentityPass') marker('LCENTER', 'IdentityPass')];
+idperiod{1}.Energy = energy*1e9; idperiod{2}.Energy = energy*1e9; idperiod{3}.Energy = energy*1e9;
+idperiod{1}.Field  = field;  idperiod{2}.Field  = field;  idperiod{3}.Field = field;
+markers   = [marker('END', 'IdentityPass') marker('BEGIN', 'IdentityPass') marker('LCENTER', 'IdentityPass')];
 markers   = buildlat(markers);
-markers{1}.Energy = energy; markers{2}.Energy = energy; 
-markers{1}.Field  = field;  markers{2}.Field  = field;
+markers{1}.Energy = energy*1e9; markers{2}.Energy = energy*1e9; markers{3}.Energy = energy*1e9;
 
 
 % builds the ID model
@@ -74,9 +77,9 @@ for p=1:length(poles_str)
     if (p == floor(length(poles_str)/2))
         if strcmpi(id_label, 'AWG01')
             % inserts markers 'BEGIN' and 'LCENTER' in the middle of AWG01
-            idlattice = [idlattice markers];
+            idlattice = [idlattice markers(1) markers(2) markers(3)];
         else
-            idlattice = [idlattice markers(2)];
+            idlattice = [idlattice markers(3)];
         end
     end
 end
@@ -93,5 +96,5 @@ idx      = findcells(THERING, 'FamName', id);
 THERING = [THERING(1:(idx(1)-1)) idlattice THERING((idx(end)+1):end)];
 % shift lattice back to original position
 idx_first  = findcells(THERING, 'FamName', famname_first);
-THERING = [THERING(idx_first:end) THERING(1:idx_first-1)];
+THERING = [THERING(idx_first:end) THERING(1:(idx_first-1))];
 

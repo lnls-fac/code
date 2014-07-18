@@ -36,6 +36,10 @@ void del_kicktables(std::vector<Kicktable*>& kicktable_list);
 template <typename T>
 Status::type kicktable_getkicks       (const Kicktable* kicktable, const T& rx, const T& ry, T& hkick, T& vkick) {
 	//std::cout << double(rx) << " " << double(ry) << std::endl;
+
+	//hkick = vkick = 0.0;
+	//return Status::success;
+
 	return kicktable_getkicks_linear(kicktable, rx, ry, hkick, vkick);
 }
 

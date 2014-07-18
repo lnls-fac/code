@@ -67,7 +67,8 @@ struct Status {
 		file_not_found = 8,
 		file_not_opened = 9,
 		kicktable_not_defined = 10,
-		kicktable_out_of_range = 11
+		kicktable_out_of_range = 11,
+		flat_file_error = 12
 	};
 };
 
@@ -85,7 +86,7 @@ const double electron_mass            = 9.1093829140e-31;  // [Kg]    - 2014-06-
 const double electron_rest_energy     = electron_mass * pow(light_speed,2);             // [Kg.m^2/s^2] - derived
 const double vaccum_permitticity      = 1/(vacuum_permeability * pow(light_speed,2));   // [V.s/(A.m)]  - derived
 const double electron_rest_energy_MeV = (electron_rest_energy / electron_charge) / 1e6; // [MeV] - derived
-const double electron_radius      = pow(electron_charge,2)/(4*M_PI*vaccum_permitticity*electron_rest_energy); // [m] - derived
+const double electron_radius          = pow(electron_charge,2)/(4*M_PI*vaccum_permitticity*electron_rest_energy); // [m] - derived
 
 template <typename T>
 int sgn(T val) {

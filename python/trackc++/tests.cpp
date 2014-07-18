@@ -8,8 +8,8 @@
 #include "trackc++.h"
 #include <ctime>
 
-int test_printlattice(const std::vector<Element>& the_ring) {
-	latt_print(the_ring);
+int test_printlattice(const Accelerator& accelerator) {
+	latt_print(accelerator.lattice);
 	return 0;
 }
 
@@ -19,18 +19,24 @@ int test_linepass(const Accelerator& accelerator) {
 
 	Pos<> pos;
 	pos.rx = 1*0.00100; pos.px = 0*0.00001;
-	pos.ry = 0*0.00010; pos.py = 0*0.00001;
+	pos.ry = 1*0.00010; pos.py = 0*0.00001;
 
 	std::vector<Pos<> > new_pos;
 	unsigned int element_offset = 0;
 	Plane::type lost_plane;
 	Status::type status = track_linepass(accelerator, pos, new_pos, element_offset, lost_plane, true);
 	std::cout << "status: " << string_error_messages[status] << std::endl;
-	for(unsigned int i=0; i<new_pos.size(); ++i) {
-		const Pos<>& c = new_pos[i];
-		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, the_ring[i % the_ring.size()].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de);
-	}
 
+
+	FILE *fp;
+	fp = fopen("orbit_trackc++.txt", "w");
+	for(unsigned int i=1-1; i<new_pos.size(); ++i) {
+	//for(unsigned int i=2000; i<292; ++i) {
+		const Pos<>& c = new_pos[i];
+		fprintf(stdout, "%03i: %15s  %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E \n", i+1, the_ring[i % the_ring.size()].fam_name.c_str(), c.rx, c.px, c.ry, c.py, c.de, c.dl);
+		fprintf(fp, "%+23.16E %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E \n", c.rx, c.px, c.ry, c.py, c.de, c.dl);
+	}
+	fclose(fp);
 
 	return 0;
 
@@ -61,7 +67,7 @@ int test_linepass_tpsa(const Accelerator& accelerator, const std::vector<Element
 
 
 #include <cstdlib>
-int test_ringpass(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
+int test_ringpass(const Accelerator& accelerator) {
 
 
 	Pos<> pos;
@@ -82,11 +88,13 @@ int test_ringpass(const Accelerator& accelerator, const std::vector<Element>& th
 	if (status != Status::success) {
 		std::cerr << "problem" << std::endl;
 	}
+
+	std::cout << "tracking_time: " << time_spent << std::endl;
 	for(unsigned int i=0; i<new_pos.size(); ++i) {
 		const Pos<>& c = new_pos[i];
-		fprintf(stdout, "%03i: %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, c.rx, c.px, c.ry, c.py, c.de);
+		fprintf(stdout, "%03i: %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E %+23.16E\n", i+1, c.rx, c.px, c.ry, c.py, c.de, c.dl);
 	}
-	std::cout << "tracking_time: " << time_spent << std::endl;
+
 
 	return 0;
 
@@ -268,12 +276,16 @@ int cmd_tests(int argc, char* argv[]) {
 
 	Accelerator accelerator;
 	//sirius_v500(accelerator.lattice);
-	Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_with_ids_in.txt", accelerator);
+	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
+	Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_ff.txt", accelerator);
 	if (status != Status::success) {
 		return EXIT_FAILURE;
 	}
+	accelerator.lattice[15].nr_steps = 1;
 	accelerator.radiation_on = true;
 	accelerator.cavity_on = true;
+	//accelerator.radiation_on = false;
+	//accelerator.cavity_on = false;
 
 	//latt_setcavity(the_ring, "on");
 	//latt_setradiation(the_ring, "on", 3e9);
@@ -284,18 +296,18 @@ int cmd_tests(int argc, char* argv[]) {
 	//latt_print(the_ring);
 	//std::cout << the_ring.size() << std::endl;
 
-	//test_printlattice(the_ring);
+	//test_printlattice(accelerator);
 	//test_findm66(accelerator);
-	//test_linepass(accelerator);
-	//test_ringpass(the_ring);
+	test_linepass(accelerator);
+	//test_ringpass(accelerator);
 	//test_linepass_tpsa(the_ring);
 	//test_findorbit6(the_ring);
 	//test_dynap_xy(the_ring);
 
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
-	// test_cmd_dynap_ma();
-	test_cmd_track_linepass();
+	//test_cmd_dynap_ma();
+	//test_cmd_track_linepass();
 	//test_kicktable(accelerator);
 
 	return 0;

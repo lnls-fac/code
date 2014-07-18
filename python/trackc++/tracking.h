@@ -89,55 +89,32 @@ Status::type track_linepass (
 	Status::type status = Status::success;
 
 	const std::vector<Element>& line = accelerator.lattice;
-
+	const Pos<T> nan_pos(nan(""),nan(""),nan(""),nan(""),nan(""),nan(""));
 	int nr_elements  = line.size();
+
+	if (trajectory) {
+		for(int i=0; i<nr_elements; ++i) {
+			pos.push_back(nan_pos);
+		}
+	}
 
 	for(int i=0; i<nr_elements; ++i) {
 
 		const Element& element = line[element_offset];  // syntactic-sugar for read-only access to element object parameters
 
 		// stores trajectory at entrance of each element
-		if (trajectory) pos.push_back(orig_pos);
+		//if (trajectory) pos.push_back(orig_pos);
+		if (trajectory) pos[i] = orig_pos;
 
 		Status::type status = track_elementpass (element, orig_pos, accelerator);
 		//if (status != Status::success) return status;
-
-		/*
-		switch (element.pass_method) {
-			case PassMethod::pm_identity_pass:
-				if ((status = pm_identity_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_drift_pass:
-				if ((status = pm_drift_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_str_mpole_symplectic4_pass:
-				if ((status = pm_str_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_bnd_mpole_symplectic4_pass:
-				if ((status = pm_bnd_mpole_symplectic4_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_corrector_pass:
-				if ((status = pm_corrector_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_cavity_pass:
-				if ((status = pm_cavity_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_thinquad_pass:
-				if ((status = pm_thinquad_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			case PassMethod::pm_thinsext_pass:
-				if ((status = pm_thinsext_pass<T>(orig_pos, element, accelerator)) != Status::success) return status;
-				break;
-			default:
-				return Status::passmethod_not_defined;
-		}
-		*/
 
 		// checks if particle is lost
 		if ((not isfinite(orig_pos.rx)) or
 			((accelerator.vchamber_on) and
 			 ((orig_pos.rx < -element.hmax) or
 			 (orig_pos.rx >  element.hmax)))) {
+			pos.push_back(nan_pos);
 			lost_plane   = Plane::x;
 			return (status == Status::success) ? Status::particle_lost : status;
 		}
@@ -145,6 +122,7 @@ Status::type track_linepass (
 			((accelerator.vchamber_on) and
 			 ((orig_pos.ry < -element.vmax) or
 			 (orig_pos.ry >  element.vmax)))) {
+			pos.push_back(nan_pos);
 			lost_plane = Plane::y;
 			return (status == Status::success) ? Status::particle_lost : status;
 		}

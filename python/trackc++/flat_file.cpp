@@ -18,6 +18,7 @@ Status::type read_flat_file_tracy(const std::string& filename, Accelerator& acce
 
 		// reads header
 		fp >> e.fam_name >> Fnum >> Knum >> idx; if (fp.eof()) break;
+		if (e.fam_name == "prtmfile:") return Status::flat_file_error;
 		fp >> type >> method >> e.nr_steps;
 		if (e.nr_steps < 1) e.nr_steps = 1;
 		fp >> e.hmax >> e.hmax >> e.vmax >> e.vmax;

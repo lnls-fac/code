@@ -18,75 +18,89 @@ e1 = marker('MARKER', 'IdentityPass');
 MARKER_element = [e1];
 
 % A2QF01 Template %
-e1 = quadrupole('A2QF01', 0.27/2, 2.793439713926239, 'QuadLinearPass');
-e2 = quadrupole('A2QF01', 0.27/2, 2.793439713926239, 'QuadLinearPass');
+quad_strength = 2.773723424942506;
+e1 = quadrupole('A2QF01', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QF01', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QF01_element = [e1 e2];
 
 % A2QF03 Template %
-e1 = quadrupole('A2QF03', 0.27/2, 2.791923490693014, 'QuadLinearPass');
-e2 = quadrupole('A2QF03', 0.27/2, 2.791923490693014, 'QuadLinearPass');
+quad_strength = 2.778028887538696;
+e1 = quadrupole('A2QF03', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QF03', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QF03_element = [e1 e2];
 
 % A2QF05 Template %
-e1 = quadrupole('A2QF05', 0.27/2, 2.779976612797458, 'QuadLinearPass');
-e2 = quadrupole('A2QF05', 0.27/2, 2.779976612797458, 'QuadLinearPass');
+quad_strength = 2.773906874926019;
+e1 = quadrupole('A2QF05', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QF05', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QF05_element = [e1 e2];
 
 % A2QF07 Template %
-e1 = quadrupole('A2QF07', 0.27/2, 2.765458949902937, 'QuadLinearPass');
-e2 = quadrupole('A2QF07', 0.27/2, 2.765458949902937, 'QuadLinearPass');
+quad_strength = 2.779482318470177;
+e1 = quadrupole('A2QF07', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QF07', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QF07_element = [e1 e2];
 
 % A2QF09 Template %
-e1 = quadrupole('A2QF09', 0.27/2, 2.794376442635251, 'QuadLinearPass');
-e2 = quadrupole('A2QF09', 0.27/2, 2.794376442635251, 'QuadLinearPass');
+quad_strength = 2.785659540513870;
+e1 = quadrupole('A2QF09', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QF09', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QF09_element = [e1 e2];
 
 % A2QF11 Template %
-e1 = quadrupole('A2QF11', 0.27/2, 2.785847002607071, 'QuadLinearPass');
-e2 = quadrupole('A2QF11', 0.27/2, 2.785847002607071, 'QuadLinearPass');
+quad_strength = 2.776734046100072;
+e1 = quadrupole('A2QF11', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QF11', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QF11_element = [e1 e2];
 
 % A2QD01 Template %
-e1 = quadrupole('A2QD01', 0.27/2, -2.959075248306463, 'QuadLinearPass');
-e2 = quadrupole('A2QD01', 0.27/2, -2.959075248306463, 'QuadLinearPass');
+quad_strength = -2.940334245422351;
+e1 = quadrupole('A2QD01', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QD01', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QD01_element = [e1 e2];
 
 % A2QD03 Template %
-e1 = quadrupole('A2QD03', 0.27/2, -2.946121118829100, 'QuadLinearPass');
-e2 = quadrupole('A2QD03', 0.27/2, -2.946121118829100, 'QuadLinearPass');
+quad_strength = -2.948986906916831;
+e1 = quadrupole('A2QD03', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QD03', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QD03_element = [e1 e2];
 
 % A2QD05 Template %
-e1 = quadrupole('A2QD05', 0.27/2, -2.954817282142365, 'QuadLinearPass');
-e2 = quadrupole('A2QD05', 0.27/2, -2.954817282142365, 'QuadLinearPass');
+quad_strength = -2.947200441993257;
+e1 = quadrupole('A2QD05', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QD05', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QD05_element = [e1 e2];
 
 % A2QD07 Template %
-e1 = quadrupole('A2QD07', 0.27/2, -2.948680759181681, 'QuadLinearPass');
-e2 = quadrupole('A2QD07', 0.27/2, -2.948680759181681, 'QuadLinearPass');
+quad_strength = -2.947811865679129;
+e1 = quadrupole('A2QD07', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QD07', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QD07_element = [e1 e2];
 
 % A2QD09 Template %
-e1 = quadrupole('A2QD09', 0.27/2, -2.980526653488019, 'QuadLinearPass');
-e2 = quadrupole('A2QD09', 0.27/2, -2.980526653488019, 'QuadLinearPass');
+quad_strength = -2.965044862057199;
+e1 = quadrupole('A2QD09', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QD09', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QD09_element = [e1 e2];
 
 % A2QD11 Template %
-e1 = quadrupole('A2QD11', 0.27/2, -2.950829645934168, 'QuadLinearPass');
-e2 = quadrupole('A2QD11', 0.27/2, -2.950829645934168, 'QuadLinearPass');
+quad_strength = -2.939194780176979;
+e1 = quadrupole('A2QD11', 0.27/2, quad_strength, 'QuadLinearPass');
+e2 = quadrupole('A2QD11', 0.27/2, quad_strength, 'QuadLinearPass');
 A2QD11_element = [e1 e2];
 
 % A6QF01 Template %
-e1 = quadrupole('A6QF01', 0.27/2, 1.850386885051623, 'QuadLinearPass');
+quad_strength = 1.854818793020486;
+e1 = quadrupole('A6QF01', 0.27/2, quad_strength, 'QuadLinearPass');
 e2 = corrector  ('VCM', 0.00000, [0 0], 'CorrectorPass');
-e3 = quadrupole('A6QF01', 0.27/2, 1.850386885051623, 'QuadLinearPass');
+e3 = quadrupole('A6QF01', 0.27/2, quad_strength, 'QuadLinearPass');
 A6QF01_element = [e1 e2 e3];
 
 % A6QF02 Template %
-e1 = quadrupole('A6QF02', 0.27/2, 1.826064805689932, 'QuadLinearPass');
+quad_strength = 1.849513674801983;
+e1 = quadrupole('A6QF02', 0.27/2, quad_strength, 'QuadLinearPass');
 e2 = corrector  ('VCM', 0.00000, [0 0], 'CorrectorPass');
-e3 = quadrupole('A6QF02', 0.27/2, 1.826064805689932, 'QuadLinearPass');
+e3 = quadrupole('A6QF02', 0.27/2,quad_strength, 'QuadLinearPass');
 A6QF02_element = [e1 e2 e3];
 
 % SKEWQUAD Template %
@@ -111,24 +125,20 @@ A12DI_element = [e1 e2 e3 e4 e5];
 % e1 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
 % e2 = marker('SCENTER', 'IdentityPass');
 % e3 = sextupole('A6SF', 0.1/2, 84.331291009094002, 'StrMPoleSymplectic4Pass');
-e1 = sextupole('A6SF', 0.1/2, 69.061800000000005, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SF', 0.1/2, 80.926379613506398, 'StrMPoleSymplectic4Pass');
 e2 = marker('SCENTER', 'IdentityPass');
-e3 = sextupole('A6SF', 0.1/2, 69.061800000000005, 'StrMPoleSymplectic4Pass');
+e3 = sextupole('A6SF', 0.1/2, 80.926379613506398, 'StrMPoleSymplectic4Pass');
 A6SF_element = [e1 e2 e3];
 
 % A6SD01 Template %
-% e1 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
-% e2 = sextupole('A6SD01', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
-e1 = sextupole('A6SD01', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD01', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD01', 0.1/2, -56.560903175078344, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD01', 0.1/2, -56.560903175078344, 'StrMPoleSymplectic4Pass');
 A6SD01_element = [e1 e2];
 
 
 % A6SD02 Template %
-% e1 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
-% e2 = sextupole('A6SD02', 0.1/2, -58.320246135913720, 'StrMPoleSymplectic4Pass');
-e1 = sextupole('A6SD02', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
-e2 = sextupole('A6SD02', 0.1/2, -46.005699999999997, 'StrMPoleSymplectic4Pass');
+e1 = sextupole('A6SD02', 0.1/2, -56.560903175078344, 'StrMPoleSymplectic4Pass');
+e2 = sextupole('A6SD02', 0.1/2, -56.560903175078344, 'StrMPoleSymplectic4Pass');
 A6SD02_element = [e1 e2];
 
 % LCENTER Template %
@@ -988,20 +998,22 @@ TR09_4 = drift('ATR', 0.1659, 'DriftPass');
 AMP09A = BPM_element;
 TR09_5 = drift('ATR', 0.1444, 'DriftPass');
 ACH09A = ACH_element;
-TR09_6 = drift('ATR', 1.56739518, 'DriftPass');
+TR09_6 = drift('ATR', 0.115, 'DriftPass');
+AQS09 = SKEWCORR_element;
+TR09_7 = drift('ATR', 1.42739518, 'DriftPass');
 AWG09 = AWG09_element;
-TR09_7 = drift('ATR', 1.57039518, 'DriftPass');
+TR09_8 = drift('ATR', 1.57039518, 'DriftPass');
 ACH09B = ACH_element;
-TR09_8 = drift('ATR', 0.1914, 'DriftPass');
+TR09_9 = drift('ATR', 0.1914, 'DriftPass');
 AMP09B = BPM_element;
-TR09_9 = drift('ATR', 0.1159, 'DriftPass');
+TR09_10 = drift('ATR', 0.1159, 'DriftPass');
 AQF09B = A2QF09_element;
-TR09_10 = drift('ATR', 0.1827, 'DriftPass');
+TR09_11 = drift('ATR', 0.1827, 'DriftPass');
 ACV09B = ACV_element;
-TR09_11 = drift('ATR', 0.1873, 'DriftPass');
+TR09_12 = drift('ATR', 0.1873, 'DriftPass');
 AQD09B = A2QD09_element;
-TR09_12 = drift('ATR', 0.830460086, 'DriftPass');
-TR09 = [TR09_1 AQD09A TR09_2 ACV09A TR09_3 AQF09A TR09_4 AMP09A TR09_5 ACH09A TR09_6 AWG09 TR09_7 ACH09B TR09_8 AMP09B TR09_9 AQF09B TR09_10 ACV09B TR09_11 AQD09B TR09_12 ];
+TR09_13 = drift('ATR', 0.830460086, 'DriftPass');
+TR09 = [TR09_1 AQD09A TR09_2 ACV09A TR09_3 AQF09A TR09_4 AMP09A TR09_5 ACH09A TR09_6 AQS09 TR09_7 AWG09 TR09_8 ACH09B TR09_9 AMP09B TR09_10 AQF09B TR09_11 ACV09B TR09_12 AQD09B TR09_13 ];
 
 
 % CELL: ADI09
@@ -1070,7 +1082,6 @@ TR11_14 = drift('ATR', 0.19, 'DriftPass');
 AQD11B = A2QD11_element;
 TR11_15 = drift('ATR', 0.830460086, 'DriftPass');
 TR11 = [TR11_1 AQD11A TR11_2 ACV11A TR11_3 AQF11A TR11_4 AMP11A TR11_5 ACH11A TR11_6 SK11A TR11_7 AMU11A TR11_8 AON11 TR11_9 AMU11B TR11_10 ACH11B TR11_11 AMP11B TR11_12 AQF11B TR11_13 ACV11B TR11_14 AQD11B TR11_15 ];
-
 
 % CELL: ADI11
 

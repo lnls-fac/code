@@ -28,7 +28,8 @@ std::string string_error_messages[] = {
 		"file_not_found",
 		"file_not_opened",
 		"kicktable_not_defined",
-		"kicktable_out_of_range"
+		"kicktable_out_of_range",
+		"flat_file_error"
 };
 
 std::string string_version = "TRACKC++ version(" + std::string(__DATE__) + " " + std::string(__TIME__) + ")";

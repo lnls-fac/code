@@ -12,6 +12,8 @@
 //      apart from discrepancies between math library implementations and TWOPI,CGAMMA constants
 //      these passmethods agree with AT passmethods up to machine 64-bit precision.
 
+#define ATCOMPATIBLE 1
+
 #include "passmethods.h"
 #include "accelerator.h"
 #include "elements.h"
@@ -28,8 +30,8 @@
 	#define TWOPI   6.28318530717959 // AT implementation of 2*PI...
 	#define CGAMMA  8.846056192e-05  // AT implementation
 #else
-	#define TWOPI   2*M_PI
-	static const double CGAMMA = 4*M_PI*electron_radius/pow(electron_rest_energy/electron_charge/1e9,3)/3;
+	//#define TWOPI   2*M_PI
+	//static const double CGAMMA = 4*M_PI*electron_radius/pow(electron_rest_energy/electron_charge/1e9,3)/3;
 #endif
 
 
@@ -288,6 +290,8 @@ Status::type pm_corrector_pass(Pos<T> &pos, const Element &elem, const Accelerat
 
 template <typename T>
 Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem, const Accelerator& accelerator) {
+
+	if (not accelerator.cavity_on) return pm_drift_pass(pos, elem, accelerator);
 
 	global_2_local(pos, elem);
 
