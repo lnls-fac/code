@@ -78,13 +78,11 @@ fprintf('   Radiation and cavities are on. Use setradiation / setcavity to modif
 
 
 if ModeNumber == 1
-    lnls1_simulation_mode_user_1p37GeV;
+    lnls1_simulation_mode_user_1p37GeV;    
 elseif ModeNumber == 2
     lnls1_simulation_mode_injection_500MeV;
 elseif ModeNumber == 3
-    lnls1_set_id_field('AWG01', 2.00);
-    lnls1_set_id_field('AWG09', 3.50);
-    lnls1_set_id_field('AON11', 0.58);
+    lnls1_simulation_mode_BEDI_1p37GeV;
 elseif ModeNumber == 4
     lnls1_simulation_mode_IDsOFF_1p37GeV;
 elseif ModeNumber == 5
@@ -94,6 +92,8 @@ elseif ModeNumber == 6
 else
     error('Operational mode unknown');
 end
+% Updates the AT indices in the MiddleLayer with the present AT lattice
+updateatindex;
 
 
 %%%%%%%%%%%%%%%%%%%%%%
@@ -125,7 +125,8 @@ if ModeNumber == 1
     catch
         fprintf('   Problem with setting the LOCO calibration.\n');
     end
-
+elseif ModeNumber == 3
+    setlocodata('SetGains', '/home/fac_files/code/MatlabMiddleLayer/Release/machine/LNLS1/StorageRingData/BEDI/LOCO/Golden/LOCO - quadfams.mat');
 elseif ModeNumber == 101
     setlocodata('Nominal');
     setfamilydata(0,'BPMx','Offset');

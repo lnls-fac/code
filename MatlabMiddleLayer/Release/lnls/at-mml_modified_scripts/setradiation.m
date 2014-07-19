@@ -138,102 +138,105 @@ end
 % Main 
 switch lower(InputString)
     case 'off'
-        MachineName = lower(getfamilydata('Machine'));
-        if any([findstr(MachineName,'spear') findstr(MachineName,'nsls2') findstr(MachineName,'bessy2') findstr(MachineName,'x-ray') findstr(MachineName,'diamond') findstr(MachineName,'soleil') findstr(MachineName,'ssrf') findstr(MachineName,'lnls') findstr(MachineName,'tls') findstr(MachineName,'tps') findstr(MachineName,'mls') findstr(MachineName,'sps')])
 
-            localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4RadPass');
-            if ~isempty(localindex)
-                for i = 1:length(localindex)
-                    if isfield(the_ring{localindex(i)},'K')
-                        % Quadupoles
-                        the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'QuadLinearPass');
-                    else
-                        % Sextupoles, etc.
-                        the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'StrMPoleSymplectic4Pass');
-                    end
-                    PassMethod{i,1} = the_ring{localindex(i)}.PassMethod;
-                    FamName{i,1}    = the_ring{localindex(i)}.FamName;
-                end
-                ATIndex = localindex(:)';
-            end
-
-            % Bends
-            localindex = findcells(the_ring,'PassMethod','BndMPoleSymplectic4RadPass');
-            if ~isempty(localindex)
-                the_ring = setcellstruct(the_ring,'PassMethod',localindex, 'BendLinearPass');
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-            
-            % Output
-            localindex = findcells(the_ring,'PassMethod','QuadLinearPass');
-            if ~isempty(localindex)
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-            localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4Pass');
-            if ~isempty(localindex)
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-            localindex = findcells(the_ring,'PassMethod','BendLinearPass');
-            if ~isempty(localindex)
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-
-        elseif any([findstr(MachineName,'pls') findstr(MachineName,'asp')])
-
-            localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4RadPass');
-            if ~isempty(localindex)
-                for i = 1:length(localindex)
-                    if isfield(the_ring{localindex(i)},'K')
-                        % Quadupoles
-                        the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'QuadLinearPass');
-                    else
-                        % Sextupoles, etc.
-                        the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'StrMPoleSymplectic4Pass');
-                    end
-                    PassMethod{i,1} = the_ring{localindex(i)}.PassMethod;
-                    FamName{i,1}    = the_ring{localindex(i)}.FamName;
-                end
-                ATIndex = localindex(:)';
-            end
-
-            % Bends
-            localindex = findcells(the_ring,'PassMethod','BndMPoleSymplectic4RadPass');
-            if ~isempty(localindex)
-                the_ring = setcellstruct(the_ring,'PassMethod',localindex, 'BndMPoleSymplectic4Pass');
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-
-            % Output
-            localindex = findcells(the_ring,'PassMethod','QuadLinearPass');
-            if ~isempty(localindex)
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-            localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4Pass');
-            if ~isempty(localindex)
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-            localindex = findcells(the_ring,'PassMethod','BndMPoleSymplectic4Pass');
-            if ~isempty(localindex)
-                ATIndex = [ATIndex localindex(:)'];
-                PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
-                FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
-            end
-
-        else
+% Fernando,Ximenes. 2014-07-19
+%         MachineName = lower(getfamilydata('Machine'));
+%         
+%         if any([findstr(MachineName,'spear') findstr(MachineName,'nsls2') findstr(MachineName,'bessy2') findstr(MachineName,'x-ray') findstr(MachineName,'diamond') findstr(MachineName,'soleil') findstr(MachineName,'ssrf') findstr(MachineName,'lnls') findstr(MachineName,'tls') findstr(MachineName,'tps') findstr(MachineName,'mls') findstr(MachineName,'sps')])
+% 
+%             localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4RadPass');
+%             if ~isempty(localindex)
+%                 for i = 1:length(localindex)
+%                     if isfield(the_ring{localindex(i)},'K')
+%                         % Quadupoles
+%                         the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'QuadLinearPass');
+%                     else
+%                         % Sextupoles, etc.
+%                         the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'StrMPoleSymplectic4Pass');
+%                     end
+%                     PassMethod{i,1} = the_ring{localindex(i)}.PassMethod;
+%                     FamName{i,1}    = the_ring{localindex(i)}.FamName;
+%                 end
+%                 ATIndex = localindex(:)';
+%             end
+% 
+%             % Bends
+%             localindex = findcells(the_ring,'PassMethod','BndMPoleSymplectic4RadPass');
+%             if ~isempty(localindex)
+%                 the_ring = setcellstruct(the_ring,'PassMethod',localindex, 'BendLinearPass');
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+%             
+%             % Output
+%             localindex = findcells(the_ring,'PassMethod','QuadLinearPass');
+%             if ~isempty(localindex)
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+%             localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4Pass');
+%             if ~isempty(localindex)
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+%             localindex = findcells(the_ring,'PassMethod','BendLinearPass');
+%             if ~isempty(localindex)
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+% 
+%         elseif any([findstr(MachineName,'pls') findstr(MachineName,'asp')])
+% 
+%             localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4RadPass');
+%             if ~isempty(localindex)
+%                 for i = 1:length(localindex)
+%                     if isfield(the_ring{localindex(i)},'K')
+%                         % Quadupoles
+%                         the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'QuadLinearPass');
+%                     else
+%                         % Sextupoles, etc.
+%                         the_ring = setcellstruct(the_ring,'PassMethod', localindex(i), 'StrMPoleSymplectic4Pass');
+%                     end
+%                     PassMethod{i,1} = the_ring{localindex(i)}.PassMethod;
+%                     FamName{i,1}    = the_ring{localindex(i)}.FamName;
+%                 end
+%                 ATIndex = localindex(:)';
+%             end
+% 
+%             % Bends
+%             localindex = findcells(the_ring,'PassMethod','BndMPoleSymplectic4RadPass');
+%             if ~isempty(localindex)
+%                 the_ring = setcellstruct(the_ring,'PassMethod',localindex, 'BndMPoleSymplectic4Pass');
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+% 
+%             % Output
+%             localindex = findcells(the_ring,'PassMethod','QuadLinearPass');
+%             if ~isempty(localindex)
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+%             localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4Pass');
+%             if ~isempty(localindex)
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+%             localindex = findcells(the_ring,'PassMethod','BndMPoleSymplectic4Pass');
+%             if ~isempty(localindex)
+%                 ATIndex = [ATIndex localindex(:)'];
+%                 PassMethod = [PassMethod; getcellstruct(the_ring,'PassMethod',localindex)];
+%                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
+%             end
+% 
+%         else
 
             % Quadupoles, Sextupoles, etc.
             localindex = findcells(the_ring,'PassMethod','StrMPoleSymplectic4RadPass');
@@ -267,8 +270,7 @@ switch lower(InputString)
                 FamName    = [FamName;    getcellstruct(the_ring,'FamName',   localindex)];
             end
 
-        end
-
+%         end
 
     case 'on'
         
