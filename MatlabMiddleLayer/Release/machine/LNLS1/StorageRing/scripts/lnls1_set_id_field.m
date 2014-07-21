@@ -22,6 +22,7 @@ ids_poles   = {...
 % gets id index
 id_idx   = strcmpi(ids_label, id);
 idx      = findcells(THERING, 'FamName', id);
+if isempty(idx), return; end
 
 % turns off id
 if (field == 0)
