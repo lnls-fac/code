@@ -1,11 +1,11 @@
 function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limit, func)
 
 %% function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limit)
-% 
+%
 % This function is utilized to produce offsprings from parent chromosomes.
 % The genetic operators corssover and mutation which are carried out with
 % slight modifications from the original design. For more information read
-% the document enclosed. 
+% the document enclosed.
 %
 % parent_chromosome - the set of selected chromosomes.
 % M - number of objective functions
@@ -16,74 +16,74 @@ function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limi
 % u_limit - a vector of upper limit for the corresponding decsion variables
 %
 % The genetic operation is performed only on the decision variables, that
-% is the first V elements in the chromosome vector. 
+% is the first V elements in the chromosome vector.
 
 %  Copyright (c) 2009, Aravind Seshadri
 %  All rights reserved.
 %
-%  Redistribution and use in source and binary forms, with or without 
-%  modification, are permitted provided that the following conditions are 
+%  Redistribution and use in source and binary forms, with or without
+%  modification, are permitted provided that the following conditions are
 %  met:
 %
-%     * Redistributions of source code must retain the above copyright 
+%     * Redistributions of source code must retain the above copyright
 %       notice, this list of conditions and the following disclaimer.
-%     * Redistributions in binary form must reproduce the above copyright 
-%       notice, this list of conditions and the following disclaimer in 
+%     * Redistributions in binary form must reproduce the above copyright
+%       notice, this list of conditions and the following disclaimer in
 %       the documentation and/or other materials provided with the distribution
-%      
-%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-%  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-%  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-%  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-%  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-%  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-%  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-%  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-%  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-%  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+%
+%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+%  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+%  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+%  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+%  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+%  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+%  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+%  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+%  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+%  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 %  POSSIBILITY OF SUCH DAMAGE.
 
 [N, ~] = size(parent_chromosome);
 
 p = 1;
-% Flags used to set if crossover and mutation were actually performed. 
+% Flags used to set if crossover and mutation were actually performed.
 was_crossover = 0;
 was_mutation = 0;
-
+max_tent = 500;
 for i = 1 : N
     % With 60 % probability perform crossover
     if rand(1) < 0.6
-        % Initialize the children to be null vector.
-        child_1 = [];
-        child_2 = [];
-        % Select the first parent
-        parent_1 = round(N*rand(1));
-        if parent_1 < 1
-            parent_1 = 1;
-        end
-        % Select the second parent
-        parent_2 = round(N*rand(1));
-        if parent_2 < 1
-            parent_2 = 1;
-        end
-        % Make sure both the parents are not the same. 
-        while isequal(parent_chromosome(parent_1,:),parent_chromosome(parent_2,:))
+        maxi=0;
+        while true
+            % Initialize the children to be null vector.
+            child_1 = [];
+            child_2 = [];
+            % Select the first parent
+            parent_1 = round(N*rand(1));
+            if parent_1 < 1
+                parent_1 = 1;
+            end
+            % Select the second parent
             parent_2 = round(N*rand(1));
             if parent_2 < 1
                 parent_2 = 1;
             end
-        end
-        % Get the chromosome information for each randomnly selected
-        % parents
-        parent_1 = parent_chromosome(parent_1,:);
-        parent_2 = parent_chromosome(parent_2,:);
-        % Perform corssover for each decision variable in the chromosome.
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Code introduced by Fernando de S�
-        maxi=0;
-        while true
+            % Make sure both the parents are not the same.
+            while isequal(parent_chromosome(parent_1,:),parent_chromosome(parent_2,:))
+                parent_2 = round(N*rand(1));
+                if parent_2 < 1
+                    parent_2 = 1;
+                end
+            end
+            % Get the chromosome information for each randomnly selected
+            % parents
+            parent_1 = parent_chromosome(parent_1,:);
+            parent_2 = parent_chromosome(parent_2,:);
+            % Perform corssover for each decision variable in the chromosome.
+            
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % Code introduced by Fernando de S�
             maxi=maxi+1;
             for j = 1 : V
                 % SBX (Simulated Binary Crossover).
@@ -119,19 +119,21 @@ for i = 1 : N
             % algorithm, but I could try to test one child at a time and
             % see if it satisfy the condition of stability.
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            [a1, cond] = func(child_1, M);
-            if ~cond, continue; end
+            [a1, accept] = func(child_1, M);
+            if ~accept, continue; end
             
-            [a2, cond] = func(child_2, M);
-            if cond
+            [a2, accept] = func(child_2, M);
+            if accept
+                fprintf('.');
+                if ~mod(i,50), fprintf('\n');end
                 child_1(:,V + 1: M + V) = a1;
                 child_2(:,V + 1: M + V) = a2;
                 break; % terminates the infinit loop
             end
             
             %condicao para nao cair em loop infinito
-            if (maxi >= 5000)
-                fprintf('child_1 and child_2');
+            if (maxi >= max_tent)
+                fprintf('%03d: Childs = parents\n',i);
                 child_1=parent_1(1:(M+V));
                 child_2=parent_2(1:(M+V));
                 break;
@@ -144,8 +146,8 @@ for i = 1 : N
         % generated.
         was_crossover = 1;
         was_mutation = 0;
-    % With 10 % probability perform mutation. Mutation is based on
-    % polynomial mutation. 
+        % With 10 % probability perform mutation. Mutation is based on
+        % polynomial mutation.
     else
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -158,9 +160,9 @@ for i = 1 : N
             if parent_3 < 1
                 parent_3 = 1;
             end
-        % Get the chromosome information for the randomnly selected parent.
+            % Get the chromosome information for the randomnly selected parent.
             child_3 = parent_chromosome(parent_3,:);
-        % Perform mutation on eact element of the selected parent.
+            % Perform mutation on eact element of the selected parent.
             for j = 1 : V
                 r(j) = rand(1);
                 if r(j) < 0.5
@@ -168,10 +170,10 @@ for i = 1 : N
                 else
                     delta(j) = 1 - (2*(1 - r(j)))^(1/(mum+1));
                 end
-           % Generate the corresponding child element.
+                % Generate the corresponding child element.
                 child_3(j) = child_3(j) + delta(j);
-           % Make sure that the generated element is within the decision
-           % space.
+                % Make sure that the generated element is within the decision
+                % space.
                 if child_3(j) > u_limit(j)
                     child_3(j) = u_limit(j);
                 elseif child_3(j) < l_limit(j)
@@ -180,23 +182,25 @@ for i = 1 : N
             end
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % Again, I decided not to change the algorithm, but I could try
-            % to let the random selection of the parent_3 and only modify  
+            % to let the random selection of the parent_3 and only modify
             % the result obtained by mutation, child_3.
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            [a, cond] = func(child_3, M);
-            if cond
+            [a, accept] = func(child_3, M);
+            if accept
+                fprintf('.');
+                if ~mod(i,50), fprintf('\n');end
                 child_3(:,V + 1: M + V) = a;
                 break; % terminates the infinit loop
             end
             %condicao para nao cair em loop infinito
-            if (maxi >= 5000)
-                fprintf('child_3');
+            if (maxi >= max_tent)
+                fprintf('%03d: Child = parent\n',i);
                 child_3=parent_chromosome(parent_3,1:(M+V));
                 break;
             end
         end
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Set the mutation flag
         was_mutation = 1;
         was_crossover = 0;
@@ -214,4 +218,5 @@ for i = 1 : N
         p = p + 1;
     end
 end
+fprintf('\n');
 f = child;

@@ -65,7 +65,7 @@ r.integrals = [0.0 0.0 0.0 0.0 0.0 0.0];
 
 
 for i = 1:length(the_ring),
-    if isfield(the_ring{i}, 'BendingAngle') && isfield(the_ring{i}, 'EntranceAngle')
+    if isfield(the_ring{i}, 'BendingAngle') && isfield(the_ring{i}, 'EntranceAngle') && the_ring{i}.BendingAngle ~= 0
         rho = the_ring{i}.Length/the_ring{i}.BendingAngle;
         dispersion = 0.5*(D_x(i)+D_x(i+1));
         r.integrals(1) = r.integrals(1) + dispersion*the_ring{i}.Length/rho;

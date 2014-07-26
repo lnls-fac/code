@@ -51,7 +51,7 @@ K = M + V;
 
 %% Initialize each chromosome
 % For each chromosome perform the following (N is the population size)
-f=zeros(N,6);
+f=zeros(N,K);
 for i = 1 : N
     % Initialize the decision variables based on the minimum and maximum
     % possible values. V is the number of decision variable. A random
@@ -61,10 +61,10 @@ for i = 1 : N
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Code introduced by Fernando de S�
-    if exist('initial','var')
-        [a, cond] = func(initial(i,:), M);
-        if cond
-            f(i,V + 1: K) = a;
+    if exist('initial','var') && i<=length(initial(:,1))
+        [a, accept] = func(initial(i,:), M);
+        if accept
+            f(i,1:K) = [initial(i,:) a];
             continue;
         end
     end
@@ -80,9 +80,11 @@ for i = 1 : N
     % with information about the number of objective functions which are
     % processed and returns the value for the objective functions. These
     % values are now stored at the end of the chromosome itself.
-    [a, cond] = func(f(i,1:V), M);
-    if cond
-            f(i,V + 1: K) = a;
+    [a, accept] = func(f(i,1:V), M);
+    if accept
+        fprintf('.');
+        if ~mod(i,50), fprintf('\n');end
+        f(i,V + 1: K) = a;
         break; % terminates the infinit loop
     end
     end

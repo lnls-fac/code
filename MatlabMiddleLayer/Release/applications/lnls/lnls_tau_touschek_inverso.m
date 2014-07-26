@@ -26,7 +26,7 @@ function Resp = lnls_tau_touschek_inverso(params,Accep,optics)
 %
 %       Optics = estrutura com as funções óticas ao longo do trecho 
 %               para o qual setá calculado o tempo de vida:
-%                   spos,   betax,    betay,  etax,   etay,
+%                    pos,   betax,    betay,  etax,   etay,
 %                           alphax,   alphay, etaxl,  etayl
 %
 %   CUIDADO: os limites de cálculo são definidos pelos pontos

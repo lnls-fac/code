@@ -92,7 +92,7 @@ func = param.objective_function;
 if ~isfield(param,'initialPop');
     chromosome = initialize_variables(pop, M, V, min_range, max_range, func);%, param.initialPoints);
 else
-    if M + V ~= size(param.initialPop,2) || pop ~= size(param.initialPop,1)
+    if V ~= size(param.initialPop,2)
         fprintf('inconsistency in input parameters');
         return;
     end
@@ -117,7 +117,7 @@ save(fullfile(folder,'initialgeneration.txt'), 'chromosome', '-ASCII');
 %   constant population size.
 
 for i = 1 : gen
-    disp(i);
+    fprintf('Generation: %03d\n',i);
     % Select the parents
     % Parents are selected for reproduction to generate offspring. The
     % original NSGA-II uses a binary tournament selection based on the
@@ -186,7 +186,7 @@ for i = 1 : gen
     % least crowding distance
     chromosome = replace_chromosome(intermediate_chromosome, M, V, pop);
     if ~mod(i,10)
-        name = fullfile(folder,sprintf('solution/generation%03d.txt',i));
+        name = fullfile(folder,sprintf('generation%03d.txt',i));
         save(name, 'chromosome', '-ASCII');
         fprintf('%d generations completed\n',i);
     end
