@@ -13,7 +13,7 @@ scale_y = 200e-6;
 
 codx = zeros(length(machine), length(r.params.the_ring));
 cody = zeros(length(machine), length(r.params.the_ring));
-fprintf('%03s |   codx[um]    |   cody[um]    | max. kick [urad]\n', 'i');
+fprintf('%3s |   codx[um]    |   cody[um]    | max. kick [urad]\n', 'i');
 fprintf('    | (max)  (std)  | (max)  (std)  |   x     y   \n');
 
 r.correctors.static.orbit.hcm_str = zeros(length(selection),length(r.params.static.hcm_idx));
@@ -93,4 +93,3 @@ for i=selection
         1e6*max(abs(hkicks)), 1e6*max(abs(vkicks)));
  end
 fprintf('\n');
-
