@@ -311,7 +311,7 @@ elseif any(strcmpi(CommandInput, 'CorrectCoupling'))
 %     setpv(MachineConfig.SkewQuad.Setpoint);
 
     % Apply the negative of the fit in hardware units
-    error('Definir correção de acoplamento!');
+    error('Definir correcao de acoplamento!');
     SkewQuadhw = physics2hw('A2QS05', 'Setpoint', -Skewfit);
     stepsp('A2QS05', SkewQuadhw);
 

@@ -22,12 +22,15 @@ ids_poles   = {...
 % gets id index
 id_idx   = strcmpi(ids_label, id);
 idx      = findcells(THERING, 'FamName', id);
+if isempty(idx), return; end
 
-% turns off id
+% turns id off
 if (field == 0)
     % models zero field ID as a pure drift space
-    THERING = setcellstruct(THERING, 'PassMethod', idx, 'DriftPass');
-    THERING = setcellstruct(THERING, 'Length', idx, ids_lengths(id_idx)/length(idx));
+    single_drift = drift(id, ids_lengths(id_idx)/length(idx), 'DriftPass'); single_drift = buildlat([single_drift]);
+    for i=idx
+        THERING{i} = single_drift{1};
+    end
     return;
 end
 
