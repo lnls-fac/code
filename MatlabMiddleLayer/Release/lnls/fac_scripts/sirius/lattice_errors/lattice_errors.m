@@ -37,14 +37,14 @@ selection = 1:r.config.nr_machines;
 %selection = 4;
 fprintf('\n');
 
-if ~isfield(r,'question') || r.question
+if ~isfield(r,'questiona') || r.questiona
     % cria um dialogo que questão para informar sobre as mudancas no código
-    texto = sprintf(['O código lattice_errors foi alterado no dia 03/04/2014 para ' ...
-        'separar o estudo dos erros lentos e dos rápidos. Isso implicou mudanças ' ...
-        'no script de configuração. Há uma versão atual desse script na pasta em '...
-        'que está o lattice_errors. \n Você deseja continuar?\n\n Ps.:Se você '...
-        'não quer mais ver essa mensagem, crie uma variavel ''r.question = false'' '...
-        'no arquivo de configuração.']);
+    texto = sprintf(['O código lattice_errors foi alterado no dia 10/07/2014 para ' ...
+        'incluir a opcao de adicionar erros multipolares nos modelos do anel. Isso ' ...
+        'implicou mudanças no script de configuração. Há uma versão atual desse '...
+        'script na pasta em que está o lattice_errors. \n Você deseja continuar?\n'...
+        '\n Ps.:Se você não quer mais ver essa mensagem, crie uma variavel '...
+        '''r.questiona = false'' no arquivo de configuração.']);
     choice = questdlg(texto, 'Alteração de programa', 'Continuar', 'Parar','Parar');
     switch choice
         case 'Continuar'
@@ -64,15 +64,25 @@ fprintf('< generating random errors... > \n\n');
 if r.config.simulate_static
     r.errors.static  = generate_errors(r,'static');
 end
+if r.config.simulate_multipoles
+    r.errors.multipoles  = generate_multipoles_errors(r);
+end
 if r.config.simulate_dynamic
     r.errors.dynamic = generate_errors(r,'dynamic');
 end
 
+name_saved_machines = 'machines';
+if r.config.simulate_multipoles
+    fprintf('< applying multipole errors to bare lattice ... > \n\n');
+    r.machine = apply_multipoles_errors(r);
+    name_saved_machines = [name_saved_machines '_multi'];
+    r = archive_machines(r, 'save', name_saved_machines);
+end
 
 if r.config.simulate_static
     
     % aplica erros a otica nominal e retorna estrutura com as maquinas aleatorias
-    fprintf('< applying random errors to bare lattice (ramping up) ... > \n\n');
+    fprintf('< applying random errors to bare lattice ... > \n\n');
     
     for i=1:length(r.config.static.errors_delta)
         
@@ -80,21 +90,21 @@ if r.config.simulate_static
         
         % desliga IDS para eliminar restrição física
         if (i == 1)
-            for m=selection
-                r.machine{m} = set_ids(r.machine{m}, 'off');
-            end
+%             for m=selection
+%                 r.machine{m} = set_ids(r.machine{m}, 'off');
+%             end
             % faz calculo da trajetoria distorcida (com sextupolos e IDs zerados)
             fprintf('< calculating COD with sextupoles off... > \n\n');
             r.init_cod = calc_init_cod(r, selection);
         end
         
-        % liga IDS para eliminar restrição física
-        if (i == length(r.config.static.errors_delta))
-            for m=selection
-                r.machine{m} = set_ids(r.machine{m}, 'on');
-            end
-        end
-        
+%         % liga IDS para eliminar restrição física
+%         if (i == length(r.config.static.errors_delta))
+%             for m=selection
+%                 r.machine{m} = set_ids(r.machine{m}, 'on');
+%             end
+%         end
+%         
         if r.params.static.cod_correction_flag    
             % faz correcao de orbita ligando gradualmente os campos dos
             % sextupolos e os IDs (apos 1a iteracao da correcao)
@@ -102,20 +112,34 @@ if r.config.simulate_static
             r = correct_cod_slow(r, selection, r.params.static.cod_sextupoles_ramp, r.params.static.cod_svs, r.params.static.cod_nr_iter);
         end
     end
-    r = archive_machines(r, 'save', 'machines_cod_corrected');
+    if r.params.static.cod_correction_flag
+        name_saved_machines = [name_saved_machines '_cod_corrected'];
+    else
+        name_saved_machines = [name_saved_machines '_cod'];
+    end
+    r = archive_machines(r, 'save', name_saved_machines);
     
     if r.params.static.optics_correction_flag
         % faz simetrizacao da rede
         fprintf('< symmetrizing optics of random machines... > \n\n');
         r.machine = correct_optics(r, selection, r.params.static.optics_svs, r.params.static.optics_nr_iter);
-        r = archive_machines(r, 'save', 'machines_cod_symm_corrected'); % liga IDs antes de salvar
+        name_saved_machines = [name_saved_machines '_symm'];
+        r = archive_machines(r, 'save', name_saved_machines); % liga IDs antes de salvar
     end
     
     if r.params.static.coup_correction_flag
         % faz correcao de acoplamento
         fprintf('< correcting coupling... > \n\n');
         r.machine = correct_coupling(r, selection, r.params.static.coup_svs, r.params.static.coup_nr_iter);
-        r = archive_machines(r, 'save', 'machines_cod_symm_coup_corrected'); % liga IDs antes de salvar
+        name_saved_machines = [name_saved_machines '_coup'];
+        r = archive_machines(r, 'save', name_saved_machines);
+    end
+    
+    if r.params.static.tune_correction_flag
+        % faz correcao de tune
+        r.machine = correct_tune_machines(r, selection);
+        name_saved_machines = [name_saved_machines '_tune'];
+        r = archive_machines(r, 'save', name_saved_machines);
     end
 end
 
@@ -127,12 +151,15 @@ if r.config.simulate_dynamic
     fprintf('< applying dynamic random errors to lattices ... > \n\n');
 
     r.machine = apply_errors(r,1,'dynamic');
+    
+    name_saved_machines = [name_saved_machines '_dyn_cod'];
  
     if r.params.dynamic.cod_correction_flag
         fprintf('< correcting COD > \n\n');
         r = correct_cod_fast(r, selection, r.params.dynamic.cod_svs, r.params.dynamic.cod_nr_iter);
+        name_saved_machines = [name_saved_machines '_corrected'];
     end
-r = archive_machines(r, 'save', 'machines_cod_corrected');
+    r = archive_machines(r, 'save', name_saved_machines);    
 end
 
 % salva estruturas de dados

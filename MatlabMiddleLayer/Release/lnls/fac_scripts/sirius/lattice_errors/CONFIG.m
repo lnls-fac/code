@@ -1,7 +1,7 @@
 function r = CONFIG
 
 r.config.label = 'CONFIG';
-r.question = false;
+r.questiona = false;
 
 %% constants
 um       = 1e-6;
@@ -14,7 +14,7 @@ ppm      = 1e-6;
 
 %% definition of the nominal AT model
 r.config.lattice_function  = @sirius_lattice;
-r.config.lattice_func_arg  = 'ac10_6';
+r.config.lattice_func_arg  = 'ac10.5';
 %r.config.lattice_function  = 'thering_withids.mat';
 
 
@@ -25,9 +25,10 @@ else
     r.params.the_ring = r.config.lattice_function(r.config.lattice_func_arg);
 end
 
-r.config.nr_machines       = 20;
-r.config.simulate_static  = true;
-r.config.simulate_dynamic = true;
+r.config.nr_machines         = 1;
+r.config.simulate_multipoles = true;
+r.config.simulate_static     = true;
+r.config.simulate_dynamic    = false;
 
 %se verdadeiro, a órbita de referência será uma simulação do processo de
 %bba. Atualmente, pegamos a orbita nos quadrupolos mais proximos ao bpm e
@@ -92,10 +93,10 @@ r.config.static.families.cbend.nrsegs = 2;
 % dinâmico mede a única, verdadeira e absoluta vibraçao do bpm.
 r.config.static.families.bpm.labels = {'BPM'};
 r.config.static.families.bpm.nrsegs = 1;
-r.config.static.families.bpm.sigma_y    = 10 * um * 1;
-r.config.static.families.bpm.sigma_x    = 10 * um * 1;
+r.config.static.families.bpm.sigma_y    = 10 * um * 0;
+r.config.static.families.bpm.sigma_x    = 10 * um * 0;
 
-r.config.static.girder.girder_error_flag = true;
+r.config.static.girder.girder_error_flag = false;
 r.config.static.girder.correlated_errors = false;
 r.config.static.girder.sigma_x     = 100 * um * 1;
 r.config.static.girder.sigma_y     = 100 * um * 1;
@@ -126,6 +127,13 @@ r.params.static.cod_sextupoles_ramp = [0 1];
 r.params.static.cod_svs        = 120:20:280;
 r.params.static.cod_nr_iter    = 3;
 
+%optics
+r.params.static.kbs_idx = findcells(r.params.the_ring, 'K');
+r.params.static.kbs_idx = setdiff(r.params.static.kbs_idx, findcells(r.params.the_ring, 'BendingAngle'));
+r.params.static.optics_correction_flag = false;
+r.params.static.optics_svs     = 180:20:260;
+r.params.static.optics_nr_iter = 2; 
+
 %coupling
 r.params.static.scm_idx = [];
 r.params.static.scm_idx = [r.params.static.scm_idx findcells(r.params.the_ring, 'FamName', 'sd2')];
@@ -134,13 +142,53 @@ r.params.static.coup_svs       = 'all';
 r.params.static.coup_nr_iter   = 3;
 r.params.static.coup_residual  = 0.5 / 100;
 
-%optics
-r.params.static.kbs_idx = findcells(r.params.the_ring, 'K');
-r.params.static.kbs_idx = setdiff(r.params.static.kbs_idx, findcells(r.params.the_ring, 'BendingAngle'));
-r.params.static.optics_correction_flag = false;
-r.params.static.optics_svs     = 180:20:260;
-r.params.static.optics_nr_iter = 2; 
+%tune
+r.params.static.tune_correction_flag = true;
+r.params.static.tune_families         = {'qaf','qbd2','qbf','qbd1','qad'};
+r.params.static.tune_goal            = [46.17987 14.15001];
+r.params.static.tune_max_iter        = 10;
+r.params.static.tune_tolerancia      = 1e-6;
 
+
+%% Multipoles
+r.config.multipoles.cutoff_errors = 2;
+
+
+% famílias dos multipolos
+r.config.multipoles.families.quads.labels = {'qaf','qbd2','qbf','qbd1','qad','qf1','qf2','qf3','qf4'};
+r.config.multipoles.families.quads.nrsegs = ones(1,9);
+r.config.multipoles.families.quads.main_multipole = 2;% positive for normal negative for skew
+r.config.multipoles.families.quads.r0 = 11.7e-3;
+r.config.multipoles.families.sexts.labels = {'sa1','sb1','sd2','sf2','sb2','sd1','sf1','sa2','sd3'};
+r.config.multipoles.families.sexts.nrsegs = ones(1, 9);
+r.config.multipoles.families.sexts.main_multipole = 3;% positive for normal negative for skew
+r.config.multipoles.families.sexts.r0 = 11.7e-3;
+r.config.multipoles.families.bends.labels = {'b1','b2','b3', 'bc'};
+r.config.multipoles.families.bends.nrsegs = [2 2 2 2];
+r.config.multipoles.families.bends.main_multipole = 1;% positive for normal negative for skew
+r.config.multipoles.families.bends.r0 = 11.7e-3;
+
+
+r.config.multipoles.families.quads.sys.order       = [ 3    4     5     6    10 ]; % 1 for dipole
+r.config.multipoles.families.quads.sys.main_values = [3e-8 1e-5 -2e-8 -3e-5 8e-5]; 
+r.config.multipoles.families.quads.sys.skew_values = [0.0  0.0   0.0   0.0  0.0 ];
+r.config.multipoles.families.quads.rms.order       = [ 3   4   5   6   7   8   9   10];
+r.config.multipoles.families.quads.rms.main_values = 0*ones(1,8)*4e-5; 
+r.config.multipoles.families.quads.rms.skew_values = 0*ones(1,8)*1e-5;
+
+r.config.multipoles.families.sexts.sys.order       = [ 9     15 ];
+r.config.multipoles.families.sexts.sys.main_values = [4e-6 -1e-7]; 
+r.config.multipoles.families.sexts.sys.skew_values = [0.0   0.0 ]; 
+r.config.multipoles.families.sexts.rms.order       = [4   5   6   7   8   9   10  11];
+r.config.multipoles.families.sexts.rms.main_values = 0*ones(1,8)*4e-5; 
+r.config.multipoles.families.sexts.rms.skew_values = 0*ones(1,8)*1e-5;
+
+r.config.multipoles.families.bends.sys.order       = [ 3   4   5   6   7 ]; % 1 for dipole
+r.config.multipoles.families.bends.sys.main_values = [-9   3   10 -8   6 ]*1e-5;  
+r.config.multipoles.families.bends.sys.skew_values = [0.0 0.0 0.0 0.0 0.0]; 
+r.config.multipoles.families.bends.rms.order       = [ 3   4   5   6   7   8   9 ];
+r.config.multipoles.families.bends.rms.main_values = 0*ones(1,7)*4e-5;
+r.config.multipoles.families.bends.rms.skew_values = 0*ones(1,7)*1e-5;
 
 %% Dynamic
 

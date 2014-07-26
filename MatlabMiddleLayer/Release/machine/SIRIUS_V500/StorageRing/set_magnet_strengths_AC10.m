@@ -1,14 +1,14 @@
 % set_magnet_strengths_V500_AC10
 % ==============================
 % 2013-04-25 Ximenes
-% retirei os modos ac10_{1,2,3} e alguns resultados antigos do moga dessa
+% retirei os modos ac10.{1,2,3} e alguns resultados antigos do moga dessa
 % versao (v500) do sirius. Para ver ou recurar esses modos antigos, ver
 % sirius_v403. Fernando 2013-11-26
 
 
 %% Antigo Moga0473modif-0512
 % Um pouco de historia: esse modo eh o resultado de duas otimizacoes do
-% MOGA. Primeiro, otimizei usando o ac10_3 como ponto inicial e peguei o
+% MOGA. Primeiro, otimizei usando o ac10.3 como ponto inicial e peguei o
 % resultado 0473. Mas esse resultado tinha uma sintonia vertical muito
 % proxima do inteiro, entao aumentei a sintonia com o OPA e usei o
 % resultado como ponto inicial para outra otimizacao, mas coloquei um
@@ -17,7 +17,7 @@
 % tempo de vida, como a abertura dinamica, quando simulado com o conjunto
 % padrao de erros, no tracy3.
 %
-if strcmpi(mode_version,'AC10_4')
+if strcmpi(mode_version,'AC10.4')
     %%% QUADRUPOLOS
     %  ===========
     
@@ -44,16 +44,16 @@ if strcmpi(mode_version,'AC10_4')
 
 
 %% Antigo Moga1139-2388
-% Um pouco de historia: Rodamos o v403_ac10_4-Moga e obtivemos o resultado 1139.
+% Um pouco de historia: Rodamos o v403_ac10.4-Moga e obtivemos o resultado 1139.
 % Com esse resultado como ponto inicial rodamos o v403_moga1139 e obtivemos o
 % resultado 2388. Quando comparamos os dois com o ensemble de erros no
 % tracy3 optamos pelo 2388.
-elseif strcmpi(mode_version,'AC10_5')
+elseif strcmpi(mode_version,'AC10.5')
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % quando a Liu mudou do 403 para o 500 ela corrigiu a sintonia e esse
-    % passou a ser chamado de ac10_5
+    % passou a ser chamado de ac10.5
     %%% QUADRUPOLOS
     %  ===========
     qaf_strength       =  2.536876;
@@ -107,7 +107,7 @@ elseif strcmpi(mode_version,'AC10_5')
 %     sf2_strength       =  333.7039740852999/2;
 
 
-elseif strcmpi(mode_version,'AC10_6')
+elseif strcmpi(mode_version,'AC10.6')
     
    % Essa rede é um resultado da tentativa de melhorar a injecao com os
    % quatro kicks aumentando a sintonia da maquina. Assim, partindo do 
@@ -140,7 +140,7 @@ elseif strcmpi(mode_version,'AC10_6')
     sf1_strength       =   190.8217; 
     
 
-%moga3seeds - 119_235_320_1149-v500-ac10-6
+%moga3seeds - 119_235_320_1149-v500-ac10.6
 %     %%% QUADRUPOLOS
 %     %  =========== 
 %    
@@ -166,207 +166,14 @@ elseif strcmpi(mode_version,'AC10_6')
 %     sd1_strength       =-154.7093218268305;
 %     sf1_strength       = 188.2260666144867; 
 
-elseif strcmpi(mode_version,'tests')
-%     % possible_change_low2chrom
-%     %     %%% QUADRUPOLOS
-%     %  ===========
-%     qaf_strength       =  2.536876;
-%     qad_strength       = -2.730416;
-%     qbd2_strength      = -3.961194;
-%     qbf_strength       =  3.902838;
-%     qbd1_strength      = -2.966239;
-%     qf1_strength       =  2.367821;
-%     qf2_strength       =  3.354286;
-%     qf3_strength       =  3.080632;
-%     qf4_strength       =  2.707639;
-%     
-% 
-%     %%% SEXTUPOLOS
-%     %  ==========
-%     sa1_strength       =  -70.853154;
-%     sa2_strength       =   30.233062;
-%     sb1_strength       = -120.693260;
-%     sb2_strength       =   76.510022;
-%     sd1_strength       = -134.263630;
-%     sf1_strength       =  176.025605;
-%     sd2_strength       =  -92.401355;
-%     sd3_strength       = -153.186174;
-%     sf2_strength       =  188.453270;
-
-%     % v500_low2chrom-000374
-%     %  QUADRUPOLOS
-%     %  ===========
-%     qaf_strength	= 2.535323544933648;
-%     qad_strength	= -2.720208520212974;
-%     qbd2_strength	= -3.985142434440647;
-%     qbf_strength	= 3.903953072659784;
-%     qbd1_strength	= -2.947567537116373;
-%     qf1_strength	= 2.370479887080239;
-%     qf2_strength	= 3.353402134149985;
-%     qf3_strength	= 3.083598871709936;
-%     qf4_strength	= 2.708587988826911;
-%  
-%     %  SEXTUPOLOS
-%     %  ===========
-%     sa1_strength	= -73.32936335366745;
-%     sa2_strength	= 27.10231020528890;
-%     sb1_strength	= -122.91050064369180;
-%     sb2_strength	= 77.67827003587865;
-%     sd2_strength	= -90.67690286345010;
-%     sd3_strength	= -151.78996602722535;
-%     sf2_strength	= 186.75710214843470;
-%     sd1_strength	= -136.86805653891555;
-%     sf1_strength	= 176.56119196046785;
+elseif strncmpi(mode_version,'tests',5)
     
-%     % v500_low2chrom ==> result374-000126
-%     %  QUADRUPOLOS
-%     %  ===========
-%     qaf_strength	= 2.535495000209817;
-%     qad_strength	= -2.7193057330148;
-%     qbd2_strength	= -3.882559559966547;
-%     qbf_strength	= 3.904067745321214;
-%     qbd1_strength	= -3.011440794252263;
-%     qf1_strength	= 2.342026546824837;
-%     qf2_strength	= 3.371319708869896;
-%     qf3_strength	= 3.08307859819553;
-%     qf4_strength	= 2.696888725343039;
-%  
-%     % SEXTUPOLOS
-%     % ===========
-%     sa1_strength	= -65.01565437570655;
-%     sa2_strength	= 23.077717774231340;
-%     sb1_strength	= -119.94381530211840;
-%     sb2_strength	= 74.7274810943740;
-%     sd2_strength	= -91.85219609738295;
-%     sd3_strength	= -149.40711403352555;
-%     sf2_strength	= 184.9312274832490;
-%     sd1_strength	= -135.71857752420095;
-%     sf1_strength	= 176.66210844537385;
-    
-%     % v500low2chrom ==> result374-000576
-%     %  QUADRUPOLOS
-%     %  ===========
-%     qaf_strength	= 2.534395031688682;
-%     qad_strength	= -2.721101236983065;
-%     qbd2_strength	= -3.984894511698974;
-%     qbf_strength	= 3.904484807845459;
-%     qbd1_strength	= -2.950114153106215;
-%     qf1_strength	= 2.370908579430082;
-%     qf2_strength	= 3.352340727953668;
-%     qf3_strength	= 3.083641897818114;
-%     qf4_strength	= 2.705709499895239;
-%  
-%     %  SEXTUPOLOS
-%     %  ===========
-%     sa1_strength	= -68.15980737240025;
-%     sa2_strength	= 28.022639656853955;
-%     sb1_strength	= -119.55313550745025;
-%     sb2_strength	= 73.61594751989790;
-%     sd2_strength	= -90.7596724997830;
-%     sd3_strength	= -153.22735213618670;
-%     sf2_strength	= 184.62844940272565;
-%     sd1_strength	= -136.55040060758555;
-%     sf1_strength	= 177.93870955797275;
+    [path, ~, ~] = fileparts(mfilename('fullpath'));
+    cur = pwd;
+    cd(fullfile(path,'tests'));
+    eval(mode_version(7:end));
+    cd(cur);
 
-%     % v500_low2chrom ==> result374-000727
-%     %  QUADRUPOLOS
-%     %  ===========
-%     qaf_strength	= 2.531874690220411;
-%     qad_strength	= -2.71937682911773;
-%     qbd2_strength	= -3.985270120751224;
-%     qbf_strength	= 3.906831028498028;
-%     qbd1_strength	= -2.954180735220485;
-%     qf1_strength	= 2.367620757291617;
-%     qf2_strength	= 3.353499176234511;
-%     qf3_strength	= 3.086401577872572;
-%     qf4_strength	= 2.69654138982354;
-%  
-%     %  SEXTUPOLOS
-%     %  ===========
-%     sa1_strength	= -65.50718032527330;
-%     sa2_strength	= 23.343139826913765;
-%     sb1_strength	= -118.46985497733025;
-%     sb2_strength	= 71.0918832640180;
-%     sd2_strength	= -92.05595880599730;
-%     sd3_strength	= -155.08394881437910;
-%     sf2_strength	= 183.28035055373555;
-%     sd1_strength	= -134.91495048325380;
-%     sf1_strength	= 179.37311382140915;
-
-%     % v500_low2chrom ==> result374-000707
-%     %  QUADRUPOLOS
-%     %  ===========
-%     qaf_strength	= 2.534472240515485;
-%     qad_strength	= -2.721414090548598;
-%     qbd2_strength	= -3.98512542211513;
-%     qbf_strength	= 3.901049912748004;
-%     qbd1_strength	= -2.945058137151954;
-%     qf1_strength	= 2.370170526874503;
-%     qf2_strength	= 3.353363399672195;
-%     qf3_strength	= 3.086369877579801;
-%     qf4_strength	= 2.704247795645077;
-%  
-%     %  SEXTUPOLOS
-%     %  ===========
-%     sa1_strength	= -68.51327793373790;
-%     sa2_strength	= 27.416942069197015;
-%     sb1_strength	= -121.03148265682460;
-%     sb2_strength	= 77.791052324395;
-%     sd2_strength	= -92.97466709481545;
-%     sd3_strength	= -157.28324007750095;
-%     sf2_strength	= 185.8073940129020;
-%     sd1_strength	= -132.18612655347955;
-%     sf1_strength	= 177.85858717408585;
-
-%     % v500_low2chrom ==> result374-000759
-%     %  QUADRUPOLOS
-%     %  ===========
-%     qaf_strength	= 2.537849774010354;
-%     qad_strength	= -2.736497894653643;
-%     qbd2_strength	= -3.971287111645283;
-%     qbf_strength	= 3.900806363751602;
-%     qbd1_strength	= -2.957728179491321;
-%     qf1_strength	= 2.368169790408015;
-%     qf2_strength	= 3.355068476306545;
-%     qf3_strength	= 3.072282925268489;
-%     qf4_strength	= 2.720429307031325;
-%  
-%     %  SEXTUPOLOS
-%     %  ===========
-%     sa1_strength	= -67.94166252240520;
-%     sa2_strength	= 24.994553065015540;
-%     sb1_strength	= -119.28112494638690;
-%     sb2_strength	= 76.23750578365145;
-%     sd2_strength	= -90.90818274247175;
-%     sd3_strength	= -150.94108399701885;
-%     sf2_strength	= 184.83176246337810;
-%     sd1_strength	= -137.22229890121485;
-%     sf1_strength	= 177.35616082329025;
-
-    % v500_low2chrom ==> result374-000669
-    %  QUADRUPOLOS
-    %  ===========
-    qaf_strength	= 2.536703689773236;
-    qad_strength	= -2.731732985529366;
-    qbd2_strength	= -3.998343044907757;
-    qbf_strength	= 3.90247430901731;
-    qbd1_strength	= -2.940296901822344;
-    qf1_strength	= 2.371602946556242;
-    qf2_strength	= 3.352571658350401;
-    qf3_strength	= 3.077901988872876;
-    qf4_strength	= 2.717054587653758;
- 
-    %  SEXTUPOLOS
-    %  ===========
-    sa1_strength	= -65.13575347227855;
-    sa2_strength	= 28.164420691983880;
-    sb1_strength	= -120.18164070630280;
-    sb2_strength	= 72.44736944635555;
-    sd2_strength	= -91.34202480486335;
-    sd3_strength	= -152.40108211083665;
-    sf2_strength	= 184.94654213081460;
-    sd1_strength	= -136.48278130859775;
-    sf1_strength	= 177.7810791401640;
 
 %% Testes de otimizacao de injecao 02/10/2013
 % Apos Montar o script que simula a injecao no anel, notamos que estavamos

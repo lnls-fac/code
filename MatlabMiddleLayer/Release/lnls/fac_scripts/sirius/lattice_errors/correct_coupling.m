@@ -12,7 +12,12 @@ end
 
 for i=selection
         THERING = machine{i};
-        [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling;
+        Ratio=0;
+        Tilt = 0;
+        try
+            [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling;
+        catch
+        end
         Ratio_lnls = mean(lnls_calc_emittance_coupling(machine{i}));
         init_fm = calc_residue_coupling(THERING, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
         %init_fm = init_fm(r.params.ele_idx);
@@ -36,7 +41,12 @@ for i=selection
         skewstr    = best_skewstr;
         THERING = machine{i};
         Ratio2_lnls = mean(lnls_calc_emittance_coupling(machine{i}));
-        [Tilt2, Eta2, EpsX2, EpsY2, Ratio2, ENV2, DP2, DL2, sigmas2] = calccoupling;
+        Ratio2=0;
+        Tilt2 = 0;
+        try
+            [Tilt2, Eta2, EpsX2, EpsY2, Ratio2, ENV2, DP2, DL2, sigmas2] = calccoupling;
+        catch
+        end
         %fprintf('%03i| skewstr[1/m^2] %+6.4f(max) %6.4f(std) | coup %8.5f (std) | tilt[deg] %5.2f -> %5.2f (std), k[%%] %5.2f -> %5.2f (std)\n', i, max(abs(skewstr)), std(skewstr), best_fm, std(Tilt)*180/pi, std(Tilt2)*180/pi, 100*Ratio, 100*Ratio2);
         fprintf('%03i| skewstr[1/m^2] %+6.4f(max) | chi2: %8.5f -> %8.5f | tilt[deg]: %8.5f -> %8.5f | coup[%%]: %8.5f -> %8.5f | coup_lnls[%%]: %8.5f -> %8.5f\n', i, max(abs(skewstr)), init_fm, best_fm, std(Tilt)*180/pi, std(Tilt2)*180/pi,  100*Ratio, 100*Ratio2,  100*Ratio_lnls, 100*Ratio2_lnls);     
 end
