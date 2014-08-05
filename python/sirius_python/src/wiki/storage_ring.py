@@ -9,31 +9,19 @@ def mark_math(name):
 
 '''
 
-sr_nr_electrons        = {value = (sr_ebeam_current.value/1e3) * (sr_rev_period.value/1e6) / electron_charge, unit = ''}
-sr_bend_low_field_rho  = {value = sr_ebeam_brho.value / sr_mag_bend_low_field.value,  unit = 'm'}
-sr_bend_high_field_rho = {value = sr_ebeam_brho.value / sr_mag_bend_high_field.value, unit = 'm'}
-sr_bend_low_field_critical_energy  = {value = calc_critical_energy(sr_ebeam_energy.value, sr_mag_bend_low_field.value),  unit = 'keV'}
-sr_bend_high_field_critical_energy = {value = calc_critical_energy(sr_ebeam_energy.value, sr_mag_bend_high_field.value), unit = 'keV'}
-
 -- equilibrium parameters with dipoles only --
 
 sr_equil_Jx_dipoles = {value = 1 - sr_equil_I4_dipoles.value/sr_equil_I2_dipoles.value, unit = ''}
 sr_equil_Jy_dipoles = {value = 1.0, unit = ''}
 sr_equil_Js_dipoles = {value = 4.0 - sr_equil_Jx_dipoles.value - sr_equil_Jy_dipoles.value, unit = ''}
-sr_equil_U0_dipoles = {value = calc_U0(sr_ebeam_energy.value, sr_equil_I2_dipoles.value), unit = 'keV'}
-sr_equil_overvoltage_dipoles = {value = (1e6*sr_rf_total_voltage.value)/(sr_equil_U0_dipoles.value*1e3), unit = ''}
-sr_equil_sync_phase_dipoles = {value = calc_sync_phase(sr_equil_overvoltage_dipoles.value), unit = 'deg'}
 sr_equil_alpha1_dipoles = {value = sr_equil_I1_dipoles.value / sr_latt_circumference.value, unit = ''}
 sr_equil_rf_energy_acceptance_dipoles = {value = calc_rf_energy_acceptance(sr_equil_overvoltage_dipoles.value, sr_ebeam_energy.value, sr_equil_U0_dipoles.value, sr_rf_harmonic_number.value, sr_equil_alpha1_dipoles.value), unit = '%'}
 sr_equil_nat_emitt_dipoles = {value = calc_natural_emittance(sr_ebeam_gamma.value, sr_equil_Jx_dipoles.value, sr_equil_I2_dipoles.value, sr_equil_I5_dipoles.value), unit = 'nm.rad'}
 sr_equil_nat_sigmae_dipoles = {value = calc_energy_spread(sr_ebeam_gamma.value, sr_equil_I2_dipoles.value, sr_equil_I3_dipoles.value, sr_equil_I4_dipoles.value), unit = '%'}
 
-
-
-
 -- radiation integrals for IDs --
-sr_equil_U0_IDs = {value = calc_U0(sr_ebeam_energy.value, sr_equil_I2_IDs.value), unit = 'keV'}
 
+sr_equil_U0_IDs = {value = calc_U0(sr_ebeam_energy.value, sr_equil_I2_IDs.value), unit = 'keV'}
 sr_equil_Jx = {value = 1 - sr_equil_I4.value/sr_equil_I2.value, unit = ''}
 sr_equil_Jy = {value = 1.0, unit = ''}
 sr_equil_Js = {value = 4.0 - sr_equil_Jx.value - sr_equil_Jy.value, unit = ''}
@@ -53,18 +41,6 @@ sr_optics_tune_s_freq = {value = 1000*sr_rev_frequency.value * (sr_optics_tune_s
 
 **************************************************************************************************************
 
-function p.number_of_electrons                        (frame) return get_parameter(sr_nr_electrons,frame.args) end
-function p.harmonic_number                            (frame) return get_parameter(sr_rf_harmonic_number,frame.args) end
-function p.dipole_low_magnetic_field                  (frame) return get_parameter(sr_mag_bend_low_field,frame.args) end
-function p.dipole_high_magnetic_field                 (frame) return get_parameter(sr_mag_bend_high_field,frame.args) end
-function p.dipole_low_magnetic_field_bending_radius   (frame) return get_parameter(sr_bend_low_field_rho,frame.args) end
-function p.dipole_high_magnetic_field_bending_radius  (frame) return get_parameter(sr_bend_high_field_rho,frame.args) end
-function p.dipole_low_magnetic_field_critical_energy  (frame) return get_parameter(sr_bend_low_field_critical_energy,frame.args) end
-function p.dipole_high_magnetic_field_critical_energy (frame) return get_parameter(sr_bend_high_field_critical_energy,frame.args) end
-
-function p.energy_loss_per_turn_from_dipoles       (frame) return get_parameter(sr_equil_U0_dipoles,frame.args) end
-function p.overvoltage_from_dipoles                (frame) return get_parameter(sr_equil_overvoltage_dipoles,frame.args) end
-function p.synchronous_phase_from_dipoles          (frame) return get_parameter(sr_equil_sync_phase_dipoles,frame.args) end
 function p.linear_momentum_compaction_from_dipoles (frame) return get_parameter(sr_equil_alpha1_dipoles,frame.args) end
 function p.rf_energy_acceptance_from_dipoles       (frame) return get_parameter(sr_equil_rf_energy_acceptance_dipoles,frame.args) end
 function p.horizontal_damping_partition_number_from_dipoles   (frame) return get_parameter(sr_equil_Jx_dipoles,frame.args) end
@@ -73,12 +49,6 @@ function p.longitudinal_damping_partition_number_from_dipoles (frame) return get
 function p.natural_emittance_from_dipoles                     (frame) return get_parameter(sr_equil_nat_emitt_dipoles,frame.args) end
 function p.natural_energy_spread_from_dipoles                 (frame) return get_parameter(sr_equil_nat_sigmae_dipoles,frame.args) end
 
-function p.radiation_integral_I1_from_IDs (frame) return get_parameter(sr_equil_I1_IDs,frame.args) end
-function p.radiation_integral_I2_from_IDs (frame) return get_parameter(sr_equil_I2_IDs,frame.args) end
-function p.radiation_integral_I3_from_IDs (frame) return get_parameter(sr_equil_I3_IDs,frame.args) end
-function p.radiation_integral_I4_from_IDs (frame) return get_parameter(sr_equil_I4_IDs,frame.args) end
-function p.radiation_integral_I5_from_IDs (frame) return get_parameter(sr_equil_I5_IDs,frame.args) end
-function p.radiation_integral_I6_from_IDs (frame) return get_parameter(sr_equil_I6_IDs,frame.args) end
 function p.energy_loss_per_turn_from_IDs  (frame) return get_parameter(sr_equil_U0_IDs,frame.args) end
 
 function p.energy_loss_per_turn       (frame) return get_parameter(sr_equil_U0,frame.args) end
@@ -92,10 +62,6 @@ function p.longitudinal_damping_partition_number (frame) return get_parameter(sr
 function p.natural_emittance                     (frame) return get_parameter(sr_equil_nat_emitt,frame.args) end
 function p.natural_energy_spread                 (frame) return get_parameter(sr_equil_nat_sigmae,frame.args) end
 
-function p.optics_mode                     (frame) return get_parameter(sr_optics_mode,frame.args) end
-function p.horizontal_tune                 (frame) return get_parameter(sr_optics_tune_x,frame.args) end
-function p.vertical_tune                   (frame) return get_parameter(sr_optics_tune_y,frame.args) end
-function p.longitudinal_tune               (frame) return get_parameter(sr_optics_tune_s,frame.args) end
 function p.horizontal_betatron_frequency   (frame) return get_parameter(sr_optics_tune_x_freq,frame.args) end
 function p.vertical_betatron_frequency     (frame) return get_parameter(sr_optics_tune_y_freq,frame.args) end
 function p.longitudinal_betatron_frequency (frame) return get_parameter(sr_optics_tune_s_freq,frame.args) end
@@ -122,6 +88,8 @@ class _P(object):
     revolution_period = optics.revolution_period(lattice_circumference, ebeam_velocity) 
     revolution_frequency = optics.revolution_frequency(revolution_period)
     rf_frequency = optics.rf_frequency(revolution_frequency, harmonic_number)
+    
+    number_of_electrons = optics.number_of_electrons(ebeam_current, revolution_period)
 
     number_of_long_straight_sections  = lattice_symmetry
     number_of_short_straight_sections = lattice_symmetry
@@ -136,6 +104,10 @@ class _P(object):
     hardedge_length_of_BC_dipoles =  0.125394 #[m]
     dipole_low_magnetic_field     =  0.583502298783241 #[T]
     dipole_high_magnetic_field    =  1.949975668803368 #[T]
+    dipole_low_magnetic_field_bending_radius = optics.rho(ebeam_magnetic_rigidity, dipole_low_magnetic_field)
+    dipole_high_magnetic_field_bending_radius = optics.rho(ebeam_magnetic_rigidity, dipole_high_magnetic_field)
+    dipole_low_magnetic_field_critical_energy = optics.critical_energy(ebeam_gamma_factor, dipole_low_magnetic_field_bending_radius)
+    dipole_high_magnetic_field_critical_energy = optics.critical_energy(ebeam_gamma_factor, dipole_high_magnetic_field_bending_radius)
     radiation_integral_I1_from_dipoles =  0.090315779996644     #[m]
     radiation_integral_I2_from_dipoles =  0.433104068989975     #[1/m]
     radiation_integral_I3_from_dipoles =  0.038257877157466     #[1/m^2]
@@ -159,6 +131,10 @@ class _P(object):
     horizontal_tune   = 46.179867828110417
     vertical_tune     = 14.149994739104255
     longitudinal_tune = 0.004421565111775
+    
+    energy_loss_per_turn_from_dipoles = optics.U0(ebeam_energy, radiation_integral_I2_from_dipoles)
+    overvoltage_from_dipoles = optics.overvoltage(total_RF_voltage, energy_loss_per_turn_from_dipoles)
+    synchronous_phase_from_dipoles = optics.sync_phase(overvoltage_from_dipoles)
 
 
 label = 'Storage ring'
@@ -172,7 +148,8 @@ parameter_list = [
     symbol   = mark_math(r'E'),
     units    = 'GeV', 
     revision = '2014-08-04',
-    deps     = []
+    deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -182,7 +159,8 @@ parameter_list = [
     symbol   = mark_math(r'\gamma'),
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Storage ring ebeam energy']
+    deps     = ['Storage ring ebeam energy'],
+    obs      = '',
   ),
 
   Parameter(
@@ -192,7 +170,8 @@ parameter_list = [
     symbol   = mark_math(r'\beta'),
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Storage ring ebeam gamma factor']
+    deps     = ['Storage ring ebeam gamma factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -202,7 +181,8 @@ parameter_list = [
     symbol   = mark_math(r'v'),
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Storage ring ebeam beta factor']
+    deps     = ['Storage ring ebeam beta factor'],
+    obs      = '',
   ),
                   
   Parameter(
@@ -212,7 +192,8 @@ parameter_list = [
     symbol   = mark_math(r'(B\rho) = \frac{p}{ec} = \frac{E}{ec^2}'),
     units    = 'T.m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring ebeam energy']
+    deps     = ['Storage ring ebeam energy'],
+    obs      = '',
   ),
                   
   Parameter(
@@ -222,7 +203,8 @@ parameter_list = [
     symbol   = mark_math(r'I'),
     units    = 'mA', 
     revision = '2014-08-01',
-    deps     = []
+    deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -233,6 +215,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -243,6 +226,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(
@@ -253,6 +237,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(
@@ -263,6 +248,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(
@@ -273,6 +259,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(
@@ -283,6 +270,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(
@@ -293,6 +281,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(
@@ -303,6 +292,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
                   
   Parameter(name = 'Storage ring total RF voltage', 
@@ -312,6 +302,7 @@ parameter_list = [
     units    = 'MV', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),              
   
   Parameter(name = 'Storage ring revolution period', 
@@ -321,6 +312,7 @@ parameter_list = [
     units    = unicode('μs', encoding='utf-8'), 
     revision = '2014-08-01',
     deps     = ['Storage ring circumference', 'Storage ring ebeam velocity'],
+    obs      = '',
   ),
  
   Parameter(name = 'Storage ring revolution frequency', 
@@ -330,6 +322,7 @@ parameter_list = [
     units    = u'MHz', 
     revision = '2014-08-01',
     deps     = ['Storage ring revolution period'],
+    obs      = '',
   ),
 
   Parameter(name = 'Storage ring RF frequency', 
@@ -339,6 +332,17 @@ parameter_list = [
     units    = u'MHz', 
     revision = '2014-08-01',
     deps     = ['Storage ring revolution frequency', 'Storage ring harmonic number'],
+    obs      = '',
+  ),
+
+  Parameter(name = 'Storage ring number of electrons', 
+    group    = 'FAC',
+    value    = _P.number_of_electrons, 
+    symbol   = mark_math(r'N'),
+    units    = u'', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring ebeam current', 'Storage ring revolution period'],
+    obs      = '',
   ),
  
   Parameter(name = 'Storage ring number of B1 dipoles', 
@@ -348,6 +352,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ), 
             
   Parameter(name = 'Storage ring number of B2 dipoles', 
@@ -357,6 +362,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring number of B3 dipoles', 
@@ -366,6 +372,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ), 
          
   Parameter(name = 'Storage ring number of BC dipoles', 
@@ -375,6 +382,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ), 
                            
   Parameter(name = 'Storage ring hardedge length of B1 dipoles', 
@@ -384,6 +392,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),  
                 
   Parameter(name = 'Storage ring hardedge length of B2 dipoles', 
@@ -393,6 +402,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),  
                   
   Parameter(name = 'Storage ring hardedge length of B3 dipoles', 
@@ -402,6 +412,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),  
                   
   Parameter(name = 'Storage ring hardedge length of BC dipoles', 
@@ -411,6 +422,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),  
                   
   Parameter(name = 'Storage ring dipole low magnetic field', 
@@ -420,6 +432,7 @@ parameter_list = [
     units    = 'T', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ), 
                 
   Parameter(name = 'Storage ring dipole high magnetic field', 
@@ -429,7 +442,49 @@ parameter_list = [
     units    = 'T', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ), 
+                  
+  Parameter(name = 'Storage ring dipole low magnetic field bending radius', 
+    group    = 'FAC',
+    value    = _P.dipole_low_magnetic_field_bending_radius,
+    symbol   = mark_math(r'\rho_{low} = \frac{ec/p}{B_{low}} = \frac{(B\rho)}{B_{low}}'),
+    units    = 'm', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring dipole low magnetic field'],
+    obs      = '',
+  ), 
+                
+  Parameter(name = 'Storage ring dipole high magnetic field bending radius', 
+    group    = 'FAC',
+    value    = _P.dipole_high_magnetic_field_bending_radius,
+    symbol   = mark_math(r'\rho_{high} = \frac{ec/p}{B_{high}} = \frac{(B\rho)}{B_{high}}'),
+    units    = 'm', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring dipole high magnetic field'],
+    obs      = '',
+  ), 
+  
+  Parameter(name = 'Storage ring dipole low magnetic field critical energy', 
+    group    = 'FAC',
+    value    = _P.dipole_low_magnetic_field_critical_energy,
+    symbol   = mark_math(r'\epsilon_{c,low} = \frac{3}{2} \hbar c \frac{\gamma^3}{\rho_{low}}'),
+    units    = 'keV', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring ebeam gamma factor', 'Storage ring dipole low magnetic field bending radius'],
+    obs      = '',
+  ), 
+                
+  Parameter(name = 'Storage ring dipole high magnetic field critical energy', 
+    group    = 'FAC',
+    value    = _P.dipole_high_magnetic_field_critical_energy,
+    symbol   = mark_math(r'\epsilon_{c,high} = \frac{3}{2} \hbar c \frac{\gamma^3}{\rho_{high}}'),
+    units    = 'keV', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring ebeam gamma factor', 'Storage ring dipole high magnetic field bending radius'],
+    obs      = '',
+  ), 
+                  
                   
   Parameter(name = 'Storage ring radiation integral I1 from dipoles', 
     group    = 'FAC',
@@ -437,7 +492,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{1,DIP} = \oint{\frac{\eta_x}{\rho_x} ds}'),
     units    = 'm', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring radiation integral I2 from dipoles', 
@@ -446,7 +502,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{2,DIP} = \oint{\frac{1}{\rho_x^2} ds}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version'],
+    obs      = '',
   ), 
    
   Parameter(name = 'Storage ring radiation integral I3 from dipoles', 
@@ -455,7 +512,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{3,DIP} = \oint{\frac{1}{|\rho_x|^3} ds}'),
     units    = '1/m^2', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version'],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring radiation integral I4 from dipoles', 
@@ -464,7 +522,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{4,DIP} = \frac{\eta_x(s_0) \tan \theta(s_0)}{\rho_x^2} + \oint{\frac{\eta_x}{\rho_x^3} \left(1 + 2 \rho_x^2 k\right) ds} + \frac{\eta_x(s_1) \tan \theta(s_1)}{\rho_x^2}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version'],
+    obs      = '',
   ),   
                   
   Parameter(name = 'Storage ring radiation integral I5 from dipoles', 
@@ -473,7 +532,7 @@ parameter_list = [
     symbol   = mark_math(r'I_{5,DIP} = \oint{\frac{H_x}{|\rho_x|^3} ds}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
     obs      = r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>",
   ),  
                   
@@ -483,7 +542,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{6,DIP} = \oint{k^2 \eta_x^2 ds}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ),            
   
   Parameter(name = 'Storage ring radiation integral I1 from IDs', 
@@ -492,7 +552,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{1,IDs} = \oint{\frac{\eta_x}{\rho_x} ds}'),
     units    = 'm', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring radiation integral I2 from IDs', 
@@ -501,7 +562,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{2,IDs} = \oint{\frac{1}{\rho_x^2} ds}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version'],
+    obs      = '',
   ), 
    
   Parameter(name = 'Storage ring radiation integral I3 from IDs', 
@@ -510,7 +572,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{3,IDs} = \oint{\frac{1}{|\rho_x|^3} ds}'),
     units    = '1/m^2', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version'],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring radiation integral I4 from IDs', 
@@ -519,7 +582,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{4,IDs} = \frac{\eta_x(s_0) \tan \theta(s_0)}{\rho_x^2} + \oint{\frac{\eta_x}{\rho_x^3} \left(1 + 2 \rho_x^2 k\right) ds} + \frac{\eta_x(s_1) \tan \theta(s_1)}{\rho_x^2}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version'],
+    obs      = '',
   ),   
                   
   Parameter(name = 'Storage ring radiation integral I5 from IDs', 
@@ -528,7 +592,7 @@ parameter_list = [
     symbol   = mark_math(r'I_{5,IDs} = \oint{\frac{H_x}{|\rho_x|^3} ds}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
     obs      = r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>",
   ),  
                   
@@ -538,7 +602,8 @@ parameter_list = [
     symbol   = mark_math(r'I_{6,IDs} = \oint{k^2 \eta_x^2 ds}'),
     units    = '1/m', 
     revision = '2014-08-01',
-    deps     = ['Storage ring magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    deps     = ['Storage ring ebeam magnetic rigidity', 'Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ),                 
   
   Parameter(name = 'Storage ring radiation integral I1', 
@@ -548,6 +613,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I1 from dipoles', 'Storage ring radiation integral I1 from IDs'],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring radiation integral I2', 
@@ -557,6 +623,7 @@ parameter_list = [
     units    = '1/m', 
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I2 from dipoles', 'Storage ring radiation integral I2 from IDs'],
+    obs      = '',
   ), 
    
   Parameter(name = 'Storage ring radiation integral I3', 
@@ -566,6 +633,7 @@ parameter_list = [
     units    = '1/m^2', 
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I3 from dipoles', 'Storage ring radiation integral I3 from IDs'],
+    obs      = '',
   ), 
                   
   Parameter(name = 'Storage ring radiation integral I4', 
@@ -575,6 +643,7 @@ parameter_list = [
     units    = '1/m', 
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I4 from dipoles', 'Storage ring radiation integral I4 from IDs'],
+    obs      = '',
   ),   
                   
   Parameter(name = 'Storage ring radiation integral I5', 
@@ -594,6 +663,7 @@ parameter_list = [
     units    = '1/m', 
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I6 from dipoles', 'Storage ring radiation integral I6 from IDs'],
+    obs      = '',
   ),   
    
   Parameter(name = 'Storage ring optics mode', 
@@ -603,6 +673,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
   
   Parameter(name = 'Storage ring horizontal tune', 
@@ -612,6 +683,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ),    
                 
   Parameter(name = 'Storage ring vertical tune', 
@@ -621,6 +693,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ),  
                   
   Parameter(name = 'Storage ring longitudinal tune', 
@@ -630,6 +703,137 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version', 'Storage ring optics mode'],
+    obs      = '',
   ),                            
-    
+  
+  Parameter(name = 'Storage ring energy loss per turn from dipoles', 
+    group    = 'FAC',
+    value    = _P.energy_loss_per_turn_from_dipoles,
+    symbol   = mark_math(r'U_{0,DIP} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_{2,DIP}'),
+    units    = 'keV', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring ebeam energy', 'Storage ring radiation integral I2 from dipoles'],
+    obs      = '',
+  ),                            
+  
+  Parameter(name = 'Storage ring overvoltage from dipoles', 
+    group    = 'FAC',
+    value    = _P.overvoltage_from_dipoles,
+    symbol   = mark_math(r'q_{DIP} = \frac{eV_{RF}}{U_{0,DIP}}'),
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring total RF voltage', 'Storage ring energy loss per turn from dipoles'],
+    obs      = '',
+  ),                            
+  
+  Parameter(name = 'Storage ring synchronous phase from dipoles', 
+    group    = 'FAC',
+    value    = _P.synchronous_phase_from_dipoles, 
+    symbol   = mark_math(r'\phi_0 = \pi - \arcsin\left(\frac{1}{q_{DIP}}\right)'),
+    units    = unicode('°', encoding='utf-8'),
+    revision = '2014-08-01',
+    deps     = ['Storage ring overvoltage from dipoles'],
+    obs      = '',
+  ),
+                            
+  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+#                            
+#  
+#  Parameter(name = 'Storage ring ', 
+#    group    = 'FAC',
+#    value    = _P., 
+#    symbol   = mark_math(r''),
+#    units    = '', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ),
+
+
 ]

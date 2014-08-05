@@ -20,14 +20,13 @@ def brho(energy, beta):
     '''Magnetic rigidity [T.m] from ebeam energy [GeV] and beta factor''' 
     return beta * (energy * 1e9) / const.light_speed
 
-def critical_energy(energy, field):
-    '''Critical energy [keV] from ebeam energy [GeV] and magnetic field [T]''' 
-    gamma = gamma(energy)
-    beta  = beta(gamma)
-    brho  = brho(energy, beta)
-    rho   = brho / field 
-    cenergy = (3 * const.reduced_planck_constant * const.light_speed * math.pow(gamma, 3)/ (2.0 * rho)) / 1000
-    return cenergy
+def rho(brho, field):
+    '''Bending radius [m] from magnetic rigidity [T.m]'''
+    return brho / field
+
+def critical_energy(gamma, rho):
+    '''Critical energy [keV] from ebeam gamma factor and bending radius [m]'''
+    return (3 * const.reduced_planck_constant * const.light_speed * math.pow(gamma, 3)/ (2.0 * rho)) / 1000
 
 def U0(energy, I2):
     '''Energy loss U0 [keV] from ebeam energy [GeV] and I2[1/m]'''
@@ -35,7 +34,7 @@ def U0(energy, I2):
 
 def sync_phase(q):
     '''Synchronous phase [deg] from overvoltage'''
-    return 180.0 - (180.0/math.pi) * math.asin(1.0/q)
+    return 180.0 - math.degrees(math.asin(1.0/q))
 
 def rf_energy_acceptance(q, energy, U0, h, alpha):
     '''RF energy acceptance [%] from overvoltage, ebeam energy [GeV], energy loss U0 per turn [keV], 
@@ -67,3 +66,11 @@ def revolution_frequency(revolution_period):
 def rf_frequency(revolution_frequency, harmonic_number):
     '''RF frequency [MHz] from revolution frequency [MHz] and harmonic number'''
     return revolution_frequency * harmonic_number
+
+def number_of_electrons(current, revolution_period):
+    '''Number of electrons from beam current [mA] and revolution period [μs]'''
+    return (current/1e3) * (revolution_period/1e6) / const.electron_charge
+
+def overvoltage(rf_voltage, U0):
+    '''Overvoltage from RF voltage [MV] and energy loss U0 per turn [keV]'''
+    return 1e6*rf_voltage / (1e3*U0)

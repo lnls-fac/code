@@ -50,4 +50,4 @@ def generate_parameter_pages(parameters):
     
 #check_deps(sirius_sr)
 generate_parameter_pages(storage_ring.parameter_list)
-#generate_parameter_name_list_page(storage_ring.label, storage_ring.parameter_list)
+generate_parameter_name_list_page(storage_ring.label, storage_ring.parameter_list)
