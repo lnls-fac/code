@@ -5,7 +5,6 @@ from parameter import Parameter
 
 '''
 
-sr_rev_period     = {value = 1.0e6 * sr_latt_circumference.value / sr_ebeam_velocity.value, unit = 'mus'} 
 sr_rev_frequency  = {value = 1.0/sr_rev_period.value, unit = 'MHz'}
 sr_rf_frequency   = {value = sr_rev_frequency.value * sr_rf_harmonic_number.value, unit = 'MHz'}
 
@@ -51,35 +50,11 @@ sr_optics_tune_x_freq = {value = 1000*sr_rev_frequency.value * (sr_optics_tune_x
 sr_optics_tune_y_freq = {value = 1000*sr_rev_frequency.value * (sr_optics_tune_y.value - math.floor(sr_optics_tune_y.value)), unit = 'kHz'}
 sr_optics_tune_s_freq = {value = 1000*sr_rev_frequency.value * (sr_optics_tune_s.value - math.floor(sr_optics_tune_s.value)), unit = 'kHz'}
 
+**************************************************************************************************************
 
-function p.ebeam_energy            (frame) return get_parameter(sr_ebeam_energy,frame.args) end
-function p.ebeam_gamma_factor      (frame) return get_parameter(sr_ebeam_gamma,frame.args) end
-function p.ebeam_beta_factor       (frame) return get_parameter(sr_ebeam_beta,frame.args) end
-function p.ebeam_velocity          (frame) return get_parameter(sr_ebeam_velocity,frame.args) end
-function p.ebeam_magnetic_rigidity (frame) return get_parameter(sr_ebeam_brho,frame.args) end
-function p.ebeam_current           (frame) return get_parameter(sr_ebeam_current,frame.args) end
-
-function p.lattice_version                   (frame) return get_parameter(sr_latt_version,frame.args) end
-function p.lattice_symmetry                  (frame) return get_parameter(sr_latt_symmetry,frame.args) end
-function p.circumference                     (frame) return get_parameter(sr_latt_circumference,frame.args) end
-function p.number_of_long_straight_sections  (frame) return get_parameter(sr_latt_nr_lss,frame.args) end
-function p.number_of_short_straight_sections (frame) return get_parameter(sr_latt_nr_sss,frame.args) end
-function p.length_of_long_straight_sections  (frame) return get_parameter(sr_latt_length_lss,frame.args) end
-function p.length_of_short_straight_sections (frame) return get_parameter(sr_latt_length_sss,frame.args) end
-function p.number_of_B1_dipoles              (frame) return get_parameter(sr_latt_nr_bends_b1,frame.args) end
-function p.number_of_B2_dipoles              (frame) return get_parameter(sr_latt_nr_bends_b2,frame.args) end
-function p.number_of_B3_dipoles              (frame) return get_parameter(sr_latt_nr_bends_b3,frame.args) end
-function p.number_of_BC_dipoles              (frame) return get_parameter(sr_latt_nr_bends_bc,frame.args) end
-function p.hardedge_length_of_B1_dipoles     (frame) return get_parameter(sr_latt_he_len_bends_b1,frame.args) end
-function p.hardedge_length_of_B2_dipoles     (frame) return get_parameter(sr_latt_he_len_bends_b2,frame.args) end
-function p.hardedge_length_of_B3_dipoles     (frame) return get_parameter(sr_latt_he_len_bends_b3,frame.args) end
-function p.hardedge_length_of_BC_dipoles     (frame) return get_parameter(sr_latt_he_len_bends_bc,frame.args) end
-
-function p.revolution_period                          (frame) return get_parameter(sr_rev_period,frame.args) end
 function p.revolution_frequency                       (frame) return get_parameter(sr_rev_frequency,frame.args) end
 function p.number_of_electrons                        (frame) return get_parameter(sr_nr_electrons,frame.args) end
 function p.harmonic_number                            (frame) return get_parameter(sr_rf_harmonic_number,frame.args) end
-function p.total_rf_voltage                           (frame) return get_parameter(sr_rf_total_voltage,frame.args) end
 function p.rf_frequency                               (frame) return get_parameter(sr_rf_frequency,frame.args) end
 function p.dipole_low_magnetic_field                  (frame) return get_parameter(sr_mag_bend_low_field,frame.args) end
 function p.dipole_high_magnetic_field                 (frame) return get_parameter(sr_mag_bend_high_field,frame.args) end
@@ -88,12 +63,6 @@ function p.dipole_high_magnetic_field_bending_radius  (frame) return get_paramet
 function p.dipole_low_magnetic_field_critical_energy  (frame) return get_parameter(sr_bend_low_field_critical_energy,frame.args) end
 function p.dipole_high_magnetic_field_critical_energy (frame) return get_parameter(sr_bend_high_field_critical_energy,frame.args) end
 
-function p.radiation_integral_I1_from_dipoles      (frame) return get_parameter(sr_equil_I1_dipoles,frame.args) end
-function p.radiation_integral_I2_from_dipoles      (frame) return get_parameter(sr_equil_I2_dipoles,frame.args) end
-function p.radiation_integral_I3_from_dipoles      (frame) return get_parameter(sr_equil_I3_dipoles,frame.args) end
-function p.radiation_integral_I4_from_dipoles      (frame) return get_parameter(sr_equil_I4_dipoles,frame.args) end
-function p.radiation_integral_I5_from_dipoles      (frame) return get_parameter(sr_equil_I5_dipoles,frame.args) end
-function p.radiation_integral_I6_from_dipoles      (frame) return get_parameter(sr_equil_I6_dipoles,frame.args) end
 function p.energy_loss_per_turn_from_dipoles       (frame) return get_parameter(sr_equil_U0_dipoles,frame.args) end
 function p.overvoltage_from_dipoles                (frame) return get_parameter(sr_equil_overvoltage_dipoles,frame.args) end
 function p.synchronous_phase_from_dipoles          (frame) return get_parameter(sr_equil_sync_phase_dipoles,frame.args) end
@@ -113,12 +82,6 @@ function p.radiation_integral_I5_from_IDs (frame) return get_parameter(sr_equil_
 function p.radiation_integral_I6_from_IDs (frame) return get_parameter(sr_equil_I6_IDs,frame.args) end
 function p.energy_loss_per_turn_from_IDs  (frame) return get_parameter(sr_equil_U0_IDs,frame.args) end
 
-function p.radiation_integral_I1      (frame) return get_parameter(sr_equil_I1,frame.args) end
-function p.radiation_integral_I2      (frame) return get_parameter(sr_equil_I2,frame.args) end
-function p.radiation_integral_I3      (frame) return get_parameter(sr_equil_I3,frame.args) end
-function p.radiation_integral_I4      (frame) return get_parameter(sr_equil_I4,frame.args) end
-function p.radiation_integral_I5      (frame) return get_parameter(sr_equil_I5,frame.args) end
-function p.radiation_integral_I6      (frame) return get_parameter(sr_equil_I6,frame.args) end
 function p.energy_loss_per_turn       (frame) return get_parameter(sr_equil_U0,frame.args) end
 function p.overvoltage                (frame) return get_parameter(sr_equil_overvoltage,frame.args) end
 function p.synchronous_phase          (frame) return get_parameter(sr_equil_sync_phase,frame.args) end
@@ -157,6 +120,9 @@ class _P(object):
     harmonic_number                   = 864
     total_RF_voltage                  = 2.7 #[MV]
     
+    revolution_period = optics.revolution_period(lattice_circumference, ebeam_velocity) 
+    revolution_frequency = optics.revolution_frequency(revolution_period)
+
     number_of_long_straight_sections  = lattice_symmetry
     number_of_short_straight_sections = lattice_symmetry
     number_of_B1_dipoles              = 4 * lattice_symmetry
@@ -347,6 +313,15 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = [],
   ),              
+  
+  Parameter(name = 'Storage ring revolution period', 
+    group    = 'FAC',
+    value    = _P.revolution_period, 
+    symbol   = '<math>T_{rev}</math>',
+    units    = u'μs', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring circumference', 'Storage ring ebeam velocity'],
+  ),
   
   Parameter(name = 'Storage ring number of B1 dipoles', 
     group    = 'FAC',
@@ -636,5 +611,4 @@ parameter_list = [
     deps     = ['Storage ring lattice version', 'Storage ring optics mode'],
   ),                            
     
-
 ]

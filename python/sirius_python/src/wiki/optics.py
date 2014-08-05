@@ -28,7 +28,6 @@ def critical_energy(energy, field):
     cenergy = (3 * const.reduced_planck_constant * const.light_speed * math.pow(gamma, 3)/ (2.0 * rho)) / 1000
     return cenergy
 
-
 def U0(energy, I2):
     '''Energy loss U0 [keV] from ebeam energy [GeV] and I2[1/m]'''
     return 1e6 * const.rad_cgamma * math.pow(energy, 4) * I2 / 2.0 / math.pi
@@ -56,3 +55,10 @@ def energy_spread(gamma, I2, I3, I4):
     sigmae = math.sqrt(const.Cq * gamma * gamma * I3 / (2*I2 + I4))
     return 100 * sigmae
 
+def revolution_period(circumference, velocity):
+    '''Revolution period [μs] from circumference [m] and velocity [m/s]'''
+    return 1.0e6 * circumference / velocity
+
+def revolution_frequency(revolution_period):
+    '''Revolution frequency [MHz] from revolution period [μs]'''
+    return 1.0 / revolution_period
