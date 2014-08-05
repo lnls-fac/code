@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import math
 import physconst as const
@@ -62,3 +63,7 @@ def revolution_period(circumference, velocity):
 def revolution_frequency(revolution_period):
     '''Revolution frequency [MHz] from revolution period [μs]'''
     return 1.0 / revolution_period
+
+def rf_frequency(revolution_frequency, harmonic_number):
+    '''RF frequency [MHz] from revolution frequency [MHz] and harmonic number'''
+    return revolution_frequency * harmonic_number

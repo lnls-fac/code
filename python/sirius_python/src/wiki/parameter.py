@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 class Parameter:
     def __init__(self, 
@@ -34,13 +35,13 @@ class Parameter:
         wiki = []
         wiki.append('=Data=')
         wiki.append('<section begin=data/>')
-        wiki.append('* Group: <section begin=group/>' + str(self.group) + '<section end=group/>')
+        wiki.append('* Group: <section begin=group/>' + self.group + '<section end=group/>')
         wiki.append('* Revision: <section begin=revision/>' + str(self.revision) + '<section end=revision/>')
-        wiki.append('* Symbol: <section begin=symbol/>' + str(self.symbol) + '<section end=symbol/>')
+        wiki.append('* Symbol: <section begin=symbol/>' + self.symbol + '<section end=symbol/>')
         wiki.append('* Value: <section begin=value/>' + str(self.value) + '<section end=value/>')
-        wiki.append('* Units: <section begin=units/>' + str(self.units) + '<section end=units/>')
+        wiki.append('* Units: <section begin=units/>' + self.units + '<section end=units/>')
         wiki.append('* Deps: <section begin=deps/>' + self.create_wiki_deps() + '<section end=deps/>')
         wiki.append('<section end=data/>')
         wiki.append('=Observations=')
-        wiki.append('<section begin=obs/>' + str(self.obs) + '<section begin=obs/>')
+        wiki.append('<section begin=obs/>' + self.obs + '<section begin=obs/>')
         return '\n'.join(wiki)
