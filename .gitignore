@@ -27,6 +27,7 @@
 *.cproject
 *.pyc
 *.out
+*.swp
 tracy
 tracyd
 lnlstracy*
