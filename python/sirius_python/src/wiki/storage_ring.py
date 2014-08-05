@@ -5,13 +5,6 @@ from parameter import Parameter
 
 '''
 
-sr_latt_nr_lss        = sr_latt_symmetry
-sr_latt_nr_sss        = sr_latt_symmetry
-sr_latt_nr_bends_b1   = {value = 4 * sr_latt_symmetry.value, unit = ''}
-sr_latt_nr_bends_b2   = {value = 4 * sr_latt_symmetry.value, unit = ''}
-sr_latt_nr_bends_b3   = {value = 4 * sr_latt_symmetry.value, unit = ''}
-sr_latt_nr_bends_bc   = {value = 2 * sr_latt_symmetry.value, unit = ''}
-
 sr_rev_period     = {value = 1.0e6 * sr_latt_circumference.value / sr_ebeam_velocity.value, unit = 'mus'} 
 sr_rev_frequency  = {value = 1.0/sr_rev_period.value, unit = 'MHz'}
 sr_rf_frequency   = {value = sr_rev_frequency.value * sr_rf_harmonic_number.value, unit = 'MHz'}
@@ -41,13 +34,6 @@ sr_equil_nat_sigmae_dipoles = {value = calc_energy_spread(sr_ebeam_gamma.value, 
 -- radiation integrals for IDs --
 sr_equil_U0_IDs = {value = calc_U0(sr_ebeam_energy.value, sr_equil_I2_IDs.value), unit = 'keV'}
 
--- total equilibrium parameters --
-sr_equil_I1 = {value = sr_equil_I1_dipoles.value + sr_equil_I1_IDs.value, unit = 'm'}
-sr_equil_I2 = {value = sr_equil_I2_dipoles.value + sr_equil_I2_IDs.value, unit = '1/m'}
-sr_equil_I3 = {value = sr_equil_I3_dipoles.value + sr_equil_I3_IDs.value, unit = '1/m^2'}
-sr_equil_I4 = {value = sr_equil_I4_dipoles.value + sr_equil_I4_IDs.value, unit = '1/m'}
-sr_equil_I5 = {value = sr_equil_I5_dipoles.value + sr_equil_I5_IDs.value, unit = '1/m'}
-sr_equil_I6 = {value = sr_equil_I6_dipoles.value + sr_equil_I6_IDs.value, unit = '1/m'} 
 sr_equil_Jx = {value = 1 - sr_equil_I4.value/sr_equil_I2.value, unit = ''}
 sr_equil_Jy = {value = 1.0, unit = ''}
 sr_equil_Js = {value = 4.0 - sr_equil_Jx.value - sr_equil_Jy.value, unit = ''}
@@ -170,6 +156,13 @@ class _P(object):
     length_of_short_straight_sections = 6.0 #[m]
     harmonic_number                   = 864
     total_RF_voltage                  = 2.7 #[MV]
+    
+    number_of_long_straight_sections  = lattice_symmetry
+    number_of_short_straight_sections = lattice_symmetry
+    number_of_B1_dipoles              = 4 * lattice_symmetry
+    number_of_B2_dipoles              = 4 * lattice_symmetry
+    number_of_B3_dipoles              = 4 * lattice_symmetry
+    number_of_BC_dipoles              = 2 * lattice_symmetry
     
     hardedge_length_of_B1_dipoles =  0.828080 #[m] 
     hardedge_length_of_B2_dipoles =  1.228262 #[m]
@@ -297,6 +290,26 @@ parameter_list = [
   ),
                   
   Parameter(
+    name     = 'Storage ring number of long straight sections', 
+    group    = 'FAC',
+    value    = _P.number_of_long_straight_sections ,
+    symbol   = '<math>N_{lss}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring number of short straight sections', 
+    group    = 'FAC',
+    value    = _P.number_of_short_straight_sections ,
+    symbol   = '<math>N_{sss}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+  ),
+                  
+  Parameter(
     name     = 'Storage ring length of long straight sections', 
     group    = 'FAC',
     value    = _P.length_of_long_straight_sections, 
@@ -334,7 +347,43 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = [],
   ),              
-    
+  
+  Parameter(name = 'Storage ring number of B1 dipoles', 
+    group    = 'FAC',
+    value    = _P.number_of_B1_dipoles, 
+    symbol   = '<math>N_{B1}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+  ), 
+            
+  Parameter(name = 'Storage ring number of B2 dipoles', 
+    group    = 'FAC',
+    value    = _P.number_of_B2_dipoles, 
+    symbol   = '<math>N_{B2}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+  ), 
+                  
+  Parameter(name = 'Storage ring number of B3 dipoles', 
+    group    = 'FAC',
+    value    = _P.number_of_B3_dipoles, 
+    symbol   = '<math>N_{B3}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+  ), 
+         
+  Parameter(name = 'Storage ring number of BC dipoles', 
+    group    = 'FAC',
+    value    = _P.number_of_BC_dipoles, 
+    symbol   = '<math>N_{BC}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+  ), 
+                           
   Parameter(name = 'Storage ring hardedge length of B1 dipoles', 
     group    = 'FAC',
     value    = _P.hardedge_length_of_B1_dipoles, 
