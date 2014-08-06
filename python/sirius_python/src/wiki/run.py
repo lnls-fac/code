@@ -34,7 +34,7 @@ def generate_parameter_name_list_page(label, parameters):
         wiki.append('#[[Parameter:' + parameter.name + '|' + parameter.name + ']]')
     
     site = pywikibot.Site('en', 'siriuswiki')
-    page = pywikibot.Page(site, 'DDR:' + label + ' parameter name list')
+    page = pywikibot.Page(site, 'Machine:' + label + ' parameter name list')
     page.text = '\n'.join(wiki)
     page.save(bot_default_comment)
     

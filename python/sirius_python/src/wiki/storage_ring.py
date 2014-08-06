@@ -67,14 +67,14 @@ class _P(object):
     radiation_integral_I5 = radiation_integral_I5_from_dipoles + radiation_integral_I5_from_IDs #[m]
     radiation_integral_I6 = radiation_integral_I6_from_dipoles + radiation_integral_I6_from_IDs #[m]
     
-    optics_mode       = 'AC10.5'
-    horizontal_tune   = 46.179867828110417
-    vertical_tune     = 14.149994739104255
-    longitudinal_tune = 0.004421565111775
+    optics_mode = 'AC10.5'
+    horizontal_betatron_tune = 46.179867828110417
+    vertical_betatron_tune = 14.149994739104255
+    synchrotron_tune = 0.004421565111775
 
-    horizontal_betatron_frequency = optics.frequency_from_tune(revolution_frequency, horizontal_tune)
-    vertical_betatron_frequency = optics.frequency_from_tune(revolution_frequency, vertical_tune)
-    synchrotron_frequency = optics.frequency_from_tune(revolution_frequency, longitudinal_tune)
+    horizontal_betatron_frequency = optics.frequency_from_tune(revolution_frequency, horizontal_betatron_tune)
+    vertical_betatron_frequency = optics.frequency_from_tune(revolution_frequency, vertical_betatron_tune)
+    synchrotron_frequency = optics.frequency_from_tune(revolution_frequency, synchrotron_tune)
     
     energy_loss_per_turn_from_dipoles = optics.U0(beam_energy, radiation_integral_I2_from_dipoles)
     overvoltage_from_dipoles = optics.overvoltage(total_RF_voltage, energy_loss_per_turn_from_dipoles)
@@ -653,9 +653,9 @@ parameter_list = [
     obs      = '',
   ),
   
-  Parameter(name = 'Storage ring horizontal tune', 
+  Parameter(name = 'Storage ring horizontal betatron tune', 
     group    = 'FAC',
-    value    = _P.horizontal_tune, 
+    value    = _P.horizontal_betatron_tune, 
     symbol   = mark_math(r'\nu_x'),
     units    = '', 
     revision = '2014-08-01',
@@ -663,9 +663,9 @@ parameter_list = [
     obs      = '',
   ),    
                 
-  Parameter(name = 'Storage ring vertical tune', 
+  Parameter(name = 'Storage ring vertical betatron tune', 
     group    = 'FAC',
-    value    = _P.vertical_tune, 
+    value    = _P.vertical_betatron_tune, 
     symbol   = mark_math(r'\nu_y'),
     units    = '', 
     revision = '2014-08-01',
@@ -673,9 +673,9 @@ parameter_list = [
     obs      = '',
   ),  
                   
-  Parameter(name = 'Storage ring longitudinal tune', 
+  Parameter(name = 'Storage ring synchrotron tune', 
     group    = 'FAC',
-    value    = _P.longitudinal_tune, 
+    value    = _P.synchrotron_tune, 
     symbol   = mark_math(r'\nu_s'),
     units    = '', 
     revision = '2014-08-01',
@@ -905,7 +905,7 @@ parameter_list = [
     symbol   = mark_math(r'f_x = f_{rev} \left( \nu_x - \lfloor \nu_x\rfloor \right)'),
     units    = 'kHz', 
     revision = '2014-08-01',
-    deps     = ['Storage ring revolution frequency', 'Storage ring horizontal tune'],
+    deps     = ['Storage ring revolution frequency', 'Storage ring horizontal betatron tune'],
     obs      = '',
   ),    
                 
@@ -915,7 +915,7 @@ parameter_list = [
     symbol   = mark_math(r'f_y = f_{rev} \left( \nu_y - \lfloor \nu_y\rfloor \right)'),
     units    = 'kHz', 
     revision = '2014-08-01',
-    deps     = ['Storage ring revolution frequency', 'Storage ring vertical tune'],
+    deps     = ['Storage ring revolution frequency', 'Storage ring vertical betatron tune'],
     obs      = '',
   ),  
                   
@@ -925,7 +925,7 @@ parameter_list = [
     symbol   = mark_math(r'f_s = f_{rev} \left( \nu_s - \lfloor \nu_s\rfloor \right)'),
     units    = 'kHz', 
     revision = '2014-08-01',
-    deps     = ['Storage ring revolution frequency', 'Storage ring longitudinal tune'],
+    deps     = ['Storage ring revolution frequency', 'Storage ring synchrotron tune'],
     obs      = '',
   ),                            
  
