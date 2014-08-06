@@ -46,7 +46,7 @@ def rf_energy_acceptance(q, energy, U0, h, alpha):
     return 100 * energy_accpt
 
 def natural_emittance(gamma, Jx, I2, I5):
-    '''Natural emittance [nm.rad] from ebeam gamma factor, damping partition number Jx, I2[1/m] and I5 [1/m]'''
+    '''Natural emittance [nm·rad] from ebeam gamma factor, damping partition number Jx, I2[1/m] and I5 [1/m]'''
     emitt = const.Cq * gamma*gamma*I5/(Jx*I2) * 1e9
     return emitt
 
@@ -74,3 +74,19 @@ def number_of_electrons(current, revolution_period):
 def overvoltage(rf_voltage, U0):
     '''Overvoltage from RF voltage [MV] and energy loss U0 per turn [keV]'''
     return 1e6*rf_voltage / (1e3*U0)
+
+def alpha1(I1, circumference):
+    '''Linear momentum compaction factor from I1 [m] and circumference [m]'''
+    return I1 / circumference
+
+def horizontal_damping_partition_number(I2, I4):
+    '''Horizontal damping partition number from I2 [1/m] and I4 [1/m]'''
+    return 1 - I4/I2
+
+def longitudinal_damping_partition_number(Jx, Jy):
+    '''Longitudinal damping partition number from Jx and Jy'''
+    return 4.0 - Jx - Jy
+
+def frequency_from_tune(revolution_frequency, tune):
+    '''Frequency [kHz] from revolution frequency [MHz] and tune'''
+    return 1000*revolution_frequency*(tune - math.floor(tune))
