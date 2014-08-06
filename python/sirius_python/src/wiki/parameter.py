@@ -23,6 +23,12 @@ class Parameter:
         r = self.name + ': ' + str(self.value) + ' ' + self.units + ' [' + self.revision + ']'
         return r
 
+    def __lt__(self, other):
+        if self.name.lower() < other.name.lower():
+            return True
+        else:
+            return False
+
     def create_wiki_deps(self):
         deps = ''
         for dep in self.deps:
