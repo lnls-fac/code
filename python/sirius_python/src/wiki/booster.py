@@ -4,12 +4,12 @@ from parameter import Parameter
 
 
 class _P(object):
-    ebeam_extraction_energy       = 3.0;       # [GeV]
-    ebeam_extraction_gamma_factor = optics.gamma(ebeam_extraction_energy)
-    ebeam_extraction_beta_factor  = optics.beta(ebeam_extraction_gamma_factor)
-    ebeam_extraction_velocity     = optics.velocity(ebeam_extraction_beta_factor);
+    beam_extraction_energy       = 3.0;       # [GeV]
+    beam_extraction_gamma_factor = optics.gamma(beam_extraction_energy)
+    beam_extraction_beta_factor  = optics.beta(beam_extraction_gamma_factor)
+    beam_extraction_velocity     = optics.velocity(beam_extraction_beta_factor);
     
-    ebeam_current         = 2.0 #[mA]
+    beam_current         = 2.0 #[mA]
     lattice_version       = '' 
     lattice_circumference = 496.8 #[m]
     lattice_symmetry      = 10
@@ -27,54 +27,56 @@ class _P(object):
     vertical_tune     = 7.307442329080478
     longitudinal_tune = 0.004419249840938
 
+    
+label = 'Booster'
 
 parameter_list = [
 
   Parameter(
-    name     = 'Booster ebeam extraction energy', 
+    name     = 'Booster beam extraction energy', 
     group    = 'LNLS',
-    value    = _P.ebeam_extraction_energy,
-    symbol   = '<math>E</math>',
+    value    = _P.beam_extraction_energy,
+    symbol   = r'<math>E</math>',
     units    = 'GeV', 
     revision = '2014-08-04',
-    deps     = ['Storage ring ebeam energy']
+    deps     = ['Storage ring beam energy']
   ),
 
   Parameter(
-    name     = 'Booster ebeam extraction gamma factor', 
+    name     = 'Booster beam extraction gamma factor', 
     group    = 'FAC',
-    value    = _P.ebeam_extraction_gamma_factor, 
-    symbol   = '<math>\\gamma</math>',
+    value    = _P.beam_extraction_gamma_factor, 
+    symbol   = r'<math>\gamma</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster ebeam extraction energy']
+    deps     = ['Booster beam extraction energy']
   ),
 
   Parameter(
-    name     = 'Booster ebeam extraction beta factor', 
+    name     = 'Booster beam extraction beta factor', 
     group    = 'FAC',
-    value    = _P.ebeam_extraction_beta_factor, 
-    symbol   = '<math>\\beta</math>',
+    value    = _P.beam_extraction_beta_factor, 
+    symbol   = r'<math>\beta</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster ebeam extraction gamma factor']
+    deps     = ['Booster beam extraction gamma factor']
   ),
 
   Parameter(
-    name     = 'Booster ebeam extraction velocity', 
+    name     = 'Booster beam extraction velocity', 
     group    = 'FAC',
-    value    = _P.ebeam_extraction_velocity, 
-    symbol   = '<math>v</math>',
+    value    = _P.beam_extraction_velocity, 
+    symbol   = r'<math>v</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster ebeam extraction beta factor']
+    deps     = ['Booster beam extraction beta factor']
   ),
 
   Parameter(
-    name     = 'Booster circumference', 
+    name     = 'Booster lattice circumference', 
     group    = 'LNLS',
     value    = _P.lattice_circumference, 
-    symbol   = '<math>C</math>',
+    symbol   = r'<math>C</math>',
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
