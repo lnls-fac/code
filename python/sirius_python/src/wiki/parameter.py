@@ -20,7 +20,8 @@ class Parameter:
         self.revision = revision
 
     def __str__(self):
-        r = self.name + ': ' + str(self.value) + ' ' + self.units + ' [' + self.revision + ']'
+        r = (self.name + ': ' + str(self.value) + ' ' + self.units +
+        ' [' + self.revision + ']')
         return r
 
     def __lt__(self, other):
