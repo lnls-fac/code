@@ -11,8 +11,7 @@ class ParameterDefinitions(object):
     sr_beam_gamma_factor      = optics.gamma(sr_beam_energy)
     sr_beam_beta_factor       = optics.beta(sr_beam_gamma_factor)
     sr_beam_velocity          = optics.velocity(sr_beam_beta_factor)
-    sr_beam_magnetic_rigidity = optics.brho(sr_beam_energy,
-        sr_beam_beta_factor)
+    sr_beam_magnetic_rigidity = optics.brho(sr_beam_energy, sr_beam_beta_factor)
     
     sr_beam_current                      = 350.0 #[mA]
     sr_lattice_version                   = 'V500' 
@@ -186,27 +185,48 @@ class ParameterDefinitions(object):
 
     # Booster parameters
     
-    bo_beam_extraction_energy       = 3.0;       # [GeV]
+    bo_beam_injection_energy        = 0.150 # [GeV]
+    bo_beam_injection_gamma_factor  = optics.gamma(bo_beam_injection_energy)
+    bo_beam_injection_beta_factor   = optics.beta(bo_beam_injection_gamma_factor)
+    bo_beam_injection_velocity      = optics.velocity(bo_beam_injection_beta_factor)
+
+    bo_beam_extraction_energy       = 3.0; # [GeV]
     bo_beam_extraction_gamma_factor = optics.gamma(bo_beam_extraction_energy)
     bo_beam_extraction_beta_factor  = optics.beta(bo_beam_extraction_gamma_factor)
     bo_beam_extraction_velocity     = optics.velocity(bo_beam_extraction_beta_factor)
-    
-    bo_beam_current          = 2.0 #[mA]
+
+    bo_beam_extraction_magnetic_rigidity = optics.brho(
+        bo_beam_extraction_energy,
+        bo_beam_extraction_beta_factor)
+
+    bo_beam_current          = 2.0 # [mA]
     bo_lattice_version       = '' 
-    bo_lattice_circumference = 496.8 #[m]
+    bo_lattice_circumference = 496.8 # [m]
     bo_lattice_symmetry      = 10
     bo_harmonic_number       = 828
 
-    bo_radiation_integral_I1 =  0.090315779996644 #[m]
-    bo_radiation_integral_I2 =  0.433104068989975 #[1/m]
-    bo_radiation_integral_I3 =  0.038257877157466 #[1/m^2]
-    bo_radiation_integral_I4 = -0.137100015107741 #[1/m]
-    bo_radiation_integral_I5 =  1.218542781664562e-05 #[1/m]
-    bo_radiation_integral_I6 =  0.019201555654789 #[1/m]
+    bo_extraction_revolution_period = optics.revolution_period(
+        bo_lattice_circumference, bo_beam_extraction_velocity)
 
-    bo_optics_mode       = ''
-    bo_horizontal_tune   = 19.204749345767866
-    bo_vertical_tune     = 7.307442329080478
-    bo_longitudinal_tune = 0.004419249840938
+    bo_extraction_revolution_frequency = optics.revolution_frequency(
+        bo_extraction_revolution_period)
+    
+    bo_radiation_integral_I1 =  0.357376004142324 # [m]
+    bo_radiation_integral_I2 =  0.632474441350948 # [1/m]
+    bo_radiation_integral_I3 =  0.065162582244920 # [1/m^2]
+    bo_radiation_integral_I4 = -0.139031150720390 # [1/m]
+    bo_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
+    bo_radiation_integral_I6 =  0.008112620479157 # [1/m]
 
+    bo_optics_mode = ''
+
+    bo_horizontal_betatron_tune = 19.204749345767866
+    bo_vertical_betatron_tune   = 7.307442329080478
+    bo_synchrotron_tune         = 0.004419249840938
+
+    bo_cycling_frequency = 2.0 # [Hz]
+
+    bo_linear_momentum_compaction = optics.alpha1(
+        bo_radiation_integral_I1,
+        bo_lattice_circumference)
 
