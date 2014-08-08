@@ -66,7 +66,7 @@ def cmd_kill_pid(remote_machine, pid):
 ''' command list of module '''   
 cmds = {
         'get_cpu_count':cmd_get_cpu_count,
-        'get_pytask_pid_list':cmd_get_task_pid_list,
+        'get_pytask_pid_list':cmd_get_pytask_pid_list,
         'get_cmd_list':cmd_get_cmd_list,
         'kill_pid':cmd_kill_pid,
        }
