@@ -96,3 +96,10 @@ def Js(Jx, Jy):
 def frequency_from_tune(revolution_frequency, tune):
     '''Frequency [kHz] from revolution frequency [MHz] and tune.'''
     return 1000*revolution_frequency*(tune - math.floor(tune))
+
+def radiation_damping_time(energy, I2, J, circumference):
+    '''Radiation damping time [s] from beam energy [GeV], radiation
+    integral I2 [1/m], damping partition number and circumference [m].'''
+    mc2 = 1e-9*const.electron_rest_energy/const.electron_charge
+    c = const.electron_radius*const.light_speed / (3*math.pow(mc2, 3))
+    return circumference / (c*math.pow(energy, 3)*I2*J)

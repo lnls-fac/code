@@ -185,38 +185,38 @@ class ParameterDefinitions(object):
 
     # Booster parameters
     
-    bo_beam_injection_energy        = 0.150 # [GeV]
-    bo_beam_injection_gamma_factor  = optics.gamma(bo_beam_injection_energy)
-    bo_beam_injection_beta_factor   = optics.beta(bo_beam_injection_gamma_factor)
-    bo_beam_injection_velocity      = optics.velocity(bo_beam_injection_beta_factor)
-
-    bo_beam_extraction_energy       = 3.0; # [GeV]
-    bo_beam_extraction_gamma_factor = optics.gamma(bo_beam_extraction_energy)
-    bo_beam_extraction_beta_factor  = optics.beta(bo_beam_extraction_gamma_factor)
-    bo_beam_extraction_velocity     = optics.velocity(bo_beam_extraction_beta_factor)
-
-    bo_beam_extraction_magnetic_rigidity = optics.brho(
-        bo_beam_extraction_energy,
-        bo_beam_extraction_beta_factor)
-
     bo_beam_current          = 2.0 # [mA]
     bo_lattice_version       = '' 
     bo_lattice_circumference = 496.8 # [m]
     bo_lattice_symmetry      = 10
     bo_harmonic_number       = 828
 
+    bo_injection_beam_energy        = 0.150 # [GeV]
+    bo_injection_beam_gamma_factor  = optics.gamma(bo_injection_beam_energy)
+    bo_injection_beam_beta_factor   = optics.beta(bo_injection_beam_gamma_factor)
+    bo_injection_beam_velocity      = optics.velocity(bo_injection_beam_beta_factor)
+
+    bo_extraction_beam_energy       = 3.0; # [GeV]
+    bo_extraction_beam_gamma_factor = optics.gamma(bo_extraction_beam_energy)
+    bo_extraction_beam_beta_factor  = optics.beta(bo_extraction_beam_gamma_factor)
+    bo_extraction_beam_velocity     = optics.velocity(bo_extraction_beam_beta_factor)
+
+    bo_extraction_beam_magnetic_rigidity = optics.brho(
+        bo_extraction_beam_energy,
+        bo_extraction_beam_beta_factor)
+
     bo_extraction_revolution_period = optics.revolution_period(
-        bo_lattice_circumference, bo_beam_extraction_velocity)
+        bo_lattice_circumference, bo_extraction_beam_velocity)
 
     bo_extraction_revolution_frequency = optics.revolution_frequency(
         bo_extraction_revolution_period)
     
-    bo_radiation_integral_I1 =  0.357376004142324 # [m]
-    bo_radiation_integral_I2 =  0.632474441350948 # [1/m]
-    bo_radiation_integral_I3 =  0.065162582244920 # [1/m^2]
-    bo_radiation_integral_I4 = -0.139031150720390 # [1/m]
-    bo_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
-    bo_radiation_integral_I6 =  0.008112620479157 # [1/m]
+    bo_extraction_radiation_integral_I1 =  0.357376004142324 # [m]
+    bo_extraction_radiation_integral_I2 =  0.632474441350948 # [1/m]
+    bo_extraction_radiation_integral_I3 =  0.065162582244920 # [1/m^2]
+    bo_extraction_radiation_integral_I4 = -0.139031150720390 # [1/m]
+    bo_extraction_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
+    bo_extraction_radiation_integral_I6 =  0.008112620479157 # [1/m]
 
     bo_optics_mode = ''
 
@@ -224,9 +224,34 @@ class ParameterDefinitions(object):
     bo_vertical_betatron_tune   = 7.307442329080478
     bo_synchrotron_tune         = 0.004419249840938
 
+    bo_horizontal_natural_chromaticity = -33.704073487683672
+    bo_vertical_natural_chromaticity   = -13.950562838260794
+
     bo_cycling_frequency = 2.0 # [Hz]
 
-    bo_linear_momentum_compaction = optics.alpha1(
-        bo_radiation_integral_I1,
+    bo_extraction_linear_momentum_compaction = optics.alpha1(
+        bo_extraction_radiation_integral_I1,
         bo_lattice_circumference)
+    
+    bo_extraction_horizontal_damping_partition_number = optics.Jx(
+        bo_extraction_radiation_integral_I2,
+        bo_extraction_radiation_integral_I4)
+
+    bo_extraction_vertical_damping_partition_number = 1.0
+
+    bo_extraction_longitudinal_damping_partition_number = optics.Js(
+        bo_extraction_horizontal_damping_partition_number,
+        bo_extraction_vertical_damping_partition_number)
+
+    bo_extraction_natural_emittance = optics.natural_emittance(
+        bo_extraction_beam_gamma_factor,
+        bo_extraction_horizontal_damping_partition_number,
+        bo_extraction_radiation_integral_I2,
+        bo_extraction_radiation_integral_I5)
+
+    bo_extraction_natural_energy_spread = optics.energy_spread(
+        bo_extraction_beam_gamma_factor,
+        bo_extraction_radiation_integral_I2,
+        bo_extraction_radiation_integral_I3,
+        bo_extraction_radiation_integral_I4)
 
