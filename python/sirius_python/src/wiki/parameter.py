@@ -46,7 +46,7 @@ class Parameter:
         wiki.append('* Revision: <section begin=revision/>' + str(self.revision) + '<section end=revision/>')
         wiki.append('* Symbol: <section begin=symbol/>' + self.symbol + '<section end=symbol/>')
         wiki.append('* Value: <section begin=value/>' + str(self.value) + '<section end=value/>')
-        wiki.append('* Units: <section begin=unit/>' + self.units + '<section end=unit/>')
+        wiki.append('* Units: <section begin=units/>' + self.units + '<section end=units/>')
         wiki.append('* Deps: <section begin=deps/>' + self.create_wiki_deps() + '<section end=deps/>')
         wiki.append('<section end=data/>')
         wiki.append('=Observations=')
