@@ -9,7 +9,7 @@ function sirius(varargin)
 
 Disconnect = false;
 
-default_version = '_V500';
+default_version = '_V00';
 
 for i=length(varargin):-1:1
     if ischar(varargin{i})
