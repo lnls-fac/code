@@ -649,6 +649,54 @@ parameter_list = [
   ),                            
   
   Parameter(
+    name     = 'Storage ring horizontal natural chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_horizontal_natural_chromaticity, 
+    symbol   = r'<math>\xi_{x,0}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),    
+                
+  Parameter(
+    name     = 'Storage ring vertical natural chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_vertical_natural_chromaticity, 
+    symbol   = r'<math>\xi_{y,0}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),  
+
+  Parameter(
+    name     = 'Storage ring horizontal chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_horizontal_chromaticity, 
+    symbol   = r'<math>\xi_x</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),    
+                
+  Parameter(
+    name     = 'Storage ring vertical chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_vertical_chromaticity, 
+    symbol   = r'<math>\xi_y</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),  
+
+  Parameter(
     name     = 'Storage ring energy loss per turn from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_energy_loss_per_turn_from_dipoles,

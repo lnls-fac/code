@@ -96,6 +96,12 @@ class ParameterDefinitions(object):
     sr_vertical_betatron_tune = 14.149994739104255
     sr_synchrotron_tune = 0.004421565111775
 
+    sr_horizontal_natural_chromaticity = -113.1198708037573
+    sr_vertical_natural_chromaticity = -80.5026603600822
+    sr_horizontal_chromaticity = 0
+    sr_vertical_chromaticity = 0
+
+
     sr_horizontal_betatron_frequency = optics.frequency_from_tune(
         sr_revolution_frequency, sr_horizontal_betatron_tune)
 

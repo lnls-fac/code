@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import pywikibot
 import storage_ring
 import booster
@@ -49,10 +50,10 @@ def generate_parameter_pages(parameters):
         #print(page.text)
 
 
-#check_deps(sirius_sr)
-#storage_ring.parameter_list.sort()
-#generate_parameter_pages(storage_ring.parameter_list)
-#generate_parameter_name_list_page(storage_ring.label, storage_ring.parameter_list)
-booster.parameter_list.sort()
-generate_parameter_pages(booster.parameter_list)
-generate_parameter_name_list_page(booster.label, booster.parameter_list)
+       
+storage_ring.parameter_list.sort()
+generate_parameter_pages(storage_ring.parameter_list)
+generate_parameter_name_list_page(storage_ring.label, storage_ring.parameter_list)
+#booster.parameter_list.sort()
+#generate_parameter_pages(booster.parameter_list)
+#generate_parameter_name_list_page(booster.label, booster.parameter_list)
