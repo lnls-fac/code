@@ -22,7 +22,7 @@ else
     % files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
     % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs_new_order_symm_coup');
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','BOOSTER_V810');
-    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs_phase2');
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','study_high_coupling');
 end
 
 cd(config_folder);
