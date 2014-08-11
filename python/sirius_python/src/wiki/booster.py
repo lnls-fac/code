@@ -582,29 +582,104 @@ parameter_list = [
                 'Booster harmonic number'],
     obs      = '',
   ),
+  
+  Parameter(
+    name     = 'Booster number of SF sextupoles', 
+    group    = 'FAC',
+    value    = Prms.bo_number_of_SF_sextupoles, 
+    symbol   = r'<math>N_\text{SF}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ),
 
-#  ********** CHECK **********
-#
-#  Parameter(
-#    name     = 'Booster QF quadrupole maximum gradient', 
-#    group    = 'FAC',
-#    value    = Prms.bo_QF_quadrupole_maximum_gradient, 
-#    symbol   = r'<math>K_\text{QF,max}</math>',
-#    units    = 'T/m', 
-#    revision = '2014-08-01',
-#    deps     = [],
-#    obs      = '',
-#  ), 
-#                
-#  Parameter(
-#    name     = 'Booster QD quadrupole maximum gradient', 
-#    group    = 'FAC',
-#    value    = Prms.bo_QD_quadrupole_maximum_gradient, 
-#    symbol   = r'<math>K_\text{QD,max}</math>',
-#    units    = 'T/m', 
-#    revision = '2014-08-01',
-#    deps     = [],
-#    obs      = '',
-#  ), 
+  Parameter(
+    name     = 'Booster hardedge length of SF sextupoles',
+    group    = 'FAC',
+    value    = Prms.bo_hardedge_length_of_SF_sextupoles,
+    symbol   = r'<math>L_\text{SF}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = '',
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster number of SD sextupoles', 
+    group    = 'FAC',
+    value    = Prms.bo_number_of_SD_sextupoles, 
+    symbol   = r'<math>N_\text{SF}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = 'Bipolar',
+  ),
+
+  Parameter(
+    name     = 'Booster hardedge length of SD sextupoles',
+    group    = 'FAC',
+    value    = Prms.bo_hardedge_length_of_SD_sextupoles,
+    symbol   = r'<math>L_\text{SF}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = '',
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster extraction QF quadrupole maximum gradient', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_QF_quadrupole_maximum_gradient, 
+    symbol   = r'<math>K_\text{QF,max}</math>',
+    units    = 'T/m', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ), 
+                
+  Parameter(
+    name     = 'Booster extraction QD quadrupole maximum absolute gradient', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_QD_quadrupole_maximum_absolute_gradient, 
+    symbol   = r'<math>K_\text{QD,max}</math>',
+    units    = 'T/m', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = 'Bipolar',
+  ), 
+                
+  Parameter(
+    name     = 'Booster injection QF quadrupole maximum gradient', 
+    group    = 'FAC',
+    value    = Prms.bo_injection_QF_quadrupole_maximum_gradient, 
+    symbol   = r'<math>K_\text{QF,max}</math>',
+    units    = 'T/m', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ), 
+                
+  Parameter(
+    name     = 'Booster injection QD quadrupole maximum absolute gradient', 
+    group    = 'FAC',
+    value    = Prms.bo_injection_QD_quadrupole_maximum_absolute_gradient, 
+    symbol   = r'<math>K_\text{QD,max}</math>',
+    units    = 'T/m', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = 'Bipolar',
+  ), 
+                
+  Parameter(
+    name     = 'Booster maximum integrated sextupole', 
+    group    = 'FAC',
+    value    = Prms.bo_maximum_integrated_sextupole, 
+    symbol   = r"<math>\left( \int \frac{B''}{2}\,\mathrm{d}s \right)_\text{max}</math>",
+    units    = 'T/m', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ), 
                 
 ]
