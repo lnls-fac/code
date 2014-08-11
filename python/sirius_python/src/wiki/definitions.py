@@ -260,6 +260,9 @@ class ParameterDefinitions(object):
     bo_extraction_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
     bo_extraction_radiation_integral_I6 =  0.008112620479157 # [1/m]
 
+    bo_extraction_energy_loss_per_turn_from_dipoles = optics.U0(
+        bo_extraction_beam_energy, bo_extraction_radiation_integral_I2)
+
     bo_extraction_linear_momentum_compaction = optics.alpha1(
         bo_extraction_radiation_integral_I1,
         bo_lattice_circumference)
@@ -307,3 +310,7 @@ class ParameterDefinitions(object):
     bo_extraction_rf_frequency = optics.rf_frequency(
         bo_extraction_revolution_frequency, bo_harmonic_number)
 
+    #bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
+    #    bo_extraction_beam_energy,
+    #    bo_extraction_dipole_bending_radius,
+    #    bo_beam_current)

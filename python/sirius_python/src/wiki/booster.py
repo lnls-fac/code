@@ -682,4 +682,16 @@ parameter_list = [
     obs      = '',
   ), 
                 
+  Parameter(
+    name     = 'Booster extraction energy loss per turn from dipoles', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_energy_loss_per_turn_from_dipoles,
+    symbol   = r'<math>U_\text{0,DIP} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2,DIP}</math>',
+    units    = 'keV', 
+    revision = '2014-08-01',
+    deps     = ['Booster beam energy', 
+                'Booster radiation integral I2 from dipoles'],
+    obs      = '',
+  ),                            
+  
 ]
