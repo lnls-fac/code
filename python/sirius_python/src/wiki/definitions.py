@@ -190,20 +190,62 @@ class ParameterDefinitions(object):
     bo_lattice_circumference = 496.8 # [m]
     bo_lattice_symmetry      = 10
     bo_harmonic_number       = 828
+    bo_optics_mode = ''
+
+    bo_number_of_dipoles = 50
+    bo_number_of_QF_quadrupoles = 50
+    bo_number_of_QD_quadrupoles = 25
+    bo_number_of_SF_sextupoles = 25
+    bo_number_of_SD_sextupoles = 10
+
+    bo_hardedge_length_of_dipoles =  1.152 # [m]
+    bo_hardedge_length_of_QF_quadrupoles = 0.3 # [m]
+    bo_hardedge_length_of_QD_quadrupoles = 0.2 # [m]
+    bo_hardedge_length_of_SF_sextupoles = 0.2 # [m]
+    bo_hardedge_length_of_SD_sextupoles = 0.2 # [m]
+
+    bo_maximum_integrated_sextupole = 20.0138457118891 # B''L/2 [T/m]
+
+    bo_horizontal_betatron_tune = 19.204749345767866
+    bo_vertical_betatron_tune   = 7.307442329080478
+    bo_synchrotron_tune         = 0.004419249840938
+
+    bo_horizontal_natural_chromaticity = -33.704073487683672
+    bo_vertical_natural_chromaticity   = -13.950562838260794
+
+    bo_cycling_frequency = 2.0 # [Hz]
 
     bo_injection_beam_energy        = 0.150 # [GeV]
     bo_injection_beam_gamma_factor  = optics.gamma(bo_injection_beam_energy)
     bo_injection_beam_beta_factor   = optics.beta(bo_injection_beam_gamma_factor)
     bo_injection_beam_velocity      = optics.velocity(bo_injection_beam_beta_factor)
 
+    bo_injection_dipole_magnetic_field = 0.0546 # [T]
+    bo_injection_QF_quadrupole_maximum_gradient = 1.0132009391643900 # [T/m]
+    bo_injection_QD_quadrupole_maximum_absolute_gradient = 0.1250865356993070 # [T/m]
+
+    bo_injection_beam_magnetic_rigidity = optics.brho(
+        bo_injection_beam_energy,
+        bo_injection_beam_beta_factor)
+
+    bo_injection_dipole_bending_radius = optics.rho(
+        bo_injection_beam_magnetic_rigidity, bo_injection_dipole_magnetic_field)
+
     bo_extraction_beam_energy       = 3.0; # [GeV]
     bo_extraction_beam_gamma_factor = optics.gamma(bo_extraction_beam_energy)
     bo_extraction_beam_beta_factor  = optics.beta(bo_extraction_beam_gamma_factor)
     bo_extraction_beam_velocity     = optics.velocity(bo_extraction_beam_beta_factor)
 
+    bo_extraction_dipole_magnetic_field = 1.092 # [T]
+    bo_extraction_QF_quadrupole_maximum_gradient = 20.2640187832877 # [T/m]
+    bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
+
     bo_extraction_beam_magnetic_rigidity = optics.brho(
         bo_extraction_beam_energy,
         bo_extraction_beam_beta_factor)
+
+    bo_extraction_dipole_bending_radius = optics.rho(
+        bo_extraction_beam_magnetic_rigidity, bo_extraction_dipole_magnetic_field)
 
     bo_extraction_revolution_period = optics.revolution_period(
         bo_lattice_circumference, bo_extraction_beam_velocity)
@@ -218,16 +260,8 @@ class ParameterDefinitions(object):
     bo_extraction_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
     bo_extraction_radiation_integral_I6 =  0.008112620479157 # [1/m]
 
-    bo_optics_mode = ''
-
-    bo_horizontal_betatron_tune = 19.204749345767866
-    bo_vertical_betatron_tune   = 7.307442329080478
-    bo_synchrotron_tune         = 0.004419249840938
-
-    bo_horizontal_natural_chromaticity = -33.704073487683672
-    bo_vertical_natural_chromaticity   = -13.950562838260794
-
-    bo_cycling_frequency = 2.0 # [Hz]
+    bo_extraction_energy_loss_per_turn_from_dipoles = optics.U0(
+        bo_extraction_beam_energy, bo_extraction_radiation_integral_I2)
 
     bo_extraction_linear_momentum_compaction = optics.alpha1(
         bo_extraction_radiation_integral_I1,
@@ -255,3 +289,28 @@ class ParameterDefinitions(object):
         bo_extraction_radiation_integral_I3,
         bo_extraction_radiation_integral_I4)
 
+    bo_extraction_horizontal_damping_time = optics.damping_time(
+        bo_extraction_beam_energy,
+        bo_extraction_radiation_integral_I2,
+        bo_extraction_horizontal_damping_partition_number,
+        bo_lattice_circumference)
+
+    bo_extraction_vertical_damping_time = optics.damping_time(
+        bo_extraction_beam_energy,
+        bo_extraction_radiation_integral_I2,
+        bo_extraction_vertical_damping_partition_number,
+        bo_lattice_circumference)
+
+    bo_extraction_longitudinal_damping_time = optics.damping_time(
+        bo_extraction_beam_energy,
+        bo_extraction_radiation_integral_I2,
+        bo_extraction_longitudinal_damping_partition_number,
+        bo_lattice_circumference)
+
+    bo_extraction_rf_frequency = optics.rf_frequency(
+        bo_extraction_revolution_frequency, bo_harmonic_number)
+
+    #bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
+    #    bo_extraction_beam_energy,
+    #    bo_extraction_dipole_bending_radius,
+    #    bo_beam_current)
