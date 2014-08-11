@@ -192,8 +192,16 @@ class ParameterDefinitions(object):
     bo_harmonic_number       = 828
     bo_optics_mode = ''
 
-    bo_number_of_dipoles = 5 * sr_lattice_symmetry
-    bo_hardedge_length_of_dipoles =  1.152 #[m] 
+    bo_number_of_dipoles = 50
+    bo_number_of_QF_quadrupoles = 50
+    bo_number_of_QD_quadrupoles = 25
+
+    bo_hardedge_length_of_dipoles =  1.152 # [m]
+    bo_hardedge_length_of_QF_quadrupoles = 0.3 # [m]
+    bo_hardedge_length_of_QD_quadrupoles = 0.2 # [m]
+
+    bo_QF_quadrupole_maximum_gradient = 13.5 # [T/m]
+    bo_QD_quadrupole_maximum_absolute_gradient = 2.0 # [T/m]
 
     bo_horizontal_betatron_tune = 19.204749345767866
     bo_vertical_betatron_tune   = 7.307442329080478
@@ -209,7 +217,7 @@ class ParameterDefinitions(object):
     bo_injection_beam_beta_factor   = optics.beta(bo_injection_beam_gamma_factor)
     bo_injection_beam_velocity      = optics.velocity(bo_injection_beam_beta_factor)
 
-    bo_injection_dipole_magnetic_field = 0.0546 #[T]
+    bo_injection_dipole_magnetic_field = 0.0546 # [T]
     
     bo_injection_beam_magnetic_rigidity = optics.brho(
         bo_injection_beam_energy,
@@ -223,7 +231,7 @@ class ParameterDefinitions(object):
     bo_extraction_beam_beta_factor  = optics.beta(bo_extraction_beam_gamma_factor)
     bo_extraction_beam_velocity     = optics.velocity(bo_extraction_beam_beta_factor)
 
-    bo_extraction_dipole_magnetic_field = 1.092 #[T]
+    bo_extraction_dipole_magnetic_field = 1.092 # [T]
 
     bo_extraction_beam_magnetic_rigidity = optics.brho(
         bo_extraction_beam_energy,
@@ -288,4 +296,7 @@ class ParameterDefinitions(object):
         bo_extraction_radiation_integral_I2,
         bo_extraction_longitudinal_damping_partition_number,
         bo_lattice_circumference)
+
+    bo_extraction_rf_frequency = optics.rf_frequency(
+        bo_extraction_revolution_frequency, bo_harmonic_number)
 

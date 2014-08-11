@@ -165,7 +165,7 @@ parameter_list = [
   ),
                   
   Parameter(
-    name = 'Storage ring total RF voltage', 
+    name     = 'Storage ring total RF voltage', 
     group    = 'FAC',
     value    = Prms.sr_total_RF_voltage, 
     symbol   = r'<math>V_\text{RF}</math>',
@@ -176,7 +176,7 @@ parameter_list = [
   ),              
   
   Parameter(
-    name = 'Storage ring revolution period', 
+    name     = 'Storage ring revolution period', 
     group    = 'FAC',
     value    = Prms.sr_revolution_period, 
     symbol   = r'<math>T_\text{rev}</math>',
@@ -188,7 +188,7 @@ parameter_list = [
   ),
  
   Parameter(
-    name = 'Storage ring revolution frequency', 
+    name     = 'Storage ring revolution frequency', 
     group    = 'FAC',
     value    = Prms.sr_revolution_frequency, 
     symbol   = r'<math>f_\text{rev}</math>',
@@ -199,7 +199,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring RF frequency', 
+    name     = 'Storage ring RF frequency', 
     group    = 'FAC',
     value    = Prms.sr_rf_frequency, 
     symbol   = r'<math>f_\text{RF}</math>',
@@ -211,7 +211,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring number of electrons', 
+    name     = 'Storage ring number of electrons', 
     group    = 'FAC',
     value    = Prms.sr_number_of_electrons, 
     symbol   = r'<math>N</math>',
@@ -223,7 +223,7 @@ parameter_list = [
   ),
  
   Parameter(
-    name = 'Storage ring number of B1 dipoles', 
+    name     = 'Storage ring number of B1 dipoles', 
     group    = 'FAC',
     value    = Prms.sr_number_of_B1_dipoles, 
     symbol   = r'<math>N_\text{B1}</math>',
@@ -234,7 +234,7 @@ parameter_list = [
   ), 
             
   Parameter(
-    name = 'Storage ring number of B2 dipoles', 
+    name     = 'Storage ring number of B2 dipoles', 
     group    = 'FAC',
     value    = Prms.sr_number_of_B2_dipoles, 
     symbol   = r'<math>N_\text{B2}</math>',
@@ -245,7 +245,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring number of B3 dipoles', 
+    name     = 'Storage ring number of B3 dipoles', 
     group    = 'FAC',
     value    = Prms.sr_number_of_B3_dipoles, 
     symbol   = r'<math>N_\text{B3}</math>',
@@ -256,7 +256,7 @@ parameter_list = [
   ), 
          
   Parameter(
-    name = 'Storage ring number of BC dipoles', 
+    name     = 'Storage ring number of BC dipoles', 
     group    = 'FAC',
     value    = Prms.sr_number_of_BC_dipoles, 
     symbol   = r'<math>N_\text{BC}</math>',
@@ -267,7 +267,7 @@ parameter_list = [
   ), 
                            
   Parameter(
-    name = 'Storage ring hardedge length of B1 dipoles', 
+    name     = 'Storage ring hardedge length of B1 dipoles', 
     group    = 'FAC',
     value    = Prms.sr_hardedge_length_of_B1_dipoles, 
     symbol   = r'<math>L_\text{B1}</math>',
@@ -278,7 +278,7 @@ parameter_list = [
   ),  
                 
   Parameter(
-    name = 'Storage ring hardedge length of B2 dipoles', 
+    name     = 'Storage ring hardedge length of B2 dipoles', 
     group    = 'FAC',
     value    = Prms.sr_hardedge_length_of_B2_dipoles, 
     symbol   = r'<math>L_\text{B2}</math>',
@@ -289,7 +289,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring hardedge length of B3 dipoles', 
+    name     = 'Storage ring hardedge length of B3 dipoles', 
     group    = 'FAC',
     value    = Prms.sr_hardedge_length_of_B3_dipoles, 
     symbol   = r'<math>L_\text{B3}</math>',
@@ -300,7 +300,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring hardedge length of BC dipoles', 
+    name     = 'Storage ring hardedge length of BC dipoles', 
     group    = 'FAC',
     value    = Prms.sr_hardedge_length_of_BC_dipoles, 
     symbol   = r'<math>L_\text{BC}</math>',
@@ -311,7 +311,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring dipole low magnetic field', 
+    name     = 'Storage ring dipole low magnetic field', 
     group    = 'FAC',
     value    = Prms.sr_dipole_low_magnetic_field, 
     symbol   = r'<math>B_\text{low}</math>',
@@ -322,7 +322,7 @@ parameter_list = [
   ), 
                 
   Parameter(
-    name = 'Storage ring dipole high magnetic field', 
+    name     = 'Storage ring dipole high magnetic field', 
     group    = 'FAC',
     value    = Prms.sr_dipole_high_magnetic_field, 
     symbol   = r'<math>B_\text{high}</math>',
@@ -333,7 +333,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring dipole low magnetic field bending radius', 
+    name     = 'Storage ring dipole low magnetic field bending radius', 
     group    = 'FAC',
     value    = Prms.sr_dipole_low_magnetic_field_bending_radius,
     symbol   = r'<math>\rho_\text{low} = \frac{ec/p}{B_\text{low}} = \frac{(B\rho)}{B_\text{low}}</math>',
@@ -345,7 +345,7 @@ parameter_list = [
   ), 
                 
   Parameter(
-    name = 'Storage ring dipole high magnetic field bending radius', 
+    name     = 'Storage ring dipole high magnetic field bending radius', 
     group    = 'FAC',
     value    = Prms.sr_dipole_high_magnetic_field_bending_radius,
     symbol   = r'<math>\rho_\text{high} = \frac{ec/p}{B_\text{high}} = \frac{(B\rho)}{B_\text{high}}</math>',
@@ -357,7 +357,7 @@ parameter_list = [
   ), 
   
   Parameter(
-    name = 'Storage ring dipole low magnetic field critical energy', 
+    name     = 'Storage ring dipole low magnetic field critical energy', 
     group    = 'FAC',
     value    = Prms.sr_dipole_low_magnetic_field_critical_energy,
     symbol   = r'<math>\epsilon_\text{c,low} = \frac{3}{2} \hbar c \frac{\gamma^3}{\rho_\text{low}}</math>',
@@ -369,7 +369,7 @@ parameter_list = [
   ), 
                 
   Parameter(
-    name = 'Storage ring dipole high magnetic field critical energy', 
+    name     = 'Storage ring dipole high magnetic field critical energy', 
     group    = 'FAC',
     value    = Prms.sr_dipole_high_magnetic_field_critical_energy,
     symbol   = r'<math>\epsilon_\text{c,high} = \frac{3}{2} \hbar c \frac{\gamma^3}{\rho_\text{high}}</math>',
@@ -381,7 +381,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I1 from dipoles', 
+    name     = 'Storage ring radiation integral I1 from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I1_from_dipoles, 
     symbol   = r'<math>I_\text{1,DIP} = \oint{\frac{\eta_x}{\rho_x}\,ds}</math>',
@@ -393,7 +393,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I2 from dipoles', 
+    name     = 'Storage ring radiation integral I2 from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I2_from_dipoles, 
     symbol   = r'<math>I_\text{2,DIP} = \oint{\frac{1}{\rho_x^2}\,ds}</math>',
@@ -405,7 +405,7 @@ parameter_list = [
   ), 
    
   Parameter(
-    name = 'Storage ring radiation integral I3 from dipoles', 
+    name     = 'Storage ring radiation integral I3 from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I3_from_dipoles, 
     symbol   = r'<math>I_\text{3,DIP} = \oint{\frac{1}{|\rho_x|^3}\,ds}</math>',
@@ -417,7 +417,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I4 from dipoles', 
+    name     = 'Storage ring radiation integral I4 from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I4_from_dipoles, 
     symbol   = r'<math>I_\text{4,DIP} = \frac{\eta_x(s_0) \tan \theta(s_0)}{\rho_x^2} + \oint{\frac{\eta_x}{\rho_x^3} \left(1 + 2 \rho_x^2 k\right)\,ds} + \frac{\eta_x(s_1) \tan \theta(s_1)}{\rho_x^2}</math>',
@@ -429,7 +429,7 @@ parameter_list = [
   ),   
                   
   Parameter(
-    name = 'Storage ring radiation integral I5 from dipoles', 
+    name     = 'Storage ring radiation integral I5 from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I5_from_dipoles, 
     symbol   = r'<math>I_\text{5,DIP} = \oint{\frac{H_x}{|\rho_x|^3}\,ds}</math>',
@@ -442,7 +442,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring radiation integral I6 from dipoles', 
+    name     = 'Storage ring radiation integral I6 from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I6_from_dipoles, 
     symbol   = r'<math>I_\text{6,DIP} = \oint{k^2 \eta_x^2\,ds}</math>',
@@ -455,7 +455,7 @@ parameter_list = [
   ),            
   
   Parameter(
-    name = 'Storage ring radiation integral I1 from IDs', 
+    name     = 'Storage ring radiation integral I1 from IDs', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I1_from_IDs, 
     symbol   = r'<math>I_\text{1,IDs} = \oint{\frac{\eta_x}{\rho_x}\,ds}</math>',
@@ -468,7 +468,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I2 from IDs', 
+    name     = 'Storage ring radiation integral I2 from IDs', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I2_from_IDs, 
     symbol   = r'<math>I_\text{2,IDs} = \oint{\frac{1}{\rho_x^2}\,ds}</math>',
@@ -480,7 +480,7 @@ parameter_list = [
   ), 
    
   Parameter(
-    name = 'Storage ring radiation integral I3 from IDs', 
+    name     = 'Storage ring radiation integral I3 from IDs', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I3_from_IDs, 
     symbol   = r'<math>I_\text{3,IDs} = \oint{\frac{1}{|\rho_x|^3}\,ds}</math>',
@@ -492,7 +492,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I4 from IDs', 
+    name     = 'Storage ring radiation integral I4 from IDs', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I4_from_IDs, 
     symbol   = r'<math>I_\text{4,IDs} = \frac{\eta_x(s_0) \tan \theta(s_0)}{\rho_x^2} + \oint{\frac{\eta_x}{\rho_x^3} \left(1 + 2 \rho_x^2 k\right)\,ds} + \frac{\eta_x(s_1) \tan \theta(s_1)}{\rho_x^2}</math>',
@@ -504,7 +504,7 @@ parameter_list = [
   ),   
                   
   Parameter(
-    name = 'Storage ring radiation integral I5 from IDs', 
+    name     = 'Storage ring radiation integral I5 from IDs', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I5_from_IDs, 
     symbol   = r'<math>I_\text{5,IDs} = \oint{\frac{H_x}{|\rho_x|^3}\,ds}</math>',
@@ -517,7 +517,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring radiation integral I6 from IDs', 
+    name     = 'Storage ring radiation integral I6 from IDs', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I6_from_IDs, 
     symbol   = r'<math>I_\text{6,IDs} = \oint{k^2 \eta_x^2\,ds}</math>',
@@ -530,7 +530,7 @@ parameter_list = [
   ),                 
   
   Parameter(
-    name = 'Storage ring radiation integral I1', 
+    name     = 'Storage ring radiation integral I1', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I1, 
     symbol   = r'<math>I_\text{1} = I_\text{1,DIP} + I_\text{1,IDs}</math>',
@@ -542,7 +542,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I2', 
+    name     = 'Storage ring radiation integral I2', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I2, 
     symbol   = r'<math>I_\text{2} = I_\text{2,DIP} + I_\text{2,IDs}</math>',
@@ -554,7 +554,7 @@ parameter_list = [
   ), 
    
   Parameter(
-    name = 'Storage ring radiation integral I3', 
+    name     = 'Storage ring radiation integral I3', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I3, 
     symbol   = r'<math>I_\text{3} = I_\text{3,DIP} + I_\text{3,IDs}</math>',
@@ -566,7 +566,7 @@ parameter_list = [
   ), 
                   
   Parameter(
-    name = 'Storage ring radiation integral I4', 
+    name     = 'Storage ring radiation integral I4', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I4, 
     symbol   = r'<math>I_\text{4} = I_\text{4,DIP} + I_\text{4,IDs}</math>',
@@ -578,7 +578,7 @@ parameter_list = [
   ),   
                   
   Parameter(
-    name = 'Storage ring radiation integral I5', 
+    name     = 'Storage ring radiation integral I5', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I5, 
     symbol   = r'<math>I_5 = I_\text{5,DIP} + I_\text{5,IDs}</math>',
@@ -590,7 +590,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring radiation integral I6', 
+    name     = 'Storage ring radiation integral I6', 
     group    = 'FAC',
     value    = Prms.sr_radiation_integral_I6, 
     symbol   = r'<math>I_\text{6} = I_\text{6,DIP} + I_\text{6,IDs}</math>',
@@ -602,7 +602,7 @@ parameter_list = [
   ),   
    
   Parameter(
-    name = 'Storage ring optics mode', 
+    name     = 'Storage ring optics mode', 
     group    = 'FAC',
     value    = Prms.sr_optics_mode, 
     symbol   = '',
@@ -613,7 +613,7 @@ parameter_list = [
   ),
   
   Parameter(
-    name = 'Storage ring horizontal betatron tune', 
+    name     = 'Storage ring horizontal betatron tune', 
     group    = 'FAC',
     value    = Prms.sr_horizontal_betatron_tune, 
     symbol   = r'<math>\nu_x</math>',
@@ -625,7 +625,7 @@ parameter_list = [
   ),    
                 
   Parameter(
-    name = 'Storage ring vertical betatron tune', 
+    name     = 'Storage ring vertical betatron tune', 
     group    = 'FAC',
     value    = Prms.sr_vertical_betatron_tune, 
     symbol   = r'<math>\nu_y</math>',
@@ -637,7 +637,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring synchrotron tune', 
+    name     = 'Storage ring synchrotron tune', 
     group    = 'FAC',
     value    = Prms.sr_synchrotron_tune, 
     symbol   = r'<math>\nu_s</math>',
@@ -649,7 +649,7 @@ parameter_list = [
   ),                            
   
   Parameter(
-    name = 'Storage ring energy loss per turn from dipoles', 
+    name     = 'Storage ring energy loss per turn from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_energy_loss_per_turn_from_dipoles,
     symbol   = r'<math>U_\text{0,DIP} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2,DIP}</math>',
@@ -661,7 +661,7 @@ parameter_list = [
   ),                            
   
   Parameter(
-    name = 'Storage ring overvoltage from dipoles', 
+    name     = 'Storage ring overvoltage from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_overvoltage_from_dipoles,
     symbol   = r'<math>q_\text{DIP} = \frac{eV_\text{RF}}{U_\text{0,DIP}}</math>',
@@ -673,7 +673,7 @@ parameter_list = [
   ),                            
   
   Parameter(
-    name = 'Storage ring synchronous phase from dipoles', 
+    name     = 'Storage ring synchronous phase from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_synchronous_phase_from_dipoles, 
     symbol   = r'<math>\phi_0 = \pi - \arcsin\left(\frac{1}{q_\text{DIP}}\right)</math>',
@@ -684,7 +684,7 @@ parameter_list = [
   ),
                             
   Parameter(
-    name = 'Storage ring linear momentum compaction from dipoles',
+    name     = 'Storage ring linear momentum compaction from dipoles',
     group    = 'FAC',
     value    = Prms.sr_linear_momentum_compaction_from_dipoles,
     symbol   = r'<math>\alpha_\text{1,DIP} = \frac{I_\text{1,DIP}}{C}</math>',
@@ -696,7 +696,7 @@ parameter_list = [
   ),
   
   Parameter(
-    name = 'Storage ring RF energy acceptance from dipoles', 
+    name     = 'Storage ring RF energy acceptance from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_rf_energy_acceptance_from_dipoles, 
     symbol   = r'<math>\epsilon_\text{max,DIP} = \sqrt{\frac{1}{\pi h \alpha_{x,\text{DIP}} \frac{U_\text{0,DIP}}{E} F(q_\text{DIP})}</math>',
@@ -711,7 +711,7 @@ parameter_list = [
   ),
                             
   Parameter(
-    name = 'Storage ring horizontal damping partition number from dipoles', 
+    name     = 'Storage ring horizontal damping partition number from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_horizontal_damping_partition_number_from_dipoles, 
     symbol   = r'<math>J_{x,\text{DIP}} = 1 - \frac{I_\text{4,DIP}}{I_\text{2,DIP}}</math>',
@@ -723,7 +723,7 @@ parameter_list = [
   ),
   
   Parameter(
-    name = 'Storage ring vertical damping partition number from dipoles', 
+    name     = 'Storage ring vertical damping partition number from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_vertical_damping_partition_number_from_dipoles, 
     symbol   = r'<math>J_{y,\text{DIP}} = 1 - \frac{I_\text{4y,DIP}}{I_\text{2,DIP}} \equiv 1</math>',
@@ -734,7 +734,7 @@ parameter_list = [
   ),
   
   Parameter(
-    name = 'Storage ring longitudinal damping partition number from dipoles',
+    name     = 'Storage ring longitudinal damping partition number from dipoles',
     group    = 'FAC',
     value    = Prms.sr_longitudinal_damping_partition_number_from_dipoles, 
     symbol   = r'<math>J_{s,\text{DIP}} = 4 - J_{x,\text{DIP}} - J_{y,\text{DIP}}</math>',
@@ -746,7 +746,7 @@ parameter_list = [
   ),
                             
   Parameter(
-    name = 'Storage ring natural emittance from dipoles', 
+    name     = 'Storage ring natural emittance from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_natural_emittance_from_dipoles, 
     symbol   = r'<math>\epsilon_\text{0,DIP} = C_\text{q} \frac{\gamma^2}{J_{x,\text{DIP}}} \frac{I_\text{5,DIP}}{I_\text{2,DIP}}</math>',
@@ -760,7 +760,7 @@ parameter_list = [
   ),
                             
   Parameter(
-    name = 'Storage ring natural energy spread from dipoles',
+    name     = 'Storage ring natural energy spread from dipoles',
     group    = 'FAC',
     value    = Prms.sr_natural_energy_spread_from_dipoles, 
     symbol   = r'<math>\sigma_{E,\text{DIP}} = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3,DIP}}{2 I_\text{2,DIP} + I_\text{4,DIP}}}</math>',
@@ -774,7 +774,7 @@ parameter_list = [
   ),
   
   Parameter(
-    name = 'Storage ring energy loss per turn from IDs', 
+    name     = 'Storage ring energy loss per turn from IDs', 
     group    = 'FAC',
     value    = Prms.sr_energy_loss_per_turn_from_IDs,
     symbol   = r'<math>U_\text{0,IDs} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2,IDs}</math>',
@@ -786,7 +786,7 @@ parameter_list = [
   ),                            
   
   Parameter(
-    name = 'Storage ring energy loss per turn', 
+    name     = 'Storage ring energy loss per turn', 
     group    = 'FAC',
     value    = Prms.sr_energy_loss_per_turn,
     symbol   = r'<math>U_\text{0} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2}</math>',
@@ -798,7 +798,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring overvoltage', 
+    name     = 'Storage ring overvoltage', 
     group    = 'FAC',
     value    = Prms.sr_overvoltage,
     symbol   = r'<math>q = \frac{eV_\text{RF}}{U_\text{0}}</math>',
@@ -810,7 +810,7 @@ parameter_list = [
   ),                            
  
   Parameter(
-    name = 'Storage ring synchronous phase', 
+    name     = 'Storage ring synchronous phase', 
     group    = 'FAC',
     value    = Prms.sr_synchronous_phase, 
     symbol   = r'<math>\phi_0 = \pi - \arcsin\left(\frac{1}{q}\right)</math>',
@@ -821,7 +821,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring linear momentum compaction',
+    name     = 'Storage ring linear momentum compaction',
     group    = 'FAC',
     value    = Prms.sr_linear_momentum_compaction,
     symbol   = r'<math>\alpha_\text{1} = \frac{I_\text{1}}{C}</math>',
@@ -833,7 +833,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring RF energy acceptance', 
+    name     = 'Storage ring RF energy acceptance', 
     group    = 'FAC',
     value    = Prms.sr_rf_energy_acceptance, 
     symbol   = r'<math>\epsilon_\text{max} = \sqrt{\frac{1}{\pi h \alpha_x} \frac{U_0}{E} F(q)}</math>',
@@ -848,7 +848,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring horizontal damping partition number', 
+    name     = 'Storage ring horizontal damping partition number', 
     group    = 'FAC',
     value    = Prms.sr_horizontal_damping_partition_number, 
     symbol   = r'<math>J_x = 1 - \frac{I_\text{4}}{I_\text{2}}</math>',
@@ -860,7 +860,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring vertical damping partition number', 
+    name     = 'Storage ring vertical damping partition number', 
     group    = 'FAC',
     value    = Prms.sr_vertical_damping_partition_number, 
     symbol   = r'<math>J_y = 1 - \frac{I_{4,y}}{I_\text{2}} \equiv 1</math>',
@@ -871,7 +871,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring longitudinal damping partition number',
+    name     = 'Storage ring longitudinal damping partition number',
     group    = 'FAC',
     value    = Prms.sr_longitudinal_damping_partition_number, 
     symbol   = r'<math>J_s = 4 - J_x - J_y</math>',
@@ -883,7 +883,7 @@ parameter_list = [
   ),
  
   Parameter(
-    name = 'Storage ring natural emittance', 
+    name     = 'Storage ring natural emittance', 
     group    = 'FAC',
     value    = Prms.sr_natural_emittance, 
     symbol   = r'<math>\epsilon_0 = C_\text{q} \frac{\gamma^2}{J_x} \frac{I_\text{5}}{I_\text{2}}</math>',
@@ -897,7 +897,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring natural energy spread',
+    name     = 'Storage ring natural energy spread',
     group    = 'FAC',
     value    = Prms.sr_natural_energy_spread, 
     symbol   = r'<math>\sigma_E = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3}}{2 I_\text{2} + I_\text{4}}}</math>',
@@ -911,7 +911,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Storage ring horizontal betatron frequency', 
+    name     = 'Storage ring horizontal betatron frequency', 
     group    = 'FAC',
     value    = Prms.sr_horizontal_betatron_frequency, 
     symbol   = r'<math>f_x = f_\text{rev} \left( \nu_x - \lfloor \nu_x\rfloor \right)</math>',
@@ -923,7 +923,7 @@ parameter_list = [
   ),    
                 
   Parameter(
-    name = 'Storage ring vertical betatron frequency', 
+    name     = 'Storage ring vertical betatron frequency', 
     group    = 'FAC',
     value    = Prms.sr_vertical_betatron_frequency, 
     symbol   = r'<math>f_y = f_\text{rev} \left( \nu_y - \lfloor \nu_y\rfloor \right)</math>',
@@ -935,7 +935,7 @@ parameter_list = [
   ),  
                   
   Parameter(
-    name = 'Storage ring synchrotron frequency', 
+    name     = 'Storage ring synchrotron frequency', 
     group    = 'FAC',
     value    = Prms.sr_synchrotron_frequency, 
     symbol   = r'<math>f_s = f_\text{rev} \left( \nu_s - \lfloor \nu_s\rfloor \right)</math>',

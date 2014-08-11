@@ -222,7 +222,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = unicode('2<sup>2</sup>×2<sup>3</sup>×23', encoding='utf-8'),
   ),
 
   Parameter(
@@ -493,7 +493,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Booster injection dipole bending radius', 
+    name     = 'Booster injection dipole bending radius', 
     group    = 'FAC',
     value    = Prms.bo_injection_dipole_bending_radius,
     symbol   = r'<math>\rho_\text{inj} = \frac{ec/p}{B_\text{inj}} = \frac{(B\rho)}{B_\text{inj}}</math>',
@@ -505,7 +505,7 @@ parameter_list = [
   ),
 
   Parameter(
-    name = 'Booster extraction dipole bending radius', 
+    name     = 'Booster extraction dipole bending radius', 
     group    = 'FAC',
     value    = Prms.bo_extraction_dipole_bending_radius,
     symbol   = r'<math>\rho_\text{ext} = \frac{ec/p}{B_\text{ext}} = \frac{(B\rho)}{B_\text{ext}}</math>',
@@ -527,4 +527,84 @@ parameter_list = [
     obs      = '',
   ),
 
+  Parameter(
+    name     = 'Booster number of QF quadrupoles', 
+    group    = 'FAC',
+    value    = Prms.bo_number_of_QF_quadrupoles, 
+    symbol   = r'<math>N_\text{QF}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster hardedge length of QF quadrupoles',
+    group    = 'FAC',
+    value    = Prms.bo_hardedge_length_of_QF_quadrupoles,
+    symbol   = r'<math>L_\text{QF}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = '',
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster number of QD quadrupoles', 
+    group    = 'FAC',
+    value    = Prms.bo_number_of_QD_quadrupoles, 
+    symbol   = r'<math>N_\text{QF}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster hardedge length of QD quadrupoles',
+    group    = 'FAC',
+    value    = Prms.bo_hardedge_length_of_QD_quadrupoles,
+    symbol   = r'<math>L_\text{QF}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = '',
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster extraction RF frequency', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_rf_frequency, 
+    symbol   = r'<math>f_\text{RF}</math>',
+    units    = u'MHz', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction revolution frequency',
+                'Booster harmonic number'],
+    obs      = '',
+  ),
+
+#  ********** CHECK **********
+#
+#  Parameter(
+#    name     = 'Booster QF quadrupole maximum gradient', 
+#    group    = 'FAC',
+#    value    = Prms.bo_QF_quadrupole_maximum_gradient, 
+#    symbol   = r'<math>K_\text{QF,max}</math>',
+#    units    = 'T/m', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ), 
+#                
+#  Parameter(
+#    name     = 'Booster QD quadrupole maximum gradient', 
+#    group    = 'FAC',
+#    value    = Prms.bo_QD_quadrupole_maximum_gradient, 
+#    symbol   = r'<math>K_\text{QD,max}</math>',
+#    units    = 'T/m', 
+#    revision = '2014-08-01',
+#    deps     = [],
+#    obs      = '',
+#  ), 
+                
 ]
