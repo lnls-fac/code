@@ -14,7 +14,8 @@ ppm      = 1e-6;
 
 %% definition of the nominal AT model
 r.config.lattice_function  = @sirius_lattice;
-r.config.lattice_func_arg  = 'b'; % old ac10
+r.config.lattice_func_arg1  = 'b'; % old ac10
+r.config.lattice_func_arg2  = '00'; % old ac10
 %r.config.lattice_function  = 'thering_withids.mat';
 
 
@@ -22,7 +23,7 @@ if ischar(r.config.lattice_function)
     data = load(r.config.lattice_function);
     r.params.the_ring = data.thering;
 else
-    r.params.the_ring = r.config.lattice_function(r.config.lattice_func_arg);
+    r.params.the_ring = r.config.lattice_function(r.config.lattice_func_arg1,r.config.lattice_func_arg2);
 end
 
 r.config.nr_machines         = 1;
