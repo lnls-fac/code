@@ -164,9 +164,9 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Storage ring total RF voltage', 
+    name     = 'Storage ring RF cavity peak voltage', 
     group    = 'FAC',
-    value    = Prms.sr_total_RF_voltage, 
+    value    = Prms.sr_rf_cavity_peak_voltage, 
     symbol   = r'<math>V_\text{RF}</math>',
     units    = 'MV', 
     revision = '2014-08-01',

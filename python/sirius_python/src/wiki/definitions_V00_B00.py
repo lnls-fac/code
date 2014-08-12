@@ -25,7 +25,7 @@ class ParameterDefinitions(object):
     sr_length_of_long_straight_sections  = 7.0 #[m]
     sr_length_of_short_straight_sections = 6.0 #[m]
     sr_harmonic_number                   = 864
-    sr_total_RF_voltage                  = 2.7 #[MV]
+    sr_rf_cavity_peak_voltage            = 2.7 #[MV]
     
     sr_revolution_period = optics.revolution_period(
         sr_lattice_circumference, sr_beam_velocity)
@@ -120,7 +120,7 @@ class ParameterDefinitions(object):
         sr_beam_energy, sr_radiation_integral_I2_from_dipoles)
 
     sr_overvoltage_from_dipoles = optics.overvoltage(
-        sr_total_RF_voltage, sr_energy_loss_per_turn_from_dipoles)
+        sr_rf_cavity_peak_voltage, sr_energy_loss_per_turn_from_dipoles)
 
     sr_synchronous_phase_from_dipoles = optics.sync_phase(
         sr_overvoltage_from_dipoles)
@@ -163,7 +163,7 @@ class ParameterDefinitions(object):
         sr_beam_energy, sr_radiation_integral_I2)
 
     sr_overvoltage = optics.overvoltage(
-        sr_total_RF_voltage, sr_energy_loss_per_turn)
+        sr_rf_cavity_peak_voltage, sr_energy_loss_per_turn)
 
     sr_synchronous_phase = optics.sync_phase(
         sr_overvoltage)
@@ -223,6 +223,8 @@ class ParameterDefinitions(object):
 
     bo_horizontal_natural_chromaticity = -33.704073487683672
     bo_vertical_natural_chromaticity   = -13.950562838260794
+
+    bo_rf_cavity_peak_voltage = 0.95 # [MV]
 
     bo_cycling_frequency = 2.0 # [Hz]
 
@@ -320,6 +322,9 @@ class ParameterDefinitions(object):
 
     bo_extraction_rf_frequency = optics.rf_frequency(
         bo_extraction_revolution_frequency, bo_harmonic_number)
+
+    bo_extraction_rf_wavelength = optics.rf_wavelength(
+        bo_extraction_rf_frequency)
 
     bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
         bo_extraction_energy_loss_per_turn_from_dipoles, bo_beam_current)

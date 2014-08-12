@@ -120,7 +120,6 @@ if __name__ == "__main__":
         bo_list = []
         '''builds lists with parameters'''
         for arg in sys.argv[1:]:
-            arg = arg.lower();
             if arg == 'sr':
                 submachine = 'sr'
             elif arg == 'booster':
