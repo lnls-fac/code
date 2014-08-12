@@ -193,7 +193,7 @@ class ParameterDefinitions(object):
     
     bo_beam_current          = 2.0 # [mA]
     bo_lattice_version       = '' 
-    bo_lattice_circumference = 496.8 # [m]
+    bo_circumference = 496.8 # [m]
     bo_lattice_symmetry      = 10
     bo_harmonic_number       = 828
     bo_optics_mode = ''
@@ -218,6 +218,8 @@ class ParameterDefinitions(object):
 
     bo_horizontal_natural_chromaticity = -33.704073487683672
     bo_vertical_natural_chromaticity   = -13.950562838260794
+
+    bo_rf_cavity_peak_voltage = 0.95 # [MV]
 
     bo_cycling_frequency = 2.0 # [Hz]
 
@@ -254,7 +256,7 @@ class ParameterDefinitions(object):
         bo_extraction_beam_magnetic_rigidity, bo_extraction_dipole_magnetic_field)
 
     bo_extraction_revolution_period = optics.revolution_period(
-        bo_lattice_circumference, bo_extraction_beam_velocity)
+        bo_circumference, bo_extraction_beam_velocity)
 
     bo_extraction_revolution_frequency = optics.revolution_frequency(
         bo_extraction_revolution_period)
@@ -271,7 +273,7 @@ class ParameterDefinitions(object):
 
     bo_extraction_linear_momentum_compaction = optics.alpha1(
         bo_extraction_radiation_integral_I1,
-        bo_lattice_circumference)
+        bo_circumference)
     
     bo_extraction_horizontal_damping_partition_number = optics.Jx(
         bo_extraction_radiation_integral_I2,
@@ -299,22 +301,25 @@ class ParameterDefinitions(object):
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_horizontal_damping_partition_number,
-        bo_lattice_circumference)
+        bo_circumference)
 
     bo_extraction_vertical_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_vertical_damping_partition_number,
-        bo_lattice_circumference)
+        bo_circumference)
 
     bo_extraction_longitudinal_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_longitudinal_damping_partition_number,
-        bo_lattice_circumference)
+        bo_circumference)
 
     bo_extraction_rf_frequency = optics.rf_frequency(
         bo_extraction_revolution_frequency, bo_harmonic_number)
 
     bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
         bo_extraction_energy_loss_per_turn_from_dipoles, bo_beam_current)
+
+    bo_extraction_rf_wavelength = optics.rf_wavelength(
+        bo_extraction_rf_frequency)

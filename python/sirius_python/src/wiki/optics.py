@@ -108,3 +108,7 @@ def radiation_power_from_dipoles(current, U0):
     '''Radiation power from dipoles [kW] from beam current [mA] and
     energy loss per turn [keV].'''
     return U0 * current / 1000
+
+def rf_wavelength(frequency):
+    '''RF wavelength [m] from RF frequency [MHz].'''
+    return const.light_speed / (1e6*frequency)
