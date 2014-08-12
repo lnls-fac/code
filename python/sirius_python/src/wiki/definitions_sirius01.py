@@ -339,3 +339,20 @@ class ParameterDefinitions(object):
     bo_extraction_synchrotron_frequency = optics.frequency_from_tune(
         bo_extraction_revolution_frequency, bo_synchrotron_tune)
 
+    bo_extraction_rf_energy_acceptance = optics.rf_energy_acceptance(
+        bo_extraction_overvoltage, bo_extraction_beam_energy,
+        bo_extraction_energy_loss_per_turn, bo_harmonic_number,
+        bo_extraction_linear_momentum_compaction)
+
+    bo_extraction_slip_factor = optics.slip_factor(
+        bo_extraction_linear_momentum_compaction,
+        bo_extraction_beam_gamma_factor)
+
+    bo_extraction_natural_bunch_length = optics.bunch_length(
+        bo_extraction_slip_factor,
+        bo_extraction_natural_energy_spread,
+        bo_extraction_synchrotron_frequency)
+
+    bo_extraction_natural_bunch_duration = optics.bunch_duration(
+        bo_extraction_natural_bunch_length,
+        bo_extraction_beam_beta_factor)

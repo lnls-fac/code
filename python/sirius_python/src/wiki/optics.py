@@ -112,3 +112,19 @@ def radiation_power(current, U0):
 def rf_wavelength(frequency):
     '''RF wavelength [m] from RF frequency [MHz].'''
     return const.light_speed / (1e6*frequency)
+
+def slip_factor(alpha, gamma):
+    '''Slip factor from momentum compaction factor alpha and gamma.'''
+    return alpha - 1/math.pow(gamma, 2)
+
+def bunch_length(slip_factor, energy_spread, synchrotron_frequency):
+    '''Natural bunch length [mm] from slip factor, natural energy spread [%],
+    synchrotron frequency [kHz].'''
+    angular_synchrotron_frequency = 2 * math.pi * synchrotron_frequency
+    return (const.light_speed * abs(slip_factor) * energy_spread/100 /
+            (1e3*angular_synchrotron_frequency)) * 1000
+
+def bunch_duration(bunch_length, beta):
+    '''Bunch lenth in time units [ps] from bunch length [mm] and beta
+    factor.'''
+    return 1e9 * bunch_length / beta / const.light_speed
