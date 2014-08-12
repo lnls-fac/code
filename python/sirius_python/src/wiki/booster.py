@@ -16,7 +16,8 @@ parameter_list = [
     symbol   = r'<math>E_\text{inj}</math>',
     units    = 'GeV', 
     revision = '2014-08-04',
-    deps     = []
+    deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -26,7 +27,8 @@ parameter_list = [
     symbol   = r'<math>\gamma_\text{inj}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster injection beam energy']
+    deps     = ['Booster injection beam energy'],
+    obs      = '',
   ),
 
   Parameter(
@@ -36,7 +38,8 @@ parameter_list = [
     symbol   = r'<math>\beta_\text{inj}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster injection beam gamma factor']
+    deps     = ['Booster injection beam gamma factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -46,7 +49,8 @@ parameter_list = [
     symbol   = r'<math>v_\text{inj}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster injection beam beta factor']
+    deps     = ['Booster injection beam beta factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -56,7 +60,8 @@ parameter_list = [
     symbol   = r'<math>E_\text{ext}</math>',
     units    = 'GeV', 
     revision = '2014-08-04',
-    deps     = []
+    deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -66,7 +71,8 @@ parameter_list = [
     symbol   = r'<math>\gamma_\text{ext}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster extraction beam energy']
+    deps     = ['Booster extraction beam energy'],
+    obs      = '',
   ),
 
   Parameter(
@@ -76,7 +82,8 @@ parameter_list = [
     symbol   = r'<math>\beta_\text{ext}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster extraction beam gamma factor']
+    deps     = ['Booster extraction beam gamma factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -86,7 +93,8 @@ parameter_list = [
     symbol   = r'<math>v_\text{ext}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster extraction beam beta factor']
+    deps     = ['Booster extraction beam beta factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -97,6 +105,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
   
   Parameter(
