@@ -807,7 +807,7 @@ parameter_list = [
     group    = 'FAC',
     value    = Prms.bo_extraction_natural_bunch_duration, 
     symbol   = r'<math>\sigma_\tau = \frac{\sigma_s}{\beta c}</math>',
-    units    = 'mm', 
+    units    = 'ps', 
     revision = '2014-08-01',
     deps     = ['Booster extraction natural bunch length',
                 'Booster extraction beam beta factor'],
