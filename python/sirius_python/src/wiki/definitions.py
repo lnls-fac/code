@@ -1,1 +1,2 @@
-from definitions_V00_B00 import *
+#from definitions_sirius00 import *
+from definitions_sirius01 import *

@@ -1,9 +1,10 @@
 '''
-Lattice/Mode V00_B00
+Sirius01
 ====================
 Date: 2014-08-12
-New naming convention
-This lattice/optics mode corresponds to the previous V500_AC10.5
+
+Storage ring:    V00B00   - This lattice/optics mode corresponds to the previous V500_AC10.5
+Booster:         V810OPT2 -  
 '''
 
 import optics

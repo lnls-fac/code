@@ -54,6 +54,8 @@ def generate_parameter_pages(parameters):
 def update_submachine(submachine, parameters_list = None):
     if parameters_list is None:
         generate_parameter_pages(submachine.parameter_list)
+        generate_parameter_name_list_page(submachine.label, submachine.parameter_list)
+        return
     if len(parameters_list) == 0:
         return
     print('<'+submachine.label+'>')
@@ -117,7 +119,6 @@ if __name__ == "__main__":
     else:
         submachine  = None
         parms_lists = {'sr':[], 'booster':[]}
-        bo_list = []
         '''builds lists with parameters'''
         for arg in sys.argv[1:]:
             if arg == 'sr':
@@ -133,11 +134,3 @@ if __name__ == "__main__":
         update_submachine(booster, parms_lists['booster'])
                     
                 
-            
-                 
-#storage_ring.parameter_list.sort()
-#generate_parameter_pages(storage_ring.parameter_list)
-#generate_parameter_name_list_page(storage_ring.label, storage_ring.parameter_list)
-#booster.parameter_list.sort()
-#generate_parameter_pages(booster.parameter_list)
-#generate_parameter_name_list_page(booster.label, booster.parameter_list)
