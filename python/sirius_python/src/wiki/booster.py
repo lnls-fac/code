@@ -716,4 +716,15 @@ parameter_list = [
     obs      = '',
   ),                            
   
+  Parameter(
+    name     = 'Booster extraction RF wavelength', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_rf_wavelength, 
+    symbol   = r'<math>\lambda_\text{RF}</math>',
+    units    = u'm', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction RF frequency'],
+    obs      = '',
+  ),
+  
 ]
