@@ -91,9 +91,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster lattice circumference', 
+    name     = 'Booster circumference', 
     group    = 'LNLS',
-    value    = Prms.bo_lattice_circumference, 
+    value    = Prms.bo_circumference, 
     symbol   = r'<math>C</math>',
     units    = 'm', 
     revision = '2014-08-01',
@@ -129,7 +129,7 @@ parameter_list = [
     symbol   = r'<math>T_\text{rev}</math>',
     units    = unicode('μs', encoding='utf-8'), 
     revision = '2014-08-01',
-    deps     = ['Booster lattice circumference',
+    deps     = ['Booster circumference',
                 'Booster extraction beam velocity'],
     obs      = '',
   ),
@@ -307,7 +307,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster extraction radiation integral I1',
-                'Booster lattice circumference'],
+                'Booster circumference'],
     obs      = '',
   ),
  
@@ -419,7 +419,7 @@ parameter_list = [
     deps     = ['Booster extraction beam energy',
                 'Booster extraction radiation integral I2',
                 'Booster extraction horizontal damping partition number',
-                'Booster lattice circumference'],
+                'Booster circumference'],
   ),
 
   Parameter(
@@ -432,7 +432,7 @@ parameter_list = [
     deps     = ['Booster extraction beam energy',
                 'Booster extraction radiation integral I2',
                 'Booster extraction vertical damping partition number',
-                'Booster lattice circumference'],
+                'Booster circumference'],
   ),
 
   Parameter(
@@ -445,7 +445,7 @@ parameter_list = [
     deps     = ['Booster extraction beam energy',
                 'Booster extraction radiation integral I2',
                 'Booster extraction longitudinal damping partition number',
-                'Booster lattice circumference'],
+                'Booster circumference'],
   ),
 
   Parameter(
@@ -689,8 +689,31 @@ parameter_list = [
     symbol   = r'<math>U_\text{0,DIP} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2,DIP}</math>',
     units    = 'keV', 
     revision = '2014-08-01',
-    deps     = ['Booster beam energy', 
-                'Booster radiation integral I2 from dipoles'],
+    deps     = ['Booster extraction beam energy', 
+                'Booster extraction radiation integral I2'],
+    obs      = '',
+  ),                            
+  
+  Parameter(
+    name     = 'Booster extraction radiation power from dipoles', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_radiation_power_from_dipoles,
+    symbol   = r'<math>P_\text{DIP} = U_{0,\text{DIP}} I</math>',
+    units    = 'kW', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction energy loss per turn from dipoles', 
+                'Booster beam current'],
+    obs      = '',
+  ),                            
+  
+  Parameter(
+    name     = 'Booster RF cavity peak voltage', 
+    group    = 'FAC',
+    value    = Prms.bo_rf_cavity_peak_voltage,
+    symbol   = r'<math>V_\text{RF}</math>',
+    units    = 'MV', 
+    revision = '2014-08-01',
+    deps     = [],
     obs      = '',
   ),                            
   
