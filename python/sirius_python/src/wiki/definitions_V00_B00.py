@@ -273,7 +273,7 @@ class ParameterDefinitions(object):
     bo_extraction_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
     bo_extraction_radiation_integral_I6 =  0.008112620479157 # [1/m]
 
-    bo_extraction_energy_loss_per_turn_from_dipoles = optics.U0(
+    bo_extraction_energy_loss_per_turn = optics.U0(
         bo_extraction_beam_energy, bo_extraction_radiation_integral_I2)
 
     bo_extraction_linear_momentum_compaction = optics.alpha1(
@@ -326,5 +326,15 @@ class ParameterDefinitions(object):
     bo_extraction_rf_wavelength = optics.rf_wavelength(
         bo_extraction_rf_frequency)
 
-    bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
-        bo_extraction_energy_loss_per_turn_from_dipoles, bo_beam_current)
+    bo_extraction_radiation_power = optics.radiation_power(
+        bo_extraction_energy_loss_per_turn, bo_beam_current)
+    
+    bo_extraction_overvoltage = optics.overvoltage(
+        bo_rf_cavity_peak_voltage, bo_extraction_energy_loss_per_turn)
+
+    bo_extraction_synchronous_phase = optics.sync_phase(
+        bo_extraction_overvoltage)
+
+    bo_extraction_synchrotron_frequency = optics.frequency_from_tune(
+        bo_extraction_revolution_frequency, bo_synchrotron_tune)
+

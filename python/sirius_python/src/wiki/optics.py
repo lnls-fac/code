@@ -104,7 +104,7 @@ def damping_time(energy, I2, J, circumference):
     c = const.electron_radius*const.light_speed / (3*math.pow(mc2, 3))
     return 1000 * circumference / (c*math.pow(energy, 3)*I2*J)
 
-def radiation_power_from_dipoles(current, U0):
+def radiation_power(current, U0):
     '''Radiation power from dipoles [kW] from beam current [mA] and
     energy loss per turn [keV].'''
     return U0 * current / 1000
