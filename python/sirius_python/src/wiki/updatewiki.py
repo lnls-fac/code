@@ -81,6 +81,17 @@ def update_all():
     update_submachine(submachine = storage_ring)
     update_submachine(submachine = booster)
     
+def lists_all_parameters():
+    submachine = storage_ring
+    print('<'+submachine.label+'>')
+    for i in range(len(submachine.parameter_list)):
+        print('{0:03d}. {1}'.format(i+1, submachine.parameter_list[i].name))
+    submachine = booster
+    print('<'+submachine.label+'>')
+    for i in range(len(submachine.parameter_list)):
+        print('{0:03d}. {1}'.format(i+1, submachine.parameter_list[i].name))
+        
+
 def print_help():
     print('NAME')
     print('      ' + sys.argv[0] + ' - updates Sirius wiki pages' )
@@ -101,6 +112,9 @@ def print_help():
     print('      ' + '4. updates two storage ring parameters and one booster parameter:')
     print('      ' + sys.argv[0] + ' sr "beam energy" circumference booster "horizontal tune"')
     print('')
+    print('      ' + '5. lists all defined parameters.')
+    print('      ' + sys.argv[0] + ' parameters')
+    print('')
     
 if __name__ == "__main__":
     
@@ -114,6 +128,8 @@ if __name__ == "__main__":
             update_submachine(submachine = booster)
         elif arg1 == 'deps':
             pass
+        elif arg1 == 'parameters':
+            lists_all_parameters()
         else:
             print_help()
     else:
