@@ -316,7 +316,5 @@ class ParameterDefinitions(object):
     bo_extraction_rf_frequency = optics.rf_frequency(
         bo_extraction_revolution_frequency, bo_harmonic_number)
 
-    #bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
-    #    bo_extraction_beam_energy,
-    #    bo_extraction_dipole_bending_radius,
-    #    bo_beam_current)
+    bo_extraction_radiation_power_from_dipoles = optics.radiation_power_from_dipoles(
+        bo_extraction_energy_loss_per_turn_from_dipoles, bo_beam_current)
