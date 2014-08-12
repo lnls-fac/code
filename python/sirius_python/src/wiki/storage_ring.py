@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import optics
 from parameter import Parameter
 from definitions import ParameterDefinitions as Prms
 
