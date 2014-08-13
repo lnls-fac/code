@@ -56,7 +56,8 @@ class Parameter:
         return '\n'.join(wiki)
 
     def create_obs(self):
-        obs = '* ' + self.DEFAULT_OBS + '\n'
+        obs = ''
         for s in self.obs:
             obs += '* ' + s + '\n'
+        obs += '* ' + self.DEFAULT_OBS + '\n'
         return obs
