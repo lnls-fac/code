@@ -17,7 +17,7 @@ parameter_list = [
     units    = 'GeV', 
     revision = '2014-08-04',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -28,7 +28,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Storage ring beam energy'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -39,7 +39,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -50,7 +50,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Storage ring beam beta factor'],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -61,7 +61,7 @@ parameter_list = [
     units    = 'T.m', 
     revision = '2014-08-01',
     deps     = ['Storage ring beam energy'],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -72,7 +72,7 @@ parameter_list = [
     units    = 'mA', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -83,7 +83,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -94,7 +94,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -105,7 +105,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -116,7 +116,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -127,7 +127,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -138,7 +138,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -149,7 +149,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -160,7 +160,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
                   
   Parameter(
@@ -171,7 +171,7 @@ parameter_list = [
     units    = 'MV', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),              
   
   Parameter(
@@ -183,7 +183,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice circumference',
                 'Storage ring beam velocity'],
-    obs      = '',
+    obs      = [],
   ),
  
   Parameter(
@@ -194,7 +194,7 @@ parameter_list = [
     units    = u'MHz', 
     revision = '2014-08-01',
     deps     = ['Storage ring revolution period'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -206,7 +206,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring revolution frequency',
                 'Storage ring harmonic number'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -218,7 +218,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam current',
                 'Storage ring revolution period'],
-    obs      = '',
+    obs      = [],
   ),
  
   Parameter(
@@ -229,7 +229,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
             
   Parameter(
@@ -240,7 +240,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -251,7 +251,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
          
   Parameter(
@@ -262,7 +262,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                            
   Parameter(
@@ -273,7 +273,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),  
                 
   Parameter(
@@ -284,7 +284,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),  
                   
   Parameter(
@@ -295,7 +295,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),  
                   
   Parameter(
@@ -306,7 +306,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),  
                   
   Parameter(
@@ -317,7 +317,7 @@ parameter_list = [
     units    = 'T', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                 
   Parameter(
@@ -328,7 +328,7 @@ parameter_list = [
     units    = 'T', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -340,7 +340,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring dipole low magnetic field'],
-    obs      = '',
+    obs      = [],
   ), 
                 
   Parameter(
@@ -352,7 +352,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring dipole high magnetic field'],
-    obs      = '',
+    obs      = [],
   ), 
   
   Parameter(
@@ -364,7 +364,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor',
                 'Storage ring dipole low magnetic field bending radius'],
-    obs      = '',
+    obs      = [],
   ), 
                 
   Parameter(
@@ -376,7 +376,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor',
                 'Storage ring dipole high magnetic field bending radius'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -388,7 +388,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version', 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -400,7 +400,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version'],
-    obs      = '',
+    obs      = [],
   ), 
    
   Parameter(
@@ -412,7 +412,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -424,7 +424,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version'],
-    obs      = '',
+    obs      = [],
   ),   
                   
   Parameter(
@@ -437,7 +437,7 @@ parameter_list = [
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>",
+    obs      = [r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>"],
   ),  
                   
   Parameter(
@@ -450,7 +450,7 @@ parameter_list = [
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),            
   
   Parameter(
@@ -463,7 +463,7 @@ parameter_list = [
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -475,7 +475,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version'],
-    obs      = '',
+    obs      = [],
   ), 
    
   Parameter(
@@ -487,7 +487,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -499,7 +499,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version'],
-    obs      = '',
+    obs      = [],
   ),   
                   
   Parameter(
@@ -512,7 +512,7 @@ parameter_list = [
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>",
+    obs      = [r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>"],
   ),  
                   
   Parameter(
@@ -525,7 +525,7 @@ parameter_list = [
     deps     = ['Storage ring beam magnetic rigidity',
                 'Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),                 
   
   Parameter(
@@ -537,7 +537,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I1 from dipoles',
                 'Storage ring radiation integral I1 from IDs'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -549,7 +549,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I2 from dipoles',
                 'Storage ring radiation integral I2 from IDs'],
-    obs      = '',
+    obs      = [],
   ), 
    
   Parameter(
@@ -561,7 +561,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I3 from dipoles',
                 'Storage ring radiation integral I3 from IDs'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -573,7 +573,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I4 from dipoles',
                 'Storage ring radiation integral I4 from IDs'],
-    obs      = '',
+    obs      = [],
   ),   
                   
   Parameter(
@@ -585,7 +585,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I5 from dipoles',
                 'Storage ring radiation integral I5 from IDs'],
-    obs      = r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>",
+    obs      = [r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>"],
   ),  
                   
   Parameter(
@@ -597,7 +597,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I6 from dipoles',
                 'Storage ring radiation integral I6 from IDs'],
-    obs      = '',
+    obs      = [],
   ),   
    
   Parameter(
@@ -608,7 +608,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -620,7 +620,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),    
                 
   Parameter(
@@ -632,7 +632,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),  
                   
   Parameter(
@@ -644,7 +644,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version', 
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -656,7 +656,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),    
                 
   Parameter(
@@ -668,7 +668,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),  
 
   Parameter(
@@ -680,7 +680,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),    
                 
   Parameter(
@@ -692,7 +692,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring lattice version',
                 'Storage ring optics mode'],
-    obs      = '',
+    obs      = [],
   ),  
 
   Parameter(
@@ -704,7 +704,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam energy', 
                 'Storage ring radiation integral I2 from dipoles'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -716,7 +716,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring RF cavity peak voltage', 
                 'Storage ring energy loss per turn from dipoles'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -727,7 +727,7 @@ parameter_list = [
     units    = unicode('°', encoding='utf-8'),
     revision = '2014-08-01',
     deps     = ['Storage ring overvoltage from dipoles'],
-    obs      = '',
+    obs      = [],
   ),
                             
   Parameter(
@@ -739,7 +739,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I1 from dipoles', 
                 'Storage ring lattice circumference'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -754,7 +754,7 @@ parameter_list = [
                 'Storage ring energy loss per turn from dipoles',
                 'Storage ring harmonic number',
                 'Storage ring linear momentum compaction from dipoles'],
-    obs      = r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>',
+    obs      = [r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
   ),
                             
   Parameter(
@@ -766,7 +766,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I2 from dipoles',
                 'Storage ring radiation integral I4 from dipoles'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -777,7 +777,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = 'Vertical damping partition number is identically one for error-free machines for which vertical dispersion functions are zero everywhere.',
+    obs      = ['Vertical damping partition number is identically one for error-free machines for which vertical dispersion functions are zero everywhere.'],
   ),
   
   Parameter(
@@ -789,7 +789,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring horizontal damping partition number from dipoles',
                'Storage ring vertical damping partition number from dipoles'],
-    obs      = "Its value is derived from Robinson's sum rule.",
+    obs      = ["Its value is derived from Robinson's sum rule."],
   ),
                             
   Parameter(
@@ -803,7 +803,7 @@ parameter_list = [
                 'Storage ring horizontal damping partition number from dipoles',
                 'Storage ring radiation integral I5 from dipoles',
                 'Storage ring radiation integral I2 from dipoles'],
-    obs      = '',
+    obs      = [],
   ),
                             
   Parameter(
@@ -817,7 +817,7 @@ parameter_list = [
                 'Storage ring radiation integral I2 from dipoles',
                 'Storage ring radiation integral I3 from dipoles',
                 'Storage ring radiation integral I4 from dipoles'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -829,7 +829,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam energy',
                 'Storage ring radiation integral I2 from IDs'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -841,7 +841,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam energy',
                 'Storage ring radiation integral I2'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -853,7 +853,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring RF cavity peak voltage',
                 'Storage ring energy loss per turn'],
-    obs      = '',
+    obs      = [],
   ),                            
  
   Parameter(
@@ -864,7 +864,7 @@ parameter_list = [
     units    = unicode('°', encoding='utf-8'),
     revision = '2014-08-01',
     deps     = ['Storage ring overvoltage'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -876,7 +876,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I1',
                 'Storage ring lattice circumference'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -891,7 +891,7 @@ parameter_list = [
                 'Storage ring energy loss per turn',
                 'Storage ring harmonic number', 
                 'Storage ring linear momentum compaction'],
-    obs      = r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>',
+    obs      = [r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
   ),
 
   Parameter(
@@ -903,7 +903,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring radiation integral I2',
                 'Storage ring radiation integral I4'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -914,7 +914,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = 'Vertical damping partition number is identically one for error-free machines for which vertical dispersion functions are zero everywhere.',
+    obs      = ['Vertical damping partition number is identically one for error-free machines for which vertical dispersion functions are zero everywhere.'],
   ),
 
   Parameter(
@@ -926,7 +926,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring horizontal damping partition number',
                 'Storage ring vertical damping partition number'],
-    obs      = "Its value is derived from Robinson's sum rule.",
+    obs      = ["Its value is derived from Robinson's sum rule."],
   ),
  
   Parameter(
@@ -940,7 +940,7 @@ parameter_list = [
                 'Storage ring horizontal damping partition number',
                 'Storage ring radiation integral I5',
                 'Storage ring radiation integral I2'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -954,7 +954,7 @@ parameter_list = [
                 'Storage ring radiation integral I2',
                 'Storage ring radiation integral I3',
                 'Storage ring radiation integral I4'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -966,7 +966,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring revolution frequency',
                 'Storage ring horizontal betatron tune'],
-    obs      = '',
+    obs      = [],
   ),    
                 
   Parameter(
@@ -978,7 +978,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring revolution frequency',
                 'Storage ring vertical betatron tune'],
-    obs      = '',
+    obs      = [],
   ),  
                   
   Parameter(
@@ -990,7 +990,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring revolution frequency',
                 'Storage ring synchrotron tune'],
-    obs      = '',
+    obs      = [],
   ),                            
  
 ]

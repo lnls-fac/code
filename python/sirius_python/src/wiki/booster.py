@@ -17,7 +17,7 @@ parameter_list = [
     units    = 'GeV', 
     revision = '2014-08-04',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -28,7 +28,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster injection beam energy'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -39,7 +39,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster injection beam gamma factor'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -50,7 +50,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster injection beam beta factor'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -61,7 +61,7 @@ parameter_list = [
     units    = 'GeV', 
     revision = '2014-08-04',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -72,7 +72,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster extraction beam energy'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -83,7 +83,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster extraction beam gamma factor'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -94,7 +94,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster extraction beam beta factor'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -105,7 +105,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -116,7 +116,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -127,7 +127,7 @@ parameter_list = [
     units    = 'mA', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -139,7 +139,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster circumference',
                 'Booster extraction beam velocity'],
-    obs      = '',
+    obs      = [],
   ),
  
   Parameter(
@@ -150,7 +150,7 @@ parameter_list = [
     units    = u'MHz', 
     revision = '2014-08-01',
     deps     = ['Booster extraction revolution period'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -161,7 +161,7 @@ parameter_list = [
     units    = 'Hz',
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -173,7 +173,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster lattice version',
                 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ),    
                 
   Parameter(
@@ -185,7 +185,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster lattice version',
                 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ),  
                   
   Parameter(
@@ -197,7 +197,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster lattice version', 
                 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -208,7 +208,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -219,7 +219,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -230,7 +230,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = unicode('2<sup>2</sup>×2<sup>3</sup>×23', encoding='utf-8'),
+    obs      = [unicode('<section begin=factors/>2<sup>2</sup>×2<sup>3</sup>×23<section end=factors/>', encoding='utf-8')],
   ),
 
   Parameter(
@@ -242,7 +242,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster lattice version', 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -254,7 +254,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster lattice version'],
-    obs      = '',
+    obs      = [],
   ), 
    
   Parameter(
@@ -266,7 +266,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster lattice version'],
-    obs      = '',
+    obs      = [],
   ), 
                   
   Parameter(
@@ -278,7 +278,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster lattice version'],
-    obs      = '',
+    obs      = [],
   ),   
                   
   Parameter(
@@ -291,7 +291,7 @@ parameter_list = [
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster lattice version',
                 'Booster optics mode'],
-    obs      = r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>",
+    obs      = [r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>"],
   ),  
                   
   Parameter(
@@ -304,7 +304,7 @@ parameter_list = [
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster lattice version',
                 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -316,7 +316,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction radiation integral I1',
                 'Booster circumference'],
-    obs      = '',
+    obs      = [],
   ),
  
   Parameter(
@@ -327,7 +327,7 @@ parameter_list = [
     units    = 'T.m', 
     revision = '2014-08-01',
     deps     = ['Booster extraction beam energy'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -339,7 +339,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster lattice version',
                 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -351,7 +351,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster lattice version',
                 'Booster optics mode'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -363,7 +363,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction radiation integral I2',
                 'Booster extraction radiation integral I4'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -374,7 +374,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = 'Vertical damping partition number is identically one for error-free machines for which vertical dispersion functions are zero everywhere.',
+    obs      = ['Vertical damping partition number is identically one for error-free machines for which vertical dispersion functions are zero everywhere.'],
   ),
 
   Parameter(
@@ -386,7 +386,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction horizontal damping partition number',
                 'Booster extraction vertical damping partition number'],
-    obs      = "Its value is derived from Robinson's sum rule.",
+    obs      = ["Its value is derived from Robinson's sum rule."],
   ),
  
   Parameter(
@@ -400,7 +400,7 @@ parameter_list = [
                 'Booster extraction horizontal damping partition number',
                 'Booster extraction radiation integral I5',
                 'Booster extraction radiation integral I2'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -414,7 +414,7 @@ parameter_list = [
                 'Booster extraction radiation integral I2',
                 'Booster extraction radiation integral I3',
                 'Booster extraction radiation integral I4'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -464,7 +464,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -475,7 +475,7 @@ parameter_list = [
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -486,7 +486,7 @@ parameter_list = [
     units    = 'T', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -497,7 +497,7 @@ parameter_list = [
     units    = 'T', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -509,7 +509,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster injection beam magnetic rigidity',
                 'Booster injection dipole magnetic field'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -521,7 +521,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction beam magnetic rigidity',
                 'Booster extraction dipole magnetic field'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -532,7 +532,7 @@ parameter_list = [
     units    = 'T.m', 
     revision = '2014-08-01',
     deps     = ['Booster injection beam energy'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -543,7 +543,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -554,7 +554,7 @@ parameter_list = [
     units    = 'm',
     revision = '2014-08-01',
     deps     = '',
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -565,7 +565,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -576,7 +576,7 @@ parameter_list = [
     units    = 'm',
     revision = '2014-08-01',
     deps     = '',
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -588,7 +588,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction revolution frequency',
                 'Booster harmonic number'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -599,7 +599,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -610,7 +610,7 @@ parameter_list = [
     units    = 'm',
     revision = '2014-08-01',
     deps     = '',
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -621,7 +621,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = 'Bipolar',
+    obs      = ['Bipolar'],
   ),
 
   Parameter(
@@ -632,7 +632,7 @@ parameter_list = [
     units    = 'm',
     revision = '2014-08-01',
     deps     = '',
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -643,7 +643,7 @@ parameter_list = [
     units    = 'T/m', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                 
   Parameter(
@@ -654,7 +654,7 @@ parameter_list = [
     units    = 'T/m', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = 'Bipolar',
+    obs      = ['Bipolar'],
   ), 
                 
   Parameter(
@@ -665,7 +665,7 @@ parameter_list = [
     units    = 'T/m', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                 
   Parameter(
@@ -676,7 +676,7 @@ parameter_list = [
     units    = 'T/m', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = 'Bipolar',
+    obs      = ['Bipolar'],
   ), 
                 
   Parameter(
@@ -687,7 +687,7 @@ parameter_list = [
     units    = 'T/m', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ), 
                 
   Parameter(
@@ -699,7 +699,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction beam energy', 
                 'Booster extraction radiation integral I2'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -711,7 +711,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction energy loss per turn', 
                 'Booster beam current'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -722,7 +722,7 @@ parameter_list = [
     units    = 'MV', 
     revision = '2014-08-01',
     deps     = [],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -733,7 +733,7 @@ parameter_list = [
     units    = u'm', 
     revision = '2014-08-01',
     deps     = ['Booster extraction RF frequency'],
-    obs      = '',
+    obs      = [],
   ),
   
   Parameter(
@@ -745,7 +745,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster RF cavity peak voltage', 
                 'Booster extraction energy loss per turn'],
-    obs      = '',
+    obs      = [],
   ),                            
   
   Parameter(
@@ -756,7 +756,7 @@ parameter_list = [
     units    = unicode('°', encoding='utf-8'),
     revision = '2014-08-01',
     deps     = ['Storage ring overvoltage'],
-    obs      = '',
+    obs      = [],
   ),
 
   Parameter(
@@ -768,7 +768,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction revolution frequency',
                 'Booster synchrotron tune'],
-    obs      = '',
+    obs      = [],
   ),                            
  
   Parameter(
@@ -783,7 +783,7 @@ parameter_list = [
                 'Booster extraction energy loss per turn',
                 'Booster harmonic number',
                 'Booster extraction linear momentum compaction'],
-    obs      = r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>',
+    obs      = [r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
   ),
                             
   Parameter(
@@ -795,7 +795,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction linear momentum compaction',
                 'Booster extraction beam gamma factor'],
-    obs      = '',
+    obs      = [],
   ),                            
  
   Parameter(
@@ -808,7 +808,7 @@ parameter_list = [
     deps     = ['Booster extraction slip factor',
                 'Booster extraction synchrotron frequency',
                 'Booster extraction natural energy spread'],
-    obs      = '',
+    obs      = [],
   ),                            
 
   Parameter(
@@ -820,7 +820,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Booster extraction natural bunch length',
                 'Booster extraction beam beta factor'],
-    obs      = '',
+    obs      = [],
   ),                            
 
 ]

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 class Parameter:
+
     def __init__(self, 
-        name, 
-        value,
-        group    = 'LNLS',
-        symbol   = '', 
-        units    = '', 
-        deps     = '', 
-        obs      = '', 
-        revision = ''):
+            name, 
+            value,
+            group    = 'LNLS',
+            symbol   = '', 
+            units    = '', 
+            deps     = '', 
+            obs      = '', 
+            revision = ''):
         self.name     = name
         self.group    = group
         self.symbol   = symbol
@@ -18,6 +19,7 @@ class Parameter:
         self.deps     = deps
         self.obs      = obs
         self.revision = revision
+        self.DEFAULT_OBS = 'Automatically generated, manual changes may be overwritten.'
 
     def __str__(self):
         r = (self.name + ': ' + str(self.value) + ' ' + self.units +
@@ -50,5 +52,11 @@ class Parameter:
         wiki.append('* Deps: <section begin=deps/>' + self.create_wiki_deps() + '<section end=deps/>')
         wiki.append('<section end=data/>')
         wiki.append('=Observations=')
-        wiki.append('<section begin=obs/>' + self.obs + '<section begin=obs/>')
+        wiki.append('<section begin=obs/>' + self.create_obs() + '<section end=obs/>')
         return '\n'.join(wiki)
+
+    def create_obs(self):
+        obs = '* ' + self.DEFAULT_OBS + '\n'
+        for s in self.obs:
+            obs += '* ' + s + '\n'
+        return obs
