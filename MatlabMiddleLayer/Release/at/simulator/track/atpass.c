@@ -70,6 +70,15 @@
 
 /* Add other platforms here macros definition here */    
     
+#elif defined(MACI64)
+    #include <dlfcn.h>
+    #define MEXEXTENSIONSTRING ".mexmaci64"
+    #define PASSMETHODSUBDIRSTRING "/simulator/element/"
+    #define LIBRARYHANDLETYPE void*
+    #define FREELIBFCN(libfilename) dlclose(libfilename)
+    #define LOADLIBFCN(libfilename) dlopen((libfilename),RTLD_LAZY)    
+    #define GETPASSFCN(libfilename) dlsym((libfilename),"passFunction")
+    
 #endif
 
 
