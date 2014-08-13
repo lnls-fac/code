@@ -104,7 +104,27 @@ def damping_time(energy, I2, J, circumference):
     c = const.electron_radius*const.light_speed / (3*math.pow(mc2, 3))
     return 1000 * circumference / (c*math.pow(energy, 3)*I2*J)
 
-#def radiation_power_from_dipoles(energy, rho, current):
-#    '''Radiation power from dipoles [kW] from beam energy [GeV],
-#    bending radius rho [m] and beam current [mA].'''
-#    return 1e6*const.rad_cgamma*math.pow(energy, 4)*current/rho
+def radiation_power(current, U0):
+    '''Radiation power from dipoles [kW] from beam current [mA] and
+    energy loss per turn [keV].'''
+    return U0 * current / 1000
+
+def rf_wavelength(frequency):
+    '''RF wavelength [m] from RF frequency [MHz].'''
+    return const.light_speed / (1e6*frequency)
+
+def slip_factor(alpha, gamma):
+    '''Slip factor from momentum compaction factor alpha and gamma.'''
+    return alpha - 1/math.pow(gamma, 2)
+
+def bunch_length(slip_factor, energy_spread, synchrotron_frequency):
+    '''Natural bunch length [mm] from slip factor, natural energy spread [%],
+    synchrotron frequency [kHz].'''
+    angular_synchrotron_frequency = 2 * math.pi * synchrotron_frequency
+    return (const.light_speed * abs(slip_factor) * energy_spread/100 /
+            (1e3*angular_synchrotron_frequency)) * 1000
+
+def bunch_duration(bunch_length, beta):
+    '''Bunch lenth in time units [ps] from bunch length [mm] and beta
+    factor.'''
+    return 1e9 * bunch_length / beta / const.light_speed

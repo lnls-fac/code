@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import optics
 from parameter import Parameter
 from definitions import ParameterDefinitions as Prms
 
@@ -165,9 +164,9 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Storage ring total RF voltage', 
+    name     = 'Storage ring RF cavity peak voltage', 
     group    = 'FAC',
-    value    = Prms.sr_total_RF_voltage, 
+    value    = Prms.sr_rf_cavity_peak_voltage, 
     symbol   = r'<math>V_\text{RF}</math>',
     units    = 'MV', 
     revision = '2014-08-01',
@@ -649,6 +648,54 @@ parameter_list = [
   ),                            
   
   Parameter(
+    name     = 'Storage ring horizontal natural chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_horizontal_natural_chromaticity, 
+    symbol   = r'<math>\xi_{x,0}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),    
+                
+  Parameter(
+    name     = 'Storage ring vertical natural chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_vertical_natural_chromaticity, 
+    symbol   = r'<math>\xi_{y,0}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),  
+
+  Parameter(
+    name     = 'Storage ring horizontal chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_horizontal_chromaticity, 
+    symbol   = r'<math>\xi_x</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),    
+                
+  Parameter(
+    name     = 'Storage ring vertical chromaticity', 
+    group    = 'FAC',
+    value    = Prms.sr_vertical_chromaticity, 
+    symbol   = r'<math>\xi_y</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Storage ring lattice version',
+                'Storage ring optics mode'],
+    obs      = '',
+  ),  
+
+  Parameter(
     name     = 'Storage ring energy loss per turn from dipoles', 
     group    = 'FAC',
     value    = Prms.sr_energy_loss_per_turn_from_dipoles,
@@ -667,7 +714,7 @@ parameter_list = [
     symbol   = r'<math>q_\text{DIP} = \frac{eV_\text{RF}}{U_\text{0,DIP}}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Storage ring total RF voltage', 
+    deps     = ['Storage ring RF cavity peak voltage', 
                 'Storage ring energy loss per turn from dipoles'],
     obs      = '',
   ),                            
@@ -763,7 +810,7 @@ parameter_list = [
     name     = 'Storage ring natural energy spread from dipoles',
     group    = 'FAC',
     value    = Prms.sr_natural_energy_spread_from_dipoles, 
-    symbol   = r'<math>\sigma_{E,\text{DIP}} = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3,DIP}}{2 I_\text{2,DIP} + I_\text{4,DIP}}}</math>',
+    symbol   = r'<math>\sigma_{\delta,\text{DIP}} = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3,DIP}}{2 I_\text{2,DIP} + I_\text{4,DIP}}}</math>',
     units    = '%', 
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor',
@@ -804,7 +851,7 @@ parameter_list = [
     symbol   = r'<math>q = \frac{eV_\text{RF}}{U_\text{0}}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Storage ring total RF voltage',
+    deps     = ['Storage ring RF cavity peak voltage',
                 'Storage ring energy loss per turn'],
     obs      = '',
   ),                            
@@ -900,7 +947,7 @@ parameter_list = [
     name     = 'Storage ring natural energy spread',
     group    = 'FAC',
     value    = Prms.sr_natural_energy_spread, 
-    symbol   = r'<math>\sigma_E = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3}}{2 I_\text{2} + I_\text{4}}}</math>',
+    symbol   = r'<math>\sigma_\delta = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3}}{2 I_\text{2} + I_\text{4}}}</math>',
     units    = '%', 
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor',

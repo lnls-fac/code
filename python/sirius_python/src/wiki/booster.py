@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import optics
 from parameter import Parameter
 from definitions import ParameterDefinitions as Prms
 
@@ -17,7 +16,8 @@ parameter_list = [
     symbol   = r'<math>E_\text{inj}</math>',
     units    = 'GeV', 
     revision = '2014-08-04',
-    deps     = []
+    deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -27,7 +27,8 @@ parameter_list = [
     symbol   = r'<math>\gamma_\text{inj}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster injection beam energy']
+    deps     = ['Booster injection beam energy'],
+    obs      = '',
   ),
 
   Parameter(
@@ -37,7 +38,8 @@ parameter_list = [
     symbol   = r'<math>\beta_\text{inj}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster injection beam gamma factor']
+    deps     = ['Booster injection beam gamma factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -47,7 +49,8 @@ parameter_list = [
     symbol   = r'<math>v_\text{inj}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster injection beam beta factor']
+    deps     = ['Booster injection beam beta factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -57,7 +60,8 @@ parameter_list = [
     symbol   = r'<math>E_\text{ext}</math>',
     units    = 'GeV', 
     revision = '2014-08-04',
-    deps     = []
+    deps     = [],
+    obs      = '',
   ),
 
   Parameter(
@@ -67,7 +71,8 @@ parameter_list = [
     symbol   = r'<math>\gamma_\text{ext}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster extraction beam energy']
+    deps     = ['Booster extraction beam energy'],
+    obs      = '',
   ),
 
   Parameter(
@@ -77,7 +82,8 @@ parameter_list = [
     symbol   = r'<math>\beta_\text{ext}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster extraction beam gamma factor']
+    deps     = ['Booster extraction beam gamma factor'],
+    obs      = '',
   ),
 
   Parameter(
@@ -87,17 +93,19 @@ parameter_list = [
     symbol   = r'<math>v_\text{ext}</math>',
     units    = '', 
     revision = '2014-08-01',
-    deps     = ['Booster extraction beam beta factor']
+    deps     = ['Booster extraction beam beta factor'],
+    obs      = '',
   ),
 
   Parameter(
-    name     = 'Booster lattice circumference', 
+    name     = 'Booster circumference', 
     group    = 'LNLS',
-    value    = Prms.bo_lattice_circumference, 
+    value    = Prms.bo_circumference, 
     symbol   = r'<math>C</math>',
     units    = 'm', 
     revision = '2014-08-01',
     deps     = [],
+    obs      = '',
   ),
   
   Parameter(
@@ -129,7 +137,7 @@ parameter_list = [
     symbol   = r'<math>T_\text{rev}</math>',
     units    = unicode('μs', encoding='utf-8'), 
     revision = '2014-08-01',
-    deps     = ['Booster lattice circumference',
+    deps     = ['Booster circumference',
                 'Booster extraction beam velocity'],
     obs      = '',
   ),
@@ -307,7 +315,7 @@ parameter_list = [
     units    = '', 
     revision = '2014-08-01',
     deps     = ['Booster extraction radiation integral I1',
-                'Booster lattice circumference'],
+                'Booster circumference'],
     obs      = '',
   ),
  
@@ -399,7 +407,7 @@ parameter_list = [
     name     = 'Booster extraction natural energy spread',
     group    = 'FAC',
     value    = Prms.bo_extraction_natural_energy_spread, 
-    symbol   = r'<math>\sigma_E = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3}}{2 I_\text{2} + I_\text{4}}}</math>',
+    symbol   = r'<math>\sigma_\delta = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3}}{2 I_\text{2} + I_\text{4}}}</math>',
     units    = '%', 
     revision = '2014-08-07',
     deps     = ['Booster extraction beam gamma factor',
@@ -419,7 +427,7 @@ parameter_list = [
     deps     = ['Booster extraction beam energy',
                 'Booster extraction radiation integral I2',
                 'Booster extraction horizontal damping partition number',
-                'Booster lattice circumference'],
+                'Booster circumference'],
   ),
 
   Parameter(
@@ -432,7 +440,7 @@ parameter_list = [
     deps     = ['Booster extraction beam energy',
                 'Booster extraction radiation integral I2',
                 'Booster extraction vertical damping partition number',
-                'Booster lattice circumference'],
+                'Booster circumference'],
   ),
 
   Parameter(
@@ -445,7 +453,7 @@ parameter_list = [
     deps     = ['Booster extraction beam energy',
                 'Booster extraction radiation integral I2',
                 'Booster extraction longitudinal damping partition number',
-                'Booster lattice circumference'],
+                'Booster circumference'],
   ),
 
   Parameter(
@@ -683,15 +691,136 @@ parameter_list = [
   ), 
                 
   Parameter(
-    name     = 'Booster extraction energy loss per turn from dipoles', 
+    name     = 'Booster extraction energy loss per turn', 
     group    = 'FAC',
-    value    = Prms.bo_extraction_energy_loss_per_turn_from_dipoles,
-    symbol   = r'<math>U_\text{0,DIP} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2,DIP}</math>',
+    value    = Prms.bo_extraction_energy_loss_per_turn,
+    symbol   = r'<math>U_0 = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_2</math>',
     units    = 'keV', 
     revision = '2014-08-01',
-    deps     = ['Booster beam energy', 
-                'Booster radiation integral I2 from dipoles'],
+    deps     = ['Booster extraction beam energy', 
+                'Booster extraction radiation integral I2'],
     obs      = '',
   ),                            
   
+  Parameter(
+    name     = 'Booster extraction radiation power', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_radiation_power,
+    symbol   = r'<math>P = U_0 I</math>',
+    units    = 'kW', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction energy loss per turn', 
+                'Booster beam current'],
+    obs      = '',
+  ),                            
+  
+  Parameter(
+    name     = 'Booster RF cavity peak voltage', 
+    group    = 'FAC',
+    value    = Prms.bo_rf_cavity_peak_voltage,
+    symbol   = r'<math>V_\text{RF}</math>',
+    units    = 'MV', 
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = '',
+  ),                            
+  
+  Parameter(
+    name     = 'Booster extraction RF wavelength', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_rf_wavelength, 
+    symbol   = r'<math>\lambda_\text{RF} = \frac{c}{f_\text{RF}}</math>',
+    units    = u'm', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction RF frequency'],
+    obs      = '',
+  ),
+  
+  Parameter(
+    name     = 'Booster extraction overvoltage', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_overvoltage,
+    symbol   = r'<math>q = \frac{eV_\text{RF}}{U_0}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Booster RF cavity peak voltage', 
+                'Booster extraction energy loss per turn'],
+    obs      = '',
+  ),                            
+  
+  Parameter(
+    name     = 'Booster extraction synchronous phase', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_synchronous_phase, 
+    symbol   = r'<math>\phi_0 = \pi - \arcsin\left(\frac{1}{q}\right)</math>',
+    units    = unicode('°', encoding='utf-8'),
+    revision = '2014-08-01',
+    deps     = ['Storage ring overvoltage'],
+    obs      = '',
+  ),
+
+  Parameter(
+    name     = 'Booster extraction synchrotron frequency', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_synchrotron_frequency, 
+    symbol   = r'<math>f_s = f_\text{rev} \left( \nu_s - \lfloor \nu_s\rfloor \right)</math>',
+    units    = 'kHz', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction revolution frequency',
+                'Booster synchrotron tune'],
+    obs      = '',
+  ),                            
+ 
+  Parameter(
+    name     = 'Booster extraction RF energy acceptance', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_rf_energy_acceptance, 
+    symbol   = r'<math>\epsilon_\text{max} = \sqrt{\frac{1}{\pi h \alpha_x} \frac{U_0}{E} F(q)}</math>',
+    units    = '%', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction overvoltage',
+                'Booster extraction beam energy',
+                'Booster extraction energy loss per turn',
+                'Booster harmonic number',
+                'Booster extraction linear momentum compaction'],
+    obs      = r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>',
+  ),
+                            
+  Parameter(
+    name     = 'Booster extraction slip factor', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_slip_factor, 
+    symbol   = r'<math>\eta = \alpha_1 - \frac{1}{\gamma^2}</math>',
+    units    = '', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction linear momentum compaction',
+                'Booster extraction beam gamma factor'],
+    obs      = '',
+  ),                            
+ 
+  Parameter(
+    name     = 'Booster extraction natural bunch length', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_natural_bunch_length, 
+    symbol   = r'<math>\sigma_s = \frac{c |\eta|}{2 \pi f_s} \sigma_\delta</math>',
+    units    = 'mm', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction slip factor',
+                'Booster extraction synchrotron frequency',
+                'Booster extraction natural energy spread'],
+    obs      = '',
+  ),                            
+
+  Parameter(
+    name     = 'Booster extraction natural bunch duration', 
+    group    = 'FAC',
+    value    = Prms.bo_extraction_natural_bunch_duration, 
+    symbol   = r'<math>\sigma_\tau = \frac{\sigma_s}{\beta c}</math>',
+    units    = 'ps', 
+    revision = '2014-08-01',
+    deps     = ['Booster extraction natural bunch length',
+                'Booster extraction beam beta factor'],
+    obs      = '',
+  ),                            
+
 ]
