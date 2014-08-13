@@ -1,6 +1,6 @@
 % set_magnet_strengths
 
-if strcmpi(mode,'a')
+if strcmpi(mode,'A')
     if strcmpi(version,'00')% old ac20.2
         %%% QUADRUPOLOS
         %  ===========
@@ -21,11 +21,16 @@ if strcmpi(mode,'a')
         % ==========
         sa2_strength   =   27.260886;
         sa1_strength   =  -53.895434;
-        sd1_strength   = -85.452385;
-        sf1_strength   =  186.287910;
-        sd2_strength   =  -127.382337;
-        sd3_strength   = -154.506764;
-        sf2_strength   =  156.861444;
+        sd1a_strength  =  -85.452385;
+        sf1a_strength  =  186.287910;
+        sd2a_strength  = -127.382337;
+        sd3a_strength  = -154.506764;
+        sf2a_strength  =  156.861444;
+        sd1b_strength  =  sd1a_strength;
+        sf1b_strength  =  sf1a_strength;
+        sd2b_strength  =  sd2a_strength;
+        sd3b_strength  =  sd3a_strength;
+        sf2b_strength  =  sf2a_strength;
         
         % v???nculos para o modo AC20
         sb1_strength   = sa1_strength;
@@ -34,7 +39,7 @@ if strcmpi(mode,'a')
         error('version not implemented');
     end
     
-elseif strcmpi(mode,'b')
+elseif strcmpi(mode,'B')
     if strcmpi(version,'00')% old ac10.5
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % quando a Liu mudou do 403 para o 500 ela corrigiu a sintonia e esse
@@ -78,9 +83,9 @@ elseif strcmpi(mode,'b')
         error('version not implemented');
     end
     
-elseif strcmpi(mode,'c')
+elseif strcmpi(mode,'C')
     if strcmpi(version,'00')
-        fprintf('Not Implemented Yet')
+        error('Not Implemented Yet: waiting for default mode')
     elseif strncmpi(version, 'opt_results_elegant',19)
         
         [path, ~, ~] = fileparts(mfilename('fullpath'));

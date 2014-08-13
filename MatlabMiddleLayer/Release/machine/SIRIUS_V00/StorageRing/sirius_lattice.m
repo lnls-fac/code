@@ -25,7 +25,7 @@ global THERING;
 
 % --- system parameters ---
 energy = 3e9;
-mode   = 'b';
+mode   = 'B';
 version = '00';
 harmonic_number = 864;
 

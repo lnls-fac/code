@@ -17,9 +17,9 @@ checkforao;
 
 % MODES
 ModeCell = { ...
-    '3 GeV - a', ...
-    '3 GeV - b', ...
-    '3 GeV - c', ...
+    '3 GeV - A', ...
+    '3 GeV - B', ...
+    '3 GeV - C', ...
     };
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,13 +99,14 @@ global THERING;
 AD = getad;
 AD.Machine             = 'SIRIUS_V01';  % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = 'V01_a00';
+AD.OperationalMode     = 'V01_A00';
 AD.Energy              = 3.0;
 AD.InjectionEnergy     = 3.0;
-AD.ModeName            = 'a';
+AD.ModeName            = 'A';
+AD.ModeVersion         = '00';
 AD.OpsFileExtension    = '';
 
-sirius_lattice(AD.Energy, AD.ModeName);
+sirius_lattice(AD.Energy, AD.ModeName, AD.ModeVersion);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 864;
@@ -134,13 +135,14 @@ global THERING;
 AD = getad;
 AD.Machine             = 'SIRIUS_V01';           % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = 'V01_b00';
+AD.OperationalMode     = 'V01_B00';
 AD.Energy              = 3.0;
 AD.InjectionEnergy     = 3.0;
-AD.ModeName            = 'b';
+AD.ModeName            = 'B';
+AD.ModeVersion         = '00';
 AD.OpsFileExtension    = '';
 
-sirius_lattice(AD.Energy, AD.ModeName);
+sirius_lattice(AD.Energy, AD.ModeName, AD.ModeVersion);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 864;
@@ -169,13 +171,14 @@ global THERING;
 AD = getad;
 AD.Machine             = 'SIRIUS_V01';           % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = 'V01_c00';
+AD.OperationalMode     = 'V01_C00';
 AD.Energy              = 3.0;
 AD.InjectionEnergy     = 3.0;
-AD.ModeName            = 'c';
+AD.ModeName            = 'C';
+AD.ModeVersion         = '00';
 AD.OpsFileExtension    = '';
 
-sirius_lattice(AD.Energy, AD.ModeName);
+sirius_lattice(AD.Energy, AD.ModeName, AD.ModeVersion);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 864;

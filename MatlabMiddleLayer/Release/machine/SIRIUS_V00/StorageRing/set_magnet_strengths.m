@@ -18,7 +18,7 @@
 % padrao de erros, no tracy3.
 %
 
-if strcmpi(mode,'a')
+if strcmpi(mode,'A')
     if strcmpi(version,'00')
         %%% QUADRUPOLOS
         %  ===========
@@ -48,8 +48,11 @@ if strcmpi(mode,'a')
         % v???nculos para o modo AC20
         sb1_strength   = sa1_strength;
         sb2_strength   = sa2_strength;
+    else
+        error('version not implemented');
     end
-elseif strcmpi(mode,'b')
+    
+elseif strcmpi(mode,'B')
     if strcmpi(version,'00')%old ac10.5
         qaf_strength       =  2.536876;
         qad_strength       = -2.730416;
