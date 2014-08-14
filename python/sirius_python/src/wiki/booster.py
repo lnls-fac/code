@@ -830,4 +830,59 @@ parameter_list = [
     obs      = [r'<math>\sigma_\tau = \frac{\sigma_s}{\beta c}</math>'],
   ),
 
+  Parameter(
+    name     = 'Booster number of beam position monitors',
+    group    = 'FAC',
+    value    = Prms.bo_number_of_beam_position_monitors,
+    symbol   = r'<math>N_\text{BPM}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster number of horizontal correctors',
+    group    = 'FAC',
+    value    = Prms.bo_number_of_horizontal_correctors,
+    symbol   = r'<math>N_\text{CH}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster number of vertical correctors',
+    group    = 'FAC',
+    value    = Prms.bo_number_of_vertical_correctors,
+    symbol   = r'<math>N_\text{CV}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster horizontal corrector maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_horizontal_corrector_maximum_strength,
+    symbol   = r'<math>\theta_\text{CH,max}</math>',
+    units    = 'mrad',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster vertical corrector maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_vertical_corrector_maximum_strength,
+    symbol   = r'<math>\theta_\text{CV,max}</math>',
+    units    = 'mrad',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
 ]
