@@ -1247,4 +1247,16 @@ parameter_list = [
     obs      = [r'<math>\sigma_{t} = \frac{\sigma_{s}{c}</math>'],
   ),
                   
+  Parameter(
+    name     = 'Storage ring horizontal radiation damping time from dipoles',
+    group    = 'FAC',
+    value    = Prms.sr_horizontal_radiation_damping_time_from_dipoles,
+    symbol   = r'<math>\alpha_{x,\text{DIP}}</math>',
+    units    = 'ps',
+    revision = '2014-08-01',
+    deps     = ['Storage ring natural bunch length',
+                'Storage ring beam beta factor'],
+    obs      = [r'<math>\sigma_{t} = \frac{\sigma_{s}{c}</math>'],
+  ),
+                  
 ]

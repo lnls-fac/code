@@ -421,9 +421,9 @@ parameter_list = [
   ),
   
   Parameter(
-    name     = 'Booster extraction horizontal damping time',
+    name     = 'Booster extraction horizontal radiation damping time',
     group    = 'FAC',
-    value    = Prms.bo_extraction_horizontal_damping_time,
+    value    = Prms.bo_extraction_horizontal_radiation_damping_time,
     symbol   = r'<math>\tau_x</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -435,9 +435,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster extraction vertical damping time',
+    name     = 'Booster extraction vertical radiation damping time',
     group    = 'FAC',
-    value    = Prms.bo_extraction_vertical_damping_time,
+    value    = Prms.bo_extraction_vertical_radiation_damping_time,
     symbol   = r'<math>\tau_y</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -449,9 +449,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster extraction longitudinal damping time',
+    name     = 'Booster extraction longitudinal radiation damping time',
     group    = 'FAC',
-    value    = Prms.bo_extraction_longitudinal_damping_time,
+    value    = Prms.bo_extraction_longitudinal_radiation_damping_time,
     symbol   = r'<math>\tau_s</math>',
     units    = 'ms',
     revision = '2014-08-01',

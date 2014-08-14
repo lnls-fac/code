@@ -220,6 +220,16 @@ class ParameterDefinitions(object):
         sr_natural_bunch_length, 
         sr_beam_beta_factor)
     
+    sr_horizontal_radiation_damping_time_from_dipoles = optics.damping_time(
+        sr_beam_energy, 
+        sr_radiation_integral_I2_from_dipoles,
+        sr_horizontal_damping_partition_number_from_dipoles,
+        sr_lattice_circumference)                                                                        
+    sr_horizontal_radiation_damping_time = optics.damping_time(
+        sr_beam_energy, 
+        sr_radiation_integral_I2,
+        sr_horizontal_damping_partition_number,
+        sr_lattice_circumference) 
 
     '''Booster parameters'''
     
@@ -337,19 +347,19 @@ class ParameterDefinitions(object):
         bo_extraction_radiation_integral_I3,
         bo_extraction_radiation_integral_I4)
 
-    bo_extraction_horizontal_damping_time = optics.damping_time(
+    bo_extraction_horizontal_radiation_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_horizontal_damping_partition_number,
         bo_circumference)
 
-    bo_extraction_vertical_damping_time = optics.damping_time(
+    bo_extraction_vertical_radiation_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_vertical_damping_partition_number,
         bo_circumference)
 
-    bo_extraction_longitudinal_damping_time = optics.damping_time(
+    bo_extraction_longitudinal_radiation_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_longitudinal_damping_partition_number,
