@@ -128,6 +128,11 @@ class ParameterDefinitions(object):
     sr_energy_loss_per_turn = optics.U0(
         sr_beam_energy, sr_radiation_integral_I2)
 
+    sr_radiation_power_from_dipoles = optics.radiation_power(
+        sr_energy_loss_per_turn_from_dipoles, sr_beam_current)
+    sr_radiation_power = optics.radiation_power(
+        sr_energy_loss_per_turn, sr_beam_current)
+    
     sr_overvoltage_from_dipoles = optics.overvoltage(
         sr_rf_cavity_peak_voltage, sr_energy_loss_per_turn_from_dipoles)
     sr_overvoltage = optics.overvoltage(

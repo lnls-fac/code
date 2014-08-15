@@ -11,7 +11,7 @@ parameter_list = [
 
   Parameter(
     name     = 'Storage ring beam energy',
-    group    = 'LNLS',
+    group    = 'GIA',
     value    = Prms.sr_beam_energy,
     symbol   = r'<math>E</math>',
     units    = 'GeV',
@@ -99,7 +99,7 @@ parameter_list = [
                   
   Parameter(
     name     = 'Storage ring lattice circumference',
-    group    = 'LNLS',
+    group    = 'GIA',
     value    = Prms.sr_lattice_circumference,
     symbol   = r'<math>C</math>',
     units    = 'm',
@@ -794,7 +794,31 @@ parameter_list = [
                 'Storage ring radiation integral I2 from IDs'],
     obs      = [r'<math>U_\text{0,IDs} = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_\text{2,IDs}</math>'],
   ),
-       
+      
+  Parameter(
+    name     = 'Storage ring radiation power from dipoles',
+    group    = 'FAC',
+    value    = Prms.sr_radiation_power_from_dipoles,
+    symbol   = r'<math>P_{\text{DIP}}</math>',
+    units    = 'kW',
+    revision = '2014-08-01',
+    deps     = ['Storage ring energy loss per turn from dipoles',
+                'Storage ring beam current'],
+    obs      = [r'<math>P = U_{0,\text{DIP}} I</math>'],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring radiation power',
+    group    = 'FAC',
+    value    = Prms.sr_radiation_power,
+    symbol   = r'<math>P</math>',
+    units    = 'kW',
+    revision = '2014-08-01',
+    deps     = ['Storage ring energy loss per turn',
+                'Storage ring beam current'],
+    obs      = [r'<math>P = U_{0} I</math>'],
+  ),
+                   
   Parameter(
     name     = 'Storage ring energy loss per turn',
     group    = 'FAC',

@@ -11,7 +11,7 @@ parameter_list = [
 
   Parameter(
     name     = 'Booster injection beam energy',
-    group    = 'LNLS',
+    group    = 'GIA',
     value    = Prms.bo_injection_beam_energy,
     symbol   = r'<math>E_\text{inj}</math>',
     units    = 'GeV',
@@ -55,7 +55,7 @@ parameter_list = [
 
   Parameter(
     name     = 'Booster extraction beam energy',
-    group    = 'LNLS',
+    group    = 'GIA',
     value    = Prms.bo_extraction_beam_energy,
     symbol   = r'<math>E_\text{ext}</math>',
     units    = 'GeV',
@@ -99,7 +99,7 @@ parameter_list = [
 
   Parameter(
     name     = 'Booster circumference',
-    group    = 'LNLS',
+    group    = 'GIA',
     value    = Prms.bo_circumference,
     symbol   = r'<math>C</math>',
     units    = 'm',
