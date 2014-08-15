@@ -230,7 +230,31 @@ class ParameterDefinitions(object):
         sr_radiation_integral_I2,
         sr_horizontal_damping_partition_number,
         sr_lattice_circumference) 
+    
+    sr_vertical_radiation_damping_time_from_dipoles = optics.damping_time(
+        sr_beam_energy, 
+        sr_radiation_integral_I2_from_dipoles,
+        sr_vertical_damping_partition_number_from_dipoles,
+        sr_lattice_circumference)                                                                        
+    sr_vertical_radiation_damping_time = optics.damping_time(
+        sr_beam_energy, 
+        sr_radiation_integral_I2,
+        sr_vertical_damping_partition_number,
+        sr_lattice_circumference)
+    
+    sr_longitudinal_radiation_damping_time_from_dipoles = optics.damping_time(
+        sr_beam_energy, 
+        sr_radiation_integral_I2_from_dipoles,
+        sr_longitudinal_damping_partition_number_from_dipoles,
+        sr_lattice_circumference)                                                                        
+    sr_longitudinal_radiation_damping_time = optics.damping_time(
+        sr_beam_energy, 
+        sr_radiation_integral_I2,
+        sr_longitudinal_damping_partition_number,
+        sr_lattice_circumference)
 
+    sr_transverse_coupling = 1.0    # [%]
+    
     '''Booster parameters'''
     
     bo_beam_current          = 2.0 # [mA]

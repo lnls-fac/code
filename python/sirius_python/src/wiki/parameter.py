@@ -42,7 +42,7 @@ class Parameter:
 
     def create_wiki_page(self):
         wiki = []
-        wiki.append('=Data=')
+        wiki.append('==Data==')
         wiki.append('<section begin=data/>')
         wiki.append('* Group: <section begin=group/>' + self.group + '<section end=group/>')
         wiki.append('* Revision: <section begin=revision/>' + str(self.revision) + '<section end=revision/>')
@@ -51,7 +51,7 @@ class Parameter:
         wiki.append('* Units: <section begin=units/>' + self.units + '<section end=units/>')
         wiki.append('* Deps: <section begin=deps/>' + self.create_wiki_deps() + '<section end=deps/>')
         wiki.append('<section end=data/>')
-        wiki.append('=Observations=')
+        wiki.append('==Observations==')
         wiki.append('<section begin=obs/>' + self.create_obs() + '<section end=obs/>')
         return '\n'.join(wiki)
 

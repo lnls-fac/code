@@ -100,7 +100,6 @@ def frequency_from_tune(revolution_frequency, tune):
 def damping_time(energy, I2, J, circumference):
     '''Radiation damping time [ms] from beam energy [GeV], radiation
     integral I2 [1/m], damping partition number and circumference [m].'''
-    mc2 = 1e-9*const.electron_rest_energy/const.electron_charge   
     return 1000 * circumference / (const.Ca*math.pow(energy, 3)*I2*J)
 
 def radiation_power(current, U0):

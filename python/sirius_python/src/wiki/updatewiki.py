@@ -41,6 +41,24 @@ def generate_parameter_name_list_page(label, parameters):
     page.text = '\n'.join(wiki)
     page.save(bot_default_comment)
     
+def generate_parameter_flat_list_page(label, parameters):
+    wiki = []
+    for parameter in parameters:
+        name = parameter.name.replace(label+' ', '')
+        name_capitalized = name[0].upper() + name[1:]
+        wiki.append('=[[Parameter:'+parameter.name+'|'+name_capitalized+']]=')
+        wiki.append("'''Data'''")
+        wiki.append('{{#lst:Parameter:'+parameter.name+'|data}}')
+        wiki.append("'''Observations'''")
+        wiki.append('')
+        wiki.append('{{#lst:Parameter:'+parameter.name+'|obs}}')
+    site = pywikibot.Site('en', 'siriuswiki')
+    page = pywikibot.Page(site, 'Machine:' + label + ' parameter flat list')
+    page.text = '\n'.join(wiki)
+    page.save(bot_default_comment)
+    #print(page.text)
+        
+    
     
 def generate_parameter_pages(parameters):
     #return
@@ -55,6 +73,7 @@ def update_submachine(submachine, parameters_list = None):
     if parameters_list is None:
         generate_parameter_pages(submachine.parameter_list)
         generate_parameter_name_list_page(submachine.label, submachine.parameter_list)
+        generate_parameter_flat_list_page(submachine.label, submachine.parameter_list)
         return
     if len(parameters_list) == 0:
         return
@@ -73,6 +92,7 @@ def update_submachine(submachine, parameters_list = None):
             print(parameter + ' not defined!')
     if parameter_updated:
         generate_parameter_name_list_page(submachine.label, submachine.parameter_list)
+        generate_parameter_flat_list_page(submachine.label, submachine.parameter_list)
         #print('"Machine:'+submachine.label+' parameter name list" page updated.')
     
 
