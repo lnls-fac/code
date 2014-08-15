@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 '''
 Sirius01
 ====================
@@ -283,6 +285,18 @@ class ParameterDefinitions(object):
 
     bo_horizontal_corrector_maximum_strength = 0.5 # [mrad]
     bo_vertical_corrector_maximum_strength = 0.5 # [mrad]
+
+    bo_dipoles_alignment_error_tolerance = 100 # [μm]
+    bo_quadrupoles_alignment_error_tolerance = 100 # [μm]
+    bo_sextupoles_alignment_error_tolerance = 100 # [μm]
+    
+    bo_dipoles_rotation_error_tolerance = 0.5 # [mrad]
+    bo_quadrupoles_rotation_error_tolerance = 0.5 # [mrad]
+    bo_sextupoles_rotation_error_tolerance = 0.5 # [mrad]
+
+    bo_dipoles_excitation_error_tolerance = 0.1 # [%]
+    bo_quadrupoles_excitation_error_tolerance = 0.2 # [%]
+    bo_sextupoles_excitation_error_tolerance = 0.2 # [%]
 
     bo_number_of_beam_position_monitors = 50
 
