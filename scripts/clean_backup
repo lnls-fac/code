@@ -1,0 +1,15 @@
+#!/bin/sh
+
+ARG=$1
+NBACKUPS=$2
+
+if [ -z "$ARG" ] || [ -z "$NBACKUPS" ] ; then
+    return
+fi
+
+cd /home/backup/$ARG
+NFILES=$(ls -1 | wc -l)
+
+if [ $NFILES -gt $NBACKUPS ] ; then
+    rm $(ls -1 | head -n 1)
+fi
