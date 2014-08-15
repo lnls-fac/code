@@ -13,4 +13,4 @@ FILE=fac-wiki-backup-$DATE.tar.gz
 cd $BASEDIR
 md5sum $BASEDIR/$WIKIDIR/$DISKNAME | /usr/sbin/sendmail $USERNAME
 tar cz ./$WIKIDIR | ssh $BACKUPDEST "cat > /home/backup/$WIKIDIR/$FILE"
-ssh $BACKUPDEST "/home/backup/clean.sh $WIKIDIR $NBACKUPS"
+ssh $BACKUPDEST "/home/fac_files/code/scripts/clean_backup $WIKIDIR $NBACKUPS"
