@@ -900,24 +900,6 @@ parameter_list = [
                 'Storage ring lattice circumference'],
     obs      = [r'<math>\alpha_\text{1} = \frac{I_\text{1}}{C}</math>'],
   ),
-  
-  
-  
-  Parameter(
-    name     = 'Storage ring RF energy acceptance from dipoles',
-    group    = 'FAC',
-    value    = Prms.sr_rf_energy_acceptance_from_dipoles,
-    symbol   = r'<math>\epsilon_\text{max,DIP}</math>',
-    units    = '%',
-    revision = '2014-08-01',
-    deps     = ['Storage ring overvoltage from dipoles',
-                'Storage ring beam energy',
-                'Storage ring energy loss per turn from dipoles',
-                'Storage ring harmonic number',
-                'Storage ring linear momentum compaction from dipoles'],
-    obs      = [r'<math>\epsilon_\text{max,DIP} = \sqrt{ \frac{1}{\pi h \alpha_{x,\text{DIP}}} \frac{U_\text{0,DIP}}{E} F(q_\text{DIP})}</math>',
-                r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
-  ),
                             
   Parameter(
     name     = 'Storage ring horizontal damping partition number from dipoles',
@@ -955,34 +937,6 @@ parameter_list = [
     obs      = ["Its value is derived from Robinson's sum rule.",
                 r'<math>J_{s, \text{DIP}} = 4 - J_{s, \text{DIP}} - J_{y, \text{DIP}}</math>'],
   ),
-                            
-  Parameter(
-    name     = 'Storage ring natural emittance from dipoles',
-    group    = 'FAC',
-    value    = Prms.sr_natural_emittance_from_dipoles,
-    symbol   = r'<math>\epsilon_\text{0,DIP}</math>',
-    units    = unicode('nm⋅rad',encoding='utf-8'),
-    revision = '2014-08-01',
-    deps     = ['Storage ring beam gamma factor',
-                'Storage ring horizontal damping partition number from dipoles',
-                'Storage ring radiation integral I5 from dipoles',
-                'Storage ring radiation integral I2 from dipoles'],
-    obs      = [r'<math>\epsilon_\text{0,DIP} = C_\text{q} \frac{\gamma^2}{J_{x,\text{DIP}}} \frac{I_\text{5,DIP}}{I_\text{2,DIP}}</math>'],
-  ),
-                            
-  Parameter(
-    name     = 'Storage ring natural energy spread from dipoles',
-    group    = 'FAC',
-    value    = Prms.sr_natural_energy_spread_from_dipoles,
-    symbol   = r'<math>\sigma_{\delta,\text{DIP}}</math>',
-    units    = '%',
-    revision = '2014-08-01',
-    deps     = ['Storage ring beam gamma factor',
-                'Storage ring radiation integral I2 from dipoles',
-                'Storage ring radiation integral I3 from dipoles',
-                'Storage ring radiation integral I4 from dipoles'],
-    obs      = [r'<math>\sigma_{\delta,\text{DIP}} = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3,DIP}}{2 I_\text{2,DIP} + I_\text{4,DIP}}}</math>'],
-  ),
   
   Parameter(
     name     = 'Storage ring linear slip phase from dipoles',
@@ -993,7 +947,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor',
                 'Storage ring linear momentum compaction from dipoles'],
-    obs      = [r'<math>\eta_{1,\text{DIP}} = \alpha_{1,\text{DIP}} - \gamma^{-2}'],
+    obs      = [r'<math>\eta_{1,\text{DIP}} = \alpha_{1,\text{DIP}} - \gamma^{-2}</math>'],
   ),
  
   Parameter(
@@ -1005,7 +959,7 @@ parameter_list = [
     revision = '2014-08-01',
     deps     = ['Storage ring beam gamma factor',
                 'Storage ring linear momentum compaction'],
-    obs      = [r'<math>\eta_{1} = \alpha_{1} - \gamma^{-2}'],
+    obs      = [r'<math>\eta_{1} = \alpha_{1} - \gamma^{-2}</math>'],
   ),
   
   Parameter(
@@ -1020,7 +974,7 @@ parameter_list = [
                 'Storage ring overvoltage from dipoles',
                 'Storage ring energy loss per turn from dipoles',
                 'Storage ring linear momentum compaction from dipoles'],
-    obs      = [r'<math>\epsilon_{\text{max},\text{DIP}} = \sqrt{\frac{1}{\pi h \alpha_{x, \text{DIP}} \frac{U_{0,\text{DIP}}{E} F(q_\text{DIP})}</math>',
+    obs      = [r'<math>\epsilon_\text{max, DIP} = \sqrt{\frac{1}{\pi h \alpha_\text{x, DIP}} \frac{U_\text{0, DIP}}{E} F(q_\text{DIP})}</math>',
                 r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
   ),
                   
@@ -1040,8 +994,6 @@ parameter_list = [
                 r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
   ),
 
-  
- 
   Parameter(
     name     = 'Storage ring horizontal damping partition number from dipoles',
     group    = 'FAC',
@@ -1072,11 +1024,11 @@ parameter_list = [
     name     = 'Storage ring vertical damping partition number from dipoles',
     group    = 'FAC',
     value    = Prms.sr_vertical_damping_partition_number_from_dipoles,
-    symbol   = r'<math>J_{\tex{y},\text{DIP}}</math>',
+    symbol   = r'<math>J_{\text{y},\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
     deps     = [],
-    obs      = [r'<math>J_{\tex{y},\text{DIP}} = 1 - \frac{I_{\text{4},\text{y}}}{I_{\text{2},\text{DIP}}} \equiv 1</math>',
+    obs      = [r'<math>J_{\text{y},\text{DIP}} = 1 - \frac{I_{\text{4},\text{y}}}{I_{\text{2},\text{DIP}}} \equiv 1</math>',
                 'Vertical damping partition number from dipoles is identically one for error-free machines for which vertical dispersion functions are zero everywhere.'],
   ),
 
@@ -1096,11 +1048,11 @@ parameter_list = [
     name     = 'Storage ring longitudinal damping partition number from dipoles',
     group    = 'FAC',
     value    = Prms.sr_longitudinal_damping_partition_number_from_dipoles,
-    symbol   = r'<math>J_{\tex{s},\text{DIP}}</math>',
+    symbol   = r'<math>J_{\text{s},\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
     deps     = [],
-    obs      = [r'<math>J_{\tex{s},\text{DIP}} = 2 + \frac{I_{\text{4},\text{DIP}}}{I_{\text{2},\text{DIP}}}</math>',
+    obs      = [r'<math>J_{\text{s},\text{DIP}} = 2 + \frac{I_{\text{4},\text{DIP}}}{I_{\text{2},\text{DIP}}}</math>',
                 'Vertical damping partition number from dipoles is identically one for error-free machines for which vertical dispersion functions are zero everywhere.'],
   ),
                   
@@ -1127,7 +1079,7 @@ parameter_list = [
                 'Storage ring horizontal damping partition number from dipoles',
                 'Storage ring radiation integral I5 from dipoles',
                 'Storage ring radiation integral I2 from dipoles'],
-    obs      = [r'<math>\epsilon_{0,\text{DIP}} = C_\text{q} \frac{\gamma^2}{J_{\text{x},\text{DIP}} \frac{I_{\text{5},\text{DIP}}}{I_{\text{2},\text{DIP}}}</math>'],
+    obs      = [r'<math>\epsilon_{0,\text{DIP}} = C_\text{q} \frac{\gamma^2}{J_\text{x,DIP}} \frac{I_\text{5, DIP}}{I_\text{2, DIP}}</math>'],
   ),                
   
   Parameter(
