@@ -37,7 +37,10 @@ Pos<double>  linalg_solve     (const std::vector<Pos<double> >& M, const Pos<dou
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 template <typename T>
-Status::type track_elementpass (const Element& el, Pos<T> &orig_pos, const Accelerator& accelerator) {
+Status::type track_elementpass (
+		     const Element& el,                 // element through which to track particle
+		     Pos<T> &orig_pos,                  // initial electron coordinates
+		     const Accelerator& accelerator) {
 
 	Status::type status = Status::success;
 
@@ -80,11 +83,11 @@ Status::type track_elementpass (const Element& el, Pos<T> &orig_pos, const Accel
 template <typename T>
 Status::type track_linepass (
 		const Accelerator& accelerator,
-		Pos<T>& orig_pos,
-		std::vector<Pos<T> >& pos,
-		unsigned int& element_offset,
-		Plane::type& lost_plane,
-		bool trajectory) {
+		Pos<T>& orig_pos,              // initial electron coordinates
+		std::vector<Pos<T> >& pos,     // vector with electron coordinates from tracking at every element.
+		unsigned int& element_offset,  // index of starting element for tracking
+		Plane::type& lost_plane,       // return plane in which particle was lost, if the case.
+		bool trajectory) {             // whether function should return coordinates at all elements
 
 	Status::type status = Status::success;
 

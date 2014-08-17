@@ -7,7 +7,7 @@
 
 struct Accelerator {
 
-	double                  energy;
+	double                  energy;              // [GeV]
 	bool                    cavity_on;
 	bool                    radiation_on;
 	bool                    vchamber_on;
