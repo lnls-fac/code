@@ -303,6 +303,44 @@ class ParameterDefinitions(object):
     bo_quadrupoles_excitation_error_tolerance = 0.2 # [%]
     bo_sextupoles_excitation_error_tolerance = 0.2 # [%]
 
+    bo_systematic_normal_6_pole_error_tolerance_for_dipoles = -3.0e-4
+    bo_systematic_normal_8_pole_error_tolerance_for_dipoles = 2.0e-4
+    bo_systematic_normal_10_pole_error_tolerance_for_dipoles = 1.0e-3
+    bo_systematic_normal_12_pole_error_tolerance_for_dipoles = -2.0e-3
+    bo_systematic_normal_14_pole_error_tolerance_for_dipoles = 2.0e-3
+    bo_systematic_normal_12_pole_error_tolerance_for_quadrupoles = 6.0e-4
+    bo_systematic_normal_20_pole_error_tolerance_for_quadrupoles = -6.2e-4
+    bo_systematic_normal_28_pole_error_tolerance_for_quadrupoles = -0.5e-4
+    bo_systematic_normal_18_pole_error_tolerance_for_sextupoles = -4.1e-4
+    bo_systematic_normal_30_pole_error_tolerance_for_sextupoles = -4.5e-4
+
+    bo_random_normal_6_pole_error_tolerance_for_dipoles = 3.0e-4
+    bo_random_normal_8_pole_error_tolerance_for_dipoles = 8.0e-5
+    bo_random_normal_10_pole_error_tolerance_for_dipoles = 1.0e-4
+    bo_random_normal_12_pole_error_tolerance_for_dipoles = 6.0e-5
+    bo_random_normal_14_pole_error_tolerance_for_dipoles = 2.0e-4
+    bo_random_normal_6_pole_error_tolerance_for_quadrupoles = 2.8e-4
+    bo_random_normal_8_pole_error_tolerance_for_quadrupoles = 2.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_quadrupoles = 3.0e-5
+    bo_random_normal_12_pole_error_tolerance_for_quadrupoles = 2.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_quadrupoles = 3.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_quadrupoles = 9.0e-5
+    bo_random_normal_18_pole_error_tolerance_for_quadrupoles = 1.0e-4
+    bo_random_normal_20_pole_error_tolerance_for_quadrupoles = 3.0e-5
+    bo_random_normal_8_pole_error_tolerance_for_sextupoles = 5.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_sextupoles = 3.5e-4
+    bo_random_normal_12_pole_error_tolerance_for_sextupoles = 1.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_sextupoles = 1.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_sextupoles = 1.0e-4
+    bo_random_normal_18_pole_error_tolerance_for_sextupoles = 9.0e-5
+    bo_random_normal_20_pole_error_tolerance_for_sextupoles = 5.0e-5
+    bo_random_normal_22_pole_error_tolerance_for_sextupoles = 1.0e-5
+    bo_random_normal_30_pole_error_tolerance_for_sextupoles = 8.0e-5
+
+    bo_random_skew_6_pole_error_tolerance_for_quadrupoles = 2.9e-4
+    bo_random_skew_8_pole_error_tolerance_for_quadrupoles = 1.4e-4
+    bo_random_skew_8_pole_error_tolerance_for_sextupoles = 4.9e-4
+
     bo_number_of_beam_position_monitors = 50
 
     bo_horizontal_betatron_tune = 19.204749345767866
