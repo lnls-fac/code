@@ -329,6 +329,48 @@ class ParameterDefinitions(object):
     bo_quadrupoles_excitation_error_tolerance = 0.2 # [%]
     bo_sextupoles_excitation_error_tolerance = 0.2 # [%]
 
+    bo_systematic_normal_6_pole_error_tolerance_for_dipoles = -3.0e-4
+    bo_systematic_normal_8_pole_error_tolerance_for_dipoles = 2.0e-4
+    bo_systematic_normal_10_pole_error_tolerance_for_dipoles = 1.0e-3
+    bo_systematic_normal_12_pole_error_tolerance_for_dipoles = -2.0e-3
+    bo_systematic_normal_14_pole_error_tolerance_for_dipoles = 2.0e-3
+    bo_systematic_normal_12_pole_error_tolerance_for_quadrupoles = 6.0e-4
+    bo_systematic_normal_20_pole_error_tolerance_for_quadrupoles = -6.2e-4
+    bo_systematic_normal_28_pole_error_tolerance_for_quadrupoles = -0.5e-4
+    bo_systematic_normal_18_pole_error_tolerance_for_sextupoles = -4.1e-4
+    bo_systematic_normal_30_pole_error_tolerance_for_sextupoles = -4.5e-4
+
+    bo_random_normal_6_pole_error_tolerance_for_dipoles = 3.0e-4
+    bo_random_normal_8_pole_error_tolerance_for_dipoles = 8.0e-5
+    bo_random_normal_10_pole_error_tolerance_for_dipoles = 1.0e-4
+    bo_random_normal_12_pole_error_tolerance_for_dipoles = 6.0e-5
+    bo_random_normal_14_pole_error_tolerance_for_dipoles = 2.0e-4
+    bo_random_normal_6_pole_error_tolerance_for_quadrupoles = 2.8e-4
+    bo_random_normal_8_pole_error_tolerance_for_quadrupoles = 2.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_quadrupoles = 3.0e-5
+    bo_random_normal_12_pole_error_tolerance_for_quadrupoles = 2.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_quadrupoles = 3.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_quadrupoles = 9.0e-5
+    bo_random_normal_18_pole_error_tolerance_for_quadrupoles = 1.0e-4
+    bo_random_normal_20_pole_error_tolerance_for_quadrupoles = 3.0e-5
+    bo_random_normal_8_pole_error_tolerance_for_sextupoles = 5.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_sextupoles = 3.5e-4
+    bo_random_normal_12_pole_error_tolerance_for_sextupoles = 1.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_sextupoles = 1.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_sextupoles = 1.0e-4
+    bo_random_normal_18_pole_error_tolerance_for_sextupoles = 9.0e-5
+    bo_random_normal_20_pole_error_tolerance_for_sextupoles = 5.0e-5
+    bo_random_normal_22_pole_error_tolerance_for_sextupoles = 1.0e-5
+    bo_random_normal_30_pole_error_tolerance_for_sextupoles = 8.0e-5
+
+    bo_random_skew_6_pole_error_tolerance_for_quadrupoles = 2.9e-4
+    bo_random_skew_8_pole_error_tolerance_for_quadrupoles = 1.4e-4
+    bo_random_skew_8_pole_error_tolerance_for_sextupoles = 4.9e-4
+    
+    bo_reference_position_for_multipole_contribution_for_dipoles = 17.5 # [mm]
+    bo_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
+    bo_reference_position_for_multipole_contribution_for_sextupoles = 20 # [mm]
+
     bo_number_of_beam_position_monitors = 50
 
     bo_horizontal_betatron_tune = 19.204749345767866
@@ -469,3 +511,25 @@ class ParameterDefinitions(object):
     bo_extraction_natural_bunch_duration = optics.bunch_duration(
         bo_extraction_natural_bunch_length,
         bo_extraction_beam_beta_factor)
+
+    '''Linac parameters'''
+    li_multi_bunch_beam_energy = 150 # [MeV]
+    li_multi_bunch_rf_frequency = 3 # [GHz]
+    li_multi_bunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
+    li_multi_bunch_maximum_rms_energy_spread = 0.5 # [%]
+    li_multi_bunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
+    li_multi_bunch_maximum_pulse_to_pulse_jitter = 100 # [ps]
+    li_multi_bunch_minimum_pulse_charge = 3 # [nC]
+    li_multi_bunch_minimum_pulse_duration = 100 # [ns]
+    li_multi_bunch_maximum_pulse_duration = 300 # [ns]
+    li_multi_bunch_repetition_rate = 2 # [Hz]
+
+    li_single_bunch_beam_energy = 150 # [MeV]
+    li_single_bunch_rf_frequency = 3 # [GHz]
+    li_single_bunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
+    li_single_bunch_maximum_rms_energy_spread = 0.5 # [%]
+    li_single_bunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
+    li_single_bunch_maximum_pulse_to_pulse_jitter = 100 # [ps]
+    li_single_bunch_minimum_pulse_charge = 1 # [nC]
+    li_single_bunch_maximum_pulse_duration = 1 # [ns]
+    li_single_bunch_repetition_rate = 2 # [Hz]
