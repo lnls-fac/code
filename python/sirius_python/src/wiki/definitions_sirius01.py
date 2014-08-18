@@ -340,6 +340,10 @@ class ParameterDefinitions(object):
     bo_random_skew_6_pole_error_tolerance_for_quadrupoles = 2.9e-4
     bo_random_skew_8_pole_error_tolerance_for_quadrupoles = 1.4e-4
     bo_random_skew_8_pole_error_tolerance_for_sextupoles = 4.9e-4
+    
+    bo_reference_position_for_multipole_contribution_for_dipoles = 17.5 # [mm]
+    bo_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
+    bo_reference_position_for_multipole_contribution_for_sextupoles = 20 # [mm]
 
     bo_number_of_beam_position_monitors = 50
 

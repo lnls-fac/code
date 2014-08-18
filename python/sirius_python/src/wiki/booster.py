@@ -1000,8 +1000,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_2/B_0,DIP}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1011,8 +1011,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_3/B_0,DIP}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1022,8 +1022,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_4/B_0,DIP}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1033,8 +1033,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_5/B_0,DIP}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1044,8 +1044,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_6/B_0,DIP}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1055,8 +1055,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_5/B_1,QUAD}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1066,8 +1066,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_9/B_1,QUAD}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1077,8 +1077,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_{13}/B_1,QUAD}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.'],
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1088,8 +1088,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_8/B_2,SEXT}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.'],
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1099,8 +1099,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_{14}/B_2,SEXT}^{\text{sys,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.'],
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.'],
   ),
 
   Parameter(
@@ -1110,8 +1110,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_2/B_0,DIP}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1122,8 +1122,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_3/B_0,DIP}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1134,8 +1134,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_4/B_0,DIP}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1146,8 +1146,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_5/B_0,DIP}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1158,8 +1158,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_6/B_0,DIP}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for dipoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
   
@@ -1170,8 +1170,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_2/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1182,8 +1182,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_3/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1194,8 +1194,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_4/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1206,8 +1206,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_5/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1218,8 +1218,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_6/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1230,8 +1230,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_7/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1242,8 +1242,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_8/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1254,8 +1254,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_9/B_1,QUAD}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1266,8 +1266,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_3/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1278,8 +1278,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_4/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1290,8 +1290,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_5/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1302,8 +1302,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_6/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1314,8 +1314,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_7/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1326,8 +1326,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_8/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1338,8 +1338,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_9/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1350,8 +1350,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_{10}/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1362,8 +1362,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_{14}/B_2,SEXT}^{\text{rnd,normal}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1374,8 +1374,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_2/B_1,QUAD}^{\text{rnd,skew}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1386,8 +1386,8 @@ parameter_list = [
     symbol   = r'<math>M_{B_3/B_1,QUAD}^{\text{rnd,skew}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 17.5 mm.',
+    deps     = ['Booster reference position for multipole contribution for quadrupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1398,9 +1398,42 @@ parameter_list = [
     symbol   = r'<math>M_{B_3/B_2,QUAD}^{\text{rnd,skew}}</math>',
     units    = '',
     revision = '2014-08-01',
-    deps     = [],
-    obs      = [r'Relative value, calculated at <math>x</math> = 20 mm.',
+    deps     = ['Booster reference position for multipole contribution for sextupoles'],
+    obs      = [r'Relative value, calculated at <math>r_0</math>.',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
+  ),
+
+  Parameter(
+    name     = 'Booster reference position for multipole contribution for dipoles',
+    group    = 'FAC',
+    value    = Prms.bo_reference_position_for_multipole_contribution_for_dipoles,
+    symbol   = r'<math>r_{0,\text{DIP}}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster reference position for multipole contribution for quadrupoles',
+    group    = 'FAC',
+    value    = Prms.bo_reference_position_for_multipole_contribution_for_quadrupoles,
+    symbol   = r'<math>r_{0,\text{QUAD}}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster reference position for multipole contribution for sextupoles',
+    group    = 'FAC',
+    value    = Prms.bo_reference_position_for_multipole_contribution_for_sextupoles,
+    symbol   = r'<math>r_{0,\text{SEXT}}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
   ),
 
 ]
