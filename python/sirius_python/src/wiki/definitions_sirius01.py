@@ -485,3 +485,25 @@ class ParameterDefinitions(object):
     bo_extraction_natural_bunch_duration = optics.bunch_duration(
         bo_extraction_natural_bunch_length,
         bo_extraction_beam_beta_factor)
+
+    '''Linac parameters'''
+    li_multibunch_beam_energy = 150 # [MeV]
+    li_multibunch_rf_frequency = 3 # [GHz]
+    li_multibunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
+    li_multibunch_maximum_rms_energy_spread = 0.5 # [%]
+    li_multibunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
+    li_multibunch_maximum_pulse_to_pulse_jitter = 100 # [ps]
+    li_multibunch_minimum_pulse_charge = 3 # [nC]
+    li_multibunch_minimum_pulse_duration = 100 # [ns]
+    li_multibunch_maximum_pulse_duration = 300 # [ns]
+    li_multibunch_repetition_rate = 2 # [Hz]
+
+    li_single_bunch_beam_energy = 150 # [MeV]
+    li_single_bunch_rf_frequency = 3 # [GHz]
+    li_single_bunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
+    li_single_bunch_maximum_rms_energy_spread = 0.5 # [%]
+    li_single_bunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
+    li_single_bunch_maximum_pulse_to_pulse_jitter = 100 # [ps]
+    li_single_bunch_minimum_pulse_charge = 1 # [nC]
+    li_single_bunch_maximum_pulse_duration = 1 # [ns]
+    li_single_bunch_repetition_rate = 2 # [Hz]
