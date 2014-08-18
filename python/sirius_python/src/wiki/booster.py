@@ -842,9 +842,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster number of horizontal correctors',
+    name     = 'Booster number of horizontal dipole correctors',
     group    = 'FAC',
-    value    = Prms.bo_number_of_horizontal_correctors,
+    value    = Prms.bo_number_of_horizontal_dipole_correctors,
     symbol   = r'<math>N_\text{CH}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -853,9 +853,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster number of vertical correctors',
+    name     = 'Booster number of vertical dipole correctors',
     group    = 'FAC',
-    value    = Prms.bo_number_of_vertical_correctors,
+    value    = Prms.bo_number_of_vertical_dipole_correctors,
     symbol   = r'<math>N_\text{CV}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -864,9 +864,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster horizontal corrector maximum strength',
+    name     = 'Booster horizontal dipole corrector maximum strength',
     group    = 'FAC',
-    value    = Prms.bo_horizontal_corrector_maximum_strength,
+    value    = Prms.bo_horizontal_dipole_corrector_maximum_strength,
     symbol   = r'<math>\theta_\text{CH,max}</math>',
     units    = 'mrad',
     revision = '2014-08-01',
@@ -875,9 +875,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster vertical corrector maximum strength',
+    name     = 'Booster vertical dipole corrector maximum strength',
     group    = 'FAC',
-    value    = Prms.bo_vertical_corrector_maximum_strength,
+    value    = Prms.bo_vertical_dipole_corrector_maximum_strength,
     symbol   = r'<math>\theta_\text{CV,max}</math>',
     units    = 'mrad',
     revision = '2014-08-01',
