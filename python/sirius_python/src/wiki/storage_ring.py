@@ -12,7 +12,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring beam energy',
     group    = 'GIA',
-    value    = Prms.sr_beam_energy,
+    value    = Prms.si_beam_energy,
     symbol   = r'<math>E</math>',
     units    = 'GeV',
     revision = '2014-08-04',
@@ -23,7 +23,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring beam gamma factor',
     group    = 'FAC',
-    value    = Prms.sr_beam_gamma_factor,
+    value    = Prms.si_beam_gamma_factor,
     symbol   = r'<math>\gamma</math>',
     units    = '',
     revision = '2014-08-01',
@@ -34,7 +34,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring beam beta factor',
     group    = 'FAC',
-    value    = Prms.sr_beam_beta_factor,
+    value    = Prms.si_beam_beta_factor,
     symbol   = r'<math>\beta</math>',
     units    = '',
     revision = '2014-08-01',
@@ -45,7 +45,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring beam velocity',
     group    = 'FAC',
-    value    = Prms.sr_beam_velocity,
+    value    = Prms.si_beam_velocity,
     symbol   = r'<math>v</math>',
     units    = '',
     revision = '2014-08-01',
@@ -56,7 +56,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring beam magnetic rigidity',
     group    = 'FAC',
-    value    = Prms.sr_beam_magnetic_rigidity,
+    value    = Prms.si_beam_magnetic_rigidity,
     symbol   = r'<math>(B\rho)</math>',
     units    = unicode('T·m', encoding='utf-8'),
     revision = '2014-08-01',
@@ -67,7 +67,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring beam current',
     group    = 'FAC',
-    value    = Prms.sr_beam_current,
+    value    = Prms.si_beam_current,
     symbol   = r'<math>I</math>',
     units    = 'mA',
     revision = '2014-08-01',
@@ -78,7 +78,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring lattice version',
     group    = 'FAC',
-    value    = Prms.sr_lattice_version,
+    value    = Prms.si_lattice_version,
     symbol   = '',
     units    = '',
     revision = '2014-08-01',
@@ -89,7 +89,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring lattice type',
     group    = 'FAC',
-    value    = Prms.sr_lattice_type,
+    value    = Prms.si_lattice_type,
     symbol   = '',
     units    = '',
     revision = '2014-08-01',
@@ -100,7 +100,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring lattice circumference',
     group    = 'GIA',
-    value    = Prms.sr_lattice_circumference,
+    value    = Prms.si_lattice_circumference,
     symbol   = r'<math>C</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -111,7 +111,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring lattice symmetry',
     group    = 'FAC',
-    value    = Prms.sr_lattice_symmetry,
+    value    = Prms.si_lattice_symmetry,
     symbol   = r'<math>N_\text{SUPERCELLS}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -122,7 +122,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of long straight sections',
     group    = 'FAC',
-    value    = Prms.sr_number_of_long_straight_sections ,
+    value    = Prms.si_number_of_long_straight_sections ,
     symbol   = r'<math>N_\text{lss}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -133,7 +133,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of short straight sections',
     group    = 'FAC',
-    value    = Prms.sr_number_of_short_straight_sections ,
+    value    = Prms.si_number_of_short_straight_sections ,
     symbol   = r'<math>N_\text{sss}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -143,7 +143,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring length of long straight sections',
     group    = 'FAC',
-    value    = Prms.sr_length_of_long_straight_sections ,
+    value    = Prms.si_length_of_long_straight_sections ,
     symbol   = r'<math>L_\text{lss}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -154,7 +154,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring length of short straight sections',
     group    = 'FAC',
-    value    = Prms.sr_length_of_short_straight_sections ,
+    value    = Prms.si_length_of_short_straight_sections ,
     symbol   = r'<math>L_\text{sss}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -165,7 +165,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring harmonic number',
     group    = 'FAC',
-    value    = Prms.sr_harmonic_number,
+    value    = Prms.si_harmonic_number,
     symbol   = r'<math>h</math>',
     units    = '',
     revision = '2014-08-01',
@@ -176,7 +176,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring RF cavity peak voltage',
     group    = 'FAC',
-    value    = Prms.sr_rf_cavity_peak_voltage,
+    value    = Prms.si_rf_cavity_peak_voltage,
     symbol   = r'<math>V_\text{RF}</math>',
     units    = 'MV',
     revision = '2014-08-01',
@@ -187,7 +187,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring revolution period',
     group    = 'FAC',
-    value    = Prms.sr_revolution_period,
+    value    = Prms.si_revolution_period,
     symbol   = r'<math>T_\text{rev}</math>',
     units    = unicode('μs',encoding='utf-8'),
     revision = '2014-08-01',
@@ -199,7 +199,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring revolution frequency',
     group    = 'FAC',
-    value    = Prms.sr_revolution_frequency,
+    value    = Prms.si_revolution_frequency,
     symbol   = r'<math>f_\text{rev}</math>',
     units    = 'MHz',
     revision = '2014-08-01',
@@ -210,7 +210,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring RF frequency',
     group    = 'FAC',
-    value    = Prms.sr_rf_frequency,
+    value    = Prms.si_rf_frequency,
     symbol   = r'<math>f_\text{RF}</math>',
     units    = 'MHz',
     revision = '2014-08-01',
@@ -222,7 +222,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of electrons',
     group    = 'FAC',
-    value    = Prms.sr_number_of_electrons,
+    value    = Prms.si_number_of_electrons,
     symbol   = r'<math>N</math>',
     units    = '',
     revision = '2014-08-01',
@@ -234,7 +234,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of B1 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_number_of_B1_dipoles,
+    value    = Prms.si_number_of_B1_dipoles,
     symbol   = r'<math>N_\text{B1}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -245,7 +245,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of B2 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_number_of_B2_dipoles,
+    value    = Prms.si_number_of_B2_dipoles,
     symbol   = r'<math>N_\text{B2}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -256,7 +256,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of B3 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_number_of_B3_dipoles,
+    value    = Prms.si_number_of_B3_dipoles,
     symbol   = r'<math>N_\text{B3}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -267,7 +267,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring number of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_number_of_BC_dipoles,
+    value    = Prms.si_number_of_BC_dipoles,
     symbol   = r'<math>N_\text{BC}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -278,7 +278,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring hardedge length of B1 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_hardedge_length_of_B1_dipoles,
+    value    = Prms.si_hardedge_length_of_B1_dipoles,
     symbol   = r'<math>L_\text{B1}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -289,7 +289,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring hardedge length of B2 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_hardedge_length_of_B2_dipoles,
+    value    = Prms.si_hardedge_length_of_B2_dipoles,
     symbol   = r'<math>L_\text{B2}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -300,7 +300,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring hardedge length of B3 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_hardedge_length_of_B3_dipoles,
+    value    = Prms.si_hardedge_length_of_B3_dipoles,
     symbol   = r'<math>L_\text{B3}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -311,7 +311,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring hardedge length of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_hardedge_length_of_BC_dipoles,
+    value    = Prms.si_hardedge_length_of_BC_dipoles,
     symbol   = r'<math>L_\text{BC}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -322,7 +322,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipole low magnetic field',
     group    = 'FAC',
-    value    = Prms.sr_dipole_low_magnetic_field,
+    value    = Prms.si_dipole_low_magnetic_field,
     symbol   = r'<math>B_\text{low}</math>',
     units    = 'T',
     revision = '2014-08-01',
@@ -333,7 +333,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipole high magnetic field',
     group    = 'FAC',
-    value    = Prms.sr_dipole_high_magnetic_field,
+    value    = Prms.si_dipole_high_magnetic_field,
     symbol   = r'<math>B_\text{high}</math>',
     units    = 'T',
     revision = '2014-08-01',
@@ -344,7 +344,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipole low magnetic field bending radius',
     group    = 'FAC',
-    value    = Prms.sr_dipole_low_magnetic_field_bending_radius,
+    value    = Prms.si_dipole_low_magnetic_field_bending_radius,
     symbol   = r'<math>\rho_\text{low}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -356,7 +356,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipole high magnetic field bending radius',
     group    = 'FAC',
-    value    = Prms.sr_dipole_high_magnetic_field_bending_radius,
+    value    = Prms.si_dipole_high_magnetic_field_bending_radius,
     symbol   = r'<math>\rho_\text{high}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -368,7 +368,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipole low magnetic field critical energy',
     group    = 'FAC',
-    value    = Prms.sr_dipole_low_magnetic_field_critical_energy,
+    value    = Prms.si_dipole_low_magnetic_field_critical_energy,
     symbol   = r'<math>\epsilon_\text{c,low}</math>',
     units    = 'keV',
     revision = '2014-08-01',
@@ -380,7 +380,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipole high magnetic field critical energy',
     group    = 'FAC',
-    value    = Prms.sr_dipole_high_magnetic_field_critical_energy,
+    value    = Prms.si_dipole_high_magnetic_field_critical_energy,
     symbol   = r'<math>\epsilon_\text{c,high}</math>',
     units    = 'keV',
     revision = '2014-08-01',
@@ -392,7 +392,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring deflection angle of B1 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_deflection_angle_B1,
+    value    = Prms.si_deflection_angle_B1,
     symbol   = r'<math>\theta_\text{B1}</math>',
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
@@ -404,7 +404,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring deflection angle of B2 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_deflection_angle_B2,
+    value    = Prms.si_deflection_angle_B2,
     symbol   = r'<math>\theta_\text{B2}</math>',
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
@@ -416,7 +416,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring deflection angle of B3 dipoles',
     group    = 'FAC',
-    value    = Prms.sr_deflection_angle_B3,
+    value    = Prms.si_deflection_angle_B3,
     symbol   = r'<math>\theta_\text{B3}</math>',
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
@@ -428,7 +428,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring deflection angle of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_deflection_angle_BC,
+    value    = Prms.si_deflection_angle_BC,
     symbol   = r'<math>\theta_\text{BC}</math>',
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
@@ -440,7 +440,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring optics mode',
     group    = 'FAC',
-    value    = Prms.sr_optics_mode,
+    value    = Prms.si_optics_mode,
     symbol   = '',
     units    = '',
     revision = '2014-08-01',
@@ -451,7 +451,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal betatron tune',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_betatron_tune,
+    value    = Prms.si_horizontal_betatron_tune,
     symbol   = r'<math>\nu_x</math>',
     units    = '',
     revision = '2014-08-01',
@@ -463,7 +463,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical betatron tune',
     group    = 'FAC',
-    value    = Prms.sr_vertical_betatron_tune,
+    value    = Prms.si_vertical_betatron_tune,
     symbol   = r'<math>\nu_y</math>',
     units    = '',
     revision = '2014-08-01',
@@ -475,7 +475,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal beam size at center of long straight sections',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_beam_size_at_center_long_straight_sections,
+    value    = Prms.si_horizontal_beam_size_at_center_long_straight_sections,
     symbol   = r'<math>\sigma_\text{x, LSS}</math>',
     units    = unicode('μm',encoding='utf-8'),
     revision = '2014-08-01',
@@ -487,7 +487,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal beam size at center of short straight sections',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_beam_size_at_center_short_straight_sections,
+    value    = Prms.si_horizontal_beam_size_at_center_short_straight_sections,
     symbol   = r'<math>\sigma_\text{x, SSS}</math>',
     units    = unicode('μm',encoding='utf-8'),
     revision = '2014-08-01',
@@ -499,7 +499,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal beam size at center of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_beam_size_at_center_bc_dipoles,
+    value    = Prms.si_horizontal_beam_size_at_center_bc_dipoles,
     symbol   = r'<math>\sigma_\text{x, BC}</math>',
     units    = unicode('μm',encoding='utf-8'),
     revision = '2014-08-01',
@@ -511,7 +511,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical beam size at center of long straight sections',
     group    = 'FAC',
-    value    = Prms.sr_vertical_beam_size_at_center_long_straight_sections,
+    value    = Prms.si_vertical_beam_size_at_center_long_straight_sections,
     symbol   = r'<math>\sigma_\text{y, LSS}</math>',
     units    = unicode('μm',encoding='utf-8'),
     revision = '2014-08-01',
@@ -523,7 +523,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical beam size at center of short straight sections',
     group    = 'FAC',
-    value    = Prms.sr_vertical_beam_size_at_center_short_straight_sections,
+    value    = Prms.si_vertical_beam_size_at_center_short_straight_sections,
     symbol   = r'<math>\sigma_\text{y, SSS}</math>',
     units    = unicode('μm',encoding='utf-8'),
     revision = '2014-08-01',
@@ -535,7 +535,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical beam size at center of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_vertical_beam_size_at_center_bc_dipoles,
+    value    = Prms.si_vertical_beam_size_at_center_bc_dipoles,
     symbol   = r'<math>\sigma_\text{y, BC}</math>',
     units    = unicode('μm',encoding='utf-8'),
     revision = '2014-08-01',
@@ -547,7 +547,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal beam divergence at center of long straight sections',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_beam_divergence_at_center_long_straight_sections,
+    value    = Prms.si_horizontal_beam_divergence_at_center_long_straight_sections,
     symbol   = r"<math>\sigma_\text{x', LSS}</math>",
     units    = unicode('μrad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -559,7 +559,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal beam divergence at center of short straight sections',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_beam_divergence_at_center_short_straight_sections,
+    value    = Prms.si_horizontal_beam_divergence_at_center_short_straight_sections,
     symbol   = r"<math>\sigma_\text{x', SSS}</math>",
     units    = unicode('μrad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -571,7 +571,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal beam divergence at center of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_beam_divergence_at_center_bc_dipoles,
+    value    = Prms.si_horizontal_beam_divergence_at_center_bc_dipoles,
     symbol   = r"<math>\sigma_\text{x', BC}</math>",
     units    = unicode('μrad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -583,7 +583,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical beam divergence at center of long straight sections',
     group    = 'FAC',
-    value    = Prms.sr_vertical_beam_divergence_at_center_long_straight_sections,
+    value    = Prms.si_vertical_beam_divergence_at_center_long_straight_sections,
     symbol   = r"<math>\sigma_\text{y', LSS}</math>",
     units    = unicode('μrad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -595,7 +595,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical beam divergence at center of short straight sections',
     group    = 'FAC',
-    value    = Prms.sr_vertical_beam_divergence_at_center_short_straight_sections,
+    value    = Prms.si_vertical_beam_divergence_at_center_short_straight_sections,
     symbol   = r"<math>\sigma_\text{y', SSS}</math>",
     units    = unicode('μrad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -607,7 +607,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical beam divergence at center of BC dipoles',
     group    = 'FAC',
-    value    = Prms.sr_vertical_beam_divergence_at_center_bc_dipoles,
+    value    = Prms.si_vertical_beam_divergence_at_center_bc_dipoles,
     symbol   = r"<math>\sigma_\text{y', BC}</math>",
     units    = unicode('μrad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -619,7 +619,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal natural chromaticity',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_natural_chromaticity,
+    value    = Prms.si_horizontal_natural_chromaticity,
     symbol   = r'<math>\xi_{x,0}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -631,7 +631,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical natural chromaticity',
     group    = 'FAC',
-    value    = Prms.sr_vertical_natural_chromaticity,
+    value    = Prms.si_vertical_natural_chromaticity,
     symbol   = r'<math>\xi_{y,0}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -643,7 +643,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal chromaticity',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_chromaticity,
+    value    = Prms.si_horizontal_chromaticity,
     symbol   = r'<math>\xi_x</math>',
     units    = '',
     revision = '2014-08-01',
@@ -655,7 +655,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical chromaticity',
     group    = 'FAC',
-    value    = Prms.sr_vertical_chromaticity,
+    value    = Prms.si_vertical_chromaticity,
     symbol   = r'<math>\xi_y</math>',
     units    = '',
     revision = '2014-08-01',
@@ -667,7 +667,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal betatron frequency',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_betatron_frequency,
+    value    = Prms.si_horizontal_betatron_frequency,
     symbol   = r'<math>f_x</math>',
     units    = 'kHz',
     revision = '2014-08-01',
@@ -679,7 +679,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical betatron frequency',
     group    = 'FAC',
-    value    = Prms.sr_vertical_betatron_frequency,
+    value    = Prms.si_vertical_betatron_frequency,
     symbol   = r'<math>f_y = f_\text{rev} \left( \nu_y - \lfloor \nu_y\rfloor \right)</math>',
     units    = 'kHz',
     revision = '2014-08-01',
@@ -693,7 +693,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I1 from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I1_from_dipoles,
+    value    = Prms.si_radiation_integral_I1_from_dipoles,
     symbol   = r'<math>I_\text{1,DIP}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -705,7 +705,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I2 from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I2_from_dipoles,
+    value    = Prms.si_radiation_integral_I2_from_dipoles,
     symbol   = r'<math>I_\text{2,DIP}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -717,7 +717,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I3 from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I3_from_dipoles,
+    value    = Prms.si_radiation_integral_I3_from_dipoles,
     symbol   = r'<math>I_\text{3,DIP}</math>',
     units    = 'm<sup>-2</sup>',
     revision = '2014-08-01',
@@ -729,7 +729,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I4 from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I4_from_dipoles,
+    value    = Prms.si_radiation_integral_I4_from_dipoles,
     symbol   = r'<math>I_\text{4,DIP}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -741,7 +741,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I5 from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I5_from_dipoles,
+    value    = Prms.si_radiation_integral_I5_from_dipoles,
     symbol   = r'<math>I_\text{5,DIP}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -755,7 +755,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I6 from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I6_from_dipoles,
+    value    = Prms.si_radiation_integral_I6_from_dipoles,
     symbol   = r'<math>I_\text{6,DIP}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -768,7 +768,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I1 from IDs',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I1_from_IDs,
+    value    = Prms.si_radiation_integral_I1_from_IDs,
     symbol   = r'<math>I_\text{1,IDs}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -781,7 +781,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I2 from IDs',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I2_from_IDs,
+    value    = Prms.si_radiation_integral_I2_from_IDs,
     symbol   = r'<math>I_\text{2,IDs}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -793,7 +793,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I3 from IDs',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I3_from_IDs,
+    value    = Prms.si_radiation_integral_I3_from_IDs,
     symbol   = r'<math>I_\text{3,IDs}</math>',
     units    = 'm<sup>-2</sup>',
     revision = '2014-08-01',
@@ -805,7 +805,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I4 from IDs',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I4_from_IDs,
+    value    = Prms.si_radiation_integral_I4_from_IDs,
     symbol   = r'<math>I_\text{4,IDs}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -817,7 +817,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I5 from IDs',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I5_from_IDs,
+    value    = Prms.si_radiation_integral_I5_from_IDs,
     symbol   = r'<math>I_\text{5,IDs}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -831,7 +831,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I6 from IDs',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I6_from_IDs,
+    value    = Prms.si_radiation_integral_I6_from_IDs,
     symbol   = r'<math>I_\text{6,IDs}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -844,7 +844,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I1',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I1,
+    value    = Prms.si_radiation_integral_I1,
     symbol   = r'<math>I_\text{1}</math>',
     units    = 'm',
     revision = '2014-08-01',
@@ -856,7 +856,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I2',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I2,
+    value    = Prms.si_radiation_integral_I2,
     symbol   = r'<math>I_\text{2}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -868,7 +868,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I3',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I3,
+    value    = Prms.si_radiation_integral_I3,
     symbol   = r'<math>I_\text{3}</math>',
     units    = 'm<sup>-2</sup>',
     revision = '2014-08-01',
@@ -880,7 +880,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I4',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I4,
+    value    = Prms.si_radiation_integral_I4,
     symbol   = r'<math>I_\text{4}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -892,7 +892,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I5',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I5,
+    value    = Prms.si_radiation_integral_I5,
     symbol   = r'<math>I_5</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -905,7 +905,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation integral I6',
     group    = 'FAC',
-    value    = Prms.sr_radiation_integral_I6,
+    value    = Prms.si_radiation_integral_I6,
     symbol   = r'<math>I_\text{6}</math>',
     units    = 'm<sup>-1</sup>',
     revision = '2014-08-01',
@@ -918,7 +918,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring energy loss per turn from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_energy_loss_per_turn_from_dipoles,
+    value    = Prms.si_energy_loss_per_turn_from_dipoles,
     symbol   = r'<math>U_\text{0,DIP}</math>',
     units    = 'keV',
     revision = '2014-08-01',
@@ -930,7 +930,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring energy loss per turn from IDs',
     group    = 'FAC',
-    value    = Prms.sr_energy_loss_per_turn_from_IDs,
+    value    = Prms.si_energy_loss_per_turn_from_IDs,
     symbol   = r'<math>U_\text{0,IDs}</math>',
     units    = 'keV',
     revision = '2014-08-01',
@@ -942,7 +942,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation power from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_radiation_power_from_dipoles,
+    value    = Prms.si_radiation_power_from_dipoles,
     symbol   = r'<math>P_{\text{DIP}}</math>',
     units    = 'kW',
     revision = '2014-08-01',
@@ -954,7 +954,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring radiation power',
     group    = 'FAC',
-    value    = Prms.sr_radiation_power,
+    value    = Prms.si_radiation_power,
     symbol   = r'<math>P</math>',
     units    = 'kW',
     revision = '2014-08-01',
@@ -966,7 +966,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring energy loss per turn',
     group    = 'FAC',
-    value    = Prms.sr_energy_loss_per_turn,
+    value    = Prms.si_energy_loss_per_turn,
     symbol   = r'<math>U_\text{0}</math>',
     units    = 'keV',
     revision = '2014-08-01',
@@ -978,7 +978,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring overvoltage from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_overvoltage_from_dipoles,
+    value    = Prms.si_overvoltage_from_dipoles,
     symbol   = r'<math>q_\text{DIP}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -990,7 +990,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring overvoltage',
     group    = 'FAC',
-    value    = Prms.sr_overvoltage,
+    value    = Prms.si_overvoltage,
     symbol   = r'<math>q</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1002,7 +1002,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring synchronous phase from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_synchronous_phase_from_dipoles,
+    value    = Prms.si_synchronous_phase_from_dipoles,
     symbol   = r'<math>\phi_0</math>',
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
@@ -1013,7 +1013,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring synchronous phase',
     group    = 'FAC',
-    value    = Prms.sr_synchronous_phase,
+    value    = Prms.si_synchronous_phase,
     symbol   = r'<math>\phi_0</math>',
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
@@ -1024,7 +1024,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring linear momentum compaction from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_linear_momentum_compaction_from_dipoles,
+    value    = Prms.si_linear_momentum_compaction_from_dipoles,
     symbol   = r'<math>\alpha_\text{1,DIP}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1036,7 +1036,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring linear momentum compaction',
     group    = 'FAC',
-    value    = Prms.sr_linear_momentum_compaction,
+    value    = Prms.si_linear_momentum_compaction,
     symbol   = r'<math>\alpha_\text{1}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1048,7 +1048,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal damping partition number from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_damping_partition_number_from_dipoles,
+    value    = Prms.si_horizontal_damping_partition_number_from_dipoles,
     symbol   = r'<math>J_{x,\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1060,7 +1060,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical damping partition number from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_vertical_damping_partition_number_from_dipoles,
+    value    = Prms.si_vertical_damping_partition_number_from_dipoles,
     symbol   = r'<math>J_{y,\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1072,7 +1072,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring longitudinal damping partition number from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_longitudinal_damping_partition_number_from_dipoles,
+    value    = Prms.si_longitudinal_damping_partition_number_from_dipoles,
     symbol   = r'<math>J_{s, \text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1085,7 +1085,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring linear slip phase from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_linear_slip_phase_from_dipoles,
+    value    = Prms.si_linear_slip_phase_from_dipoles,
     symbol   = r'<math>\eta_{1,\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1097,7 +1097,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring linear slip phase',
     group    = 'FAC',
-    value    = Prms.sr_linear_slip_phase,
+    value    = Prms.si_linear_slip_phase,
     symbol   = r'<math>\eta_{1}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1109,7 +1109,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring RF energy acceptance from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_rf_energy_acceptance_from_dipoles,
+    value    = Prms.si_rf_energy_acceptance_from_dipoles,
     symbol   = r'<math>\epsilon_{\text{max},\text{DIP}}</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1125,7 +1125,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring RF energy acceptance',
     group    = 'FAC',
-    value    = Prms.sr_rf_energy_acceptance,
+    value    = Prms.si_rf_energy_acceptance,
     symbol   = r'<math>\epsilon_{\text{max}}</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1141,7 +1141,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal damping partition number from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_damping_partition_number_from_dipoles,
+    value    = Prms.si_horizontal_damping_partition_number_from_dipoles,
     symbol   = r'<math>J_{\text{x},\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1153,7 +1153,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal damping partition number',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_damping_partition_number,
+    value    = Prms.si_horizontal_damping_partition_number,
     symbol   = r'<math>J_{\text{x}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1167,7 +1167,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical damping partition number from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_vertical_damping_partition_number_from_dipoles,
+    value    = Prms.si_vertical_damping_partition_number_from_dipoles,
     symbol   = r'<math>J_{\text{y},\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1179,7 +1179,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical damping partition number',
     group    = 'FAC',
-    value    = Prms.sr_vertical_damping_partition_number,
+    value    = Prms.si_vertical_damping_partition_number,
     symbol   = r'<math>J_{\text{y}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1191,7 +1191,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring longitudinal damping partition number from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_longitudinal_damping_partition_number_from_dipoles,
+    value    = Prms.si_longitudinal_damping_partition_number_from_dipoles,
     symbol   = r'<math>J_{\text{s},\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1203,7 +1203,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring longitudinal damping partition number',
     group    = 'FAC',
-    value    = Prms.sr_longitudinal_damping_partition_number,
+    value    = Prms.si_longitudinal_damping_partition_number,
     symbol   = r'<math>J_{\text{s}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1215,7 +1215,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural emittance from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_natural_emittance_from_dipoles,
+    value    = Prms.si_natural_emittance_from_dipoles,
     symbol   = r'<math>\epsilon_{0,\text{DIP}}</math>',
     units    = unicode('nm⋅rad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -1229,7 +1229,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural emittance',
     group    = 'FAC',
-    value    = Prms.sr_natural_emittance,
+    value    = Prms.si_natural_emittance,
     symbol   = r'<math>\epsilon_{0}</math>',
     units    = unicode('nm⋅rad',encoding='utf-8'),
     revision = '2014-08-01',
@@ -1243,7 +1243,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural energy spread from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_natural_energy_spread_from_dipoles,
+    value    = Prms.si_natural_energy_spread_from_dipoles,
     symbol   = r'<math>\sigma_{\delta,\text{DIP}}</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1257,7 +1257,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural energy spread',
     group    = 'FAC',
-    value    = Prms.sr_natural_energy_spread,
+    value    = Prms.si_natural_energy_spread,
     symbol   = r'<math>\sigma_{\delta}</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1272,7 +1272,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring synchrotron tune from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_synchrotron_tune_from_dipoles,
+    value    = Prms.si_synchrotron_tune_from_dipoles,
     symbol   = r'<math>\nu_{s,\text{DIP}}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1284,7 +1284,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring synchrotron tune',
     group    = 'FAC',
-    value    = Prms.sr_synchrotron_tune,
+    value    = Prms.si_synchrotron_tune,
     symbol   = r'<math>\nu_{s}</math>',
     units    = '',
     revision = '2014-08-01',
@@ -1296,7 +1296,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring synchrotron frequency from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_synchrotron_frequency_from_dipoles,
+    value    = Prms.si_synchrotron_frequency_from_dipoles,
     symbol   = r'<math>f_{s,\text{DIP}}</math>',
     units    = 'kHz',
     revision = '2014-08-01',
@@ -1308,7 +1308,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring synchrotron frequency',
     group    = 'FAC',
-    value    = Prms.sr_synchrotron_frequency,
+    value    = Prms.si_synchrotron_frequency,
     symbol   = r'<math>f_{s}</math>',
     units    = 'kHz',
     revision = '2014-08-01',
@@ -1320,7 +1320,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural bunch length from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_natural_bunch_length_from_dipoles,
+    value    = Prms.si_natural_bunch_length_from_dipoles,
     symbol   = r'<math>\sigma_{s,\text{DIP}}</math>',
     units    = 'mm',
     revision = '2014-08-01',
@@ -1333,7 +1333,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural bunch length',
     group    = 'FAC',
-    value    = Prms.sr_natural_bunch_length,
+    value    = Prms.si_natural_bunch_length,
     symbol   = r'<math>\sigma_{s}</math>',
     units    = 'mm',
     revision = '2014-08-01',
@@ -1346,7 +1346,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural bunch duration from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_natural_bunch_duration_from_dipoles,
+    value    = Prms.si_natural_bunch_duration_from_dipoles,
     symbol   = r'<math>\sigma_{t,\text{DIP}}</math>',
     units    = 'ps',
     revision = '2014-08-01',
@@ -1358,7 +1358,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring natural bunch duration',
     group    = 'FAC',
-    value    = Prms.sr_natural_bunch_duration_from_dipoles,
+    value    = Prms.si_natural_bunch_duration_from_dipoles,
     symbol   = r'<math>\sigma_{t}</math>',
     units    = 'ps',
     revision = '2014-08-01',
@@ -1370,7 +1370,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal radiation damping time from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_radiation_damping_time_from_dipoles,
+    value    = Prms.si_horizontal_radiation_damping_time_from_dipoles,
     symbol   = r'<math>\alpha_{x,\text{DIP}}</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -1384,7 +1384,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring horizontal radiation damping time',
     group    = 'FAC',
-    value    = Prms.sr_horizontal_radiation_damping_time_from_dipoles,
+    value    = Prms.si_horizontal_radiation_damping_time_from_dipoles,
     symbol   = r'<math>\alpha_{x}</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -1398,7 +1398,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical radiation damping time from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_vertical_radiation_damping_time_from_dipoles,
+    value    = Prms.si_vertical_radiation_damping_time_from_dipoles,
     symbol   = r'<math>\alpha_{y,\text{DIP}}</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -1412,7 +1412,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring vertical radiation damping time',
     group    = 'FAC',
-    value    = Prms.sr_vertical_radiation_damping_time_from_dipoles,
+    value    = Prms.si_vertical_radiation_damping_time_from_dipoles,
     symbol   = r'<math>\alpha_{y}</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -1426,7 +1426,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring longitudinal radiation damping time from dipoles',
     group    = 'FAC',
-    value    = Prms.sr_longitudinal_radiation_damping_time_from_dipoles,
+    value    = Prms.si_longitudinal_radiation_damping_time_from_dipoles,
     symbol   = r'<math>\alpha_{s,\text{DIP}}</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -1440,7 +1440,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring longitudinal radiation damping time',
     group    = 'FAC',
-    value    = Prms.sr_longitudinal_radiation_damping_time_from_dipoles,
+    value    = Prms.si_longitudinal_radiation_damping_time_from_dipoles,
     symbol   = r'<math>\alpha_{s}</math>',
     units    = 'ms',
     revision = '2014-08-01',
@@ -1454,7 +1454,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring transverse coupling',
     group    = 'FAC',
-    value    = Prms.sr_transverse_coupling,
+    value    = Prms.si_transverse_coupling,
     symbol   = r'<math>\kappa</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1466,7 +1466,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipoles alignment error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_dipoles_alignment_error_tolerance,
+    value    = Prms.si_dipoles_alignment_error_tolerance,
     symbol   = r'<math>E_{xy,\text{DIP}}</math>',
     units    = unicode('μm', encoding='utf-8'),
     revision = '2014-08-01',
@@ -1478,7 +1478,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring quadrupoles alignment error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_quadrupoles_alignment_error_tolerance,
+    value    = Prms.si_quadrupoles_alignment_error_tolerance,
     symbol   = r'<math>E_{xy,\text{QUAD}}</math>',
     units    = unicode('μm', encoding='utf-8'),
     revision = '2014-08-01',
@@ -1490,7 +1490,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring sextupoles alignment error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_sextupoles_alignment_error_tolerance,
+    value    = Prms.si_sextupoles_alignment_error_tolerance,
     symbol   = r'<math>E_{xy,\text{SEXT}}</math>',
     units    = unicode('μm', encoding='utf-8'),
     revision = '2014-08-01',
@@ -1502,7 +1502,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipoles rotation error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_dipoles_rotation_error_tolerance,
+    value    = Prms.si_dipoles_rotation_error_tolerance,
     symbol   = r'<math>E_{\theta,\text{DIP}}</math>',
     units    = 'mrad',
     revision = '2014-08-01',
@@ -1514,7 +1514,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring quadrupoles rotation error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_quadrupoles_rotation_error_tolerance,
+    value    = Prms.si_quadrupoles_rotation_error_tolerance,
     symbol   = r'<math>E_{\theta,\text{QUAD}}</math>',
     units    = 'mrad',
     revision = '2014-08-01',
@@ -1526,7 +1526,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring sextupoles rotation error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_sextupoles_rotation_error_tolerance,
+    value    = Prms.si_sextupoles_rotation_error_tolerance,
     symbol   = r'<math>E_{\theta,\text{SEXT}}</math>',
     units    = 'mrad',
     revision = '2014-08-01',
@@ -1538,7 +1538,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring dipoles excitation error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_dipoles_excitation_error_tolerance,
+    value    = Prms.si_dipoles_excitation_error_tolerance,
     symbol   = r'<math>E_{\text{exc,DIP}}</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1550,7 +1550,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring quadrupoles excitation error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_quadrupoles_excitation_error_tolerance,
+    value    = Prms.si_quadrupoles_excitation_error_tolerance,
     symbol   = r'<math>E_{\text{exc,QUAD}}</math>',
     units    = '%',
     revision = '2014-08-01',
@@ -1562,7 +1562,7 @@ parameter_list = [
   Parameter(
     name     = 'Storage ring sextupoles excitation error tolerance',
     group    = 'FAC',
-    value    = Prms.sr_sextupoles_excitation_error_tolerance,
+    value    = Prms.si_sextupoles_excitation_error_tolerance,
     symbol   = r'<math>E_{\text{exc,SEXT}}</math>',
     units    = '%',
     revision = '2014-08-01',

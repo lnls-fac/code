@@ -16,277 +16,277 @@ class ParameterDefinitions(object):
 
     '''Storage ring parameters'''
 
-    sr_beam_energy            = 3.0       # [GeV]
-    sr_beam_gamma_factor      = optics.gamma(sr_beam_energy)
-    sr_beam_beta_factor       = optics.beta(sr_beam_gamma_factor)
-    sr_beam_velocity          = optics.velocity(sr_beam_beta_factor)
-    sr_beam_magnetic_rigidity = optics.brho(sr_beam_energy, sr_beam_beta_factor)
+    si_beam_energy            = 3.0       # [GeV]
+    si_beam_gamma_factor      = optics.gamma(si_beam_energy)
+    si_beam_beta_factor       = optics.beta(si_beam_gamma_factor)
+    si_beam_velocity          = optics.velocity(si_beam_beta_factor)
+    si_beam_magnetic_rigidity = optics.brho(si_beam_energy, si_beam_beta_factor)
     
-    sr_beam_current                      = 350.0 #[mA]
-    sr_lattice_version                   = 'V00' 
-    sr_lattice_type                      = '5BA'
-    sr_lattice_circumference             = 518.396 #[m]
-    sr_lattice_symmetry                  = 10
-    sr_number_of_long_straight_sections  = sr_lattice_symmetry
-    sr_number_of_short_straight_sections = sr_lattice_symmetry
-    sr_length_of_long_straight_sections  = 7.0 #[m]
-    sr_length_of_short_straight_sections = 6.0 #[m]
-    sr_harmonic_number                   = 864
-    sr_rf_cavity_peak_voltage            = 2.7 #[MV]
+    si_beam_current                      = 350.0 #[mA]
+    si_lattice_version                   = 'V00' 
+    si_lattice_type                      = '5BA'
+    si_lattice_circumference             = 518.396 #[m]
+    si_lattice_symmetry                  = 10
+    si_number_of_long_straight_sections  = si_lattice_symmetry
+    si_number_of_short_straight_sections = si_lattice_symmetry
+    si_length_of_long_straight_sections  = 7.0 #[m]
+    si_length_of_short_straight_sections = 6.0 #[m]
+    si_harmonic_number                   = 864
+    si_rf_cavity_peak_voltage            = 2.7 #[MV]
     
-    sr_revolution_period = optics.revolution_period(
-        sr_lattice_circumference, sr_beam_velocity)
+    si_revolution_period = optics.revolution_period(
+        si_lattice_circumference, si_beam_velocity)
 
-    sr_revolution_frequency = optics.revolution_frequency(
-        sr_revolution_period)
+    si_revolution_frequency = optics.revolution_frequency(
+        si_revolution_period)
 
-    sr_rf_frequency = optics.rf_frequency(
-        sr_revolution_frequency, sr_harmonic_number)
+    si_rf_frequency = optics.rf_frequency(
+        si_revolution_frequency, si_harmonic_number)
     
-    sr_number_of_electrons = optics.number_of_electrons(
-        sr_beam_current, sr_revolution_period)
+    si_number_of_electrons = optics.number_of_electrons(
+        si_beam_current, si_revolution_period)
           
-    sr_number_of_B1_dipoles              = 4 * sr_lattice_symmetry
-    sr_number_of_B2_dipoles              = 4 * sr_lattice_symmetry
-    sr_number_of_B3_dipoles              = 4 * sr_lattice_symmetry
-    sr_number_of_BC_dipoles              = 2 * sr_lattice_symmetry
+    si_number_of_B1_dipoles              = 4 * si_lattice_symmetry
+    si_number_of_B2_dipoles              = 4 * si_lattice_symmetry
+    si_number_of_B3_dipoles              = 4 * si_lattice_symmetry
+    si_number_of_BC_dipoles              = 2 * si_lattice_symmetry
     
-    sr_hardedge_length_of_B1_dipoles =  0.828080 #[m] 
-    sr_hardedge_length_of_B2_dipoles =  1.228262 #[m]
-    sr_hardedge_length_of_B3_dipoles =  0.428011 #[m]
-    sr_hardedge_length_of_BC_dipoles =  0.125394 #[m]
+    si_hardedge_length_of_B1_dipoles =  0.828080 #[m] 
+    si_hardedge_length_of_B2_dipoles =  1.228262 #[m]
+    si_hardedge_length_of_B3_dipoles =  0.428011 #[m]
+    si_hardedge_length_of_BC_dipoles =  0.125394 #[m]
     
-    sr_dipole_low_magnetic_field     =  0.583502298783241 #[T]
-    sr_dipole_high_magnetic_field    =  1.949975668803368 #[T]
+    si_dipole_low_magnetic_field     =  0.583502298783241 #[T]
+    si_dipole_high_magnetic_field    =  1.949975668803368 #[T]
 
-    sr_dipole_low_magnetic_field_bending_radius = optics.rho(
-        sr_beam_magnetic_rigidity, 
-        sr_dipole_low_magnetic_field)
-    sr_dipole_high_magnetic_field_bending_radius = optics.rho(
-        sr_beam_magnetic_rigidity, 
-        sr_dipole_high_magnetic_field)
+    si_dipole_low_magnetic_field_bending_radius = optics.rho(
+        si_beam_magnetic_rigidity, 
+        si_dipole_low_magnetic_field)
+    si_dipole_high_magnetic_field_bending_radius = optics.rho(
+        si_beam_magnetic_rigidity, 
+        si_dipole_high_magnetic_field)
 
-    sr_dipole_low_magnetic_field_critical_energy = optics.critical_energy(
-        sr_beam_gamma_factor, 
-        sr_dipole_low_magnetic_field_bending_radius)
-    sr_dipole_high_magnetic_field_critical_energy = optics.critical_energy(
-        sr_beam_gamma_factor, 
-        sr_dipole_high_magnetic_field_bending_radius)
+    si_dipole_low_magnetic_field_critical_energy = optics.critical_energy(
+        si_beam_gamma_factor, 
+        si_dipole_low_magnetic_field_bending_radius)
+    si_dipole_high_magnetic_field_critical_energy = optics.critical_energy(
+        si_beam_gamma_factor, 
+        si_dipole_high_magnetic_field_bending_radius)
 
-    sr_deflection_angle_B1 =  (180.0/math.pi) * sr_hardedge_length_of_B1_dipoles / sr_dipole_low_magnetic_field_bending_radius
-    sr_deflection_angle_B2 =  (180.0/math.pi) * sr_hardedge_length_of_B2_dipoles / sr_dipole_low_magnetic_field_bending_radius
-    sr_deflection_angle_B3 =  (180.0/math.pi) * sr_hardedge_length_of_B3_dipoles / sr_dipole_low_magnetic_field_bending_radius
-    sr_deflection_angle_BC =  (180.0/math.pi) * sr_hardedge_length_of_BC_dipoles / sr_dipole_high_magnetic_field_bending_radius
+    si_deflection_angle_B1 =  (180.0/math.pi) * si_hardedge_length_of_B1_dipoles / si_dipole_low_magnetic_field_bending_radius
+    si_deflection_angle_B2 =  (180.0/math.pi) * si_hardedge_length_of_B2_dipoles / si_dipole_low_magnetic_field_bending_radius
+    si_deflection_angle_B3 =  (180.0/math.pi) * si_hardedge_length_of_B3_dipoles / si_dipole_low_magnetic_field_bending_radius
+    si_deflection_angle_BC =  (180.0/math.pi) * si_hardedge_length_of_BC_dipoles / si_dipole_high_magnetic_field_bending_radius
   
-    sr_optics_mode = 'B00'
-    sr_horizontal_betatron_tune = 46.179867828110417
-    sr_vertical_betatron_tune = 14.149994739104255
+    si_optics_mode = 'B00'
+    si_horizontal_betatron_tune = 46.179867828110417
+    si_vertical_betatron_tune = 14.149994739104255
     
-    sr_horizontal_beam_size_at_center_long_straight_sections  = 68.751773951345939  # [um] calculated using analytical expression
-    sr_horizontal_beam_size_at_center_short_straight_sections = 33.718654943446005  # [um]
-    sr_horizontal_beam_size_at_center_bc_dipoles              = 11.056250696773693  # [um]
-    sr_vertical_beam_size_at_center_long_straight_sections    = 3.041750355172871  # [um]
-    sr_vertical_beam_size_at_center_short_straight_sections   = 1.444008428763601  # [um]
-    sr_vertical_beam_size_at_center_bc_dipoles                = 4.016421176598540  # [um]
+    si_horizontal_beam_size_at_center_long_straight_sections  = 68.751773951345939  # [um] calculated using analytical expression
+    si_horizontal_beam_size_at_center_short_straight_sections = 33.718654943446005  # [um]
+    si_horizontal_beam_size_at_center_bc_dipoles              = 11.056250696773693  # [um]
+    si_vertical_beam_size_at_center_long_straight_sections    = 3.041750355172871  # [um]
+    si_vertical_beam_size_at_center_short_straight_sections   = 1.444008428763601  # [um]
+    si_vertical_beam_size_at_center_bc_dipoles                = 4.016421176598540  # [um]
     
-    sr_horizontal_beam_divergence_at_center_long_straight_sections  = 4.105284385615102  # [urad] calculated using analytical expression
-    sr_horizontal_beam_divergence_at_center_short_straight_sections = 8.370606258537984  # [urad]
-    sr_horizontal_beam_divergence_at_center_bc_dipoles              = 26.577287542948945 # [urad]
-    sr_vertical_beam_divergence_at_center_long_straight_sections    = 0.927905156926034  # [urad]
-    sr_vertical_beam_divergence_at_center_short_straight_sections   = 1.954597898752207  # [urad]
-    sr_vertical_beam_divergence_at_center_bc_dipoles                = 0.702729050910861  # [urad]
+    si_horizontal_beam_divergence_at_center_long_straight_sections  = 4.105284385615102  # [urad] calculated using analytical expression
+    si_horizontal_beam_divergence_at_center_short_straight_sections = 8.370606258537984  # [urad]
+    si_horizontal_beam_divergence_at_center_bc_dipoles              = 26.577287542948945 # [urad]
+    si_vertical_beam_divergence_at_center_long_straight_sections    = 0.927905156926034  # [urad]
+    si_vertical_beam_divergence_at_center_short_straight_sections   = 1.954597898752207  # [urad]
+    si_vertical_beam_divergence_at_center_bc_dipoles                = 0.702729050910861  # [urad]
     
-    sr_horizontal_natural_chromaticity = -113.1198708037573
-    sr_vertical_natural_chromaticity = -80.5026603600822
-    sr_horizontal_chromaticity = 0
-    sr_vertical_chromaticity = 0
+    si_horizontal_natural_chromaticity = -113.1198708037573
+    si_vertical_natural_chromaticity = -80.5026603600822
+    si_horizontal_chromaticity = 0
+    si_vertical_chromaticity = 0
     
-    sr_horizontal_betatron_frequency = optics.frequency_from_tune(
-        sr_revolution_frequency, sr_horizontal_betatron_tune)
+    si_horizontal_betatron_frequency = optics.frequency_from_tune(
+        si_revolution_frequency, si_horizontal_betatron_tune)
 
-    sr_vertical_betatron_frequency = optics.frequency_from_tune(
-        sr_revolution_frequency, sr_vertical_betatron_tune)
+    si_vertical_betatron_frequency = optics.frequency_from_tune(
+        si_revolution_frequency, si_vertical_betatron_tune)
 
     ''' DIPOLES ONLY '''
-    sr_radiation_integral_I1_from_dipoles =  0.090315779996644     #[m]
-    sr_radiation_integral_I2_from_dipoles =  0.433104068989975     #[1/m]
-    sr_radiation_integral_I3_from_dipoles =  0.038257877157466     #[1/m^2]
-    sr_radiation_integral_I4_from_dipoles = -0.137100015107741     #[1/m]
-    sr_radiation_integral_I5_from_dipoles =  1.218542781664562e-05 #[1/m]
-    sr_radiation_integral_I6_from_dipoles =  0.019201555654789     #[1/m]
+    si_radiation_integral_I1_from_dipoles =  0.090315779996644     #[m]
+    si_radiation_integral_I2_from_dipoles =  0.433104068989975     #[1/m]
+    si_radiation_integral_I3_from_dipoles =  0.038257877157466     #[1/m^2]
+    si_radiation_integral_I4_from_dipoles = -0.137100015107741     #[1/m]
+    si_radiation_integral_I5_from_dipoles =  1.218542781664562e-05 #[1/m]
+    si_radiation_integral_I6_from_dipoles =  0.019201555654789     #[1/m]
     ''' IDs '''
-    sr_radiation_integral_I1_from_IDs =  0.0 #[m]
-    sr_radiation_integral_I2_from_IDs =  0.0 #[1/m]
-    sr_radiation_integral_I3_from_IDs =  0.0 #[1/m^2]
-    sr_radiation_integral_I4_from_IDs =  0.0 #[1/m]
-    sr_radiation_integral_I5_from_IDs =  0.0 #[1/m]
-    sr_radiation_integral_I6_from_IDs =  0.0 #[1/m] 
+    si_radiation_integral_I1_from_IDs =  0.0 #[m]
+    si_radiation_integral_I2_from_IDs =  0.0 #[1/m]
+    si_radiation_integral_I3_from_IDs =  0.0 #[1/m^2]
+    si_radiation_integral_I4_from_IDs =  0.0 #[1/m]
+    si_radiation_integral_I5_from_IDs =  0.0 #[1/m]
+    si_radiation_integral_I6_from_IDs =  0.0 #[1/m] 
     ''' DIPOLES and IDs '''
-    sr_radiation_integral_I1 = (sr_radiation_integral_I1_from_dipoles + 
-        sr_radiation_integral_I1_from_IDs) #[m]
-    sr_radiation_integral_I2 = (sr_radiation_integral_I2_from_dipoles +
-        sr_radiation_integral_I2_from_IDs) #[m]
-    sr_radiation_integral_I3 = (sr_radiation_integral_I3_from_dipoles +
-        sr_radiation_integral_I3_from_IDs) #[m]
-    sr_radiation_integral_I4 = (sr_radiation_integral_I4_from_dipoles +
-        sr_radiation_integral_I4_from_IDs) #[m]
-    sr_radiation_integral_I5 = (sr_radiation_integral_I5_from_dipoles +
-        sr_radiation_integral_I5_from_IDs) #[m]
-    sr_radiation_integral_I6 = (sr_radiation_integral_I6_from_dipoles +
-        sr_radiation_integral_I6_from_IDs) #[m]
+    si_radiation_integral_I1 = (si_radiation_integral_I1_from_dipoles + 
+        si_radiation_integral_I1_from_IDs) #[m]
+    si_radiation_integral_I2 = (si_radiation_integral_I2_from_dipoles +
+        si_radiation_integral_I2_from_IDs) #[m]
+    si_radiation_integral_I3 = (si_radiation_integral_I3_from_dipoles +
+        si_radiation_integral_I3_from_IDs) #[m]
+    si_radiation_integral_I4 = (si_radiation_integral_I4_from_dipoles +
+        si_radiation_integral_I4_from_IDs) #[m]
+    si_radiation_integral_I5 = (si_radiation_integral_I5_from_dipoles +
+        si_radiation_integral_I5_from_IDs) #[m]
+    si_radiation_integral_I6 = (si_radiation_integral_I6_from_dipoles +
+        si_radiation_integral_I6_from_IDs) #[m]
      
-    sr_energy_loss_per_turn_from_dipoles = optics.U0(
-        sr_beam_energy, sr_radiation_integral_I2_from_dipoles)
-    sr_energy_loss_per_turn_from_IDs = optics.U0(
-        sr_beam_energy, sr_radiation_integral_I2_from_IDs)
-    sr_energy_loss_per_turn = optics.U0(
-        sr_beam_energy, sr_radiation_integral_I2)
+    si_energy_loss_per_turn_from_dipoles = optics.U0(
+        si_beam_energy, si_radiation_integral_I2_from_dipoles)
+    si_energy_loss_per_turn_from_IDs = optics.U0(
+        si_beam_energy, si_radiation_integral_I2_from_IDs)
+    si_energy_loss_per_turn = optics.U0(
+        si_beam_energy, si_radiation_integral_I2)
 
-    sr_radiation_power_from_dipoles = optics.radiation_power(
-        sr_energy_loss_per_turn_from_dipoles, sr_beam_current)
-    sr_radiation_power = optics.radiation_power(
-        sr_energy_loss_per_turn, sr_beam_current)
+    si_radiation_power_from_dipoles = optics.radiation_power(
+        si_energy_loss_per_turn_from_dipoles, si_beam_current)
+    si_radiation_power = optics.radiation_power(
+        si_energy_loss_per_turn, si_beam_current)
     
-    sr_overvoltage_from_dipoles = optics.overvoltage(
-        sr_rf_cavity_peak_voltage, sr_energy_loss_per_turn_from_dipoles)
-    sr_overvoltage = optics.overvoltage(
-        sr_rf_cavity_peak_voltage, sr_energy_loss_per_turn)
+    si_overvoltage_from_dipoles = optics.overvoltage(
+        si_rf_cavity_peak_voltage, si_energy_loss_per_turn_from_dipoles)
+    si_overvoltage = optics.overvoltage(
+        si_rf_cavity_peak_voltage, si_energy_loss_per_turn)
 
-    sr_synchronous_phase_from_dipoles = optics.sync_phase(
-        sr_overvoltage_from_dipoles)
-    sr_synchronous_phase = optics.sync_phase(
-        sr_overvoltage)
+    si_synchronous_phase_from_dipoles = optics.sync_phase(
+        si_overvoltage_from_dipoles)
+    si_synchronous_phase = optics.sync_phase(
+        si_overvoltage)
 
-    sr_linear_momentum_compaction_from_dipoles = optics.alpha1(
-        sr_radiation_integral_I1_from_dipoles,
-        sr_lattice_circumference)
-    sr_linear_momentum_compaction = optics.alpha1(
-        sr_radiation_integral_I1,
-        sr_lattice_circumference)
+    si_linear_momentum_compaction_from_dipoles = optics.alpha1(
+        si_radiation_integral_I1_from_dipoles,
+        si_lattice_circumference)
+    si_linear_momentum_compaction = optics.alpha1(
+        si_radiation_integral_I1,
+        si_lattice_circumference)
 
-    sr_linear_slip_phase_from_dipoles = optics.slip_factor(
-        sr_linear_momentum_compaction_from_dipoles, sr_beam_gamma_factor)
-    sr_linear_slip_phase = optics.slip_factor(
-        sr_linear_momentum_compaction, sr_beam_gamma_factor)
+    si_linear_slip_phase_from_dipoles = optics.slip_factor(
+        si_linear_momentum_compaction_from_dipoles, si_beam_gamma_factor)
+    si_linear_slip_phase = optics.slip_factor(
+        si_linear_momentum_compaction, si_beam_gamma_factor)
         
-    sr_rf_energy_acceptance_from_dipoles = optics.rf_energy_acceptance(
-        sr_overvoltage_from_dipoles, sr_beam_energy,
-        sr_energy_loss_per_turn_from_dipoles, sr_harmonic_number,
-        sr_linear_momentum_compaction_from_dipoles)
-    sr_rf_energy_acceptance = optics.rf_energy_acceptance(
-        sr_overvoltage, sr_beam_energy,
-        sr_energy_loss_per_turn, sr_harmonic_number,
-        sr_linear_momentum_compaction) 
+    si_rf_energy_acceptance_from_dipoles = optics.rf_energy_acceptance(
+        si_overvoltage_from_dipoles, si_beam_energy,
+        si_energy_loss_per_turn_from_dipoles, si_harmonic_number,
+        si_linear_momentum_compaction_from_dipoles)
+    si_rf_energy_acceptance = optics.rf_energy_acceptance(
+        si_overvoltage, si_beam_energy,
+        si_energy_loss_per_turn, si_harmonic_number,
+        si_linear_momentum_compaction) 
 
-    sr_horizontal_damping_partition_number_from_dipoles = optics.Jx(
-        sr_radiation_integral_I2_from_dipoles,
-        sr_radiation_integral_I4_from_dipoles)
-    sr_horizontal_damping_partition_number = optics.Jx(
-        sr_radiation_integral_I2, 
-        sr_radiation_integral_I4)
+    si_horizontal_damping_partition_number_from_dipoles = optics.Jx(
+        si_radiation_integral_I2_from_dipoles,
+        si_radiation_integral_I4_from_dipoles)
+    si_horizontal_damping_partition_number = optics.Jx(
+        si_radiation_integral_I2, 
+        si_radiation_integral_I4)
 
-    sr_vertical_damping_partition_number_from_dipoles = 1.0
-    sr_vertical_damping_partition_number = 1.0
+    si_vertical_damping_partition_number_from_dipoles = 1.0
+    si_vertical_damping_partition_number = 1.0
     
-    sr_longitudinal_damping_partition_number_from_dipoles = optics.Js(
-        sr_horizontal_damping_partition_number_from_dipoles,
-        sr_vertical_damping_partition_number_from_dipoles)
-    sr_longitudinal_damping_partition_number = optics.Js(
-        sr_horizontal_damping_partition_number,
-        sr_vertical_damping_partition_number)
+    si_longitudinal_damping_partition_number_from_dipoles = optics.Js(
+        si_horizontal_damping_partition_number_from_dipoles,
+        si_vertical_damping_partition_number_from_dipoles)
+    si_longitudinal_damping_partition_number = optics.Js(
+        si_horizontal_damping_partition_number,
+        si_vertical_damping_partition_number)
 
-    sr_natural_emittance_from_dipoles = optics.natural_emittance(
-        sr_beam_gamma_factor,
-        sr_horizontal_damping_partition_number_from_dipoles,
-        sr_radiation_integral_I2_from_dipoles,
-        sr_radiation_integral_I5_from_dipoles)
-    sr_natural_emittance = optics.natural_emittance(
-        sr_beam_gamma_factor, 
-        sr_horizontal_damping_partition_number,
-        sr_radiation_integral_I2, 
-        sr_radiation_integral_I5)
+    si_natural_emittance_from_dipoles = optics.natural_emittance(
+        si_beam_gamma_factor,
+        si_horizontal_damping_partition_number_from_dipoles,
+        si_radiation_integral_I2_from_dipoles,
+        si_radiation_integral_I5_from_dipoles)
+    si_natural_emittance = optics.natural_emittance(
+        si_beam_gamma_factor, 
+        si_horizontal_damping_partition_number,
+        si_radiation_integral_I2, 
+        si_radiation_integral_I5)
 
-    sr_natural_energy_spread_from_dipoles = optics.energy_spread(
-        sr_beam_gamma_factor,
-        sr_radiation_integral_I2_from_dipoles,
-        sr_radiation_integral_I3_from_dipoles,
-        sr_radiation_integral_I4_from_dipoles)
-    sr_natural_energy_spread = optics.energy_spread(
-        sr_beam_gamma_factor, 
-        sr_radiation_integral_I2,
-        sr_radiation_integral_I3, 
-        sr_radiation_integral_I4)
+    si_natural_energy_spread_from_dipoles = optics.energy_spread(
+        si_beam_gamma_factor,
+        si_radiation_integral_I2_from_dipoles,
+        si_radiation_integral_I3_from_dipoles,
+        si_radiation_integral_I4_from_dipoles)
+    si_natural_energy_spread = optics.energy_spread(
+        si_beam_gamma_factor, 
+        si_radiation_integral_I2,
+        si_radiation_integral_I3, 
+        si_radiation_integral_I4)
     
-    sr_synchrotron_tune_from_dipoles = 0.004421565111775
-    sr_synchrotron_tune              = 0.004421565111775
+    si_synchrotron_tune_from_dipoles = 0.004421565111775
+    si_synchrotron_tune              = 0.004421565111775
     
-    sr_synchrotron_frequency_from_dipoles = optics.frequency_from_tune(
-        sr_revolution_frequency, sr_synchrotron_tune_from_dipoles)
-    sr_synchrotron_frequency = optics.frequency_from_tune(
-        sr_revolution_frequency, sr_synchrotron_tune)
+    si_synchrotron_frequency_from_dipoles = optics.frequency_from_tune(
+        si_revolution_frequency, si_synchrotron_tune_from_dipoles)
+    si_synchrotron_frequency = optics.frequency_from_tune(
+        si_revolution_frequency, si_synchrotron_tune)
     
-    sr_natural_bunch_length_from_dipoles = optics.bunch_length(
-        sr_linear_slip_phase_from_dipoles, 
-        sr_natural_energy_spread_from_dipoles, 
-        sr_synchrotron_frequency)
-    sr_natural_bunch_length = optics.bunch_length(
-        sr_linear_slip_phase, 
-        sr_natural_energy_spread, 
-        sr_synchrotron_frequency)
+    si_natural_bunch_length_from_dipoles = optics.bunch_length(
+        si_linear_slip_phase_from_dipoles, 
+        si_natural_energy_spread_from_dipoles, 
+        si_synchrotron_frequency)
+    si_natural_bunch_length = optics.bunch_length(
+        si_linear_slip_phase, 
+        si_natural_energy_spread, 
+        si_synchrotron_frequency)
 
-    sr_natural_bunch_duration_from_dipoles = optics.bunch_duration(
-        sr_natural_bunch_length_from_dipoles, 
-        sr_beam_beta_factor)    
-    sr_natural_bunch_duration = optics.bunch_duration(
-        sr_natural_bunch_length, 
-        sr_beam_beta_factor)
+    si_natural_bunch_duration_from_dipoles = optics.bunch_duration(
+        si_natural_bunch_length_from_dipoles, 
+        si_beam_beta_factor)    
+    si_natural_bunch_duration = optics.bunch_duration(
+        si_natural_bunch_length, 
+        si_beam_beta_factor)
     
-    sr_horizontal_radiation_damping_time_from_dipoles = optics.damping_time(
-        sr_beam_energy, 
-        sr_radiation_integral_I2_from_dipoles,
-        sr_horizontal_damping_partition_number_from_dipoles,
-        sr_lattice_circumference)                                                                        
-    sr_horizontal_radiation_damping_time = optics.damping_time(
-        sr_beam_energy, 
-        sr_radiation_integral_I2,
-        sr_horizontal_damping_partition_number,
-        sr_lattice_circumference) 
+    si_horizontal_radiation_damping_time_from_dipoles = optics.damping_time(
+        si_beam_energy, 
+        si_radiation_integral_I2_from_dipoles,
+        si_horizontal_damping_partition_number_from_dipoles,
+        si_lattice_circumference)                                                                        
+    si_horizontal_radiation_damping_time = optics.damping_time(
+        si_beam_energy, 
+        si_radiation_integral_I2,
+        si_horizontal_damping_partition_number,
+        si_lattice_circumference) 
     
-    sr_vertical_radiation_damping_time_from_dipoles = optics.damping_time(
-        sr_beam_energy, 
-        sr_radiation_integral_I2_from_dipoles,
-        sr_vertical_damping_partition_number_from_dipoles,
-        sr_lattice_circumference)                                                                        
-    sr_vertical_radiation_damping_time = optics.damping_time(
-        sr_beam_energy, 
-        sr_radiation_integral_I2,
-        sr_vertical_damping_partition_number,
-        sr_lattice_circumference)
+    si_vertical_radiation_damping_time_from_dipoles = optics.damping_time(
+        si_beam_energy, 
+        si_radiation_integral_I2_from_dipoles,
+        si_vertical_damping_partition_number_from_dipoles,
+        si_lattice_circumference)                                                                        
+    si_vertical_radiation_damping_time = optics.damping_time(
+        si_beam_energy, 
+        si_radiation_integral_I2,
+        si_vertical_damping_partition_number,
+        si_lattice_circumference)
     
-    sr_longitudinal_radiation_damping_time_from_dipoles = optics.damping_time(
-        sr_beam_energy, 
-        sr_radiation_integral_I2_from_dipoles,
-        sr_longitudinal_damping_partition_number_from_dipoles,
-        sr_lattice_circumference)                                                                        
-    sr_longitudinal_radiation_damping_time = optics.damping_time(
-        sr_beam_energy, 
-        sr_radiation_integral_I2,
-        sr_longitudinal_damping_partition_number,
-        sr_lattice_circumference)
+    si_longitudinal_radiation_damping_time_from_dipoles = optics.damping_time(
+        si_beam_energy, 
+        si_radiation_integral_I2_from_dipoles,
+        si_longitudinal_damping_partition_number_from_dipoles,
+        si_lattice_circumference)                                                                        
+    si_longitudinal_radiation_damping_time = optics.damping_time(
+        si_beam_energy, 
+        si_radiation_integral_I2,
+        si_longitudinal_damping_partition_number,
+        si_lattice_circumference)
 
-    sr_transverse_coupling = 1.0    # [%]
+    si_transverse_coupling = 1.0    # [%]
     
-    sr_dipoles_alignment_error_tolerance = 40 # [μm]
-    sr_quadrupoles_alignment_error_tolerance = 40 # [μm]
-    sr_sextupoles_alignment_error_tolerance = 40 # [μm]
+    si_dipoles_alignment_error_tolerance = 40 # [μm]
+    si_quadrupoles_alignment_error_tolerance = 40 # [μm]
+    si_sextupoles_alignment_error_tolerance = 40 # [μm]
     
-    sr_dipoles_rotation_error_tolerance = 0.2 # [mrad]
-    sr_quadrupoles_rotation_error_tolerance = 0.2 # [mrad]
-    sr_sextupoles_rotation_error_tolerance = 0.2 # [mrad]
+    si_dipoles_rotation_error_tolerance = 0.2 # [mrad]
+    si_quadrupoles_rotation_error_tolerance = 0.2 # [mrad]
+    si_sextupoles_rotation_error_tolerance = 0.2 # [mrad]
 
-    sr_dipoles_excitation_error_tolerance = 0.05 # [%]
-    sr_quadrupoles_excitation_error_tolerance = 0.05 # [%]
-    sr_sextupoles_excitation_error_tolerance = 0.05 # [%]
+    si_dipoles_excitation_error_tolerance = 0.05 # [%]
+    si_quadrupoles_excitation_error_tolerance = 0.05 # [%]
+    si_sextupoles_excitation_error_tolerance = 0.05 # [%]
     
     '''Booster parameters'''
     
