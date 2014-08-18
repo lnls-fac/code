@@ -81,7 +81,21 @@ class ParameterDefinitions(object):
     sr_optics_mode = 'B00'
     sr_horizontal_betatron_tune = 46.179867828110417
     sr_vertical_betatron_tune = 14.149994739104255
-
+    
+    sr_horizontal_beam_size_at_center_long_straight_sections  = 68.751773951345939  # [um] calculated using analytical expression
+    sr_horizontal_beam_size_at_center_short_straight_sections = 33.718654943446005  # [um]
+    sr_horizontal_beam_size_at_center_bc_dipoles              = 11.056250696773693  # [um]
+    sr_vertical_beam_size_at_center_long_straight_sections    = 3.041750355172871  # [um]
+    sr_vertical_beam_size_at_center_short_straight_sections   = 1.444008428763601  # [um]
+    sr_vertical_beam_size_at_center_bc_dipoles                = 4.016421176598540  # [um]
+    
+    sr_horizontal_beam_divergence_at_center_long_straight_sections  = 4.105284385615102  # [urad] calculated using analytical expression
+    sr_horizontal_beam_divergence_at_center_short_straight_sections = 8.370606258537984  # [urad]
+    sr_horizontal_beam_divergence_at_center_bc_dipoles              = 26.577287542948945 # [urad]
+    sr_vertical_beam_divergence_at_center_long_straight_sections    = 0.927905156926034  # [urad]
+    sr_vertical_beam_divergence_at_center_short_straight_sections   = 1.954597898752207  # [urad]
+    sr_vertical_beam_divergence_at_center_bc_dipoles                = 0.702729050910861  # [urad]
+    
     sr_horizontal_natural_chromaticity = -113.1198708037573
     sr_vertical_natural_chromaticity = -80.5026603600822
     sr_horizontal_chromaticity = 0
@@ -261,6 +275,18 @@ class ParameterDefinitions(object):
         sr_lattice_circumference)
 
     sr_transverse_coupling = 1.0    # [%]
+    
+    sr_dipoles_alignment_error_tolerance = 40 # [μm]
+    sr_quadrupoles_alignment_error_tolerance = 40 # [μm]
+    sr_sextupoles_alignment_error_tolerance = 40 # [μm]
+    
+    sr_dipoles_rotation_error_tolerance = 0.2 # [mrad]
+    sr_quadrupoles_rotation_error_tolerance = 0.2 # [mrad]
+    sr_sextupoles_rotation_error_tolerance = 0.2 # [mrad]
+
+    sr_dipoles_excitation_error_tolerance = 0.05 # [%]
+    sr_quadrupoles_excitation_error_tolerance = 0.05 # [%]
+    sr_sextupoles_excitation_error_tolerance = 0.05 # [%]
     
     '''Booster parameters'''
     

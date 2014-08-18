@@ -206,9 +206,9 @@ int cmd_dynap_ma(int argc, char* argv[]) {
 	std::cout << "cavity_state    : " << cavity_state << std::endl;
 	std::cout << "radiation_state : " << radiation_state << std::endl;
 	std::cout << "vchamber_state  : " << vchamber_state << std::endl;
+	std::cout << "nr_turns        : " << nr_turns << std::endl;
 	std::cout << "y0[m]           : " << y0 << std::endl;
 	std::cout << "e0              : " << e0 << std::endl;
-	std::cout << "nr_turns        : " << nr_turns << std::endl;
 	std::cout << "e_tol           : " << e_tol << std::endl;
 	std::cout << "s_min[m]        : " << s_min << std::endl;
 	std::cout << "s_max[m]        : " << s_max << std::endl;

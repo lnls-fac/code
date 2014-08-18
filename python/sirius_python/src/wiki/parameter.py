@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 class Parameter:
-
+    
     def __init__(self, 
             name, 
             value,
@@ -19,8 +19,9 @@ class Parameter:
         self.deps     = deps
         self.obs      = obs
         self.revision = revision
-        self.DEFAULT_OBS = 'Automatically generated, manual changes may be overwritten.'
+        self.DEFAULT_OBS = 'Automatically generated, manual changes may be overwritten. Comments may be added in the [[Parameter_Talk:' + self.name + '|Discussion]] section of this page.'
 
+    
     def __str__(self):
         r = (self.name + ': ' + str(self.value) + ' ' + self.units +
         ' [' + self.revision + ']')
