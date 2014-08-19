@@ -196,6 +196,6 @@ if __name__ == "__main__":
         update_submachine(storage_ring, parms_lists['si'])
         update_submachine(booster, parms_lists['booster'])
         update_submachine(linac, parms_lists['linac'])
-        update_submachine(linac, parms_lists['tb'])
+        update_submachine(linac_to_booster_transport_line, parms_lists['tb'])
                     
                 
