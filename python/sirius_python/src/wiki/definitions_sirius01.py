@@ -513,6 +513,7 @@ class ParameterDefinitions(object):
         bo_extraction_beam_beta_factor)
 
     '''Linac parameters'''
+
     li_multi_bunch_beam_energy = 150 # [MeV]
     li_multi_bunch_rf_frequency = 3 # [GHz]
     li_multi_bunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
@@ -533,3 +534,11 @@ class ParameterDefinitions(object):
     li_single_bunch_minimum_pulse_charge = 1 # [nC]
     li_single_bunch_maximum_pulse_duration = 1 # [ns]
     li_single_bunch_repetition_rate = 2 # [Hz]
+
+    '''Linac to booster transport line parameters'''
+
+    tb_operation_energy = 150 # [MeV]
+    tb_total_length = 22.15 # [m]
+    tb_number_of_dipoles = 4
+    tb_number_of_quadrupoles = 13
+    tb_maximum_quadrupole_gradient = 3 # [T/m]
