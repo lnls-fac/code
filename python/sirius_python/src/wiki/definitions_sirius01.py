@@ -46,38 +46,44 @@ class ParameterDefinitions(object):
     si_number_of_electrons = optics.number_of_electrons(
         si_beam_current, si_revolution_period)
           
-    si_number_of_B1_dipoles              = 4 * si_lattice_symmetry
-    si_number_of_B2_dipoles              = 4 * si_lattice_symmetry
-    si_number_of_B3_dipoles              = 4 * si_lattice_symmetry
-    si_number_of_BC_dipoles              = 2 * si_lattice_symmetry
+    si_number_of_B1_dipoles = 4 * si_lattice_symmetry
+    si_number_of_B2_dipoles = 4 * si_lattice_symmetry
+    si_number_of_B3_dipoles = 4 * si_lattice_symmetry
+    si_number_of_BC_dipoles = 2 * si_lattice_symmetry
     
     si_hardedge_length_of_B1_dipoles =  0.828080 #[m] 
     si_hardedge_length_of_B2_dipoles =  1.228262 #[m]
     si_hardedge_length_of_B3_dipoles =  0.428011 #[m]
     si_hardedge_length_of_BC_dipoles =  0.125394 #[m]
     
-    si_dipole_low_magnetic_field     =  0.583502298783241 #[T]
-    si_dipole_high_magnetic_field    =  1.949975668803368 #[T]
+    si_B1_dipole_deflection_angle = 2.76654
+    si_B2_dipole_deflection_angle = 4.10351
+    si_B3_dipole_deflection_angle = 1.42995
+    si_BC_dipole_deflection_angle = 1.40000
 
-    si_dipole_low_magnetic_field_bending_radius = optics.rho(
-        si_beam_magnetic_rigidity, 
-        si_dipole_low_magnetic_field)
-    si_dipole_high_magnetic_field_bending_radius = optics.rho(
-        si_beam_magnetic_rigidity, 
-        si_dipole_high_magnetic_field)
+    si_B1_dipole_bending_radius = si_hardedge_length_of_B1_dipoles / math.radians(si_B1_dipole_deflection_angle)
+    si_B2_dipole_bending_radius = si_hardedge_length_of_B2_dipoles / math.radians(si_B2_dipole_deflection_angle)
+    si_B3_dipole_bending_radius = si_hardedge_length_of_B3_dipoles / math.radians(si_B3_dipole_deflection_angle)
+    si_BC_dipole_bending_radius = si_hardedge_length_of_BC_dipoles / math.radians(si_BC_dipole_deflection_angle)
 
-    si_dipole_low_magnetic_field_critical_energy = optics.critical_energy(
-        si_beam_gamma_factor, 
-        si_dipole_low_magnetic_field_bending_radius)
-    si_dipole_high_magnetic_field_critical_energy = optics.critical_energy(
-        si_beam_gamma_factor, 
-        si_dipole_high_magnetic_field_bending_radius)
+    si_B1_dipole_magnetic_field = si_beam_magnetic_rigidity / si_B1_dipole_bending_radius
+    si_B2_dipole_magnetic_field = si_beam_magnetic_rigidity / si_B2_dipole_bending_radius
+    si_B3_dipole_magnetic_field = si_beam_magnetic_rigidity / si_B3_dipole_bending_radius
+    si_BC_dipole_magnetic_field = si_beam_magnetic_rigidity / si_BC_dipole_bending_radius
 
-    si_deflection_angle_B1 =  (180.0/math.pi) * si_hardedge_length_of_B1_dipoles / si_dipole_low_magnetic_field_bending_radius
-    si_deflection_angle_B2 =  (180.0/math.pi) * si_hardedge_length_of_B2_dipoles / si_dipole_low_magnetic_field_bending_radius
-    si_deflection_angle_B3 =  (180.0/math.pi) * si_hardedge_length_of_B3_dipoles / si_dipole_low_magnetic_field_bending_radius
-    si_deflection_angle_BC =  (180.0/math.pi) * si_hardedge_length_of_BC_dipoles / si_dipole_high_magnetic_field_bending_radius
-  
+    si_B1_dipole_critical_energy = optics.critical_energy(
+        si_beam_gamma_factor,
+        si_B1_dipole_bending_radius)
+    si_B2_dipole_critical_energy = optics.critical_energy(
+        si_beam_gamma_factor,
+        si_B2_dipole_bending_radius)
+    si_B3_dipole_critical_energy = optics.critical_energy(
+        si_beam_gamma_factor,
+        si_B3_dipole_bending_radius)
+    si_BC_dipole_critical_energy = optics.critical_energy(
+        si_beam_gamma_factor,
+        si_BC_dipole_bending_radius)
+
     si_optics_mode = 'B00'
     si_horizontal_betatron_tune = 46.179867828110417
     si_vertical_betatron_tune = 14.149994739104255
@@ -542,3 +548,15 @@ class ParameterDefinitions(object):
     tb_number_of_dipoles = 4
     tb_number_of_quadrupoles = 13
     tb_maximum_quadrupole_gradient = 3 # [T/m]
+
+    tb_energy_of_BN_dipole = 0.15 # [GeV]
+    tb_energy_of_BP_dipole = 0.15 # [GeV]
+    tb_energy_of_septum = 0.15 # [GeV]
+
+    tb_arc_length_of_BN_dipole = 0.3500 # [m]
+    tb_arc_length_of_BP_dipole = 0.5017 # [m]
+    tb_arc_length_of_septum = 0.5000 # [m]
+
+    tb_deflection_angle_of_BN_dipole = 15 # [°]
+    tb_deflection_angle_of_BP_dipole = 21.5 # [°]
+    tb_deflection_angle_of_septum = 10 # [°]
