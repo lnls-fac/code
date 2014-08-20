@@ -85,7 +85,12 @@ elseif strcmpi(mode,'B')
     
 elseif strcmpi(mode,'C')
     if strcmpi(version,'00')
-        error('Not Implemented Yet: waiting for default mode')
+        [path, ~, ~] = fileparts(mfilename('fullpath'));
+        cur = pwd;
+        cd(fullfile(path,'opt_results/c/mantemV500/'));
+        eval('firstRun_000556');
+        cd(cur);
+    
     elseif strncmpi(version, 'opt_results_elegant',19)
         
         [path, ~, ~] = fileparts(mfilename('fullpath'));
