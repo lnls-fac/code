@@ -492,7 +492,7 @@ parameter_list = [
     units    = 'T',
     revision = '2014-08-01',
     deps     = [],
-    obs      = [],
+    obs      = [r'<math>B_\text{inj} = \frac{(B\rho)_\text{inj}}{\rho}</math>'],
   ),
   
   Parameter(
@@ -503,31 +503,19 @@ parameter_list = [
     units    = 'T',
     revision = '2014-08-01',
     deps     = [],
-    obs      = [],
+    obs      = [r'<math>B_\text{ext} = \frac{(B\rho)_\text{ext}}{\rho}</math>'],
   ),
 
   Parameter(
-    name     = 'Booster injection dipole bending radius',
+    name     = 'Booster dipole bending radius',
     group    = 'FAC',
-    value    = Prms.bo_injection_dipole_bending_radius,
-    symbol   = r'<math>\rho_\text{inj}</math>',
+    value    = Prms.bo_dipole_bending_radius,
+    symbol   = r'<math>\rho</math>',
     units    = 'm',
     revision = '2014-08-01',
-    deps     = ['Booster injection beam magnetic rigidity',
-                'Booster injection dipole magnetic field'],
-    obs      = [r'<math>\rho_\text{inj} = \frac{ec/p}{B_\text{inj}} = \frac{(B\rho)}{B_\text{inj}}</math>'],
-  ),
-
-  Parameter(
-    name     = 'Booster extraction dipole bending radius',
-    group    = 'FAC',
-    value    = Prms.bo_extraction_dipole_bending_radius,
-    symbol   = r'<math>\rho_\text{ext}</math>',
-    units    = 'm',
-    revision = '2014-08-01',
-    deps     = ['Booster extraction beam magnetic rigidity',
-                'Booster extraction dipole magnetic field'],
-    obs      = [r'<math>\rho_\text{ext} = \frac{ec/p}{B_\text{ext}} = \frac{(B\rho)}{B_\text{ext}}</math>'],
+    deps     = ['Booster hardedge length of dipoles',
+                'Booster deflection angle of dipoles'],
+    obs      = [r'<math>\rho = \frac{L_\text{DIP}}{\theta_\text{DIP}}</math>'],
   ),
 
   Parameter(
@@ -1436,4 +1424,15 @@ parameter_list = [
     obs      = [],
   ),
 
+  Parameter(
+    name     = 'Booster deflection angle of dipoles',
+    group    = 'FAC',
+    value    = Prms.bo_dipole_deflection_angle,
+    symbol   = r'<math>\theta_\text{DIP}</math>',
+    units    = unicode('°',encoding='utf-8'),
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
 ]

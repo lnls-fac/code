@@ -318,6 +318,10 @@ class ParameterDefinitions(object):
     bo_hardedge_length_of_SF_sextupoles = 0.2 # [m]
     bo_hardedge_length_of_SD_sextupoles = 0.2 # [m]
 
+    bo_dipole_deflection_angle = 7.2 # [°]
+
+    bo_dipole_bending_radius = bo_hardedge_length_of_dipoles / math.radians(bo_dipole_deflection_angle)
+
     bo_maximum_integrated_sextupole = 20.0138457118891 # B''L/2 [T/m]
 
     bo_horizontal_dipole_corrector_maximum_strength = 0.5 # [mrad]
@@ -395,32 +399,26 @@ class ParameterDefinitions(object):
     bo_injection_beam_beta_factor   = optics.beta(bo_injection_beam_gamma_factor)
     bo_injection_beam_velocity      = optics.velocity(bo_injection_beam_beta_factor)
 
-    bo_injection_dipole_magnetic_field = 0.0546 # [T]
-    bo_injection_QF_quadrupole_maximum_gradient = 1.0132009391643900 # [T/m]
-    bo_injection_QD_quadrupole_maximum_absolute_gradient = 0.1250865356993070 # [T/m]
-
     bo_injection_beam_magnetic_rigidity = optics.brho(
         bo_injection_beam_energy,
         bo_injection_beam_beta_factor)
 
-    bo_injection_dipole_bending_radius = optics.rho(
-        bo_injection_beam_magnetic_rigidity, bo_injection_dipole_magnetic_field)
+    bo_injection_dipole_magnetic_field = bo_injection_beam_magnetic_rigidity / bo_dipole_bending_radius
+    bo_injection_QF_quadrupole_maximum_gradient = 1.0132009391643900 # [T/m]
+    bo_injection_QD_quadrupole_maximum_absolute_gradient = 0.1250865356993070 # [T/m]
 
     bo_extraction_beam_energy       = 3.0; # [GeV]
     bo_extraction_beam_gamma_factor = optics.gamma(bo_extraction_beam_energy)
     bo_extraction_beam_beta_factor  = optics.beta(bo_extraction_beam_gamma_factor)
     bo_extraction_beam_velocity     = optics.velocity(bo_extraction_beam_beta_factor)
 
-    bo_extraction_dipole_magnetic_field = 1.092 # [T]
-    bo_extraction_QF_quadrupole_maximum_gradient = 20.2640187832877 # [T/m]
-    bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
-
     bo_extraction_beam_magnetic_rigidity = optics.brho(
         bo_extraction_beam_energy,
         bo_extraction_beam_beta_factor)
 
-    bo_extraction_dipole_bending_radius = optics.rho(
-        bo_extraction_beam_magnetic_rigidity, bo_extraction_dipole_magnetic_field)
+    bo_extraction_dipole_magnetic_field = bo_extraction_beam_magnetic_rigidity / bo_dipole_bending_radius
+    bo_extraction_QF_quadrupole_maximum_gradient = 20.2640187832877 # [T/m]
+    bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
 
     bo_extraction_revolution_period = optics.revolution_period(
         bo_circumference, bo_extraction_beam_velocity)
@@ -520,43 +518,60 @@ class ParameterDefinitions(object):
 
     '''Linac parameters'''
 
-    li_multi_bunch_beam_energy = 150 # [MeV]
-    li_multi_bunch_rf_frequency = 3 # [GHz]
-    li_multi_bunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
+    li_multi_bunch_beam_energy = 150.0 # [MeV]
+    li_multi_bunch_rf_frequency = 3.0 # [GHz]
+    li_multi_bunch_maximum_normalized_emittance = 50.0 # [π·mm·mrad]
     li_multi_bunch_maximum_rms_energy_spread = 0.5 # [%]
     li_multi_bunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
-    li_multi_bunch_maximum_pulse_to_pulse_jitter = 100 # [ps]
-    li_multi_bunch_minimum_pulse_charge = 3 # [nC]
-    li_multi_bunch_minimum_pulse_duration = 100 # [ns]
-    li_multi_bunch_maximum_pulse_duration = 300 # [ns]
-    li_multi_bunch_repetition_rate = 2 # [Hz]
+    li_multi_bunch_maximum_pulse_to_pulse_jitter = 100.0 # [ps]
+    li_multi_bunch_minimum_pulse_charge = 3.0 # [nC]
+    li_multi_bunch_minimum_pulse_duration = 100.0 # [ns]
+    li_multi_bunch_maximum_pulse_duration = 300.0 # [ns]
+    li_multi_bunch_repetition_rate = 2.0 # [Hz]
 
-    li_single_bunch_beam_energy = 150 # [MeV]
-    li_single_bunch_rf_frequency = 3 # [GHz]
-    li_single_bunch_maximum_normalized_emittance = 50 # [π·mm·mrad]
+    li_single_bunch_beam_energy = 150.0 # [MeV]
+    li_single_bunch_rf_frequency = 3.0 # [GHz]
+    li_single_bunch_maximum_normalized_emittance = 50.0 # [π·mm·mrad]
     li_single_bunch_maximum_rms_energy_spread = 0.5 # [%]
     li_single_bunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
-    li_single_bunch_maximum_pulse_to_pulse_jitter = 100 # [ps]
-    li_single_bunch_minimum_pulse_charge = 1 # [nC]
-    li_single_bunch_maximum_pulse_duration = 1 # [ns]
-    li_single_bunch_repetition_rate = 2 # [Hz]
+    li_single_bunch_maximum_pulse_to_pulse_jitter = 100.0 # [ps]
+    li_single_bunch_minimum_pulse_charge = 1.0 # [nC]
+    li_single_bunch_maximum_pulse_duration = 1.0 # [ns]
+    li_single_bunch_repetition_rate = 2.0 # [Hz]
 
     '''Linac to booster transport line parameters'''
 
-    tb_operation_energy = 150 # [MeV]
+    tb_beam_energy            = 150.0 # [MeV]
+    tb_beam_gamma_factor      = optics.gamma(1.0e-3*tb_beam_energy)
+    tb_beam_beta_factor       = optics.beta(tb_beam_gamma_factor)
+    tb_beam_velocity          = optics.velocity(tb_beam_beta_factor)
+    tb_beam_magnetic_rigidity = optics.brho(1.0e-3*tb_beam_energy, tb_beam_beta_factor)
+
     tb_total_length = 22.15 # [m]
     tb_number_of_dipoles = 4
     tb_number_of_quadrupoles = 13
-    tb_maximum_quadrupole_gradient = 3 # [T/m]
+    tb_maximum_quadrupole_gradient = 3.0 # [T/m]
 
-    tb_energy_of_BN_dipole = 0.15 # [GeV]
-    tb_energy_of_BP_dipole = 0.15 # [GeV]
-    tb_energy_of_septum = 0.15 # [GeV]
-
-    tb_arc_length_of_BN_dipole = 0.3500 # [m]
-    tb_arc_length_of_BP_dipole = 0.5017 # [m]
+    tb_arc_length_of_BN_dipoles = 0.3500 # [m]
+    tb_arc_length_of_BP_dipoles = 0.5017 # [m]
     tb_arc_length_of_septum = 0.5000 # [m]
 
-    tb_deflection_angle_of_BN_dipole = 15 # [°]
-    tb_deflection_angle_of_BP_dipole = 21.5 # [°]
-    tb_deflection_angle_of_septum = 10 # [°]
+    tb_BN_dipole_deflection_angle = 15.0 # [°]
+    tb_BP_dipole_deflection_angle = 21.5 # [°]
+    tb_septum_deflection_angle = 10.0 # [°]
+
+    tb_BN_dipole_bending_radius = tb_arc_length_of_BN_dipoles / math.radians(tb_BN_dipole_deflection_angle)
+    tb_BP_dipole_bending_radius = tb_arc_length_of_BP_dipoles / math.radians(tb_BN_dipole_deflection_angle)
+    tb_septum_bending_radius = tb_arc_length_of_septum / math.radians(tb_septum_deflection_angle)
+
+    tb_BN_dipole_magnetic_field = tb_beam_magnetic_rigidity / tb_BN_dipole_bending_radius
+    tb_BP_dipole_magnetic_field = tb_beam_magnetic_rigidity / tb_BP_dipole_bending_radius
+    tb_septum_magnetic_field = tb_beam_magnetic_rigidity / tb_septum_bending_radius
+
+    tb_BN_dipole_sagitta = 11.4 # [mm]
+    tb_BP_dipole_sagitta = 23.5 # [mm]
+    tb_septum_sagitta = 43.5 # [mm]
+
+    tb_number_of_BN_dipoles = 2
+    tb_number_of_BP_dipoles = 2
+    tb_number_of_septa = 1

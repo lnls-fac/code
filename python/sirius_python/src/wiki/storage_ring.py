@@ -471,7 +471,7 @@ parameter_list = [
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
     deps     = [],
-    obs      = [r'<math>\theta_\text{B1} = \frac{L_\text{B1}}{\rho_\text{LOW}}</math>'],
+    obs      = [],
   ),
                   
   Parameter(
@@ -482,7 +482,7 @@ parameter_list = [
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
     deps     = [],
-    obs      = [r'<math>\theta_\text{B2} = \frac{L_\text{B2}}{\rho_\text{LOW}}</math>'],
+    obs      = [],
   ),
                             
   Parameter(
@@ -493,7 +493,7 @@ parameter_list = [
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
     deps     = [],
-    obs      = [r'<math>\theta_\text{B3} = \frac{L_\text{B3}}{\rho_\text{LOW}}</math>'],
+    obs      = [],
   ),
                   
   Parameter(
@@ -504,7 +504,7 @@ parameter_list = [
     units    = unicode('°',encoding='utf-8'),
     revision = '2014-08-01',
     deps     = [],
-    obs      = [r'<math>\theta_\text{BC} = \frac{L_\text{BC}}{\rho_\text{HIGH}}</math>'],
+    obs      = [],
   ),
                            
   Parameter(
