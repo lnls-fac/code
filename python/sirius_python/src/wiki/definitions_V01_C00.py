@@ -645,3 +645,83 @@ class ParameterDefinitions(object):
     tb_number_of_BN_dipoles = 2
     tb_number_of_BP_dipoles = 2
     tb_number_of_septa = 1
+
+    tb_hardedge_length_of_QA1_quadrupoles = 0.05 # [m]
+    tb_hardedge_length_of_QA2_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QB1_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QB2_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QB3_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QC1_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QC2_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QC3_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QD1_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QD2_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QE1_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QE2_quadrupoles = 0.15 # [m]
+    
+    '''Booster to storage ring transport line parameters'''
+
+    ts_beam_energy            = 3.0 # [GeV]
+    ts_beam_gamma_factor      = optics.gamma(ts_beam_energy)
+    ts_beam_beta_factor       = optics.beta(ts_beam_gamma_factor)
+    ts_beam_velocity          = optics.velocity(ts_beam_beta_factor)
+    ts_beam_magnetic_rigidity = optics.brho(ts_beam_energy, ts_beam_beta_factor)
+
+    ts_total_length = 26.5 # [m]
+    ts_number_of_dipoles = 2
+    ts_number_of_quadrupoles = 7
+    ts_maximum_quadrupole_gradient = 25.0 # [T/m]
+
+    ts_arc_length_of_dipoles = 0.9006 # [m]
+    ts_arc_length_of_extraction_septum = 2.0 # [m]
+    ts_arc_length_of_thick_injection_septum = 1.0004 # [m]
+    ts_arc_length_of_thin_injection_septum = 1.4016 # [m]
+
+    ts_dipole_deflection_angle = 7.075 # [°]
+    ts_extraction_septum_deflection_angle = 6.0 # [°]
+    ts_thick_injection_septum_deflection_angle = 5.8 # [°]
+    ts_thin_injection_septum_deflection_angle = 4.8 # [°]
+
+    ts_dipole_bending_radius = ts_arc_length_of_dipoles / math.radians(ts_dipole_deflection_angle)
+    ts_extraction_septum_bending_radius = ts_arc_length_of_extraction_septum / math.radians(ts_extraction_septum_deflection_angle)
+    ts_thick_injection_septum_bending_radius = ts_arc_length_of_thick_injection_septum / math.radians(ts_thick_injection_septum_deflection_angle)
+    ts_thin_injection_septum_bending_radius = ts_arc_length_of_thin_injection_septum / math.radians(ts_thin_injection_septum_deflection_angle)
+
+    ts_dipole_magnetic_field = ts_beam_magnetic_rigidity / ts_dipole_bending_radius
+    ts_extraction_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_extraction_septum_bending_radius
+    ts_thick_injection_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_thick_injection_septum_bending_radius
+    ts_thin_injection_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_thin_injection_septum_bending_radius
+
+    ts_dipole_sagitta = 13.9 # [mm]
+    ts_extraction_septum_sagitta = 104.6 # [mm]
+    ts_thick_injection_septum_sagitta = 12.7 # [mm]
+    ts_thin_injection_septum_sagitta = 58.7 # [mm]
+
+    ts_number_of_dipoles = 2
+    ts_number_of_extraction_septa = 1
+    ts_number_of_thick_injection_septa = 1
+    ts_number_of_thin_injection_septa = 1
+
+    ts_hardedge_length_of_QA1_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QA2_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QB1_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QB2_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QC1_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QC2_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QC3_quadrupoles = 0.3 # [m]
+
+    ts_QA1_quadrupole_strength = -1.292 # [1/m^2]
+    ts_QA2_quadrupole_strength = 1.948 # [1/m^2]
+    ts_QB1_quadrupole_strength = -1.326 # [1/m^2]
+    ts_QB2_quadrupole_strength = 2.054 # [1/m^2]
+    ts_QC1_quadrupole_strength = 1.543 # [1/m^2]
+    ts_QC2_quadrupole_strength = -2.490 # [1/m^2]
+    ts_QC3_quadrupole_strength = 1.633 # [1/m^2]
+
+    ts_QA1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QA1_quadrupole_strength
+    ts_QA2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QA2_quadrupole_strength
+    ts_QB1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QB1_quadrupole_strength
+    ts_QB2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QB2_quadrupole_strength
+    ts_QC1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC1_quadrupole_strength
+    ts_QC2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC2_quadrupole_strength
+    ts_QC3_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC3_quadrupole_strength

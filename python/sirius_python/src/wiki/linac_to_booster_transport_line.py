@@ -312,4 +312,136 @@ parameter_list = [
     obs      = [],
   ),
                 
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QA1 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QA1_quadrupoles,
+    symbol   = r'<math>L_\text{QA1}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QA2 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QA2_quadrupoles,
+    symbol   = r'<math>L_\text{QA2}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QB1 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QB1_quadrupoles,
+    symbol   = r'<math>L_\text{QB1}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QB2 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QB2_quadrupoles,
+    symbol   = r'<math>L_\text{QB2}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QB3 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QB3_quadrupoles,
+    symbol   = r'<math>L_\text{QB3}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QC1 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QC1_quadrupoles,
+    symbol   = r'<math>L_\text{QC1}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QC2 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QC2_quadrupoles,
+    symbol   = r'<math>L_\text{QC2}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QC3 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QC3_quadrupoles,
+    symbol   = r'<math>L_\text{QC3}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QD1 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QD1_quadrupoles,
+    symbol   = r'<math>L_\text{QD1}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QD2 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QD2_quadrupoles,
+    symbol   = r'<math>L_\text{QD2}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QE1 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QE1_quadrupoles,
+    symbol   = r'<math>L_\text{QE1}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Linac to booster transport line hardedge length of QE2 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QE2_quadrupoles,
+    symbol   = r'<math>L_\text{QE2}</math>',
+    units    = 'm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
 ]
