@@ -74,6 +74,7 @@ def generate_parameter_pages(parameters):
 
 def update_submachine(submachine, parameters_list = None):
     if parameters_list is None:
+        submachine.parameter_list.sort()
         generate_parameter_pages(submachine.parameter_list)
         generate_parameter_name_list_page(submachine.label, submachine.parameter_list)
         generate_parameter_flat_list_page(submachine.label, submachine.parameter_list)
