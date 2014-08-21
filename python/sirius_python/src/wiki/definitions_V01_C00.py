@@ -87,6 +87,8 @@ class ParameterDefinitions(object):
 
 
     si_optics_mode = "C00"
+    si_synchrotron_tune_from_dipoles = 4.364436028401864E-03
+    si_synchrotron_tune              = 4.364436028401864E-03
     si_horizontal_betatron_tune = 4.813860814231471E+01
     si_vertical_betatron_tune   = 1.320733867979753E+01
     si_horizontal_chromaticity         = -4.330757974457811E-03
@@ -224,9 +226,6 @@ class ParameterDefinitions(object):
         si_radiation_integral_I3, 
         si_radiation_integral_I4)
     
-    si_synchrotron_tune_from_dipoles = 0.004421565111775
-    si_synchrotron_tune              = 0.004421565111775
-    
     si_synchrotron_frequency_from_dipoles = optics.frequency_from_tune(
         si_revolution_frequency, si_synchrotron_tune_from_dipoles)
     si_synchrotron_frequency = optics.frequency_from_tune(
@@ -317,60 +316,52 @@ class ParameterDefinitions(object):
     si_random_skew_16_pole_error_tolerance_for_dipoles       =  1.0e-5
     si_random_skew_18_pole_error_tolerance_for_dipoles       =  1.0e-5
     
-#     ''' multipole errors for quadrupoles '''
-#     si_reference_position_for_multipole_contribution_for_dipoles = 11.7 # [mm]
-#     si_systematic_normal_6_pole_error_tolerance_for_dipoles  = -9.0e-5
-#     si_systematic_normal_8_pole_error_tolerance_for_dipoles  =  3.0e-5
-#     si_systematic_normal_10_pole_error_tolerance_for_dipoles =  1.0e-4
-#     si_systematic_normal_12_pole_error_tolerance_for_dipoles = -8.0e-5
-#     si_systematic_normal_14_pole_error_tolerance_for_dipoles =  6.0e-5
-#     si_random_normal_6_pole_error_tolerance_for_dipoles      =  4.0e-5
-#     si_random_normal_8_pole_error_tolerance_for_dipoles      =  4.0e-5
-#     si_random_normal_10_pole_error_tolerance_for_dipoles     =  4.0e-5
-#     si_random_normal_12_pole_error_tolerance_for_dipoles     =  4.0e-5
-#     si_random_normal_14_pole_error_tolerance_for_dipoles     =  4.0e-5
-#     si_random_normal_16_pole_error_tolerance_for_dipoles     =  4.0e-5
-#     si_random_normal_18_pole_error_tolerance_for_dipoles     =  4.0e-5
-#     si_random_skew_6_pole_error_tolerance_for_dipoles        =  1.0e-5
-#     si_random_skew_8_pole_error_tolerance_for_dipoles        =  1.0e-5
-#     si_random_skew_10_pole_error_tolerance_for_dipoles       =  1.0e-5
-#     si_random_skew_12_pole_error_tolerance_for_dipoles       =  1.0e-5
-#     si_random_skew_14_pole_error_tolerance_for_dipoles       =  1.0e-5
-#     si_random_skew_16_pole_error_tolerance_for_dipoles       =  1.0e-5
-#     si_random_skew_18_pole_error_tolerance_for_dipoles       =  1.0e-5
+    ''' multipole errors for quadrupoles '''
+    si_reference_position_for_multipole_contribution_for_quadrupoles = 11.7 # [mm]
+    si_systematic_normal_6_pole_error_tolerance_for_quadrupoles  =  3.0e-8
+    si_systematic_normal_8_pole_error_tolerance_for_quadrupoles  =  1.0e-5
+    si_systematic_normal_10_pole_error_tolerance_for_quadrupoles = -2.0e-8
+    si_systematic_normal_12_pole_error_tolerance_for_quadrupoles = -3.0e-5
+    si_systematic_normal_20_pole_error_tolerance_for_quadrupoles =  8.0e-5    
+    si_random_normal_6_pole_error_tolerance_for_quadrupoles      =  4.0e-5
+    si_random_normal_8_pole_error_tolerance_for_quadrupoles      =  4.0e-5
+    si_random_normal_10_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_12_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_14_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_16_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_18_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_20_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_skew_6_pole_error_tolerance_for_quadrupoles        =  1.0e-5
+    si_random_skew_8_pole_error_tolerance_for_quadrupoles        =  1.0e-5
+    si_random_skew_10_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_12_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_14_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_16_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_18_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_20_pole_error_tolerance_for_quadrupoles       =  1.0e-5
     
-    
-    si_systematic_normal_12_pole_error_tolerance_for_quadrupoles =  6.0e-4
-    si_systematic_normal_20_pole_error_tolerance_for_quadrupoles = -6.2e-4
-    si_systematic_normal_28_pole_error_tolerance_for_quadrupoles = -0.5e-4
-    si_systematic_normal_18_pole_error_tolerance_for_sextupoles  = -4.1e-4
-    si_systematic_normal_30_pole_error_tolerance_for_sextupoles  = -4.5e-4
-
-    si_random_normal_6_pole_error_tolerance_for_quadrupoles  = 2.8e-4
-    si_random_normal_8_pole_error_tolerance_for_quadrupoles  = 2.0e-4
-    si_random_normal_10_pole_error_tolerance_for_quadrupoles = 3.0e-5
-    si_random_normal_12_pole_error_tolerance_for_quadrupoles = 2.0e-4
-    si_random_normal_14_pole_error_tolerance_for_quadrupoles = 3.0e-4
-    si_random_normal_16_pole_error_tolerance_for_quadrupoles = 9.0e-5
-    si_random_normal_18_pole_error_tolerance_for_quadrupoles = 1.0e-4
-    si_random_normal_20_pole_error_tolerance_for_quadrupoles = 3.0e-5
-    si_random_normal_8_pole_error_tolerance_for_sextupoles   = 5.0e-4
-    si_random_normal_10_pole_error_tolerance_for_sextupoles  = 3.5e-4
-    si_random_normal_12_pole_error_tolerance_for_sextupoles  = 1.0e-4
-    si_random_normal_14_pole_error_tolerance_for_sextupoles  = 1.0e-4
-    si_random_normal_16_pole_error_tolerance_for_sextupoles  = 1.0e-4
-    si_random_normal_18_pole_error_tolerance_for_sextupoles  = 9.0e-5
-    si_random_normal_20_pole_error_tolerance_for_sextupoles  = 5.0e-5
-    si_random_normal_22_pole_error_tolerance_for_sextupoles  = 1.0e-5
-    si_random_normal_30_pole_error_tolerance_for_sextupoles  = 8.0e-5
-
-    si_random_skew_6_pole_error_tolerance_for_quadrupoles = 2.9e-4
-    si_random_skew_8_pole_error_tolerance_for_quadrupoles = 1.4e-4
-    si_random_skew_8_pole_error_tolerance_for_sextupoles  = 4.9e-4
-    
-    
-    si_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
-    si_reference_position_for_multipole_contribution_for_sextupoles  = 20 # [mm]
+    ''' multipole errors for sextupoles '''
+    si_reference_position_for_multipole_contribution_for_sextupoles = 11.7 # [mm]
+    si_systematic_normal_18_pole_error_tolerance_for_sextupoles =  4.0e-6
+    si_systematic_normal_30_pole_error_tolerance_for_sextupoles = -1.0e-7    
+    si_random_normal_8_pole_error_tolerance_for_sextupoles      =  4.0e-5
+    si_random_normal_10_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_12_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_14_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_16_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_18_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_20_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_22_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_30_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_skew_8_pole_error_tolerance_for_sextupoles        =  1.0e-5
+    si_random_skew_10_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_12_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_14_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_16_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_18_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_20_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_22_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_30_pole_error_tolerance_for_sextupoles       =  1.0e-5
     
     
     '''Booster parameters'''
