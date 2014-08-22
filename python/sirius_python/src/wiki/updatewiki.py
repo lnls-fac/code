@@ -73,8 +73,8 @@ def generate_parameter_pages(parameters):
         #print(page.text)
 
 def update_submachine(submachine, parameters_list = None):
+    submachine.parameter_list.sort()
     if parameters_list is None:
-        submachine.parameter_list.sort()
         generate_parameter_pages(submachine.parameter_list)
         generate_parameter_name_list_page(submachine.label, submachine.parameter_list)
         generate_parameter_flat_list_page(submachine.label, submachine.parameter_list)
@@ -84,6 +84,7 @@ def update_submachine(submachine, parameters_list = None):
     print('<'+submachine.label+'>')
     parm_names = [p.name for p in submachine.parameter_list]
     parameter_updated = False
+    parameters_list.sort()
     for parameter in parameters_list:
         try:
             parameter_full_name = submachine.label + ' ' + parameter
