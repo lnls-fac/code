@@ -1,5 +1,5 @@
-FAC_CODE
-========
+CODE
+====
 
 LNLS version of MML/AT, Matlab Scripts, Python and C/C++ codes
 
@@ -23,6 +23,3 @@ Main projects in this repository:
     . module_trackcpp (python-exposed trackc++ module)
     . pyring (python port of matlab AcceleratorToolbox + MML)
 - control (high level applications and related modules)
-
-
-
