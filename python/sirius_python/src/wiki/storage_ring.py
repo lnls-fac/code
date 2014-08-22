@@ -3,12 +3,560 @@
 from parameter import Parameter
 from definitions import ParameterDefinitions as Prms
 
-
 label = 'Storage ring'
 
-
 parameter_list = [
-
+    
+  Parameter(
+    name     = 'Storage ring dipole power supplies ripple error tolerance',
+    group    = 'FAC',
+    value    = Prms.si_dipole_power_supplies_ripple_error_tolerance,
+    symbol   = r'E_\text{ripp, DIP}',
+    units    = 'ppm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring quadrupole power supplies ripple error tolerance',
+    group    = 'FAC',
+    value    = Prms.si_quadrupole_power_supplies_ripple_error_tolerance,
+    symbol   = r'E_\text{ripp, QUAD}',
+    units    = 'ppm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring sextupole power supplies ripple error tolerance',
+    group    = 'FAC',
+    value    = Prms.si_sextupole_power_supplies_ripple_error_tolerance,
+    symbol   = r'E_\text{ripp, SEXT}',
+    units    = 'ppm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+          
+  Parameter(
+    name     = 'Storage ring dipoles vibration amplitude error tolerance',
+    group    = 'FAC',
+    value    = Prms.si_dipoles_vibration_amplitude_error_tolerance,
+    symbol   = r'E_\text{vib, DIP}',
+    units    = 'nm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring quadrupoles vibration amplitude error tolerance',
+    group    = 'FAC',
+    value    = Prms.si_quadrupoles_vibration_amplitude_error_tolerance,
+    symbol   = r'E_\text{vib, QUAD}',
+    units    = 'nm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring sextupoles vibration amplitude error tolerance',
+    group    = 'FAC',
+    value    = Prms.si_sextupoles_vibration_amplitude_error_tolerance,
+    symbol   = r'E_\text{vib, SEXT}',
+    units    = 'nm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T name',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_name,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T type',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_type,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T period length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_period,
+    symbol   = r'<math>\lambda_\text{SCW4T}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T number of periods',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_number_of_periods,
+    symbol   = r'<math>N_\text{p, SCW4T}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_length,
+    symbol   = r'<math>L_\text{p, SCW4T}</math>',
+    units    = 'cm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),  
+  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T minimum gap',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_minimum_gap,
+    symbol   = r'<math>G_\text{min, SCW4T}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),              
+       
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T maximum horizontal field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_maximum_horizontal_field,
+    symbol   = r'<math>B_\text{x, SCW4T}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T maximum vertical field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_maximum_vertical_field,
+    symbol   = r'<math>B_\text{y, SCW4T}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T maximum horizontal deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_maximum_horizontal_deflection_parameter,
+    symbol   = r'<math>K_\text{x, SCW4T}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device SCW4T period length', 'Storage ring insertion device SCW4T maximum vertical field'],
+    obs      = [r'<math>K_\text{x, SCW4T} = \frac{ec B_\text{y,SCW4T} \lambda_\text{p, SCW4T}}{2 \pi E_0}</math>'],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T maximum vertical deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_maximum_vertical_deflection_parameter,
+    symbol   = r'<math>K_\text{y, SCW4T}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device SCW4T period length', 'Storage ring insertion device SCW4T maximum horizontal field'],
+    obs      = [r'<math>K_\text{y, SCW4T} = \frac{ec B_\text{x,SCW4T} \lambda_\text{p, SCW4T}}{2 \pi E_0}</math>'],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device SCW4T maximum power',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_scw4t_maximum_power,
+    symbol   = r'<math>P_\text{SCW4T}</math>',
+    units    = 'kW',
+    revision = '2014-08-01',
+    deps     = ['Storage ring beam energy', 'Storage ring beam current', 'Storage ring insertion device SCW4T period length', 'Storage ring insertion device SCW4T number of periods', 'Storage ring insertion device SCW4T maximum horizontal deflection parameter'],
+    obs      = [r'<math>P_\text{SCW4T} = \frac{4 \pi^2 r_e}{3 e E_0} \frac{E^2 K^2_\text{x,SCW4T} N_\text{p, SCW4T} I}{\lambda_\text{p, SCW4T}}</math>'],
+  ), 
+                    
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 name',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_name,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 type',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_type,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 period length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_period,
+    symbol   = r'<math>\lambda_\text{EPU80}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 number of periods',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_number_of_periods,
+    symbol   = r'<math>N_\text{p, EPU80}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_length,
+    symbol   = r'<math>L_\text{p, EPU80}</math>',
+    units    = 'cm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),  
+  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 minimum gap',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_minimum_gap,
+    symbol   = r'<math>G_\text{min, EPU80}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),              
+       
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 maximum horizontal field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_maximum_horizontal_field,
+    symbol   = r'<math>B_\text{x, EPU80}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 maximum vertical field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_maximum_vertical_field,
+    symbol   = r'<math>B_\text{y, EPU80}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 maximum horizontal deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_maximum_horizontal_deflection_parameter,
+    symbol   = r'<math>K_\text{x, EPU80}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device EPU80 period length', 'Storage ring insertion device EPU80 maximum vertical field'],
+    obs      = [r'<math>K_\text{x, EPU80} = \frac{ec B_\text{y,EPU80} \lambda_\text{p, EPU80}}{2 \pi E_0}</math>'],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 maximum vertical deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_maximum_vertical_deflection_parameter,
+    symbol   = r'<math>K_\text{y, EPU80}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device EPU80 period length', 'Storage ring insertion device EPU80 maximum horizontal field'],
+    obs      = [r'<math>K_\text{y, EPU80} = \frac{ec B_\text{x,EPU80} \lambda_\text{p, EPU80}}{2 \pi E_0}</math>'],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device EPU80 maximum power',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_epu80_maximum_power,
+    symbol   = r'<math>P_\text{EPU80}</math>',
+    units    = 'kW',
+    revision = '2014-08-01',
+    deps     = ['Storage ring beam energy', 'Storage ring beam current', 'Storage ring insertion device EPU80 period length', 'Storage ring insertion device EPU80 number of periods', 'Storage ring insertion device EPU80 maximum horizontal deflection parameter'],
+    obs      = [r'<math>P_\text{EPU80} = \frac{4 \pi^2 r_e}{3 e E_0} \frac{E^2 K^2_\text{x,EPU80} N_\text{p, EPU80} I}{\lambda_\text{p, EPU80}}</math>'],
+  ), 
+        
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 name',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_name,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 type',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_type,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 period length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_period,
+    symbol   = r'<math>\lambda_\text{IVU25}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 number of periods',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_number_of_periods,
+    symbol   = r'<math>N_\text{p, IVU25}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_length,
+    symbol   = r'<math>L_\text{p, IVU25}</math>',
+    units    = 'cm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),  
+  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 minimum gap',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_minimum_gap,
+    symbol   = r'<math>G_\text{min, IVU25}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),              
+       
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 maximum horizontal field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_maximum_horizontal_field,
+    symbol   = r'<math>B_\text{x, IVU25}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 maximum vertical field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_maximum_vertical_field,
+    symbol   = r'<math>B_\text{y, IVU25}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 maximum horizontal deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_maximum_horizontal_deflection_parameter,
+    symbol   = r'<math>K_\text{x, IVU25}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device IVU25 period length', 'Storage ring insertion device IVU25 maximum vertical field'],
+    obs      = [r'<math>K_\text{x, IVU25} = \frac{ec B_\text{y,IVU25} \lambda_\text{p, IVU25}}{2 \pi E_0}</math>'],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 maximum vertical deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_maximum_vertical_deflection_parameter,
+    symbol   = r'<math>K_\text{y, IVU25}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device IVU25 period length', 'Storage ring insertion device IVU25 maximum horizontal field'],
+    obs      = [r'<math>K_\text{y, IVU25} = \frac{ec B_\text{x,IVU25} \lambda_\text{p, IVU25}}{2 \pi E_0}</math>'],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device IVU25 maximum power',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu25_maximum_power,
+    symbol   = r'<math>P_\text{IVU25}</math>',
+    units    = 'kW',
+    revision = '2014-08-01',
+    deps     = ['Storage ring beam energy', 'Storage ring beam current', 'Storage ring insertion device IVU25 period length', 'Storage ring insertion device IVU25 number of periods', 'Storage ring insertion device IVU25 maximum horizontal deflection parameter'],
+    obs      = [r'<math>P_\text{IVU25} = \frac{4 \pi^2 r_e}{3 e E_0} \frac{E^2 K^2_\text{x,IVU25} N_\text{p, IVU25} I}{\lambda_\text{p, IVU25}}</math>'],
+  ), 
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 name',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_name,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 type',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_type,
+    symbol   = r'',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 period length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_period,
+    symbol   = r'<math>\lambda_\text{IVU19}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 number of periods',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_number_of_periods,
+    symbol   = r'<math>N_\text{p, IVU19}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 length',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_length,
+    symbol   = r'<math>L_\text{p, IVU19}</math>',
+    units    = 'cm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),  
+  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 minimum gap',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_minimum_gap,
+    symbol   = r'<math>G_\text{min, IVU19}</math>',
+    units    = 'mm',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),              
+       
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 maximum horizontal field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_maximum_horizontal_field,
+    symbol   = r'<math>B_\text{x, IVU19}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 maximum vertical field',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_maximum_vertical_field,
+    symbol   = r'<math>B_\text{y, IVU19}</math>',
+    units    = 'T',
+    revision = '2014-08-01',
+    deps     = [],
+    obs      = [],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 maximum horizontal deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_maximum_horizontal_deflection_parameter,
+    symbol   = r'<math>K_\text{x, IVU19}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device IVU19 period length', 'Storage ring insertion device IVU19 maximum vertical field'],
+    obs      = [r'<math>K_\text{x, IVU19} = \frac{ec B_\text{y,IVU19} \lambda_\text{p, IVU19}}{2 \pi E_0}</math>'],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 maximum vertical deflection parameter',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_maximum_vertical_deflection_parameter,
+    symbol   = r'<math>K_\text{y, IVU19}</math>',
+    units    = '',
+    revision = '2014-08-01',
+    deps     = ['Storage ring insertion device IVU19 period length', 'Storage ring insertion device IVU19 maximum horizontal field'],
+    obs      = [r'<math>K_\text{y, IVU19} = \frac{ec B_\text{x,IVU19} \lambda_\text{p, IVU19}}{2 \pi E_0}</math>'],
+  ),
+    
+  Parameter(
+    name     = 'Storage ring insertion device IVU19 maximum power',
+    group    = 'GIA',
+    value    = Prms.si_insertion_device_ivu19_maximum_power,
+    symbol   = r'<math>P_\text{IVU19}</math>',
+    units    = 'kW',
+    revision = '2014-08-01',
+    deps     = ['Storage ring beam energy', 'Storage ring beam current', 'Storage ring insertion device IVU19 period length', 'Storage ring insertion device IVU19 number of periods', 'Storage ring insertion device IVU19 maximum horizontal deflection parameter'],
+    obs      = [r'<math>P_\text{IVU19} = \frac{4 \pi^2 r_e}{3 e E_0} \frac{E^2 K^2_\text{x,IVU19} N_\text{p, IVU19} I}{\lambda_\text{p, IVU19}}</math>'],
+  ),    
+                  
   Parameter(
     name     = 'Storage ring beam energy',
     group    = 'GIA',
@@ -2368,5 +2916,7 @@ parameter_list = [
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
   
+                                    
+   
   
 ]

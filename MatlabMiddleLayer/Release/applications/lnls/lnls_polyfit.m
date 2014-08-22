@@ -1,4 +1,4 @@
-function [coeffs y_fit] = mypolyfit(x, y, n)
+function [coeffs, y_fit] = lnls_polyfit(x, y, n)
 
 warning('off', 'MATLAB:polyfit:RepeatedPointsOrRescale');
 warning('off', 'MATLAB:nearlySingularMatrix');

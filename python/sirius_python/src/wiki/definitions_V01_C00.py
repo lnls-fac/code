@@ -362,7 +362,66 @@ class ParameterDefinitions(object):
     si_random_skew_20_pole_error_tolerance_for_sextupoles       =  1.0e-5
     si_random_skew_22_pole_error_tolerance_for_sextupoles       =  1.0e-5
     si_random_skew_30_pole_error_tolerance_for_sextupoles       =  1.0e-5
+
+    ''' high frequency error tolerances '''
+    si_dipole_power_supplies_ripple_error_tolerance             =  20   # [ppm]
+    si_quadrupole_power_supplies_ripple_error_tolerance         =  20   # [ppm]    
+    si_sextupole_power_supplies_ripple_error_tolerance          =  20   # [ppm]
+    si_dipoles_vibration_amplitude_error_tolerance              =  6    # [nm]
+    si_quadrupoles_vibration_amplitude_error_tolerance          =  6    # [nm]
+    si_sextupoles_vibration_amplitude_error_tolerance           =  6    # [nm]
     
+    ''' insertion devices '''
+    
+    si_insertion_device_ivu19_name              = 'IVU19'
+    si_insertion_device_ivu19_type              = 'IVU'
+    si_insertion_device_ivu19_period            = 19.0   # [mm]
+    si_insertion_device_ivu19_number_of_periods = 105
+    si_insertion_device_ivu19_length            = 200.0  # [cm]
+    si_insertion_device_ivu19_minimum_gap       = 4.5    # [mm]
+    si_insertion_device_ivu19_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_ivu19_maximum_vertical_field   = 1.28   # [T]
+    si_insertion_device_ivu19_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_ivu19_maximum_vertical_field, si_insertion_device_ivu19_period)
+    si_insertion_device_ivu19_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_ivu19_maximum_horizontal_field, si_insertion_device_ivu19_period)  
+    si_insertion_device_ivu19_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_ivu19_period, si_insertion_device_ivu19_number_of_periods, si_insertion_device_ivu19_maximum_horizontal_deflection_parameter)
+    
+    si_insertion_device_ivu25_name              = 'IVU25'
+    si_insertion_device_ivu25_type              = 'IVU'
+    si_insertion_device_ivu25_period            = 25.0   # [mm]
+    si_insertion_device_ivu25_number_of_periods = 80
+    si_insertion_device_ivu25_length            = 200.0  # [cm]
+    si_insertion_device_ivu25_minimum_gap       = 8.0    # [mm]
+    si_insertion_device_ivu25_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_ivu25_maximum_vertical_field   = 0.94   # [T]
+    si_insertion_device_ivu25_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_ivu25_maximum_vertical_field, si_insertion_device_ivu25_period)
+    si_insertion_device_ivu25_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_ivu25_maximum_horizontal_field, si_insertion_device_ivu25_period)  
+    si_insertion_device_ivu25_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_ivu25_period, si_insertion_device_ivu25_number_of_periods, si_insertion_device_ivu25_maximum_horizontal_deflection_parameter)
+    
+    si_insertion_device_epu80_name              = 'EPU80'
+    si_insertion_device_epu80_type              = 'EPU'
+    si_insertion_device_epu80_period            = 80.0   # [mm]
+    si_insertion_device_epu80_number_of_periods = 38
+    si_insertion_device_epu80_length            = 270.0  # [cm]
+    si_insertion_device_epu80_minimum_gap       = 16.0   # [mm]
+    si_insertion_device_epu80_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_epu80_maximum_vertical_field   = 0.90   # [T]
+    si_insertion_device_epu80_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_epu80_maximum_vertical_field, si_insertion_device_epu80_period)
+    si_insertion_device_epu80_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_epu80_maximum_horizontal_field, si_insertion_device_epu80_period)  
+    si_insertion_device_epu80_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_epu80_period, si_insertion_device_epu80_number_of_periods, si_insertion_device_epu80_maximum_horizontal_deflection_parameter)
+  
+    si_insertion_device_scw4t_name              = 'SCW4T'
+    si_insertion_device_scw4t_type              = 'SCW'
+    si_insertion_device_scw4t_period            = 60.0   # [mm]
+    si_insertion_device_scw4t_number_of_periods = 16
+    si_insertion_device_scw4t_length            = 100.0  # [cm]
+    si_insertion_device_scw4t_minimum_gap       = 22.0   # [mm]
+    si_insertion_device_scw4t_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_scw4t_maximum_vertical_field   = 4.00   # [T]
+    si_insertion_device_scw4t_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_scw4t_maximum_vertical_field, si_insertion_device_scw4t_period)
+    si_insertion_device_scw4t_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_scw4t_maximum_horizontal_field, si_insertion_device_scw4t_period)  
+    si_insertion_device_scw4t_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_scw4t_period, si_insertion_device_scw4t_number_of_periods, si_insertion_device_scw4t_maximum_horizontal_deflection_parameter)
+    
+
     
     '''Booster parameters'''
     

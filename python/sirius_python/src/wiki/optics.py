@@ -39,8 +39,8 @@ def sync_phase(q):
 
 def rf_energy_acceptance(q, energy, U0, h, alpha):
     '''RF energy acceptance [%] from overvoltage, ebeam energy [GeV], energy
-    loss U0 per turn [keV], harmonic number h and linear compaction factor
-    alpha.'''
+       loss U0 per turn [keV], harmonic number h and linear compaction factor
+       alpha.'''
     Fq = 0.0
     if q > 1.0:
         Fq = 2.0*(math.sqrt(q*q-1.0) - math.acos(1.0/q))
@@ -49,7 +49,7 @@ def rf_energy_acceptance(q, energy, U0, h, alpha):
 
 def natural_emittance(gamma, Jx, I2, I5):
     '''Natural emittance [nm·rad] from ebeam gamma factor, damping partition
-    number Jx, I2[1/m] and I5 [1/m].'''
+       number Jx, I2[1/m] and I5 [1/m].'''
     emitt = const.Cq * gamma*gamma*I5/(Jx*I2) * 1e9
     return emitt
 
@@ -69,12 +69,12 @@ def revolution_frequency(revolution_period):
 
 def rf_frequency(revolution_frequency, harmonic_number):
     '''RF frequency [MHz] from revolution frequency [MHz] and harmonic
-    number.'''
+       number.'''
     return revolution_frequency * harmonic_number
 
 def number_of_electrons(current, revolution_period):
     '''Number of electrons from beam current [mA] and revolution
-    period [μs].'''
+       period [μs].'''
     return (current/1e3) * (revolution_period/1e6) / const.electron_charge
 
 def overvoltage(rf_voltage, U0):
@@ -99,12 +99,12 @@ def frequency_from_tune(revolution_frequency, tune):
 
 def damping_time(energy, I2, J, circumference):
     '''Radiation damping time [ms] from beam energy [GeV], radiation
-    integral I2 [1/m], damping partition number and circumference [m].'''
+       integral I2 [1/m], damping partition number and circumference [m].'''
     return 1000 * circumference / (const.Ca*math.pow(energy, 3)*I2*J)
 
 def radiation_power(current, U0):
     '''Radiation power [kW] from beam current [mA] and
-    energy loss per turn [keV].'''
+       energy loss per turn [keV].'''
     return U0 * current / 1000
 
 def rf_wavelength(frequency):
@@ -117,12 +117,23 @@ def slip_factor(alpha, gamma):
 
 def bunch_length(slip_factor, energy_spread, synchrotron_frequency):
     '''Natural bunch length [mm] from slip factor, natural energy spread [%],
-    synchrotron frequency [kHz].'''
+       synchrotron frequency [kHz].'''
     angular_synchrotron_frequency = 2 * math.pi * synchrotron_frequency
     return (const.light_speed * abs(slip_factor) * energy_spread/100 /
             (1e3*angular_synchrotron_frequency)) * 1000
 
 def bunch_duration(bunch_length, beta):
     '''Bunch lenth in time units [ps] from bunch length [mm] and beta
-    factor.'''
+       factor.'''
     return 1e9 * bunch_length / beta / const.light_speed
+
+def id_deflection_parameter(field, period):
+    '''insertion device deflection parameter from field [T] and period [mm]'''
+    return 1e-9 * period * field * const.light_speed / const.electron_rest_energy_MeV / (2*math.pi)
+
+def id_mean_power(energy, current, period, nr_periods, k):
+    '''insertion device mean power from beam energy [GeV], current [mA], ID period [mm], ID nr periods and k
+       see Handbook of Acc. Physics, eq.(14), pg 189'''
+    cst = math.pi * 1e9 * const.rad_cgamma * (const.electron_rest_energy_MeV/1000)**2
+    return (cst * energy * k**2 * nr_periods / (period/1000.0))/1000.0
+    

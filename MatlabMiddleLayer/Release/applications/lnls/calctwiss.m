@@ -13,26 +13,29 @@ function r = calctwiss(varargin)
 global THERING;
 
 np1_flag = false;
-
-if isempty(varargin)
-    the_ring = THERING;
-else
-    for i=1:length(varargin)
-        if iscell(varargin{i})
-            the_ring = varargin{i};
-        elseif ischar(varargin{i})
-            if strcmpi(varargin{i}, 'N+1')
-                np1_flag = true;
-            end
+elements = [];
+the_ring = THERING;
+for i=1:length(varargin)
+    if iscell(varargin{i})
+        the_ring = varargin{i};
+    elseif ischar(varargin{i})
+        if strcmpi(varargin{i}, 'N+1')
+            np1_flag = true;
         end
+    elseif isnumeric(varargin{i})
+        elements = varargin{i};
     end
 end
 
-if np1_flag
-    [TD, tune, chrom] = twissring(the_ring,0,1:length(the_ring)+1, 'chrom',1e-8);
-else
-    [TD, tune, chrom] = twissring(the_ring,0,1:length(the_ring), 'chrom',1e-8);
+if isempty(elements)
+    if np1_flag
+        element = 1:(length(the_ring)+1);
+    else
+        elements = 1:length(the_ring);
+    end
 end
+
+[TD, tune, chrom] = twissring(the_ring,0,elements, 'chrom',1e-8);
 
 for i=1:length(TD)
     the_ring{i}.Twiss = TD(i);
