@@ -1,4 +1,4 @@
-function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limit, func)
+function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limit, scale, func)
 
 %% function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limit)
 %
@@ -14,6 +14,9 @@ function f  = genetic_operator(parent_chromosome, M, V, mu, mum, l_limit, u_limi
 % mum - distribution index for mutation (read the enclosed pdf file)
 % l_limit - a vector of lower limit for the corresponding decsion variables
 % u_limit - a vector of upper limit for the corresponding decsion variables
+% scale - when performing mutation, the algorithm scales the value of the
+% mutation with the lower and upper limits of the variables. This scale is
+% an multiplicative control of this range.
 %
 % The genetic operation is performed only on the decision variables, that
 % is the first V elements in the chromosome vector.
@@ -171,7 +174,7 @@ for i = 1 : N
                     delta(j) = 1 - (2*(1 - r(j)))^(1/(mum+1));
                 end
                 % Generate the corresponding child element.
-                child_3(j) = child_3(j) + delta(j);
+                child_3(j) = child_3(j) + scale*(u_limit(j)-l_limit(j))*delta(j);
                 % Make sure that the generated element is within the decision
                 % space.
                 if child_3(j) > u_limit(j)
