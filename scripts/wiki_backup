@@ -5,7 +5,7 @@ BACKUPDEST=lnls209-linux
 BASEDIR=/home/virtualbox
 WIKIDIR=fac-wiki
 DISKNAME=fac-wiki.vdi
-USERNAME=afonso
+USERNAME=`whoami`
 CLEANSCRIPT=wiki_clean_backup
 NBACKUPS=5
 
