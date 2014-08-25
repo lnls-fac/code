@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 '''
-Sirius01
-====================
-Date: 2014-08-12
+Date: 2014-08-20
 
-Storage ring:    V00B00   - This lattice/optics mode corresponds to the previous V500_AC10.5
-Booster:         V810OPT2 -  
+Storage ring:   V01-C00   
+                V01: separate sextupoles families (SD1 -> SD1A, SD1B, etc)
+                C00: new low betax at short straights, new moga optimization.
+
+Booster:        V810-OPT2  
 '''
 
 import optics
@@ -84,28 +85,30 @@ class ParameterDefinitions(object):
         si_beam_gamma_factor,
         si_BC_dipole_bending_radius)
 
-    si_optics_mode = 'B00'
-    si_horizontal_betatron_tune = 46.179867828110417
-    si_vertical_betatron_tune = 14.149994739104255
+
+    si_optics_mode = "C00"
+    si_synchrotron_tune_from_dipoles = 4.364436028401864E-03
+    si_synchrotron_tune              = 4.364436028401864E-03
+    si_horizontal_betatron_tune = 4.813860814231471E+01
+    si_vertical_betatron_tune   = 1.320733867979753E+01
+    si_horizontal_chromaticity         = -4.330757974457811E-03
+    si_vertical_chromaticity           = -6.926578421939666E-01
+    si_horizontal_natural_chromaticity = -1.252309601795787E+02
+    si_vertical_natural_chromaticity   = -8.022172846011699E+01
+    si_horizontal_beam_size_at_center_long_straight_sections  = 7.009486798878925E+01 #[um]
+    si_horizontal_beam_size_at_center_short_straight_sections = 2.084762622184360E+01 #[um]
+    si_horizontal_beam_size_at_center_bc_dipoles              = 9.948943931676647E+00 #[um]
+    si_vertical_beam_size_at_center_long_straight_sections    = 3.214983743415169E+00 #[um]
+    si_vertical_beam_size_at_center_short_straight_sections   = 1.939167731203255E+00 #[um]
+    si_vertical_beam_size_at_center_bc_dipoles                = 3.996725872734588E+00 #[um]
+    si_horizontal_beam_divergence_at_center_long_straight_sections  = 3.915259575507898E+00 #[urad]
+    si_horizontal_beam_divergence_at_center_short_straight_sections = 1.316409860763686E+01 #[urad]
+    si_horizontal_beam_divergence_at_center_bc_dipoles              = 2.942299673538725E+01 #[urad]
+    si_vertical_beam_divergence_at_center_long_straight_sections    = 8.536265817057522E-01 #[urad]
+    si_vertical_beam_divergence_at_center_short_straight_sections   = 1.415244044631019E+00 #[urad]
+    si_vertical_beam_divergence_at_center_bc_dipoles                = 6.866611249310436E-01 #[urad]
     
-    si_horizontal_beam_size_at_center_long_straight_sections  = 68.751773951345939  # [um] calculated using analytical expression
-    si_horizontal_beam_size_at_center_short_straight_sections = 33.718654943446005  # [um]
-    si_horizontal_beam_size_at_center_bc_dipoles              = 11.056250696773693  # [um]
-    si_vertical_beam_size_at_center_long_straight_sections    = 3.041750355172871  # [um]
-    si_vertical_beam_size_at_center_short_straight_sections   = 1.444008428763601  # [um]
-    si_vertical_beam_size_at_center_bc_dipoles                = 4.016421176598540  # [um]
-    
-    si_horizontal_beam_divergence_at_center_long_straight_sections  = 4.105284385615102  # [urad] calculated using analytical expression
-    si_horizontal_beam_divergence_at_center_short_straight_sections = 8.370606258537984  # [urad]
-    si_horizontal_beam_divergence_at_center_bc_dipoles              = 26.577287542948945 # [urad]
-    si_vertical_beam_divergence_at_center_long_straight_sections    = 0.927905156926034  # [urad]
-    si_vertical_beam_divergence_at_center_short_straight_sections   = 1.954597898752207  # [urad]
-    si_vertical_beam_divergence_at_center_bc_dipoles                = 0.702729050910861  # [urad]
-    
-    si_horizontal_natural_chromaticity = -113.1198708037573
-    si_vertical_natural_chromaticity = -80.5026603600822
-    si_horizontal_chromaticity = 0
-    si_vertical_chromaticity = 0
+
     
     si_horizontal_betatron_frequency = optics.frequency_from_tune(
         si_revolution_frequency, si_horizontal_betatron_tune)
@@ -114,12 +117,12 @@ class ParameterDefinitions(object):
         si_revolution_frequency, si_vertical_betatron_tune)
 
     ''' DIPOLES ONLY '''
-    si_radiation_integral_I1_from_dipoles =  0.090315779996644     #[m]
-    si_radiation_integral_I2_from_dipoles =  0.433104068989975     #[1/m]
-    si_radiation_integral_I3_from_dipoles =  0.038257877157466     #[1/m^2]
-    si_radiation_integral_I4_from_dipoles = -0.137100015107741     #[1/m]
-    si_radiation_integral_I5_from_dipoles =  1.218542781664562e-05 #[1/m]
-    si_radiation_integral_I6_from_dipoles =  0.019201555654789     #[1/m]
+    si_radiation_integral_I1_from_dipoles = +8.799905562300937E-02 #[m]
+    si_radiation_integral_I2_from_dipoles = +4.331040689899748E-01 #[1/m]
+    si_radiation_integral_I3_from_dipoles = +3.825787715746642E-02 #[1/m^2]
+    si_radiation_integral_I4_from_dipoles = -1.331248659312025E-01 #[1/m]
+    si_radiation_integral_I5_from_dipoles = +1.176581653611004E-05 #[1/m]
+    si_radiation_integral_I6_from_dipoles = +1.800079309293100E-02 #[1/m]
     ''' IDs '''
     si_radiation_integral_I1_from_IDs =  0.0 #[m]
     si_radiation_integral_I2_from_IDs =  0.0 #[1/m]
@@ -223,9 +226,6 @@ class ParameterDefinitions(object):
         si_radiation_integral_I3, 
         si_radiation_integral_I4)
     
-    si_synchrotron_tune_from_dipoles = 0.004421565111775
-    si_synchrotron_tune              = 0.004421565111775
-    
     si_synchrotron_frequency_from_dipoles = optics.frequency_from_tune(
         si_revolution_frequency, si_synchrotron_tune_from_dipoles)
     si_synchrotron_frequency = optics.frequency_from_tune(
@@ -293,6 +293,135 @@ class ParameterDefinitions(object):
     si_dipoles_excitation_error_tolerance = 0.05 # [%]
     si_quadrupoles_excitation_error_tolerance = 0.05 # [%]
     si_sextupoles_excitation_error_tolerance = 0.05 # [%]
+    
+    ''' multipole errors for dipoles '''
+    si_reference_position_for_multipole_contribution_for_dipoles = 11.7 # [mm]
+    si_systematic_normal_6_pole_error_tolerance_for_dipoles  = -9.0e-5
+    si_systematic_normal_8_pole_error_tolerance_for_dipoles  =  3.0e-5
+    si_systematic_normal_10_pole_error_tolerance_for_dipoles =  1.0e-4
+    si_systematic_normal_12_pole_error_tolerance_for_dipoles = -8.0e-5
+    si_systematic_normal_14_pole_error_tolerance_for_dipoles =  6.0e-5
+    si_random_normal_6_pole_error_tolerance_for_dipoles      =  4.0e-5
+    si_random_normal_8_pole_error_tolerance_for_dipoles      =  4.0e-5
+    si_random_normal_10_pole_error_tolerance_for_dipoles     =  4.0e-5
+    si_random_normal_12_pole_error_tolerance_for_dipoles     =  4.0e-5
+    si_random_normal_14_pole_error_tolerance_for_dipoles     =  4.0e-5
+    si_random_normal_16_pole_error_tolerance_for_dipoles     =  4.0e-5
+    si_random_normal_18_pole_error_tolerance_for_dipoles     =  4.0e-5
+    si_random_skew_6_pole_error_tolerance_for_dipoles        =  1.0e-5
+    si_random_skew_8_pole_error_tolerance_for_dipoles        =  1.0e-5
+    si_random_skew_10_pole_error_tolerance_for_dipoles       =  1.0e-5
+    si_random_skew_12_pole_error_tolerance_for_dipoles       =  1.0e-5
+    si_random_skew_14_pole_error_tolerance_for_dipoles       =  1.0e-5
+    si_random_skew_16_pole_error_tolerance_for_dipoles       =  1.0e-5
+    si_random_skew_18_pole_error_tolerance_for_dipoles       =  1.0e-5
+    
+    ''' multipole errors for quadrupoles '''
+    si_reference_position_for_multipole_contribution_for_quadrupoles = 11.7 # [mm]
+    si_systematic_normal_6_pole_error_tolerance_for_quadrupoles  =  3.0e-8
+    si_systematic_normal_8_pole_error_tolerance_for_quadrupoles  =  1.0e-5
+    si_systematic_normal_10_pole_error_tolerance_for_quadrupoles = -2.0e-8
+    si_systematic_normal_12_pole_error_tolerance_for_quadrupoles = -3.0e-5
+    si_systematic_normal_20_pole_error_tolerance_for_quadrupoles =  8.0e-5    
+    si_random_normal_6_pole_error_tolerance_for_quadrupoles      =  4.0e-5
+    si_random_normal_8_pole_error_tolerance_for_quadrupoles      =  4.0e-5
+    si_random_normal_10_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_12_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_14_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_16_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_18_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_normal_20_pole_error_tolerance_for_quadrupoles     =  4.0e-5
+    si_random_skew_6_pole_error_tolerance_for_quadrupoles        =  1.0e-5
+    si_random_skew_8_pole_error_tolerance_for_quadrupoles        =  1.0e-5
+    si_random_skew_10_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_12_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_14_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_16_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_18_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    si_random_skew_20_pole_error_tolerance_for_quadrupoles       =  1.0e-5
+    
+    ''' multipole errors for sextupoles '''
+    si_reference_position_for_multipole_contribution_for_sextupoles = 11.7 # [mm]
+    si_systematic_normal_18_pole_error_tolerance_for_sextupoles =  4.0e-6
+    si_systematic_normal_30_pole_error_tolerance_for_sextupoles = -1.0e-7    
+    si_random_normal_8_pole_error_tolerance_for_sextupoles      =  4.0e-5
+    si_random_normal_10_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_12_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_14_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_16_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_18_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_20_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_22_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_normal_30_pole_error_tolerance_for_sextupoles     =  4.0e-5
+    si_random_skew_8_pole_error_tolerance_for_sextupoles        =  1.0e-5
+    si_random_skew_10_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_12_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_14_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_16_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_18_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_20_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_22_pole_error_tolerance_for_sextupoles       =  1.0e-5
+    si_random_skew_30_pole_error_tolerance_for_sextupoles       =  1.0e-5
+
+    ''' high frequency error tolerances '''
+    si_dipole_power_supplies_ripple_error_tolerance             =  20   # [ppm]
+    si_quadrupole_power_supplies_ripple_error_tolerance         =  20   # [ppm]    
+    si_sextupole_power_supplies_ripple_error_tolerance          =  20   # [ppm]
+    si_dipoles_vibration_amplitude_error_tolerance              =  6    # [nm]
+    si_quadrupoles_vibration_amplitude_error_tolerance          =  6    # [nm]
+    si_sextupoles_vibration_amplitude_error_tolerance           =  6    # [nm]
+    
+    ''' insertion devices '''
+    
+    si_insertion_device_ivu19_name              = 'IVU19'
+    si_insertion_device_ivu19_type              = 'IVU'
+    si_insertion_device_ivu19_period            = 19.0   # [mm]
+    si_insertion_device_ivu19_number_of_periods = 105
+    si_insertion_device_ivu19_length            = 200.0  # [cm]
+    si_insertion_device_ivu19_minimum_gap       = 4.5    # [mm]
+    si_insertion_device_ivu19_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_ivu19_maximum_vertical_field   = 1.28   # [T]
+    si_insertion_device_ivu19_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_ivu19_maximum_vertical_field, si_insertion_device_ivu19_period)
+    si_insertion_device_ivu19_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_ivu19_maximum_horizontal_field, si_insertion_device_ivu19_period)  
+    si_insertion_device_ivu19_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_ivu19_period, si_insertion_device_ivu19_number_of_periods, si_insertion_device_ivu19_maximum_horizontal_deflection_parameter)
+    
+    si_insertion_device_ivu25_name              = 'IVU25'
+    si_insertion_device_ivu25_type              = 'IVU'
+    si_insertion_device_ivu25_period            = 25.0   # [mm]
+    si_insertion_device_ivu25_number_of_periods = 80
+    si_insertion_device_ivu25_length            = 200.0  # [cm]
+    si_insertion_device_ivu25_minimum_gap       = 8.0    # [mm]
+    si_insertion_device_ivu25_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_ivu25_maximum_vertical_field   = 0.94   # [T]
+    si_insertion_device_ivu25_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_ivu25_maximum_vertical_field, si_insertion_device_ivu25_period)
+    si_insertion_device_ivu25_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_ivu25_maximum_horizontal_field, si_insertion_device_ivu25_period)  
+    si_insertion_device_ivu25_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_ivu25_period, si_insertion_device_ivu25_number_of_periods, si_insertion_device_ivu25_maximum_horizontal_deflection_parameter)
+    
+    si_insertion_device_epu80_name              = 'EPU80'
+    si_insertion_device_epu80_type              = 'EPU'
+    si_insertion_device_epu80_period            = 80.0   # [mm]
+    si_insertion_device_epu80_number_of_periods = 38
+    si_insertion_device_epu80_length            = 270.0  # [cm]
+    si_insertion_device_epu80_minimum_gap       = 16.0   # [mm]
+    si_insertion_device_epu80_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_epu80_maximum_vertical_field   = 0.90   # [T]
+    si_insertion_device_epu80_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_epu80_maximum_vertical_field, si_insertion_device_epu80_period)
+    si_insertion_device_epu80_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_epu80_maximum_horizontal_field, si_insertion_device_epu80_period)  
+    si_insertion_device_epu80_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_epu80_period, si_insertion_device_epu80_number_of_periods, si_insertion_device_epu80_maximum_horizontal_deflection_parameter)
+  
+    si_insertion_device_scw4t_name              = 'SCW4T'
+    si_insertion_device_scw4t_type              = 'SCW'
+    si_insertion_device_scw4t_period            = 60.0   # [mm]
+    si_insertion_device_scw4t_number_of_periods = 16
+    si_insertion_device_scw4t_length            = 100.0  # [cm]
+    si_insertion_device_scw4t_minimum_gap       = 22.0   # [mm]
+    si_insertion_device_scw4t_maximum_horizontal_field = 0.0    # [T]
+    si_insertion_device_scw4t_maximum_vertical_field   = 4.00   # [T]
+    si_insertion_device_scw4t_maximum_horizontal_deflection_parameter = optics.id_deflection_parameter(si_insertion_device_scw4t_maximum_vertical_field, si_insertion_device_scw4t_period)
+    si_insertion_device_scw4t_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_scw4t_maximum_horizontal_field, si_insertion_device_scw4t_period)  
+    si_insertion_device_scw4t_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_scw4t_period, si_insertion_device_scw4t_number_of_periods, si_insertion_device_scw4t_maximum_horizontal_deflection_parameter)
+    
+
     
     '''Booster parameters'''
     

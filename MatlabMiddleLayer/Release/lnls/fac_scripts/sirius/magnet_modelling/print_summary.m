@@ -97,10 +97,10 @@ fprintf(fp, '%-10s', 'M21');     fprintf(fp, '%-22s', num2str(M_fieldmap(2,1), '
 fprintf(fp, '%-10s', 'M22');     fprintf(fp, '%-22s', num2str(M_fieldmap(2,2), '%+9.6f'));  fprintf(fp, '%-22s', num2str(M_atmodel(2,2), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(M_atmodel(2,2) - M_fieldmap(2,2))/M_fieldmap(2,2), '%+9.6f')); fprintf(fp, '\n');
 xi  = fieldmap_track.in_pts(:,1)';
 pxf = fieldmap_track.out_pts(:,2)';
-kick_coeffs_rk = mypolyfit(xi,pxf,parms.perp_grid.monomials);
+kick_coeffs_rk = lnls_polyfit(xi,pxf,parms.perp_grid.monomials);
 xi  = atmodel_track.in_pts(:,1)';
 pxf = atmodel_track.out_pts(:,2)';
-kick_coeffs_at = mypolyfit(xi,pxf,parms.perp_grid.monomials);
+kick_coeffs_at = lnls_polyfit(xi,pxf,parms.perp_grid.monomials);
 fprintf(fp, '%-10s', 'T211');     fprintf(fp, '%-22s', num2str(kick_coeffs_rk(3), '%+9.6f'));  fprintf(fp, '%-22s', num2str(kick_coeffs_at(3), '%+9.6f')); fprintf(fp, '%-22s', num2str(100*(kick_coeffs_at(3) - kick_coeffs_rk(3))/kick_coeffs_rk(3), '%+9.6f')); fprintf(fp, '\n');
 
 fprintf(fp, '\n');
@@ -115,8 +115,8 @@ fprintf(fp, strfmt, 'max. abs. delta px:'); fprintf(fp, [num2str(1e6*(max(abs(fi
 fprintf(fp, strfmt, 'max. abs. delta dl:'); fprintf(fp, [num2str(1e3*(max(abs(fieldmap_track.out_pts(:,6) - atmodel_track.out_pts(:,6)))), '%6.2f'), ' mm']); fprintf(fp, '\n');
 fprintf(fp, strfmt, 'fitted multipoles:'); fprintf(fp, '%-10s', '[order]'); fprintf(fp, '%-22s', '[runge-kutta]'); fprintf(fp, '%-22s', '[at-model]'); fprintf(fp, '%-22s', '[error %]'); fprintf(fp, '\n');
 x = fieldmap_track.rx;
-rk_data = fieldmap_track.out_pts(:,2); rk_p = mypolyfit(x, rk_data, parms.perp_grid.monomials);
-at_data = atmodel_track.out_pts(:,2); at_p = mypolyfit(x, at_data, parms.perp_grid.monomials);
+rk_data = fieldmap_track.out_pts(:,2); rk_p = lnls_polyfit(x, rk_data, parms.perp_grid.monomials);
+at_data = atmodel_track.out_pts(:,2); at_p = lnls_polyfit(x, at_data, parms.perp_grid.monomials);
 for i=1:size(rk_traj.by_polynom,2)
     x_power = parms.perp_grid.monomials(i);
     if (x_power == 0), units1 = ''; elseif (x_power == 1), units1 = '1/m'; else units1 = ['1/m^' int2str(x_power)]; end;
