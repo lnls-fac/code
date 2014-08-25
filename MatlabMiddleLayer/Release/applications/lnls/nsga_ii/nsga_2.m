@@ -157,7 +157,7 @@ for i = 1 : gen
     mum = 20;
     offspring_chromosome = ...
         genetic_operator(parent_chromosome, ...
-        M, V, mu, mum, min_range, max_range, func);
+        M, V, mu, mum, min_range, max_range, param.mutation_scale, func);
 
     % Intermediate population
     % Intermediate population is the combined population of parents and

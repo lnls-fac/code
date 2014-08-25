@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./call_infinite_loop
+
+touch done
