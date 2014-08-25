@@ -421,7 +421,18 @@ class ParameterDefinitions(object):
     si_insertion_device_scw4t_maximum_vertical_deflection_parameter   = optics.id_deflection_parameter(si_insertion_device_scw4t_maximum_horizontal_field, si_insertion_device_scw4t_period)  
     si_insertion_device_scw4t_maximum_power     = optics.id_mean_power(si_beam_energy, si_beam_current, si_insertion_device_scw4t_period, si_insertion_device_scw4t_number_of_periods, si_insertion_device_scw4t_maximum_horizontal_deflection_parameter)
     
-
+    ''' correction system '''
+    si_number_of_beam_position_monitors = 200
+    si_number_of_horizontal_slow_dipole_correctors = 160
+    si_number_of_vertical_slow_dipole_correctors = 120
+    si_number_of_skew_correctors = 40
+    si_number_of_horizontal_fast_dipole_correctors = 80
+    si_number_of_vertical_fast_dipole_correctors = 80
+    si_horizontal_slow_dipole_corrector_maximum_strength = 250   # [urad]
+    si_vertical_slow_dipole_corrector_maximum_strength = 250     # [urad]
+    si_horizontal_fast_dipole_corrector_maximum_strength = 25    # [urad]
+    si_vertical_fast_dipole_corrector_maximum_strength = 25      # [urad]
+    si_skew_corrector_maximum_integrated_strength = 0.003 # [1/m]
     
     '''Booster parameters'''
     
