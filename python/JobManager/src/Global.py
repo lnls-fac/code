@@ -9,7 +9,7 @@ import psutil
 import datetime
 
 #Address = ('fernando-linux', 8804)
-Address = ('lnls210-linux', 8804)
+Address = ('lnls82-linux', 8804)
 VERSION = '0.0.0'.encode('utf-8')
 MAX_BLOCK_LEN = 1024*4
 PICKLE_PROTOCOL = 3
