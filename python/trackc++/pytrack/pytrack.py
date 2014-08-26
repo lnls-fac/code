@@ -4,7 +4,7 @@ import subprocess
 import sys
 import os
 
-default_track_version = './trackc++-release'
+#default_track_version = './trackc++-release'
 default_track_version = 'trackc++'
 
 if len(sys.argv) == 1:
@@ -21,6 +21,40 @@ with open(input_file) as f:
     content = f.readlines()
 for line in content:
     exec(line)
+
+
+try:
+	track_linepass_run
+except:
+	track_linepass_run = False
+if linepass_run:
+	def track_linepass(track_version   = default_track_version,
+		     flat_filename   = track_linepass_flatfilename,
+		     energy          = ebeam_energy,
+       		     harmonic_number = harmonic_number,
+	     	     cavity_state    = cavity_state,
+	     	     radiation_state = radiation_state,
+		     vchamber_state  = vchamber_state,
+	     	     start_element   = track_linepass_start_element,
+		     rx0             = track_linepass_rx0,
+                     px0             = track_linepass_px0,
+		     ry0             = track_linepass_ry0,
+                     py0             = track_linepass_py0,
+		     de0             = track_linepass_de0,
+                     dl0             = track_linepass_dl0):
+	
+		args = [track_version, 'track_linepass', 
+			str(track_flat_filename),
+			str(energy), 
+			str(harmonic_number), 
+			str(cavity_state),
+			str(radiation_state),
+			str(vchamber_state),
+			str(track_linepass_rx0), str(track_linepass_px0),
+			str(track_linepass_ry0), str(track_linepass_py0),
+			str(track_linepass_de0), str(track_linepass_dl0),
+			]
+		subprocess.call(args)
 
 
 try:
@@ -44,7 +78,7 @@ if dynap_xy_run:
 	     	     y_min           = dynap_xy_y_min,
 	     	     y_max           = dynap_xy_y_max):
 	
-		subprocess.call([track_version, 'dynap_xy', 
+		args = [track_version, 'dynap_xy', 
 			str(flat_filename),
 			str(energy), 
 			str(harmonic_number), 
@@ -56,7 +90,7 @@ if dynap_xy_run:
 			str(x_nrpts), str(x_min), str(x_max),
 			str(y_nrpts), str(y_min), str(y_max),
 			]
-		)
+		subprocess.call(args)
 
 try:
 	dynap_ex_run
@@ -139,9 +173,13 @@ if __name__ == "__main__":
 	if dynap_ex_run:
 		dynap_ex()
 
-	''' SYNAP_MA '''
+	''' DYNAP_MA '''
 	if dynap_ma_run:
 		dynap_ma()
+
+	''' LINEPASS '''
+	if track_linepass_run:
+		track_linepass()
 
 
 	

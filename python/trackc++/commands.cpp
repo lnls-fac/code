@@ -11,9 +11,9 @@
 #include <cstdlib>
 #include <iostream>
 
-int cmd_dynap_xy(int argc, char* argv[]) {
+int cmd_dynap_xy(const std::vector<std::string>& args) {
 
-	if (argc != 16) {
+	if (args.size() != 16) {
 		std::cerr << "dynap_xy: invalid number of arguments!" << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -21,20 +21,20 @@ int cmd_dynap_xy(int argc, char* argv[]) {
 	std::cout << std::endl;
 	std::cout << "[cmd_dynap_xy]" << std::endl << std::endl;
 
-	std::string  flat_filename(argv[2]);
-	double       ring_energy     = std::atof(argv[3]);
-	unsigned int harmonic_number = std::atoi(argv[4]);
-	std::string  cavity_state(argv[5]);
-	std::string  radiation_state(argv[6]);
-	std::string  vchamber_state(argv[7]);
-	double       de = std::atof(argv[8]);
-	unsigned int nr_turns = std::atoi(argv[9]);
-	unsigned int x_nrpts = std::atoi(argv[10]);
-	double       x_min = std::atof(argv[11]);
-	double       x_max = std::atof(argv[12]);
-	unsigned int y_nrpts = std::atoi(argv[13]);
-	double       y_min = std::atof(argv[14]);
-	double       y_max = std::atof(argv[15]);
+	std::string  flat_filename(args[2]);
+	double       ring_energy     = std::atof(args[3].c_str());
+	unsigned int harmonic_number = std::atoi(args[4].c_str());
+	std::string  cavity_state(args[5]);
+	std::string  radiation_state(args[6]);
+	std::string  vchamber_state(args[7]);
+	double       de = std::atof(args[8].c_str());
+	unsigned int nr_turns = std::atoi(args[9].c_str());
+	unsigned int x_nrpts = std::atoi(args[10].c_str());
+	double       x_min = std::atof(args[11].c_str());
+	double       x_max = std::atof(args[12].c_str());
+	unsigned int y_nrpts = std::atoi(args[13].c_str());
+	double       y_min = std::atof(args[14].c_str());
+	double       y_max = std::atof(args[15].c_str());
 
 	print_header(stdout);
 	std::cout << std::endl;
@@ -92,9 +92,9 @@ int cmd_dynap_xy(int argc, char* argv[]) {
 
 }
 
-int cmd_dynap_ex(int argc, char* argv[]) {
+int cmd_dynap_ex(const std::vector<std::string>& args) {
 
-	if (argc != 16) {
+	if (args.size() != 16) {
 		std::cerr << "dynap_ex: invalid number of arguments!" << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -102,20 +102,20 @@ int cmd_dynap_ex(int argc, char* argv[]) {
 	std::cout << std::endl;
 	std::cout << "[cmd_dynap_ex]" << std::endl << std::endl;
 
-	std::string  flat_filename(argv[2]);
-	double       ring_energy      = std::atof(argv[3]);
-	unsigned int harmonic_number = std::atoi(argv[4]);
-	std::string  cavity_state(argv[5]);
-	std::string  radiation_state(argv[6]);
-	std::string  vchamber_state(argv[7]);
-	double       y = std::atof(argv[8]);
-	unsigned int nr_turns = std::atoi(argv[9]);
-	unsigned int e_nrpts = std::atoi(argv[10]);
-	double       e_min = std::atof(argv[11]);
-	double       e_max = std::atof(argv[12]);
-	unsigned int x_nrpts = std::atoi(argv[13]);
-	double       x_min = std::atof(argv[14]);
-	double       x_max = std::atof(argv[15]);
+	std::string  flat_filename(args[2]);
+	double       ring_energy     = std::atof(args[3].c_str());
+	unsigned int harmonic_number = std::atoi(args[4].c_str());
+	std::string  cavity_state(args[5]);
+	std::string  radiation_state(args[6]);
+	std::string  vchamber_state(args[7]);
+	double       y = std::atof(args[8].c_str());
+	unsigned int nr_turns = std::atoi(args[9].c_str());
+	unsigned int e_nrpts = std::atoi(args[10].c_str());
+	double       e_min = std::atof(args[11].c_str());
+	double       e_max = std::atof(args[12].c_str());
+	unsigned int x_nrpts = std::atoi(args[13].c_str());
+	double       x_min = std::atof(args[14].c_str());
+	double       x_max = std::atof(args[15].c_str());
 
 	print_header(stdout);
 	std::cout << std::endl;
@@ -172,9 +172,9 @@ int cmd_dynap_ex(int argc, char* argv[]) {
 
 }
 
-int cmd_dynap_ma(int argc, char* argv[]) {
+int cmd_dynap_ma(const std::vector<std::string>& args) {
 
-	if (argc < 15) {
+	if (args.size() < 15) {
 		std::cerr << "dynap_ex: invalid number of arguments!" << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -182,20 +182,20 @@ int cmd_dynap_ma(int argc, char* argv[]) {
 	std::cout << std::endl;
 	std::cout << "[cmd_dynap_ma]" << std::endl << std::endl;
 
-	std::string  flat_filename(argv[2]);
-	double       ring_energy      = std::atof(argv[3]);
-	unsigned int harmonic_number = std::atoi(argv[4]);
-	std::string  cavity_state(argv[5]);
-	std::string  radiation_state(argv[6]);
-	std::string  vchamber_state(argv[7]);
-	unsigned int nr_turns = std::atoi(argv[8]);
-	double       y0    = std::atof(argv[9]);
-	double       e0    = std::atof(argv[10]);
-	double       e_tol = std::atof(argv[11]);
-	double       s_min = std::atof(argv[12]);
-	double       s_max = std::atof(argv[13]);
+	std::string  flat_filename(args[2]);
+	double       ring_energy      = std::atof(args[3].c_str());
+	unsigned int harmonic_number = std::atoi(args[4].c_str());
+	std::string  cavity_state(args[5].c_str());
+	std::string  radiation_state(args[6].c_str());
+	std::string  vchamber_state(args[7].c_str());
+	unsigned int nr_turns = std::atoi(args[8].c_str());
+	double       y0    = std::atof(args[9].c_str());
+	double       e0    = std::atof(args[10].c_str());
+	double       e_tol = std::atof(args[11].c_str());
+	double       s_min = std::atof(args[12].c_str());
+	double       s_max = std::atof(args[13].c_str());
 	std::vector<std::string> fam_names;
-	for(int i=14; i<argc; ++i) fam_names.push_back(argv[i]);
+	for(unsigned int i=14; i<args.size(); ++i) fam_names.push_back(args[i]);
 
 
 	print_header(stdout);
@@ -253,9 +253,9 @@ int cmd_dynap_ma(int argc, char* argv[]) {
 
 }
 
-int cmd_track_linepass(int argc, char* argv[]) {
+int cmd_track_linepass(const std::vector<std::string>& args) {
 
-	if (argc != 15) {
+	if (args.size() != 15) {
 		std::cerr << "cmd_track_linepass: invalid number of arguments!" << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -263,19 +263,19 @@ int cmd_track_linepass(int argc, char* argv[]) {
 	std::cout << std::endl;
 	std::cout << "[cmd_track_linepass]" << std::endl << std::endl;
 
-	std::string  flat_filename(argv[2]);
-	double       ring_energy     = std::atof(argv[3]);
-	unsigned int harmonic_number = std::atoi(argv[4]);
-	std::string  cavity_state(argv[5]);
-	std::string  radiation_state(argv[6]);
-	std::string  vchamber_state(argv[7]);
-	unsigned int start_element = std::atoi(argv[8]);
-	double       rx0 = std::atof(argv[9]);
-	double       px0 = std::atof(argv[10]);
-	double       ry0 = std::atof(argv[11]);
-	double       py0 = std::atof(argv[12]);
-	double       de0 = std::atof(argv[13]);
-	double       dl0 = std::atof(argv[14]);
+	std::string  flat_filename(args[2]);
+	double       ring_energy     = std::atof(args[3].c_str());
+	unsigned int harmonic_number = std::atoi(args[4].c_str());
+	std::string  cavity_state(args[5]);
+	std::string  radiation_state(args[6]);
+	std::string  vchamber_state(args[7]);
+	unsigned int start_element = std::atoi(args[8].c_str());
+	double       rx0 = std::atof(args[9].c_str());
+	double       px0 = std::atof(args[10].c_str());
+	double       ry0 = std::atof(args[11].c_str());
+	double       py0 = std::atof(args[12].c_str());
+	double       de0 = std::atof(args[13].c_str());
+	double       dl0 = std::atof(args[14].c_str());
 
 	print_header(stdout);
 	std::cout << std::endl;
