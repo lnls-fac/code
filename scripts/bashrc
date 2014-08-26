@@ -6,7 +6,7 @@
 export PYTHONPATH=/home/fac_files/code/python/sirius_python/src:/home/fac_files/code/control/modules/CustomPlot/src:/home/fac_files/code/python/PyTasks
 
 # FAC SCRIPTS
-export PATH=$PATH:/home/fac_files/code/scripts
+export PATH=$PATH:/home/fac_files/code/scripts:/home/fac_files/code/python/JobManager/src
 
 # USERS BIN
 export PATH=$PATH:~/bin/
