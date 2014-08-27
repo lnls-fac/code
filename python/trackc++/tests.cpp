@@ -162,102 +162,100 @@ int test_dynap_xy(const Accelerator& accelerator) {
 
 int test_cmd_track_linepass() {
 
-	char *argv[] = {
-			(char*)"trackc++",
-			(char*)"track_linepass",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
-			(char*)"3e9",
-			(char*)"864",
-			(char*)"on",
-			(char*)"on",
-			(char*)"on",
-			(char*)"0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			(char*)"0.0",
-			nullptr};
-	int argc = 0; while(argv[argc] != nullptr) argc++;
-	return cmd_track_linepass(argc,argv);
+	std::vector<std::string> args = {
+			"trackc++",
+			"track_linepass",
+			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt",
+			"3e9",
+			"864",
+			"on",
+			"on",
+			"on",
+			"0",
+			"0.0",
+			"0.0",
+			"0.0",
+			"0.0",
+			"0.0",
+			"0.0"
+	};
+
+	return cmd_track_linepass(args);
 
 }
 
 int test_cmd_dynap_xy() {
 
-	char *argv[] = {
-			(char*)"trackc++",
-			(char*)"dynap_xy",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_with_ids_in.txt",
-			(char*)"3e9",
-			(char*)"864",
-			(char*)"on",
-			(char*)"on",
-			(char*)"on",
-			(char*)"0.0",
-			(char*)"5000",
-			(char*)"4",
-			(char*)"-0.015",
-			(char*)"+0.015",
-			(char*)"4",
-			(char*)"0.0",
-			(char*)"+0.0035",
-			nullptr};
-	int argc = 0; while(argv[argc] != nullptr) argc++;
-	return cmd_dynap_xy(argc,argv);
+	std::vector<std::string> args = {
+			"trackc++",
+			"dynap_xy",
+			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
+			"3e9",
+			"864",
+			"on",
+			"on",
+			"on",
+			"0.0",
+			"5000",
+			"4",
+			"-0.015",
+			"+0.015",
+			"4",
+			"0.0",
+			"+0.0035"
+	};
+	return cmd_dynap_xy(args);
 
 }
 
 
 int test_cmd_dynap_ex() {
 
-	char *argv[] = {
-			(char*)"trackc++",
-			(char*)"dynap_ex",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_in.txt",
-			(char*)"3e9",
-			(char*)"864",
-			(char*)"on",
-			(char*)"on",
-			(char*)"on",
-			(char*)"1e-6",
-			(char*)"5000",
-			(char*)"2",
-			(char*)"-0.05",
-			(char*)"+0.05",
-			(char*)"2",
-			(char*)"-0.015",
-			(char*)"+0.015",
-			nullptr};
-	int argc = 0; while(argv[argc] != nullptr) argc++;
-	return cmd_dynap_xy(argc,argv);
+	std::vector<std::string> args = {
+			"trackc++",
+			"dynap_ex",
+			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt",
+			"3e9",
+			"864",
+			"on",
+			"on",
+			"on",
+			"1e-6",
+			"5000",
+			"2",
+			"-0.05",
+			"+0.05",
+			"2",
+			"-0.015",
+			"+0.015"
+	};
+	return cmd_dynap_xy(args);
 
 }
 
 
 int test_cmd_dynap_ma() {
 
-	char *argv[] = {
-			(char*)"trackc++",
-			(char*)"dynap_ma",
-			(char*)"/home/fac_files/code/python/trackc++/pytrack/flat_file_v500_ac10_5_bare_with_ids_in.txt",
-			(char*)"3e9",
-			(char*)"864",
-			(char*)"on",
-			(char*)"on",
-			(char*)"on",
-			(char*)"5000",
-			(char*)"30e-6",   // y0
-			(char*)"0.01",    // e0
-			(char*)"0.0001",  // tol_e
-			(char*)"0",       // s_min [m]
-			(char*)"30",      // s_max [m]
-			(char*)"qaf",
-			(char*)"qad",
+	std::vector<std::string> args = {
+			"trackc++",
+			"dynap_ma",
+			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
+			"3e9",
+			"864",
+			"on",
+			"on",
+			"on",
+			"5000",
+			"30e-6",   // y0
+			"0.01",    // e0
+			"0.0001",  // tol_e
+			"0",       // s_min [m]
+			"30",      // s_max [m]
+			"qaf",
+			"qad",
 			nullptr};
-	int argc = 0; while(argv[argc] != nullptr) argc++;
-	return cmd_dynap_ma(argc,argv);
+
+	return cmd_dynap_ma(args);
 
 }
 
@@ -271,19 +269,19 @@ int test_kicktable(Accelerator& accelerator) {
 
 }
 
-int cmd_tests(int argc, char* argv[]) {
+int cmd_tests(const std::vector<std::string>& args) {
 
 
-	Accelerator accelerator;
+	//Accelerator accelerator;
 	//sirius_v500(accelerator.lattice);
 	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
-	Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_ff.txt", accelerator);
-	if (status != Status::success) {
-		return EXIT_FAILURE;
-	}
-	accelerator.lattice[15].nr_steps = 1;
-	accelerator.radiation_on = true;
-	accelerator.cavity_on = true;
+	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_ff.txt", accelerator);
+	//if (status != Status::success) {
+	//	return EXIT_FAILURE;
+	//}
+	//accelerator.lattice[15].nr_steps = 1;
+	//accelerator.radiation_on = true;
+	//accelerator.cavity_on = true;
 	//accelerator.radiation_on = false;
 	//accelerator.cavity_on = false;
 
@@ -298,7 +296,7 @@ int cmd_tests(int argc, char* argv[]) {
 
 	//test_printlattice(accelerator);
 	//test_findm66(accelerator);
-	test_linepass(accelerator);
+	//test_linepass(accelerator);
 	//test_ringpass(accelerator);
 	//test_linepass_tpsa(the_ring);
 	//test_findorbit6(the_ring);
@@ -307,7 +305,7 @@ int cmd_tests(int argc, char* argv[]) {
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
 	//test_cmd_dynap_ma();
-	//test_cmd_track_linepass();
+	test_cmd_track_linepass();
 	//test_kicktable(accelerator);
 
 	return 0;

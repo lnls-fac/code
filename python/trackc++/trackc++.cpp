@@ -53,11 +53,16 @@ int main(int argc, char *argv[]) {
 		print_header (stdout);
 		return EXIT_SUCCESS;
 	};
-	std::string cmd(argv[1]);
-	if (cmd == "tests")    return cmd_tests(argc, argv);
-	if (cmd == "dynap_xy") return cmd_dynap_xy(argc, argv);
-	if (cmd == "dynap_ex") return cmd_dynap_ex(argc, argv);
-	if (cmd == "dynap_ma") return cmd_dynap_ma(argc, argv);
+
+	std::vector<std::string> args;
+	for(int i=0; i<argc; ++i) args.push_back(std::string(argv[i]));
+
+	std::string cmd(args[1]);
+	if (cmd == "tests")    return cmd_tests(args);
+	if (cmd == "dynap_xy") return cmd_dynap_xy(args);
+	if (cmd == "dynap_ex") return cmd_dynap_ex(args);
+	if (cmd == "dynap_ma") return cmd_dynap_ma(args);
+	if (cmd == "linepass") return cmd_track_linepass(args);
 	std::cerr << "trackc++: invalid command!" << std::endl;
 	return EXIT_FAILURE;
 }

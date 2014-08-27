@@ -11,7 +11,8 @@ sexts   = ['sa1', 'sb1']
 allfams = bends + quads + mrkrs + sexts
 
 
-flat_filename         = 'flat_file_v500_ac10_5_bare_with_ids_in.txt'
+#flat_filename         = 'flat_file_v500_ac10_5_bare_with_ids_in.txt'
+flat_filename         = 'sirius_v500_ac10_5_bare_in.txt'
 
 dynap_xy_run          = True
 dynap_xy_flatfilename = flat_filename
