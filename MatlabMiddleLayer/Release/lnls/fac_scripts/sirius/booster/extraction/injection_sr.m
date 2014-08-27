@@ -1,4 +1,4 @@
-function [outSR Pert] = injection_sr(storage_ring, transfer_line, inj_bun, param,err)
+function [outSR, Pert] = injection_sr(storage_ring, transfer_line, inj_bun, param,err)
 
 n_part= param.n_part;
 
@@ -123,7 +123,7 @@ elseif strcmp(param.sr.mode,'pmm')
     pmm_polB = param.sr.pmm.polb*(1+err.pmm_amp);
     storage_ring{pmm_ind}.PolynomB = pmm_polB;
     storage_ring{pmm_ind}.PolynomA = pmm_polB*0;
-    storage_ring{pmm_ind}.MaxOrder = length(pmm_polB);
+    storage_ring{pmm_ind}.MaxOrder = length(pmm_polB)+1;
     
     Rout = zeros(6,n_part,param.sr.nturns+2);
     

@@ -14,7 +14,7 @@ import struct
 import pickle
 import Global
 
-TEMPFOLDER    = '/var/tmp/JobManagerTempFolders'
+TEMPFOLDER    = os.path.join(os.path.split(Global.__file__)[0],'.TempFolders')
 FOLDERFORMAT  = 'jobid-{0:08d}'
 JOBFILE       = 'pid-{0:d}'
 JOBDONE       = 'done'
@@ -28,6 +28,7 @@ Address     = Global.Address
 VERSION     = Global.VERSION
 MAX_BLOCK_LEN = Global.MAX_BLOCK_LEN
 PICKLE_PROTOCOL = Global.PICKLE_PROTOCOL
+WAIT_TIME = Global.WAIT_TIME
 SET_STRUCT_PARAM = Global.SET_STRUCT_PARAM
 
 class SocketManager:
@@ -152,9 +153,6 @@ def deal_with_configs():
         if proc.get_nice() != MyConfigs.niceness:
             proc.set_nice(MyConfigs.niceness)
             
-    if MyConfigs.shutdown:
-        shutdown()
-    
     return allowed
 
 def submit_jobs(NewQueue):
@@ -256,11 +254,14 @@ def main():
         if ok:
             deal_with_results(ResQueue)
 
-        time.sleep(10)
+        time.sleep(WAIT_TIME)
 
         ok, data = handle_request('GIME_CONFIGS',MyConfigs)
         if ok:
             MyConfigs = data
+        
+        if MyConfigs.shutdown:
+            shutdown()
         
 if __name__ == '__main__':
     proclist = psutil.get_process_list()

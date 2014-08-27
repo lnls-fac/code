@@ -86,10 +86,10 @@ def main():
         print('Calendar display not implemented yet')
     
     print('{0:15s} {1:^7s} {2:^12s} {3:^7s} {4:^7s} {5:^5s} '
-          .format('hostname','state', 'DefNumJobs', 'MoreJobs', 'Shut','Nice'))
+          .format('hostname','state', 'numcpus' 'DefNumJobs', 'MoreJobs', 'Shut','Nice'))
     for k,v in ConfigsReceived.items():
-        print('{0:15s} {1.active:^7b} {1.defNumJobs:^12d} {1.MoreJobs:^7b} '
-              '{1.shutdown:^7b} {1.niceness:^5d} '.format(k, v))
+        print('{0:15s} {1.active:^7} {1.numcpus:^5d} {1.defNumJobs:^12d} {1.MoreJobs:^7} '
+              '{1.shutdown:^7} {1.niceness:^5d} '.format(k, v))
         
         
         

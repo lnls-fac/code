@@ -16,9 +16,10 @@ Address = Global.Address
 VERSION = Global.VERSION
 MAX_BLOCK_LEN = Global.MAX_BLOCK_LEN
 PICKLE_PROTOCOL = Global.PICKLE_PROTOCOL
+WAIT_TIME = Global.WAIT_TIME
 SET_STRUCT_PARAM = Global.SET_STRUCT_PARAM
 STATUS = Global.STATUS
-CONFIGFOLDER  = os.path.join(os.path.split(os.getcwd())[0],'.configs') #for now
+CONFIGFOLDER  = os.path.join(os.path.split(Global.__file__)[0],'.configs') #for now
 IDGEN_FILENAME = 'last_id'
 QUEUE_FILENAME = 'Queue'
 CONFIGS_FILENAME = 'clients_configs'
@@ -120,11 +121,14 @@ class RequestHandler(socketserver.StreamRequestHandler):
             clientName = socket.gethostname()
         with self.ConfigsLock:
             if clientName in self.Configs.keys():
-                self.Configs[clientName].active = True
+                self.Configs[clientName].numcpus = ItsConfigs.numcpus
+                self.Configs[clientName].active = 'on'
+                self.Configs[clientName].last_contact = datetime.datetime.now()
                 return (True, self.Configs[clientName])
             
             self.Configs.update({clientName:ItsConfigs})
             self.Configs[clientName].active = True
+            self.Configs[clientName].last_contact = datetime.datetime.now()
             return (False, True)
     
     
@@ -165,13 +169,16 @@ class RequestHandler(socketserver.StreamRequestHandler):
     
     def get_configs_of_clients(self, clients):
         if clients == 'all':
-            with self.ConfigsLock:
-                return (True, self.Configs)
+            clients = tuple(self.Configs.keys())
             
         Configs2Send = {}        
         with self.ConfigsLock:
             for clientName in clients:
                 if clientName in self.Configs.keys():
+                    if (3*WAIT_TIME < datetime.datetime.now().timestamp() - 
+                        self.Configs[clientName].last_contact.timestamp()
+                        and self.Configs[clientName].active == 'on'):
+                        self.Configs[clientName]. active = 'dead'
                     ClientConfigs = self.Configs[clientName]
                     Configs2Send.update({clientName: ClientConfigs})
             return (True, Configs2Send)
@@ -193,7 +200,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
         if clientName == 'localhost':
             clientName = socket.gethostname()
         with self.ConfigsLock:
-            self.Configs[clientName].active = False
+            self.Configs[clientName].active = 'off'
             self.Configs[clientName].shutdown = False
             self.Configs[clientName].MoreJobs = True
         return True
@@ -242,7 +249,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-  #fuser -Address[1]/tcp
+    #fuser -Address[1]/tcp
   
    
 

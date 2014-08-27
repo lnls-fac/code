@@ -12,6 +12,7 @@ import datetime
 Address = ('lnls82-linux', 8804)
 VERSION = '0.0.0'.encode('utf-8')
 MAX_BLOCK_LEN = 1024*4
+WAIT_TIME  = 10  # in seconds
 PICKLE_PROTOCOL = 3
 SET_STRUCT_PARAM = "!I 5s"
 STATUS = dict(q=1, # queued
@@ -172,14 +173,22 @@ class JobQueue(dict):
     
 class Configs:
     def __init__(self, shutdown = False, MoreJobs = True, niceness=0,
-                 defNumJobs = 0, Calendar = dict(), active = True):
+                 defNumJobs = 0, Calendar = dict(), active = 'on',
+                 numcpus = None):
         self.shutdown = shutdown
         self.MoreJobs = MoreJobs
         self.niceness = niceness
         self.defNumJobs = defNumJobs
         self.Calendar =  Calendar
         self.active = active
+        self.numcpus = numcpus or psutil.NUM_CPUS
+        self.__last_contact = None
         
+    @property
+    def last_contact(self): return self.__last_contact
+    @last_contact.setter
+    def last_contact(self, last): self.__last_contact = last
+    
     def __repr__(self):
         return representational_form(self)
 
