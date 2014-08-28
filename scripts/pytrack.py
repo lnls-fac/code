@@ -27,32 +27,33 @@ try:
 	track_linepass_run
 except:
 	track_linepass_run = False
-if linepass_run:
+if track_linepass_run:
 	def track_linepass(track_version   = default_track_version,
-		     flat_filename   = track_linepass_flatfilename,
-		     energy          = ebeam_energy,
-       		     harmonic_number = harmonic_number,
-	     	     cavity_state    = cavity_state,
-	     	     radiation_state = radiation_state,
-		     vchamber_state  = vchamber_state,
-	     	     start_element   = track_linepass_start_element,
-		     rx0             = track_linepass_rx0,
-                     px0             = track_linepass_px0,
-		     ry0             = track_linepass_ry0,
-                     py0             = track_linepass_py0,
-		     de0             = track_linepass_de0,
-                     dl0             = track_linepass_dl0):
+		     	   flat_filename   = track_linepass_flatfilename,
+		     	   energy          = ebeam_energy,
+       		     	   harmonic_number = harmonic_number,
+	     	     	   cavity_state    = cavity_state,
+	     	     	   radiation_state = radiation_state,
+		     	   vchamber_state  = vchamber_state,
+	    		   start_element   = track_linepass_start_element,
+		     	   rx0             = track_linepass_rx0,
+                     	   px0             = track_linepass_px0,
+		     	   ry0             = track_linepass_ry0,
+                     	   py0             = track_linepass_py0,
+		     	   de0             = track_linepass_de0,
+                     	   dl0             = track_linepass_dl0):
 	
 		args = [track_version, 'track_linepass', 
-			str(track_flat_filename),
+			str(flat_filename),
 			str(energy), 
 			str(harmonic_number), 
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
-			str(track_linepass_rx0), str(track_linepass_px0),
-			str(track_linepass_ry0), str(track_linepass_py0),
-			str(track_linepass_de0), str(track_linepass_dl0),
+			str(start_element),
+			str(rx0), str(px0),
+			str(ry0), str(py0),
+			str(de0), str(dl0),
 			]
 		subprocess.call(args)
 

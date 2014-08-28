@@ -10,11 +10,19 @@ mrkrs   = ['mia', 'mib']
 sexts   = ['sa1', 'sb1']
 allfams = bends + quads + mrkrs + sexts
 
-
-#flat_filename         = 'flat_file_v500_ac10_5_bare_with_ids_in.txt'
 flat_filename         = 'sirius_v500_ac10_5_bare_in.txt'
 
-dynap_xy_run          = True
+track_linepass_run           = True
+track_linepass_flatfilename  = flat_filename
+track_linepass_start_element = 0
+track_linepass_rx0           = 0   # [m]
+track_linepass_px0           = 0
+track_linepass_ry0           = 0   # [m]
+track_linepass_py0           = 0
+track_linepass_de0           = 0
+track_linepass_dl0           = 0   # [m]
+
+dynap_xy_run          = False
 dynap_xy_flatfilename = flat_filename
 dynap_xy_de           = 0
 dynap_xy_nr_turns     = 500
