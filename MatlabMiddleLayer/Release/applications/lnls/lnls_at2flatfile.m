@@ -13,7 +13,7 @@ for i=1:length(lattice)
     fprintf(fp, column_format, 'index'); fprintf(fp, '%04i\r\n', i);
     fprintf(fp, column_format, 'fam_name'); fprintf(fp, '%s\r\n', lattice{i}.FamName);
     fprintf(fp, column_format, 'length'); fprintf(fp, [double_format, '\r\n'], lattice{i}.Length);
-    fprintf(fp, column_format, 'pass_method'); fprintf(fp, ['%s', '\r\n'], lattice{i}.PassMethod);
+    fprintf(fp, column_format, 'pass_method'); fprintf(fp, ['%s', '\r\n'], get_passmethod(lattice{i}));
     if isfield(lattice{i}, 'NumIntSteps'), fprintf(fp, column_format, 'nr_steps'); fprintf(fp, '%i\r\n', lattice{i}.NumIntSteps); end;
     if isfield(lattice{i}, 'PolynomA')
         [PolyA, PolyB] = calc_polynoms(lattice{i});
@@ -88,15 +88,10 @@ else
     error('passmethod not defined');
 end
 
-    template <typename T> Status::type pm_identity_pass              (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_drift_pass                 (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_str_mpole_symplectic4_pass (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_bnd_mpole_symplectic4_pass (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_corrector_pass             (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_cavity_pass                (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_thinquad_pass              (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_thinsext_pass              (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
-template <typename T> Status::type pm_kicktable_pass             (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
+% template <typename T> Status::type pm_cavity_pass                (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
+% template <typename T> Status::type pm_thinquad_pass              (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
+% template <typename T> Status::type pm_thinsext_pass              (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
+% template <typename T> Status::type pm_kicktable_pass             (Pos<T> &pos, const Element &elem, const Accelerator& accelerator);
 
 
 function print_polynom(fp, polynom, double_format)
