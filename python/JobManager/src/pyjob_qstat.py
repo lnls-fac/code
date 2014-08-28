@@ -12,6 +12,7 @@ VERSION = Global.VERSION
 MAX_BLOCK_LEN = Global.MAX_BLOCK_LEN
 PICKLE_PROTOCOL = Global.PICKLE_PROTOCOL
 SET_STRUCT_PARAM = Global.SET_STRUCT_PARAM
+STATUS = Global.STATUS
 
 class SocketManager:
     def __init__(self, address):
@@ -53,8 +54,31 @@ def handle_request(*items, wait_for_reply=True):
 
 def main():
 
-    # Load execution script
+    parser = optparse.OptionParser()
+    parser.group.add_option('-s','--status',dest='status',type='str',
+                      help=("Select the jobs to show by their status. "
+                            "[format: status1,status2,...  default: 'all']"))
+    parser.group.add_option('-u','--user',dest='user',type='str',
+                      help=("Select the jobs to show by their user. "
+                            "[format: user1,user2,...  default: 'all']"))
+    parser.set_description(description='This command lists the jobs in the '
+                           ' queue.')
+    
+    (opts, _) = parser.parse_args()
+    
     ok, Queue = handle_request('STATUS_QUEUE')
+    
+    if opts.status is not None:
+        status = set(opts.status.split(','))
+        if not len(status - STATUS.keys()):
+            print('Wrong status specification. Possible values are:\n'
+                  ' '.join(list(k for k,v in sorted(STATUS.items(),
+                                                    key= lambda x: x[1]))))
+        Queue = Queue.SelAttrVal(attr='status_key',value=status)
+        
+    if opts.user is not None:
+        user = set(opts.user.split(','))
+        Queue = Queue.SelAttrVal(attr='user',value=user)
     
     if ok:
         for k,v in Queue.items():
