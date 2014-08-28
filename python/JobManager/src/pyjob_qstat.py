@@ -2,7 +2,6 @@
 
 import optparse
 import sys
-import os
 import socket
 import struct
 import pickle

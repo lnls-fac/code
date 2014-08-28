@@ -5,8 +5,6 @@ import datetime
 import socketserver
 import struct
 import threading
-import gzip
-import sys
 import pickle
 import os
 import socket
@@ -19,25 +17,15 @@ PICKLE_PROTOCOL = Global.PICKLE_PROTOCOL
 WAIT_TIME = Global.WAIT_TIME
 SET_STRUCT_PARAM = Global.SET_STRUCT_PARAM
 STATUS = Global.STATUS
-CONFIGFOLDER  = os.path.join(os.path.split(Global.__file__)[0],'.configs') #for now
+CONFIGFOLDER  = os.path.join(os.path.split(
+                             os.path.split(Global.__file__)[0])[0],
+                             '.Configs')
 IDGEN_FILENAME = 'last_id'
 QUEUE_FILENAME = 'Queue'
 CONFIGS_FILENAME = 'clients_configs'
 
 class ManageJobsServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
-
-class GzipManager:
-    def __init__(self, filename, mode):
-        self.filename = filename
-        self.mode = mode
-    
-    def __enter__(self):
-        self.fh = gzip.open(self.filename, self.mode)
-        return self.fh
-        
-    def __exit__(self, *ignore):
-        self.fh.close()
 
 class Finish(Exception): pass
 
@@ -224,6 +212,8 @@ def load_existing_Configs():
     if data and data[1]: return eval(data[1])
 
 def save():
+    if not os.path.isdir(CONFIGFOLDER):
+        os.mkdir(path=CONFIGFOLDER)
     idgenname   = os.path.join(CONFIGFOLDER,IDGEN_FILENAME)
     queuename   = os.path.join(CONFIGFOLDER,QUEUE_FILENAME)
     configname = os.path.join(CONFIGFOLDER,CONFIGS_FILENAME)

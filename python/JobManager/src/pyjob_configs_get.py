@@ -63,7 +63,7 @@ def main():
                       "[format: client1,client2,...  default: 'all']")
     parser.add_option('-s', '--showCalendar',dest='sCal',action='store_true',
                       help="Show the calendar of each client", default=False)
-         
+    
     (opts, _) = parser.parse_args()
     
     
@@ -82,14 +82,16 @@ def main():
                   "in the server's list.")
             return
     
-    if opts.sCal is not None:
+    if opts.sCal:
         print('Calendar display not implemented yet')
     
-    print('{0:15s} {1:^7s} {2:^12s} {3:^7s} {4:^7s} {5:^5s} '
-          .format('hostname','state', 'numcpus' 'DefNumJobs', 'MoreJobs', 'Shut','Nice'))
+    print('{:15s}{:^7s}{:^9s}{:^9s}{:^10s}{:^10s}{:^6s}'
+          .format('hostname','state', 'numcpus','NumJobs',
+                  'MoreJobs', 'Shutdown','Nice'))
     for k,v in ConfigsReceived.items():
-        print('{0:15s} {1.active:^7} {1.numcpus:^5d} {1.defNumJobs:^12d} {1.MoreJobs:^7} '
-              '{1.shutdown:^7} {1.niceness:^5d} '.format(k, v))
+        print('{0:15s}{1.active!s:^7s}{1.numcpus:^9d}{1.defNumJobs:^9d}'
+              '{1.MoreJobs!s:^10}{1.shutdown!s:^10}{1.niceness:^6d}'
+              .format(k,v))
         
         
         
