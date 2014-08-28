@@ -86,7 +86,8 @@ def main():
     else:
         data = Global.load_file(opts.exec_script_name)
         if data is not None:
-            job.execution_script.update({opts.exec_script_name:data})
+            script_name = os.path.split(opts.exec_script_name)[-1]
+            job.execution_script.update({script_name:data})
         else:
             sys.exit(1)
     #Load name
@@ -109,6 +110,7 @@ def main():
         for name in input_file_names:
             data = Global.load_file(name)
             if data is not None:
+                name = os.path.split(name)[-1]
                 job.input_files.update({name: data})
             else:
                 sys.exit(1)

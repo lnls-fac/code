@@ -67,10 +67,8 @@ class Jobs:
 
     @property
     def input_file_names(self): return list(self.input_files.keys())
-    
     @property
     def output_file_names(self): return list(self.output_files.keys())
-    
     @property
     def execution_script_name(self): return list(self.execution_script.keys())[0]
         

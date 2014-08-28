@@ -14,7 +14,9 @@ import struct
 import pickle
 import Global
 
-TEMPFOLDER    = os.path.join(os.path.split(Global.__file__)[0],'.TempFolders')
+TEMPFOLDER    = os.path.join(os.path.split(
+                             os.path.split(Global.__file__)[0])[0],
+                             '.TempFolders')
 FOLDERFORMAT  = 'jobid-{0:08d}'
 JOBFILE       = 'pid-{0:d}'
 JOBDONE       = 'done'
@@ -66,7 +68,7 @@ def handle_request(*items, wait_for_reply=True):
             return pickle.loads(result)
     except socket.error as err:
         print("{0}: is the pyjob_server running?".format(err))
-        return (False, None)
+        sys.exit(1)
         
 
 
@@ -150,7 +152,7 @@ def deal_with_configs():
                                   MyConfigs.defNumJobs)
     
     for proc in jobid2proc.values():
-        if proc.get_nice() != MyConfigs.niceness:
+        if not proc.poll() and proc.get_nice() != MyConfigs.niceness:
             proc.set_nice(MyConfigs.niceness)
             
     return allowed
