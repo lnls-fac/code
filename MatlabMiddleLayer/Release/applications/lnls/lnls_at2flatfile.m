@@ -8,7 +8,7 @@ function lnls_at2flatfile(lattice, filename)
 fp = fopen(filename, 'w');
 
 column_format = '%-15s ';
-double_format = '%+.15E';
+double_format = '%+.17E';
 for i=1:length(lattice)
     fprintf(fp, column_format, 'index'); fprintf(fp, '%04i\r\n', i);
     fprintf(fp, column_format, 'fam_name'); fprintf(fp, '%s\r\n', lattice{i}.FamName);
@@ -20,6 +20,12 @@ for i=1:length(lattice)
         if (~isempty(PolyA) && any(PolyA ~= 0)), fprintf(fp, column_format, 'polynom_a'); print_polynom(fp, PolyA, double_format); end;
         if (~isempty(PolyB) && any(PolyB ~= 0)), fprintf(fp, column_format, 'polynom_b'); print_polynom(fp, PolyB, double_format); end;
     end
+    if isfield(lattice{i}, 'Voltage')
+        fprintf(fp, column_format, 'voltage'); fprintf(fp, [double_format, '\r\n'], lattice{i}.Voltage);
+    end
+    if isfield(lattice{i}, 'Frequency')
+        fprintf(fp, column_format, 'frequency'); fprintf(fp, [double_format, '\r\n'], lattice{i}.Frequency);
+    end
     if isfield(lattice{i}, 'BendingAngle')
         fprintf(fp, column_format, 'angle'); fprintf(fp, [double_format, '\r\n'], lattice{i}.BendingAngle);
         fprintf(fp, column_format, 'angle_in'); fprintf(fp, [double_format, '\r\n'], lattice{i}.EntranceAngle);
@@ -28,18 +34,15 @@ for i=1:length(lattice)
     if isfield(lattice{i}, 'FullGap')
         fprintf(fp, column_format, 'gap'); fprintf(fp, [double_format, '\r\n'], lattice{i}.FullGap);
     end
-    if isfield(lattice{i}, 'FullGap')
-        fprintf(fp, column_format, 'gap'); fprintf(fp, [double_format, '\r\n'], lattice{i}.FullGap);
-    end
-    if isfield(lattice{i}, 'KickAngle')
-        fprintf(fp, column_format, 'hkick'); fprintf(fp, [double_format, '\r\n'], lattice{i}.KickAngle(1));
-        fprintf(fp, column_format, 'vkick'); fprintf(fp, [double_format, '\r\n'], lattice{i}.KickAngle(2));
-    end
     if isfield(lattice{i}, 'FringeInt1')
         fprintf(fp, column_format, 'fint_in'); fprintf(fp, [double_format, '\r\n'], lattice{i}.FringeInt1);
     end
     if isfield(lattice{i}, 'FringeInt2')
         fprintf(fp, column_format, 'fint_out'); fprintf(fp, [double_format, '\r\n'], lattice{i}.FringeInt2);
+    end
+    if isfield(lattice{i}, 'KickAngle')
+        fprintf(fp, column_format, 'hkick'); fprintf(fp, [double_format, '\r\n'], lattice{i}.KickAngle(1));
+        fprintf(fp, column_format, 'vkick'); fprintf(fp, [double_format, '\r\n'], lattice{i}.KickAngle(2));
     end
     if isfield(lattice{i}, 'VChamber')
         fprintf(fp, column_format, 'hmax'); fprintf(fp, [double_format, '\r\n'], abs(lattice{i}.VChamber(1)));
@@ -67,6 +70,11 @@ for i=1:length(lattice)
         fprintf(fp, column_format, 'de|r_out'); fprintf(fp, [double_format, ' '], lattice{i}.R2(5,:)); fprintf(fp, '\r\n');
         fprintf(fp, column_format, 'dl|r_out'); fprintf(fp, [double_format, ' '], lattice{i}.R2(6,:)); fprintf(fp, '\r\n');
     end
+    if isfield(lattice{i}, 'PxGrid')
+        [pathstr, ~, ~] = fileparts(filename);
+        kicktable_filename = fullfile(pathstr, [lattice{i}.fam_name, '_kicktable.txt']);
+        save_kicktable_file(lattice{i}, kicktable_filename);
+    end
     fprintf(fp, '\r\n');
 end
 
@@ -75,15 +83,19 @@ fclose(fp);
 function passmethod = get_passmethod(element)
 
 if strcmpi(element.PassMethod, 'IdentityPass')
-    passmethod = 'identity_pass';
+    passmethod = 'pm_identity_pass';
 elseif strcmpi(element.PassMethod, 'DriftPass')
-    passmethod = 'drift_pass';
+    passmethod = 'pm_drift_pass';
 elseif strcmpi(element.PassMethod, 'CorrectorPass')
-    passmethod = 'corrector_pass';
+    passmethod = 'pm_corrector_pass';
+elseif strcmpi(element.PassMethod, 'CavityPass')
+    passmethod = 'pm_cavity_pass';
+elseif strcmpi(element.PassMethod, 'LNLSThickEPUPass')
+    passmethod = 'pm_kickmap_pass';    
 elseif any(strcmpi(element.PassMethod, {'BndMPoleSymplectic4Pass','BndMPoleSymplectic4RadPass'}))
-    passmethod = 'bnd_mpole_symplectic4_pass';
+    passmethod = 'pm_bnd_mpole_symplectic4_pass';
 elseif any(strcmpi(element.PassMethod, {'StrMPoleSymplectic4Pass','StrMPoleSymplectic4RadPass'}))
-    passmethod = 'str_mpole_symplectic4_pass';
+    passmethod = 'pm_str_mpole_symplectic4_pass';
 else
     error('passmethod not defined');
 end
@@ -112,4 +124,60 @@ PolynomA = zeros(1,order);
 PolynomB = zeros(1,order);
 PolynomA(selA) = element.PolynomA(selA);
 PolynomB(selB) = element.PolynomB(selB);
+
+function save_kicktable_file(elem, fname)
+
+endofline = '\r\n';
+sep_char = ' ';
+
+posx = 1000 * elem.XGrid(1,:);
+posz = 1000 * elem.YGrid(:,1)';
+dpsi_dx = 1 * elem.PxGrid;
+dpsi_dz = 1 * elem.PyGrid;
+params.factor = 1;
+
+%fname = lower(['kicktable_' elem.FamName '.txt']);
+fp = fopen(fname, 'w');
+fprintf(fp, ['# ' elem.FamName ' KICKMAP' endofline] );
+fprintf(fp, ['# Author: lnls_at2tracy @ LNLS, Date: ' datestr(now) endofline] );
+fprintf(fp, ['# ID Length [m]' endofline] );
+fprintf(fp, ['%.17E' endofline], elem.Length);
+fprintf(fp, ['# Number of Horizontal Points' endofline] );
+fprintf(fp, ['%i' endofline], elem.NumX);
+fprintf(fp, ['# Number of Vertical Points' endofline] );
+fprintf(fp, ['%i' endofline], elem.NumY);
+
+% copy and paste do arquivo 'kickmap_save_kickmap_tables.m'
+
+fprintf(fp,  '# Horizontal KickTable in T2m2\r\n');
+fprintf(fp,  'START\r\n');
+fprintf(fp, '%11s', ''); fprintf(fp, sep_char);
+for i=1:length(posx)
+    fprintf(fp, '%+.17E', posx(i)/1000); fprintf(fp, sep_char);
+end
+fprintf(fp, '\r\n');
+for i=1:length(posz)
+    fprintf(fp, '%+.17E', posz(i)/1000); fprintf(fp, sep_char);
+    for j=1:length(posx)
+        fprintf(fp, '%+.17E', params.factor * dpsi_dx(i,j)); fprintf(fp, sep_char);
+    end
+    fprintf(fp, '\r\n');
+end
+
+fprintf(fp,  '# Vertical KickTable in T2m2\r\n');
+fprintf(fp,  'START\r\n');
+fprintf(fp, '%11s', ''); fprintf(fp, sep_char);
+for i=1:length(posx)
+    fprintf(fp, '%+.17E', posx(i)/1000); fprintf(fp, sep_char);
+end
+fprintf(fp, '\r\n');
+for i=1:length(posz)
+    fprintf(fp, '%+.17E', posz(i)/1000); fprintf(fp, sep_char);
+    for j=1:length(posx)
+        fprintf(fp, '%+.17E', params.factor * dpsi_dz(i,j)); fprintf(fp, sep_char);
+    end
+    fprintf(fp, '\r\n');
+end
+
+fclose(fp);
 

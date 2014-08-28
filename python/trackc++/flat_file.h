@@ -21,5 +21,6 @@ struct FlatFileType {
 
 
 Status::type read_flat_file_tracy(const std::string& filename, Accelerator& accelerator);
+Status::type read_flat_file(const std::string& filename, Accelerator& accelerator);
 
 #endif
