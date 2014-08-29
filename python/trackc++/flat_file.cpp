@@ -3,20 +3,27 @@
 #include "auxiliary.h"
 #include <fstream>
 #include <string>
-
-static void read_polynomials(std::ifstream& fp, Element& e);
+#include <sstream>
 
 Status::type read_flat_file(const std::string& filename, Accelerator& accelerator) {
+	return read_flat_file_trackcpp(filename, accelerator);
+}
+
+static void synchronize_polynomials(Element& e);
+
+Status::type read_flat_file_trackcpp(const std::string& filename, Accelerator& accelerator) {
 
 	std::ifstream fp(filename);
 	if (fp.fail()) return Status::file_not_found;
 
 	accelerator.lattice.clear();
 
-	std::string cmd, line;
 	Element e;
 	while (not fp.eof()) {
+		std::string cmd, line;
+		unsigned int index = 0;
 		fp >> cmd;
+		//std::cout << cmd << std::endl;
 		if (cmd[0] == '#') {
 			std::getline(fp, line);
 			continue;
@@ -29,18 +36,19 @@ Status::type read_flat_file(const std::string& filename, Accelerator& accelerato
 			fp >> e.fam_name;
 			continue;
 		}
-		if (cmd.compare("length")    == 0) { fp >> e.length;    continue; }
-		if (cmd.compare("hmax")      == 0) { fp >> e.hmax;      continue; }
-		if (cmd.compare("vmax")      == 0) { fp >> e.vmax;      continue; }
-		if (cmd.compare("hkick")     == 0) { fp >> e.hkick;     continue; }
-		if (cmd.compare("vkick")     == 0) { fp >> e.vkick;     continue; }
-		if (cmd.compare("nr_steps")  == 0) { fp >> e.nr_steps;  continue; }
-		if (cmd.compare("angle")     == 0) { fp >> e.angle;     continue; }
-		if (cmd.compare("gap")       == 0) { fp >> e.gap;       continue; }
-		if (cmd.compare("fint_in")   == 0) { fp >> e.fint_in;   continue; }
-		if (cmd.compare("fint_out")  == 0) { fp >> e.fint_out;  continue; }
-		if (cmd.compare("angle_in")  == 0) { fp >> e.angle_in;  continue; }
-		if (cmd.compare("angle_out") == 0) { fp >> e.angle_out; continue; }
+		if (cmd.compare("index")       == 0) { fp >> index;       continue; }
+		if (cmd.compare("length")      == 0) { fp >> e.length;    continue; }
+		if (cmd.compare("hmax")        == 0) { fp >> e.hmax;      continue; }
+		if (cmd.compare("vmax")        == 0) { fp >> e.vmax;      continue; }
+		if (cmd.compare("hkick")       == 0) { fp >> e.hkick;     continue; }
+		if (cmd.compare("vkick")       == 0) { fp >> e.vkick;     continue; }
+		if (cmd.compare("nr_steps")    == 0) { fp >> e.nr_steps;  continue; }
+		if (cmd.compare("angle")       == 0) { fp >> e.angle;     continue; }
+		if (cmd.compare("gap")         == 0) { fp >> e.gap;       continue; }
+		if (cmd.compare("fint_in")     == 0) { fp >> e.fint_in;   continue; }
+		if (cmd.compare("fint_out")    == 0) { fp >> e.fint_out;  continue; }
+		if (cmd.compare("angle_in")    == 0) { fp >> e.angle_in;  continue; }
+		if (cmd.compare("angle_out")   == 0) { fp >> e.angle_out; continue; }
 		if (cmd.compare("t_in")      == 0) { for(auto i=0; i<6; ++i) fp >> e.t_in[i];  continue; }
 		if (cmd.compare("t_out")     == 0) { for(auto i=0; i<6; ++i) fp >> e.t_out[i]; continue; }
 		if (cmd.compare("rx|r_in")   == 0) { for(auto i=0; i<6; ++i) fp >> e.r_in[0*6+i]; continue; }
@@ -55,11 +63,74 @@ Status::type read_flat_file(const std::string& filename, Accelerator& accelerato
 		if (cmd.compare("py|r_out")  == 0) { for(auto i=0; i<6; ++i) fp >> e.r_out[3*6+i]; continue; }
 		if (cmd.compare("de|r_out")  == 0) { for(auto i=0; i<6; ++i) fp >> e.r_out[4*6+i]; continue; }
 		if (cmd.compare("dl|r_out")  == 0) { for(auto i=0; i<6; ++i) fp >> e.r_out[5*6+i]; continue; }
+		if (cmd.compare("pass_method") == 0) {
+			std::string pass_method; fp >> pass_method;
+			bool found_pm = false;
+			for(unsigned int i = 0; i<((unsigned int)PassMethod::pm_nr_pms); ++i) {
+				if (pass_method.compare(pm_dict[i]) == 0) {
+					e.pass_method = i;
+					found_pm = true;
+					break;
+				}
+			}
+			if (found_pm) continue;
+			return Status::passmethod_not_defined;
+		}
+		if (cmd.compare("polynom_a") == 0) {
+			std::getline(fp, line);
+			std::istringstream ss(line);
+			std::vector<unsigned int> order;
+			std::vector<double> multipole;
+			unsigned int size = 0;
+			while (not ss.eof()) {
+				unsigned int o; double m; ss >> o >> m;
+				if (ss.eof()) break;
+				order.push_back(o); multipole.push_back(m);
+				if (o+1 > size) size = o+1;
+			}
+			if (size > 0) {
+				e.polynom_a.resize(size, 0);
+				for(unsigned int i=0; i<order.size(); ++i) e.polynom_a[order[i]] = multipole[i];
+			}
+			synchronize_polynomials(e);
+			continue;
+		}
+		if (cmd.compare("polynom_b") == 0) {
+			std::getline(fp, line);
+			std::istringstream ss(line);
+			std::vector<unsigned int> order;
+			std::vector<double> multipole;
+			unsigned int size = 0;
+			while (not ss.eof()) {
+				unsigned int o; double m; ss >> o >> m;
+				if (ss.eof()) break;
+				order.push_back(o); multipole.push_back(m);
+				if (o+1 > size) size = o+1;
+			}
+			if (size > 0) {
+				e.polynom_b.resize(size, 0);
+				for(unsigned int i=0; i<order.size(); ++i) e.polynom_b[order[i]] = multipole[i];
+			}
+			synchronize_polynomials(e);
+			continue;
+		}
 	}
 	accelerator.lattice.push_back(e);
 	fp.close();
 	
-};
+	return Status::success;
+
+}
+
+void synchronize_polynomials(Element& e) {
+
+	unsigned int size = (e.polynom_a.size() > e.polynom_b.size()) ? e.polynom_a.size() : e.polynom_b.size();
+	e.polynom_a.resize(size, 0);
+	e.polynom_b.resize(size, 0);
+
+}
+
+static void read_polynomials(std::ifstream& fp, Element& e);
 
 Status::type read_flat_file_tracy(const std::string& filename, Accelerator& accelerator) {
 

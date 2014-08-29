@@ -173,6 +173,6 @@ std::vector<Element> latt_set_num_integ_steps(const std::vector<Element>& orig_l
 
 Status::type latt_read_flat_file(const std::string& filename, Accelerator& accelerator) {
 
-	return read_flat_file_tracy(filename, accelerator);
+	return read_flat_file(filename, accelerator);
 
 }

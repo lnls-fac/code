@@ -59,7 +59,7 @@ int cmd_dynap_xy(const std::vector<std::string>& args) {
 	Accelerator accelerator;
 
 	// reads flat file
-	Status::type status = read_flat_file_tracy(flat_filename, accelerator);
+	Status::type status = read_flat_file(flat_filename, accelerator);
 	if (status == Status::file_not_found) {
 		std::cerr << "dynap_xy: flat file not found!" << std::endl;
 		return EXIT_FAILURE;
@@ -140,7 +140,7 @@ int cmd_dynap_ex(const std::vector<std::string>& args) {
 	Accelerator accelerator;
 
 	// reads flat file
-	Status::type status = read_flat_file_tracy(flat_filename, accelerator);
+	Status::type status = read_flat_file(flat_filename, accelerator);
 	if (status == Status::file_not_found) {
 		std::cerr << "dynap_ex: flat file not found!" << std::endl;
 		return EXIT_FAILURE;
@@ -221,7 +221,7 @@ int cmd_dynap_ma(const std::vector<std::string>& args) {
 	Accelerator accelerator;
 
 	// reads flat file
-	Status::type status = read_flat_file_tracy(flat_filename, accelerator);
+	Status::type status = read_flat_file(flat_filename, accelerator);
 	if (status == Status::file_not_found) {
 		std::cerr << "dynap_ma: flat file not found!" << std::endl;
 		return EXIT_FAILURE;
@@ -299,7 +299,7 @@ int cmd_track_linepass(const std::vector<std::string>& args) {
 	Accelerator accelerator;
 
 	// reads flat file
-	Status::type status = read_flat_file_tracy(flat_filename, accelerator);
+	Status::type status = read_flat_file(flat_filename, accelerator);
 	if (status == Status::file_not_found) {
 		std::cerr << "track_linepass: flat file not found!" << std::endl;
 		return EXIT_FAILURE;
@@ -321,7 +321,7 @@ int cmd_track_linepass(const std::vector<std::string>& args) {
 	track_linepass(accelerator, pos, pos_list, offset_element, lost_plane, true);
 
 	std::cout << get_timestamp() << " saving track_linepass data to file" << std::endl;
-	status = print_tracking_ringpass(accelerator, pos_list, start_element, "track_linepass_out.txt");
+	status = print_tracking_linepass(accelerator, pos_list, start_element, "track_linepass_out.txt");
 	if (status == Status::file_not_opened) return status;
 
 	std::cout << get_timestamp() << " end timestamp" << std::endl;

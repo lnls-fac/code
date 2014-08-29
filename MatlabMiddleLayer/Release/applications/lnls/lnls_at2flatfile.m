@@ -83,19 +83,19 @@ fclose(fp);
 function passmethod = get_passmethod(element)
 
 if strcmpi(element.PassMethod, 'IdentityPass')
-    passmethod = 'pm_identity_pass';
+    passmethod = 'identity_pass';
 elseif strcmpi(element.PassMethod, 'DriftPass')
-    passmethod = 'pm_drift_pass';
+    passmethod = 'drift_pass';
 elseif strcmpi(element.PassMethod, 'CorrectorPass')
-    passmethod = 'pm_corrector_pass';
+    passmethod = 'corrector_pass';
 elseif strcmpi(element.PassMethod, 'CavityPass')
-    passmethod = 'pm_cavity_pass';
+    passmethod = 'cavity_pass';
 elseif strcmpi(element.PassMethod, 'LNLSThickEPUPass')
-    passmethod = 'pm_kickmap_pass';    
+    passmethod = 'kickmap_pass';    
 elseif any(strcmpi(element.PassMethod, {'BndMPoleSymplectic4Pass','BndMPoleSymplectic4RadPass'}))
-    passmethod = 'pm_bnd_mpole_symplectic4_pass';
+    passmethod = 'bnd_mpole_symplectic4_pass';
 elseif any(strcmpi(element.PassMethod, {'StrMPoleSymplectic4Pass','StrMPoleSymplectic4RadPass'}))
-    passmethod = 'pm_str_mpole_symplectic4_pass';
+    passmethod = 'str_mpole_symplectic4_pass';
 else
     error('passmethod not defined');
 end

@@ -165,14 +165,14 @@ int test_cmd_track_linepass() {
 	std::vector<std::string> args = {
 			"trackc++",
 			"track_linepass",
-			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt",
+			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt",
 			"3e9",
 			"864",
-			"on",
-			"on",
-			"on",
+			"off",
+			"off",
+			"off",
 			"0",
-			"0.0",
+			"0.001",
 			"0.0",
 			"0.0",
 			"0.0",
@@ -189,7 +189,7 @@ int test_cmd_dynap_xy() {
 	std::vector<std::string> args = {
 			"trackc++",
 			"dynap_xy",
-			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
+			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
 			"3e9",
 			"864",
 			"on",
@@ -214,7 +214,7 @@ int test_cmd_dynap_ex() {
 	std::vector<std::string> args = {
 			"trackc++",
 			"dynap_ex",
-			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt",
+			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt",
 			"3e9",
 			"864",
 			"on",
@@ -239,7 +239,7 @@ int test_cmd_dynap_ma() {
 	std::vector<std::string> args = {
 			"trackc++",
 			"dynap_ma",
-			"/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
+			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
 			"3e9",
 			"864",
 			"on",
@@ -269,10 +269,18 @@ int test_kicktable(Accelerator& accelerator) {
 
 }
 
+int test_read_flat_file(Accelerator& accelerator) {
+
+	read_flat_file("/home/ximenes/flatfile.txt", accelerator);
+	std::cout << "nr_elements: " << accelerator.lattice.size() << std::endl;
+	return 0;
+
+}
+
 int cmd_tests(const std::vector<std::string>& args) {
 
 
-	//Accelerator accelerator;
+	Accelerator accelerator;
 	//sirius_v500(accelerator.lattice);
 	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
 	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_ff.txt", accelerator);
@@ -301,12 +309,14 @@ int cmd_tests(const std::vector<std::string>& args) {
 	//test_linepass_tpsa(the_ring);
 	//test_findorbit6(the_ring);
 	//test_dynap_xy(the_ring);
+	//test_read_flat_file(accelerator);
 
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
 	//test_cmd_dynap_ma();
 	test_cmd_track_linepass();
 	//test_kicktable(accelerator);
+
 
 	return 0;
 
