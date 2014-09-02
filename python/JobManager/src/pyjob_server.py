@@ -219,7 +219,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
                 keyschanged.add(k)
                 self.Queue.update({k:vl})
                 
-            keys2change = set(ChanQueue.keys() - ChanQueueNoRun.keys())
+            keys2change = set(ChanQueue.keys()) - set(ChanQueueNoRun.keys())
             keyssched2change = set()
             for k in keys2change:
                 if self.Queue[k].status_key in {'t','e','tu'}:

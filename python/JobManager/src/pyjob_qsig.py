@@ -93,26 +93,30 @@ def main():
     
     (opts, _) = parser.parse_args()
     
+    if not any((opts.jobs,opts.status,opts.user,opts.descr)):
+        print('At least one Job Selection Option must be given')
+        return
+    
+    if opts.jobs and any((opts.status,opts.user,opts.descr)):
+        print('When the option -J is given the other Job Selection Options'
+              'can not be used.')
+        return
+    
     ok, Queue = handle_request('STATUS_QUEUE')
     
     if not ok:
         print("I don't know what happened, but the server did not respond"
               "as expected. maybe its a bug")
         return
-    
-    if not any((opts.jobs,opts.status,opts.user,opts.descr)):
-        print('At least one Job Selection Option must be given')
-        return
-    
-    if opts.jobs and not any((opts.status,opts.user,opts.descr)):
-        print('When the option -J is given the other Job Selection Options'
-              'can not be used.')
-        return
-    
+   
     if opts.jobs is not None:
-        jobs = set([ int(x) for x in opts.jobs.split(',')])
-        nonexistent_jobs = jobs - Queue.keys()
-        if not nonexistent_jobs:
+        try:
+            jobs = set([ int(x) for x in opts.jobs.split(',')])
+        except ValueError as err:
+            print(err)
+            return
+        nonexistent_jobs = list(jobs - set(Queue.keys()))
+        if nonexistent_jobs:
             print('These jobs do not exist:', ' '.join(nonexistent_jobs))
             return
         Queue = Global.JobQueue({k:v for k,v in Queue.items() if k in jobs})
@@ -133,9 +137,9 @@ def main():
     if opts.descr is not None:
         Queue = Queue.SelAttrVal(attr='description',value=opts.descr)
 
-    if not Queue.SelAttrVal(attr='status_key', value={'t','e','tu'}):
+    if Queue.SelAttrVal(attr='status_key', value={'t','e','tu'}):
         print("You are trying to change a job which is finished: Operation"
-              "not allowed.")
+              " not allowed.")
         return
 
     signals = dict({'kill':'tu','pause':'pu','continue':'r'})
