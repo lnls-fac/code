@@ -33,12 +33,14 @@ class RequestHandler(socketserver.StreamRequestHandler):
     
     ConfigsLock = threading.Lock()
     QueueLock   = threading.Lock()
+    QChanLock   = threading.Lock()
     CallLock    = threading.Lock()
     IdGenLock   = threading.Lock()
     
-    Configs     = None
-    IdGen       = None
-    Queue       = None
+    Configs = None
+    IdGen   = None
+    Queue   = None
+    QChan   = Global.JobQueue()
     Call = dict( 
         GIME_JOBS=(
             lambda self, *args: self.send_job_from_queue(*args)),
@@ -48,6 +50,10 @@ class RequestHandler(socketserver.StreamRequestHandler):
             lambda self, *args: self.add_new_job_to_queue(*args)),
         UPDATE_JOBS=(
             lambda self, *args: self.update_jobs_in_queue(*args)),  
+        CHANGE_JOBS_REQUEST=(
+            lambda self, *args: self.change_jobs_request(*args)),
+        SIGNAL_JOBS=(
+            lambda self, *args: self.send_signal_jobs(*args)),
         STATUS_QUEUE=(
             lambda self, *args: self.print_queue_status(*args)),
         GIME_CONFIGS=(
@@ -89,12 +95,10 @@ class RequestHandler(socketserver.StreamRequestHandler):
         return (True, jobid)
     
     def send_results_to_host(self):
-        clientName = socket.gethostbyaddr(self.client_address[0])[0]
-        if clientName == 'localhost':
-            clientName = socket.gethostname()
+        clientName = get_client_name(self)
         with self.QueueLock:
             ResQueue = self.Queue.SelAttrVal(attr='status_key',
-                                             value={'e','t'})
+                                             value={'e','t','tu'})
         EnvQueue = ResQueue.SelAttrVal(attr='hostname',value={clientName})
         if EnvQueue: 
             with self.QueueLock:
@@ -104,9 +108,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
         return (False, None)
     
     def send_configs_to_client(self, ItsConfigs):
-        clientName = socket.gethostbyaddr(self.client_address[0])[0]
-        if clientName == 'localhost':
-            clientName = socket.gethostname()
+        clientName = get_client_name(self)
         with self.ConfigsLock:
             if clientName in self.Configs.keys():
                 self.Configs[clientName].numcpus = ItsConfigs.numcpus
@@ -143,17 +145,26 @@ class RequestHandler(socketserver.StreamRequestHandler):
     
     def update_jobs_in_queue(self, ItsQueue):
         keys2remove = []
+        clientName = get_client_name(self)
+        Jobs2Sign = Global.JobQueue()
+        
+        ClientQueue = self.Queue.SelAttrVal(attr='runninghost',
+                                            value = {clientName})
+        diffe = set(ClientQueue.keys() ^ ItsQueue.keys())
+        if diffe:
+            print("Problem, incompatibility between client's and"
+                  "server's queue")
         with self.QueueLock:
+        # section to update the jobs in the server
             for k, v in ItsQueue.items():
-                value = self.Queue.get(k)
-                if value is not None:
+                if v.status_key in {'e','t','tu','q'}:
                     self.Queue.update({k:v})
-                else:
-                    print('job {0:08d} exists in {1.runninghost}'
-                          'but not in server: deleting!'.format(k,v))
-                if v.status_key in {'e','t'}:
                     keys2remove.append(k)
-        return (True, keys2remove)
+        #section to update the jobs in the client
+        for k in ClientQueue.keys():
+            if self.Queue[k] != ItsQueue[k]:
+                Jobs2Sign.update({k:self.Queue[k]})
+        return (True, keys2remove, Jobs2Sign)
     
     def get_configs_of_clients(self, clients):
         if clients == 'all':
@@ -163,9 +174,9 @@ class RequestHandler(socketserver.StreamRequestHandler):
         with self.ConfigsLock:
             for clientName in clients:
                 if clientName in self.Configs.keys():
-                    if (3*WAIT_TIME < datetime.datetime.now().timestamp() - 
-                        self.Configs[clientName].last_contact.timestamp()
-                        and self.Configs[clientName].active == 'on'):
+                    if (self.Configs[clientName].active == 'on' and 
+                        3*WAIT_TIME < datetime.datetime.now().timestamp() - 
+                        self.Configs[clientName].last_contact.timestamp()):
                         self.Configs[clientName]. active = 'dead'
                     ClientConfigs = self.Configs[clientName]
                     Configs2Send.update({clientName: ClientConfigs})
@@ -179,22 +190,52 @@ class RequestHandler(socketserver.StreamRequestHandler):
         return (True, None)
     
     def shutdown(self):
+        for k in self.Configs:
+            self.Configs[k].active= 'off'
         self.server.shutdown()
         save()
         raise Finish()
     
     def client_shutdown(self):
-        clientName = socket.gethostbyaddr(self.client_address[0])[0]
-        if clientName == 'localhost':
-            clientName = socket.gethostname()
+        clientName = get_client_name(self)
         with self.ConfigsLock:
             self.Configs[clientName].active = 'off'
             self.Configs[clientName].shutdown = False
             self.Configs[clientName].MoreJobs = True
         return True
-        
+    
+    def change_jobs_request(self,ChanQueue):
+        keyschanged = set()
+        with self.QueueLock:
+            ChanQueueNoRun = ChanQueue.SelAttrVal(attr='runninghost',
+                                                  value={None})
+            for k,v in ChanQueueNoRun.items():
+                vl = self.Queue.get(k)
+                if not vl or vl.runninghost:
+                    continue
+                vl.priority = v.priority
+                vl.status_key = v.status_key
+                vl.possiblehosts = v.possiblehosts
+                keyschanged.add(k)
+                self.Queue.update({k:vl})
+                
+            keys2change = set(ChanQueue.keys() - ChanQueueNoRun.keys())
+            keyssched2change = set()
+            for k in keys2change:
+                if self.Queue[k].status_key in {'t','e','tu'}:
+                    continue
+                self.Queue[k].priority = ChanQueue[k].priority
+                self.Queue[k].status_key = ChanQueue[k].status_key
+                self.Queue[k].possiblehosts = ChanQueue[k].possiblehosts
+                keyssched2change.add(k)
+            return (True, keyschanged, keyssched2change)       
 
-        
+def get_client_name(client):
+    clientName = socket.gethostbyaddr(client.client_address[0])[0]
+    if clientName == 'localhost':
+        clientName = socket.gethostname()
+    return clientName
+
 def load_existing_Queue():
     name   = os.path.join(CONFIGFOLDER,QUEUE_FILENAME)
     data = Global.load_file(name=name, ignore = True)

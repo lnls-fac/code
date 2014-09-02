@@ -122,7 +122,7 @@ def check_running_jobs():
     for jobid, proc in jobid2proc.items():
         state = proc.poll()
         folder = FOLDERFORMAT.format(jobid)
-        if state is not None:
+        if state is not None and MyQueue[jobid].status_key not in {'tu','q'}:
             if os.path.isfile('/'.join([TEMPFOLDER,folder,JOBDONE])):
                 MyQueue[jobid].status_key = 'e'
             else:
@@ -134,7 +134,7 @@ def check_running_jobs():
 
 def deal_with_finished_jobs():
     for k, v in MyQueue.items():
-        if v.status_key in {'e', 't'}:
+        if v.status_key in {'e', 't', 'tu','q'}:
             folder = '/'.join([TEMPFOLDER, FOLDERFORMAT.format(k)])
             jobf= JOBFILE.format(jobid2proc[k].pid)
             files = os.listdir(path=folder)
@@ -213,6 +213,20 @@ def deal_with_results(ResQueue):
             Global.createfile(name = os.path.join(v.working_dir,name),
                               data = content[1], stats = content[0])
 
+def deal_with_signals(Jobs2Sign):
+    for k, v in Jobs2Sign.items():
+        if v.status_key == 'pu':
+            os.killpg(jobid2proc[k].pid, signal.SIGSTOP)
+        elif v.status_key == 'tu':
+            os.killpg(jobid2proc[k].pid, signal.SIGTERM)
+        elif v.status_key == 'r':
+            os.killpg(jobid2proc[k].pid, signal.SIGCONT)
+        elif v.status_key == 'q':
+             os.killpg(jobid2proc[k].pid, signal.SIGTERM)
+             v.runninghost = None
+        MyQueue.update({k:v})
+           
+
 
 MyQueue = Global.JobQueue()
 jobid2proc = dict()
@@ -245,13 +259,15 @@ def main():
             jobs2Stop = -jobs2Continue
             stop_jobs(jobs2Stop)
         
-        ok, keys2remove = handle_request('UPDATE_JOBS', MyQueue)
+        ok, keys2remove, Jobs2Sign = handle_request('UPDATE_JOBS', MyQueue)
         if ok:
             for key in keys2remove:
                 jobid2proc.pop(key)
                 MyQueue.pop(key)
                 shutil.rmtree('/'.join([TEMPFOLDER,FOLDERFORMAT.format(key)]))
-        
+            if Jobs2Sign:
+                deal_with_signals(Jobs2Sign)
+            
         ok, ResQueue = handle_request('GIME_RESULTS')
         if ok:
             deal_with_results(ResQueue)

@@ -55,18 +55,26 @@ def handle_request(*items, wait_for_reply=True):
 def main():
 
     parser = optparse.OptionParser()
-    parser.group.add_option('-s','--status',dest='status',type='str',
+    parser.add_option('-s','--status',dest='status',type='str',
                       help=("Select the jobs to show by their status. "
                             "[format: status1,status2,...  default: 'all']"))
-    parser.group.add_option('-u','--user',dest='user',type='str',
+    parser.add_option('-u','--user',dest='user',type='str',
                       help=("Select the jobs to show by their user. "
                             "[format: user1,user2,...  default: 'all']"))
+    parser.add_option('-d','--description',dest='descr',type='str',
+                      help="Select the jobs to show by a segment of their"
+                      "description.")
     parser.set_description(description='This command lists the jobs in the '
                            ' queue.')
     
     (opts, _) = parser.parse_args()
     
     ok, Queue = handle_request('STATUS_QUEUE')
+    if not ok:
+        print("I don't know what happened, but the server did not respond"
+              "as expected. maybe its a bug")
+        return
+    
     
     if opts.status is not None:
         status = set(opts.status.split(','))
@@ -80,12 +88,15 @@ def main():
         user = set(opts.user.split(','))
         Queue = Queue.SelAttrVal(attr='user',value=user)
     
-    if ok:
-        for k,v in Queue.items():
-            print('{0:08}  {1.priority:d} {1.status_key:5s}  {1.user:9s} '
-                  '{1.description:15s} {1.hostname:s} '
-                  '{1.runninghost}'.format(k, v))
+    if opts.descr is not None:
+        Queue = Queue.SelAttrVal(attr='description',value=opts.descr)
     
+
+    for k,v in Queue.items():
+        print('{0:08}  {1.priority:d} {1.status_key:5s}  {1.user:9s} '
+              '{1.description:15s} {1.hostname:s} '
+              '{1.runninghost}'.format(k, v))
+
     
     
 main()

@@ -77,6 +77,9 @@ def main():
                             "Higher numbers have higher priority (negative allowed)"
                             "[default: 0]"))
     
+    
+    parser.set_description(description='This command submit one job to the '
+                           ' queue.')
     (opts, _) = parser.parse_args()
         
     # Load execution script

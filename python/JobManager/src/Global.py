@@ -18,8 +18,10 @@ SET_STRUCT_PARAM = "!I 5s"
 STATUS = dict(q=1, # queued
                        r=4, # running
                        p=2, # paused
+                       pu=2,# paused by the user
                        w=3, # waiting
                        t=5, # terminated
+                       tu=5,# terminated by the user
                        e=6, # ended
                        s=7) # sent
 
@@ -33,6 +35,7 @@ class Jobs:
                  creation_date = None,
                  status_key = None,
                  hostname = None,
+                 possiblehosts = dict(),
                  runninghost = None,
                  priority = 0,
                  input_files = dict(),#keys are file names and values the data
@@ -56,6 +59,7 @@ class Jobs:
         self.hostname = hostname or socket.gethostname()
         self.priority = priority
         self.runninghost = runninghost
+        self.possiblehosts = possiblehosts or 'all'
         
         # Load input files
         self.input_files = input_files
@@ -91,7 +95,8 @@ class Jobs:
     def __eq__(self,other):
         if not isinstance(other, Jobs):
             return NotImplemented
-        elif not (self < other or other < self):
+        elif (not (self < other or other < self) and 
+              self.possiblehosts == other.possiblehosts):
             return True
         else:
             return False
@@ -162,12 +167,15 @@ class JobQueue(dict):
     
     def SelAttrVal(self,attr='status_key', value={'r'}):
         newqueue = JobQueue()
-        if not isinstance(value, set): value = set(value)
+        if isinstance(value, set):
+            for k,v in self.items():
+                if v.__getattribute__(attr) in value:
+                    newqueue.update({k:v})
+            return newqueue
         for k,v in self.items():
-            if v.__getattribute__(attr) in value:
-                newqueue.update({k:v})
+            if value in v.__getattribute__(attr):
+                    newqueue.update({k:v})
         return newqueue
-        
     
 class Configs:
     def __init__(self, shutdown = False, MoreJobs = True, niceness=0,
