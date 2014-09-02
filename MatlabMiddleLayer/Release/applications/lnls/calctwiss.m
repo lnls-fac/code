@@ -29,7 +29,7 @@ end
 
 if isempty(elements)
     if np1_flag
-        element = 1:(length(the_ring)+1);
+        elements = 1:(length(the_ring)+1);
     else
         elements = 1:length(the_ring);
     end

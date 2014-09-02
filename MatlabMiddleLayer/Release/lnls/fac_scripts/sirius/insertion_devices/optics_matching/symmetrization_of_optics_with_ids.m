@@ -59,7 +59,8 @@ ids = [ids ids_def.ipe2];
 % the_ring0 = THERING;
 % data = load('the_ring_withids_ac10_5_2014-05-15.mat');
 %the_ring0 = data.the_ring;
-the_ring0 = sirius_lattice('ac10_5');
+the_ring0 = sirius_lattice();
+the_ring = the_ring0; save('the_ring.mat', 'the_ring');
 
 the_ring0 = start_at_last_element(the_ring0, 'mc'); % shifts model to start at center of 2T bending magnets
 twiss0 = calc_short_twiss(the_ring0); % calcs original twiss parameters
@@ -89,7 +90,8 @@ end
 
 % saves lattice model with ids
 the_ring = restore_lattice_ordering(the_ring);
-save('the_ring_withids_ac10_5_2014-05-15_phase2.mat', 'the_ring');
+save('the_ring_withids.mat', 'the_ring');
+%save('the_ring_withids_ac10_5_2014-05-15_phase2.mat', 'the_ring');
 
 
 
@@ -530,6 +532,14 @@ ids_def.sabia.straight_label     = 'mia';
 ids_def.sabia.straight_number    = 7;
 ids_def.sabia.strength           = 2; % two IDs in series
 
+% ids_def.sabia.label              = 'sabia';
+% ids_def.sabia.kicktable_file     = '../id_modelling/EPU80/EPU80_PH_kicktable_6p5meters.txt';
+% ids_def.sabia.nr_segs            = 40;
+% ids_def.sabia.straight_label     = 'mia';
+% ids_def.sabia.straight_number    = 7;
+% ids_def.sabia.strength           = 2 * (6.5/5.4); % two IDs in series
+
+
 ids_def.ipe.label                = 'ipe';
 ids_def.ipe.kicktable_file       = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';
 ids_def.ipe.nr_segs              = 40;
@@ -551,6 +561,13 @@ ids_def.sabia2.nr_segs            = 40;
 ids_def.sabia2.straight_label     = 'mia';
 ids_def.sabia2.straight_number    = 8;
 ids_def.sabia2.strength           = 2; % two IDs in series
+
+% ids_def.sabia2.label              = 'sabia2';
+% ids_def.sabia2.kicktable_file     = '../id_modelling/EPU80/EPU80_PH_kicktable_6p5meters.txt';
+% ids_def.sabia2.nr_segs            = 40;
+% ids_def.sabia2.straight_label     = 'mia';
+% ids_def.sabia2.straight_number    = 8;
+% ids_def.sabia2.strength           = 2 * (6.5/5.4); % two IDs in series
 
 ids_def.ipe2.label                = 'ipe2';
 ids_def.ipe2.kicktable_file       = '../id_modelling/EPU80/EPU80_PH_kicktable_5p4meters.txt';

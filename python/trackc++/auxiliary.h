@@ -38,7 +38,8 @@ struct PassMethod {
 		pm_cavity_pass                    = 5,
 		pm_thinquad_pass                  = 6,
 		pm_thinsext_pass                  = 7,
-		pm_kicktable_pass                 = 8
+		pm_kicktable_pass                 = 8,
+		pm_nr_pms                         = 9
 	};
 };
 
