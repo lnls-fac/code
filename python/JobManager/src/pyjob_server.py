@@ -150,7 +150,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
         
         ClientQueue = self.Queue.SelAttrVal(attr='runninghost',
                                             value = {clientName})
-        diffe = set(ClientQueue.keys() ^ ItsQueue.keys())
+        diffe = set(ClientQueue.keys()) ^ set(ItsQueue.keys())
         if diffe:
             print("Problem, incompatibility between client's and"
                   "server's queue")

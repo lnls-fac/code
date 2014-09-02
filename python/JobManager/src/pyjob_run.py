@@ -222,8 +222,8 @@ def deal_with_signals(Jobs2Sign):
         elif v.status_key == 'r':
             os.killpg(jobid2proc[k].pid, signal.SIGCONT)
         elif v.status_key == 'q':
-             os.killpg(jobid2proc[k].pid, signal.SIGTERM)
-             v.runninghost = None
+            os.killpg(jobid2proc[k].pid, signal.SIGTERM)
+            v.runninghost = None
         MyQueue.update({k:v})
            
 
