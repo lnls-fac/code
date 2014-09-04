@@ -91,6 +91,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
         with cls.IdGenLock, cls.QueueLock:
             jobid = cls.IdGen
             cls.IdGen += 1 
+            job.creation_date = datetime.datetime.now()
             cls.Queue.update({jobid : job})
         return (True, jobid)
     
