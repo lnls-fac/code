@@ -98,7 +98,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
         clientName = get_client_name(self)
         with self.QueueLock:
             ResQueue = self.Queue.SelAttrVal(attr='status_key',
-                                             value={'e','t','tu'})
+                                             value={'e','t'})
         EnvQueue = ResQueue.SelAttrVal(attr='hostname',value={clientName})
         if EnvQueue: 
             with self.QueueLock:
@@ -131,10 +131,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
             if not len(QueuedJobs): return (False, None)
             for k,v in QueuedJobs.items():
                 v.status_key = 's'
-                v.runninghost = socket.gethostbyaddr(
-                                                self.client_address[0])[0]
-                if v.runninghost == 'localhost':
-                    v.runninghost = socket.gethostname()
+                v.runninghost = get_client_name(self)
                 Jobs2Send.update({k:v})
                 self.Queue.update({k:v})
                 if len(Jobs2Send) >= jobs2send: break
@@ -150,6 +147,9 @@ class RequestHandler(socketserver.StreamRequestHandler):
         
         ClientQueue = self.Queue.SelAttrVal(attr='runninghost',
                                             value = {clientName})
+        ClientQueue = ClientQueue.SelAttrVal(attr='status_key',
+                                             value=(set(STATUS.keys())-
+                                                    {'t','e'}))
         diffe = set(ClientQueue.keys()) ^ set(ItsQueue.keys())
         if diffe:
             print("Problem, incompatibility between client's and"
@@ -157,12 +157,22 @@ class RequestHandler(socketserver.StreamRequestHandler):
         with self.QueueLock:
         # section to update the jobs in the server
             for k, v in ItsQueue.items():
-                if v.status_key in {'e','t','tu','q'}:
+                if v.status_key in {'e','t','q'}:
                     self.Queue.update({k:v})
                     keys2remove.append(k)
+                if self.Queue[k].status_key in {'ru','pu','qu','tu'}:
+                    if STATUS[self.Queue[k].status_key] == STATUS[v.status_key]: 
+                        self.Queue.update({k:v})
+                elif self.Queue[k].status_key == 'ch':
+                    if (self.Queue[k].possiblehosts == v.possiblehosts and
+                        self.Queue[k].priority == v.priority):
+                        self.Queue.update({k:v})                    
+                else:
+                    self.Queue.update({k:v})
+      
         #section to update the jobs in the client
         for k in ClientQueue.keys():
-            if self.Queue[k] != ItsQueue[k]:
+            if self.Queue.get(k) != ItsQueue.get(k):
                 Jobs2Sign.update({k:self.Queue[k]})
         return (True, keys2remove, Jobs2Sign)
     
@@ -193,7 +203,6 @@ class RequestHandler(socketserver.StreamRequestHandler):
         for k in self.Configs:
             self.Configs[k].active= 'off'
         self.server.shutdown()
-        save()
         raise Finish()
     
     def client_shutdown(self):
@@ -215,14 +224,18 @@ class RequestHandler(socketserver.StreamRequestHandler):
                     continue
                 vl.priority = v.priority
                 vl.status_key = v.status_key
+                if v.status_key == 'ru':
+                    vl.status_key = 'q'
                 vl.possiblehosts = v.possiblehosts
                 keyschanged.add(k)
                 self.Queue.update({k:vl})
+                if v.status_key == 'tu':
+                    self.Queue.pop(k)
                 
             keys2change = set(ChanQueue.keys()) - set(ChanQueueNoRun.keys())
             keyssched2change = set()
             for k in keys2change:
-                if self.Queue[k].status_key in {'t','e','tu'}:
+                if self.Queue[k].status_key in {'t','e','tu', 'qu','q'}:
                     continue
                 self.Queue[k].priority = ChanQueue[k].priority
                 self.Queue[k].status_key = ChanQueue[k].status_key

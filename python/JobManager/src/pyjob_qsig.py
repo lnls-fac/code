@@ -123,8 +123,8 @@ def main():
     
     if opts.status is not None:
         status = set(opts.status.split(','))
-        if not len(status - STATUS.keys()):
-            print('Wrong status specification. Possible values are:\n'
+        if len(status - STATUS.keys()):
+            print('Wrong status specification. Possible values are:',
                   ' '.join(list(k for k,v in sorted(STATUS.items(),
                                                     key= lambda x: x[1]))))
             return
@@ -142,7 +142,7 @@ def main():
               " not allowed.")
         return
 
-    signals = dict({'kill':'tu','pause':'pu','continue':'r'})
+    signals = dict({'kill':'tu','pause':'pu','continue':'ru'})
     if opts.signal is not None:
         if opts.signal.lower() not in signals.keys():
             print('Signal not supported')
@@ -152,32 +152,53 @@ def main():
     
     if opts.hosts is not None:
         action = opts.hosts.split('=')
-        if len(action) != 2: print('Wrong -H assignment.')
+        if len(action) != 2: 
+            print('Wrong -H assignment.')
+            return
         hosts = set(action[1].split(','))
         for k,v in Queue.items():
+            if len(hosts) == 1 and not hosts.symmetric_difference({'all'}):
+                v.possiblehosts = 'all';
+                v.status_key = 'ch'
+                continue
             if 'append'.startswith(action[0].lower()):
                 if v.possiblehosts == 'all':
                     continue
                 v.possiblehosts += hosts
+                v.status_key = 'ch'
             elif 'set'.startswith(action[0].lower()):
                 v.possiblehosts = hosts
+                v.status_key = 'ch'
             else:
                 print('Wrong -H assignment.')
                 return
             Queue.update({k:v})
     
+    if opts.priority is not None:
+        for k,v in Queue.items():
+            v.priority = opts.priority
+            v.status_key = 'ch'
+            Queue.update({k:v})
+    
     if opts.queue:
-        for k in Queue:
-            Queue[k].status_key = 'q'
+        for k,v in Queue:
+            if v.status_key != 'q':
+                Queue[k].status_key = 'qu'
+            else:
+                print('You are trying to send a job which already is in q'
+                      ' state to the q state. Operation not allowed.')
+                return
         
-    ok, data = handle_request('CHANGE_JOBS_REQUEST',Queue)
+    ok, data1, data2 = handle_request('CHANGE_JOBS_REQUEST',Queue)
 
     if ok:
-        print('These jobs were successfully changed:', ' '.join(list(data[0])))
-        print('These jobs were scheduled to change: ', ' '.join(list(data[1])))
-        left = Queue.keys() - (data[0] | data[1])
+        pr1 = [str(x) for x in data1]
+        pr2 = [str(x) for x in data2]
+        print('These jobs were successfully changed:', ' '.join(pr1))
+        print('These jobs were scheduled to change: ', ' '.join(pr2))
+        left = [str(x) for x in set(Queue.keys()) - (data1 | data2)]
         if left:
-            print('These jobs could not be changed :', ' '.join(list(left)))
+            print('These jobs could not be changed :', ' '.join(left))
 
     
 if __name__ == '__main__':

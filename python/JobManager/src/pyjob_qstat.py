@@ -91,11 +91,13 @@ def main():
     if opts.descr is not None:
         Queue = Queue.SelAttrVal(attr='description',value=opts.descr)
     
-
+    print('{:8s}{:^5s}{:^8s}{:^10s}{:^20s}{:^16s}{:^16s}{:^16s}'
+      .format('Job ID','Prior', 'Status','User',
+              'Description', 'Host Owner','Host Running','Possible Hosts'))
     for k,v in Queue.items():
-        print('{0:08}  {1.priority:d} {1.status_key:5s}  {1.user:9s} '
-              '{1.description:15s} {1.hostname:s} '
-              '{1.runninghost}'.format(k, v))
+        print('{0:^8}{1.priority:^5d}{1.status_key:^8s}{1.user:^10s}'
+              '{1.description:20s}{1.hostname:^16s}{2:^16s}'
+              .format(k, v, v.runninghost or 'None'), v.possiblehosts)
 
     
     

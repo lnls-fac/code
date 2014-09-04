@@ -122,11 +122,12 @@ def check_running_jobs():
     for jobid, proc in jobid2proc.items():
         state = proc.poll()
         folder = FOLDERFORMAT.format(jobid)
-        if state is not None and MyQueue[jobid].status_key not in {'tu','q'}:
+        if state is not None:
             if os.path.isfile('/'.join([TEMPFOLDER,folder,JOBDONE])):
                 MyQueue[jobid].status_key = 'e'
             else:
-                MyQueue[jobid].status_key = 't'
+                if MyQueue[jobid].status_key != 'q':
+                    MyQueue[jobid].status_key = 't'
         else:
             if proc.status in {'running','sleeping'}:
                 count +=1
@@ -134,7 +135,7 @@ def check_running_jobs():
 
 def deal_with_finished_jobs():
     for k, v in MyQueue.items():
-        if v.status_key in {'e', 't', 'tu','q'}:
+        if v.status_key in {'e', 't', 'q'}:
             folder = '/'.join([TEMPFOLDER, FOLDERFORMAT.format(k)])
             jobf= JOBFILE.format(jobid2proc[k].pid)
             files = os.listdir(path=folder)
@@ -152,8 +153,9 @@ def deal_with_configs():
                                   MyConfigs.defNumJobs)
     
     for proc in jobid2proc.values():
-        if not proc.poll() and proc.get_nice() != MyConfigs.niceness:
-            proc.set_nice(MyConfigs.niceness)
+        if not proc.poll():
+            if proc.get_nice() != MyConfigs.niceness:
+                proc.set_nice(MyConfigs.niceness)
             
     return allowed
 
@@ -219,11 +221,18 @@ def deal_with_signals(Jobs2Sign):
             os.killpg(jobid2proc[k].pid, signal.SIGSTOP)
         elif v.status_key == 'tu':
             os.killpg(jobid2proc[k].pid, signal.SIGTERM)
-        elif v.status_key == 'r':
             os.killpg(jobid2proc[k].pid, signal.SIGCONT)
-        elif v.status_key == 'q':
+            v.status_key = 't'
+        elif v.status_key == 'ru':
+            os.killpg(jobid2proc[k].pid, signal.SIGCONT)
+            v.status_key = 'r'
+        elif v.status_key == 'qu':
             os.killpg(jobid2proc[k].pid, signal.SIGTERM)
+            os.killpg(jobid2proc[k].pid, signal.SIGCONT)
             v.runninghost = None
+            v.status_key = 'q'
+        elif v.status_key == 'ch':
+            v.status_key = MyQueue[k].status_key
         MyQueue.update({k:v})
            
 

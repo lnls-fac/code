@@ -121,13 +121,13 @@ def main():
     
         if opts.week is not None:
             week = opts.week.split(',')
-            days = (x for x in calendar.day_name for y in week 
+            days = tuple(x for x in calendar.day_name for y in week 
                                     if x.lower().startswith(y.lower()))
             if len(days) != len(week):
                 print("Problem with at least one week day specified")
                 return
         else:
-            days = (calendar.day_name[datetime.datetime.now().weekday()])
+            days = (calendar.day_name[datetime.datetime.now().weekday()],)
         
         if opts.hour is not None:
             hour = tuple(int(x) for x in opts.hour.split(':'))
@@ -135,9 +135,9 @@ def main():
                 print("Problem with specification of hour")
                 return
             y = 1 if hour[0]<=hour[1] else 25
-            hour = (x % 24 for x in range(hour[0],hour[1] + y))
+            hour = tuple(x % 24 for x in range(hour[0],hour[1] + y))
         else:
-            hour = (x for x in range(24))
+            hour = tuple(x for x in range(24))
         
         if opts.minutes is not None:
             minutes = tuple(int(x) for x in opts.minutes.split(':'))
@@ -147,7 +147,7 @@ def main():
             y = 1 if minutes[0] <= minutes[1] else 61
             minutes = (x % 60 for x in range(minutes[0], minutes[1] + y))
         else:
-            minutes = list(range(60))   
+            minutes = tuple(range(60))   
         
         calendars = {(x,y,z): np for x in days for y in hour for z in minutes}
     else:
@@ -159,7 +159,10 @@ def main():
             return
     
     for k in ConfigsReceived.keys():
-        ConfigsReceived[k].Calendar.update(calendars)
+        if opts.calendar == 'append':
+            ConfigsReceived[k].Calendar.update(calendars)
+        elif opts.calendar == 'set':
+            ConfigsReceived[k].Calendar = calendars
     
     
     if opts.niceness is not None:
