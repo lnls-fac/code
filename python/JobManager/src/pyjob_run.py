@@ -175,6 +175,9 @@ def submit_jobs(NewQueue):
         for name, info in v.input_files.items():
             Global.createfile(name='/'.join([tempdir, name]),
                               data = info[1], stats = info[0])
+        for name, info in v.output_files.items():
+            Global.createfile(name='/'.join([tempdir, name]),
+                              data = info[1], stats = info[0])
         #submit job
         proc = psutil.Popen('/'.join([tempdir, SUBMITSCRNAME.format(k)]),
                             stdout=subprocess.DEVNULL,

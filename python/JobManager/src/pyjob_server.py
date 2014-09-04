@@ -88,10 +88,12 @@ class RequestHandler(socketserver.StreamRequestHandler):
 
     @classmethod
     def add_new_job_to_queue(cls, job):
+        clientName = get_client_name(self)
         with cls.IdGenLock, cls.QueueLock:
             jobid = cls.IdGen
             cls.IdGen += 1 
             job.creation_date = datetime.datetime.now()
+            job.hostname = clientName
             cls.Queue.update({jobid : job})
         return (True, jobid)
     
@@ -180,6 +182,8 @@ class RequestHandler(socketserver.StreamRequestHandler):
     def get_configs_of_clients(self, clients):
         if clients == 'all':
             clients = tuple(self.Configs.keys())
+        elif not clients:
+            clients = (get_client_name(self),)
             
         Configs2Send = {}        
         with self.ConfigsLock:

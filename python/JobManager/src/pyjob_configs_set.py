@@ -60,7 +60,8 @@ def main():
     parser = optparse.OptionParser()
     parser.add_option('-c','--clients',dest='clients',type='str',
                       help="list of hosts to set calendar. "
-                      "[format: client1,client2,...  default: 'this']")
+                      "[format: client1,client2,...  default: 'this']. "
+                      "Use 'all' to set the configs of all clients")
     parser.add_option('-n','--niceness',dest='niceness',type='int',
                       help="Niceness of the jobs submitted by the clients. "
                       "[default: 'current value']")
@@ -97,9 +98,12 @@ def main():
     (opts, _) = parser.parse_args()
     
     
-    clients = [socket.gethostname()]
+    clients = None
     if opts.clients is not None:
-        clients = opts.clients.split(",")
+        if opts.clients == 'all':
+            clients = opts.clients
+        else:
+            clients = opts.clients.split(",")
     
     ok, data = handle_request('GET_CONFIGS',clients)
     if ok:
