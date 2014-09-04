@@ -205,7 +205,7 @@ def continue_stopped_jobs(jobs2Continue = 1):
     StoppedQueue = MyQueue.SelAttrVal(attr='status_key', value={'p'})
     if not len(StoppedQueue): return 0
     for i in range(jobs2Continue):
-        k, v = StoppedQueue.poplast()
+        k, v = StoppedQueue.popfirst()
         os.killpg(jobid2proc[k].pid,signal.SIGCONT)
         v.status_key = 'r'
         MyQueue.update({k:v})
