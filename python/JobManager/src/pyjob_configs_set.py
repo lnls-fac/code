@@ -102,6 +102,7 @@ def main():
     if opts.clients is not None:
         if opts.clients == 'all':
             clients = opts.clients
+            print('ok')
         else:
             clients = opts.clients.split(",")
     
@@ -109,7 +110,9 @@ def main():
     if ok:
         ConfigsReceived = data
 
-    notmatched =  set(clients) - ConfigsReceived.keys()
+    notmatched = None
+    if clients != 'all':
+        notmatched =  set(clients) - ConfigsReceived.keys()
     if notmatched:
         print("These clients: " + ", ".join(notmatched) + "\n do not exist "
               "in the server's list.")

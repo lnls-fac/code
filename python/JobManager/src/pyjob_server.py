@@ -86,9 +86,9 @@ class RequestHandler(socketserver.StreamRequestHandler):
         self.wfile.write(InfoStruct.pack(len(data), VERSION))
         self.wfile.write(data)
 
-    @classmethod
-    def add_new_job_to_queue(cls, job):
+    def add_new_job_to_queue(self, job):
         clientName = get_client_name(self)
+        cls = self.__class__
         with cls.IdGenLock, cls.QueueLock:
             jobid = cls.IdGen
             cls.IdGen += 1 
