@@ -5,6 +5,7 @@ import datetime
 import socketserver
 import struct
 import threading
+import signal
 import pickle
 import os
 import socket
@@ -281,6 +282,9 @@ def save():
     Global.createfile(name=queuename, data=repr(RequestHandler.Queue))
     Global.createfile(name=configname, data=repr(RequestHandler.Configs))
 
+def signal_handler(signal, frame):
+    save()
+
 def main():
     RequestHandler.Queue = load_existing_Queue() or Global.JobQueue()
     RequestHandler.IdGen = load_last_id() or int(1)
@@ -297,9 +301,5 @@ def main():
         save()
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, signal_handler)
     main()
-
-    #fuser -Address[1]/tcp
-  
-   
-

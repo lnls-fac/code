@@ -113,7 +113,7 @@ def load_jobs_from_last_run():
             MyQueue.update({jobid : job})
 
 def signal_handler(signal, frame):
-        shutdown()
+    shutdown()
 
 def shutdown():
     ok = handle_request('GOODBYE')
