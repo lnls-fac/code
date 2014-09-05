@@ -112,6 +112,9 @@ def load_jobs_from_last_run():
             jobid2proc.update({jobid : proc})
             MyQueue.update({jobid : job})
 
+def signal_handler(signal, frame):
+        shutdown()
+
 def shutdown():
     ok = handle_request('GOODBYE')
     if ok:
@@ -316,4 +319,6 @@ if __name__ == '__main__':
                 print('There is already one instance of {0}'
                       ' running on this computer: exiting'.format(mod_name))
                 sys.exit(1)
+                
+    signal.signal(signal.SIGTERM, signal_handler)
     main()
