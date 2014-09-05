@@ -61,7 +61,12 @@ def main():
     parser.add_option('-c','--clients',dest='clients',type='str',
                       help="list of hosts to set calendar. "
                       "[format: client1,client2,...  default: 'this']. "
-                      "Use 'all' to set the configs of all clients")
+                      "Use 'all' to set the configs of all clients. "
+                      "It is not necessary to give the full name of the "
+                      "clients, only a small set of letters can be given, "
+                      "for example, to specify the client fernando-linux, "
+                      "only the word lin, or nan could be passed. However, "
+                      "if other clients mach")
     parser.add_option('-n','--niceness',dest='niceness',type='int',
                       help="Niceness of the jobs submitted by the clients. "
                       "[default: 'current value']")
@@ -102,22 +107,25 @@ def main():
     if opts.clients is not None:
         if opts.clients == 'all':
             clients = opts.clients
-            print('ok')
         else:
             clients = opts.clients.split(",")
     
-    ok, data = handle_request('GET_CONFIGS',clients)
+    ok, data = handle_request('GET_CONFIGS','all')
     if ok:
         ConfigsReceived = data
 
-    notmatched = None
+    ConfigsMatched = dict()
     if clients != 'all':
-        notmatched =  set(clients) - ConfigsReceived.keys()
-    if notmatched:
-        print("These clients: " + ", ".join(notmatched) + "\n do not exist "
-              "in the server's list.")
-        return
-    
+        for client in clients:
+            keys = set(ConfigsReceived.keys())
+            for k in sorted(keys):
+                if client.lower() in k.lower():
+                    ConfigsMatched.update({k:ConfigsReceived.pop(k)})
+        if len(ConfigsMatched) != len(clients):
+            print("Some keys : did not match any client "
+                  "in the server's list.")
+            return
+        ConfigsReceived = ConfigsMatched
     calendars = {}
     if opts.calendar in {'append','set'}:
         if opts.np is None:
@@ -211,7 +219,8 @@ def main():
     
     ok, clients = handle_request('SET_CONFIGS',ConfigsReceived)
     if ok:
-        print('Success. Configurations will be set!')
+        print('Success. Configurations will be set! for \n', 
+              ', '.join(tuple(ConfigsReceived)))
     else:
         print("It seems that these clients are not in the server's list;",
               ', '.join(clients))

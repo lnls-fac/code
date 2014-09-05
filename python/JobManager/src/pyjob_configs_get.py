@@ -125,7 +125,7 @@ def main():
     print('{:15s}{:^7s}{:^9s}{:^9s}{:^10s}{:^10s}{:^6s}'
           .format('hostname','state', 'numcpus','NumJobs',
                   'MoreJobs', 'Shutdown','Nice'))
-    for k,v in ConfigsReceived.items():
+    for k,v in sorted(ConfigsReceived.items(),key=lambda x: x[0]):
         print('{0:15s}{1.active!s:^7s}{1.numcpus:^9d}{1.defNumJobs:^9d}'
               '{1.MoreJobs!s:^10}{1.shutdown!s:^10}{1.niceness:^6d}'
               .format(k,v))

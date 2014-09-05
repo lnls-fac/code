@@ -44,7 +44,8 @@ class SocketManager:
     
     def __exit__(self, *ignore):
         self.sock.close()
-    
+ 
+class ServerDown(Exception): pass   
 
 def handle_request(*items, wait_for_reply=True):
     InfoStruct = struct.Struct(SET_STRUCT_PARAM)
@@ -68,9 +69,8 @@ def handle_request(*items, wait_for_reply=True):
             return pickle.loads(result)
     except socket.error as err:
         print("{0}: is the pyjob_server running?".format(err))
-        sys.exit(1)
+        raise ServerDown()
         
-
 
 def load_jobs_from_last_run():
     ''' Check if there are jobs running from last call of the script.
@@ -100,7 +100,8 @@ def load_jobs_from_last_run():
             state = proc.poll()
             folder = FOLDERFORMAT.format(jobid)
             if (state is not None or
-                proc.name not in '/'.join([folder, SUBMITSCRNAME.format(jobid)])):
+                proc.name not in '/'.join([folder, 
+                                           SUBMITSCRNAME.format(jobid)])):
                 if os.path.isfile('/'.join([TEMPFOLDER,folder,JOBDONE])):
                     job.status_key = 'e'
                 else:
@@ -140,7 +141,8 @@ def deal_with_finished_jobs():
             jobf= JOBFILE.format(jobid2proc[k].pid)
             files = os.listdir(path=folder)
             for file in set(files) - (v.input_files.keys() |
-                                       set([jobf,JOBDONE])):
+                                       set([JOBDONE]) |
+                                       set(SUBMITSCRNAME.format(k))):
                 data = Global.load_file(os.path.join(folder,file))
                 v.output_files.update({file: data})
             MyQueue.update({k:v})
@@ -153,7 +155,8 @@ def deal_with_configs():
                                   MyConfigs.defNumJobs)
     
     for proc in jobid2proc.values():
-        if not proc.poll():
+        state = proc.poll()
+        if state is None:
             if proc.get_nice() != MyConfigs.niceness:
                 proc.set_nice(MyConfigs.niceness)
             
@@ -238,6 +241,9 @@ def deal_with_signals(Jobs2Sign):
             v.status_key = MyQueue[k].status_key
         MyQueue.update({k:v})
            
+def wait_for_server():
+    time.sleep(WAIT_TIME)
+
 
 
 MyQueue = Global.JobQueue()
@@ -250,49 +256,56 @@ def main():
     deal_with_finished_jobs()
     
     global MyConfigs
-    ok, data = handle_request('GIME_CONFIGS', MyConfigs)
-    if ok:
-        MyConfigs = data
+    try:
+        ok, data = handle_request('GIME_CONFIGS', MyConfigs)
+        if ok:
+            MyConfigs = data
+    except ServerDown:
+        wait_for_server()
 
     
     while True:
-        num_running = check_running_jobs()
-        deal_with_finished_jobs()
-        num_allowed = deal_with_configs()
-        jobs2Continue = num_allowed - num_running
-        if jobs2Continue > 0:
-            continued = continue_stopped_jobs(jobs2Continue)
-            jobs2Submit = jobs2Continue - continued
-            if jobs2Submit > 0 and MyConfigs.MoreJobs:
-                ok, NewQueue = handle_request('GIME_JOBS',jobs2Submit)                 
-                if ok:
-                    submit_jobs(NewQueue)
-        elif jobs2Continue < 0 :
-            jobs2Stop = -jobs2Continue
-            stop_jobs(jobs2Stop)
-        
-        ok, keys2remove, Jobs2Sign = handle_request('UPDATE_JOBS', MyQueue)
-        if ok:
-            for key in keys2remove:
-                jobid2proc.pop(key)
-                MyQueue.pop(key)
-                shutil.rmtree('/'.join([TEMPFOLDER,FOLDERFORMAT.format(key)]))
-            if Jobs2Sign:
-                deal_with_signals(Jobs2Sign)
+        try:
+            time.sleep(WAIT_TIME)
+            num_running = check_running_jobs()
+            deal_with_finished_jobs()
+            num_allowed = deal_with_configs()
+            jobs2Continue = num_allowed - num_running
+            if jobs2Continue > 0:
+                continued = continue_stopped_jobs(jobs2Continue)
+                jobs2Submit = jobs2Continue - continued
+                if jobs2Submit > 0 and MyConfigs.MoreJobs:
+                    ok, NewQueue = handle_request('GIME_JOBS',jobs2Submit)                 
+                    if ok:
+                        submit_jobs(NewQueue)
+            elif jobs2Continue < 0 :
+                jobs2Stop = -jobs2Continue
+                stop_jobs(jobs2Stop)
             
-        ok, ResQueue = handle_request('GIME_RESULTS')
-        if ok:
-            deal_with_results(ResQueue)
+            ok, keys2remove, Jobs2Sign = handle_request('UPDATE_JOBS', MyQueue)
+            if ok:
+                for key in keys2remove:
+                    jobid2proc.pop(key)
+                    MyQueue.pop(key)
+                    shutil.rmtree('/'.join([TEMPFOLDER,
+                                            FOLDERFORMAT.format(key)]))
+                if Jobs2Sign:
+                    deal_with_signals(Jobs2Sign)
+                
+            ok, ResQueue = handle_request('GIME_RESULTS')
+            if ok:
+                deal_with_results(ResQueue)
+    
+            ok, data = handle_request('GIME_CONFIGS',MyConfigs)
+            if ok:
+                MyConfigs = data
+            
+            if MyConfigs.shutdown:
+                shutdown()
+        except ServerDown:
+            wait_for_server()
+            
 
-        time.sleep(WAIT_TIME)
-
-        ok, data = handle_request('GIME_CONFIGS',MyConfigs)
-        if ok:
-            MyConfigs = data
-        
-        if MyConfigs.shutdown:
-            shutdown()
-        
 if __name__ == '__main__':
     proclist = psutil.get_process_list()
     mod_name = os.path.split(__file__)[1]

@@ -183,7 +183,7 @@ class JobQueue(dict):
 class Configs:
     def __init__(self, shutdown = False, MoreJobs = True, niceness=0,
                  defNumJobs = 0, Calendar = dict(), active = 'on',
-                 numcpus = None):
+                 numcpus = None, last_contact=None):
         self.shutdown = shutdown
         self.MoreJobs = MoreJobs
         self.niceness = niceness
@@ -191,13 +191,8 @@ class Configs:
         self.Calendar =  Calendar
         self.active = active
         self.numcpus = numcpus or psutil.NUM_CPUS
-        self.__last_contact = None
+        self.last_contact = last_contact
         
-    @property
-    def last_contact(self): return self.__last_contact
-    @last_contact.setter
-    def last_contact(self, last): self.__last_contact = last
-    
     def __repr__(self):
         return representational_form(self)
 

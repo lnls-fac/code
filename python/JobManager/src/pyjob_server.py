@@ -205,9 +205,10 @@ class RequestHandler(socketserver.StreamRequestHandler):
         return (True, None)
     
     def shutdown(self):
-        for k in self.Configs:
-            self.Configs[k].active= 'off'
-        self.server.shutdown()
+        with self.ConfigsLock:
+            for k in self.Configs:
+                self.Configs[k].active= 'off'
+            self.server.shutdown()
         raise Finish()
     
     def client_shutdown(self):
@@ -293,7 +294,7 @@ def main():
     finally:
         if server is not None:
             server.shutdown()
-            save()
+        save()
 
 if __name__ == '__main__':
     main()
