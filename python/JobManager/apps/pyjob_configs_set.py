@@ -3,78 +3,23 @@
 import optparse
 import calendar
 import datetime
-import sys
-import socket
-import struct
-import pickle
 import Global
 
-
-
-Address = Global.Address
-VERSION = Global.VERSION
-MAX_BLOCK_LEN = Global.MAX_BLOCK_LEN
-PICKLE_PROTOCOL = Global.PICKLE_PROTOCOL
-SET_STRUCT_PARAM = Global.SET_STRUCT_PARAM
-
-class SocketManager:
-    def __init__(self, address):
-        self.address = address
-    
-    def __enter__(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect(self.address)
-        return self.sock
-    
-    def __exit__(self, *ignore):
-        self.sock.close()
-    
-
-def handle_request(*items, wait_for_reply=True):
-    InfoStruct = struct.Struct(SET_STRUCT_PARAM)
-    data = pickle.dumps(items,PICKLE_PROTOCOL)
-    try:
-        with SocketManager(Address) as sock:
-            sock.sendall(InfoStruct.pack(len(data), VERSION))
-            sock.sendall(data)
-            if not wait_for_reply:
-                return
-            size_data = sock.recv(InfoStruct.size)
-            size = InfoStruct.unpack(size_data)[0]
-            result = bytearray()
-            while True:
-                data = sock.recv(MAX_BLOCK_LEN)
-                if not data:
-                    break
-                result.extend(data)
-                if len(result) >= size:
-                    break
-        return pickle.loads(result)
-    except socket.error as err:
-        print("{0}: is the pyjob_server running?".format(err))
-        sys.exit(1)
-
 def main():
-    
     # configuration of the parser for the arguments
     parser = optparse.OptionParser()
     parser.add_option('-c','--clients',dest='clients',type='str',
-                      help="list of hosts to set calendar. "
+                      help="list of hosts to interact with. "
                       "[format: client1,client2,...  default: 'this']. "
-                      "Use 'all' to set the configs of all clients. "
-                      "It is not necessary to give the full name of the "
-                      "clients, only a small set of letters can be given, "
-                      "for example, to specify the client fernando-linux, "
-                      "only the word lin, or nan could be passed. However, "
-                      "if other clients mach")
+                      "Use 'all' to get all clients. " + Global.MATCH_RULE)
     parser.add_option('-n','--niceness',dest='niceness',type='int',
                       help="Niceness of the jobs submitted by the clients. "
                       "[default: 'current value']")
-    parser.add_option('-s','--shutdown',dest='shut',type='string',
+    parser.add_option('--shutdown',dest='shut',type='string',
                       help="If true shutdown the clients. ")
-    parser.add_option('-j','--MoreJobs',dest='More',type='string',
+    parser.add_option('--MoreJobs',dest='More',type='string',
                       help="If false, the clients won't ask for new jobs.")
-    parser.add_option('-d','--defnumproc',dest='defproc',type='int',
+    parser.add_option('--defnumproc',dest='defproc',type='int',
                       help="Default number of processes the clients can run."
                       "It means that for the set of (W,H,M) not specified "
                       "in the calendar this will be the number of jobs each"
@@ -101,31 +46,23 @@ def main():
     
         
     (opts, _) = parser.parse_args()
-    
-    
-    clients = None
-    if opts.clients is not None:
+ 
+    try:
         if opts.clients == 'all':
             clients = opts.clients
+            ok, ConfigsReceived = Global.handle_request('GET_CONFIGS','all')
+        elif opts.clients is None:
+            ok, ConfigsReceived = Global.handle_request('GET_CONFIGS','this')
         else:
-            clients = opts.clients.split(",")
-    
-    ok, data = handle_request('GET_CONFIGS','all')
-    if ok:
-        ConfigsReceived = data
-
-    ConfigsMatched = dict()
-    if clients != 'all':
-        for client in clients:
-            keys = set(ConfigsReceived.keys())
-            for k in sorted(keys):
-                if client.lower() in k.lower():
-                    ConfigsMatched.update({k:ConfigsReceived.pop(k)})
-        if len(ConfigsMatched) != len(clients):
-            print("Some keys : did not match any client "
-                  "in the server's list.")
-            return
-        ConfigsReceived = ConfigsMatched
+            clients = set(opts.clients.split(","))
+            ConfigsReceived = Global.match_clients(clients)
+            ok = True
+        if not ok:
+            raise MatchClientsErr('Could not get configs of server.')
+    except Global.MatchClientsErr as err:
+        print(err)
+        return
+        
     calendars = {}
     if opts.calendar in {'append','set'}:
         if opts.np is None:
@@ -217,7 +154,7 @@ def main():
             ConfigsReceived[k].defNumJobs = defproc
     
     
-    ok, clients = handle_request('SET_CONFIGS',ConfigsReceived)
+    ok, clients = Global.handle_request('SET_CONFIGS',ConfigsReceived)
     if ok:
         print('Success. Configurations will be set! for \n', 
               ', '.join(tuple(ConfigsReceived)))

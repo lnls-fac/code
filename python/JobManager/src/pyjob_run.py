@@ -9,9 +9,6 @@ import time
 import signal
 import psutil
 import shutil
-import socket
-import struct
-import pickle
 import Global
 
 TEMPFOLDER    = os.path.join(os.path.split(
@@ -25,52 +22,10 @@ SUBMITSCR= (
 ./{0} > {1:08d}.out 2> {1:08d}.err
 touch {2}''')
 SUBMITSCRNAME = 'run_{0:08d}'
-
-Address     = Global.Address
-VERSION     = Global.VERSION
-MAX_BLOCK_LEN = Global.MAX_BLOCK_LEN
-PICKLE_PROTOCOL = Global.PICKLE_PROTOCOL
 WAIT_TIME = Global.WAIT_TIME
-SET_STRUCT_PARAM = Global.SET_STRUCT_PARAM
 
-class SocketManager:
-    def __init__(self, address):
-        self.address = address
-    
-    def __enter__(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect(Address)
-        return self.sock
-    
-    def __exit__(self, *ignore):
-        self.sock.close()
- 
-class ServerDown(Exception): pass   
-
-def handle_request(*items, wait_for_reply=True):
-    InfoStruct = struct.Struct(SET_STRUCT_PARAM)
-    data = pickle.dumps(items,PICKLE_PROTOCOL)
-    try:
-        with SocketManager(tuple(Address)) as sock:
-            sock.sendall(InfoStruct.pack(len(data), VERSION))
-            sock.sendall(data)
-            if not wait_for_reply:
-                return
-            size_data = sock.recv(InfoStruct.size)
-            size = InfoStruct.unpack(size_data)[0]
-            result = bytearray()
-            while True:
-                data = sock.recv(MAX_BLOCK_LEN)
-                if not data:
-                    break
-                result.extend(data)
-                if len(result) >= size:
-                    break
-            return pickle.loads(result)
-    except socket.error as err:
-        print("{0}: is the pyjob_server running?".format(err))
-        raise ServerDown()
-        
+def handle_request(*items):
+    return Global.handle_request(*items, exit_on_err = False)
 
 def load_jobs_from_last_run():
     ''' Check if there are jobs running from last call of the script.
@@ -141,7 +96,6 @@ def deal_with_finished_jobs():
     for k, v in MyQueue.items():
         if v.status_key in {'e', 't', 'q'}:
             folder = '/'.join([TEMPFOLDER, FOLDERFORMAT.format(k)])
-            jobf= JOBFILE.format(jobid2proc[k].pid)
             files = os.listdir(path=folder)
             for file in set(files) - (v.input_files.keys() |
                                        set([JOBDONE]) |
@@ -263,7 +217,7 @@ def main():
         ok, data = handle_request('GIME_CONFIGS', MyConfigs)
         if ok:
             MyConfigs = data
-    except ServerDown:
+    except Global.ServerDown:
         wait_for_server()
 
     
@@ -305,7 +259,7 @@ def main():
             
             if MyConfigs.shutdown:
                 shutdown()
-        except ServerDown:
+        except Global.ServerDown:
             wait_for_server()
             
 

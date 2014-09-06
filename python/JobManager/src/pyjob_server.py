@@ -165,7 +165,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
                     self.Queue.update({k:v})
                     keys2remove.append(k)
                 if self.Queue[k].status_key in {'ru','pu','qu','tu'}:
-                    if STATUS[self.Queue[k].status_key] == STATUS[v.status_key]: 
+                    if STATUS[self.Queue[k].status_key] ==STATUS[v.status_key]: 
                         self.Queue.update({k:v})
                 elif self.Queue[k].status_key == 'ch':
                     if (self.Queue[k].possiblehosts == v.possiblehosts and
@@ -183,7 +183,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
     def get_configs_of_clients(self, clients):
         if clients == 'all':
             clients = tuple(self.Configs.keys())
-        elif not clients:
+        elif clients == 'this':
             clients = (get_client_name(self),)
             
         Configs2Send = {}        
