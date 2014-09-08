@@ -366,7 +366,7 @@ def createfile(name= None, data=None, stats = MyStats(), owner = None):
     if not name:
         raise ValueError('Name not specified')
     try:
-        with open(name,'w') as fh:
+        with open(name, mode='wb') as fh:
             fh.write(data or '')
     except (IOError, OSError) as err:
         print('Problem with output files:\n',err)
@@ -386,7 +386,7 @@ def createfile(name= None, data=None, stats = MyStats(), owner = None):
         pass
 def load_file(name, ignore=False):
     try:
-        with open(name) as fh:
+        with open(name, mode='rb') as fh:
             file_data = fh.read()
     except (TypeError, IOError, OSError) as err:
         if not ignore:
