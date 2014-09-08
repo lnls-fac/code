@@ -7,6 +7,7 @@ import struct
 import threading
 import signal
 import pickle
+import sys
 import os
 import socket
 import Global
@@ -112,16 +113,18 @@ class RequestHandler(socketserver.StreamRequestHandler):
     def send_job_from_queue(self,jobs2send):
         QueuedJobs = Global.JobQueue()
         Jobs2Send = Global.JobQueue()
+        clientName = get_client_name(self)
         with self.QueueLock:
             QueuedJobs.update(self.Queue.SelAttrVal(attr='status_key',
                                                     value={'q'}))
             if not len(QueuedJobs): return (False, None)
             for k,v in QueuedJobs.items():
-                v.status_key = 's'
-                v.runninghost = get_client_name(self)
-                Jobs2Send.update({k:v})
-                self.Queue.update({k:v})
-                if len(Jobs2Send) >= jobs2send: break
+                if v.possiblehosts == 'all' or clientName in v.possiblehosts:
+                    v.status_key = 's'
+                    v.runninghost = get_client_name(self)
+                    Jobs2Send.update({k:v})
+                    self.Queue.update({k:v})
+                    if len(Jobs2Send) >= jobs2send: break
         return (True, Jobs2Send)
             
     def update_jobs_in_queue(self, ItsQueue):
@@ -283,6 +286,7 @@ def save():
 
 def signal_handler(signal, frame):
     save()
+    sys.exit()
 
 def main():
     RequestHandler.Queue = load_existing_Queue() or Global.JobQueue()
