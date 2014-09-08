@@ -34,14 +34,12 @@ class RequestHandler(socketserver.StreamRequestHandler):
     
     ConfigsLock = threading.Lock()
     QueueLock   = threading.Lock()
-    QChanLock   = threading.Lock()
     CallLock    = threading.Lock()
     IdGenLock   = threading.Lock()
     
     Configs = None
     IdGen   = None
     Queue   = None
-    QChan   = Global.JobQueue()
     Call = dict( 
         GIME_JOBS=(
             lambda self, *args: self.send_job_from_queue(*args)),
@@ -111,21 +109,6 @@ class RequestHandler(socketserver.StreamRequestHandler):
             return (True, EnvQueue)
         return (False, None)
     
-    def send_configs_to_client(self, ItsConfigs):
-        clientName = get_client_name(self)
-        with self.ConfigsLock:
-            if clientName in self.Configs.keys():
-                self.Configs[clientName].numcpus = ItsConfigs.numcpus
-                self.Configs[clientName].active = 'on'
-                self.Configs[clientName].last_contact = datetime.datetime.now()
-                return (True, self.Configs[clientName])
-            
-            self.Configs.update({clientName:ItsConfigs})
-            self.Configs[clientName].active = True
-            self.Configs[clientName].last_contact = datetime.datetime.now()
-            return (False, True)
-    
-    
     def send_job_from_queue(self,jobs2send):
         QueuedJobs = Global.JobQueue()
         Jobs2Send = Global.JobQueue()
@@ -141,9 +124,6 @@ class RequestHandler(socketserver.StreamRequestHandler):
                 if len(Jobs2Send) >= jobs2send: break
         return (True, Jobs2Send)
             
-    def print_queue_status(self):
-        return (True, self.Queue)
-    
     def update_jobs_in_queue(self, ItsQueue):
         keys2remove = []
         clientName = get_client_name(self)
@@ -179,6 +159,54 @@ class RequestHandler(socketserver.StreamRequestHandler):
             if self.Queue.get(k) != ItsQueue.get(k):
                 Jobs2Sign.update({k:self.Queue[k]})
         return (True, keys2remove, Jobs2Sign)
+
+    def change_jobs_request(self,ChanQueue):
+        keyschanged = set()
+        with self.QueueLock:
+            ChanQueueNoRun = ChanQueue.SelAttrVal(attr='runninghost',
+                                                  value={None})
+            for k,v in ChanQueueNoRun.items():
+                vl = self.Queue.get(k)
+                if not vl or vl.runninghost:
+                    continue
+                vl.priority = v.priority
+                vl.status_key = v.status_key
+                if v.status_key == 'ru':
+                    vl.status_key = 'q'
+                vl.possiblehosts = v.possiblehosts
+                keyschanged.add(k)
+                self.Queue.update({k:vl})
+                if v.status_key == 'tu':
+                    self.Queue.pop(k)
+                
+            keys2change = set(ChanQueue.keys()) - set(ChanQueueNoRun.keys())
+            keyssched2change = set()
+            for k in keys2change:
+                if self.Queue[k].status_key in {'t','e','tu', 'qu','q'}:
+                    continue
+                self.Queue[k].priority = ChanQueue[k].priority
+                self.Queue[k].status_key = ChanQueue[k].status_key
+                self.Queue[k].possiblehosts = ChanQueue[k].possiblehosts
+                keyssched2change.add(k)
+            return (True, keyschanged, keyssched2change)       
+
+    def print_queue_status(self):
+        return (True, self.Queue)
+
+
+    def send_configs_to_client(self, ItsConfigs):
+        clientName = get_client_name(self)
+        with self.ConfigsLock:
+            if clientName in self.Configs.keys():
+                self.Configs[clientName].numcpus = ItsConfigs.numcpus
+                self.Configs[clientName].active = 'on'
+                self.Configs[clientName].last_contact = datetime.datetime.now()
+                return (True, self.Configs[clientName])
+            
+            self.Configs.update({clientName:ItsConfigs})
+            self.Configs[clientName].active = True
+            self.Configs[clientName].last_contact = datetime.datetime.now()
+            return (False, True)
     
     def get_configs_of_clients(self, clients):
         if clients == 'all':
@@ -219,36 +247,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
             self.Configs[clientName].shutdown = False
             self.Configs[clientName].MoreJobs = True
         return True
-    
-    def change_jobs_request(self,ChanQueue):
-        keyschanged = set()
-        with self.QueueLock:
-            ChanQueueNoRun = ChanQueue.SelAttrVal(attr='runninghost',
-                                                  value={None})
-            for k,v in ChanQueueNoRun.items():
-                vl = self.Queue.get(k)
-                if not vl or vl.runninghost:
-                    continue
-                vl.priority = v.priority
-                vl.status_key = v.status_key
-                if v.status_key == 'ru':
-                    vl.status_key = 'q'
-                vl.possiblehosts = v.possiblehosts
-                keyschanged.add(k)
-                self.Queue.update({k:vl})
-                if v.status_key == 'tu':
-                    self.Queue.pop(k)
-                
-            keys2change = set(ChanQueue.keys()) - set(ChanQueueNoRun.keys())
-            keyssched2change = set()
-            for k in keys2change:
-                if self.Queue[k].status_key in {'t','e','tu', 'qu','q'}:
-                    continue
-                self.Queue[k].priority = ChanQueue[k].priority
-                self.Queue[k].status_key = ChanQueue[k].status_key
-                self.Queue[k].possiblehosts = ChanQueue[k].possiblehosts
-                keyssched2change.add(k)
-            return (True, keyschanged, keyssched2change)       
+
 
 def get_client_name(client):
     clientName = socket.gethostbyaddr(client.client_address[0])[0]

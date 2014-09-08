@@ -107,9 +107,8 @@ def deal_with_finished_jobs():
 def deal_with_configs():
     agora = datetime.datetime.now()
     allowed = MyConfigs.Calendar.get((calendar.day_name[agora.weekday()],
-                                   agora.hour,
-                                   agora.minute),
-                                  MyConfigs.defNumJobs)
+                                      agora.hour, agora.minute),
+                                     MyConfigs.defNumJobs)
     
     for proc in jobid2proc.values():
         state = proc.poll()

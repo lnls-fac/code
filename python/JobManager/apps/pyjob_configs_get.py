@@ -34,7 +34,8 @@ def main():
         days = tuple(x for x in calendar.day_name)
         hours = tuple(range(24))
         minutes = tuple(range(60))
-        for k, v in ConfigsReceived.items():
+        print(' '*14, calendar.weekheader(9))
+        for k, v in sorted(ConfigsReceived.items(),key=lambda x: x[0]):
             np = ConfigsReceived[k].defNumJobs
             table = {x:dict() for x in calendar.day_name}
             conj = set()
@@ -49,7 +50,6 @@ def main():
                     previous = vl
                     lastday = kl[0]
             print(k)
-            print(' '*9, calendar.weekheader(9))
             lasttime = dict() 
             for kl in sorted(conj, key=lambda x:x):
                 nums = ''
@@ -61,7 +61,7 @@ def main():
                         lasttime[day] = kl
                     
                     nums += '{:^10d}'.format(vl)
-                print('{:^10s}{:s}'.format('{0:02d}:{1:02d}'
+                print('{:^15s}{:s}'.format('{0:02d}:{1:02d}'
                                            .format(kl[0], kl[1]),nums))  
         return
     
