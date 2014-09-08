@@ -361,13 +361,17 @@ class MyStats:
     def __repr__(self):
         return representational_form(self)
         
-        
+     
 def createfile(name= None, data=None, stats = MyStats(), owner = None):
     if not name:
         raise ValueError('Name not specified')
     try:
-        with open(name, mode='wb') as fh:
-            fh.write(data or ''.encode('utf-8'))
+        try:
+            with open(name,mode='w') as fh:
+                fh.write(data or '')
+        except TypeError:
+            with open(name,mode='wb') as fh:
+                fh.write(data or ''.encode('utf-8'))
     except (IOError, OSError) as err:
         print('Problem with output files:\n',err)
         return None
@@ -386,8 +390,12 @@ def createfile(name= None, data=None, stats = MyStats(), owner = None):
         pass
 def load_file(name, ignore=False):
     try:
-        with open(name, mode='rb') as fh:
-            file_data = fh.read()
+        try:
+            with open(name,mode='r') as fh:
+                file_data = fh.read()
+        except UnicodeDecodeError:
+            with open(name,mode='rb') as fh:
+                file_data = fh.read()
     except (TypeError, IOError, OSError) as err:
         if not ignore:
             print('Problem with file {0}:\n'.format(name),err)
