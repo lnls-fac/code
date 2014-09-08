@@ -367,7 +367,7 @@ def createfile(name= None, data=None, stats = MyStats(), owner = None):
         raise ValueError('Name not specified')
     try:
         with open(name, mode='wb') as fh:
-            fh.write(data or b'')
+            fh.write(data or ''.encode('utf-8'))
     except (IOError, OSError) as err:
         print('Problem with output files:\n',err)
         return None
