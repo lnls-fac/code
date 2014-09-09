@@ -24,6 +24,7 @@ touch {2}''')
 SUBMITSCRNAME = 'run_{0:08d}'
 WAIT_TIME = Global.WAIT_TIME
 
+
 def handle_request(*items):
     return Global.handle_request(*items, exit_on_err = False)
 
@@ -98,8 +99,8 @@ def deal_with_finished_jobs():
             folder = '/'.join([TEMPFOLDER, FOLDERFORMAT.format(k)])
             files = os.listdir(path=folder)
             for file in set(files) - (v.input_files.keys() |
-                                       set([JOBDONE]) |
-                                       set(SUBMITSCRNAME.format(k))):
+                                       set([JOBDONE,
+                                       SUBMITSCRNAME.format(k)])):
                 data = Global.load_file(os.path.join(folder,file))
                 v.output_files.update({file: data})
             MyQueue.update({k:v})
@@ -174,8 +175,9 @@ def continue_stopped_jobs(jobs2Continue = 1):
 def deal_with_results(ResQueue):
     for v in ResQueue.values():
         for name, content in v.output_files.items():
-            Global.createfile(name = os.path.join(v.working_dir,name),
-                              data = content[1], stats = content[0])
+            if not name.startswith(JOBFILE[0:4]):
+                Global.createfile(name = os.path.join(v.working_dir,name),
+                                  data = content[1], stats = content[0])
 
 def deal_with_signals(Jobs2Sign):
     for k, v in Jobs2Sign.items():

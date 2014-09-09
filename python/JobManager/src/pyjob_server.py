@@ -229,13 +229,16 @@ class RequestHandler(socketserver.StreamRequestHandler):
                     Configs2Send.update({clientName: ClientConfigs})
             return (True, Configs2Send)
 
-    def set_configs_of_clients(self, NewConfigs):
+    def set_configs_of_clients(self, NewConfigs, RmClie):
         clients = tuple(NewConfigs.keys() - self.Configs.keys())
         if clients:
             return (False, clients)
-        with self.ConfigsLock: self.Configs.update(NewConfigs)
+        with self.ConfigsLock:
+            self.Configs.update(NewConfigs)
+            for client in RmClie:
+                self.Configs.pop(client)
         return (True, None)
-    
+        
     def shutdown(self):
         with self.ConfigsLock:
             for k in self.Configs:
