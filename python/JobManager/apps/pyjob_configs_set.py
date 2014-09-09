@@ -72,7 +72,7 @@ def main():
     
     RmClie = {}
     if opts.remove:
-        Rmclie = clients
+        RmClie = clients
      
     calendars = {}
     if opts.calendar in {'append','set','empty'}:

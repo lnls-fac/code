@@ -234,11 +234,11 @@ class RequestHandler(socketserver.StreamRequestHandler):
         if clients:
             return (False, clients)
         with self.ConfigsLock: self.Configs.update(NewConfigs)
-        return (True, None)
         with self.ConfigsLock:
             for client in RmClie:
                 self.Configs.pop(client)
-    
+        return (True, None)
+        
     def shutdown(self):
         with self.ConfigsLock:
             for k in self.Configs:
