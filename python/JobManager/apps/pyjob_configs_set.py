@@ -24,12 +24,19 @@ def main():
                       "It means that for the set of (W,H,M) not specified "
                       "in the calendar this will be the number of jobs each"
                       " client will run. [default: current value]")
+    parser.add_option('--remove', dest='remove', action='store_true',
+                      help="This option removes the client's configurations"
+                      "from the server's list. If the client is 'on', as soon"
+                      "as it makes contact to the server, the configurations"
+                      "will be restored.",
+                      default=False)
     group = optparse.OptionGroup(parser, "Calendar Options")
     group.add_option('--calendar',dest='calendar',type='str',
                       help="If this option is given, the calendar of the "
-                      "clients will be set with the following options or "
-                      "their default values. [Possible values: " 
-                      "'append' and 'set'   default: 'append']")
+                      "clients will be set according the following options"
+                      " to the (W,H,M) specifications for the number of "
+                      "processes to run. [Possible values: " 
+                      "'append', 'set' and 'empty']   [default: 'append']")
     group.add_option('-W','--weekday',dest='week',type='str',
                       help=("list of week days to set the calendar. "
                       "[format: day1,day2,... default is the weekday of today]"))
@@ -62,9 +69,13 @@ def main():
     except Global.MatchClientsErr as err:
         print(err)
         return
-        
+    
+    RmClie = {}
+    if opts.remove:
+        Rmclie = clients
+     
     calendars = {}
-    if opts.calendar in {'append','set'}:
+    if opts.calendar in {'append','set','empty'}:
         if opts.np is None:
             print('Calendar not submitted: must specify -N or --num_proc option')
             return 
@@ -115,6 +126,8 @@ def main():
             ConfigsReceived[k].Calendar.update(calendars)
         elif opts.calendar == 'set':
             ConfigsReceived[k].Calendar = calendars
+        elif opts.calendar == 'empty':
+            ConfigsReceived[k].Calendar = dict()
     
     
     if opts.niceness is not None:
@@ -154,7 +167,7 @@ def main():
             ConfigsReceived[k].defNumJobs = defproc
     
     
-    ok, clients = Global.handle_request('SET_CONFIGS',ConfigsReceived)
+    ok, clients = Global.handle_request('SET_CONFIGS',ConfigsReceived, RmClie)
     if ok:
         print('Success. Configurations will be set! for \n', 
               ', '.join(tuple(ConfigsReceived)))

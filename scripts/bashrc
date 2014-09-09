@@ -1,10 +1,10 @@
 #completion for the JobManager functions
-complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                          pyjob_qsub.py
-complete -W "--clients --showCalendar --help"                                                                                 pyjob_configs_get.py
-complete -W "--clients --niceness --shutdown --MoreJobs --defnumproc --calendar --weekday --hour --minutes --num_proc --help" pyjob_configs_set.py
-complete -W "--sure --help"                                                                                                   pyjob_shutdown.py
-complete -W "--jobs --status --user --description --explicate --help"                                                         pyjob_qstat.py
-complete -W "--jobs --status --user --description --signal --priority --possibleHosts --queue --help"                         pyjob_qsig.py
+complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
+complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
+complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --hour --minutes --num_proc --help"  pyjob_configs_set.py
+complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
+complete -W "--jobs --status --user --description --explicate --help"                                                                   pyjob_qstat.py
+complete -W "--jobs --status --user --description --signal --priority --possibleHosts --queue --help"                                   pyjob_qsig.py
 
 # ---------------------------
 # PATHS
