@@ -233,9 +233,10 @@ class RequestHandler(socketserver.StreamRequestHandler):
         clients = tuple(NewConfigs.keys() - self.Configs.keys())
         if clients:
             return (False, clients)
-        with self.ConfigsLock: self.Configs.update(NewConfigs)
         with self.ConfigsLock:
+            self.Configs.update(NewConfigs)
             for client in RmClie:
+                print(client)
                 self.Configs.pop(client)
         return (True, None)
         
