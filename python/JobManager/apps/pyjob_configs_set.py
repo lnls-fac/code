@@ -72,8 +72,7 @@ def main():
     
     RmClie = {}
     if opts.remove:
-        RmClie = clients
-        print('ok')
+        RmClie = set(ConfigsReceived.keys())
      
     calendars = {}
     if opts.calendar in {'append','set','empty'}:

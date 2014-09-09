@@ -236,7 +236,6 @@ class RequestHandler(socketserver.StreamRequestHandler):
         with self.ConfigsLock:
             self.Configs.update(NewConfigs)
             for client in RmClie:
-                print(client)
                 self.Configs.pop(client)
         return (True, None)
         
