@@ -1,0 +1,13 @@
+# TRACKC++ version(Aug 28 2014 22:32:49)
+# Accelerator Physics Group - LNLS
+# Campinas BRAZIL
+# contact: xresende@gmail.com
+# [track_linepass]
+# ebeam_energy[eV]  : 3000000000.000000
+# harmonic_number   : 864
+# cavity_state      : off
+# radiation_state   : off
+# chamber_state     : off
+
+# idx fam_name        s[m]                     rx[m]                    px[rad]                  ry[m]                    py[rad]                  de                       dl[m]                   
+# --- --------------- ------------------------ ------------------------ ------------------------ ------------------------ ------------------------ ------------------------ ------------------------

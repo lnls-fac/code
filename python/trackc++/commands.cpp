@@ -304,6 +304,10 @@ int cmd_track_linepass(const std::vector<std::string>& args) {
 		std::cerr << "track_linepass: flat file not found!" << std::endl;
 		return EXIT_FAILURE;
 	}
+	if (status == Status::flat_file_error) {
+		std::cerr << "track_linepass: flat file with incorrect syntax!" << std::endl;
+		return EXIT_FAILURE;
+	}
 	std::cout << get_timestamp() << " input file with flat lattice read." << std::endl;
 
 	// builds accelerator

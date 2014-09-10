@@ -10,7 +10,7 @@ fp = fopen(filename, 'w');
 column_format = '%-15s ';
 double_format = '%+.17E';
 for i=1:length(lattice)
-    fprintf(fp, column_format, 'index'); fprintf(fp, '%04i\r\n', i);
+    fprintf(fp, '### %04i ###\r\n',i-1);
     fprintf(fp, column_format, 'fam_name'); fprintf(fp, '%s\r\n', lattice{i}.FamName);
     fprintf(fp, column_format, 'length'); fprintf(fp, [double_format, '\r\n'], lattice{i}.Length);
     fprintf(fp, column_format, 'pass_method'); fprintf(fp, ['%s', '\r\n'], get_passmethod(lattice{i}));
@@ -82,14 +82,14 @@ fclose(fp);
 
 function passmethod = get_passmethod(element)
 
-if strcmpi(element.PassMethod, 'IdentityPass')
+if isfield(element, 'Frequency') || strcmpi(element.PassMethod, 'CavityPass')
+    passmethod = 'cavity_pass';
+elseif strcmpi(element.PassMethod, 'IdentityPass')
     passmethod = 'identity_pass';
 elseif strcmpi(element.PassMethod, 'DriftPass')
     passmethod = 'drift_pass';
 elseif strcmpi(element.PassMethod, 'CorrectorPass')
     passmethod = 'corrector_pass';
-elseif strcmpi(element.PassMethod, 'CavityPass')
-    passmethod = 'cavity_pass';
 elseif strcmpi(element.PassMethod, 'LNLSThickEPUPass')
     passmethod = 'kickmap_pass';    
 elseif any(strcmpi(element.PassMethod, {'BndMPoleSymplectic4Pass','BndMPoleSymplectic4RadPass'}))

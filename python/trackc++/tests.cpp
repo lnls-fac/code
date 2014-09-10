@@ -100,7 +100,7 @@ int test_ringpass(const Accelerator& accelerator) {
 
 }
 
-int test_findorbit6(const Accelerator& accelerator, const std::vector<Element>& the_ring) {
+int test_findorbit6(const Accelerator& accelerator) {
 
 	std::vector<Pos<double> > orbit;
 	Status::type status = track_findorbit6(accelerator, orbit);
@@ -165,7 +165,7 @@ int test_cmd_track_linepass() {
 	std::vector<std::string> args = {
 			"trackc++",
 			"track_linepass",
-			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt",
+			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in_TRACY.txt",
 			"3e9",
 			"864",
 			"off",
@@ -239,21 +239,20 @@ int test_cmd_dynap_ma() {
 	std::vector<std::string> args = {
 			"trackc++",
 			"dynap_ma",
-			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_with_ids_in.txt",
+			"/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt",
 			"3e9",
 			"864",
 			"on",
 			"on",
-			"on",
+			"off",
 			"5000",
 			"30e-6",   // y0
 			"0.01",    // e0
-			"0.0001",  // tol_e
+			"0.0005",  // tol_e
 			"0",       // s_min [m]
 			"30",      // s_max [m]
 			"qaf",
-			"qad",
-			nullptr};
+			"qad"};
 
 	return cmd_dynap_ma(args);
 
@@ -282,14 +281,17 @@ int cmd_tests(const std::vector<std::string>& args) {
 
 	Accelerator accelerator;
 	//sirius_v500(accelerator.lattice);
-	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
+	latt_read_flat_file("/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
 	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_ff.txt", accelerator);
 	//if (status != Status::success) {
 	//	return EXIT_FAILURE;
 	//}
 	//accelerator.lattice[15].nr_steps = 1;
-	//accelerator.radiation_on = true;
-	//accelerator.cavity_on = true;
+	accelerator.energy = 3e9; // [ev]
+	accelerator.harmonic_number = 864;
+	accelerator.radiation_on = true;
+	accelerator.cavity_on = true;
+	accelerator.vchamber_on = false;
 	//accelerator.radiation_on = false;
 	//accelerator.cavity_on = false;
 
@@ -307,14 +309,14 @@ int cmd_tests(const std::vector<std::string>& args) {
 	//test_linepass(accelerator);
 	//test_ringpass(accelerator);
 	//test_linepass_tpsa(the_ring);
-	//test_findorbit6(the_ring);
+	//test_findorbit6(accelerator);
 	//test_dynap_xy(the_ring);
 	//test_read_flat_file(accelerator);
 
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
-	//test_cmd_dynap_ma();
-	test_cmd_track_linepass();
+	test_cmd_dynap_ma();
+	//test_cmd_track_linepass();
 	//test_kicktable(accelerator);
 
 
