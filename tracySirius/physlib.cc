@@ -1,4 +1,4 @@
-lb/* Tracy-2
+/* Tracy-2
 
  J. Bengtsson, CBP, LBL      1990 - 1994   Pascal version
  SLS, PSI      1995 - 1997

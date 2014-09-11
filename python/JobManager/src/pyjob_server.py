@@ -207,7 +207,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
                 return (True, self.Configs[clientName])
             
             self.Configs.update({clientName:ItsConfigs})
-            self.Configs[clientName].active = True
+            self.Configs[clientName].active = 'on'
             self.Configs[clientName].last_contact = datetime.datetime.now()
             return (False, True)
     

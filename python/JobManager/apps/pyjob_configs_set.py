@@ -76,7 +76,7 @@ def main():
      
     calendars = {}
     if opts.calendar in {'append','set','empty'}:
-        if opts.np is None:
+        if opts.np is None and opts.calendar != 'empty':
             print('Calendar not submitted: must specify -N or --num_proc option')
             return 
         else:

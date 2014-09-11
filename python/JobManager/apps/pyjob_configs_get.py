@@ -2,6 +2,7 @@
 
 import optparse
 import calendar
+import datetime
 import Global
 
 def main():
@@ -55,7 +56,7 @@ def main():
                 nums = ''
                 for day, dados in sorted(table.items(), key=sorTab):
                     vl = dados.get(kl)
-                    if not vl:
+                    if vl is None:
                         vl = dados.get(lasttime[day])
                     else:
                         lasttime[day] = kl
@@ -68,11 +69,18 @@ def main():
     print('{:15s}{:^7s}{:^9s}{:^9s}{:^10s}{:^6s}'
           .format('hostname','state', 'numcpus','NumJobs',
                   'MoreJobs', 'Nice'))
+    agora = datetime.datetime.now()
+    Tnumcpus, TNumJobs = 0, 0
     for k,v in sorted(ConfigsReceived.items(),key=lambda x: x[0]):
-        print('{0:15s}{1.active!s:^7s}{1.numcpus:^9d}{1.defNumJobs:^9d}'
-              '{1.MoreJobs!s:^10}{1.niceness:^6d}'
-              .format(k,v))
-        
+        NumJobs = v.Calendar.get((calendar.day_name[agora.weekday()],
+                                  agora.hour, agora.minute), v.defNumJobs)
+        print('{key:15s}{val.active!s:^7s}{val.numcpus:^9d}{N:^9d}'
+              '{val.MoreJobs!s:^10}{val.niceness:^6d}'
+              .format(key=k,val=v,N=NumJobs))
+        Tnumcpus += v.numcpus
+        TNumJobs += NumJobs
+    print('{0:15s}{1:^7s}{2:^9d}{3:^9d}{1:^10s}{1:^6s}'
+          .format('Total',' ',Tnumcpus, TNumJobs))
         
         
 if __name__ == '__main__':
