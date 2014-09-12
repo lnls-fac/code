@@ -25,6 +25,8 @@ export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/ep
 
 export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64"
 
+export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
+
 # arquivo de definições para o rpn do elegant
 export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
 
