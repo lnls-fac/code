@@ -1,17 +1,5 @@
-# This script must be in the folder /etc/init/
+#!/bin/bash
 
-description "Reads the current machine ip and send it to workstation"
-author "FAC"
-
-setuid fernando
-setgid fac
-
-start on net-device-up
-stop  on runlevel [016]
-
-task
-
-script 
 # descubro o ip da máquina
 ip=$( ifconfig | grep -A 2 eth0 | grep "inet add" | cut --delimiter=":" -f 2 | cut --delimiter="B" -f 1 )
 ip=${ip//[[:blank:]]/}
@@ -31,5 +19,5 @@ grep $iphf /etc/hosts | sed -e "s/$iphf/$ip/g" > $HOME/$host
 # copio o arquivo para a workstation e removo o arquivo local
 scp ~/$host workstation-linux:~/ips_clients/
 rm ~/$host
-end script
+
 
