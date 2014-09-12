@@ -4,12 +4,6 @@ import numpy
 import elements
 
 
-ELEMENT_TYPES = {
-    'drift': elements.Drift,
-    'quadrupole': elements.Quadrupole
-}
-
-
 class Model(object):
 
     def __init__(self, element_list=None):
