@@ -243,7 +243,7 @@ Status::type dynap_ma_track(
 	) {
 	Pos<double> p = p0;     // offset
 	p.de += energy_offset;
-	unsigned int start_element = element_idx;
+	//unsigned int start_element = element_idx;
 	unsigned int lost_turn = 0;
 	unsigned int lost_element = element_idx;
 	Plane::type lost_plane = Plane::no_plane;
@@ -328,6 +328,8 @@ Status::type dynap_ma(
 		}
 
 	}
+
+	return Status::success;
 
 }
 
