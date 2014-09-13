@@ -123,7 +123,7 @@ def main():
         if opts.calendar is not None:
             print("Wrong value for --calendar option:", opts.calendar)
             return
-        if any((opts.minutes, opts.hour, opts.week)):
+        if any((opts.initial, opts.final, opts.week)):
             print("Option --calendar must be given to set the calendar")
             return
     
