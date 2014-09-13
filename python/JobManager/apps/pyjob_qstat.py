@@ -23,11 +23,23 @@ EXPLICATION = dict(q='In the queue',
               'sent to the host.',
               e='Job ended successfully.',
               s='Job has been sent to the host, but its current status was not'
-              ' confirmed yet.',
-              ch='User scheduled some change in the job priority or possible '
-              'hosts to run it, but the confirmation of such action was not '
-              'received yet.')
-
+              ' confirmed yet.')
+iden= lambda x:str(x)
+PROPERTIES = dict(description=('{:^20s}','Description',iden),
+                  user=('{:^10s}','User',iden),
+                  working_dir=('{:^20s}','Working Directory',iden),
+                  creation_date=('{:^10s}','Creation',
+                                 lambda x:x.date().isoformat()),
+                  status_key=('{:^8s}','Status',iden),
+                  hostname=('{:^10s}','Hostname', lambda x:x.split('-')[0]),
+                  priority=('{:^7s}','Prior', iden),
+                  runninghost=('{:^10s}','Run Host',lambda x:(x or "None"
+                                                              ).split('-')[0]),
+                  possiblehosts=('{:^20s}','Can Run On',
+                                lambda x:x if x=='all' else 
+                                ','.join([y.split('-')[0]
+                                for y in sorted(x)])),
+                  running_time=('{:^12s}','Time Run',iden))
 def main():
     parser = optparse.OptionParser()
     parser = Global.job_selection_parse_options(parser)
@@ -36,6 +48,13 @@ def main():
     parser.add_option('--explicate',dest='explicate', action='store_true',
                       help="This option explains the meaning of the several "
                       "status flag of the jobs.", default=False)
+    parser.add_option('-c','--choose',dest='choose',type='str',
+                      help="If this option is given, the user can specify which "
+                      "job properties will be shown. [format: "
+                      "prop1,prop2,...  default: 'prior,status,user,creation_"
+                      "date,runninghost,description']. It is not needed to give "
+                      "the whole property name, only a fraction of it is enough."
+                      "Possible Values:\n" + ', '.join(list(PROPERTIES.keys())))
     
     (opts, _) = parser.parse_args()
     
@@ -55,22 +74,38 @@ def main():
             print('\n')
         return
     
-    
+
     try:
         Queue = Global.job_selection_parse(opts)
     except Global.JobSelParseErr as err:
         print(err)
         return
+
+    choose = 'prior,status,user,creation_date,runninghost,description'
+    if opts.choose is not None:
+        choose = opts.choose
+    
+    ordem = []
+    for cho in choose.split(','):
+        for k in PROPERTIES:
+            if cho.lower() in k:
+                ordem += [k]
+    
     
     if Queue:
-        print('{:8s}{:^5s}{:^8s}{:^10s}{:^20s}{:^16s}{:^16s}{:^16s}'
-          .format('JobID','Prior', 'Status','User',
-                  'Description', 'Host Owner','Host Running','Possible Hosts'))
+        myprint('{:^7s}'.format('JobID'))
+        for at in ordem:
+            myprint(PROPERTIES[at][0].format(PROPERTIES[at][1]))
+        print()
     for k,v in Queue.items():
-        print('{0:^8}{1.priority:^5d}{1.status_key:^8s}{1.user:^10s}'
-              '{1.description:20s}{1.hostname:^16s}{2:^16s}'
-              .format(k, v, v.runninghost or 'None'), v.possiblehosts)
+        myprint('{:^7d}'.format(k))
+        for at in ordem:
+            myprint(PROPERTIES[at][0].format(PROPERTIES[at][2](getattr(v,at))))
+        print()
 
+    
+def myprint(*items):
+    return print(*items,end='')
     
 if __name__ == '__main__':
     main()

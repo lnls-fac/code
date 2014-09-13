@@ -129,39 +129,19 @@ class RequestHandler(socketserver.StreamRequestHandler):
             
     def update_jobs_in_queue(self, ItsQueue):
         keys2remove = []
-        clientName = get_client_name(self)
-        Jobs2Sign = Global.JobQueue()
         
-        ClientQueue = self.Queue.SelAttrVal(attr='runninghost',
-                                            value = {clientName})
-        ClientQueue = ClientQueue.SelAttrVal(attr='status_key',
-                                             value=(set(STATUS.keys())-
-                                                    {'t','e'}))
-        diffe = set(ClientQueue.keys()) ^ set(ItsQueue.keys())
-        if diffe:
-            print("Problem, incompatibility between client's and"
-                  "server's queue")
         with self.QueueLock:
-        # section to update the jobs in the server
             for k, v in ItsQueue.items():
                 if v.status_key in {'e','t','q'}:
-                    self.Queue.update({k:v})
                     keys2remove.append(k)
-                if self.Queue[k].status_key in {'ru','pu','qu','tu'}:
-                    if STATUS[self.Queue[k].status_key] ==STATUS[v.status_key]: 
-                        self.Queue.update({k:v})
-                elif self.Queue[k].status_key == 'ch':
-                    if (self.Queue[k].possiblehosts == v.possiblehosts and
-                        self.Queue[k].priority == v.priority):
-                        self.Queue.update({k:v})                    
+                    self.Queue.update({k:v}) # not a jobview
                 else:
-                    self.Queue.update({k:v})
+                    try:
+                        self.Queue[k].update(v)# jobview
+                    except KeyError:
+                        self.Queue.update({k:v})# not a jobview
       
-        #section to update the jobs in the client
-        for k in ClientQueue.keys():
-            if self.Queue.get(k) != ItsQueue.get(k):
-                Jobs2Sign.update({k:self.Queue[k]})
-        return (True, keys2remove, Jobs2Sign)
+        return (True, keys2remove)
 
     def change_jobs_request(self,ChanQueue):
         keyschanged = set()
@@ -172,13 +152,8 @@ class RequestHandler(socketserver.StreamRequestHandler):
                 vl = self.Queue.get(k)
                 if not vl or vl.runninghost:
                     continue
-                vl.priority = v.priority
-                vl.status_key = v.status_key
-                if v.status_key == 'ru':
-                    vl.status_key = 'q'
-                vl.possiblehosts = v.possiblehosts
                 keyschanged.add(k)
-                self.Queue.update({k:vl})
+                self.Queue[k].update(v) # v is a jobview!
                 if v.status_key == 'tu':
                     self.Queue.pop(k)
                 
@@ -187,14 +162,21 @@ class RequestHandler(socketserver.StreamRequestHandler):
             for k in keys2change:
                 if self.Queue[k].status_key in {'t','e','tu', 'qu','q'}:
                     continue
-                self.Queue[k].priority = ChanQueue[k].priority
-                self.Queue[k].status_key = ChanQueue[k].status_key
-                self.Queue[k].possiblehosts = ChanQueue[k].possiblehosts
+                self.Queue[k].update(ChanQueue[k]) # jobview!!!
                 keyssched2change.add(k)
             return (True, keyschanged, keyssched2change)       
 
-    def print_queue_status(self):
-        return (True, self.Queue)
+    def print_queue_status(self, onlymine = False):
+        if onlymine:
+            Queue2Send = self.Queue.SelAttrVal(attr='runninghost',
+                                               value={get_client_name(self)})
+        else:
+            Queue2Send = self.Queue
+        
+        for k, v in Queue2Send.items():
+            Queue2Send.update({k:Global.JobView(v)})
+        
+        return (True, Queue2Send)
 
 
     def send_configs_to_client(self, ItsConfigs):
