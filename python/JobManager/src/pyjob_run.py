@@ -258,7 +258,7 @@ def main():
                 jobs2Stop = -jobs2Continue
                 stop_jobs(jobs2Stop)
             
-            ok, Queue2Deal = handle_request('STATUS_QUEUE', onlymine=True)
+            ok, Queue2Deal = handle_request('STATUS_QUEUE', True)
             if ok:
                 isbigger = set(Queue2Deal.keys()) - set(MyQueue.keys())
                 if not isbigger:
