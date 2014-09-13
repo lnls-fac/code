@@ -89,6 +89,9 @@ def check_running_jobs():
                 if MyQueue[jobid].status_key != 'q':
                     MyQueue[jobid].status_key = 't'
         else:
+            a = proc.get_cpu_times()
+            a = str(datetime.timedelta(seconds=int(a.system+a.user)))
+            MyQueue[jobid].running_time = a
             if proc.status in {'running','sleeping'}:
                 count +=1
     return count
@@ -164,13 +167,22 @@ def stop_jobs(jobs2Stop = 0):
 def continue_stopped_jobs(jobs2Continue = 1):
     StoppedQueue = MyQueue.SelAttrVal(attr='status_key', value={'p'})
     if not len(StoppedQueue): return 0
-    for i in range(jobs2Continue):
-        k, v = StoppedQueue.popfirst()
-        os.killpg(jobid2proc[k].pid,signal.SIGCONT)
-        v.status_key = 'r'
+    RunningQueue = MyQueue.SelAttrVal(attr='status_key', value={'r'})
+    numJobsRunning = len(RunningQueue)
+    RunningQueue.update(StoppedQueue)
+    total = numJobsRunning + jobs2Continue
+    i = 0
+    for k, v in RunningQueue.items():
+        if i < total:
+            os.killpg(jobid2proc[k].pid,signal.SIGCONT)
+            v.status_key = 'r'
+            i +=1
+        else:
+            os.killpg(jobid2proc[k].pid,signal.SIGSTOP)
+            v.status_key = 'p'
         MyQueue.update({k:v})
         if not len(StoppedQueue): break
-    return i + 1
+    return i - numJobsRunning
 
 def deal_with_results(ResQueue):
     for v in ResQueue.values():
@@ -181,23 +193,29 @@ def deal_with_results(ResQueue):
 
 def deal_with_signals(Jobs2Sign):
     for k, v in Jobs2Sign.items():
-        if v.status_key == 'pu':
-            os.killpg(jobid2proc[k].pid, signal.SIGSTOP)
-        elif v.status_key == 'tu':
-            os.killpg(jobid2proc[k].pid, signal.SIGTERM)
-            os.killpg(jobid2proc[k].pid, signal.SIGCONT)
-            v.status_key = 't'
-        elif v.status_key == 'ru':
-            os.killpg(jobid2proc[k].pid, signal.SIGCONT)
-            v.status_key = 'r'
-        elif v.status_key == 'qu':
-            os.killpg(jobid2proc[k].pid, signal.SIGTERM)
-            os.killpg(jobid2proc[k].pid, signal.SIGCONT)
-            v.runninghost = None
-            v.status_key = 'q'
-        elif v.status_key == 'ch':
-            v.status_key = MyQueue[k].status_key
-        MyQueue.update({k:v})
+        if MyQueue[k].status_key in {'e','t','q'}:
+            continue
+        try:
+            if v.status_key in {'pu','tu','ru','qu'}:
+                if v.status_key == 'pu':
+                    os.killpg(jobid2proc[k].pid, signal.SIGSTOP)
+                elif v.status_key == 'tu':
+                    os.killpg(jobid2proc[k].pid, signal.SIGTERM)
+                    os.killpg(jobid2proc[k].pid, signal.SIGCONT)
+                    v.status_key = 't'
+                elif v.status_key == 'ru':
+                    os.killpg(jobid2proc[k].pid, signal.SIGCONT)
+                    v.status_key = 'r'
+                elif v.status_key == 'qu':
+                    os.killpg(jobid2proc[k].pid, signal.SIGTERM)
+                    os.killpg(jobid2proc[k].pid, signal.SIGCONT)
+                    v.runninghost = None
+                    v.status_key = 'q'
+                MyQueue[k].update(v)
+            elif v != MyQueue[k] and v.status_key == MyQueue[k].status_key:
+                MyQueue[k].update(v)
+        except ProcessLookupError:
+            continue
            
 def wait_for_server():
     time.sleep(WAIT_TIME)
@@ -240,15 +258,33 @@ def main():
                 jobs2Stop = -jobs2Continue
                 stop_jobs(jobs2Stop)
             
-            ok, keys2remove, Jobs2Sign = handle_request('UPDATE_JOBS', MyQueue)
+            ok, Queue2Deal = handle_request('STATUS_QUEUE', onlymine=True)
+            if ok:
+                isbigger = set(Queue2Deal.keys()) - set(MyQueue.keys())
+                if not isbigger:
+                    for k in isbigger:
+                        Queue2Deal.pop(k)
+                deal_with_signals(Queue2Deal)
+            
+            # Just send the complete jobs if needed, otherwise send jobviews
+            Queue2Send = Global.JobQueue();
+            for k, v in MyQueue.items():
+                if v.status_key in {'e','t','q'}:
+                    Queue2Send.update({k:v})
+                else:
+                    if Queue2Deal.get(k) is not None:
+                        Queue2Send.update({k:Global.JobView(v)})
+                    else:
+                        Queue2Send.update({k:v})
+            
+            ok, keys2remove = handle_request('UPDATE_JOBS', Queue2Send)
             if ok:
                 for key in keys2remove:
                     jobid2proc.pop(key)
                     MyQueue.pop(key)
                     shutil.rmtree('/'.join([TEMPFOLDER,
                                             FOLDERFORMAT.format(key)]))
-                if Jobs2Sign:
-                    deal_with_signals(Jobs2Sign)
+                    
                 
             ok, ResQueue = handle_request('GIME_RESULTS')
             if ok:
@@ -260,6 +296,8 @@ def main():
             
             if MyConfigs.shutdown:
                 shutdown()
+        except psutil._error.NoSuchProcess:
+            continue
         except Global.ServerDown:
             wait_for_server()
             

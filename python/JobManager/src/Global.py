@@ -19,17 +19,16 @@ WAIT_TIME  = 10  # in seconds
 PICKLE_PROTOCOL = 3
 SET_STRUCT_PARAM = "!I 5s"
 STATUS = dict(q=1, # queued
-              qu=1, # queued by user
+              qu=1.5, # queued by user
               r=4, # running
-              ru=4, # sched to continue by user
+              ru=4.5, # sched to continue by user
               p=2, # paused
-              pu=2,# paused by the user
+              pu=2.5,# paused by the user
               w=3, # waiting
               t=5, # terminated
-              tu=5,# terminated by the user
+              tu=5.5,# terminated by the user
               e=6, # ended
-              s=7, # sent
-              ch=8) # change priority or hosts
+              s=7) # sent
 
 class SocketManager:
     def __init__(self, address):
@@ -72,82 +71,11 @@ def handle_request(*items, wait_for_reply=True, exit_on_err=True):
 
 
 class JobErr(Exception): pass
-class JobView: # not used yet
-   
-    def __init__(self,
-                 description = 'generic job',
-                 user = getpass.getuser(),
-                 working_dir = None,
-                 creation_date = None,
-                 status_key = None,
-                 hostname = None,
-                 possiblehosts = set(),
-                 runninghost = None,
-                 priority = 0):
-        
-        self.description = description
-       
-        self.user = user
-        self.working_dir = os.path.abspath(working_dir or os.getcwd())
-        self.creation_date = creation_date or datetime.datetime.now()
-        self.status_key = status_key or 'q'
-        self.hostname = hostname or socket.gethostname()
-        self.priority = priority
-        self.runninghost = runninghost
-        self.possiblehosts = possiblehosts or 'all'
-        
-    def __lt__(self,other):
-        if not isinstance(other, (JobView, Jobs)):
-            return NotImplemented
-        if self.status_key != other.status_key:
-            if (STATUS[self.status_key] < STATUS[other.status_key]):
-                return True
-            return False
-        else:
-            if self.priority > other.priority:
-                return True
-            elif self.priority == other.priority:
-                if self.creation_date < other.creation_date:
-                    return True
-            return False
-
-    def __eq__(self,other):
-        if not isinstance(other, (JobView, Jobs)):
-            return NotImplemented
-        elif ((not (self < other or other < self)) and 
-              self.possiblehosts == other.possiblehosts):
-            return True
-        else:
-            return False
-    
-    def __le__(self,other):
-        return True if self == other or self < other else False
-    
-    def __repr__(self):
-        return representational_form(self)
-   
-    def __str__(self):
-        return ("description = {0.description},\n"
-                "user = {0.user},\n"
-                "working_dir = {0.working_dir},\n"
-                "creation_date = {0.creation_date},\n"
-                "status_key = {0.status_key},\n"
-                "hostname = {0.hostname},\n"
-                "runninghost = {0.runninghost}\n"
-                "possiblehosts = {0.possiblehosts}\n"
-                "priority = {0.priority},\n"
-                "input_file_names = {0.input_file_names},\n"
-                "execution_script_name = {0.execution_script_name},\n"
-                "output_file_names = {0.output_file_names}"
-                .format(self))
-    
-    def __hash__(self):
-        return hash(id(self))
 class Jobs:
    
     def __init__(self,
-                 description = 'generic job',
                  user = getpass.getuser(),
+                 description = 'generic job',
                  working_dir = None,
                  creation_date = None,
                  status_key = None,
@@ -155,6 +83,7 @@ class Jobs:
                  possiblehosts = set(),
                  runninghost = None,
                  priority = 0,
+                 running_time = None,
                  input_files = dict(),#keys are file names and values the data
                  execution_script = dict(),#idem to input_files
                  output_files = dict()#keys -> names values are tuples of data
@@ -177,7 +106,7 @@ class Jobs:
         self.priority = priority
         self.runninghost = runninghost
         self.possiblehosts = possiblehosts or 'all'
-        
+        self.running_time = running_time or '00:00:00'
         # Load input files
         self.input_files = input_files
         #Load Execution Script
@@ -197,18 +126,20 @@ class Jobs:
     def __lt__(self,other):
         if not isinstance(other, Jobs):
             return NotImplemented
-        if self.status_key != other.status_key:
-            if (STATUS[self.status_key] < STATUS[other.status_key]):
-                return True
+        if self.priority > other.priority:
+            return True
+        elif self.priority < other.priority:
             return False
         else:
-            if self.priority > other.priority:
-                return True
-            elif self.priority == other.priority:
+            if self.status_key != other.status_key:
+                if (STATUS[self.status_key] < STATUS[other.status_key]):
+                    return True
+                return False
+            else:
                 if self.creation_date < other.creation_date:
                     return True
-            return False
-
+                return False
+        
     def __eq__(self,other):
         if not isinstance(other, Jobs):
             return NotImplemented
@@ -241,6 +172,30 @@ class Jobs:
     
     def __hash__(self):
         return hash(id(self))
+    
+    def update(self, other):
+        self.description = other.description
+        self.user = other.user
+        self.working_dir = other.working_dir                
+        self.creation_date = other.creation_date
+        self.status_key = other.status_key
+        self.hostname = other.hostname
+        self.priority = other.priority
+        self.runninghost = other.runninghost
+        self.possiblehosts = other.possiblehosts
+        self.running_time = other.running_time
+
+class JobView(Jobs):
+   
+    def __init__(self, other):
+        self.update(other)
+        
+    def __repr__(self):
+        return representational_form(self)
+    
+    def update(self, other):
+        super().update(other)
+
 
 keyQueue= lambda x: x[1]
 class JobQueue(dict):
@@ -486,16 +441,22 @@ def match_clients(keys2Match, possibleClients = None):
         for k in sorted(keys):
             if client.lower() in k.lower():
                 ConfigsMatched.update({k:possibleClients.pop(k)})
-    if len(ConfigsMatched) != len(keys2Match):
+    if len(ConfigsMatched) < len(keys2Match):
         raise MatchClientsErr("Some keys did not match any client "
-              "in the server's list.")
+                              "in the server's list.")
     return ConfigsMatched
 
 if __name__ == '__main__':
-    job = Jobs(priority=1)
-    queuee = JobQueue()
-    queuee.update({2:job})
-    repr(queuee)
+    job = Jobs(priority=1,possiblehosts = {'asdf'},
+               input_files={'teste': ('las', 2)})
+    job2 = Jobs(possiblehosts = {'alskdf','laksdi'})
+    job2view = JobView(job2)
+    jobview = JobView(job)
+    job.update(job2)
+    job.update(jobview)
+    jobview.update(job2)
+    print(jobview.running_time)
+
     
 
 
