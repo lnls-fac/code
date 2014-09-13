@@ -40,12 +40,12 @@ def main():
     group.add_option('-W','--weekday',dest='week',type='str',
                       help=("list of week days to set the calendar. "
                       "[format: day1,day2,... default is the weekday of today]"))
-    group.add_option('-H','--hour',dest='hour',type='str',
-                      help=("hours to set the calendar. "
-                      "[format from:to  default: '0:23']"))
-    group.add_option('-M','--minutes',dest='minutes',type='str',
-                      help=("minutes to set the calendar. "
-                            "[format from:to  default: '0:59']"))
+    group.add_option('-i','--initial',dest='initial',type='str',
+                      help=("Initial time to set the calendar. "
+                      "[format H:M   default 00:00]"))
+    group.add_option('-f','--final',dest='final',type='str',
+                      help=("Final time set the calendar. "
+                            "[format H:M   default 23:59]"))
     group.add_option('-N','--num_proc',dest='np',type='int',
                       help=("Integer which specify the number of processes to "
                             "set to the calendar) [no Default Value]"))
@@ -92,32 +92,38 @@ def main():
         else:
             days = (calendar.day_name[datetime.datetime.now().weekday()],)
         
-        if opts.hour is not None:
-            hour = tuple(int(x) for x in opts.hour.split(':'))
-            if len(hour) != 2 or  not all(-1 < x < 24 for x in hour):
-                print("Problem with specification of hour")
+        IH, IM = 0, 0
+        if (opts.initial is not None):
+            initial = tuple(int(x) for x in opts.initial.split(':'))
+            if len(initial) != 2 or  not ((-1 < initial[0] < 24) and 
+                                          (-1 < initial[1] < 60)):
+                print("Problem with specification of initial time")
                 return
-            y = 1 if hour[0]<=hour[1] else 25
-            hour = tuple(x % 24 for x in range(hour[0],hour[1] + y))
-        else:
-            hour = tuple(x for x in range(24))
-        
-        if opts.minutes is not None:
-            minutes = tuple(int(x) for x in opts.minutes.split(':'))
-            if len(minutes) != 2 or  not all(-1 < x < 60 for x in minutes):
-                print("Problem with specification of minutes")
+            IH, IM = initial
+            
+        FH, FM = 23, 59
+        if (opts.final is not None):
+            final = tuple(int(x) for x in opts.final.split(':'))
+            if len(final) != 2 or not ((-1 < final[0] < 24) and 
+                                       (-1 < final[1] < 60)     ):
+                print("Problem with specification of final time")
                 return
-            y = 1 if minutes[0] <= minutes[1] else 61
-            minutes = (x % 60 for x in range(minutes[0], minutes[1] + y))
-        else:
-            minutes = tuple(range(60))   
+            FH, FM = final
+         
+        if initial > final:
+             print('Initial time must be smaller than the final.')
+             return   
+        interval = tuple((H,M) for H in range(IH,FH+1) 
+                         for M in range(0,60) 
+                         if (IH,IM) <= (H,M) <= (FH,FM))    
         
-        calendars = {(x,y,z): np for x in days for y in hour for z in minutes}
+        
+        calendars = {(x,y,z): np for x in days for (y,z) in interval}
     else:
         if opts.calendar is not None:
             print("Wrong value for --calendar option:", opts.calendar)
             return
-        if any((opts.minutes, opts.hour, opts.week)):
+        if any((opts.initial, opts.final, opts.week)):
             print("Option --calendar must be given to set the calendar")
             return
     

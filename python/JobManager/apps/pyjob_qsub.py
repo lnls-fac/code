@@ -65,6 +65,7 @@ def main():
             print('Could not set the priority. Using default')
     
     
+    hosts = 'all'
     if opts.hosts is not None:
         if opts.hosts != 'all':
             keys2Match = set(opts.hosts.split(','))
@@ -73,8 +74,7 @@ def main():
             except Global.MatchClientsErr as err:
                 print(err)
                 return
-        else:
-            hosts = 'all'
+            
     job.possiblehosts = hosts
     
     if opts.input_file_names is not None:
