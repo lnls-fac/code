@@ -265,15 +265,17 @@ def main():
             
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, signal_handler)
     proclist = psutil.get_process_list()
     mod_name = os.path.split(__file__)[1]
     mypid = os.getpid()
     for proc in proclist:
-        for cmdline in proc.cmdline:
-            if mod_name in cmdline and proc.pid != mypid:
-                print('There is already one instance of {0}'
-                      ' running on this computer: exiting'.format(mod_name))
-                sys.exit(1)
-                
-    signal.signal(signal.SIGTERM, signal_handler)
+        try:
+            for cmdline in proc.cmdline:
+                if mod_name in cmdline and proc.pid != mypid:
+                    print('There is already one instance of {0}'
+                          ' running on this computer: exiting'.format(mod_name))
+                    sys.exit(1)
+        except psutil._error.NoSuchProcess:
+            continue
     main()
