@@ -24,9 +24,10 @@ fclose('all'); drawnow;
 %parms = load_config('SIRIUS_QF_MODELO2');
 %parms = load_config('SIRIUS_QFC_MODELO2');
 %parms = load_config('SIRIUS_QD_MODELO2');
-parms = load_config('SIRIUS_QF_MODELO3');
+%parms = load_config('SIRIUS_QF_MODELO3');
 %parms = load_config('SIRIUS_QD');
 %parms = load_config('SIRIUS_QFC');
+parms = load_config('SIRIUS_BC_MODELO1_GAP8MM');
 
 % calcs beam parameters (magnetic rigidity, gamma factor, beta, etc)
 calc_beam_parameters(parms.beam.energy);

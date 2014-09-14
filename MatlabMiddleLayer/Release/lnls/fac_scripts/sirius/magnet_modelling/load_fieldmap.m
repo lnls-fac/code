@@ -45,7 +45,7 @@ if ~exist('type','var') || ~strcmpi(type, 'suppress_plot')
     
     % prints by field roll-off
     pos = 10; % [mm]
-    [~,idx] = min(abs(x/1000 - pos));
+    [~,idx] = min(abs(x - pos/1000));
     by0 = data.by(idx_z0, idx_x0);
     by  = data.by(idx_z0, idx);
     rolloff = 100 * (by - by0)/abs(by0);

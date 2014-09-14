@@ -14,7 +14,7 @@ complete -W "--jobs --status --user --description --signal --priority --possible
 export PYTHONPATH=/home/fac_files/code/python/sirius_python/src:/home/fac_files/code/control/modules/CustomPlot/src:/home/fac_files/code/python/PyTasks:/home/fac_files/code/python/JobManager/src
 
 # FAC SCRIPTS
-export PATH=$PATH:/home/fac_files/code/scripts:/home/fac_files/code/python/JobManager/apps
+export PATH=$PATH:/home/fac_files/code/scripts:/home/fac_files/code/python/JobManager/apps:/home/fac_files/code/trackc++
 
 # USERS BIN
 export PATH=$PATH:~/bin/
