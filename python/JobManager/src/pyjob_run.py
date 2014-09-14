@@ -94,6 +94,7 @@ def check_running_jobs():
             MyQueue[jobid].running_time = a
             if proc.status in {'running','sleeping'}:
                 count +=1
+    MyConfigs.running = count
     return count
 
 def deal_with_finished_jobs():
@@ -106,6 +107,9 @@ def deal_with_finished_jobs():
                                        SUBMITSCRNAME.format(k)])):
                 data = Global.load_file(os.path.join(folder,file))
                 v.output_files.update({file: data})
+            for file in v.input_files.keys(): # Reload the input_files
+                data = Global.load_file(os.path.join(folder,file))
+                v.input_files.update({file: data})
             MyQueue.update({k:v})
 
 def deal_with_configs():
@@ -164,7 +168,7 @@ def stop_jobs(jobs2Stop = 0):
         v.status_key = 'p'
         MyQueue.update({k:v})
 
-def continue_stopped_jobs(jobs2Continue = 1):
+def continue_stopped_jobs(jobs2Continue):
     StoppedQueue = MyQueue.SelAttrVal(attr='status_key', value={'p'})
     if not len(StoppedQueue): return 0
     RunningQueue = MyQueue.SelAttrVal(attr='status_key', value={'r'})
@@ -181,7 +185,6 @@ def continue_stopped_jobs(jobs2Continue = 1):
             os.killpg(jobid2proc[k].pid,signal.SIGSTOP)
             v.status_key = 'p'
         MyQueue.update({k:v})
-        if not len(StoppedQueue): break
     return i - numJobsRunning
 
 def deal_with_results(ResQueue):
@@ -190,6 +193,9 @@ def deal_with_results(ResQueue):
             if not name.startswith(JOBFILE[0:4]):
                 Global.createfile(name = os.path.join(v.working_dir,name),
                                   data = content[1], stats = content[0])
+        for name, content in v.input_files.items():
+            Global.createfile(name = os.path.join(v.working_dir,name),
+                              data = content[1], stats = content[0])
 
 def deal_with_signals(Jobs2Sign):
     for k, v in Jobs2Sign.items():
@@ -242,12 +248,12 @@ def main():
     
     while True:
         try:
-            time.sleep(WAIT_TIME)
+            MyConfigs.totalJobs = len(MyQueue)
             num_running = check_running_jobs()
             deal_with_finished_jobs()
             num_allowed = deal_with_configs()
             jobs2Continue = num_allowed - num_running
-            if jobs2Continue > 0:
+            if jobs2Continue >= 0:
                 continued = continue_stopped_jobs(jobs2Continue)
                 jobs2Submit = jobs2Continue - continued
                 if jobs2Submit > 0 and MyConfigs.MoreJobs:
@@ -257,6 +263,8 @@ def main():
             elif jobs2Continue < 0 :
                 jobs2Stop = -jobs2Continue
                 stop_jobs(jobs2Stop)
+            
+            time.sleep(WAIT_TIME)
             
             ok, Queue2Deal = handle_request('STATUS_QUEUE', True)
             if ok:

@@ -171,7 +171,7 @@ class RequestHandler(socketserver.StreamRequestHandler):
             Queue2Send = self.Queue.SelAttrVal(attr='runninghost',
                                                value={get_client_name(self)})
         else:
-            Queue2Send = self.Queue
+            Queue2Send = Global.JobQueue(self.Queue)
         
         for k, v in Queue2Send.items():
             Queue2Send.update({k:Global.JobView(v)})

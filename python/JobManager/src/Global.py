@@ -254,9 +254,9 @@ class JobQueue(dict):
         return newqueue
     
 class Configs:
-    def __init__(self, shutdown = False, MoreJobs = True, niceness=0,
-                 defNumJobs = 0, Calendar = dict(), active = 'on',
-                 numcpus = None, last_contact=None):
+    def __init__(self, shutdown=False, MoreJobs=True, niceness=0,
+                 defNumJobs=0, Calendar = dict(), active='on',
+                 numcpus=None, last_contact=None, running=0, totalJobs=0):
         self.shutdown = shutdown
         self.MoreJobs = MoreJobs
         self.niceness = niceness
@@ -265,6 +265,8 @@ class Configs:
         self.active = active
         self.numcpus = numcpus or psutil.NUM_CPUS
         self.last_contact = last_contact
+        self.running = running
+        self.totalJobs = totalJobs
         
     def __repr__(self):
         return representational_form(self)
