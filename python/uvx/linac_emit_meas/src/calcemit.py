@@ -5,7 +5,7 @@ import numpy
 import numpy.linalg
 
 
-NUM_ITERS = 100
+NUM_SAMPLES = 100
 
 
 def calc_emit(model, quadrupole_idx, k, measured_beam_size, size_error=None):
@@ -18,7 +18,7 @@ def calc_emit(model, quadrupole_idx, k, measured_beam_size, size_error=None):
 
     if size_error is not None:
         emit_with_errors = []
-        for i in range(NUM_ITERS):
+        for i in range(NUM_SAMPLES):
             beam_size_with_errors = propagate_beam_size(
                 sigma_0,
                 model,
