@@ -184,6 +184,8 @@ class RequestHandler(socketserver.StreamRequestHandler):
         with self.ConfigsLock:
             if clientName in self.Configs.keys():
                 self.Configs[clientName].numcpus = ItsConfigs.numcpus
+                self.Configs[clientName].totalJobs = ItsConfigs.totalJobs
+                self.Configs[clientName].running = ItsConfigs.running
                 self.Configs[clientName].active = 'on'
                 self.Configs[clientName].last_contact = datetime.datetime.now()
                 return (True, self.Configs[clientName])

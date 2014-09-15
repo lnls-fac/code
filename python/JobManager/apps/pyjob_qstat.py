@@ -28,12 +28,12 @@ iden= lambda x:str(x)
 PROPERTIES = dict(description=('{:^20s}','Description',iden),
                   user=('{:^10s}','User',iden),
                   working_dir=('{:^20s}','Working Directory',iden),
-                  creation_date=('{:^10s}','Creation',
-                                 lambda x:x.date().isoformat()),
+                  creation_date=('{:^13s}','Creation',
+                                 lambda x:x.strftime('%m/%d %H:%M')),
                   status_key=('{:^8s}','Status',iden),
                   hostname=('{:^10s}','Hostname', lambda x:x.split('-')[0]),
                   priority=('{:^7s}','Prior', iden),
-                  runninghost=('{:^10s}','Run Host',lambda x:(x or "None"
+                  runninghost=('{:^10s}','Run Host',lambda x:(x or "_"
                                                               ).split('-')[0]),
                   possiblehosts=('{:^20s}','Can Run On',
                                 lambda x:x if x=='all' else 
@@ -87,7 +87,7 @@ def main():
     
     ordem = []
     for cho in choose.split(','):
-        for k in PROPERTIES:
+        for k in sorted(PROPERTIES):
             if cho.lower() in k:
                 ordem += [k]
     

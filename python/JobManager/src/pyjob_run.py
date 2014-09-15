@@ -14,6 +14,14 @@ import Global
 TEMPFOLDER    = os.path.join(os.path.split(
                              os.path.split(Global.__file__)[0])[0],
                              '.TempFolders')
+RESULTSFOLDER = os.path.join(os.path.split(
+                             os.path.split(Global.__file__)[0])[0],
+                             '.Results')
+RECSCRPT = (
+'''#!/bin/bash
+
+cp -a {0} {1} ''')
+RECSCRPTNAME  = "recover.sh"
 FOLDERFORMAT  = 'jobid-{0:08d}'
 JOBFILE       = 'pid-{0:d}'
 JOBDONE       = 'done'
@@ -78,6 +86,16 @@ def shutdown():
     sys.exit(1)
     
 def check_running_jobs():
+
+        # get the time consumed by the job so far
+    def get_time_process(proc):
+        a = proc.get_cpu_times()
+        time = a.system+a.user
+        proc_list = proc.get_children()
+        for proc in proc_list:
+            time += get_time_process(proc)
+        return time
+    
     count = 0
     for jobid, proc in jobid2proc.items():
         state = proc.poll()
@@ -89,14 +107,15 @@ def check_running_jobs():
                 if MyQueue[jobid].status_key != 'q':
                     MyQueue[jobid].status_key = 't'
         else:
-            a = proc.get_cpu_times()
-            a = str(datetime.timedelta(seconds=int(a.system+a.user)))
-            MyQueue[jobid].running_time = a
             if proc.status in {'running','sleeping'}:
                 count +=1
+            a = get_time_process(proc)
+            a = str(datetime.timedelta(seconds=int(a)))
+            MyQueue[jobid].running_time = a
     MyConfigs.running = count
     return count
-
+              
+    
 def deal_with_finished_jobs():
     for k, v in MyQueue.items():
         if v.status_key in {'e', 't', 'q'}:
@@ -104,7 +123,7 @@ def deal_with_finished_jobs():
             files = os.listdir(path=folder)
             for file in set(files) - (v.input_files.keys() |
                                        set([JOBDONE,
-                                       SUBMITSCRNAME.format(k)])):
+                                            SUBMITSCRNAME.format(k)])):
                 data = Global.load_file(os.path.join(folder,file))
                 v.output_files.update({file: data})
             for file in v.input_files.keys(): # Reload the input_files
@@ -188,14 +207,37 @@ def continue_stopped_jobs(jobs2Continue):
     return i - numJobsRunning
 
 def deal_with_results(ResQueue):
-    for v in ResQueue.values():
+   
+    for k, v in ResQueue.items():
+        working_dir = v.working_dir
+        try:
+            with open(os.path.join(working_dir,'test'),mode='w') as fh:
+                fh.write('teste')
+            os.remove(os.path.join(working_dir,'test'))
+        except PermissionError:
+            if not os.path.isdir(RESULTSFOLDER):
+                os.mkdir(path=RESULTSFOLDER)
+            working_dir = '/'.join([RESULTSFOLDER,FOLDERFORMAT.format(k)])
+            os.mkdir(working_dir)
+        
+        files = []
         for name, content in v.output_files.items():
             if not name.startswith(JOBFILE[0:4]):
-                Global.createfile(name = os.path.join(v.working_dir,name),
+                files.append(name)
+                Global.createfile(name = os.path.join(working_dir,name),
                                   data = content[1], stats = content[0])
         for name, content in v.input_files.items():
-            Global.createfile(name = os.path.join(v.working_dir,name),
+            files.append(name)
+            Global.createfile(name = os.path.join(working_dir,name),
                               data = content[1], stats = content[0])
+            
+        # create script to copy the files to the right folder
+        if working_dir != v.working_dir:
+            rec_file = RECSCRPT.format(working_dir + '/{'+','.join(files)+'}',
+                                      v.working_dir)
+            Global.createfile(name = '/'.join([working_dir,RECSCRPTNAME]),
+                              data = rec_file,
+                              stats = Global.MyStats(st_mode=0o774))
 
 def deal_with_signals(Jobs2Sign):
     for k, v in Jobs2Sign.items():
@@ -210,8 +252,10 @@ def deal_with_signals(Jobs2Sign):
                     os.killpg(jobid2proc[k].pid, signal.SIGCONT)
                     v.status_key = 't'
                 elif v.status_key == 'ru':
-                    os.killpg(jobid2proc[k].pid, signal.SIGCONT)
-                    v.status_key = 'r'
+                    if MyQueue[k].status_key == 'pu':
+                        v.status_key = 'p'
+                    else:
+                        v.status_key = MyQueue[k].status_key
                 elif v.status_key == 'qu':
                     os.killpg(jobid2proc[k].pid, signal.SIGTERM)
                     os.killpg(jobid2proc[k].pid, signal.SIGCONT)
