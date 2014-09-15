@@ -106,7 +106,7 @@ class Jobs:
         self.priority = priority
         self.runninghost = runninghost
         self.possiblehosts = possiblehosts or 'all'
-        self.running_time = running_time or '00:00:00'
+        self.running_time = running_time or '0:00:00'
         # Load input files
         self.input_files = input_files
         #Load Execution Script
@@ -131,20 +131,16 @@ class Jobs:
         elif self.priority < other.priority:
             return False
         else:
-            if self.status_key != other.status_key:
-                if (STATUS[self.status_key] < STATUS[other.status_key]):
-                    return True
-                return False
-            else:
-                if self.creation_date < other.creation_date:
-                    return True
-                return False
+            if self.creation_date < other.creation_date:
+                return True
+            return False
         
     def __eq__(self,other):
         if not isinstance(other, Jobs):
             return NotImplemented
         elif ((not (self < other or other < self)) and 
-              self.possiblehosts == other.possiblehosts):
+              self.possiblehosts == other.possiblehosts and
+              self.status_key == other.status_key):
             return True
         else:
             return False
@@ -319,16 +315,20 @@ class MyStats:
         return representational_form(self)
         
      
-def createfile(name= None, data=None, stats = MyStats(), owner = None):
+def createfile(name= None, data=None, stats = MyStats()):
     if not name:
         raise ValueError('Name not specified')
     try:
-        try:
-            with open(name,mode='w') as fh:
-                fh.write(data or '')
-        except TypeError:
-            with open(name,mode='wb') as fh:
-                fh.write(data or ''.encode('utf-8'))
+        os.remove(name)
+    except:
+        pass
+    
+    if isinstance(data,str):
+        data = data.encode('utf-8')
+    
+    try:
+        with open(name,mode='wb') as fh:
+            fh.write(data)
     except (IOError, OSError) as err:
         print('Problem with output files:\n',err)
         return None
@@ -340,19 +340,11 @@ def createfile(name= None, data=None, stats = MyStats(), owner = None):
         mtime = stats.st_mtime
         times = (atime,mtime)
     os.utime(name, times=times)
-    try:
-        user = pwd.getpwnam(owner)
-        os.chown(name, user.pw_uid, user.pw_gid)
-    except (TypeError, KeyError):
-        pass
+
 def load_file(name, ignore=False):
     try:
-        try:
-            with open(name,mode='r') as fh:
-                file_data = fh.read()
-        except UnicodeDecodeError:
-            with open(name,mode='rb') as fh:
-                file_data = fh.read()
+        with open(name,mode='rb') as fh:
+            file_data = fh.read()
     except (TypeError, IOError, OSError) as err:
         if not ignore:
             print('Problem with file {0}:\n'.format(name),err)
