@@ -66,22 +66,26 @@ def main():
                                            .format(kl[0], kl[1]),nums))  
         return
     
-    print('{:15s}{:^7s}{:^10s}{:^10s}{:^10s}{:^10s}{:^10s}{:^6s}'
-          .format('hostname','state', 'NumCPUs','NJAllowed','NJThere',
-                  'NJobsRun', 'MoreJobs', 'Nice'))
+    print('='*78)
+    print('{:15s}{:^7s}{:^7s}{:^10s}{:^10s}{:^10s}{:^11s}{:^6s}'
+          .format('hostname','State', 'NCPUs','NJPermtd','NJRecvd',
+                  'NJRunning', 'Accepting', 'Nice'))
+    print('='*78)
     agora = datetime.datetime.now()
     TNCPUs, TNAllow, TJThere, TJRun = 0, 0, 0, 0
     for k,v in sorted(ConfigsReceived.items(),key=lambda x: x[0]):
         NumJobs = v.Calendar.get((calendar.day_name[agora.weekday()],
                                   agora.hour, agora.minute), v.defNumJobs)
-        print('{key:15s}{val.active!s:^7s}{val.numcpus:^10d}{N:^10d}'
-              '{val.totalJobs:^10d}{val.running:^10d}{val.MoreJobs!s:^10}'
-              '{val.niceness:^6d}'.format(key=k,val=v,N=NumJobs))
+        print('{key:15s}{val.active!s:^7s}{val.numcpus:^7d}{N:^10d}'
+              '{val.totalJobs:^10d}{val.running:^10d}{acc:^11}'
+              '{val.niceness:^6d}'.format(key=k,val=v,N=NumJobs, 
+                                          acc='yes' if v.MoreJobs else 'no'))
         TNCPUs += v.numcpus
         TNAllow += NumJobs
         TJThere += v.totalJobs
         TJRun += v.running
-    print('{0:15s}{1:^7s}{2:^10d}{3:^10d}{4:^10d}{5:^10d}{1:^10s}{1:^6s}'
+    print('='*78)
+    print('{0:15s}{1:^7s}{2:^7d}{3:^10d}{4:^10d}{5:^10d}{1:^10s}{1:^6s}'
           .format('Total',' ',TNCPUs, TNAllow, TJThere, TJRun))
         
         
