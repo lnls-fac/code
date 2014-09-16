@@ -19,7 +19,7 @@ elseif strcmpi(type, 'exponential')
     rndnr = zeros(1,nrvalues);
     sel = 1:nrvalues;
     while ~isempty(sel)
-        rndnr(sel) = random('exp',stdvalue, 1,length(sel));
+        rndnr(sel) = random('exp',2*stdvalue, 1,length(sel));
         sel = find(abs(rndnr) > cutoff*stdvalue);
     end
 else
