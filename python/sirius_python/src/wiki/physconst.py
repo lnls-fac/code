@@ -13,3 +13,5 @@ electron_rest_energy_MeV = (electron_rest_energy / electron_charge) / 1e6       
 electron_radius          = math.pow(electron_charge,2)/(4*math.pi*vacuum_permitticity*electron_rest_energy)                      # [m] - derived
 rad_cgamma               = 4*math.pi*electron_radius/math.pow(electron_rest_energy/electron_charge/1e9,3)/3                      # [m]/[GeV]^3 - derived
 Cq                       = (55.0/(32*math.sqrt(3.0))) * reduced_planck_constant * light_speed / (1e6 * electron_rest_energy_MeV) # [m] - derived
+Ca                       = electron_radius*light_speed / (3*math.pow(electron_rest_energy_MeV/1000, 3))                          # [m^2/(s.GeV^3)] - derived
+    

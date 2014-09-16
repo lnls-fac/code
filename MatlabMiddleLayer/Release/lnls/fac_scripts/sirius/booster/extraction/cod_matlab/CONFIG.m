@@ -19,7 +19,7 @@ r.config.lattice_function  = @sirius_booster_lattice;
 r.params.the_ring = r.config.lattice_function();
 
 
-r.config.nr_machines       = 500;
+r.config.nr_machines       = 20;
 r.config.simulate_static  = true;
 r.config.simulate_dynamic = false;
 

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Number of recent backups to keep
+BACKUPDEST=lnls209-linux
+BASEDIR=/home/virtualbox
+WIKIDIR=fac-wiki
+DISKNAME=fac-wiki.vdi
+USERNAME=`whoami`
+CLEANSCRIPT=wiki_clean_backup
+NBACKUPS=5
+
+DATE=$(date +%Y%m%d)
+FILE=fac-wiki-backup-$DATE.tar.gz
+cd $BASEDIR
+md5sum $BASEDIR/$WIKIDIR/$DISKNAME | /usr/sbin/sendmail $USERNAME
+tar cz ./$WIKIDIR | ssh $BACKUPDEST "cat > /home/backup/$WIKIDIR/$FILE"
+ssh $BACKUPDEST "/home/fac_files/code/scripts/$CLEANSCRIPT $WIKIDIR $NBACKUPS"

@@ -25,7 +25,7 @@ global THERING;
 
 % --- system parameters ---
 energy = 3e9;
-mode   = 'B';% a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
+mode   = 'C';% a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
 version = '00';
 harmonic_number = 864;
 
@@ -51,9 +51,8 @@ set_magnet_strengths;
 
 bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
-%quad_pass_method = 'QuadLinearPass';
 sext_pass_method = 'StrMPoleSymplectic4Pass';
-mult_pass_method = 'ThinMPolePass';
+%mult_pass_method = 'ThinMPolePass';
 
 
 %% elements
@@ -64,10 +63,10 @@ mult_pass_method = 'ThinMPolePass';
 
 id_length = 2.0; % [m]
 
-dia      = drift('dia', 3.269200 + 3.65e-3, 'DriftPass');
+%dia      = drift('dia', 3.269200 + 3.65e-3, 'DriftPass');
 dia1     = drift('dia', id_length/2, 'DriftPass');
 dia2     = drift('dia', 3.26920 + 3.65e-3 - id_length/2, 'DriftPass');
-dib      = drift('dib', 2.909200 + 3.65e-3, 'DriftPass');
+%dib      = drift('dib', 2.909200 + 3.65e-3, 'DriftPass');
 dib1     = drift('dib', id_length/2, 'DriftPass');
 dib2     = drift('dib', 2.909200 + 3.65e-3 - id_length/2, 'DriftPass');
 d10      = drift('d10', 0.100000, 'DriftPass');
@@ -139,7 +138,7 @@ B2      = [h1 mb2 h2];
 % -- b3 --
 dip_nam =  'b3';
 dip_len =  0.428011;
-dip_ang =  1.429950 * deg_2_rad;
+dip_ang =  (1.429950-0.1/2) * deg_2_rad;
 dip_K   = -0.78;
 dip_S   =  0.00;
 h1      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
@@ -149,7 +148,7 @@ B3      = [h1 mb3 h2];
 % -- bc --
 dip_nam =  'bc';
 dip_len =  0.125394;
-dip_ang =  1.4 * deg_2_rad;
+dip_ang =  (1.4+0.1) * deg_2_rad;
 dip_K   =  0.00;
 dip_S   = -18.93;
 bce     = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);

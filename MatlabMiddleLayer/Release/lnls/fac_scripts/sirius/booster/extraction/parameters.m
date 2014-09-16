@@ -3,7 +3,7 @@ param.Rin = [0;0.0;0;0;0;0];
 
 %Definition of the bunch to be used:
 param.n_part = 1000;
-param.cutoff = 1;
+param.cutoff = 5;
 param.emitx = 3.8e-9;
 param.emity = param.emitx*20/100;
 param.sigmae= 9e-4;
@@ -16,7 +16,7 @@ param.number_simu = 20;
 % Load the Booster lattice;
 synchrotron = sirius_booster_lattice;
 %carrega maquinas com erros de orbitas:
-param.boo.simulate_orbit_errors = false;
+param.boo.simulate_orbit_errors = true;
 % lattice_errors([pwd '/cod_matlab']);
 machines = load('/home/fac_files/code/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/booster/extraction/cod_matlab/CONFIG_machines_cod_corrected.mat');
 machines = machines.machine;
@@ -31,7 +31,7 @@ param.boo.seb_leak= 0e-4;
 %% Definition of the Transport line parameters
 
 % mode of operation
-param.ltba.mode = 'mismatched_4k';
+param.ltba.mode = 'mismatched_pmm';
 
 % Load the transfer line
 [transfer_line IniCond] = ltba_lattice(param.ltba.mode);
@@ -57,29 +57,29 @@ param.ltba.sef_x = -(  12    +  2.5  + 0.5    +   1)*1e-3; %position
 %achieved by an angle added to the polynomB of the septum
 param.ltba.sef_xp = 0;%angle
 % septum deflection angle and error 
-% param.ltba.sef_dang = -4.05e-3; % additional angle to deflect of the particle.
-param.ltba.sef_dang = 0.45e-3*0;
+param.ltba.sef_dang = -4.05e-3; % additional angle to deflect of the particle.
+% param.ltba.sef_dang = 0.45e-3*0;
 param.ltba.sef_err  = 0*7e-4; % tested
 
 
 % THICK SEPTUM's deflection angle, error and leak field 
-% param.ltba.seg_dang = 0.8e-3; % additional angle to deflect the particle.
-param.ltba.seg_dang = -0.45e-3*0;
+param.ltba.seg_dang = 0.8e-3; % additional angle to deflect the particle.
+% param.ltba.seg_dang = -0.45e-3*0;
 param.ltba.seg_err  = 0*7e-4; %tested
 
 
 %% Definition of the Storage Ring parameters
 
 % Load the sirius lattice;
-storage_ring = sirius_lattice('ac10_5');
+storage_ring = sirius_lattice();
 
 % Simulate injection in the storage ring too?
-param.sr.inject = false;
+param.sr.inject = true;
 
 % Injection mode: with four kickers or multipole?
-param.sr.mode = '4kickers'; % '4kickers' or 'pmm'
+param.sr.mode = 'pmm'; % '4kickers' or 'pmm'
 % Number of turns to track the beam after injection
-param.sr.nturns = 1;
+param.sr.nturns = 9;
 
 %leakage field from the thin septum only.
 % the leak field will be modeled as a sextupole + a dipole with the dipole:
@@ -100,10 +100,9 @@ param.sr.kick.deform_err = 0;%2e-5; % a defomation of the shape of the bump
 
 % parameters for injection with pmm
 param.sr.pmm.nturns = 500e-9/518.25*299792458; % pulse duration (# of turn)
-param.sr.pmm.polb = [0,-0.4941*0,1*52]/0.6; %PolynomB of the magnet
-% polB = [0,0,0,0,-49/8.2e-3^2]/0.6;
-% polB(3) = -2*polB(5)*8.2e-3^2;
-% param.sr.pmm.polb =polB;
+% param.sr.pmm.polb = [0,-0.4941*0,1*52]/0.6; %PolynomB of the magnet
+polB(2:2:10) = -[-1.565, 757940, -1.29116e10, 7.80222e13, -1.64038e17]/10*(60/100);
+param.sr.pmm.polb =polB;
 param.sr.pmm.amp_err= 1e-2; %Amplitude error of the magnet
 
 % Do we want to simulate the perturbation in the stored beam?

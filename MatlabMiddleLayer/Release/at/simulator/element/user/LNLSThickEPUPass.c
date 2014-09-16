@@ -3,6 +3,8 @@
    ximenes@lnls.br
 */
 
+#define _USE_MATH_DEFINES
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -153,7 +155,7 @@ void interpolate_kickmap(int nx, int ny, double *XEPU, double *YEPU, double *PXE
     ix = (int) ((x - xmin) / ((xmax - xmin) / (nx - 1)) );
     iy = (int) ((y - ymin) / ((ymax - ymin) / (ny - 1)) );
     if ((ix < 0) || (ix >= nx) || (iy < 0) || (iy >= ny)) {
-        *xkick = *ykick = 1.0/0.0;
+        *xkick = *ykick = tan(M_PI/2);
         return;
     }
     

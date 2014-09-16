@@ -1,12 +1,36 @@
+#completion for the JobManager functions
+complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
+complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
+complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --initial --final --num_proc --help" pyjob_configs_set.py
+complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
+complete -W "--jobs --status --user --description --explicate --choose --help"                                                          pyjob_qstat.py
+complete -W "--jobs --status --user --description --signal --priority --possibleHosts --help"                                           pyjob_qsig.py
+
 # ---------------------------
 # PATHS
 # ---------------------------
 
 # PYTHON
-export PYTHONPATH=/home/fac_files/code/python/sirius_python/src:/home/fac_files/code/control/modules/CustomPlot/src:/home/fac_files/code/python/PyTasks
+export PYTHONPATH=/home/fac_files/code/python/sirius_python/src:/home/fac_files/code/control/modules/CustomPlot/src:/home/fac_files/code/python/PyTasks:/home/fac_files/code/python/JobManager/src
 
 # FAC SCRIPTS
-export PATH=$PATH:/home/fac_files/code/scripts
+export PATH=$PATH:/home/fac_files/code/scripts:/home/fac_files/code/python/JobManager/apps:/home/fac_files/code/trackc++
 
 # USERS BIN
 export PATH=$PATH:~/bin/
+
+#ELEGANT AND OAG CONFIGS:
+
+export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64:/usr/local/mpich-install/bin:
+
+export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64"
+
+export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
+
+# arquivo de definições para o rpn do elegant
+export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
+
+#Variaveis necessarias para rodar elegant e afins (entre eles o geneticOptimizer)
+export HOST_ARCH=linux-x86_64
+export EPICS_HOST_ARCH=linux-x86_64
+export OAG_TOP_DIR=/usr/local/epics_oag

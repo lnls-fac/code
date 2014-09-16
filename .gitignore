@@ -50,6 +50,9 @@ eclipse/
 *Debug/
 *build/
 *.settings/
+.Configs/
+.Results/
+.TempFolders/
 
 
 

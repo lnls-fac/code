@@ -21,7 +21,7 @@ for i=1:calibration.nrpts_fit
         best_atmodel = at_model;
         fprintf('%02i: %f\n', i, sqrt(sum(dkick.^2))/1e-6);
     end
-    p = mypolyfit(atmodel_track.rx, -dkick, monomials_subset);
+    p = lnls_polyfit(atmodel_track.rx, -dkick, monomials_subset);
     at_model{end}.PolynomB(1+monomials_subset) = at_model{end}.PolynomB(1+monomials_subset) + p' / at_model{end}.Length;
     at_model{end}.K = at_model{end}.PolynomB(2);
 end

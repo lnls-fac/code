@@ -37,7 +37,7 @@ fieldmap_track = track_through_fieldmap(ref_traj, parms.track, parms.runge_kutta
 
 xi  = fieldmap_track.in_pts(:,1)';
 pxf = fieldmap_track.out_pts(:,2)';
-r.kick_coeffs = mypolyfit(xi,pxf,parms.perp_grid.monomials);
+r.kick_coeffs = lnls_polyfit(xi,pxf,parms.perp_grid.monomials);
 r.by_polynom=rk_traj_parms.integ_by_polynom;
 
 
