@@ -77,15 +77,21 @@ def load_jobs_from_last_run():
             jobid2proc.update({jobid : proc})
             MyQueue.update({jobid : job})
 
-def signal_handler(signal, frame):
-    shutdown()
+def signal_handler(sig, frame):
+    if sig == signal.SIGTERM:
+        shutdown()
+    elif sig == signal.SIGUSR1:
+        pause()
 
 def shutdown():
-    ok = handle_request('GOODBYE')
+    ok = handle_request('GOODBYE', True)
     if ok:
         sys.exit()
     sys.exit(1)
     
+def pause():
+    handle_request('GOODBYE', False)
+
 def check_running_jobs():
 
         # get the time consumed by the job so far
@@ -358,6 +364,7 @@ def main():
 
 if __name__ == '__main__':
     signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGUSR1, signal_handler)
     proclist = psutil.get_process_list()
     mod_name = os.path.split(__file__)[1]
     mypid = os.getpid()

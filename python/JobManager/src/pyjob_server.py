@@ -230,12 +230,15 @@ class RequestHandler(socketserver.StreamRequestHandler):
             self.server.shutdown()
         raise Finish()
     
-    def client_shutdown(self):
+    def client_shutdown(self,down):
         clientName = get_client_name(self)
         with self.ConfigsLock:
-            self.Configs[clientName].active = 'off'
-            self.Configs[clientName].shutdown = False
-            self.Configs[clientName].MoreJobs = True
+            if down:
+                self.Configs[clientName].active = 'off'
+                self.Configs[clientName].shutdown = False
+                self.Configs[clientName].MoreJobs = True
+            else:
+                self.Configs[clientName].active = 'paused'
         return True
 
 
