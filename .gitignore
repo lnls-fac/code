@@ -53,7 +53,7 @@ eclipse/
 .Configs/
 .Results/
 .TempFolders/
-
+bin/
 
 
 
