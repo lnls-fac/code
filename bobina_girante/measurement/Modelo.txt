@@ -1,0 +1,27 @@
+
+import os
+
+#Cria diretório para arquivos de saída
+        nomePasta = 'Medidas_PUC_'+ time.strftime("%d-%m-%Y_%H%M", time.localtime()) + '\\'
+        if not os.path.exists(Bib.Par.parametros['DirDados'] + nomePasta):
+            os.makedirs(Bib.Par.parametros['DirDados']+nomePasta)
+            Bib.DirMedidas = Bib.Par.parametros['DirDados'] + nomePasta
+        else:
+            raise Exception()
+
+
+## Salvar os dados
+dataoutCorrente = np.column_stack((self.curvaCorrente))
+np.savetxt((Bib.DirMedidas + 'Dados_Corrente_PUC_.dat'),dataoutCorrente,delimiter='\t',newline='\r\n')
+
+
+
+
+
+
+    def default(self):
+        # ****************************
+        # Controle e Correcoes *******
+        # ****************************
+        self.parametros = dict()
+        self.parametros.update({'DirDados': 'D:\\ARQ\\Work_at_LNLS\\Controle_Bancada_Hall\\Release_vs7\\Dados\\'})
