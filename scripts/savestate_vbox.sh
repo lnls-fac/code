@@ -11,11 +11,13 @@ function dostop()
         exit
     fi
     ## try gracefully savestate
-    echo -n "Shutting down WinXP ... "
+    echo -n "Shutting down JobClient ... "
     pid=$( vboxmanage guestcontrol $host  execute --image /bin/ps --username fac \
                                 --password 2f0a1c4 --wait-stdout -- -elf | \
-             grep pyjob_run | cut -d c -f 2 | grep  -o "\b[0-9]\{3\}\b" )
-
+         grep pyjob_run.py | grep -o "fac[ ]*\b[0-9]\{2,5\}\b" | grep -o "[0-9]\{2,5\}" )
+     
+    echo "The JobClient's pid is: " $pid
+    
     vboxmanage guestcontrol $host  execute --image /bin/kill --username fac \
                                 --password 2f0a1c4 --wait-stdout -- -USR1 $pid
     sleep 1

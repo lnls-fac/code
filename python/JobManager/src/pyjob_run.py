@@ -91,6 +91,7 @@ def shutdown():
     
 def pause():
     handle_request('GOODBYE', False)
+    time.sleep(2*WAIT_TIME)
 
 def check_running_jobs():
 
