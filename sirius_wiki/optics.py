@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
-import physconst as const
+import constants as const
 
 
 def gamma(energy):
@@ -75,7 +75,7 @@ def rf_frequency(revolution_frequency, harmonic_number):
 def number_of_electrons(current, revolution_period):
     '''Number of electrons from beam current [mA] and revolution
        period [μs].'''
-    return (current/1e3) * (revolution_period/1e6) / const.electron_charge
+    return (current/1e3) * (revolution_period/1e6) / const.elementary_charge
 
 def overvoltage(rf_voltage, U0):
     '''Overvoltage from RF voltage [MV] and energy loss U0 per turn [keV].'''
