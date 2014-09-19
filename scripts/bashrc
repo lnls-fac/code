@@ -7,7 +7,7 @@ export FACCODE=$FACROOT/code
 export FACDATA=$FACROOT/data
 
 # PYTHON
-export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE/tools:$FACCODE/mathphys
+export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE:$FACCODE/tools
 
 # FAC SCRIPTS
 export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin

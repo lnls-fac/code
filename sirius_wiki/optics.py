@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
-import constants as const
+import mathphys.constants as const
 
 
 def gamma(energy):
