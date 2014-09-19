@@ -17,9 +17,10 @@ Main projects in this repository:
     . non_linear_beam_stay_clear
     . etc...
 - collective_effects matlab scripts (UVX/Sirius)
-- tracySirius (based on Soleil's Tracy3)
+- fieldmap
+- job_manager
+- mathphys (mathematical and physical constants and functions)
+- pyring (python port of matlab AcceleratorToolbox + MML)
+- sirius_wiki (update parameters in wiki)
 - trackc++ (tracking code based on AT/Tracy passmethods + mp_task_mgr)
-- python scripts
-    . module_trackcpp (python-exposed trackc++ module)
-    . pyring (python port of matlab AcceleratorToolbox + MML)
-- control (high level applications and related modules)
+- tracy_sirius (based on Soleil's Tracy3)
