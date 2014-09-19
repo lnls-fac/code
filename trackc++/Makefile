@@ -26,8 +26,9 @@ SOURCES_CPP	= 	lattice.cpp \
 			output.cpp \
 			kicktable.cpp
 
-LIBS            = tracking_mp/tracking_mp.a -lpthread -lgsl -lgslcblas
+LIBS            = tracking_mp/build/tracking_mp.a -lpthread -lgsl -lgslcblas
 INC             = 
+OBJDIR = build
 
 ifeq ($(MAKECMDGOALS),trackc++-debug)
 	CFLAGS		= $(MACHINE) $(DBG_FLAG) $(DFLAGS)
@@ -35,20 +36,19 @@ else
 	CFLAGS		= $(MACHINE) $(OPT_FLAG) $(DFLAGS)
 endif
 
-OBJECTS		= $(SOURCES_CPP:.cpp=.o) $(SOURCES_C:.c=.o) 
+OBJECTS		= $(addprefix $(OBJDIR)/, $(SOURCES_CPP:.cpp=.o) $(SOURCES_C:.c=.o))
 LDFLAGS		= $(MACHINE) 
-
 
 #### DERIVED CONDITIONALS AND VARIABLES ####
 ifeq ($(shell hostname), uv100)
     CC          = /progs/users/gcc-4.7.3/bin/gcc
     CXX         = /progs/users/gcc-4.7.3/bin/g++
-    LIBS        = -Wl,-rpath,/progs/users/gcc-4.7.3/lib64 tracking_mp/tracking_mp.a -lpthread ~/bin/GSL/lib/libgsl.a ~/bin/GSL/lib/libgslcblas.a
+    LIBS        = -Wl,-rpath,/progs/users/gcc-4.7.3/lib64 tracking_mp/build/tracking_mp.a -lpthread ~/bin/GSL/lib/libgsl.a ~/bin/GSL/lib/libgslcblas.a
     INC         = -I../bin/GSL/include/
 endif
 
 #### GENERATES DEPENDENCY FILE ####
-$(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) > .depend)
+$(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) | sed 's/.*\.o/$(OBJDIR)\/&/' > .depend)
 -include .depend
 
 #### TARGETS ####
@@ -60,13 +60,18 @@ alllibs:
 	cd tracking_mp; make all;
 
 trackc++: $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(OBJDIR)/$@
 
 trackc++-debug:	$(OBJECTS)
 	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
 
+$(OBJECTS): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
 clean:
-	rm -rf *.o trackc++ trackc++-debug .depend *.out *.dat *~
+	rm -rf $(OBJDIR) trackc++ trackc++-debug .depend *.out *.dat *~
 
 cleanall: clean
 	cd tracking_mp; make clean;
@@ -74,10 +79,11 @@ cleanall: clean
 
 #### RULES ####
 
-.c.o:
-	$(CC) -c $(CFLAGS) $(INC) $<
+$(OBJDIR)/%.o: %.cpp
+	$(CXX) -c $(CFLAGS) $(INC) $< -o $@
 
-.cc.o:
-	$(CXX) -c $(CFLAGS) $(INC) $<
-.cpp.o:
-	$(CXX) -c $(CFLAGS) $(INC) $<
+$(OBJDIR)/%.o: %.c
+	$(CC) -c $(CFLAGS) $(INC) $< -o $@
+
+$(OBJDIR)/%.o: %.cc
+	$(CXX) -c $(CFLAGS) $(INC) $< -o $@
