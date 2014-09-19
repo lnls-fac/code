@@ -111,7 +111,7 @@ class FieldMap:
         for line in lines:
             
             # empty line or comment
-            if line[0] == '#':
+            if not line or (line[0] == '#'):
                 continue
             words = line.split()
             if not words:

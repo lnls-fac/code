@@ -9,9 +9,9 @@ folder = fullfile(root_path,'code','MatlabMiddleLayer','Release','lnls','fac_scr
 addpath(folder);
 
 % loads fieldmap
-filename = fullfile(root_path, 'data','sirius_mml','magnet_modelling','MM3D','B_Booster','2013-12-21_Dipolo_Booster_BD_Modelo_6_-80_20mm_-1000_1000mm.txt');
-%load_fieldmap(filename, 'suppress_plot');
-load_fieldmap(filename);
+filename = fullfile(root_path, 'data','sirius_mml','magnet_modelling','MM3D','B_Booster','2014-09-18_Dipolo_Booster_BD_Modelo_6_-80_35mm_-1000_1000mm.txt');
+load_fieldmap(filename, 'suppress_plot');
+%load_fieldmap(filename);
 maxwell_field_reconstruction(0);
 
 % calcs beam parameters (magnetic rigidity, gamma factor, beta, etc)
@@ -37,9 +37,13 @@ ref_y      =  traj1.y(end);
 ref_z      = -traj1.z(end);
 ref_beta_x = -traj1.beta_x(end);
 ref_beta_z =  traj1.beta_z(end);
+traj1.s = [-flipud(traj1.s); traj1.s(2:end)];
 traj1.x = [flipud(traj1.x); traj1.x(2:end)];
 traj1.y = [traj1.y; traj1.y(2:end)];
 traj1.z = [-flipud(traj1.z); traj1.z(2:end)];
+traj1.beta_x = [-flipud(traj1.beta_x); traj1.beta_x(2:end)];
+traj1.beta_y = [traj1.beta_y; traj1.beta_y(2:end)];
+traj1.beta_z = [flipud(traj1.beta_z); traj1.beta_z(2:end)];
 
 % adds kick to the initial coordinate (from kicker) and does runge-kutta
 % tracking
@@ -53,9 +57,43 @@ traj2.beta_x  = t(:,4); traj2.beta_y  = t(:,5); traj2.beta_z  = t(:,6);
 traj2.angle_x = atan(traj2.beta_x ./ traj2.beta_z);
 traj2.angle_y = atan(traj2.beta_y ./ traj2.beta_z);
 
+traj1_i1 = Inf; traj1_i2 = -Inf;
+traj2_i1 = Inf; traj2_i2 = -Inf;
+rx = []; px = [];
+for i=1:length(traj1.s)
+    sf = get_local_SerretFrenet_coord_system(traj1, traj1.s(i));
+    [s_intersection, x_perp, idx] = find_intersection_point(traj2, sf);
+    if ~isempty(s_intersection)
+        traj1_i1 = min([traj1_i1, i]); traj1_i2 = max([traj1_i2, i]);
+        traj2_i1 = min([traj2_i1, i]); traj2_i2 = max([traj2_i2, i]);
+        rx(end+1) = x_perp;
+        px(end+1) = 0.5 * (traj2.beta_x(idx) + traj2.beta_x(idx+1)) - traj1.beta_x(i);
+    end
+end
+
+sel1 = traj1_i1:traj1_i2;
+sel2 = traj2_i1:traj2_i2;
+
 figure; hold all;
-plot(1000*traj1.z, 1000*traj1.x);
-plot(1000*traj2.z, 1000*traj2.x);
+plot(1000*traj1.z(sel1), 1000*traj1.x(sel1));
+plot(1000*traj2.z(sel2), 1000*traj2.x(sel2));
+xlabel('z [mm]'); ylabel('x [mm]');
+
+figure; hold all;
+plot(1000*traj1.s(sel1), 1000*rx);
+xlabel('s [mm]'); ylabel('rx [mm]');
+
+figure; hold all;
+plot(1000*traj1.s(sel1), 1000*px);
+xlabel('s [mm]'); ylabel('px [mm]');
+
+
+
+% figure; hold all;
+% plot(1000*traj1.z, 1000*traj1.x);
+% plot(1000*traj2.z, 1000*traj2.x);
+
+
 
 
 
