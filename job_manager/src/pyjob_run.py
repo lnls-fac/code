@@ -173,11 +173,10 @@ def submit_jobs(NewQueue):
             Global.createfile(name='/'.join([tempdir, name]),
                               data = info[1], stats = info[0])
         #submit job
-        proc = psutil.Popen(['-l','/'.join([tempdir, SUBMITSCRNAME.format(k)])],
+        proc = psutil.Popen('/'.join([tempdir, SUBMITSCRNAME.format(k)]),
                             stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL,
                             start_new_session=True,
-                            executable='/bin/bash',
                             cwd = tempdir)
         #update queues
         v.status_key = 'r'
