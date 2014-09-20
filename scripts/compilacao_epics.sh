@@ -3,19 +3,23 @@
 # Para voce conseguir rodar o elegant e os arquivos do SDDS corretamente
 # na sua area, ou então para reinstalar o elegant, edite seu arquivo .bashrc
 # adicionando no final do arquivo as seguintes linhas:
-#export PATH=/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64:/usr/local/mpich-install/bin:$PATH:.
-
-#export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64"
+#ELEGANT AND OAG CONFIGS:
+#export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64
+#export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64 /usr/local/epics_oag/oag/apps/lib/linux-x86_64/sdds /usr/local/epics_oag/oag/apps/lib/linux-x86_64/os /usr/local/epics_oag/oag/apps/lib/linux-x86_64/ca /usr/local/epics_oag/oag/apps/lib/linux-x86_64/rpn"
 #export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
-
+# arquivo de definições para o rpn do elegant
 #export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
+#Variaveis necessarias para rodar elegant e afins (entre eles o geneticOptimizer)
 #export HOST_ARCH=linux-x86_64
 #export EPICS_HOST_ARCH=linux-x86_64
 #export OAG_TOP_DIR=/usr/local/epics_oag
 
 # mude as permissoes da pasta:
+function compila_epics() 
+{
 sudo mkdir /usr/local/epics_oag || return
 sudo chown fernando.fac /usr/local/epics_oag || return
+sudo chmod ug+w /usr/local/epics_oag || return
 
 
 # entre na pasta /usr/local/epics_oag e exclua tudo o que estiver la dentro
@@ -87,6 +91,7 @@ sudo apt-get install libreadline6-dev libncurses5-dev libncursesw5-dev \
 zlib1g-dev libgd2-xpm-dev libxaw7-dev liblapack-dev libmotif-dev libgsl0-dev \
  python-dev iwidgets4 tcl8.5 tk8.5 tcl8.5-dev tk8.5-dev mpich2  || return
 
+# as bibliotecas adicionais de sdds e os que vêm com os códigos da oag não são compatí
 sudo apt-get remove tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev
 sudo ln -s /usr/bin/tclsh{8.5,}
 
@@ -200,21 +205,22 @@ cd /usr/local/epics_oag/oag/apps/src/tcltkapp/oagapp && make  || return
 #abra todos os Makefile.OAG das pastas que estão abaixo de extensions:
 #gedit */*.OAG 
 # e adicione isso no início do arquivo:
-#TCL_INC = /usr/include/tcl8.6
+#TCL_INC = /usr/include/tcl8.5
 #TK_INC = /usr/include/tk
-#TK_LIB = /usr/lib/tcl8.6
-#TCL_LIB = /usr/lib/tk8.6
+#TK_LIB = /usr/lib/tcl8.5
+#TCL_LIB = /usr/lib/tk8.5
+cd /usr/local/epics_oag/oag/apps/src/tcltkinterp/extensions || return
 Folder='ca'
-sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.6\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.6\nTCL_LIB = \/usr\/lib\/tk8.6/;:a;n;ba}' \
+sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.5\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.5\nTCL_LIB = \/usr\/lib\/tk8.5/;:a;n;ba}' \
 $Folder/Makefile.OAG > $Folder/Makefile.OAG2 && mv $Folder/Makefile.OAG{2,} || return
 Folder='os'
-sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.6\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.6\nTCL_LIB = \/usr\/lib\/tk8.6/;:a;n;ba}' \
+sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.5\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.5\nTCL_LIB = \/usr\/lib\/tk8.5/;:a;n;ba}' \
 $Folder/Makefile.OAG > $Folder/Makefile.OAG2 && mv $Folder/Makefile.OAG{2,} || return
 Folder='sdds'
-sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.6\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.6\nTCL_LIB = \/usr\/lib\/tk8.6/;:a;n;ba}' \
+sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.5\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.5\nTCL_LIB = \/usr\/lib\/tk8.5/;:a;n;ba}' \
 $Folder/Makefile.OAG > $Folder/Makefile.OAG2 && mv $Folder/Makefile.OAG{2,} || return
 Folder='rpn'
-sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.6\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.6\nTCL_LIB = \/usr\/lib\/tk8.6/;:a;n;ba}' \
+sed '/SHARED_LIBRARIES/{s/.*/&\n\nTCL_INC = \/usr\/include\/tcl8.5\nTK_INC = \/usr\/include\/tk\nTK_LIB = \/usr\/lib\/tcl8.5\nTCL_LIB = \/usr\/lib\/tk8.5/;:a;n;ba}' \
 $Folder/Makefile.OAG > $Folder/Makefile.OAG2 && mv $Folder/Makefile.OAG{2,} || return
 # Por fim, vá para 
 cd /usr/local/epics_oag/oag/apps/src/tcltkinterp/extensions && make  || return
@@ -235,3 +241,6 @@ cd /usr/local/epics_oag/epics/extensions/src/SDDS/pgapack && make clean && make 
 cd /usr/local/epics_oag/oag/apps/src/elegant && make MPI=1 clean && make Pelegant
 
 cd /usr/local/epics_oag/ && rm *.gz
+}
+
+compila_epics
