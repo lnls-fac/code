@@ -1,8 +1,9 @@
 import math
 import numpy as np
-#import matplotlib.pyplot as plt
 
 class OutOfRange(Exception):
+    pass
+class OutOfRangeRz(OutOfRange):
     pass
 class OutOfRangeRxMax(OutOfRange):
     pass
@@ -12,9 +13,9 @@ class OutOfRangeRyMax(OutOfRange):
     pass
 class OutOfRangeRyMin(OutOfRange):
     pass
-class OutOfRangeRzMax(OutOfRange):
+class OutOfRangeRzMax(OutOfRangeRz):
     pass
-class OutOfRangeRzMin(OutOfRange):
+class OutOfRangeRzMin(OutOfRangeRz):
     pass
 class IrregularFieldMap(Exception):
     pass
@@ -23,7 +24,7 @@ class FieldMap:
     
     def __init__(self, fname, 
                  polyfit_exponents = None,
-                 analysis_missing_field = True,
+                 analysis_missing_field = False,
                  threshold_field_fraction = 0.5):
         
         self.filename = None
@@ -56,6 +57,7 @@ class FieldMap:
         # field and to thus obtain numerical estimates of the field integrals outside the fieldmap.
         # these estimates are stored in the lists below.
         #
+        self.clear_extrapolation_coefficients()
         self.bx_missing_integral  = None  # list of estimated bx field line integrals outside the region of the field map
         self.by_missing_integral  = None  # list of estimated by field line integrals outside the region of the field map
         self.bz_missing_integral  = None  # list of estimated bz field line integrals outside the region of the field map
@@ -65,7 +67,7 @@ class FieldMap:
         
         # does field extrapolation analysis 
         if analysis_missing_field:
-            self.__field_extrapolation_analysis(polyfit_exponents = polyfit_exponents, 
+            self.field_extrapolation_analysis(polyfit_exponents = polyfit_exponents, 
                                                 threshold_field_fraction = threshold_field_fraction)
 
     def read_fieldmap(self, fname):
@@ -111,7 +113,7 @@ class FieldMap:
         for line in lines:
             
             # empty line or comment
-            if line[0] == '#':
+            if not line or (line[0] == '#'):
                 continue
             words = line.split()
             if not words:
@@ -148,39 +150,58 @@ class FieldMap:
                 except ValueError:
                     self.current = None
                 continue
-                    
+                 
+    def __get_ix(self, rx):
+        ix = int(math.floor((rx - self.rx_min) / self.rx_step)) if self.rx_nrpts > 1 else 0
+        ix = ix-1 if ix == self.rx_nrpts-1 else ix
+        return ix
+    
+    def __get_iy(self, ry):
+        iy = int(math.floor((ry - self.ry_min) / self.ry_step)) if self.ry_nrpts > 1 else 0
+        iy = iy-1 if iy == self.ry_nrpts-1 else iy
+        return iy
+    
+    def __get_iz(self, rz):
+        iz = int(math.floor((rz - self.rz_min) / self.rz_step)) if self.rz_nrpts > 1 else 0
+        iz = iz-1 if iz == self.rz_nrpts-1 else iz
+        return iz
+               
     def interpolate(self, rx, ry, rz):
 
+            
         def rz_interpolate(rz, ix, iy):
                 
-            def field_rz_extrapolate(self, coeffs, rz):
-                b = np.zeros(rz.shape)
+            def field_rz_extrapolate(rz, coeffs):
+                try:
+                    b = np.zeros(rz.shape)
+                except AttributeError:
+                    b = 0.0
                 x = 1.0/rz
                 for i in range(len(coeffs)):
                     b += coeffs[i] * (x ** self.__polyfit_exponents[i])
                     return b
     
             if rz > self.rz_max:
-                if not hasattr(self, '_FiedlMap__bx_pos_coeffs'):
+                if self._bx_pos_coeffs is None:
                     raise OutOfRangeRzMax('rz = {0:f} > rz_max = {1:f} [mm]'.format(rz, self.rz_max))
-                bx_pos_coeffs = self.__bx_pos_coeffs[iy][ix]
-                by_pos_coeffs = self.__by_pos_coeffs[iy][ix]
-                bz_pos_coeffs = self.__bz_pos_coeffs[iy][ix]
-                bx = field_rz_extrapolate(bx_pos_coeffs, rz)
-                by = field_rz_extrapolate(by_pos_coeffs, rz)
-                bz = field_rz_extrapolate(bz_pos_coeffs, rz)
+                bx_pos_coeffs = self._bx_pos_coeffs[iy][ix]
+                by_pos_coeffs = self._by_pos_coeffs[iy][ix]
+                bz_pos_coeffs = self._bz_pos_coeffs[iy][ix]
+                bx = field_rz_extrapolate(rz, bx_pos_coeffs)
+                by = field_rz_extrapolate(rz, by_pos_coeffs)
+                bz = field_rz_extrapolate(rz, bz_pos_coeffs)
             elif rz < self.rz_min:
-                if not hasattr(self, '__bx_pos_coeffs'):
+                if self._bx_neg_coeffs is None:
                     raise OutOfRangeRzMin('rz = {0:f} < rz_min = {1:f} [mm]'.format(rz, self.rz_min))
-                bx_neg_coeffs = self.__bx_neg_coeffs[iy][ix]
-                by_neg_coeffs = self.__by_neg_coeffs[iy][ix]
-                bz_neg_coeffs = self.__bz_neg_coeffs[iy][ix]
-                bx = field_rz_extrapolate(bx_neg_coeffs, rz)
-                by = field_rz_extrapolate(by_neg_coeffs, rz)
-                bz = field_rz_extrapolate(bz_neg_coeffs, rz)
+                bx_neg_coeffs = self._bx_neg_coeffs[iy][ix]
+                by_neg_coeffs = self._by_neg_coeffs[iy][ix]
+                bz_neg_coeffs = self._bz_neg_coeffs[iy][ix]
+                bx = field_rz_extrapolate(rz, bx_neg_coeffs)
+                by = field_rz_extrapolate(rz, by_neg_coeffs)
+                bz = field_rz_extrapolate(rz, bz_neg_coeffs)
             else:
 
-                iz = int(math.floor((rz - self.rz_min) / self.rz_step)) if self.rz_nrpts > 1 else 0
+                iz = self.__get_iz(rz)
                 iz1, iz2 = iz, iz+1 if self.rz_nrpts > 1 else iz
                 fdz = (rz - self.rz[iz1])/self.rz_step if self.rz_step != 0.0 else 0.0
                 
@@ -198,9 +219,9 @@ class FieldMap:
             ix1, ix2 = ix, ix+1 if self.rx_nrpts > 1 else ix
             
             # prev x
-            bx_x1, by_x1, bz_x1 = rz_interpolate(rz, ix = ix1, iy = iy)
+            bx_x1, by_x1, bz_x1 = rz_interpolate(rz = rz, ix = ix1, iy = iy)
             # next x
-            bx_x2, by_x2, bz_x2 = rz_interpolate(rz, ix = ix2, iy = iy)
+            bx_x2, by_x2, bz_x2 = rz_interpolate(rz = rz, ix = ix2, iy = iy)
             # interpolate in x
             fdx = (rx - self.rx[ix1])/self.rx_step if self.rx_step != 0.0 else 0.0
             bx = bx_x1 + fdx * (bx_x2 - bx_x1)
@@ -262,53 +283,17 @@ class FieldMap:
             if rz < self.rz_min:
                 raise OutOfRangeRzMin('rz = {0:f} < rz_min = {1:f} [mm]'.format(rz, self.rz_min))
             
-        iy = int(math.floor((ry - self.ry_min) / self.ry_step)) if self.ry_nrpts > 1 else 0
-        ix = int(math.floor((rx - self.rx_min) / self.rx_step)) if self.rx_nrpts > 1 else 0
-        iz = int(math.floor((rz - self.rz_min) / self.rz_step)) if self.rz_nrpts > 1 else 0
+        iy = self.__get_iy(ry)
+        ix = self.__get_ix(rx)
+        iz = self.__get_iz(rz)
         return ix,iy,iz
 
-    def __str__(self):
-        r = ''
-        r += '{0:<35s} {1}\n'.format('filename:', self.filename)
-        r += '{0:<35s} {1}\n'.format('timestamp:', self.timestamp)
-        if self.ry_nrpts == 1: 
-            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
-        else:
-            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
-        if self.rx_nrpts == 1: 
-            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
-        else:
-            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
-        if self.rz_nrpts == 1: 
-            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)
-        else:
-            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)    
-        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('by@(all)(axis):', 
-        np.amin(self.by[self.ry_zero]), np.amax(self.by[self.ry_zero]), min(self.by[self.ry_zero][self.rx_zero]), max(self.by[self.ry_zero][self.rx_zero])) 
-        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('bx@(all)(axis):', 
-        np.amin(self.bx[self.ry_zero]), np.amax(self.bx[self.ry_zero]), min(self.bx[self.ry_zero][self.rx_zero]), max(self.bx[self.ry_zero][self.rx_zero])) 
-        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('bz@(all)(axis):', 
-        np.amin(self.bz[self.ry_zero]), np.amax(self.bz[self.ry_zero]), min(self.bz[self.ry_zero][self.rx_zero]), max(self.bz[self.ry_zero][self.rx_zero]))
+    def clear_extrapolation_coefficients(self):
+        self._bx_pos_coeffs, self._bx_neg_coeffs = None, None
+        self._by_pos_coeffs, self._by_neg_coeffs = None, None
+        self._bz_pos_coeffs, self._bz_neg_coeffs = None, None
         
-        if self.bx_missing_integral is not None:
-            missing_Lbx = [abs(x) for x in self.bx_missing_integral[self.ry_zero]]
-            max_missing_Lbx = max(missing_Lbx)
-            rx_max = missing_Lbx.index(max_missing_Lbx)
-            r += '{0:<35s} {1:.2E} T.m at x = {2:+d} mm\n'.format('missing int{Bx.dz}(max):', max_missing_Lbx/1000, rx_max)
-        if self.by_missing_integral is not None:
-            missing_Lby = [abs(x) for x in self.by_missing_integral[self.ry_zero]]
-            max_missing_Lby = max(missing_Lby)
-            rx_max = missing_Lby.index(max_missing_Lby)
-            r += '{0:<35s} {1:.2E} T.m at x = {2:+d} mm\n'.format('missing int{By.dz}(max):', max_missing_Lby/1000, rx_max)
-        if self.bz_missing_integral is not None:
-            missing_Lbz = [abs(x) for x in self.bz_missing_integral[self.ry_zero]]
-            max_missing_Lbz = max(missing_Lbz)
-            rx_max = missing_Lbz.index(max_missing_Lbz)
-            r += '{0:<35s} {1:.2E} T.m at x = {2:+d} mm\n'.format('missing int{Bz.dz}(max):', max_missing_Lbz/1000, rx_max)
-        return r
-
-             
-    def __field_extrapolation_analysis(self, threshold_field_fraction = 0.5, polyfit_exponents = None):
+    def field_extrapolation_analysis(self, threshold_field_fraction = 0.5, polyfit_exponents = None):
         
         if polyfit_exponents is None:
             self.__polyfit_exponents = [2,3,4,5,6,7,8,9,10,11,12,13,14,15]
@@ -369,18 +354,19 @@ class FieldMap:
             
             return (pos_coeffs,neg_coeffs)
                     
-        self.__bx_pos_coeffs, self.__bx_neg_coeffs = [], []
-        self.__by_pos_coeffs, self.__by_neg_coeffs = [], []
-        self.__bz_pos_coeffs, self.__bz_neg_coeffs = [], []
+        self._bx_pos_coeffs, self._bx_neg_coeffs = [], []
+        self._by_pos_coeffs, self._by_neg_coeffs = [], []
+        self._bz_pos_coeffs, self._bz_neg_coeffs = [], []
         self.bx_missing_integral = []
         self.by_missing_integral = []
         self.bz_missing_integral = []
+            
         for yplane_idx in range(len(self.by)):
             bx_pos_coeffs, by_pos_coeffs, bz_pos_coeffs = [], [], []
             bx_neg_coeffs, by_neg_coeffs, bz_neg_coeffs = [], [], []
             bx_missing_integral, by_missing_integral, bz_missing_integral = [], [], []
             for fieldline_idx in range(self.by[yplane_idx].shape[0]):
-                print(fieldline_idx)
+                #print(fieldline_idx)
                 # bx
                 pos_coeff, neg_coeff = calc_poly_coeffs(yplane_idx, fieldline_idx, self.bx)
                 bx_pos_coeffs.append(pos_coeff)
@@ -403,13 +389,66 @@ class FieldMap:
                 binteg += self.integral_z(coeffs = neg_coeff, rz_inf = -float('inf'), rz_sup = self.rz_min)
                 bz_missing_integral.append(binteg)
              
-            self.__bx_pos_coeffs.append(bx_pos_coeffs)
-            self.__bx_neg_coeffs.append(bx_neg_coeffs)
-            self.__by_pos_coeffs.append(by_pos_coeffs)
-            self.__by_neg_coeffs.append(by_neg_coeffs)
-            self.__bz_pos_coeffs.append(bz_pos_coeffs)
-            self.__bz_neg_coeffs.append(bz_neg_coeffs)
+            self._bx_pos_coeffs.append(bx_pos_coeffs)
+            self._bx_neg_coeffs.append(bx_neg_coeffs)
+            self._by_pos_coeffs.append(by_pos_coeffs)
+            self._by_neg_coeffs.append(by_neg_coeffs)
+            self._bz_pos_coeffs.append(bz_pos_coeffs)
+            self._bz_neg_coeffs.append(bz_neg_coeffs)
             self.bx_missing_integral.append(bx_missing_integral)
             self.by_missing_integral.append(by_missing_integral)
             self.bz_missing_integral.append(bz_missing_integral)
+      
+    def __str__(self):
+        r = ''
+        r += '{0:<35s} {1}\n'.format('timestamp:', self.timestamp)
+        r += '{0:<35s} {1}\n'.format('filename:', self.filename)
+        r += '{0:<35s} {1}\n'.format('magnet_label:', self.magnet_label)
+        r += '{0:<35s} {1} mm\n'.format('magnet_length:', self.length)
+        r += '{0:<35s} {1}\n'.format('main_coil_current:', self.current)
+        try:
+            r += '{0:<35s} {1} mm\n'.format('magnetic_gap:', self.gap)
+        except:
+            pass
+        try:
+            r += '{0:<35s} {1} mm\n'.format('control_gap:', self.control_gap)
+        except:
+            pass
+  
+        if self.ry_nrpts == 1: 
+            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
+        else:
+            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
+        if self.rx_nrpts == 1: 
+            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
+        else:
+            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
+        if self.rz_nrpts == 1: 
+            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)
+        else:
+            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)    
+        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('by@(all)(axis):', 
+        np.amin(self.by[self.ry_zero]), np.amax(self.by[self.ry_zero]), min(self.by[self.ry_zero][self.rx_zero]), max(self.by[self.ry_zero][self.rx_zero])) 
+        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('bx@(all)(axis):', 
+        np.amin(self.bx[self.ry_zero]), np.amax(self.bx[self.ry_zero]), min(self.bx[self.ry_zero][self.rx_zero]), max(self.bx[self.ry_zero][self.rx_zero])) 
+        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('bz@(all)(axis):', 
+        np.amin(self.bz[self.ry_zero]), np.amax(self.bz[self.ry_zero]), min(self.bz[self.ry_zero][self.rx_zero]), max(self.bz[self.ry_zero][self.rx_zero]))
+        
+        if self.bx_missing_integral is not None:
+            missing_Lbx = [abs(x) for x in self.bx_missing_integral[self.ry_zero]]
+            max_missing_Lbx = max(missing_Lbx)
+            rx_max = missing_Lbx.index(max_missing_Lbx)
+            r += '{0:<35s} {1:.2E} T.m at rx = {2:+d} mm\n'.format('missing int{Bx.drz}(max):', max_missing_Lbx/1000, rx_max)
+        if self.by_missing_integral is not None:
+            missing_Lby = [abs(x) for x in self.by_missing_integral[self.ry_zero]]
+            max_missing_Lby = max(missing_Lby)
+            rx_max = missing_Lby.index(max_missing_Lby)
+            r += '{0:<35s} {1:.2E} T.m at rx = {2:+d} mm\n'.format('missing int{By.drz}(max):', max_missing_Lby/1000, rx_max)
+        if self.bz_missing_integral is not None:
+            missing_Lbz = [abs(x) for x in self.bz_missing_integral[self.ry_zero]]
+            max_missing_Lbz = max(missing_Lbz)
+            rx_max = missing_Lbz.index(max_missing_Lbz)
+            r += '{0:<35s} {1:.2E} T.m at rx = {2:+d} mm\n'.format('missing int{Bz.drz}(max):', max_missing_Lbz/1000, rx_max)
+        return r
+      
             
