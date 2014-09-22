@@ -10,11 +10,13 @@ OBJDIR = build
 
 .PHONY:	all tracking_mp
 
-all:	tracking_mp
+all: tracking_mp
 
-tracking_mp: $(OBJECTS)
-	-rm $(OBJDIR)/tracking_mp.a
-	ar r $(OBJDIR)/tracking_mp.a $(OBJDIR)/*.o 
+tracking_mp: $(OBJDIR)/tracking_mp.a
+
+$(OBJDIR)/tracking_mp.a: $(OBJECTS)
+	-rm $@
+	ar r $@ $(OBJDIR)/*.o 
 
 $(OBJECTS): | $(OBJDIR)
 
