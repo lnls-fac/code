@@ -3,15 +3,19 @@ import numpy as np
 
 class OutOfRange(Exception):
     pass
+class OutOfRangeRx(OutOfRange):
+    pass
+class OutOfRangeRy(OutOfRange):
+    pass
 class OutOfRangeRz(OutOfRange):
     pass
-class OutOfRangeRxMax(OutOfRange):
+class OutOfRangeRxMax(OutOfRangeRx):
     pass
-class OutOfRangeRxMin(OutOfRange):
+class OutOfRangeRxMin(OutOfRangeRx):
     pass
-class OutOfRangeRyMax(OutOfRange):
+class OutOfRangeRyMax(OutOfRangeRy):
     pass
-class OutOfRangeRyMin(OutOfRange):
+class OutOfRangeRyMin(OutOfRangeRy):
     pass
 class OutOfRangeRzMax(OutOfRangeRz):
     pass
@@ -235,11 +239,10 @@ class FieldMap:
         
         try:        
             ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = True)
-        except OutOfRangeRzMax:
+        except OutOfRangeRz:
             ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = False)
-        except OutOfRangeRzMax:
-            ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = False)
-                    
+        
+              
         # upper and lower fieldmaps
         bx_y1, bx_y2 = self.bx[iy], self.bx[iy+1] if self.ry_nrpts > 1 else self.bx[iy]
         by_y1, by_y2 = self.by[iy], self.by[iy+1] if self.ry_nrpts > 1 else self.by[iy]
@@ -401,54 +404,54 @@ class FieldMap:
       
     def __str__(self):
         r = ''
-        r += '{0:<35s} {1}\n'.format('timestamp:', self.timestamp)
-        r += '{0:<35s} {1}\n'.format('filename:', self.filename)
-        r += '{0:<35s} {1}\n'.format('magnet_label:', self.magnet_label)
-        r += '{0:<35s} {1} mm\n'.format('magnet_length:', self.length)
-        r += '{0:<35s} {1}\n'.format('main_coil_current:', self.current)
+        r += '{0:<35s} {1}'.format('timestamp:', self.timestamp)
+        r += '\n{0:<35s} {1}'.format('filename:', self.filename)
+        r += '\n{0:<35s} {1}'.format('magnet_label:', self.magnet_label)
+        r += '\n{0:<35s} {1} mm'.format('magnet_length:', self.length)
+        r += '\n{0:<35s} {1}'.format('main_coil_current:', self.current)
         try:
-            r += '{0:<35s} {1} mm\n'.format('magnetic_gap:', self.gap)
+            r += '\n{0:<35s} {1} mm'.format('magnetic_gap:', self.gap)
         except:
             pass
         try:
-            r += '{0:<35s} {1} mm\n'.format('control_gap:', self.control_gap)
+            r += '\n{0:<35s} {1} mm'.format('control_gap:', self.control_gap)
         except:
             pass
   
         if self.ry_nrpts == 1: 
-            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
+            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
         else:
-            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
+            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
         if self.rx_nrpts == 1: 
-            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
+            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
         else:
-            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
+            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
         if self.rz_nrpts == 1: 
-            r += '{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)\n'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)
+            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)
         else:
-            r += '{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)\n'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)    
-        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('by@(all)(axis):', 
+            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)    
+        r += '\n{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla'.format('by@(all)(axis):', 
         np.amin(self.by[self.ry_zero]), np.amax(self.by[self.ry_zero]), min(self.by[self.ry_zero][self.rx_zero]), max(self.by[self.ry_zero][self.rx_zero])) 
-        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('bx@(all)(axis):', 
+        r += '\n{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla'.format('bx@(all)(axis):', 
         np.amin(self.bx[self.ry_zero]), np.amax(self.bx[self.ry_zero]), min(self.bx[self.ry_zero][self.rx_zero]), max(self.bx[self.ry_zero][self.rx_zero])) 
-        r += '{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla\n'.format('bz@(all)(axis):', 
+        r += '\n{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla'.format('bz@(all)(axis):', 
         np.amin(self.bz[self.ry_zero]), np.amax(self.bz[self.ry_zero]), min(self.bz[self.ry_zero][self.rx_zero]), max(self.bz[self.ry_zero][self.rx_zero]))
         
         if self.bx_missing_integral is not None:
             missing_Lbx = [abs(x) for x in self.bx_missing_integral[self.ry_zero]]
             max_missing_Lbx = max(missing_Lbx)
             rx_max = missing_Lbx.index(max_missing_Lbx)
-            r += '{0:<35s} {1:.2E} T.m at rx = {2:+d} mm\n'.format('missing int{Bx.drz}(max):', max_missing_Lbx/1000, rx_max)
+            r += '\n{0:<35s} {1:.2E} T.m at rx = {2:+d} mm'.format('missing_int{Bx.drz}(max):', max_missing_Lbx/1000, rx_max)
         if self.by_missing_integral is not None:
             missing_Lby = [abs(x) for x in self.by_missing_integral[self.ry_zero]]
             max_missing_Lby = max(missing_Lby)
             rx_max = missing_Lby.index(max_missing_Lby)
-            r += '{0:<35s} {1:.2E} T.m at rx = {2:+d} mm\n'.format('missing int{By.drz}(max):', max_missing_Lby/1000, rx_max)
+            r += '\n{0:<35s} {1:.2E} T.m at rx = {2:+d} mm'.format('missing_int{By.drz}(max):', max_missing_Lby/1000, rx_max)
         if self.bz_missing_integral is not None:
             missing_Lbz = [abs(x) for x in self.bz_missing_integral[self.ry_zero]]
             max_missing_Lbz = max(missing_Lbz)
             rx_max = missing_Lbz.index(max_missing_Lbz)
-            r += '{0:<35s} {1:.2E} T.m at rx = {2:+d} mm\n'.format('missing int{Bz.drz}(max):', max_missing_Lbz/1000, rx_max)
+            r += '\n{0:<35s} {1:.2E} T.m at rx = {2:+d} mm'.format('missing_int{Bz.drz}(max):', max_missing_Lbz/1000, rx_max)
         return r
       
             
