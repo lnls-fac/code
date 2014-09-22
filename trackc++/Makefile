@@ -28,6 +28,7 @@ SOURCES_CPP	= 	lattice.cpp \
 
 LIBS            = tracking_mp/build/tracking_mp.a -lpthread -lgsl -lgslcblas
 INC             = 
+prefix = ../..
 OBJDIR = build
 
 ifeq ($(MAKECMDGOALS),trackc++-debug)
@@ -50,6 +51,7 @@ endif
 #### TARGETS ####
 
 all:	alllibs trackc++
+.PHONY: all alllibs trackc++ clean cleanall
 
 #### GENERATES DEPENDENCY FILE ####
 $(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) | sed 's/.*\.o/$(OBJDIR)\/&/' > .depend)
@@ -58,16 +60,24 @@ $(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) | sed 's/.*\.o/$(OBJDIR)\/&/' > .
 alllibs:
 	cd tracking_mp; make all;
 
-trackc++: $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(OBJDIR)/$@
+trackc++: $(OBJDIR)/trackc++
 
 trackc++-debug:	$(OBJECTS)
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $(OBJDIR)/$@
+
+$(OBJDIR)/trackc++: $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
 
 $(OBJECTS): | $(OBJDIR)
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
+
+install: trackc++ alllibs | $(prefix)/bin
+	cp $(OBJDIR)/trackc++ $(prefix)/bin
+
+$(prefix)/bin:
+	mkdir $(prefix)/bin
 
 clean:
 	rm -rf $(OBJDIR) trackc++ trackc++-debug .depend *.out *.dat *~
@@ -78,11 +88,11 @@ cleanall: clean
 
 #### RULES ####
 
-$(OBJDIR)/%.o: %.cpp
-	$(CXX) -c $(CFLAGS) $(INC) $< -o $@
-
 $(OBJDIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) $(INC) $< -o $@
 
 $(OBJDIR)/%.o: %.cc
+	$(CXX) -c $(CFLAGS) $(INC) $< -o $@
+
+$(OBJDIR)/%.o: %.cpp
 	$(CXX) -c $(CFLAGS) $(INC) $< -o $@
