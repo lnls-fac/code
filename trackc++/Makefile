@@ -48,10 +48,12 @@ ifeq ($(shell hostname), uv100)
     INC         = -I../bin/GSL/include/
 endif
 
+
+.PHONY: all alllibs trackc++ clean cleanall
+
 #### TARGETS ####
 
 all:	alllibs trackc++
-.PHONY: all alllibs trackc++ clean cleanall
 
 #### GENERATES DEPENDENCY FILE ####
 $(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) | sed 's/.*\.o/$(OBJDIR)\/&/' > .depend)
@@ -73,7 +75,7 @@ $(OBJECTS): | $(OBJDIR)
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-install: trackc++ alllibs | $(prefix)/bin
+install: all | $(prefix)/bin
 	cp $(OBJDIR)/trackc++ $(prefix)/bin
 
 $(prefix)/bin:

@@ -2,11 +2,13 @@
 # ===========
 # Author: 		Ximenes R. Resende
 # email:  		xresende@gmail.com, ximenes.resende@lnls.br
-# affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+# affiliation:	        LNLS - Laboratorio Nacional de Luz Sincrotron
 # Date: 		2012-08-20
 
 OBJECTS = $(addprefix $(OBJDIR)/, mp_task_mgr.o)
 OBJDIR = build
+
+.PHONY:	all tracking_mp
 
 all:	tracking_mp
 
