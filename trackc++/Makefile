@@ -47,14 +47,13 @@ ifeq ($(shell hostname), uv100)
     INC         = -I../bin/GSL/include/
 endif
 
-#### GENERATES DEPENDENCY FILE ####
-$(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) | sed 's/.*\.o/$(OBJDIR)\/&/' > .depend)
--include .depend
-
 #### TARGETS ####
 
 all:	alllibs trackc++
 
+#### GENERATES DEPENDENCY FILE ####
+$(shell $(CXX) -MM $(SOURCES_CPP) $(SOURCES_C) | sed 's/.*\.o/$(OBJDIR)\/&/' > .depend)
+-include .depend
 
 alllibs:
 	cd tracking_mp; make all;
