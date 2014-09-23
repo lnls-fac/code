@@ -70,8 +70,10 @@ function the_ring = redefine_the_ring(the_ring0, dim, rms_x, rms_y)
 
 hcm = findcells(the_ring0, 'FamName', 'hcm');
 vcm = findcells(the_ring0, 'FamName', 'vcm');
-kickx0 = getcellstruct(the_ring0, 'KickAngle', hcm, 1, 1);
-kicky0 = getcellstruct(the_ring0, 'KickAngle', vcm, 1, 2);
+% kickx0 = getcellstruct(the_ring0, 'KickAngle', hcm, 1, 1);
+% kicky0 = getcellstruct(the_ring0, 'KickAngle', vcm, 1, 2);
+kickx0 = lnls_get_kickangle(the_ring0, hcm, 'x');
+kicky0 = lnls_get_kickangle(the_ring0, vcm, 'y');
 [tx, ty] = calc_cod(the_ring0, dim); rmsx0 = std(tx); rmsy0 = std(ty);
 
 if (rms_x <= rmsx0) || (rms_y <= rmsy0)
@@ -85,11 +87,17 @@ rmsm = 0;
 while (rmsm < rms_x)
     r(2) = r(1);
     r(1) = r(1) * 0.9;
-    the_ring = setcellstruct(the_ring, 'KickAngle', hcm, kickx0 * r(1), 1, 1); [tx, ty] = calc_cod(the_ring, dim); rmsm = std(tx);
+    the_ring = lnls_set_kickangle(the_ring, kickx0 * r(1), hcm, 'x');
+%     the_ring = setcellstruct(the_ring, 'KickAngle', hcm, kickx0 * r(1), 1, 1);
+    [tx, ~] = calc_cod(the_ring, dim);
+    rmsm = std(tx);
 end
 while (abs(rmsm - rms_x) > 1e-6)
     rm = 0.5 * (r(1) + r(2));
-    the_ring = setcellstruct(the_ring, 'KickAngle', hcm, kickx0 * rm, 1, 1); [tx, ty] = calc_cod(the_ring, dim); rmsm = std(tx);
+    the_ring = lnls_set_kickangle(the_ring, kickx0 * rm, hcm, 'x');
+%     the_ring = setcellstruct(the_ring, 'KickAngle', hcm, kickx0 * rm, 1, 1);
+    [tx, ~] = calc_cod(the_ring, dim);
+    rmsm = std(tx);
     if (rmsm > rms_x)
         r(1) = rm;
     else
@@ -102,11 +110,17 @@ rmsm = 0;
 while (rmsm < rms_y)
     r(2) = r(1);
     r(1) = r(1) * 0.9;
-    the_ring = setcellstruct(the_ring, 'KickAngle', vcm, kicky0 * r(1), 1, 2); [tx, ty] = calc_cod(the_ring, dim); rmsm = std(ty);
+    the_ring = lnls_set_kickangle(the_ring, kicky0 * r(1), vcm, 'y');
+%     the_ring = setcellstruct(the_ring, 'KickAngle', vcm, kicky0 * r(1), 1, 2);
+    [~, ty] = calc_cod(the_ring, dim);
+    rmsm = std(ty);
 end
 while (abs(rmsm - rms_y) > 1e-6)
     rm = 0.5 * (r(1) + r(2));
-    the_ring = setcellstruct(the_ring, 'KickAngle', vcm, kicky0 * rm, 1, 2); [tx, ty] = calc_cod(the_ring, dim); rmsm = std(ty);
+    the_ring = lnls_set_kickangle(the_ring, kicky0 * rm, vcm, 'y');
+%     the_ring = setcellstruct(the_ring, 'KickAngle', vcm, kicky0 * rm, 1, 2);
+    [~, ty] = calc_cod(the_ring, dim);
+    rmsm = std(ty);
     if (rmsm > rms_y)
         r(1) = rm;
     else

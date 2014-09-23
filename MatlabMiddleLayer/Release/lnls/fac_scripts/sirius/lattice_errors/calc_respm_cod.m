@@ -12,24 +12,17 @@ if print
     fprintf('nr vcms: %03i\n', length(vcm_idx));
 end
 
-% twiss = calctwiss(the_ring); %
-% betax = twiss.betax';%
-% betay = twiss.betay';%
-
 mxx = zeros(length(bpm_idx), length(hcm_idx));
 myx = zeros(length(bpm_idx), length(hcm_idx));
 if print, lnls_create_waitbar('Calcs H-COD Response Matrix',0.5,length(hcm_idx)); end
 for i=1:length(hcm_idx)
     idx = hcm_idx(i);
-    the_ring{idx}.KickAngle = the_ring{idx}.KickAngle - 0.5 * [step_kick 0];
-    [codx1 cody1] = calc_cod(the_ring);
-%     codx1 = codx1./sqrt(betax);%
-%     cody1 = cody1./sqrt(betay);%
-    the_ring{idx}.KickAngle = the_ring{idx}.KickAngle + 1.0 * [step_kick 0];
-    [codx2 cody2] = calc_cod(the_ring);
-%     codx2 = codx2./sqrt(betax);%
-%     cody2 = cody2./sqrt(betay);%
-    the_ring{idx}.KickAngle = the_ring{idx}.KickAngle - 0.5 * [step_kick 0];
+    init_hkick = lnls_get_kickangle(the_ring, idx, 'x');
+    the_ring = lnls_set_kickangle(the_ring, init_hkick - 0.5* step_kick, idx, 'x');
+    [codx1, cody1] = calc_cod(the_ring);
+    the_ring = lnls_set_kickangle(the_ring, init_hkick + 0.5* step_kick, idx, 'x');
+    [codx2, cody2] = calc_cod(the_ring);
+    the_ring = lnls_set_kickangle(the_ring, init_hkick, idx, 'x');
     mxx(:,i) = (codx2(bpm_idx) - codx1(bpm_idx)) / step_kick;
     myx(:,i) = (cody2(bpm_idx) - cody1(bpm_idx)) / step_kick;
     if print, lnls_update_waitbar(i); end
@@ -41,11 +34,12 @@ myy = zeros(length(bpm_idx), length(vcm_idx));
 if print, lnls_create_waitbar('Calcs V-COD Response Matrix',0.5,length(vcm_idx)); end
 for i=1:length(vcm_idx)
     idx = vcm_idx(i);
-    the_ring{idx}.KickAngle = the_ring{idx}.KickAngle - 0.5 * [0 step_kick];
-    [codx1 cody1] = calc_cod(the_ring);
-    the_ring{idx}.KickAngle = the_ring{idx}.KickAngle + 1.0 * [0 step_kick];
-    [codx2 cody2] = calc_cod(the_ring);
-    the_ring{idx}.KickAngle = the_ring{idx}.KickAngle - 0.5 * [0 step_kick];
+    init_vkick = lnls_get_kickangle(the_ring, idx, 'y');
+    the_ring = lnls_set_kickangle(the_ring, init_vkick - 0.5* step_kick, idx, 'y');
+    [codx1, cody1] = calc_cod(the_ring);
+    the_ring = lnls_set_kickangle(the_ring, init_vkick + 0.5* step_kick, idx, 'y');
+    [codx2, cody2] = calc_cod(the_ring);
+    the_ring = lnls_set_kickangle(the_ring, init_vkick, idx, 'y');
     mxy(:,i) = (codx2(bpm_idx) - codx1(bpm_idx)) / step_kick;
     myy(:,i) = (cody2(bpm_idx) - cody1(bpm_idx)) / step_kick;
     if print, lnls_update_waitbar(i); end

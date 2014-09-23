@@ -96,7 +96,11 @@ elseif ModeNumber == 101
     %setsp('VCM', 0, 'Simulator', 'Physics');
     setfamilydata(0,'TuneDelay');
 else
-    setlocodata('Nominal');
+    try
+        setlocodata('Nominal');
+    catch
+        fprintf('   Problem with setting the LOCO calibration.\n');
+    end
 end
 
 
@@ -108,7 +112,7 @@ function set_operationalmode_High
 global THERING;
 
 AD = getad;
-AD.Machine             = 'BOOSTER_V701';           % Will already be defined if setpathmml was used
+AD.Machine             = 'BOOSTER_V810';           % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
 AD.OperationalMode     = '3 GeV';
 AD.Energy              = 3.0;
@@ -120,7 +124,7 @@ sirius_booster_lattice(AD.Energy);
 
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
-AD.HarmonicNumber      = 200;
+AD.HarmonicNumber      = 828;
 AD.DeltaRFDisp         = 2000e-6;
 %AD.DeltaRFChro         = [-4000 -2000 -1000 0 1000 2000 4000] * 1e-6;
 %AD.DeltaRFChro         = [-2000 -1000 0 1000 2000] * 1e-6;
@@ -140,7 +144,7 @@ function set_operationalmode_Low
 global THERING;
 
 AD = getad;
-AD.Machine             = 'BOOSTER_V701';           % Will already be defined if setpathmml was used
+AD.Machine             = 'BOOSTER_V810';           % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
 AD.OperationalMode     = '150 MeV';
 AD.Energy              = 0.150;
@@ -148,13 +152,14 @@ AD.InjectionEnergy     = 0.150;
 AD.ModeName            = 'LowE';
 AD.OpsFileExtension    = '';
 
-sirius3_booster_lattice(AD.Energy);
+sirius_booster_lattice(AD.Energy);
 atsummary;
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
-AD.HarmonicNumber      = 200;
+AD.HarmonicNumber      = 828;
 AD.DeltaRFDisp         = 2000e-6;
-AD.DeltaRFChro         = [-2000 -1000 0 1000 2000] * 1e-6;
+AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
+
 AD.TuneDelay           = 3.0;  
 AD.ATModel             = 'sirius_booster_lattice';
 AD.Chromaticity.Golden = [1; 1];

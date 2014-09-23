@@ -8,8 +8,8 @@ if exist(Directory, 'dir')
     addpath(Directory, '-begin');
 end
     
-
-OperationalMode = 1;
+% set operational mode to low energy by default.
+OperationalMode = 2;
 
 sirius_booster_init;
 setoperationalmode(OperationalMode);
