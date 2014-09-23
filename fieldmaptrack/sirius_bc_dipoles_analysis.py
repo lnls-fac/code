@@ -1,6 +1,7 @@
-#!/usr/bin/env python3 
+#!/usr/bin/python3 
 
-from fieldmap import dipole_analysis
+from fieldmaptrack import beam
+from fieldmaptrack import dipole_analysis
 
 label             = 'BC_model1_controlgap_8mm' # parameter: identification label
 fieldmap_filename = '/home/ximenes/fac_files/data/magnet_modelling/sirius/bc/fieldmaps/2014-09-05_Dipolo_Anel_BC_Modelo1_gap_lateral_8mm_-50_50mm_-2000_2000mm.txt' # parameter
@@ -15,11 +16,9 @@ init_pz           = 1.0   # parameter: initial pz/p0 position [mm] of the electr
 s_length          = 800.0 # parameter: total path length to track through RK
 s_nrpts           = 2001  # parameter: number of points in RK
 force_midplane    = True          # parameter: force trajectory on midplane (setting ry = py = 0)
-missing_integral_analusis = False # parameter: does missing integral analysis with extrapolation functions
+missing_integral_analysis = False # parameter: does missing integral analysis with extrapolation functions
 threshold_field_fraction  = 0.3   # parameter: for missing integrals analysis of fieldmap
 polyfit_exponents         = [2,3,4,5,6,7,8,9,10] # parameter: for extrapolating fieldmap
-
-
 
 if __name__ == "__main__":
     dipole_analysis.run(

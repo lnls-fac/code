@@ -1,6 +1,6 @@
-from fieldmap import fieldmap as fmap
-from fieldmap import track
-from fieldmap import beam
+from fieldmaptrack import fieldmap as fmap
+from fieldmaptrack import track
+from fieldmaptrack import beam
 import matplotlib.pyplot as plt
 
 

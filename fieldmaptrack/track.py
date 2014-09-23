@@ -1,5 +1,5 @@
 import math
-from fieldmap import fieldmap
+from fieldmaptrack import fieldmap
 import numpy as np
 
 class Trajectory:
