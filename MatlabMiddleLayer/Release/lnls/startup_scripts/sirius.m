@@ -9,7 +9,7 @@ function sirius(varargin)
 
 Disconnect = false;
 
-default_version = '_V02';
+default_version = '_V03';
 
 for i=length(varargin):-1:1
     if ischar(varargin{i})
@@ -36,7 +36,7 @@ root_folder = lnls_get_root_folder();
 cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 
 % remove toolbox/finance/finsupport/ do path para previnir conflito com
-% funcao drift da Financial Toolbox (se pasta está no caminho, para evitar warningMessage)
+% funcao drift da Financial Toolbox (se pasta est?? no caminho, para evitar warningMessage)
 fins = fullfile(matlabroot, 'toolbox', 'finance', 'finsupport');
 if ~isempty(strfind(path, fins))
     rmpath(fins);

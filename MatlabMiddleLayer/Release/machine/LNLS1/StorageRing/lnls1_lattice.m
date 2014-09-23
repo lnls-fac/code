@@ -1132,9 +1132,9 @@ while not_ready
         atpass(THERING, [0 0 0 0 0 0]',1,1);
         not_ready = false;
     catch
-       if isempty(strfind(lasterr,'Library or function could not be loaded'))
-            rethrow(lasterror);
-       end
+       %if isempty(strfind(lasterr,'Library or function could not be loaded'))
+       %     rethrow(lasterror);
+       %end
     end
 end
 

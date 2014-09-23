@@ -10,7 +10,7 @@ def gamma(energy):
     
 def beta(gamma):
     '''Beta factor from gamma.'''
-    return ((gamma + 1.0)/gamma)*((gamma - 1.0)/gamma)
+    return math.sqrt(((gamma + 1.0)/gamma)*((gamma - 1.0)/gamma))
   
 def velocity(beta):
     '''Velocity [m/s] from ebeam beta factor.'''
