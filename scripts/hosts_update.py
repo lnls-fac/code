@@ -26,7 +26,7 @@ def get_hostname():
 def import_hosts():
 
 	hostname   = get_hostname()
-	output = subprocess.check_output(['ssh', 'lnls82-linux', 'cat /etc/hosts'])
+	output = subprocess.check_output(['ssh', '-X', 'lnls82-linux', 'cat /etc/hosts'])
 	text  = output.decode('utf-8')
 	lines = text.split('\n')
 	new_text = []

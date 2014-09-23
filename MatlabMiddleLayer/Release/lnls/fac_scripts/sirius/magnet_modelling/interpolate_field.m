@@ -34,7 +34,9 @@ for i=1:length(fmaps)
             (rl(3) > max(data.z)) || ...
             (rl(1) < min(data.x)) || ...
             (rl(1) > max(data.x)))
+        fprintf('interpolating out of fieldmap: local r = (%f, %f, %f)\n', rl);
         continue; % ponto fora do mapa: considera campo nulo.
+ 
     end
     
     % interpola campo (no sistema de coord. local do mapa

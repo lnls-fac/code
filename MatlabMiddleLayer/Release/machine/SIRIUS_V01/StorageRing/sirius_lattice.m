@@ -138,7 +138,7 @@ B2      = [h1 mb2 h2];
 % -- b3 --
 dip_nam =  'b3';
 dip_len =  0.428011;
-dip_ang =  (1.429950-0.1/2) * deg_2_rad;
+dip_ang =  (1.429950-1*0.3/2) * deg_2_rad;
 dip_K   = -0.78;
 dip_S   =  0.00;
 h1      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
@@ -148,7 +148,7 @@ B3      = [h1 mb3 h2];
 % -- bc --
 dip_nam =  'bc';
 dip_len =  0.125394;
-dip_ang =  (1.4+0.1) * deg_2_rad;
+dip_ang =  (1.4+1*0.3) * deg_2_rad;
 dip_K   =  0.00;
 dip_S   = -18.93;
 bce     = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);

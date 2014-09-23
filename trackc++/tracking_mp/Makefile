@@ -2,18 +2,29 @@
 # ===========
 # Author: 		Ximenes R. Resende
 # email:  		xresende@gmail.com, ximenes.resende@lnls.br
-# affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
+# affiliation:	        LNLS - Laboratorio Nacional de Luz Sincrotron
 # Date: 		2012-08-20
 
-all:	tracking_mp
+OBJECTS = $(addprefix $(OBJDIR)/, mp_task_mgr.o)
+OBJDIR = build
 
-tracking_mp:
-	rm -rf tracking_mp.a *.o
-	g++ -m64 -O2 -c mp_task_mgr.cc
-	#g++ -m64 -O2 -c fmap_mp.cc
-	#g++ -m64 -O2 -c fmapdp_mp.cc
-	ar r tracking_mp.a *.o 
+.PHONY:	all tracking_mp
+
+all: tracking_mp
+
+tracking_mp: $(OBJDIR)/tracking_mp.a
+
+$(OBJDIR)/tracking_mp.a: $(OBJECTS)
+	-rm $@
+	ar r $@ $(OBJDIR)/*.o 
+
+$(OBJECTS): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(OBJDIR)/%.o: %.cc
+	g++ -m64 -O2 -c $< -o $@
 
 clean:
-	rm -rf *.o *.a *~
-
+	rm -rf $(OBJDIR)
