@@ -43,6 +43,7 @@ clear cdir;
 
 addpath(genpath(fullfile(mml_path, 'lnls','fac_scripts','sirius','lattice_errors')));
 addpath(fullfile(mml_path, 'lnls', 'fac_scripts', 'tracy3'), '-begin');
+addpath(fullfile(mml_path, 'lnls', 'fac_scripts', 'trackcpp'), '-begin');
 addpath(genpath(fullfile(mml_path, 'machine','LTLB_V200')));
 addpath(genpath(fullfile(mml_path, 'machine', 'LTBA_V200')));
 

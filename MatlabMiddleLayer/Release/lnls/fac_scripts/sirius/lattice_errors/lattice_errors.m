@@ -22,7 +22,8 @@ else
     % files = dir(); if ~any(strcmpi('lattice_errors.m', {files.name})), cd('../'); end
     % config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','CONFIG_V500_AC10_5_40ums_IDs_new_order_symm_coup');
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','BOOSTER_V810');
-    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', 'lattice_errors','study_high_coupling');
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius_mml', ...
+                             'lattice_errors','study_high_coupling');
 end
 
 cd(config_folder);
@@ -30,7 +31,7 @@ cd(config_folder);
 % carrega configuracaoo com parametros do calculo
 fprintf('< loading configuration parameters... > \n\n');
 if ~exist('r','var')
-    mfiles = dir('*.m'); config_label = strrep(mfiles(1).name,'.m','');
+    mfiles = dir('CONFIG*.m'); config_label = strrep(mfiles(1).name,'.m','');
     r = eval(config_label);
 end
 selection = 1:r.config.nr_machines;
@@ -72,13 +73,6 @@ if r.config.simulate_dynamic
 end
 
 name_saved_machines = 'machines';
-if r.config.simulate_multipoles
-    fprintf('< applying multipole errors to bare lattice ... > \n\n');
-    r.machine = apply_multipoles_errors(r);
-    name_saved_machines = [name_saved_machines '_multi'];
-    r = archive_machines(r, 'save', name_saved_machines);
-end
-
 if r.config.simulate_static
     
     % aplica erros a otica nominal e retorna estrutura com as maquinas aleatorias
@@ -109,7 +103,8 @@ if r.config.simulate_static
             % faz correcao de orbita ligando gradualmente os campos dos
             % sextupolos e os IDs (apos 1a iteracao da correcao)
             fprintf('< correcting COD ... > \n\n');
-            r = correct_cod_slow(r, selection, r.params.static.cod_sextupoles_ramp, r.params.static.cod_svs, r.params.static.cod_nr_iter);
+            r=correct_cod_slow(r,selection,r.params.static.cod_sextupoles_ramp, ...
+                          r.params.static.cod_svs, r.params.static.cod_nr_iter);
         end
     end
     if r.params.static.cod_correction_flag
@@ -122,7 +117,8 @@ if r.config.simulate_static
     if r.params.static.optics_correction_flag
         % faz simetrizacao da rede
         fprintf('< symmetrizing optics of random machines... > \n\n');
-        r.machine = correct_optics(r, selection, r.params.static.optics_svs, r.params.static.optics_nr_iter);
+        r.machine = correct_optics(r, selection, r.params.static.optics_svs, ...
+                                   r.params.static.optics_nr_iter);
         name_saved_machines = [name_saved_machines '_symm'];
         r = archive_machines(r, 'save', name_saved_machines); % liga IDs antes de salvar
     end
@@ -130,7 +126,8 @@ if r.config.simulate_static
     if r.params.static.coup_correction_flag
         % faz correcao de acoplamento
         fprintf('< correcting coupling... > \n\n');
-        r.machine = correct_coupling(r, selection, r.params.static.coup_svs, r.params.static.coup_nr_iter);
+        r.machine = correct_coupling(r, selection, r.params.static.coup_svs, ...
+                                     r.params.static.coup_nr_iter);
         name_saved_machines = [name_saved_machines '_coup'];
         r = archive_machines(r, 'save', name_saved_machines);
     end
@@ -143,6 +140,12 @@ if r.config.simulate_static
     end
 end
 
+if r.config.simulate_multipoles
+    fprintf('< applying multipole errors to bare lattice ... > \n\n');
+    r.machine = apply_multipoles_errors(r);
+    name_saved_machines = [name_saved_machines '_multi'];
+    r = archive_machines(r, 'save', name_saved_machines);
+end
 
 if r.config.simulate_dynamic
     
@@ -156,7 +159,8 @@ if r.config.simulate_dynamic
  
     if r.params.dynamic.cod_correction_flag
         fprintf('< correcting COD > \n\n');
-        r = correct_cod_fast(r, selection, r.params.dynamic.cod_svs, r.params.dynamic.cod_nr_iter);
+        r = correct_cod_fast(r, selection, r.params.dynamic.cod_svs, ...
+                             r.params.dynamic.cod_nr_iter);
         name_saved_machines = [name_saved_machines '_corrected'];
     end
     r = archive_machines(r, 'save', name_saved_machines);    
