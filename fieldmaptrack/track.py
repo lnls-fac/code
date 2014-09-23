@@ -2,6 +2,7 @@ import math
 from fieldmaptrack import fieldmap
 import numpy as np
 
+
 class Trajectory:
     
     def __init__(self,
@@ -29,6 +30,7 @@ class Trajectory:
         self.force_midplane = force_midplane
         self.rx, self.ry, self.rz = np.zeros(s_nrpts), np.zeros(s_nrpts), np.zeros(s_nrpts)
         self.px, self.py, self.pz = np.zeros(s_nrpts), np.zeros(s_nrpts), np.zeros(s_nrpts)
+        self.bx, self.by, self.bz = np.zeros(s_nrpts), np.zeros(s_nrpts), np.zeros(s_nrpts)
         self.s = np.zeros(s_nrpts)
         alpha = 1.0/(1000.0*self.beam.brho)/self.beam.beta
         
@@ -36,11 +38,25 @@ class Trajectory:
         px,py,pz = init_px, init_py, init_pz
         s, s_step = 0, s_length / (self.s_nrpts - 1.0)
         for i in range(self.s_nrpts):
+            
+            # forces midplane, if the case
+            if self.force_midplane:
+                ry, py = 0.0,0.0
+            
+            # calcs magnetic field on current position
             try:
                 bx,by,bz = self.fieldmap.interpolate(rx,ry,rz)
             except fieldmap.OutOfRangeRy:
                     bx,by,bz = 0.0,0.0,0.0
                     print('extrapolation at ' + str((rx,ry,rz)))
+            
+            # stores current position
+            self.s[i] = s
+            self.rx[i], self.ry[i], self.rz[i] = rx, ry, rz
+            self.px[i], self.py[i], self.pz[i] = px, py, pz
+            self.bx[i], self.by[i], self.bz[i] = bx, by, bz
+            
+            # propagates to next point
             drx_ds = px
             dry_ds = py
             drz_ds = pz
@@ -53,26 +69,12 @@ class Trajectory:
             px += dpx_ds * s_step
             py += dpy_ds * s_step
             pz += dpz_ds * s_step
-            if self.force_midplane:
-                ry, py = 0.0,0.0
-            
-            self.rx[i], self.ry[i], self.rz[i] = rx, ry, rz
-            self.px[i], self.py[i], self.pz[i] = px, py, pz
-            self.s[i] = s
-            
             s += s_step
             
         # calcs deflection angle along trajectory
-        self.theta_x = np.arctan(self.rx/self.rz)
+        self.theta_x = np.arctan(self.px/self.pz)
         
-        # interpolates field on trajectory
-        self.bx = np.zeros(self.s.shape)
-        self.by = np.zeros(self.s.shape)
-        self.bz = np.zeros(self.s.shape)
-        for i in range(len(self.s)):
-            self.bx[i], self.by[i], self.bz[i] = self.fieldmap.interpolate(self.rx[i], self.ry[i], self.rz[i])
-        
-    
+         
     def __str__(self):
         
         bx,by,bz = [abs(x) for x in self.bx], [abs(x) for x in self.by], [abs(x) for x in self.bz]
@@ -89,3 +91,29 @@ class Trajectory:
         r += '\n{0:35s} {1:+f} Tesla at rz = {2} mm'.format('max_abs_bz@trajectory:', self.bz[max_bz], s_max_bz)
     
         return r
+    
+    
+class SerretFrenetCoordSystem:
+    
+    def __init__(self, trajectory, point_idx = 0):
+        
+        t,i = trajectory,point_idx # syntactic-sugars
+        self.s = t.s[i]                      # s position
+        self.p = np.array((t.rx[i], t.ry[i], t.rz[i])) # (rx,ry,rz) position of point
+        self.t = np.array((t.px[i], t.py[i], t.pz[i])) # (px,py,pz) position of point
+        self.t /= math.sqrt(np.sum(self.t**2))
+        self.n = np.array((t.pz[i], t.py[i],-t.px[i])) # (px,py,pz) position of point
+        tx,ty,tz = self.t # syntactic-sugars
+        nx,ny,nz = self.n # syntactic-sugars
+        self.k = np.array((ty*nz-tz*ny, tz*nx-tx*nz, tx*ny-ty*nx))  ## k = t x n
+        
+    def get_transverse_line(self, grid):
+        
+        points = np.zeros((3,len(grid)))
+        for i in range(len(grid)):
+            points[:,i] = self.p + grid[i] * self.n
+        return points
+        
+        
+    
+    

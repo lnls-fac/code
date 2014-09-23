@@ -96,6 +96,11 @@ def run(label,
                          s_nrpts=s_nrpts, 
                          force_midplane=force_midplane)
     
+    
+    sf = track.SerretFrenetCoordSystem(traj, 0)
+    tp = sf.get_transverse_line([-3,-2,-1,0,1,2,3])
+    
+    print(tp)
 
     # calcs sagitta
     sagitta = calc_sagitta(fm.length/2.0, traj)
