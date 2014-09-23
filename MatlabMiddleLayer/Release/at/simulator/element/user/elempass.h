@@ -13,6 +13,8 @@
 #define ExportMode
 #elif defined(SOL64)
 #define ExportMode
+#elif defined(MACI64)
+#define ExportMode
 #else 
 /* Default - Windows */
 #define ExportMode __declspec(dllexport)
