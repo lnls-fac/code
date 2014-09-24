@@ -170,6 +170,13 @@ class FieldMap:
         iz = iz-1 if iz == self.rz_nrpts-1 else iz
         return iz
                
+    def interpolate_set(self, points):
+        
+        field = np.zeros(points.shape)
+        for i in range(points.shape[1]):
+            field[:,i] = self.interpolate(*points[:,i])
+        return field
+    
     def interpolate(self, rx, ry, rz):
 
             

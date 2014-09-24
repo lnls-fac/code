@@ -737,9 +737,9 @@ class ParameterDefinitions(object):
     ts_beam_velocity          = optics.velocity(ts_beam_beta_factor)
     ts_beam_magnetic_rigidity = optics.brho(ts_beam_energy, ts_beam_beta_factor)
 
-    ts_total_length = 26.5 # [m]
+    ts_total_length = 27.88 # [m]
     ts_number_of_dipoles = 2
-    ts_number_of_quadrupoles = 7
+    ts_number_of_quadrupoles = 8 
     ts_maximum_quadrupole_gradient = 25.0 # [T/m]
 
     ts_arc_length_of_dipoles = 0.9006 # [m]

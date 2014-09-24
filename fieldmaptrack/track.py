@@ -1,8 +1,30 @@
 import math
 from fieldmaptrack import fieldmap
 import numpy as np
+import mathphys
 
-
+    
+class SerretFrenetCoordSystem:
+    
+    def __init__(self, trajectory, point_idx = 0):
+        
+        t,i = trajectory,point_idx # syntactic-sugars
+        self.s = t.s[i]                      # s position
+        self.p = np.array((t.rx[i], t.ry[i], t.rz[i])) # (rx,ry,rz) position of point
+        self.t = np.array((t.px[i], t.py[i], t.pz[i])) # (px,py,pz) position of point
+        self.t /= math.sqrt(np.sum(self.t**2))
+        self.n = np.array((t.pz[i], t.py[i],-t.px[i])) # (px,py,pz) position of point
+        tx,ty,tz = self.t # syntactic-sugars
+        nx,ny,nz = self.n # syntactic-sugars
+        self.k = np.array((ty*nz-tz*ny, tz*nx-tx*nz, tx*ny-ty*nx))  ## k = t x n
+        
+    def get_transverse_line(self, grid):
+        
+        points = np.zeros((3,len(grid)))
+        for i in range(len(grid)):
+            points[:,i] = self.p + grid[i] * self.n
+        return points    
+    
 class Trajectory:
     
     def __init__(self,
@@ -74,6 +96,21 @@ class Trajectory:
         # calcs deflection angle along trajectory
         self.theta_x = np.arctan(self.px/self.pz)
         
+    def calc_multipoles(self, grid, monomials):
+        
+        polynom_b = np.zeros((len(monomials), len(self.s)))
+        polynom_a = np.zeros((len(monomials), len(self.s)))
+        for i in range(len(self.s)):
+            print(str(i) + '/' + str(len(self.s)))
+            sf = SerretFrenetCoordSystem(self, 0)
+            points = sf.get_transverse_line(grid)
+            field = self.fieldmap.interpolate_set(points)
+            polynom_a[:,i] = mathphys.functions.polyfit(grid, field[0,:], monomials)
+            polynom_b[:,i] = mathphys.functions.polyfit(grid, field[1,:], monomials)
+        return polynom_a, polynom_b
+            
+        
+    
          
     def __str__(self):
         
@@ -91,29 +128,6 @@ class Trajectory:
         r += '\n{0:35s} {1:+f} Tesla at rz = {2} mm'.format('max_abs_bz@trajectory:', self.bz[max_bz], s_max_bz)
     
         return r
-    
-    
-class SerretFrenetCoordSystem:
-    
-    def __init__(self, trajectory, point_idx = 0):
-        
-        t,i = trajectory,point_idx # syntactic-sugars
-        self.s = t.s[i]                      # s position
-        self.p = np.array((t.rx[i], t.ry[i], t.rz[i])) # (rx,ry,rz) position of point
-        self.t = np.array((t.px[i], t.py[i], t.pz[i])) # (px,py,pz) position of point
-        self.t /= math.sqrt(np.sum(self.t**2))
-        self.n = np.array((t.pz[i], t.py[i],-t.px[i])) # (px,py,pz) position of point
-        tx,ty,tz = self.t # syntactic-sugars
-        nx,ny,nz = self.n # syntactic-sugars
-        self.k = np.array((ty*nz-tz*ny, tz*nx-tx*nz, tx*ny-ty*nx))  ## k = t x n
-        
-    def get_transverse_line(self, grid):
-        
-        points = np.zeros((3,len(grid)))
-        for i in range(len(grid)):
-            points[:,i] = self.p + grid[i] * self.n
-        return points
-        
-        
+       
     
     
