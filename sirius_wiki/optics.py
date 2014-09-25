@@ -2,11 +2,12 @@
 
 import math
 import mathphys.constants as const
+import mathphys.units as units
 
 
 def gamma(energy):
     '''Gamma from energy[GeV].'''
-    return energy * 1000 / const.electron_rest_energy_MeV
+    return energy * 1.0e9 / units.joule_2_eV(const.electron_rest_energy)
     
 def beta(gamma):
     '''Beta factor from gamma.'''
@@ -26,7 +27,7 @@ def rho(brho, field):
 
 def critical_energy(gamma, rho):
     '''Critical energy [keV] from ebeam gamma factor and bending radius [m].'''
-    return (3 * const.reduced_planck_constant * const.light_speed *
+    return (3 * units.joule_2_eV(const.reduced_planck_constant) * const.light_speed *
             math.pow(gamma, 3)/ (2.0 * rho)) / 1000
 
 def U0(energy, I2):
@@ -129,11 +130,11 @@ def bunch_duration(bunch_length, beta):
 
 def id_deflection_parameter(field, period):
     '''insertion device deflection parameter from field [T] and period [mm]'''
-    return 1e-9 * period * field * const.light_speed / const.electron_rest_energy_MeV / (2*math.pi)
+    return 1e-9 * period * field * const.light_speed / (units.joule_2_eV(const.electron_rest_energy)/1.0e6) / (2*math.pi)
 
 def id_mean_power(energy, current, period, nr_periods, k):
     '''insertion device mean power from beam energy [GeV], current [mA], ID period [mm], ID nr periods and k
        see Handbook of Acc. Physics, eq.(14), pg 189'''
-    cst = math.pi * 1e9 * const.rad_cgamma * (const.electron_rest_energy_MeV/1000)**2
+    cst = math.pi * 1e9 * const.rad_cgamma * (units.joule_2_eV(const.electron_rest_energy)/1.0e9)**2
     return (cst * energy * k**2 * nr_periods / (period/1000.0))/1000.0
     
