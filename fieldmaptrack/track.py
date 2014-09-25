@@ -108,10 +108,7 @@ class Trajectory:
             polynom_a[:,i] = mathphys.functions.polyfit(grid, field[0,:], monomials)
             polynom_b[:,i] = mathphys.functions.polyfit(grid, field[1,:], monomials)
         return polynom_a, polynom_b
-            
-        
-    
-         
+                 
     def __str__(self):
         
         bx,by,bz = [abs(x) for x in self.bx], [abs(x) for x in self.by], [abs(x) for x in self.bz]
@@ -131,3 +128,31 @@ class Trajectory:
        
     
     
+class Multipoles:
+    
+    def __init__(self,
+                 trajectory = None,
+                 multipolar_perpendicular_grid = None,
+                 multipolar_fitting_monomials = None):
+        
+        self.trajectory = trajectory
+        self.multipolar_perpendicular_grid = multipolar_perpendicular_grid
+        self.multipolar_fitting_monomials = multipolar_fitting_monomials
+        
+    def calc_multipoles(self):
+        
+        s = self.trajectory.s
+        grid = self.multipolar_perpendicular_grid
+        grid_meter = grid * mathphys.units.mm_2_meter
+        monomials = self.multipolar_fitting_monomials
+        
+        self.polynom_b = np.zeros((len(monomials), len(s)))
+        self.polynom_a = np.zeros((len(monomials), len(s)))
+        for i in range(len(s)):
+            #print(str(i) + '/' + str(len(self.s)))
+            sf = SerretFrenetCoordSystem(self, i)
+            points = sf.get_transverse_line(grid)
+            field = self.fieldmap.interpolate_set(points)
+            self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
+            self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
+        

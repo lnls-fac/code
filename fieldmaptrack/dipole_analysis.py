@@ -2,11 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process
 
-
-class DipoleAnalysisException(Exception):
-    pass
-
-
 def calc_sagitta(half_dipole_length, trajectory):
     
     rx = trajectory.rx
