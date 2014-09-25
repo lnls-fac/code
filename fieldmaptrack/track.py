@@ -3,7 +3,7 @@ from fieldmaptrack import fieldmap
 import numpy as np
 import mathphys
 
-    
+
 class SerretFrenetCoordSystem:
     
     def __init__(self, trajectory, point_idx = 0):
@@ -30,7 +30,6 @@ class Trajectory:
     def __init__(self,
                  beam,
                  fieldmap):
-        
         self.beam     = beam
         self.fieldmap = fieldmap
         
@@ -53,12 +52,14 @@ class Trajectory:
         self.rx, self.ry, self.rz = np.zeros(s_nrpts), np.zeros(s_nrpts), np.zeros(s_nrpts)
         self.px, self.py, self.pz = np.zeros(s_nrpts), np.zeros(s_nrpts), np.zeros(s_nrpts)
         self.bx, self.by, self.bz = np.zeros(s_nrpts), np.zeros(s_nrpts), np.zeros(s_nrpts)
-        self.s = np.zeros(s_nrpts)
+        self.s = np.linspace(0.0, self.s_length, self.s_nrpts)
+        
         alpha = 1.0/(1000.0*self.beam.brho)/self.beam.beta
         
         rx,ry,rz = init_rx, init_ry, init_rz
         px,py,pz = init_px, init_py, init_pz
-        s, s_step = 0, s_length / (self.s_nrpts - 1.0)
+        s_step = s_length / (self.s_nrpts - 1.0)
+        
         for i in range(self.s_nrpts):
             
             # forces midplane, if the case
@@ -73,7 +74,6 @@ class Trajectory:
                     print('extrapolation at ' + str((rx,ry,rz)))
             
             # stores current position
-            self.s[i] = s
             self.rx[i], self.ry[i], self.rz[i] = rx, ry, rz
             self.px[i], self.py[i], self.pz[i] = px, py, pz
             self.bx[i], self.by[i], self.bz[i] = bx, by, bz
@@ -91,7 +91,6 @@ class Trajectory:
             px += dpx_ds * s_step
             py += dpy_ds * s_step
             pz += dpz_ds * s_step
-            s += s_step
             
         # calcs deflection angle along trajectory
         self.theta_x = np.arctan(self.px/self.pz)
@@ -113,33 +112,53 @@ class Trajectory:
     
         return r
        
-    
-    
 class Multipoles:
-    
-    def __init__(self,
-                 trajectory = None,
-                 multipolar_perpendicular_grid = None,
-                 multipolar_fitting_monomials = None):
-        
+
+    def __init__(self, 
+                 trajectory = None, 
+                 multipoles_perpendicular_grid = None, 
+                 multipoles_fitting_monomials = None):
         self.trajectory = trajectory
-        self.multipolar_perpendicular_grid = multipolar_perpendicular_grid
-        self.multipolar_fitting_monomials = multipolar_fitting_monomials
+        self.multipoles_perpendicular_grid = multipoles_perpendicular_grid
+        self.multipoles_fitting_monomials = multipoles_fitting_monomials
         
     def calc_multipoles(self):
-        
+        ''' calcs multipoles ([T] and [m] units) around given trajectory '''
         s = self.trajectory.s
-        grid = self.multipolar_perpendicular_grid
+        grid = self.multipoles_perpendicular_grid
         grid_meter = grid * mathphys.units.mm_2_meter
-        monomials = self.multipolar_fitting_monomials
+        monomials = self.multipoles_fitting_monomials
         
         self.polynom_b = np.zeros((len(monomials), len(s)))
         self.polynom_a = np.zeros((len(monomials), len(s)))
         for i in range(len(s)):
             #print(str(i) + '/' + str(len(self.s)))
-            sf = SerretFrenetCoordSystem(self, i)
+            sf = SerretFrenetCoordSystem(self.trajectory, i)
             points = sf.get_transverse_line(grid)
-            field = self.fieldmap.interpolate_set(points)
+            field = self.trajectory.fieldmap.interpolate_set(points)
             self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
             self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
+             
+
+    def calc_multipoles_integrals():
+        monomials = self.multipoles_fitting_monomials
+        for i in range(len(monomials)):
+            y = self.polynom_a[i,:]
+            x = self.trajectory.s
+               
+    def __str__(self):
         
+        nrpts = len(self.multipoles_perpendicular_grid)
+        grid_min = min(self.multipoles_perpendicular_grid)
+        grid_max = max(self.multipoles_perpendicular_grid)
+        monomials = self.multipoles_fitting_monomials
+        
+        r = ''
+        r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in ({1:+f} .. {2:+f})'.format(nrpts, grid_min, grid_max)) 
+        r += '\n{0:<35s} {1}'.format('fitting_monomials:', 'x^{0}'.format(monomials))
+        for i in range(len(monomials)):
+            n = monomials[i]
+            poly_a = self.polynom_a_integral[i]
+            poly_a = self.polynom_b_integral[i]
+            r += '\n{0:35s} {1:+.4e} {2:+.4e}'.format('integrated_multipole(n={0}):'.format(n), poly_a, poly_b)
+        return r
