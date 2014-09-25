@@ -1,6 +1,6 @@
 import math
-
 import mathphys.base_units as u
+
 # temporary auxiliary derived units
 u.volt    = (u.kilogram * u.meter**2) / (u.ampere * u.second**2)
 u.coulomb = u.second * u.ampere
@@ -20,4 +20,4 @@ rad_cgamma               = 4*math.pi*electron_radius/math.pow(electron_rest_ener
 Cq                       = (55.0/(32*math.sqrt(3.0))) * reduced_planck_constant * light_speed / (1e6 * electron_rest_energy_MeV) # [m] - derived
 Ca                       = electron_radius*light_speed / (3*math.pow(electron_rest_energy_MeV/1000, 3))                          # [m^2/(s.GeV^3)] - derived
 
-del u 
+del u  # cleans up namespace

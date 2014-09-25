@@ -95,20 +95,7 @@ class Trajectory:
             
         # calcs deflection angle along trajectory
         self.theta_x = np.arctan(self.px/self.pz)
-        
-    def calc_multipoles(self, grid, monomials):
-        
-        polynom_b = np.zeros((len(monomials), len(self.s)))
-        polynom_a = np.zeros((len(monomials), len(self.s)))
-        for i in range(len(self.s)):
-            print(str(i) + '/' + str(len(self.s)))
-            sf = SerretFrenetCoordSystem(self, 0)
-            points = sf.get_transverse_line(grid)
-            field = self.fieldmap.interpolate_set(points)
-            polynom_a[:,i] = mathphys.functions.polyfit(grid, field[0,:], monomials)
-            polynom_b[:,i] = mathphys.functions.polyfit(grid, field[1,:], monomials)
-        return polynom_a, polynom_b
-                 
+                         
     def __str__(self):
         
         bx,by,bz = [abs(x) for x in self.bx], [abs(x) for x in self.by], [abs(x) for x in self.bz]
@@ -117,9 +104,9 @@ class Trajectory:
         
         r  = ''
         r += '{0:<35s} {1} deg.'.format('deflection_angle:', abs((180.0/math.pi)*self.theta_x[-1]))
-        r += '\n{0:<35s} {1} mm'.format('rk_s_length:', self.s_length)
-        r += '\n{0:<35s} {1}'.format('rk_s_nrpts:', self.s_nrpts)
-        r += '\n{0:<35s} {1} mm'.format('rk_s_step:', self.s_length/(self.s_nrpts-1)) 
+        r += '\n{0:<35s} {1} mm'.format('trajectory_length:', self.s_length)
+        r += '\n{0:<35s} {1}'.format('trajectory_nrpts:', self.s_nrpts)
+        r += '\n{0:<35s} {1} mm'.format('trajectory_s_step:', self.s_length/(self.s_nrpts-1)) 
         r += '\n{0:35s} {1:+f} Tesla at rz = {2} mm'.format('max_abs_bx@trajectory:', self.bx[max_bx], s_max_bx)
         r += '\n{0:35s} {1:+f} Tesla at rz = {2} mm'.format('max_abs_by@trajectory:', self.by[max_by], s_max_by)
         r += '\n{0:35s} {1:+f} Tesla at rz = {2} mm'.format('max_abs_bz@trajectory:', self.bz[max_bz], s_max_bz)

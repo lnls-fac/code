@@ -25,11 +25,11 @@ electron_volt           = mathphys.constants.elementary_charge * volt
 
 # conversions
 # ============
-meter_2_mm = (mm / meter)
-mm_2_meter = (meter / mm)
-mrad_2_rad = (rad / mrad)
-rad_2_mrad = (mrad / rad)
+meter_2_mm = (meter / mm)
+mm_2_meter = (mm / meter)
+mrad_2_rad = (mrad / rad)
+rad_2_mrad = (rad / mrad)
 
-def kelvin_to_celsius(k): return k - 273.15
-def joule_to_eV(e): return e / electron_volt
-def radian_to_degree(r): return (180.0/math.pi) * r
+def kelvin_2_celsius(k): return k - 273.15
+def joule_2_eV(e): return e / electron_volt
+def radian_2_degree(r): return (180.0/math.pi) * r

@@ -1,7 +1,27 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from multiprocessing import Process
+import fieldmaptrack.fieldmap as fieldmap
+import fieldmaptrack.beam as beam
+import fieldmaptrack.track as track
 
+#from multiprocessing import Process
+
+class Config:
+    
+    def __init__(self):
+        
+        self.config_label = None
+        self.config_timestamp = None
+        self.fmap_filename = None
+        self.fmap_extrapolation_flag = False
+        self.fmap_extrapolation_threshold_field_fraction = 0.3
+        self.fmap_extrapolation_exponents = None
+        self.traj_center_sagitta_flag = True
+        self.traj_length = None 
+        self.traj_nrpts = None 
+        self.traj_force_midplane_flag = True
+                                    
+    
 def calc_sagitta(half_dipole_length, trajectory):
     
     rx = trajectory.rx
@@ -16,206 +36,92 @@ def calc_sagitta(half_dipole_length, trajectory):
     sagitta = rx[0] - rx[i]
     return sagitta
         
-    
-def fieldmap_analysis(
-        label,
-        file_name,
-        missing_integral_analysis = False,
-        threshold_field_fraction = 0.3,
-        field_extrapolation_exponents = None,
-        ):
-    
-    if field_extrapolation_exponents is None:
-        field_extrapolation_exponents = (2,3,4,5,6,7,8,9,10)
-    
+def raw_fieldmap_analysis(config):
+        
+    if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
+        config.fmap_extrapolation_exponents = (2,3,4,5,6,7,8,9,10)
+
     # loads fieldmap from file
     # ========================
-    fm = fieldmaptrack.fieldmap.FieldMap(file_name)
+    config.fmap = fieldmap.FieldMap(config.fmap_filename)
     
     # plots basic data
     # ================
-   
+    
     # -- longitudinal profile at (x,y) = (0,0)
-    x = fm.rz
-    y = fm.by[fm.ry_zero][fm.rx_zero,:]
+    try:
+        config.config_fig_number += 1
+    except:
+        config.config_fig_number = 1
+    x,y = config.fmap.rz, config.fmap.by[config.fmap.ry_zero][config.fmap.rx_zero,:]
     plt.plot(x,y)
     plt.grid(True)
     plt.xlabel('rz [mm]'), plt.ylabel('by [mm]')
-    plt.title(label + '\n' + 'Longitudinal profile of vertical field')
-    plt.savefig(label + '_fig01' + '_by-vs-z.pdf')
+    plt.title(config.config_label + '\n' + 'Longitudinal profile of vertical field')
+    plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + 'by-vs-rz.pdf')
     plt.clf()
     
     # -- transversal profile at (y,z) = (0,0)
-    x = fm.rx
-    y = fm.by[fm.ry_zero][:,fm.rz_zero]
+    try:
+        config.config_fig_number += 1
+    except:
+        config.config_fig_number = 1
+    x, y = config.fmap.rx, config.fmap.by[config.fmap.ry_zero][:,config.fmap.rz_zero]
     plt.plot(x,y)
     plt.grid(True)
     plt.xlabel('rx [mm]'), plt.ylabel('by [T]')
-    plt.title(label + '\n' + 'Transverse profile of vertical field')
-    plt.savefig(label + '_fig02' + '_by-vs-x.pdf')
+    plt.title(config.config_label + '\n' + 'Transverse profile of vertical field')
+    plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) +  'by-vs-rx.pdf')
     plt.clf()
     
     
     # calculates missing integrals
     # ============================
-    if missing_integral_analysis:
-        fm.field_extrapolation_analysis(threshold_field_fraction = threshold_field_fraction, 
-                                        polyfit_exponents = field_extrapolation_exponents)
+    if config.fmap_extrapolation_flag:
+        config.fmap.field_extrapolation_analysis(threshold_field_fraction = config.fmap_extrapolation_threshold_field_fraction, 
+                                        polyfit_exponents = config.fmap_extrapolation_exponents)
 
     # prints basic raw information on the fieldmap
     # ============================================
     print('--- fieldmap ---')
-    print(fm)
+    print(config.fmap)
     
+    return config
+      
+def reference_trajectory(config):
     
-def reference_trajectory(
-        fieldmap,
-        beam_energy,
-        beam_current,
-        s_length,
-        s_nrpts,
-        force_midplane,
-        ):
-    
-    ebeam = fieldmaptrack.beam.Beam(energy = beam_energy, current = beam_current)
+    config.beam = beam.Beam(energy = config.beam_energy, current = config.beam_current)
     
     # Runge-Kutta trajectory calculation
     # ==================================
-    traj = fieldmaptrack.track.Trajectory(beam=ebeam, fieldmap=fieldmap)
+    config.traj = track.Trajectory(beam=config.beam, fieldmap=config.fmap)
+    half_dipole_length = config.fmap.length / 2.0
     init_rx, init_ry, init_rz = 0.0, 0.0, 0.0
     init_px, init_py, init_pz = 0.0, 0.0, 1.0
-    traj.calc_trajectory(init_rx=init_rx, init_ry=init_ry, init_rz=init_rz,   
-                         init_px=init_px, init_py=init_py, init_pz=init_pz, 
-                         s_length=s_length, 
-                         s_nrpts=s_nrpts, 
-                         force_midplane=force_midplane)
+    while True:
+        config.traj.calc_trajectory(init_rx=init_rx, init_ry=init_ry, init_rz=init_rz,   
+                                    init_px=init_px, init_py=init_py, init_pz=init_pz, 
+                                    s_length       = config.traj_length, 
+                                    s_nrpts        = config.traj_nrpts, 
+                                    force_midplane = config.traj_force_midplane_flag) 
+        config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
+        if not config.traj_center_sagitta_flag:
+            break
+        new_init_rx = config.traj_sagitta / 2.0
+        change_init_rx = new_init_rx - init_rx
+        if abs(change_init_rx) < 0.001:
+            break
+        else:
+            init_rx = new_init_rx
     
+    # prints basic information on the reference trajectory
+    # ====================================================
+    print('--- reference trajectory ---')
+    print(config.traj)
+    print('{0:<35s} {1} mm'.format('sagitta:', config.traj_sagitta))
     
+#     monomials = [0,1,2,3,4,5,6,7]
+#     grid = np.linspace(-5,5,21)
+#     polynom_a, polynom_b = traj.calc_multipoles(perpendicular_grid, multipolar_monomials)
     
-    monomials = [0,1,2,3,4,5,6,7]
-    grid = np.linspace(-5,5,21)
-    polynom_a, polynom_b = traj.calc_multipoles(perpendicular_grid, multipolar_monomials)
-    
-
-
-    
-def run(label,
-        file_name,
-        beam_energy,
-        beam_current,
-        init_rx, init_ry, init_rz,
-        init_px, init_py, init_pz,
-        s_length,
-        s_nrpts,
-        force_midplane,
-        threshold_field_fraction = 0.3,
-        field_extrapolation_exponents = None,
-        multipolar_monomials = None,
-        perpendicular_grid = None,
-        missing_integral_analysis = False
-        ):
-    
-    if field_extrapolation_exponents is None:
-        field_extrapolation_exponents = (2,3,4,5,6,7,8,9,10)
-    if multipolar_monomials is None:
-        multipolar_monomials = (0,1,2,3,4,5,6,7,8)
-    if perpendicular_grid is None:
-        perpendicular_grid = np.linspace(-5,5,11)
-    
-    print('DIPOLE ANALYSIS')
-    print('===============')
-         
-    print('{0:<35s} {1}'.format('label:', label))
-    
-    # loads fieldmap from file
-    # ========================
-    fm = fmap.FieldMap(file_name)
-    ebeam = beam.Beam(energy = beam_energy, current = beam_current)
-    
-    # plots basic data
-    # ================
-   
-    # -- longitudinal profile at (x,y) = (0,0)
-    x = fm.rz
-    y = fm.by[fm.ry_zero][fm.rx_zero,:]
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rz [mm]'), plt.ylabel('by [mm]')
-    plt.title(label + '\n' + 'Longitudinal profile of vertical field')
-    plt.savefig(label + '_fig01' + '_by-vs-z.pdf')
-    plt.clf()
-    
-    # -- transversal profile at (y,z) = (0,0)
-    x = fm.rx
-    y = fm.by[fm.ry_zero][:,fm.rz_zero]
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rx [mm]'), plt.ylabel('by [T]')
-    plt.title(label + '\n' + 'Transverse profile of vertical field')
-    plt.savefig(label + '_fig02' + '_by-vs-x.pdf')
-    plt.clf()
-    
-    
-    # calculates missing integrals
-    # ============================
-    if missing_integral_analysis:
-        fm.field_extrapolation_analysis(threshold_field_fraction = threshold_field_fraction, 
-                                        polyfit_exponents = field_extrapolation_exponents)
-
-    # prints basic raw information on the fieldmap
-    # ============================================
-    print('--- fieldmap ---')
-    print(fm)
-    fm.clear_extrapolation_coefficients()
-    
-    
-    # Runge-Kutta trajectory calculation
-    # ==================================
-    traj = track.Trajectory(beam=ebeam, fieldmap=fm)
-    traj.calc_trajectory(init_rx=init_rx, init_ry=init_ry, init_rz=init_rz,   
-                         init_px=init_px, init_py=init_py, init_pz=init_pz, 
-                         s_length=s_length, 
-                         s_nrpts=s_nrpts, 
-                         force_midplane=force_midplane)
-    
-    
-    
-    monomials = [0,1,2,3,4,5,6,7]
-    grid = np.linspace(-5,5,21)
-    polynom_a, polynom_b = traj.calc_multipoles(perpendicular_grid, multipolar_monomials)
-    
-
-    # calcs sagitta
-    sagitta = calc_sagitta(fm.length/2.0, traj)
-    
-    # prints basic information on the trajectory
-    # =========================================    
-    print('--- trajectory (half magnet) ---')
-    print(traj)
-    print('{0:<35s} {1} mm'.format('sagitta:', sagitta))
-    
-    
-   
-      
-    # Plots trajectory data
-    # =====================
-    
-    # -- trajectory on rectangular grid
-    x = traj.rz
-    y = traj.rx
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rz [mm]'), plt.ylabel('rx [mm]')
-    plt.title(label + '\n' + 'Trajectory')
-    plt.savefig(label + '_fig03' + '_zx-trajectory.pdf')
-    plt.clf()    
-    # -- vertical field on trajectory
-    x = traj.s
-    y = traj.by
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('s [mm]'), plt.ylabel('by [T]')
-    plt.title(label + '\n' + 'Vertical field on trajectory')
-    plt.savefig(label + '_fig04' + '_by-vs-s-trajectory.pdf')
-    plt.clf()    
-    
+    return config
