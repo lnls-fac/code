@@ -9,8 +9,7 @@ class Parameter:
             symbol   = '', 
             units    = '', 
             deps     = '', 
-            obs      = '', 
-            revision = ''):
+            obs      = ''):
         self.name     = name
         self.group    = group
         self.symbol   = symbol
@@ -18,13 +17,11 @@ class Parameter:
         self.units    = units
         self.deps     = deps
         self.obs      = obs
-        self.revision = revision
         self.DEFAULT_OBS = 'Automatically generated, manual changes may be overwritten. Comments may be added in the [[Parameter_Talk:' + self.name + '|Discussion]] section of this page.'
 
     
     def __str__(self):
-        r = (self.name + ': ' + str(self.value) + ' ' + self.units +
-        ' [' + self.revision + ']')
+        r = (self.name + ': ' + str(self.value) + ' ' + self.units)
         return r
 
     def __lt__(self, other):
@@ -46,7 +43,6 @@ class Parameter:
         wiki.append('==Data==')
         wiki.append('<section begin=data/>')
         wiki.append('* Group: <section begin=group/>' + self.group + '<section end=group/>')
-        wiki.append('* Revision: <section begin=revision/>' + str(self.revision) + '<section end=revision/>')
         wiki.append('* Symbol: <section begin=symbol/>' + self.symbol + '<section end=symbol/>')
         wiki.append('* Value: <section begin=value/>' + str(self.value) + '<section end=value/>')
         wiki.append('* Units: <section begin=units/>' + self.units + '<section end=units/>')

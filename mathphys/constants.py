@@ -19,9 +19,9 @@ electron_radius          = math.pow(elementary_charge,2)/(4*math.pi*vacuum_permi
 
 u.joule_2_eV             = u.joule / elementary_charge
 
-reduced_planck_constant  = 6.6260695729e-34 * u.joule*u.second                       # [J.s]  - 2014-07-22
+reduced_planck_constant  = 1.05457172647e-34 * u.joule*u.second                      # [J.s]  - 2014-07-22
 rad_cgamma               = 4*math.pi*electron_radius/math.pow(electron_rest_energy/elementary_charge/1e9,3)/3                      # [m]/[GeV]^3 - derived
-Cq                       = (55.0/(32*math.sqrt(3.0))) * (reduced_planck_constant*u.joule_2_eV) * light_speed / (1e6 * electron_rest_energy_MeV) # [m] - derived
-Ca                       = electron_radius*light_speed / (3*math.pow(electron_rest_energy_MeV/1000.0, 3))                          # [m^2/(s.GeV^3)] - derived
+Cq                       = (55.0/(32*math.sqrt(3.0))) * (reduced_planck_constant*u.joule_2_eV) * light_speed / (electron_rest_energy*u.joule_2_eV) # [m] - derived
+Ca                       = electron_radius*light_speed / (3*math.pow(electron_rest_energy*u.joule_2_eV/1.0e9, 3))                          # [m^2/(s.GeV^3)] - derived
 
 del u  # cleans up namespace
