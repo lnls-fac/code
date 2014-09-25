@@ -2,6 +2,7 @@
 
 import math
 import mathphys.constants as const
+import mathphys.units as units
 
 
 def gamma(energy):
@@ -26,7 +27,7 @@ def rho(brho, field):
 
 def critical_energy(gamma, rho):
     '''Critical energy [keV] from ebeam gamma factor and bending radius [m].'''
-    return (3 * const.reduced_planck_constant * const.light_speed *
+    return (3 * (const.reduced_planck_constant*units.joule_2_eV) * const.light_speed *
             math.pow(gamma, 3)/ (2.0 * rho)) / 1000
 
 def U0(energy, I2):
