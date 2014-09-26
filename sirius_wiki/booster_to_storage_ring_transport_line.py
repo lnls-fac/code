@@ -100,9 +100,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster to storage ring transport line arc length of dipoles',
+    name     = 'Booster to storage ring transport line hardedge length of dipoles',
     group    = 'FAC',
-    value    = Prms.ts_arc_length_of_dipoles,
+    value    = Prms.ts_hardedge_length_of_dipoles,
     symbol   = r'<math>L_\text{DIP}</math>',
     units    = 'm',
     deps     = [],
@@ -110,9 +110,9 @@ parameter_list = [
   ),
                 
   Parameter(
-    name     = 'Booster to storage ring transport line arc length of extraction septum',
+    name     = 'Booster to storage ring transport line hardedge length of extraction septum',
     group    = 'FAC',
-    value    = Prms.ts_arc_length_of_extraction_septum,
+    value    = Prms.ts_hardedge_length_of_extraction_septum,
     symbol   = r'<math>L_\text{sep,ext}</math>',
     units    = 'm',
     deps     = [],
@@ -120,9 +120,9 @@ parameter_list = [
   ),
                 
   Parameter(
-    name     = 'Booster to storage ring transport line arc length of thick injection septum',
+    name     = 'Booster to storage ring transport line hardedge length of thick injection septum',
     group    = 'FAC',
-    value    = Prms.ts_arc_length_of_thick_injection_septum,
+    value    = Prms.ts_hardedge_length_of_thick_injection_septum,
     symbol   = r'<math>L_\text{thick sep,inj}</math>',
     units    = 'm',
     deps     = [],
@@ -130,9 +130,9 @@ parameter_list = [
   ),
                 
   Parameter(
-    name     = 'Booster to storage ring transport line arc length of thin injection septum',
+    name     = 'Booster to storage ring transport line hardedge length of thin injection septum',
     group    = 'FAC',
-    value    = Prms.ts_arc_length_of_thin_injection_septum,
+    value    = Prms.ts_hardedge_length_of_thin_injection_septum,
     symbol   = r'<math>L_\text{thin sep,inj}</math>',
     units    = 'm',
     deps     = [],
@@ -185,7 +185,7 @@ parameter_list = [
     value    = Prms.ts_dipole_bending_radius,
     symbol   = r'<math>\rho_\text{DIP}</math>',
     units    = 'm',
-    deps     = ['Booster to storage ring transport line arc length of dipoles',
+    deps     = ['Booster to storage ring transport line hardedge length of dipoles',
                 'Booster to storage ring transport line deflection angle of dipoles'],
     obs      = [r'<math>\rho_\text{DIP} = \frac{L_\text{DIP}}{\theta_\text{DIP}}</math>'],
   ),
@@ -196,7 +196,7 @@ parameter_list = [
     value    = Prms.ts_extraction_septum_bending_radius,
     symbol   = r'<math>\rho_\text{sep,ext}</math>',
     units    = 'm',
-    deps     = ['Booster to storage ring transport line arc length of extraction septum',
+    deps     = ['Booster to storage ring transport line hardedge length of extraction septum',
                 'Booster to storage ring transport line deflection angle of extraction septum'],
     obs      = [r'<math>\rho_\text{sep,ext} = \frac{L_\text{sep,ext}}{\theta_\text{sep,ext}}</math>'],
   ),
@@ -207,7 +207,7 @@ parameter_list = [
     value    = Prms.ts_thick_injection_septum_bending_radius,
     symbol   = r'<math>\rho_\text{thick sep,inj}</math>',
     units    = 'm',
-    deps     = ['Booster to storage ring transport line arc length of thick injection septum',
+    deps     = ['Booster to storage ring transport line hardedge length of thick injection septum',
                 'Booster to storage ring transport line deflection angle of thick injection septum'],
     obs      = [r'<math>\rho_\text{thick sep,inj} = \frac{L_\text{thick sep,inj}}{\theta_\text{thick sep,inj}}</math>'],
   ),
@@ -218,7 +218,7 @@ parameter_list = [
     value    = Prms.ts_thin_injection_septum_bending_radius,
     symbol   = r'<math>\rho_\text{thin sep,inj}</math>',
     units    = 'm',
-    deps     = ['Booster to storage ring transport line arc length of thin injection septum',
+    deps     = ['Booster to storage ring transport line hardedge length of thin injection septum',
                 'Booster to storage ring transport line deflection angle of thin injection septum'],
     obs      = [r'<math>\rho_\text{thin sep,inj} = \frac{L_\text{thin sep,inj}}{\theta_\text{thin sep,inj}}</math>'],
   ),

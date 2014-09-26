@@ -16,57 +16,13 @@ class Config:
         self.fmap_extrapolation_flag = False
         self.fmap_extrapolation_threshold_field_fraction = 0.3
         self.fmap_extrapolation_exponents = None
+        self.traj_rk_s_step = None
+        self.traj_rk_length = None 
+        self.traj_rk_nrpts = None
+        self.traj_rk_min_rz = None
         self.traj_center_sagitta_flag = True
-        self.traj_length = None 
-        self.traj_nrpts = None 
         self.traj_force_midplane_flag = True
-        
-                                    
-def get_multipole_labels(type, n):
-    
-    if n == 0:
-        title  = type.title() + ' dipolar field'
-        ylabel = title + ' [T]'
-    elif n == 1:
-        title  = type.title() + ' quadrupolar field'
-        ylabel = title + ' [T/m]'
-    elif n == 2:
-        title  = type.title() + ' sextupolar field'
-        ylabel = title + ' [T/m$^\mathrm{2}$]'
-    elif n == 3:
-        title  = type.title() + ' octupolar field'
-        ylabel = title + ' [T/m$^\mathrm{3}$]'
-    elif n == 4:
-        title  = type.title() + ' decapolar field'
-        ylabel = title + ' [T/m$^\mathrm{4}$]'
-    elif n == 5:
-        title  = type.title() + ' duodecapolar field'
-        ylabel = title + ' [T/m$^\mathrm{5}$]'
-    else:
-        title  = type.title() + ' 2*({0}+1)-polar field'.format(n)
-        pot = '{0}'.format(n)
-        ylabel = title + ' [T/m$^\mathrm{'+pot+'}$]'
-        
-    fname = type + '_' + 'b{0}bx{0}'.format(n)
-    return ylabel, title, fname 
-    
- 
-        
-
-def calc_sagitta(half_dipole_length, trajectory):
-    
-    rx = trajectory.rx
-    rz = trajectory.rz
-    
-    if rz[-1] < half_dipole_length:
-        raise DipoleAnalysisException('trajectory path does not exit dipole')
-    
-    i = 0
-    while (rz[i] < half_dipole_length):
-        i += 1
-    sagitta = rx[0] - rx[i]
-    return sagitta
-        
+                                  
 def raw_fieldmap_analysis(config):
         
     if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
@@ -117,9 +73,23 @@ def raw_fieldmap_analysis(config):
     print('--- fieldmap ---')
     print(config.fmap)
     
-    return config
-      
-def reference_trajectory(config):
+    return config    
+
+def calc_sagitta(half_dipole_length, trajectory):
+    
+    rx = trajectory.rx
+    rz = trajectory.rz
+    
+    if rz[-1] < half_dipole_length:
+        raise DipoleAnalysisException('trajectory path does not exit dipole')
+    
+    i = 0
+    while (rz[i] < half_dipole_length):
+        i += 1
+    sagitta = rx[0] - rx[i]
+    return sagitta
+              
+def trajectory_analysis(config):
     
     config.beam = beam.Beam(energy = config.beam_energy, current = config.beam_current)
     
@@ -133,11 +103,14 @@ def reference_trajectory(config):
     half_dipole_length = config.fmap.length / 2.0
     init_rx, init_ry, init_rz = 0.0, 0.0, 0.0
     init_px, init_py, init_pz = 0.0, 0.0, 1.0
+    rk_min_rz = config.fmap.rz[-1]
     while True:
         config.traj.calc_trajectory(init_rx=init_rx, init_ry=init_ry, init_rz=init_rz,   
                                     init_px=init_px, init_py=init_py, init_pz=init_pz, 
-                                    s_length       = config.traj_length, 
-                                    s_nrpts        = config.traj_nrpts, 
+                                    s_step         = config.traj_rk_s_step,
+                                    s_length       = config.traj_rk_length, 
+                                    s_nrpts        = config.traj_rk_nrpts, 
+                                    min_rz         = rk_min_rz,
                                     force_midplane = config.traj_force_midplane_flag) 
         config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
         if not config.traj_center_sagitta_flag:
@@ -152,13 +125,13 @@ def reference_trajectory(config):
     
     # prints basic information on the reference trajectory
     # ====================================================
-    print('--- reference trajectory ---')
+    print('--- trajectory ---')
     print(config.traj)
     print('{0:<35s} {1} mm'.format('sagitta:', config.traj_sagitta))
     
     return config
 
-def calc_multipoles(config):
+def multipoles_analysis(config):
     
     if config.multipoles_perpendicular_grid is None:
         config.multipoles_perpendicular_grid = (-5,-4,-3,-2,-1,0,1,2,3,4,5)
@@ -168,14 +141,14 @@ def calc_multipoles(config):
     # calcs multipoles around reference trajectory
     # ============================================
     config.multipoles = track.Multipoles(trajectory=config.traj, 
-                                         multipoles_perpendicular_grid=config.multipoles_perpendicular_grid,
-                                         multipoles_fitting_monomials=config.multipoles_fitting_monomials)
+                                         perpendicular_grid=config.multipoles_perpendicular_grid,
+                                         fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles()
     config.multipoles.calc_multipoles_integrals()
     
     # prints basic information on multipoles
     # ======================================
-    print('--- multipoles on reference trajectory ---')
+    print('--- multipoles on trajectory ---')
     print(config.multipoles)
     
     # plots normal multipoles
@@ -185,7 +158,7 @@ def calc_multipoles(config):
         except:
             config.config_fig_number = 1
         x,y = config.traj.rz, config.multipoles.polynom_b[n,:]
-        ylabel, title, fname = get_multipole_labels('normal',config.multipoles.multipoles_fitting_monomials[n])
+        ylabel, title, fname = config.multipoles.get_multipole_labels('normal',n)
         plt.plot(x,y)
         plt.grid(True)
         plt.xlabel('s [mm]'), plt.ylabel(ylabel)
