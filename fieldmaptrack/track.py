@@ -2,6 +2,7 @@ import math
 from fieldmaptrack import fieldmap
 import numpy as np
 import mathphys
+import mathphys.units as units
 
 
 class SerretFrenetCoordSystem:
@@ -140,11 +141,16 @@ class Multipoles:
             self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
              
 
-    def calc_multipoles_integrals():
+    def calc_multipoles_integrals(self):
         monomials = self.multipoles_fitting_monomials
+        self.polynom_a_integral = np.zeros(self.polynom_a.shape[0])
+        self.polynom_b_integral = np.zeros(self.polynom_b.shape[0])
+        x = self.trajectory.s * units.mm_2_meter
         for i in range(len(monomials)):
-            y = self.polynom_a[i,:]
-            x = self.trajectory.s
+            ya, yb = self.polynom_a[i,:], self.polynom_b[i,:]
+            self.polynom_a_integral[i] = np.trapz(y = ya, x = x)
+            self.polynom_b_integral[i] = np.trapz(y = yb, x = x)
+            
                
     def __str__(self):
         
@@ -154,11 +160,13 @@ class Multipoles:
         monomials = self.multipoles_fitting_monomials
         
         r = ''
-        r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in ({1:+f} .. {2:+f})'.format(nrpts, grid_min, grid_max)) 
-        r += '\n{0:<35s} {1}'.format('fitting_monomials:', 'x^{0}'.format(monomials))
+        r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in ({1:+f} .. {2:+f}) mm'.format(nrpts, grid_min, grid_max)) 
+        r += '\n{0:<35s} {1:^17s} {2:^17s} | {3:^17s} {4:^17s}'.format('<multipole_order n>', 'MaxAbs_Nn_[T/m^n]', 'Integ_Nn[T.m/m^n]', 'MaxAbs_Sn_[T/m^n]', 'Integ_Sn[T.m/m^n]')
         for i in range(len(monomials)):
             n = monomials[i]
-            poly_a = self.polynom_a_integral[i]
-            poly_a = self.polynom_b_integral[i]
-            r += '\n{0:35s} {1:+.4e} {2:+.4e}'.format('integrated_multipole(n={0}):'.format(n), poly_a, poly_b)
+            max_poly_a = max(np.abs(self.polynom_a[i,:]))
+            max_poly_b = max(np.abs(self.polynom_b[i,:]))
+            integ_poly_a = self.polynom_a_integral[i]
+            integ_poly_b = self.polynom_b_integral[i]
+            r += '\n{0:35s} {1:^17.4e} {2:^+17.4e} | {3:^17.4e} {4:^+17.4e}'.format('n={0:02d}:'.format(n), max_poly_b, integ_poly_b, max_poly_a, integ_poly_a)
         return r

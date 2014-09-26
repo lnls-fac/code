@@ -416,6 +416,16 @@ parameter_list = [
     deps     = [],
     obs      = [],
   ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line hardedge length of QC4 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.ts_hardedge_length_of_QC4_quadrupoles,
+    symbol   = r'<math>L_\text{QC4}</math>',
+    units    = 'm',
+    deps     = [],
+    obs      = [],
+  ),
                   
   Parameter(
     name     = 'Booster to storage ring transport line QA1 quadrupole strength',
@@ -482,6 +492,16 @@ parameter_list = [
     group    = 'FAC',
     value    = Prms.ts_QC3_quadrupole_strength,
     symbol   = r'<math>K_\text{QC3}</math>',
+    units    = 'm<sup>-2</sup>',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line QC4 quadrupole strength',
+    group    = 'FAC',
+    value    = Prms.ts_QC4_quadrupole_strength,
+    symbol   = r'<math>K_\text{QC4}</math>',
     units    = 'm<sup>-2</sup>',
     deps     = [],
     obs      = [],
@@ -562,6 +582,17 @@ parameter_list = [
     deps     = ['Booster to storage ring transport line QC3 quadrupole strength',
                 'Booster to storage ring transport line beam magnetic rigidity'],
     obs      = [r"<math>B'_\text{QC3} = (B\rho) K_\text{QC3}</math>"],
+  ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line QC4 quadrupole gradient',
+    group    = 'FAC',
+    value    = Prms.ts_QC4_quadrupole_gradient,
+    symbol   = r"<math>B'_\text{QC4}</math>",
+    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    deps     = ['Booster to storage ring transport line QC4 quadrupole strength',
+                'Booster to storage ring transport line beam magnetic rigidity'],
+    obs      = [r"<math>B'_\text{QC4} = (B\rho) K_\text{QC4}</math>"],
   ),
                   
 ]

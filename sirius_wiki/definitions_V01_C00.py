@@ -742,15 +742,15 @@ class ParameterDefinitions(object):
     ts_number_of_quadrupoles = 8 
     ts_maximum_quadrupole_gradient = 25.0 # [T/m]
 
-    ts_arc_length_of_dipoles = 0.9006 # [m]
-    ts_arc_length_of_extraction_septum = 2.0 # [m]
-    ts_arc_length_of_thick_injection_septum = 1.0004 # [m]
-    ts_arc_length_of_thin_injection_septum = 1.4016 # [m]
+    ts_arc_length_of_dipoles = 1.152 # [m]
+    ts_arc_length_of_extraction_septum = 0.85 # [m]
+    ts_arc_length_of_thick_injection_septum = 1.100 # [m]
+    ts_arc_length_of_thin_injection_septum = 1.400 # [m]
 
-    ts_dipole_deflection_angle = 7.075 # [°]
-    ts_extraction_septum_deflection_angle = 6.0 # [°]
-    ts_thick_injection_septum_deflection_angle = 5.8 # [°]
-    ts_thin_injection_septum_deflection_angle = 4.8 # [°]
+    ts_dipole_deflection_angle = 7.20 # [°]
+    ts_extraction_septum_deflection_angle = -3.60 # [°]
+    ts_thick_injection_septum_deflection_angle = 6.2 # [°]
+    ts_thin_injection_septum_deflection_angle = 4.73 # [°]
 
     ts_dipole_bending_radius = ts_arc_length_of_dipoles / math.radians(ts_dipole_deflection_angle)
     ts_extraction_septum_bending_radius = ts_arc_length_of_extraction_septum / math.radians(ts_extraction_septum_deflection_angle)
@@ -762,31 +762,34 @@ class ParameterDefinitions(object):
     ts_thick_injection_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_thick_injection_septum_bending_radius
     ts_thin_injection_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_thin_injection_septum_bending_radius
 
-    ts_dipole_sagitta = 13.9 # [mm]
-    ts_extraction_septum_sagitta = 104.6 # [mm]
-    ts_thick_injection_septum_sagitta = 12.7 # [mm]
-    ts_thin_injection_septum_sagitta = 58.7 # [mm]
+    ts_dipole_sagitta = 18.1 # [mm]
+    ts_extraction_septum_sagitta = 6.7 # [mm]
+    ts_thick_injection_septum_sagitta = 14.9 # [mm]
+    ts_thin_injection_septum_sagitta = 14.4 # [mm]
 
     ts_number_of_dipoles = 2
-    ts_number_of_extraction_septa = 1
+    ts_number_of_extraction_septa = 2
     ts_number_of_thick_injection_septa = 1
     ts_number_of_thin_injection_septa = 1
 
-    ts_hardedge_length_of_QA1_quadrupoles = 0.3 # [m]
-    ts_hardedge_length_of_QA2_quadrupoles = 0.3 # [m]
-    ts_hardedge_length_of_QB1_quadrupoles = 0.3 # [m]
-    ts_hardedge_length_of_QB2_quadrupoles = 0.3 # [m]
-    ts_hardedge_length_of_QC1_quadrupoles = 0.3 # [m]
-    ts_hardedge_length_of_QC2_quadrupoles = 0.3 # [m]
-    ts_hardedge_length_of_QC3_quadrupoles = 0.3 # [m]
+    ts_hardedge_length_of_QA1_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QA2_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QB1_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QB2_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QC1_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QC2_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QC3_quadrupoles = 0.2 # [m]
+    ts_hardedge_length_of_QC4_quadrupoles = 0.2 # [m]
 
-    ts_QA1_quadrupole_strength = -1.292 # [1/m^2]
-    ts_QA2_quadrupole_strength = 1.948 # [1/m^2]
-    ts_QB1_quadrupole_strength = -1.326 # [1/m^2]
-    ts_QB2_quadrupole_strength = 2.054 # [1/m^2]
-    ts_QC1_quadrupole_strength = 1.543 # [1/m^2]
-    ts_QC2_quadrupole_strength = -2.490 # [1/m^2]
-    ts_QC3_quadrupole_strength = 1.633 # [1/m^2]
+
+    ts_QA1_quadrupole_strength =  0.85 # [1/m^2]
+    ts_QA2_quadrupole_strength =  1.01 # [1/m^2]
+    ts_QB1_quadrupole_strength = -0.32 # [1/m^2]
+    ts_QB2_quadrupole_strength =  2.19 # [1/m^2]
+    ts_QC1_quadrupole_strength = -1.88 # [1/m^2]
+    ts_QC2_quadrupole_strength =  1.80 # [1/m^2]
+    ts_QC3_quadrupole_strength =  1.80 # [1/m^2]
+    ts_QC4_quadrupole_strength = -1.32 # [1/m^2]
 
     ts_QA1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QA1_quadrupole_strength
     ts_QA2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QA2_quadrupole_strength
@@ -795,3 +798,4 @@ class ParameterDefinitions(object):
     ts_QC1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC1_quadrupole_strength
     ts_QC2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC2_quadrupole_strength
     ts_QC3_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC3_quadrupole_strength
+    ts_QC4_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC4_quadrupole_strength
