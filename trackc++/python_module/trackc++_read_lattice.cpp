@@ -1,4 +1,4 @@
-#include "trackcpp.h"
+#include "trackc++.h"
 
 // Exception object
 extern PyObject *TrackcppError;
@@ -162,14 +162,6 @@ int trackcpp_read_lattice(PyObject *py_lattice, std::vector<Element>& v) {
 				Py_DECREF(py_attr);
 			}
 		}
-		double energy = 0.0;
-		if (PyObject_HasAttrString(py_element, "energy")) {
-			PyObject *py_attr = PyObject_GetAttrString(py_element, "energy");
-			if (py_attr != NULL) {
-				energy = PyFloat_AsDouble(py_attr);
-				Py_DECREF(py_attr);
-			}
-		}
 		std::vector<double> t_in;
 		if (PyObject_HasAttrString(py_element, "t_in")) {
 			PyObject *py_attr = PyObject_GetAttrString(py_element, "t_in");
@@ -226,7 +218,6 @@ int trackcpp_read_lattice(PyObject *py_lattice, std::vector<Element>& v) {
 		el.thin_SL     = thin_SL;
 		el.frequency   = frequency;
 		el.voltage     = voltage;
-		el.energy      = energy;
 		el.hkick       = kick_angle[0];
 		el.vkick       = kick_angle[1];
 

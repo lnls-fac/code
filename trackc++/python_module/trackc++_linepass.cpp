@@ -5,7 +5,7 @@
 // affiliation:	LNLS - Laboratorio Nacional de Luz Sincrotron
 // Date: 		Tue Dec 10 18:14:27 BRST 2013
 
-#include "trackcpp.h"
+#include "trackc++.h"
 
 // Exception object
 extern PyObject *TrackcppError;
@@ -47,7 +47,7 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 	// Does tracking
 	std::vector<Pos<double> > pos;
-	Status::type ret = linepass (lattice, orig_pos, pos, &element_offset, trajectory);
+	Status::type ret = track_linepass (lattice, orig_pos, pos, &element_offset, trajectory);
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
 			std::string pmname = pm_dict[lattice[element_offset].pass_method];

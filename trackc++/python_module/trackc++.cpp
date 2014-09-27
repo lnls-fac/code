@@ -1,4 +1,4 @@
-#include "trackcpp.h"
+#include "trackc++.h"
 
 // MODULE Docstrings
 static char module_docstring[]            = "Module for efficiently tracking particles in transport lines and storage rings";
