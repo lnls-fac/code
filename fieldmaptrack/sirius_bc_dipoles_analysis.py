@@ -1,11 +1,11 @@
 #!/usr/bin/python3 
 
-from fieldmaptrack import beam
-from fieldmaptrack import dipole_analysis
+import fieldmaptrack as fmaptrack
+import fieldmaptrack.dipole_analysis as analysis
 import numpy as np
 
 
-config = dipole_analysis.Config()
+config = analysis.Config()
 
 config.config_label  = 'bc_model1_controlgap_8mm' #  identification label
 config.fmap_filename = '/home/ximenes/fac_files/data/magnet_modelling/sirius/bc/fieldmaps/2014-09-05_Dipolo_Anel_BC_Modelo1_gap_lateral_8mm_-50_50mm_-2000_2000mm.txt' # parameter
@@ -29,6 +29,6 @@ if __name__ == "__main__":
          
     print('{0:<35s} {1}'.format('label:', config.config_label))
     
-    config = dipole_analysis.raw_fieldmap_analysis(config)
-    config = dipole_analysis.trajectory_analysis(config)
-    config = dipole_analysis.multipoles_analysis(config)
+    config = analysis.raw_fieldmap_analysis(config)
+    config = analysis.trajectory_analysis(config)
+    config = analysis.multipoles_analysis(config)

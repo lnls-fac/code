@@ -1,23 +1,26 @@
 import math
-from fieldmaptrack import fieldmap
+#from fieldmaptrack import FieldMap
 import numpy as np
-import mathphys
+#import mathphys
 import mathphys.units as units
+
+class TrackException(Exception):
+    pass
 
 
 class SerretFrenetCoordSystem:
     
     def __init__(self, trajectory, point_idx = 0):
         
-        t,i = trajectory,point_idx # syntactic-sugars
-        self.s = t.s[i]                      # s position
-        self.p = np.array((t.rx[i], t.ry[i], t.rz[i])) # (rx,ry,rz) position of point
-        self.t = np.array((t.px[i], t.py[i], t.pz[i])) # (px,py,pz) position of point
-        self.t /= math.sqrt(np.sum(self.t**2))
-        self.n = np.array((t.pz[i], t.py[i],-t.px[i])) # (px,py,pz) position of point
-        tx,ty,tz = self.t # syntactic-sugars
-        nx,ny,nz = self.n # syntactic-sugars
-        self.k = np.array((ty*nz-tz*ny, tz*nx-tx*nz, tx*ny-ty*nx))  ## k = t x n
+        t,i      =  trajectory,point_idx # syntactic-sugars
+        self.s   =  t.s[i]                # s position
+        self.p   =  np.array((t.rx[i], t.ry[i], t.rz[i])) # (rx,ry,rz) position of point
+        self.t   =  np.array((t.px[i], t.py[i], t.pz[i])) # tangential versor
+        self.t   /= math.sqrt(np.sum(self.t**2))          # renormalization
+        self.n   =  np.array((t.pz[i], t.py[i],-t.px[i])) # normal versor
+        tx,ty,tz =  self.t # syntactic-sugars
+        nx,ny,nz =  self.n # syntactic-sugars
+        self.k   =  np.array((ty*nz-tz*ny, tz*nx-tx*nz, tx*ny-ty*nx))  # skew versor k = t x n
         
     def get_transverse_line(self, grid):
         
@@ -42,15 +45,69 @@ class Trajectory:
                         s_step = None,
                         min_rz = None,
                         force_midplane = False):
-        """ Numerical integration (1st-order simple RK lagorithm) of the beam trajectory"""
-        
-        
+        """ Calculates trajectory of charged particle in an arbitrary magnetic field
+ 
+            Algorithm              1st-order Runge-Kutta with constant step 
+            Independent variable   s: trajectory arc-length
+            Dependent variables    rx,ry,rz: rectangular coordinates [mm]
+                                   px,py,pz: p0-normalized momenta [adimensional]
+                                       (px**2+py**2+pz**2 == 1) 
+                                       horizontal deflection angle is atan(px/pz) [rad]
+                                       vertical deflection angle is atan(py/pz) [rad]
+
+            Input                  force_midplane: whether to force trajectory to midplane
+                                       (usefull, for exmaple, for dipoles)
+                                   init_rx,init_ry,init_rz: initial rectangular position
+                                       of the particle.
+                                   init_px,init_py,init_pz: initial normalized momenta
+                                       of the particle. (px,py,pz)=(0.0,0.0,1.0), for example,
+                                       represents an initial velocity along the longitudinal 
+                                       direction z.
+                                   s_length,s_nrpts,s_step,min_rz: parameters that control
+                                       range of trajectory integrations. Any of subset of these 
+                                       parameters may be used, so long as they are consistent.
+                                       s_nrpts:  number of points in trajectory
+                                       s_step:   fixed step size in longitudinal coordinates
+                                       s_length: trajectory length 
+                                       min_rz:   integrates trajectory until while rz < min_rz
+                                                 (s_step has be to be set as well)
+
+	    Output                 s: vector with longitudinal position of points on trajectory
+                                   rx,ry,rz: vector with rectangular coordinates of points on trajectory
+                                   px,py,pz: vector with normalized momenta of points on trajectory
+                                   bx,by,bz: vector with magnetic field at the points on trajectory
+	"""
+       
+        # processes input parameters
+ 
+        if min_rz is not None:
+            if s_step is None:
+                raise TrackException('s_step has to be set for this opion of trajectory integration')
+            if s_length is not None or s_nrpts is not None:
+                raise TrackException('Neither s_length nor s_nrpts parameters should be set for this option of trajectory integration')
+            s_length = 0.0
+            s_nrpts  = 0
+        else:
+            if s_step is None:
+                if s_length is None or s_nrpts is None:
+                    raise TrackException('Both s_length and s_nrpts need to be set for this option of trajectory integration')
+                s_step = s_length / (s_nrpts - 1.0)
+            else:
+                if s_length is None:
+                    if s_nrpts is None:
+                        raise TrackException('s_nrpts has to be set when s_step is given and s_length is not set')
+                    else:
+                        s_length = s_step * (s_nrpts + 1.0)   
+                else:
+                    s_nrpts = 1 + int(s_length / s_step)
         if s_length is None:
             s_length = 0
             s_nrpts = 0
         else:
             s_step = s_length / (s_nrpts - 1.0)
-                
+
+        # inits auxilliary data structures                
+
         self.s_step = s_step
         self.force_midplane = force_midplane
         self.init_rx, self.init_ry, self.init_rz = init_rx, init_ry, init_rz
@@ -59,13 +116,13 @@ class Trajectory:
         self.rx, self.ry, self.rz = [], [], []
         self.px, self.py, self.pz = [], [], []
         self.bx, self.by, self.bz = [], [], []
-        
         alpha = 1.0/(1000.0*self.beam.brho)/self.beam.beta
     
+        # RK integratior proper
+        
         s, i = 0.0, 0    
         rx,ry,rz = init_rx, init_ry, init_rz
         px,py,pz = init_px, init_py, init_pz
-        
         while True:
            
             # forces midplane, if the case
@@ -75,7 +132,7 @@ class Trajectory:
             # calcs magnetic field on current position
             try:
                 bx,by,bz = self.fieldmap.interpolate(rx,ry,rz)
-            except fieldmap.OutOfRangeRy:
+            except fieldmap.OutOfRange:
                     bx,by,bz = 0.0,0.0,0.0
                     print('extrapolation at ' + str((rx,ry,rz)))
             
@@ -103,13 +160,13 @@ class Trajectory:
             i  += 1 
             
             # tests if end of integration is reached
-            if not s_nrpts:
+            if min_rz is not None:
+                # integration is being done until <min_rz is reached>
                 if rz > min_rz:
-                    # is integrating until min_rz is reached
                     break
             else:
+                # integration is being done until <s_nrpts is reached>
                 if i == s_nrpts:
-                    # is integrating until s_nrpts is reached
                     break
             
         # converts python native lists into numpy arrays
@@ -118,18 +175,20 @@ class Trajectory:
         self.rx, self.ry, self.rz = np.array(self.rx), np.array(self.ry), np.array(self.rz)   
         self.px, self.py, self.pz = np.array(self.px), np.array(self.py), np.array(self.pz)
         self.bx, self.by, self.bz = np.array(self.bx), np.array(self.by), np.array(self.bz)
-        
-        # calcs deflection angle along trajectory
-        self.theta_x = np.arctan(self.px/self.pz)
+       
+        self.error_estimate = math.sqrt(self.px**2 + self.py**2 + self.pz**2 - 1.0) 
                          
     def __str__(self):
         
         bx,by,bz = [abs(x) for x in self.bx], [abs(x) for x in self.by], [abs(x) for x in self.bz]
         max_bx, max_by, max_bz = max(bx), max(by), max(bz)
         s_max_bx, s_max_by, s_max_bz = self.s[bx.index(max_bx)], self.s[by.index(max_by)], self.s[bz.index(max_bz)] 
-        
+        theta_x = math.atan(self.px[-1]/self.pz[-1])
+        theta_y = math.atan(self.py[-1]/self.pz[-1])
+ 
         r  = ''
-        r += '{0:<35s} {1} deg.'.format('deflection_angle:', abs((180.0/math.pi)*self.theta_x[-1]))
+        r += '{0:<35s} {1} deg.'.format('horizontal_deflection_angle:', theta_x)
+        r += '\n{0:<35s} {1} deg.'.format('vertical_deflection_angle:', theta_y) 
         r += '\n{0:<35s} {1} mm'.format('trajectory_length:', self.s[-1]-self.s[0])
         r += '\n{0:<35s} {1}'.format('trajectory_nrpts:', len(self.s))
         r += '\n{0:<35s} {1} mm'.format('trajectory_s_step:', self.s_step) 
@@ -185,7 +244,7 @@ class Multipoles:
             
             - is_ref_trajectory: True or False 
             
-            if trajectory is a reference trajectory than, for the dipolar
+            if trajectory is a reference trajectory then, for the dipolar
             term, the algorithm fits only the difference between the fieldmap
             and the field on the ref. trajectory (dipolar error fit)
             
