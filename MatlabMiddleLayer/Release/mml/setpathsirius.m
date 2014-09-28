@@ -9,10 +9,6 @@ function [MachineName, SubMachineName, LinkFlag, MMLROOT] = setpathsirius(vararg
 %  Written by Greg Portmann
 %             Ximenes.
 
-Machine  = '';
-SubMachine = 'StorageRing';
-LinkFlag = 'sirius_link';
-
 % Input parsing
 if nargin>0
     Machine = varargin{1};
@@ -24,13 +20,13 @@ if nargin>2,
     LinkFlag = varargin{3}; 
 end;
 
-if strcmpi(SubMachine, 'StorageRing')
+if ~isempty(strfind(SubMachine, 'SI_'))
     MachineType = 'StorageRing';
-elseif strcmpi(SubMachine, 'Booster')
+elseif ~isempty(strfind(SubMachine, 'BO_'))
     MachineType = 'Booster';
-elseif ~isempty(strfind(SubMachine, 'LTBA'))
+elseif ~isempty(strfind(SubMachine, 'TB_'))
     MachineType = 'TransportLine';
-elseif ~isempty(strfind(SubMachine, 'LTLB'))
+elseif ~isempty(strfind(SubMachine, 'TS_'))
     MachineType = 'TransportLine';
 end
 
