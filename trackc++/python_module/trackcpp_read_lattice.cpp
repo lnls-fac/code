@@ -1,4 +1,4 @@
-#include "trackc++.h"
+#include "trackcpp.h"
 
 // Exception object
 extern PyObject *TrackcppError;

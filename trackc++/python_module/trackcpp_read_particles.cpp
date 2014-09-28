@@ -1,4 +1,4 @@
-#include "trackc++.h"
+#include "trackcpp.h"
 
 int trackcpp_read_particles(PyObject *py_particles, std::vector<Pos<double> >& pos) {
 

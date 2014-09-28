@@ -4,14 +4,14 @@ from distutils.core import setup, Extension
 
 module1 = Extension('trackc++', 
             sources = [ 
-            'trackc++.cpp',
+            'trackcpp.cpp',
             # module aux. functions
-            'trackc++_read_particles.cpp',
-            'trackc++_read_lattice.cpp',
+            'trackcpp_read_particles.cpp',
+            'trackcpp_read_lattice.cpp',
             # module functionalities
-            'trackc++_linepass.cpp',
-            'trackc++_ringpass.cpp',
-            'trackc++_findm66.cpp',
+            'trackcpp_linepass.cpp',
+            'trackcpp_ringpass.cpp',
+            'trackcpp_findm66.cpp',
             # trackc++
             '../elements.cpp',
             '../lattice.cpp',
