@@ -1,7 +1,7 @@
 if strcmpi(caso,'default')
     
-% for?as baseadas no arquivo LTBA_V300.opa com extra??o do booster
-% alterada para ates do QF e utiliza dipolos do booster [2014-09-25]
+% forcas baseadas no arquivo LTBA_V300.opa com extracao do booster
+% alterada para antes do QF. Utiliza dipolos do booster [2014-09-25]
     
     qa1_strength      = 0.843500;
     qa2_strength      = 1.009718;
