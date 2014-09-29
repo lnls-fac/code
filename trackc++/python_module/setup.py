@@ -2,7 +2,7 @@
 
 from distutils.core import setup, Extension
 
-module1 = Extension('trackcpp', 
+module1 = Extension('trackc++', 
             sources = [ 
             'trackcpp.cpp',
             # module aux. functions
@@ -13,16 +13,16 @@ module1 = Extension('trackcpp',
             'trackcpp_ringpass.cpp',
             'trackcpp_findm66.cpp',
             # trackc++
-            '../../../trackc++/elements.cpp',
-            '../../../trackc++/lattice.cpp',
-            '../../../trackc++/passmethods.cpp',
-            '../../../trackc++/tracking.cpp',
+            '../elements.cpp',
+            '../lattice.cpp',
+            '../passmethods.cpp',
+            '../tracking.cpp',
             ],
             language = "c++",
-            #extra_compile_args = ["-std=c++11"],
+            extra_compile_args = ["-std=c++11"],
            )
 
-setup (name        = 'trackcpp',
+setup (name        = 'trackc++',
        version     = '1.0',
        description = 'This a module for efficiently tracking charged particles in transport lines and in storage rings',
        ext_modules = [module1])

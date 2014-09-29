@@ -436,6 +436,9 @@ class ParameterDefinitions(object):
     
     '''Booster parameters'''
     
+    bo_hardedge_length_of_short_quadrupoles = 0.2 # [m]
+    bo_hardedge_length_of_long_quadrupoles  = 0.2 # [m]
+    
     bo_beam_current          = 2.0 # [mA]
     bo_lattice_version       = '' 
     bo_circumference         = 496.8 # [m]
@@ -453,8 +456,8 @@ class ParameterDefinitions(object):
     bo_number_of_vertical_dipole_correctors = 50
 
     bo_hardedge_length_of_dipoles =  1.152 # [m]
-    bo_hardedge_length_of_QF_quadrupoles = 0.3 # [m]
-    bo_hardedge_length_of_QD_quadrupoles = 0.2 # [m]
+    bo_hardedge_length_of_QF_quadrupoles = bo_hardedge_length_of_long_quadrupoles # [m]
+    bo_hardedge_length_of_QD_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
     bo_hardedge_length_of_SF_sextupoles = 0.2 # [m]
     bo_hardedge_length_of_SD_sextupoles = 0.2 # [m]
 
@@ -742,20 +745,20 @@ class ParameterDefinitions(object):
     ts_number_of_quadrupoles = 8 
     ts_maximum_quadrupole_gradient = 25.0 # [T/m]
 
-    ts_arc_length_of_dipoles = 1.152 # [m]
-    ts_arc_length_of_extraction_septum = 0.85 # [m]
-    ts_arc_length_of_thick_injection_septum = 1.100 # [m]
-    ts_arc_length_of_thin_injection_septum = 1.400 # [m]
+    ts_hardedge_length_of_dipoles = bo_hardedge_length_of_dipoles # [m]
+    ts_hardedge_length_of_extraction_septum = 0.85 # [m]
+    ts_hardedge_length_of_thick_injection_septum = 1.100 # [m]
+    ts_hardedge_length_of_thin_injection_septum = 1.400 # [m]
 
-    ts_dipole_deflection_angle = 7.20 # [°]
+    ts_dipole_deflection_angle = bo_dipole_deflection_angle # [°]
     ts_extraction_septum_deflection_angle = -3.60 # [°]
     ts_thick_injection_septum_deflection_angle = 6.2 # [°]
     ts_thin_injection_septum_deflection_angle = 4.73 # [°]
 
-    ts_dipole_bending_radius = ts_arc_length_of_dipoles / math.radians(ts_dipole_deflection_angle)
-    ts_extraction_septum_bending_radius = ts_arc_length_of_extraction_septum / math.radians(ts_extraction_septum_deflection_angle)
-    ts_thick_injection_septum_bending_radius = ts_arc_length_of_thick_injection_septum / math.radians(ts_thick_injection_septum_deflection_angle)
-    ts_thin_injection_septum_bending_radius = ts_arc_length_of_thin_injection_septum / math.radians(ts_thin_injection_septum_deflection_angle)
+    ts_dipole_bending_radius = ts_hardedge_length_of_dipoles / math.radians(ts_dipole_deflection_angle)
+    ts_extraction_septum_bending_radius = ts_hardedge_length_of_extraction_septum / math.radians(ts_extraction_septum_deflection_angle)
+    ts_thick_injection_septum_bending_radius = ts_hardedge_length_of_thick_injection_septum / math.radians(ts_thick_injection_septum_deflection_angle)
+    ts_thin_injection_septum_bending_radius = ts_hardedge_length_of_thin_injection_septum / math.radians(ts_thin_injection_septum_deflection_angle)
 
     ts_dipole_magnetic_field = ts_beam_magnetic_rigidity / ts_dipole_bending_radius
     ts_extraction_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_extraction_septum_bending_radius
@@ -772,15 +775,14 @@ class ParameterDefinitions(object):
     ts_number_of_thick_injection_septa = 1
     ts_number_of_thin_injection_septa = 1
 
-    ts_hardedge_length_of_QA1_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QA2_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QB1_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QB2_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QC1_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QC2_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QC3_quadrupoles = 0.2 # [m]
-    ts_hardedge_length_of_QC4_quadrupoles = 0.2 # [m]
-
+    ts_hardedge_length_of_QA1_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QA2_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QB1_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QB2_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QC1_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QC2_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QC3_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    ts_hardedge_length_of_QC4_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
 
     ts_QA1_quadrupole_strength =  0.85 # [1/m^2]
     ts_QA2_quadrupole_strength =  1.01 # [1/m^2]

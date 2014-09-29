@@ -14,8 +14,8 @@ extern std::string TrackcppErrorMsg;
 PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 
-	PyObject *py_lattice, *py_pos, *py_trajectory, *py_element_offset;
-	if (!PyArg_ParseTuple(args, "OOOO", &py_lattice, &py_pos, &py_trajectory, &py_element_offset))
+	PyObject *py_accelerator, *py_lattice, *py_pos, *py_trajectory, *py_element_offset;
+	if (!PyArg_ParseTuple(args, "OOOOO", &py_accelerator, &py_lattice, &py_pos, &py_trajectory, &py_element_offset))
 		return NULL;
 
 	bool trajectory     = PyObject_IsTrue(py_trajectory);
@@ -35,6 +35,9 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 	//Py_RETURN_NONE;
 
 
+	// reads pyring accelrator into trackc++
+	Accelerator accelerator;
+
 	// reads pyring lattice into trackc++ lattice
 	std::vector<Element> lattice;
 	if (trackcpp_read_lattice(py_lattice, lattice)) {
@@ -47,7 +50,7 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
 	// Does tracking
 	std::vector<Pos<double> > pos;
-	Status::type ret = linepass (lattice, orig_pos, pos, &element_offset, trajectory);
+	Status::type ret = track_linepass (accelerator, lattice, orig_pos, pos, &element_offset, trajectory);
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
 			std::string pmname = pm_dict[lattice[element_offset].pass_method];

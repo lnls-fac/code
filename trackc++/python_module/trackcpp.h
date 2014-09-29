@@ -8,12 +8,12 @@
 
 #include "Python.h"
 
-#include "../../../trackc++/auxiliary.h"
-#include "../../../trackc++/pos.h"
-#include "../../../trackc++/elements.h"
-#include "../../../trackc++/passmethods.h"
-#include "../../../trackc++/lattice.h"
-#include "../../../trackc++/tracking.h"
+#include "../auxiliary.h"
+#include "../pos.h"
+#include "../elements.h"
+#include "../passmethods.h"
+#include "../lattice.h"
+#include "../tracking.h"
 
 // auxiliary functions
 int trackcpp_read_particles (PyObject *py_particles, std::vector<Pos<double> >&  pos);
