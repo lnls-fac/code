@@ -16,7 +16,7 @@ for i=length(varargin):-1:1
         if any(strcmpi(varargin{i}, {'SelectServer'})), SelectServer = true; end;
         if any(strcmpi(varargin{i}, {'NoServer'})), NoServer = true; end;
         if any(strcmpi(varargin{i}, {'Disconnect'})), Disconnect = true; end;
-        if ~isempty(strfind(varargin{i}, '_V')), default_version = varargin{i}; end;
+        if ~isempty(strfind(varargin{i}, 'V')), default_version = varargin{i}; end;
     end
 end
 

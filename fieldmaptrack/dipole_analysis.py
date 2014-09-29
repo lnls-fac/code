@@ -1,8 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import fieldmaptrack.fieldmap as fieldmap
-import fieldmaptrack.beam as beam
-import fieldmaptrack.track as track
+import fieldmaptrack
 
 #from multiprocessing import Process
 
@@ -22,6 +20,7 @@ class Config:
         self.traj_rk_min_rz = None
         self.traj_center_sagitta_flag = True
         self.traj_force_midplane_flag = True
+        self.multipoles_r0 = None
                                   
 def raw_fieldmap_analysis(config):
         
@@ -30,7 +29,7 @@ def raw_fieldmap_analysis(config):
 
     # loads fieldmap from file
     # ========================
-    config.fmap = fieldmap.FieldMap(config.fmap_filename)
+    config.fmap = fieldmaptrack.FieldMap(config.fmap_filename)
     
     # plots basic data
     # ================
@@ -91,7 +90,7 @@ def calc_sagitta(half_dipole_length, trajectory):
               
 def trajectory_analysis(config):
     
-    config.beam = beam.Beam(energy = config.beam_energy, current = config.beam_current)
+    config.beam = fieldmaptrack.Beam(energy = config.beam_energy, current = config.beam_current)
     
     # calcs reference trajectory
     # ==========================
@@ -99,7 +98,7 @@ def trajectory_analysis(config):
     # until its sagitta is centered in the good field region. This is
     # accomplished by changing the initial radial position of the trajectory
     # at the longitudinal center of the dipole.
-    config.traj = track.Trajectory(beam=config.beam, fieldmap=config.fmap)
+    config.traj = fieldmaptrack.Trajectory(beam=config.beam, fieldmap=config.fmap)
     half_dipole_length = config.fmap.length / 2.0
     init_rx, init_ry, init_rz = 0.0, 0.0, 0.0
     init_px, init_py, init_pz = 0.0, 0.0, 1.0
@@ -140,11 +139,12 @@ def multipoles_analysis(config):
     
     # calcs multipoles around reference trajectory
     # ============================================
-    config.multipoles = track.Multipoles(trajectory=config.traj, 
+    config.multipoles = fieldmaptrack.Multipoles(trajectory=config.traj, 
                                          perpendicular_grid=config.multipoles_perpendicular_grid,
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles()
     config.multipoles.calc_multipoles_integrals()
+    config.multipoles.calc_multipoles_integrals_normalized(config.multipoles.polynom_b, 0, r0 = config.multipoles_r0)
     
     # prints basic information on multipoles
     # ======================================
