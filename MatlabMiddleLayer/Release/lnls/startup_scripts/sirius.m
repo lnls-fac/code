@@ -9,7 +9,7 @@ function sirius_new(varargin)
 
 Disconnect = false;
 
-default_version = 'V03';
+default_version = 'SI_V03';
 
 for i=length(varargin):-1:1
     if ischar(varargin{i})
@@ -42,7 +42,7 @@ if ~isempty(strfind(path, fins))
     rmpath(fins);
 end
 
-setpathsirius('SIRIUS', ['SI_' default_version], 'sirius_link');
+setpathsirius('SIRIUS', default_version, 'sirius_link');
 cd(cdir);
 clear cdir;
 

@@ -25,9 +25,10 @@ IniCond.ElemIndex = 1;
 IniCond.Spos = 0;
 IniCond.ClosedOrbit = [0,0,0,0]';
 IniCond.mu = [0,0];
-IniCond.Dispersion = [0.3448,-0.0692,0,0]';
-IniCond.beta = [20.4713, 6.0196];
-IniCond.alpha= [4.0892,-1.1444];
+IniCond.Dispersion = [0.191; 0.0689; 0; 0];
+IniCond.beta = [6.57, 15.30];
+IniCond.alpha= [-2.155, 2.22];
+
 %%% Quadrupole strengths:
 set_parameters_ltba;
 
@@ -44,19 +45,20 @@ quad_pass_method = 'StrMPoleSymplectic4Pass';
 % --- drift spaces ---
 l20      = drift('l20', 0.20, 'DriftPass');
 l25      = drift('l25', 0.25, 'DriftPass');
+l50      = drift('l50', 0.50, 'DriftPass');
 
-la1p     = drift('la1p', 1.08000, 'DriftPass');
-la2p     = drift('la2p', 2.37111, 'DriftPass');
+la1p     = drift('la1p', 0.58000, 'DriftPass');
+la2p     = drift('la2p', 0.37111, 'DriftPass');
 la3      = drift('la3' , 0.49000, 'DriftPass');
 lb1      = drift('lb1' , 0.92000, 'DriftPass');
-lb2p     = drift('lb2p', 5.46459, 'DriftPass');
+lb2p     = drift('lb2p', 0.46459, 'DriftPass');
 lb3      = drift('lb3' , 0.70000, 'DriftPass');
 
-lc1p     = drift('lc1p', 2.08000, 'DriftPass');
-lc2p     = drift('lc2p', 0.96417, 'DriftPass');
+lc1p     = drift('lc1p', 0.58000, 'DriftPass');
+lc2p     = drift('lc2p', 0.46417, 'DriftPass');
 lc3      = drift('lc3' , 0.20000, 'DriftPass');
 lc4      = drift('lc4' , 0.74000, 'DriftPass');
-lc5p     = drift('lc5p', 1.82000, 'DriftPass');
+lc5p     = drift('lc5p', 0.32000, 'DriftPass');
 
 % --- markers ---
 
@@ -124,7 +126,7 @@ h1      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang,...
            0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);        
 h2      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang, 1*dip_ang/2,...
            0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
-septgr  = [h1 msg ch h2];
+septgr  = [h1 msg h2];
 
 % -- sep fino --
 dip_nam =  'sef';
@@ -140,13 +142,13 @@ septfi  = [h1 msf ch h2];
 
            
 % --- lines ---
-la1   = [la1p, cv, l20];
-la2   = [la2p, bpm, l20, ch, l25, cv, l20];
-lb2   = [lb2p, bpm, l20, cv, l25, ch, l20];
-lc1   = [lc1p, bpm, l20, cv, l20];
-lc2   = [l20, ch, lc2p];
-lc5   = [lc5p, bpm, l20, cv, l25];
-linea = [septex, l20, septex, la1, qa1, la2, qa2, la3];
+la1   = [l50, la1p, cv, l20];
+la2   = [l50, l50, l50, l50, la2p, bpm, l20, ch, l25, cv, l20];
+lb2   = [l50, l50, l50, l50, l50, l50, l50, l50, l50, l50, lb2p, bpm, l20, cv, l25, ch, l20];
+lc1   = [l50, l50, l50, lc1p, bpm, l20, cv, l20];
+lc2   = [l20, ch, l50, lc2p];
+lc5   = [l50, l50, l50, lc5p, bpm, l20, cv, l25];
+linea = [septex, ch, l20, septex, la1, qa1, la2, qa2, la3];
 lineb = [bp, lb1, qb1, lb2, qb2, lb3];
 linec = [bp, lc1, qc1, lc2, qc2, lc3, qc3, lc4, qc4, lc5];
 lined = [septgr, l20, septfi, bpm];
