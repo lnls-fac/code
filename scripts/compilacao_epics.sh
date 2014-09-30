@@ -94,6 +94,7 @@ zlib1g-dev libgd2-xpm-dev libxaw7-dev liblapack-dev libmotif-dev libgsl0-dev \
 # as bibliotecas adicionais de sdds e os que vêm com os códigos da oag não são compatí
 sudo apt-get remove tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev
 sudo ln -s /usr/bin/tclsh{8.5,}
+sudo ln -s /usr/bin/wish{8.5,}
 
 # tambem eh necessario ter instalados o g++ e o gfortran
 

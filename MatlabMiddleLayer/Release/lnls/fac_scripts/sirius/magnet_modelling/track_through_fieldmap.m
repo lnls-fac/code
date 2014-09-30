@@ -16,9 +16,6 @@ s_length = ref_traj.s(end) + 0.1; % 100 mm should be enough
 pts1 = zeros(size(pts0));
 for i=1:size(pts0,1)
     pos = sf_in.r + sf_in.n * pts0(i,1);
-    if pos(1) == 0
-        disp('ok');
-    end
     beta_x = sf_in.t(1) + pts0(i,2);
     beta_z = sqrt(1-beta_x^2); % beta = constant
     p = [beta_x; 0; beta_z];

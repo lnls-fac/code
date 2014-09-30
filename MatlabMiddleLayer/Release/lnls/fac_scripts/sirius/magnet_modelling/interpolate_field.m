@@ -30,13 +30,12 @@ for i=1:length(fmaps)
     % checks limits of fieldmap
     data  = fmaps{fmap.data_index}.data;
     rl = transf_coord_from_global_to_local(r, Ry, T); % transforma posicao r do sistema fixo para o sistema do mapa em particular
-    if ((rl(3) < min(data.z)) || ...
-            (rl(3) > max(data.z)) || ...
-            (rl(1) < min(data.x)) || ...
-            (rl(1) > max(data.x)))
+    if (rl(3) < min(data.z)) || (rl(3) > max(data.z))
+        continue; % ponto fora do mapa: considera campo nulo.
+    end
+    if (rl(1) < min(data.x)) || (rl(1) > max(data.x))
         fprintf('interpolating out of fieldmap: local r = (%f, %f, %f)\n', rl);
         continue; % ponto fora do mapa: considera campo nulo.
- 
     end
     
     % interpola campo (no sistema de coord. local do mapa

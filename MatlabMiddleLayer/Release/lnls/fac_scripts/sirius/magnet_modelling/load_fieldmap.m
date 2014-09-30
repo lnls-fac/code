@@ -15,8 +15,7 @@ fmaps{1}.Ry       = [1 0 0; 0 1 0; 0 0 1];
 setappdata(0, 'FIELD_MAPS', fmaps);
 
 % for the case of combined correctors
-invert = 0;
-if exist('type','var') && strcmpi(type, 'HCM')
+if exist('type','var') && any(strcmpi(type, {'VCM','HCM'}))
     modify_fieldmap_for_correctors(type);
     fmaps = getappdata(0, 'FIELD_MAPS');
 elseif exist('type','var') && strcmpi(type, 'invert')
