@@ -1,7 +1,7 @@
 import numpy as np    
 import mathphys
 import fieldmaptrack
-import mathphys.units as units
+import mathphys
     
 class Multipoles:
 
@@ -110,15 +110,16 @@ class Multipoles:
     
     def calc_multipoles_integrals_normalized(self, main_polynom, main_monomial, r0):
         
-        r0 = r0 * units.mm_2_meter
-        main_idx = list(fitting_monomials[main_order]).index(main_monomial)
+        self.r0 = r0
+        r0 = self.r0 * mathphys.units.mm_2_meter
+        main_idx = list(self.fitting_monomials).index(main_monomial)
         main_multipole = main_polynom[main_idx] * r0 ** main_monomial
-        self.polynom_a_integral_normalized = np.array(self.polynom_a_integral.shape)
-        self.polynom_b_integral_normalized = np.array(self.polynom_b_integral.shape)
-        for i in range(len(fitting_monomials)):
+        self.polynom_a_integral_normalized = np.zeros(self.polynom_a_integral.shape)
+        self.polynom_b_integral_normalized = np.zeros(self.polynom_b_integral.shape)
+        for i in range(len(self.fitting_monomials)):
             n = self.fitting_monomials[i]
-            self.polynom_a_integral[i] = self.polynom_a_integral * (r0 ** n) / main_multipole
-            self.polynom_b_integral[i] = self.polynom_b_integral * (r0 ** n) / main_multipole
+            self.polynom_a_integral_normalized[i] = self.polynom_a_integral[i] * (r0 ** n) / main_multipole
+            self.polynom_b_integral_normalized[i] = self.polynom_b_integral[i] * (r0 ** n) / main_multipole
             
         
         
@@ -130,7 +131,8 @@ class Multipoles:
         monomials = self.fitting_monomials
         
         r = ''
-        r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in [{1:+f},{2:+f}] mm'.format(nrpts, grid_min, grid_max)) 
+        r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in [{1:+f},{2:+f}] mm'.format(nrpts, grid_min, grid_max))
+        r += '{0:<35s} {1} mm'.format('r0_for_relative_multipoles', self.r0) 
         r += '\n{0:<35s} {1:^17s} {2:^17s} {5:^17s} | {3:^17s} {4:^17s} {6:^17s}'.format('<multipole_order n>', 'MaxAbs_Nn_[T/m^n]', 'Integ_Nn[T.m/m^n]', 'MaxAbs_Sn_[T/m^n]', 'Integ_Sn[T.m/m^n]', 'Nn/N0(@r0)_Integ', 'Sn/S0(@r0)_Integ')
         for i in range(len(monomials)):
             n = monomials[i]

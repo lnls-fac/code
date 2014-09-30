@@ -144,7 +144,7 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles()
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_normalized(config.multipoles.polynom_b, 0, r0 = config.multipoles_r0)
+    config.multipoles.calc_multipoles_integrals_normalized(config.multipoles.polynom_b_integral, 0, r0 = config.multipoles_r0)
     
     # prints basic information on multipoles
     # ======================================

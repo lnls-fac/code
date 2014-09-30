@@ -8,6 +8,7 @@ module1 = Extension('trackc++',
             # module aux. functions
             'trackcpp_read_particles.cpp',
             'trackcpp_read_lattice.cpp',
+            'trackcpp_read_accelerator.cpp',
             # module functionalities
             'trackcpp_linepass.cpp',
             'trackcpp_ringpass.cpp',

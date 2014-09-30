@@ -2,17 +2,28 @@ import mathphysicslibs.functions as mfuncs
 import mathphysicslibs.constants as consts
 
 ''' These passmethod indices have to be consistent with corresponding indices from trackc++ passmethods '''
-identity_pass                  = 0
-drift_pass                     = 1
-str_mpole_symplectic4_pass     = 2
-bnd_mpole_symplectic4_pass     = 3
-corrector_pass                 = 4
-cavity_pass                    = 5
-thinquad_pass                  = 6
-thinsext_pass                  = 7
-str_mpole_symplectic4_rad_pass = 8
-bnd_mpole_symplectic4_rad_pass = 9
+pm_identity_pass              = 0
+pm_drift_pass                 = 1
+pm_str_mpole_symplectic4_pass = 2
+pm_bnd_mpole_symplectic4_pass = 3
+pm_corrector_pass             = 4
+pm_cavity_pass                = 5
+pm_thinquad_pass              = 6
+pm_thinsext_pass              = 7
+pm_kicktable_pass             = 8
 
+pm_dict = { pm_identity_pass              : ('identity_pass',              PassMethods.identity_pass) ,
+            pm_drift_pass                 : ('drift_pass',                 PassMethods.drift_pass),
+            pm_str_mpole_symplectic4_pass : ('str_mpole_symplectic4_pass', PassMethods.str_mpole_symplectic4_pass),
+            pm_bnd_mpole_symplectic4_pass : ('bnd_mpole_symplectic4_pass', PassMethods.bnd_mpole_symplectic4_pass),
+            pm_corrector_pass             : ('corrector_pass',             PassMethods.corrector_pass),
+            pm_cavity_pass                : ('cavity_pass',                PassMethods.cavity_pass),
+            pm_thinquad_pass              : ('thinquad_pass',              PassMethods.thinquad_pass),
+            pm_thinsext_pass              : ('thinsext_pass',              PassMethods.thinsext_pass),
+            pm_kicktable_pass             : ('thinsext_pass',              PassMethods.thinsext_pass),
+       }
+  
+  
 class PassMethods:
 
     _DRIFT1 =  6.756035959798286638e-01
@@ -259,14 +270,4 @@ class PassMethods:
     def thinsext_pass(pos, element):
         raise Exception('pass method not implemented!')
         
-  
-pm_dict = { identity_pass              : ('identity_pass',              PassMethods.identity_pass) ,
-            drift_pass                 : ('drift_pass',                 PassMethods.drift_pass),
-            str_mpole_symplectic4_pass : ('str_mpole_symplectic4_pass', PassMethods.str_mpole_symplectic4_pass),
-            bnd_mpole_symplectic4_pass : ('bnd_mpole_symplectic4_pass', PassMethods.bnd_mpole_symplectic4_pass),
-            corrector_pass             : ('corrector_pass',             PassMethods.corrector_pass),
-            cavity_pass                : ('cavity_pass',                PassMethods.cavity_pass),
-            thinquad_pass              : ('thinquad_pass',              PassMethods.thinquad_pass),
-            thinsext_pass              : ('thinsext_pass',              PassMethods.thinsext_pass),
-       }
     
