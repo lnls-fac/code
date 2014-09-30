@@ -41,6 +41,12 @@ fins = fullfile(matlabroot, 'toolbox', 'finance', 'finsupport');
 if ~isempty(strfind(path, fins))
     rmpath(fins);
 end
+mmlpaths = textscan(path(), '%s', 'delimiter', pathsep); mmlpaths = mmlpaths{1};
+for i=1:length(mmlpaths)
+    if ~isempty(strfind(mmlpaths{i},'MatlabMiddleLayer')) && isempty(strfind(mmlpaths{i}, 'startup_scripts'))
+        rmpath(mmlpaths{i})
+    end
+end
 
 setpathsirius('SIRIUS', default_version, 'sirius_link');
 cd(cdir);
@@ -49,4 +55,3 @@ clear cdir;
 addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','sirius','lattice_errors')));
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','tracy3'), '-begin');
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','trackcpp'), '-begin');
-addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','machine','LTBA_V200')));
