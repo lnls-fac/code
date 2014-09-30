@@ -13,41 +13,60 @@ extern std::string TrackcppErrorMsg;
 
 PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 
-
-	PyObject *py_lattice, *py_pos, *py_trajectory, *py_element_offset;
-	if (!PyArg_ParseTuple(args, "OOOO", &py_lattice, &py_pos, &py_trajectory, &py_element_offset))
+	PyObject *py_accelerator, *py_pos, *py_trajectory, *py_element_offset, *py_lost_plane;
+	if (!PyArg_ParseTuple(args, "OOOOO", &py_accelerator, &py_pos, &py_element_offset, &py_lost_plane, &py_trajectory))
 		return NULL;
 
-	bool trajectory     = PyObject_IsTrue(py_trajectory);
-	int  element_offset = PyInt_AS_LONG(py_element_offset) ;
+	bool trajectory        = PyObject_IsTrue(py_trajectory);
+	int  element_offset    = PyInt_AS_LONG(py_element_offset);
+	Plane::type lost_plane = (Plane::type) PyInt_AS_LONG(py_lost_plane);
 	//std::cout << "element_offset: " << element_offset << std::endl;
 
-	Py_INCREF(py_lattice);
+	Py_INCREF(py_accelerator);
 	Py_INCREF(py_pos);
 
 	// reads pyring particles coordinates in phase space into trackc++ vector
 	std::vector<Pos<double> > orig_pos;
 	if (trackcpp_read_particles(py_pos, orig_pos)) {
-		Py_DECREF(py_lattice);
+		Py_DECREF(py_accelerator);
 		Py_DECREF(py_pos);
 		return NULL;
 	}
 	//Py_RETURN_NONE;
 
 
-	// reads pyring lattice into trackc++ lattice
-	std::vector<Element> lattice;
-	if (trackcpp_read_lattice(py_lattice, lattice)) {
-		Py_DECREF(py_lattice);
+	// reads pyring accelerator into trackc++
+	Accelerator accelerator;
+	if (trackcpp_read_accelerator(py_accelerator, accelerator)) {
+		Py_DECREF(py_accelerator);
 		Py_DECREF(py_pos);
 		return NULL;
 	}
-	//Py_RETURN_NONE;
+		//Py_RETURN_NONE;
 
+//	// reads pyring lattice into trackc++ lattice
+//	std::vector<Element> lattice;
+//	if (trackcpp_read_lattice(py_lattice, lattice)) {
+//		Py_DECREF(py_lattice);
+//		Py_DECREF(py_pos);
+//		return NULL;
+//	}
+//	//Py_RETURN_NONE;
+
+//	template <typename T>
+//	Status::type track_linepass (
+//			const Accelerator& accelerator,
+//			Pos<T>& orig_pos,              // initial electron coordinates
+//			std::vector<Pos<T> >& pos,     // vector with electron coordinates from tracking at every element.
+//			unsigned int& element_offset,  // index of starting element for tracking
+//			Plane::type& lost_plane,       // return plane in which particle was lost, if the case.
+//			bool trajectory) {
+//
+//	}
 
 	// Does tracking
 	std::vector<Pos<double> > pos;
-	Status::type ret = linepass (lattice, orig_pos, pos, &element_offset, trajectory);
+	Status::type ret = track_linepass (accelerator, orig_pos, pos, &element_offset, trajectory);
 	if (ret != Status::success) {
 		if (ret == Status::passmethod_not_defined) {
 			std::string pmname = pm_dict[lattice[element_offset].pass_method];
@@ -60,12 +79,12 @@ PyObject*  trackcpp_linepass(PyObject *self, PyObject *args) {
 			TrackcppErrorMsg = "Passmethod '" + pmname + "' in element #" + strnumber + " not implemented";
 		}
 		PyErr_SetString(TrackcppError, TrackcppErrorMsg.c_str());
-		Py_DECREF(py_lattice);
+		Py_DECREF(py_accelerator);
 		Py_DECREF(py_pos);
 		return NULL;
 	}
 
-	Py_DECREF(py_lattice);
+	Py_DECREF(py_accelerator);
 	Py_DECREF(py_pos);
 
 	PyObject *lst = PyList_New(6*pos.size());

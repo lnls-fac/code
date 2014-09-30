@@ -8,16 +8,18 @@
 
 #include "Python.h"
 
-#include "../../../trackc++/auxiliary.h"
-#include "../../../trackc++/pos.h"
-#include "../../../trackc++/elements.h"
-#include "../../../trackc++/passmethods.h"
-#include "../../../trackc++/lattice.h"
-#include "../../../trackc++/tracking.h"
+#include "../auxiliary.h"
+#include "../pos.h"
+#include "../accelerator.h"
+#include "../elements.h"
+#include "../passmethods.h"
+#include "../lattice.h"
+#include "../tracking.h"
 
 // auxiliary functions
-int trackcpp_read_particles (PyObject *py_particles, std::vector<Pos<double> >&  pos);
-int trackcpp_read_lattice   (PyObject *py_lattice,   std::vector<Element>& pos);
+int trackcpp_read_particles   (PyObject *py_particles,   std::vector<Pos<double> >&  pos);
+int trackcpp_read_lattice     (PyObject *py_lattice,     std::vector<Element>& pos);
+int trackcpp_read_accelerator (PyObject *py_accelerator, Accelerator& accelerator);
 
 // exposed functionalities
 PyObject*  trackcpp_linepass (PyObject *Self, PyObject *args);

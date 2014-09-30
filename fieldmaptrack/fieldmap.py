@@ -170,6 +170,13 @@ class FieldMap:
         iz = iz-1 if iz == self.rz_nrpts-1 else iz
         return iz
                
+    def interpolate_set(self, points):
+        
+        field = np.zeros(points.shape)
+        for i in range(points.shape[1]):
+            field[:,i] = self.interpolate(*points[:,i])
+        return field
+    
     def interpolate(self, rx, ry, rz):
 
             
@@ -419,17 +426,17 @@ class FieldMap:
             pass
   
         if self.ry_nrpts == 1: 
-            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
+            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('ry_grid:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
         else:
-            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('ry:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
+            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('ry_grid:', self.ry_min, self.ry_max, self.ry_nrpts, self.ry_step)
         if self.rx_nrpts == 1: 
-            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
+            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('rx_grid:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
         else:
-            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('rx:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
+            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('rx_grid:', self.rx_min, self.rx_max, self.rx_nrpts, self.rx_step)
         if self.rz_nrpts == 1: 
-            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)
+            r += '\n{0:<35s} {3} point in [{1},{2}] mm (step of {4:f} mm)'.format('rz_grid:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)
         else:
-            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('rz:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)    
+            r += '\n{0:<35s} {3} points in [{1},{2}] mm (step of {4:f} mm)'.format('rz_grid:', self.rz_min, self.rz_max, self.rz_nrpts, self.rz_step)    
         r += '\n{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla'.format('by@(all)(axis):', 
         np.amin(self.by[self.ry_zero]), np.amax(self.by[self.ry_zero]), min(self.by[self.ry_zero][self.rx_zero]), max(self.by[self.ry_zero][self.rx_zero])) 
         r += '\n{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla'.format('bx@(all)(axis):', 

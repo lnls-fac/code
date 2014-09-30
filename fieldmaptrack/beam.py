@@ -1,5 +1,7 @@
 import math
 import mathphys.constants as consts
+import mathphys.units as units
+import mathphys.constants as consts
 
 class Beam:
     
@@ -11,7 +13,8 @@ class Beam:
         
     @staticmethod
     def calc_brho(energy):
-        gamma    = 1000.0*energy/consts.electron_rest_energy_MeV
+        electron_rest_energy_GeV = units.joule_2_eV(consts.electron_rest_energy) / 1e9
+        gamma    = energy/electron_rest_energy_GeV
         beta     = math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
         velocity = consts.light_speed * beta 
         brho     = beta * (energy * 1e9) / consts.light_speed
@@ -19,9 +22,9 @@ class Beam:
     
     def __str__(self):
         r = ''
-        r += '{0:<10s} {1:f} GeV\n'.format('energy:', self.energy)
-        r += '{0:<10s} {1:f}\n'.format('gamma:', self.gamma)
-        r += '{0:<10s} {1:f}\n'.format('beta:', self.beta)
-        r += '{0:<10s} {1:f} m/s\n'.format('velocity:', self.velocity)
-        r += '{0:<10s} {1:f} T.m\n'.format('brho:', self.brho)
+        r += '{0:<10s} {1:f} GeV'.format('energy:', self.energy)
+        r += '\n{0:<10s} {1:f}'.format('gamma:', self.gamma)
+        r += '\n{0:<10s} 1 - {1:e}'.format('beta:', 1.0-self.beta)
+        r += '\n{0:<10s} {1:.0f} - {2:f} m/s'.format('velocity:', consts.light_speed, consts.light_speed - self.velocity)
+        r += '\n{0:<10s} {1:f} T.m'.format('brho:', self.brho)
         return r

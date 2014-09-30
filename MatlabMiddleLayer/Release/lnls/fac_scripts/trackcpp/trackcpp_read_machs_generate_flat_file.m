@@ -1,4 +1,4 @@
-function tracy3_read_machines_generate_flat_file(archive_name,inicio)
+function trackcpp_read_machs_generate_flat_file(archive_name,inicio)
 %function tracy3_read_machines_generate_flat_file(archive_name)
 %function tracy3_read_machines_generate_flat_file(archive_name,inicio)
 %
@@ -19,6 +19,7 @@ else
     machines = load([path '/cod_matlab/' archive_name '.mat']);
 end
 
+cd trackcpp
 [~, result] = system('ls | grep rms | wc -l');
 n_pastas = str2double(result);
 if(length(machines.machine) < n_pastas)
@@ -31,7 +32,7 @@ n_pastas = min([n_pastas, length(machines.machine)]);
 
 for i=1:n_pastas
     fprintf('machine #%03i...', i);
-    flat_name = [sprintf('rms%02d', i) sprintf('/rms%02d', i) '.dat'];
+    flat_name = sprintf('rms%02d/flatfile_rms%02d.txt', i, i);
     full_name = fullfile(path, flat_name);
     the_ring = machines.machine{i};
     the_ring = simplify_kicktables(the_ring);
@@ -39,7 +40,7 @@ for i=1:n_pastas
         the_ring = start_at_first_element(the_ring, inicio);
     end
 %     the_ring = modify_the_ring(machines.machine{i});
-    lnls_at2tracyflat(the_ring,full_name);
+    lnls_at2flatfile(the_ring,full_name);
     fprintf('ok\n');
 end
 

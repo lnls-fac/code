@@ -1,4 +1,4 @@
-function sirius(varargin)
+function sirius_new(varargin)
 % Inicializa as estruturas do MML-LNLS e conecta com servidor LNLS1LinkS
 %
 % Historico
@@ -9,14 +9,14 @@ function sirius(varargin)
 
 Disconnect = false;
 
-default_version = '_V03';
+default_version = 'SI_V03';
 
 for i=length(varargin):-1:1
     if ischar(varargin{i})
         if any(strcmpi(varargin{i}, {'SelectServer'})), SelectServer = true; end;
         if any(strcmpi(varargin{i}, {'NoServer'})), NoServer = true; end;
         if any(strcmpi(varargin{i}, {'Disconnect'})), Disconnect = true; end;
-        if ~isempty(strfind(varargin{i}, '_V')), default_version = varargin{i}; end;
+        if ~isempty(strfind(varargin{i}, 'V')), default_version = varargin{i}; end;
     end
 end
 
@@ -41,11 +41,17 @@ fins = fullfile(matlabroot, 'toolbox', 'finance', 'finsupport');
 if ~isempty(strfind(path, fins))
     rmpath(fins);
 end
+mmlpaths = textscan(path(), '%s', 'delimiter', pathsep); mmlpaths = mmlpaths{1};
+for i=1:length(mmlpaths)
+    if ~isempty(strfind(mmlpaths{i},'MatlabMiddleLayer')) && isempty(strfind(mmlpaths{i}, 'startup_scripts'))
+        rmpath(mmlpaths{i})
+    end
+end
 
-setpathsirius(['SIRIUS' default_version], 'StorageRing', 'sirius_link');
+setpathsirius('SIRIUS', default_version, 'sirius_link');
 cd(cdir);
 clear cdir;
 
 addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','sirius','lattice_errors')));
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','tracy3'), '-begin');
-addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','machine','LTBA_V200')));
+addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','trackcpp'), '-begin');
