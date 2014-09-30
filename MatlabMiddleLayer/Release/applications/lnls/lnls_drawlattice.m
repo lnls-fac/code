@@ -16,10 +16,10 @@ end
 pos = findspos(the_ring, 1:(length(the_ring)+1));
 if exist('bpms_and_cms', 'var')
     
-    bpms = findcells(the_ring, 'FamName', 'bpm');
+    bpms = findcells(the_ring, 'FamName', 'BPM');
     for i=1:length(bpms)
         s = pos(bpms(i));
-        line([s s], [0+offset 1.5+offset], 'Color', [1 0 1])
+        line([s s], [0+offset 1.5+offset], 'Color', [0 0 0])
     end
     hcms = findcells(the_ring, 'FamName', 'hcm');
     for i=1:length(hcms)
@@ -29,7 +29,7 @@ if exist('bpms_and_cms', 'var')
     vcms = findcells(the_ring, 'FamName', 'vcm');
     for i=1:length(vcms)
         s = pos(vcms(i));
-        line([s s], [0+offset -1.5+offset], 'Color', [1.0 0 0])
+        line([s s], [0+offset -1.5+offset], 'Color', [1 0 0])
     end
     
 end
@@ -52,21 +52,31 @@ s = 0;
 for i=1:(length(pos)-1)
     len = pos(i+1) - pos(i);
     if isfield(the_ring{i}, 'BendingAngle')
-        rectangle('Position',[s,-1+offset,len,2], 'FaceColor', [0 0 1], 'EdgeColor', [0 0 1]);
-        text(s+len/2, 1.9, the_ring{i}.FamName, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+        rectangle('Position',[s,-1+offset,len,2], 'FaceColor', [0 0.535 0.711], 'EdgeColor', [0 0.535 0.711]);
+        if (unset_names == 0)
+            text(s+len/2, 1.9, the_ring{i}.FamName, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+        end
     elseif isfield(the_ring{i}, 'K')
-        rectangle('Position',[s,-1+offset,len,2], 'FaceColor', [1 0 0], 'EdgeColor', [1 0 0]);
-        text(s+len/2, 1.9, the_ring{i}.FamName, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+        rectangle('Position',[s,-1+offset,len,2], 'FaceColor', [0.918 0.609 0.32], 'EdgeColor', [0.918 0.609 0.32]);
+        if (unset_names == 0)
+            text(s+len/2, 1.9, the_ring{i}.FamName, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+        end
     elseif isfield(the_ring{i}, 'PolynomB')
-        rectangle('Position',[s,-1+offset,len,2], 'FaceColor', [0 0.8 0], 'EdgeColor', [0 0.8 0]);
-        text(s+len/2, -1.9, the_ring{i}.FamName, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+        if (strcmpi(the_ring{i}.FamName,'pmm')==0)
+            rectangle('Position',[s,-1+offset,len,2], 'FaceColor', [0.539 0.598 0.465], 'EdgeColor', [0.539 0.598 0.465]);
+            if (unset_names == 0)
+                text(s+len/2, -1.9, the_ring{i}.FamName, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+            end
+        else
+            line([s s+len], [0+offset 0+offset], 'Color', [0 0 0]);
+        end
     else
         line([s s+len], [0+offset 0+offset], 'Color', [0 0 0]);
     end
     s = s + len;
     if (s > max_pos), break; end;
 end
-axis([0 max_pos -10 10]);
+axis([0 max_pos -5+offset 10]);
 
 h = gcf;
 %axis off;
