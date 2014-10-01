@@ -8,7 +8,7 @@ function lnls_at2flatfile(lattice, filename)
 fp = fopen(filename, 'w');
 
 column_format = '%-15s ';
-double_format = '%+.17E';
+double_format = '%+.17E ';
 for i=1:length(lattice)
     fprintf(fp, '### %04i ###\r\n',i-1);
     fprintf(fp, column_format, 'fam_name'); fprintf(fp, '%s\r\n', lattice{i}.FamName);
