@@ -198,13 +198,13 @@ insa   = [ dia1, mida, dia2, ch, cv, crhv, d12, sa2, d12, mon, d12, qaf, d23, qa
 insb   = [ dib1, midb, dib2, qbd2, d18, ch, cv, crhv, d16, sb2, d15, mon, d11, qbf, d23, qbd1, d14, d00, sb1, d19, d00];
 
 cline1a = [ d45, d00, ch, cv, d16, sd1a, d14, d00, qf1, d12, mon, d11, sf1a, d20, qf2, d14, d00, sd2a, d12, ch, d10, mon, d12, d00];
-cline2a = [ d30, d00, cv, d16, sd3a, d14, d00, qf3, d12, mon, d11, sf2a, d10, mon, d10, qf4, d15, mon, d00, d00, ch, crhv, d11, ch, crhv, d22, d10, mon, d12];
-cline3a = [ d44, ch, crhv, d11, ch, d00, d00, mon, d15, qf4, d10, mon, d10, sf2a, d11, mon, d12, qf3, d14, d00, sd3a, d16, cv, crhv, d30, d00];
+cline2a = [ d30, d00, cv, d16, sd3a, d14, d00, qf3, d12, mon, d11, sf2a, d20, qf4, d16, ch, crhv, d33, d10, mon, d12];
+cline3a = [ d44, d11, ch, d16, qf4, d20, sf2a, d11, mon, d12, qf3, d14, d00, sd3a, d16, cv, crhv, d30, d00];
 cline4a = [ d22, d00, ch,  d12, sd2a, d14, d00, qf2, d20, sf1a, d11, mon, d12, qf1, d14, d00, sd1a, d16, ch, cv, d33, d00, mon, d12];
 
 cline1b = [ d45, d00, ch, cv, d16, sd1b, d14, d00, qf1, d12, mon, d11, sf1b, d20, qf2, d14, d00, sd2b, d12, ch, d10, mon, d12, d00];
-cline2b = [ d30, d00, cv, d16, sd3b, d14, d00, qf3, d12, mon, d11, sf2b, d10, mon, d10, qf4, d15, mon, d00, d00, ch, crhv, d11, ch, crhv, d22, d10, mon, d12];
-cline3b = [ d44, ch, crhv, d11, ch, d00, d00, mon, d15, qf4, d10, mon, d10, sf2b, d11, mon, d12, qf3, d14, d00, sd3b, d16, cv, crhv, d30, d00];
+cline2b = [ d30, d00, cv, d16, sd3b, d14, d00, qf3, d12, mon, d11, sf2b, d20, qf4, d16, ch, crhv, d33, d10, mon, d12];
+cline3b = [ d44, d11, ch, d16, qf4, d20, sf2b, d11, mon, d12, qf3, d14, d00, sd3b, d16, cv, crhv, d30, d00];
 cline4b = [ d22, d00, ch, d12, sd2b, d14, d00, qf2, d20, sf1b, d11, mon, d12, qf1, d14, d00, sd1b, d16, ch, cv, d33, d00, mon, d12];
 
 %% Injection Section
@@ -222,7 +222,7 @@ kick     = corrector('kick',0.6, [0 0], 'CorrectorPass');
 pmm      = sextupole('pmm', 0.6, 0.0, sext_pass_method);
 inj = marker('inj','IdentityPass');
 
-insaend  = [ch,cv,crhv, d12, sa2, d12, mon, d12, qaf, d23, qad, d14, d00, sa1, d19, d00];
+insaend  = [ch, cv, crhv, d12, sa2, d12, mon, d12, qaf, d23, qad, d14, d00, sa1, d19, d00];
 insainj  = [d12, dmiainj, inj, dinjk3, kick, dk3k4, kick, dk4pmm, pmm, dpmmcv, insaend];
 injinsa  = [fliplr(insaend), d12, dcvk1, kick, dk1k2, kick, dk2sef, sef];
 
