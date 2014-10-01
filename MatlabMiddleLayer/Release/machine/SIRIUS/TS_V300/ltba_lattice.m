@@ -1,4 +1,4 @@
-function [r, IniCond] = ltba_lattice(varargin)
+function [r, lattice_title, IniCond] = ltba_lattice(varargin)
 % 2013-11-26 created Ximenes (from V100)
 
 %% global parameters 
@@ -7,6 +7,7 @@ function [r, IniCond] = ltba_lattice(varargin)
 % --- system parameters ---
 energy = 3e9;
 caso   = 'default';
+lattice_title = ['LTBA-V300 - ' caso] ;
 
 % processamento de input (energia e modo de operacao)
 for i=1:length(varargin)
@@ -16,7 +17,7 @@ for i=1:length(varargin)
         energy = varargin{i} * 1e9;
     end;
 end
-fprintf(['   Loading LTBA_V300 - ' caso ' - ' num2str(energy/1e9) ' GeV' '\n']);
+fprintf(['   Loading ' lattice_title ' - ' num2str(energy/1e9) ' GeV' '\n']);
 
 
 % carrega forcas dos imas de acordo com modo de operacao
