@@ -1,4 +1,4 @@
-function trackcpp_submit_jobs(path, inpfile, exec_scpt, description, possible_hosts)
+function trackcpp_submit_jobs( description, path, inpfile, exec_scpt, possible_hosts)
 cur_dir = pwd;
 
 if ~exist('path','var'), path = pwd; end
