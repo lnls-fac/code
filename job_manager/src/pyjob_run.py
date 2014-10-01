@@ -155,7 +155,7 @@ def deal_with_configs():
     for proc in jobid2proc.values():
         state = proc.poll()
         if state is None:
-            if proc.get_nice() != MyConfigs.niceness:
+            if proc.get_nice() < MyConfigs.niceness:
                 set_nice_process(proc)
             
     return allowed
