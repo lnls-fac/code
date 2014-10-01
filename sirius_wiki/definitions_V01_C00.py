@@ -452,8 +452,8 @@ class ParameterDefinitions(object):
     bo_number_of_SF_sextupoles = 25
     bo_number_of_SD_sextupoles = 10
 
-    bo_number_of_horizontal_dipole_correctors = 50
-    bo_number_of_vertical_dipole_correctors = 50
+    bo_number_of_horizontal_dipole_correctors = 25
+    bo_number_of_vertical_dipole_correctors = 25
 
     bo_hardedge_length_of_dipoles =  1.152 # [m]
     bo_hardedge_length_of_QF_quadrupoles = bo_hardedge_length_of_long_quadrupoles # [m]
@@ -467,8 +467,8 @@ class ParameterDefinitions(object):
 
     bo_maximum_integrated_sextupole = 20.0138457118891 # B''L/2 [T/m]
 
-    bo_horizontal_dipole_corrector_maximum_strength = 0.5 # [mrad]
-    bo_vertical_dipole_corrector_maximum_strength = 0.5 # [mrad]
+    bo_horizontal_dipole_corrector_maximum_strength = 0.35 # [mrad]
+    bo_vertical_dipole_corrector_maximum_strength = 0.35 # [mrad]
 
     bo_dipoles_alignment_error_tolerance = 100 # [μm]
     bo_quadrupoles_alignment_error_tolerance = 100 # [μm]
