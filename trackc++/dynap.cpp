@@ -254,7 +254,7 @@ Status::type dynap_ma_track(
 
 }
 
-Status::type dynap_ma(
+Status::type dynap_ma2(
 		const Accelerator& accelerator,
 		std::vector<Pos<double> >& cod,
 		unsigned int nr_turns,
@@ -321,8 +321,6 @@ Status::type dynap_ma(
 
 		while (true) {
 
-
-
 			this_nr_turns = (2 * this_nr_turns > nr_turns) ? nr_turns : 2 * this_nr_turns;
 
 		}
@@ -333,7 +331,7 @@ Status::type dynap_ma(
 
 }
 
-Status::type dynap_ma2(
+Status::type dynap_ma(
 		const Accelerator& accelerator,
 		std::vector<Pos<double> >& cod,
 		unsigned int nr_turns,
