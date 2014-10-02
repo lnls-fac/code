@@ -73,72 +73,63 @@ class marker(object):
         except: pass
         try: r += '\n{0:<15s} {1}'.format('fint_out',       str(self.fint_out))
         except: pass
-        
-        
-        try: r += '  polynom_a: ' + str(self.polynom_a) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('thin_KL[1/m]',   str(self.thin_KL))
         except: pass
-        try: r += '  polynom_b: ' + str(self.polynom_b) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('thin_SL[1/m^2]', str(self.thin_SL))
         except: pass
-        try: r += '          k: ' + str(self.k) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('frequency[Hz]',  str(self.frequency))
         except: pass
-        try: r += '         kl: ' + str(self.kl) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('voltage[V]',     str(self.voltage))
         except: pass
-        try: r += '         sl: ' + str(self.sl) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('polynom_a[m^n]', str(self.polynom_a))
         except: pass
-        try: r += ' kick_angle: ' + str(self.kick_angle) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('polynom_b[m^n]', str(self.polynom_b))
         except: pass
-        try: r += '    voltage: ' + str(self.voltage) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('kicktable',      str(self.kicktable))
         except: pass
-        try: r += '  frequency: ' + str(self.frequency) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('hmax[m]',        str(self.hmax))
         except: pass
-        try: r += '     energy: ' + str(self.energy) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('vmax[m]',        str(self.vmax))
         except: pass
-        try: r += '    hnumber: ' + str(self.hnumber) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('t_in[m,rad]',    str(self.t_in))
         except: pass
-        try: r += '       t_in: ' + str(self.t_in) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('t_out[m,rad]',   str(self.t_out))
         except: pass
-        try: r += '       r_in: ' + str(self.r_in) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('r_in[1,m,1/m]',  str(self.r_in))
         except: pass
-        try: r += '    fint_in: ' + str(self.fint_in) + '\n'
+        try: r += '\n{0:<15s} {1}'.format('r_out[1,m,1/m]', str(self.r_out))
         except: pass
-        try: r += '      t_out: ' + str(self.t_out) + '\n'
-        except: pass
-        try: r += '      r_out: ' + str(self.r_out) + '\n'
-        except: pass
-        try: r += '   fint_out: ' + str(self.fint_out) + '\n'
-        except: pass
+       
         return r    
     
     
 class drift(marker):
-    def __init__(self, pass_method = passmethods.drift_pass, **kwargs):
+    def __init__(self, pass_method = passmethods.pm_drift_pass, **kwargs):
         marker.__init__(self, pass_method = pass_method, **kwargs)
 
 class corrector(marker):
-    def __init__(self, pass_method = passmethods.corrector_pass, kick_angle  = None, **kwargs):
-        if kick_angle == None: kick_angle = [0,0]
-        marker.__init__(self, pass_method = pass_method, kick_angle = kick_angle, **kwargs)
+    def __init__(self, pass_method = passmethods.pm_corrector_pass, hkick = None, vkick = None, **kwargs):
+        marker.__init__(self, pass_method = pass_method, hkick = hkick, vkick = vkick, **kwargs)
         
 class rfcavity(marker):
-    def __init__(self, voltage, frequency, energy, hnumber, pass_method = passmethods.cavity_pass, **kwargs):
+    def __init__(self, voltage = None, frequency = None, pass_method = passmethods.pm_cavity_pass, **kwargs):
         marker.__init__(self, pass_method = pass_method, voltage = voltage, frequency = frequency, energy = energy, hnumber = hnumber, **kwargs)
 
 class quadrupole(marker):
-    def __init__(self, pass_method = passmethods.str_mpole_symplectic4_pass, nr_steps = 10, polynom_a = None, polynom_b = None, **kwargs): 
-        if polynom_a == None: polynom_a = [0,0]
-        if polynom_b == None: polynom_b = [0,0] 
-        if 'k' in kwargs: 
-            if ('kl' in kwargs) or (pass_method == passmethods.thinquad_pass):
+    def __init__(self, pass_method = passmethods.pm_str_mpole_symplectic4_pass, nr_steps = 10, polynom_a = None, polynom_b = None, **kwargs):  
+        if 'thin_KL' in kwargs:
+            if ('k' in kwargs) or (pass_method != passmethods.pm_thinquad_pass):
                 raise Exception('Inconsistent marker parameters!')
-            polynom_b[1] = kwargs['k']
-            del kwargs['k']
-        if 'kl' in kwargs:
-            if ('k' in kwargs) or (pass_method != passmethods.thinquad_pass):
-                raise Exception('Inconsistent marker parameters!')
+        else:
+            if polynom_a == None: polynom_a = [0.,0.,0.]
+            if polynom_b == None: polynom_b = [0.,0.,0.]
+            if 'k' in kwargs: 
+                polynom_b[1] = kwargs['k']
+                del kwargs['k']
         marker.__init__(self, pass_method = pass_method, nr_steps = nr_steps, polynom_a = polynom_a, polynom_b = polynom_b, **kwargs)
 
 class sextupole(marker):
-    def __init__(self, pass_method = passmethods.str_mpole_symplectic4_pass, nr_steps = 5, polynom_a = None, polynom_b = None, **kwargs): 
+    def __init__(self, pass_method = passmethods.pm_str_mpole_symplectic4_pass, nr_steps = 5, polynom_a = None, polynom_b = None, **kwargs): 
         if polynom_a == None: polynom_a = [0,0,0]
         if polynom_b == None: polynom_b = [0,0,0] 
         if 's' in kwargs: 

@@ -14,7 +14,7 @@ function orbit_correct_ltba(r)
 
 % loads transport line model and plots lattice functions
 sirius_ltba;
-[lt, TwissDataIn] = ltba_lattice;
+[lt, TwissDataIn] = sirius_ts_lattice;
 plot_optics(lt, TwissDataIn);
 
 
@@ -64,7 +64,7 @@ function orbit_correct_ltlb(r)
 
 % loads transport line model and plots lattice functions
 sirius_ltlb;
-[lt, TwissDataIn] = ltlb_lattice;
+[lt, TwissDataIn] = sirius_lb_lattice;
 plot_optics(lt, TwissDataIn);
 
 

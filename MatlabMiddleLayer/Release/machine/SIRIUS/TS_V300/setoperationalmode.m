@@ -98,10 +98,10 @@ AD.InjectionEnergy     = 3.0;
 AD.ModeName            = 'default';
 AD.OpsFileExtension    = '';
 
-THERING = ltba_lattice(AD.Energy, AD.ModeName);
+THERING = sirius_ts_lattice(AD.Energy, AD.ModeName);
                                 
 AD.DeltaRFDisp         = 2000e-6;
-AD.ATModel             = 'ltba_lattice';
+AD.ATModel             = 'sirius_ts_lattice';
 AD.BeamCurrent         = 0.500; % [A]
 AD.Coupling            = 0.010;
 %AD.OpsData.PrsProfFile = 'sirius_V02_pressure_profile.txt';

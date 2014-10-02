@@ -12,7 +12,7 @@ rho0 = L_dip*50/2/pi;
 [gamat dgamatdt] =  energy_ramp(gamainf, gama0, freq, dt(1:end));
 
 
-the_ring = sirius_booster_lattice;
+the_ring = sirius_bo_lattice;
 mu0 = 4*pi*1e-7;
 condut = 1.35e6; % aco inox 316L austensitico 
 hgap = 0.028/2;

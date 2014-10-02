@@ -101,7 +101,7 @@ AD.InjectionEnergy     = 3.0;
 AD.ModeName            = 'AC20';
 AD.OpsFileExtension    = '';
 
-sirius_lattice(AD.Energy, AD.ModeName);
+sirius_si_lattice(AD.Energy, AD.ModeName);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 864;
@@ -109,7 +109,7 @@ AD.DeltaRFDisp         = 2000e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
 
 AD.TuneDelay           = 0;
-AD.ATModel             = 'sirius_lattice';
+AD.ATModel             = 'sirius_si_lattice';
 AD.Chromaticity.Golden = [1; 1];
 AD.MCF                 = getmcf('Model');
 
@@ -136,7 +136,7 @@ AD.InjectionEnergy     = 3.0;
 AD.ModeName            = 'AC10';
 AD.OpsFileExtension    = '';
 
-sirius_lattice(AD.Energy, AD.ModeName);
+sirius_si_lattice(AD.Energy, AD.ModeName);
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 864;
@@ -144,7 +144,7 @@ AD.DeltaRFDisp         = 2000e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
 
 AD.TuneDelay           = 0;
-AD.ATModel             = 'sirius_lattice';
+AD.ATModel             = 'sirius_si_lattice';
 AD.Chromaticity.Golden = [1; 1];
 AD.MCF                 = getmcf('Model');
 

@@ -13,7 +13,7 @@ ppm      = 1e-6;
 
 %% errors specification
 
-r.config.lattice_function  = @sirius_booster_lattice;
+r.config.lattice_function  = @sirius_bo_lattice;
 % r.config.lattice_func_arg  = [];
 
 r.params.the_ring = r.config.lattice_function();

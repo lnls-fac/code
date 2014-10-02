@@ -59,7 +59,7 @@ ids = [ids ids_def.ipe2];
 % the_ring0 = THERING;
 % data = load('the_ring_withids_ac10_5_2014-05-15.mat');
 %the_ring0 = data.the_ring;
-the_ring0 = sirius_lattice('ac10_5');
+the_ring0 = sirius_si_lattice('ac10_5');
 
 the_ring0 = start_at_last_element(the_ring0, 'mc'); % shifts model to start at center of 2T bending magnets
 twiss0 = calc_short_twiss(the_ring0); % calcs original twiss parameters

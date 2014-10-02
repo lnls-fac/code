@@ -16,7 +16,7 @@ at_model = load(['/home/fac_files/data/sirius_mml/magnet_modelling/CONFIGS/BOOST
 at_model = at_model.r.at_model;
 comp_atmod = findspos(at_model, length(at_model)+1);
 
-the_ring = sirius_booster_lattice();
+the_ring = sirius_bo_lattice();
 atsummary(the_ring);
 idx_dip = findcells(the_ring,'FamName','B');
 n_dip = length(idx_dip);

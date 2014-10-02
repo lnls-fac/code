@@ -1,7 +1,7 @@
 function ramp_tracking()
 
 global THERING;
-THERING = sirius_booster_lattice;
+THERING = sirius_bo_lattice;
 setradiation('on'); setcavity('on');
 
 the_ring = THERING;

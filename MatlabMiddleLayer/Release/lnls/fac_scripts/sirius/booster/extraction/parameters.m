@@ -14,7 +14,7 @@ param.number_simu = 20;
 %% Definition of Booster's parameters
 
 % Load the Booster lattice;
-synchrotron = sirius_booster_lattice;
+synchrotron = sirius_bo_lattice;
 %carrega maquinas com erros de orbitas:
 param.boo.simulate_orbit_errors = true;
 % lattice_errors([pwd '/cod_matlab']);
@@ -34,7 +34,7 @@ param.boo.seb_leak= 0e-4;
 param.ltba.mode = 'mismatched_pmm';
 
 % Load the transfer line
-[transfer_line IniCond] = ltba_lattice(param.ltba.mode);
+[transfer_line IniCond] = sirius_ts_lattice(param.ltba.mode);
 
 % Definition of the EXTRACTION SEPTUM's position in relation to the booster:
 %                   boo_vac   folga   copper   sep_vac   sep_half_wid
@@ -71,7 +71,7 @@ param.ltba.seg_err  = 0*7e-4; %tested
 %% Definition of the Storage Ring parameters
 
 % Load the sirius lattice;
-storage_ring = sirius_lattice();
+storage_ring = sirius_si_lattice();
 
 % Simulate injection in the storage ring too?
 param.sr.inject = true;

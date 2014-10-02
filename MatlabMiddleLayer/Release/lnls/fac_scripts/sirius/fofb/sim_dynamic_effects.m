@@ -1,7 +1,7 @@
 clear all;
 
 % primeiro, vamos carregar o modelo do anel de armazenamento:
-the_ring = sirius_lattice;
+the_ring = sirius_si_lattice;
 [~, ~, ~, ~, ~, ~, the_ring] = setradiation('on',the_ring);
 [~, the_ring] = setcavity('on',the_ring);
 orb0 = findorbit6(the_ring);

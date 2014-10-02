@@ -100,10 +100,10 @@ AD.InjectionEnergy     = 0.150;
 AD.ModeName            = 'Mode1';
 AD.OpsFileExtension    = '';
 
-THERING = ltlb_lattice(AD.Energy, AD.ModeName);
+THERING = sirius_lb_lattice(AD.Energy, AD.ModeName);
 
 AD.DeltaRFDisp         = 2000e-6;
-AD.ATModel             = 'ltlb_lattice';
+AD.ATModel             = 'sirius_lb_lattice';
 AD.BeamCurrent         = 0.500; % [A]
 AD.Coupling            = 0.010;
 %AD.OpsData.PrsProfFile = 'sirius_V500_pressure_profile.txt';

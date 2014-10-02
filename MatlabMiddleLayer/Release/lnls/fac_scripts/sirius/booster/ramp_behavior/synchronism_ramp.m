@@ -27,7 +27,7 @@ box(axes1,'on');
 
 % deltak = alpha*Ef*2.3/1.8821./E;
 % 
-% the_ring = sirius_booster_lattice;
+% the_ring = sirius_bo_lattice;
 % a = findcells(the_ring,'FamName','QF');
 % kf = getcellstruct(the_ring,'PolynomB',a(1),2);
 % for i=1:(length(dt))

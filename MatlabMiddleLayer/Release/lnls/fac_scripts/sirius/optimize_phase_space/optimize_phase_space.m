@@ -1,7 +1,7 @@
 clear all;
 RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
 % first, we load the lattice
-storage_ring_ref = sirius_lattice('tests');
+storage_ring_ref = sirius_si_lattice('tests');
 [~, storage_ring_ref] = setcavity('on', storage_ring_ref);
 [~, ~, ~, ~, ~, ~, storage_ring_ref] = setradiation('on', storage_ring_ref);
 % lattice_errors([pwd '/home/fac_files/data/sirius_tracy/sr/calcs/v500/ac10_5/possible_change/low_2chrom/multi_cod_tune/cod_matlab']);

@@ -1,7 +1,7 @@
 function the_ring = booster_insert_segmented_models
 
 
-the_ring = sirius_booster_lattice;
+the_ring = sirius_bo_lattice;
 
 
 % calcs original tunes

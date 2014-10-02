@@ -13,7 +13,7 @@ ppm      = 1e-6;
 
 
 %% definition of the nominal AT model
-r.config.lattice_function  = @sirius_lattice;
+r.config.lattice_function  = @sirius_si_lattice;
 r.config.lattice_func_arg1  = 'b'; % old ac10
 r.config.lattice_func_arg2  = '00'; % old ac10
 %r.config.lattice_function  = 'thering_withids.mat';
