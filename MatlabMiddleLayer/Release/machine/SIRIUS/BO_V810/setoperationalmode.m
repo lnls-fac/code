@@ -120,7 +120,7 @@ AD.InjectionEnergy     = 0.150;
 AD.ModeName            = 'HighE';
 AD.OpsFileExtension    = '';
 
-sirius_booster_lattice(AD.Energy);
+sirius_bo_lattice(AD.Energy);
 
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
@@ -131,7 +131,7 @@ AD.DeltaRFDisp         = 2000e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
 
 AD.TuneDelay           = 3.0;  
-AD.ATModel             = 'sirius_booster_lattice';
+AD.ATModel             = 'sirius_bo_lattice';
 AD.Chromaticity.Golden = [1; 1];
 AD.MCF                 = getmcf('Model');
 
@@ -152,7 +152,7 @@ AD.InjectionEnergy     = 0.150;
 AD.ModeName            = 'LowE';
 AD.OpsFileExtension    = '';
 
-sirius_booster_lattice(AD.Energy);
+sirius_bo_lattice(AD.Energy);
 atsummary;
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
@@ -161,7 +161,7 @@ AD.DeltaRFDisp         = 2000e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
 
 AD.TuneDelay           = 3.0;  
-AD.ATModel             = 'sirius_booster_lattice';
+AD.ATModel             = 'sirius_bo_lattice';
 AD.Chromaticity.Golden = [1; 1];
 AD.MCF                 = getmcf('Model');
 

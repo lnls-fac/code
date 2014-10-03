@@ -9,7 +9,7 @@ if ~exist(result_fname,'file')
     
     if ~exist('the_ring','var')
         global THERING;
-        THERING = sirius_lattice('AC20');
+        THERING = sirius_si_lattice('AC20');
         the_ring = THERING;
     end
     

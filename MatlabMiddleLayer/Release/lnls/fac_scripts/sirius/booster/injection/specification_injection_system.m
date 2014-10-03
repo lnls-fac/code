@@ -45,7 +45,7 @@ param.len2trackB = 25;
 % lattice_errors([pwd '/cod_matlab']);
 % machines = load('/opt/MatlabMiddleLayer/Release/lnls/fac_scripts/sirius/booster/extraction/cod_matlab/CONFIG_machines_cod_corrected.mat');
 % machines = machines.machine;
-machines{1} = sirius_booster_lattice;
+machines{1} = sirius_bo_lattice;
 
 the_ring = machines{1};
 % first, let's set its energy;
@@ -56,7 +56,7 @@ cav_ind = findcells(the_ring,'FamName','CAV');
 the_ring{cav_ind}.Voltage = 1.5e5;
 
 % Now, lets load the transfer line
-[transfer_line param.IniCond] = ltlb_lattice;
+[transfer_line param.IniCond] = sirius_lb_lattice;
 
 % The dispersion function is not matched correctly, if we set it to the
 % value below, the injection works better.

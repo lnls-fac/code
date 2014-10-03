@@ -28,3 +28,5 @@ class Beam:
         r += '\n{0:<10s} {1:.0f} - {2:f} m/s'.format('velocity:', consts.light_speed, consts.light_speed - self.velocity)
         r += '\n{0:<10s} {1:f} T.m'.format('brho:', self.brho)
         return r
+    
+    

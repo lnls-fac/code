@@ -140,16 +140,23 @@ def deal_with_finished_jobs():
             MyQueue.update({k:v})
 
 def deal_with_configs():
+
+    # set nice of the job and its children
+    def set_nice_process(proc):
+        proc.set_nice(MyConfigs.niceness)
+        proc_list = proc.get_children()
+        for proc in proc_list:
+            set_nice_process(proc)
+        
     agora = datetime.datetime.now()
     allowed = MyConfigs.Calendar.get((calendar.day_name[agora.weekday()],
                                       agora.hour, agora.minute),
                                      MyConfigs.defNumJobs)
-    
     for proc in jobid2proc.values():
         state = proc.poll()
         if state is None:
-            if proc.get_nice() != MyConfigs.niceness:
-                proc.set_nice(MyConfigs.niceness)
+            if proc.get_nice() < MyConfigs.niceness:
+                set_nice_process(proc)
             
     return allowed
 
@@ -336,6 +343,8 @@ def main():
                         Queue2Send.update({k:Global.JobView(v)})
                     else:
                         Queue2Send.update({k:v})
+            
+            deal_with_finished_jobs()
             
             ok, keys2remove = handle_request('UPDATE_JOBS', Queue2Send)
             if ok:

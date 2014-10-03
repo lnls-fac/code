@@ -20,7 +20,7 @@ pm_dict = { pm_identity_pass              : ('identity_pass',              PassM
             pm_cavity_pass                : ('cavity_pass',                PassMethods.cavity_pass),
             pm_thinquad_pass              : ('thinquad_pass',              PassMethods.thinquad_pass),
             pm_thinsext_pass              : ('thinsext_pass',              PassMethods.thinsext_pass),
-            pm_kicktable_pass             : ('thinsext_pass',              PassMethods.thinsext_pass),
+            pm_kicktable_pass             : ('kicktable_pass',             PassMethods.kicktable_pass),
        }
   
   

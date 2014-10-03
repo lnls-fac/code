@@ -754,7 +754,7 @@ AO.skewcm.Setpoint.Tolerance    = 0.00001;
 % bpmx
 AO.bpmx.FamilyName  = 'bpmx';
 AO.bpmx.MemberOf    = {'PlotFamily'; 'BPM'; 'bpmx'; 'Diagnostics'};
-AO.bpmx.DeviceList  = getDeviceList(10,20);
+AO.bpmx.DeviceList  = getDeviceList(10,18);
 AO.bpmx.ElementList = (1:size(AO.bpmx.DeviceList,1))';
 AO.bpmx.Status      = ones(size(AO.bpmx.DeviceList,1),1);
 AO.bpmx.Position    = [];
@@ -775,7 +775,7 @@ AO.bpmx.Monitor.PhysicsUnits = 'meter';
 % bpmy
 AO.bpmy.FamilyName  = 'bpmy';
 AO.bpmy.MemberOf    = {'PlotFamily'; 'BPM'; 'bpmy'; 'Diagnostics'};
-AO.bpmy.DeviceList  = getDeviceList(10,20);
+AO.bpmy.DeviceList  = getDeviceList(10,18);
 AO.bpmy.ElementList = (1:size(AO.bpmy.DeviceList,1))';
 AO.bpmy.Status      = ones(size(AO.bpmy.DeviceList,1),1);
 AO.bpmy.Position    = [];
