@@ -2,7 +2,14 @@
 # PATHS
 # ---------------------------
 
-export FACROOT=/home/fac_files
+if [ -d /home ] ; then
+    export FACROOT=/home/fac_files
+elif [ -d /Users ] ; then
+    export FACROOT=/Users/fac_files
+else
+    echo "FACROOT not defined!"
+fi
+
 export FACCODE=$FACROOT/code
 export FACDATA=$FACROOT/data
 
@@ -35,4 +42,4 @@ complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --
 complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
 complete -W "--jobs --status --user --description --explicate --choose --help"                                                          pyjob_qstat.py
 complete -W "--jobs --status --user --description --signal --priority --possibleHosts --help"                                           pyjob_qsig.py
-
+complete -W "--just-print --si --bo --tb --ts --help --list-all --sort"                                                                                   updatewiki
