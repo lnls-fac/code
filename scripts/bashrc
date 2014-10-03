@@ -2,6 +2,7 @@
 # PATHS
 # ---------------------------
 
+<<<<<<< HEAD
 if [ -d /home ] ; then
     export FACROOT=/home/fac_files
 elif [ -d /Users ] ; then
