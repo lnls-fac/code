@@ -2,7 +2,14 @@
 # PATHS
 # ---------------------------
 
-export FACROOT=/home/fac_files
+FACROOT_LINUX=/home/fac_files
+FACROOT_MAC=/Users/fac_files
+if [ -d $FACROOT_LINUX ] ; then
+	export FACROOT=$FACROOT_LINUX
+else
+	export FACROOT=$FACROOT_MAC
+fi
+
 export FACCODE=$FACROOT/code
 export FACDATA=$FACROOT/data
 
