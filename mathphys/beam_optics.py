@@ -1,7 +1,5 @@
 import math
-import mathphys.constants as consts
-import mathphys.units as units
-import mathphys.constants as consts
+import mathphys
 
 class Beam:
     
@@ -10,14 +8,14 @@ class Beam:
         self.energy = energy
         self.current = current
         self.brho, self.velocity, self.beta, self.gamma = Beam.calc_brho(self.energy)
-        
+                                                        
     @staticmethod
-    def calc_brho(energy):
-        electron_rest_energy_GeV = units.joule_2_eV(consts.electron_rest_energy) / 1e9
+    def calc_brho(energy = None, gamma = None, beta = None, velocity = None):
+        electron_rest_energy_GeV = mathphys.units.joule_2_eV(mathphys.constants.electron_rest_energy) / 1e9
         gamma    = energy/electron_rest_energy_GeV
         beta     = math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
-        velocity = consts.light_speed * beta 
-        brho     = beta * (energy * 1e9) / consts.light_speed
+        velocity = mathphys.constants.light_speed * beta 
+        brho     = beta * (energy * 1e9) / mathphys.constants.light_speed
         return brho, velocity, beta, gamma
     
     def __str__(self):

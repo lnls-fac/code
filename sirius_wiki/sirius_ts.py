@@ -594,5 +594,65 @@ parameter_list = [
                 'Booster to storage ring transport line beam magnetic rigidity'],
     obs      = [r"<math>B'_\text{QC4} = (B\rho) K_\text{QC4}</math>"],
   ),
-                  
+  
+  Parameter(
+    name     = 'Booster to storage ring transport line number of beam position monitors',
+    group    = 'FAC',
+    value    = Prms.ts_number_of_beam_position_monitors,
+    symbol   = r'<math>N_\text{BPM}</math>',
+    units    = '',
+    deps     = [],
+    obs      = [],
+  ),
+  
+  Parameter(
+    name     = 'Booster to storage ring transport line number of beam position monitors',
+    group    = 'FAC',
+    value    = Prms.ts_number_of_beam_position_monitors,
+    symbol   = r'<math>N_\text{BPM}</math>',
+    units    = '',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line number of horizontal dipole correctors',
+    group    = 'FAC',
+    value    = Prms.ts_number_of_horizontal_dipole_correctors,
+    symbol   = r'<math>N_\text{HCM}</math>',
+    units    = '',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line number of vertical dipole correctors',
+    group    = 'FAC',
+    value    = Prms.ts_number_of_vertical_dipole_correctors,
+    symbol   = r'<math>N_\text{VCM}</math>',
+    units    = '',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line horizontal dipole correctors maximum strength',
+    group    = 'FAC',
+    value    = Prms.ts_horizontal_dipole_corrector_maximum_strength,
+    symbol   = r'<math>\theta^\text{x, max}</math>',
+    units    = unicode('mrad', encoding='utf-8'),
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster to storage ring transport line vertical dipole correctors maximum strength',
+    group    = 'FAC',
+    value    = Prms.ts_vertical_dipole_corrector_maximum_strength,
+    symbol   = r'<math>\theta^\text{y, max}</math>',
+    units    = unicode('mrad', encoding='utf-8'),
+    deps     = [],
+    obs      = [],
+  ),
+
 ]

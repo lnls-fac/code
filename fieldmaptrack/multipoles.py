@@ -1,7 +1,6 @@
 import numpy as np    
 import mathphys
 import fieldmaptrack
-import mathphys
     
 class Multipoles:
 
@@ -108,21 +107,33 @@ class Multipoles:
             self.polynom_a_integral[i] = np.trapz(y = ya, x = x)
             self.polynom_b_integral[i] = np.trapz(y = yb, x = x)               
     
-    def calc_multipoles_integrals_normalized(self, main_polynom, main_monomial, r0):
+    def calc_multipoles_integrals_relative(self, main_polynom, main_monomial, r0):
         
         self.r0 = r0
         r0 = self.r0 * mathphys.units.mm_2_meter
         main_idx = list(self.fitting_monomials).index(main_monomial)
         main_multipole = main_polynom[main_idx] * r0 ** main_monomial
-        self.polynom_a_integral_normalized = np.zeros(self.polynom_a_integral.shape)
-        self.polynom_b_integral_normalized = np.zeros(self.polynom_b_integral.shape)
+        self.polynom_a_integral_relative = np.zeros(self.polynom_a_integral.shape)
+        self.polynom_b_integral_relative = np.zeros(self.polynom_b_integral.shape)
         for i in range(len(self.fitting_monomials)):
             n = self.fitting_monomials[i]
-            self.polynom_a_integral_normalized[i] = self.polynom_a_integral[i] * (r0 ** n) / main_multipole
-            self.polynom_b_integral_normalized[i] = self.polynom_b_integral[i] * (r0 ** n) / main_multipole
-            
+            self.polynom_a_integral_relative[i] = self.polynom_a_integral[i] * (r0 ** n) / main_multipole
+            self.polynom_b_integral_relative[i] = self.polynom_b_integral[i] * (r0 ** n) / main_multipole
+                   
+    def calc_hardedge_polynomials(self,model_hardedge_length):
         
+        beam = self.trajectory.beam
+        half_hedge_len = 0.5 * model_hardedge_length * mathphys.units.mm_2_meter
+        signed_brho = - 1.0 * beam.brho
+        self.polynom_a_hardedge = (self.polynom_a_integral / signed_brho) / half_hedge_len    
+        self.polynom_b_hardedge = (self.polynom_b_integral / signed_brho) / half_hedge_len
         
+        for i in range(len(self.polynom_b_integral_relative)):
+            if self.polynom_a_integral_relative[i] == 1.0:
+                self.polynom_a_hardedge[i] = 0.0
+            if self.polynom_b_integral_relative[i] == 1.0:
+                self.polynom_b_hardedge[i] = 0.0
+                        
     def __str__(self):
         
         nrpts = len(self.perpendicular_grid)
@@ -132,15 +143,18 @@ class Multipoles:
         
         r = ''
         r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in [{1:+f},{2:+f}] mm'.format(nrpts, grid_min, grid_max))
-        r += '{0:<35s} {1} mm'.format('r0_for_relative_multipoles', self.r0) 
-        r += '\n{0:<35s} {1:^17s} {2:^17s} {5:^17s} | {3:^17s} {4:^17s} {6:^17s}'.format('<multipole_order n>', 'MaxAbs_Nn_[T/m^n]', 'Integ_Nn[T.m/m^n]', 'MaxAbs_Sn_[T/m^n]', 'Integ_Sn[T.m/m^n]', 'Nn/N0(@r0)_Integ', 'Sn/S0(@r0)_Integ')
+        r += '\n{0:<35s} {1} mm'.format('r0_for_relative_multipoles', self.r0) 
+        r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} {7:^12s} | {3:^12s} {4:^12s} {6:^12s} {8:^12s}'.format('<multipole_order n>', 'MaxAbs_Nn', 'Integ_Nn', 'MaxAbs_Sn', 'Integ_Sn', 'Nn/N0(@r0)', 'Sn/S0(@r0)', 'PolynomB', 'PolynomA')
+        r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} {7:^12s} | {3:^12s} {4:^12s} {6:^12s} {8:^12s}'.format('<multipole_order n>', '[T/m^n]', '[T.m/m^n]', '[T/m^n]', '[T.m/m^n]', '[]', '[]', '[1/m^n+1]', '[1/m^n+1]')
         for i in range(len(monomials)):
             n = monomials[i]
             max_poly_a = max(np.abs(self.polynom_a[i,:]))
             max_poly_b = max(np.abs(self.polynom_b[i,:]))
             integ_poly_a = self.polynom_a_integral[i]
             integ_poly_b = self.polynom_b_integral[i]
-            integ_poly_a_norm = self.polynom_a_integral_normalized[i]
-            integ_poly_b_norm = self.polynom_b_integral_normalized[i]
-            r += '\n{0:35s} {1:^17.4e} {2:^+17.4e} {5:^+17.4e} | {3:^17.4e} {4:^+17.4e} {6:^+17.4e}'.format('n={0:02d}:'.format(n), max_poly_b, integ_poly_b, max_poly_a, integ_poly_a, integ_poly_b_norm, integ_poly_a_norm)
+            integ_poly_a_relative = self.polynom_a_integral_relative[i]
+            integ_poly_b_relative = self.polynom_b_integral_relative[i]
+            polynom_a = self.polynom_a_hardedge[i]
+            polynom_b = self.polynom_b_hardedge[i]
+            r += '\n{0:35s} {1:^12.3e} {2:^+12.3e} {5:^+12.4e} {7:^+12.3e} | {3:^12.3e} {4:^+12.3e} {6:^+12.3e} {8:^+12.3e}'.format('n={0:02d}:'.format(n), max_poly_b, integ_poly_b, max_poly_a, integ_poly_a, integ_poly_b_relative, integ_poly_a_relative, polynom_b, polynom_a)
         return r

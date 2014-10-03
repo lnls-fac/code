@@ -14,6 +14,7 @@ class Config:
         self.fmap_extrapolation_flag = False
         self.fmap_extrapolation_threshold_field_fraction = 0.3
         self.fmap_extrapolation_exponents = None
+        self.model_hardedge_length = None
         self.traj_rk_s_step = None
         self.traj_rk_length = None 
         self.traj_rk_nrpts = None
@@ -90,7 +91,7 @@ def calc_sagitta(half_dipole_length, trajectory):
               
 def trajectory_analysis(config):
     
-    config.beam = fieldmaptrack.Beam(energy = config.beam_energy, current = config.beam_current)
+    config.beam = fieldmaptrack.Beam(energy = config.beam_energy)
     
     # calcs reference trajectory
     # ==========================
@@ -124,7 +125,7 @@ def trajectory_analysis(config):
     
     # prints basic information on the reference trajectory
     # ====================================================
-    print('--- trajectory ---')
+    print('--- trajectory (rz > 0) ---')
     print(config.traj)
     print('{0:<35s} {1} mm'.format('sagitta:', config.traj_sagitta))
     
@@ -144,11 +145,13 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles()
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_normalized(config.multipoles.polynom_b_integral, 0, r0 = config.multipoles_r0)
-    
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.polynom_b_integral, 0, r0 = config.multipoles_r0)
+    config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
+        
+         
     # prints basic information on multipoles
     # ======================================
-    print('--- multipoles on trajectory ---')
+    print('--- multipoles on reference trajectory (rz > 0) ---')
     print(config.multipoles)
     
     # plots normal multipoles

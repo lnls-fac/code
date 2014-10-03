@@ -4,11 +4,11 @@
 import os
 import sys
 import pywikibot
-import storage_ring
-import booster
-import linac
-import linac_to_booster_transport_line
-import booster_to_storage_ring_transport_line
+import sirius_si
+import sirius_bo
+import sirius_li
+import sirius_tb
+import sirius_ts
 
 
 sort_flag = False
@@ -191,11 +191,11 @@ def process_arguments(argv):
         submachine  = None
         parms_lists = {'si':[], 'bo':[], 'li':[], 'tb':[], 'ts':[]}
         subma_flags = {'si':False, 'bo':False, 'li':False, 'tb':False, 'ts':False}
-        all_parms   = {'si':storage_ring, 'bo':booster, 'li':linac, 'tb': linac_to_booster_transport_line, 'ts': booster_to_storage_ring_transport_line}
+        all_parms   = {'si':sirius_si, 'bo':sirius_bo, 'li':sirius_li, 'tb': sirius_tb, 'ts': sirius_ts}
         '''builds lists with parameters'''
         for arg in argv[1:]:
             if arg == 'help':
-                print_help()
+                print_help(argv)
             elif arg == 'parameters':
                 lists_all_parameters()
             elif arg == 'si':
@@ -217,7 +217,7 @@ def process_arguments(argv):
                 sort_flag = True
             else:
                 if submachine is None:
-                    print_help()
+                    print_help(argv)
                 else:
                     parms_lists[submachine].append(arg)
                 

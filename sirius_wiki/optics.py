@@ -4,7 +4,6 @@ import math
 import mathphys.constants as const
 import mathphys.units as units
 
-
 def gamma(energy):
     '''Gamma from energy[GeV].'''
     return energy * 1.0e9 / units.joule_2_eV(const.electron_rest_energy)

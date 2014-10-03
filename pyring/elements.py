@@ -102,7 +102,6 @@ class marker(object):
        
         return r    
     
-    
 class drift(marker):
     def __init__(self, pass_method = passmethods.pm_drift_pass, **kwargs):
         marker.__init__(self, pass_method = pass_method, **kwargs)
