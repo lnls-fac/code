@@ -653,7 +653,7 @@ parameter_list = [
     group    = 'FAC',
     value    = Prms.si_beam_velocity,
     symbol   = r'<math>v</math>',
-    units    = '',
+    units    = 'm/s',
     deps     = ['Storage ring beam beta factor'],
     obs      = [],
   ),
