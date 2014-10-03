@@ -1,4 +1,4 @@
-[ltba, tit, Twiss0] = ltba_lattice;
+[ltba, tit, Twiss0] = sirius_ts_lattice;
 
 um = 1e-6;
 mm = 1e-3;

@@ -49,10 +49,10 @@ l25      = drift('l25', 0.25, 'DriftPass');
 l50      = drift('l50', 0.50, 'DriftPass');
 
 la1p     = drift('la1p', 0.58000, 'DriftPass');
-la2p     = drift('la2p', 0.37111, 'DriftPass');
+la2p     = drift('la2p', 0.37114, 'DriftPass');
 la3      = drift('la3' , 0.49000, 'DriftPass');
 lb1      = drift('lb1' , 0.92000, 'DriftPass');
-lb2p     = drift('lb2p', 0.46459, 'DriftPass');
+lb2p     = drift('lb2p', 0.46417, 'DriftPass');
 lb3      = drift('lb3' , 0.70000, 'DriftPass');
 
 lc1p     = drift('lc1p', 0.58000, 'DriftPass');
