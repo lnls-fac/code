@@ -153,7 +153,6 @@ AD.ModeName            = 'LowE';
 AD.OpsFileExtension    = '';
 
 sirius_bo_lattice(AD.Energy);
-atsummary;
 
 AD.Circumference       = findspos(THERING,length(THERING)+1);
 AD.HarmonicNumber      = 828;
