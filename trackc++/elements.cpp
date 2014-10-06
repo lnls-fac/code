@@ -29,10 +29,17 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 
 };
 
+
 Element Element::marker (const std::string& fam_name_) {
 	Element e = Element(fam_name_, 0);
 	e.pass_method = PassMethod::pm_identity_pass;
 	return e;
+}
+
+Element Element::bpm (const std::string& fam_name_) {
+    Element e = Element(fam_name_, 0);
+    e.pass_method = PassMethod::pm_identity_pass;
+    return e;
 }
 
 Element Element::drift (const std::string& fam_name_, const double& length_) {
