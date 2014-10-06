@@ -6,13 +6,13 @@ tdata = importdata(fname, ' ', nr_header_lines); tdata = tdata.data;
 
 % Agora, eu tenho que encontrar a DA
 %primeiro eu identifico quantos x e y existem
-npe = length(unique(tdata(:,7)));
+npe = length(unique(tdata(:,8)));
 npx = size(tdata,1)/npe;
 %agora eu pego a coluna da frequencia x
-en = tdata(:,7);
-x = tdata(:,3);
-plane = tdata(:,11);
-turn = tdata(:,10);
+en = tdata(:,8);
+x = tdata(:,6);
+plane = tdata(:,4);
+turn = tdata(:,2);
 % e a redimensiono para que todos os valores calculados para x iguais
 %fiquem na mesma coluna:
 en = reshape(en,npx,npe); dados.en = en;
