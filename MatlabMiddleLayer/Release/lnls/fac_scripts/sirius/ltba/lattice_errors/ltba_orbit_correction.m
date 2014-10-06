@@ -5,9 +5,14 @@ mm = 1e-3;
 mrad = 1e-3;
 pc = 1e-2;
 
+Path = mfilename('fullpath');
+ip = strfind(Path,'/');
+Path = Path(1:ip(end));
+
 % Errors
 rms_alix = 0.3 * mm;
 rms_aliy = 0.3 * mm;
+rms_roll = 0.4 * mrad;
 rms_ex   = 0.1 * pc;
 rms_x0   = 0.1 * mm;
 rms_xp0  = 0.1 * mrad;
@@ -93,9 +98,11 @@ for nmaq=1:n_maquinas
     errox = (-1+2*rand(1,length(idx))) * rms_alix;
     erroy = (-1+2*rand(1,length(idx))) * rms_aliy;
     erroex = (-1+2*rand(1,length(idx))) * rms_ex;
+    erroroll = (-1+2*rand(1,length(idx))) * rms_roll;
 
     ltba = lnls_set_misalignmentX(errox, idx, ltba);
     ltba = lnls_set_misalignmentY(erroy, idx, ltba);
+    ltba = lnls_set_rotation_ROLL(erroroll, idx, ltba);
     erroex = lnls_set_excitation(erroex, idx, ltba);
     
 %    for i=1:length(idx)
@@ -171,9 +178,15 @@ x_BPM_rms = std(x_BPM,0,2);
 y_BPM_rms = std(y_BPM,0,2);
 xc_BPM_rms = std(xc_BPM,0,2);
 yc_BPM_rms = std(yc_BPM,0,2);
-teta_ch_rms = std(dteta_ch(:));
+
+%separando ch e septa
+dteta_sep = [ dteta_ch(1,:) ; dteta_ch(end,:) ];
+dteta_cch = dteta_ch(2:end-1,:);
+teta_cch_rms = std(dteta_cch(:));
+teta_sep_rms = std(dteta_sep(:));
 teta_cv_rms = std(dteta_cv(:));
-teta_ch_max = max(abs(dteta_ch(:)));
+teta_cch_max = max(abs(dteta_cch(:)));
+teta_sep_max = max(abs(dteta_sep(:)));
 teta_cv_max = max(abs(dteta_cv(:)));
 
 % Correction summary
@@ -197,17 +210,18 @@ Ycptp_mean = mean(orbcy_ptp);
 Xcptp_max = max(orbcx_ptp);
 Ycptp_max = max(orbcy_ptp);
 
-fout = fopen('/Users/fac_files/estudo_LTBA/Correction_summary.out', 'w');
+fout = fopen([Path 'Correction_summary.out'], 'w');
 fprintf(fout,'Correction_summary\n');
 fprintf(fout,['BTS Transfer Line - ' tit '\n']);
 fprintf(fout,'Uniform random errors for all dipoles, septa and quadrupoles\n');
 fmt = 'X alignment = +-%g mm\n'; fprintf(fout,fmt,rms_alix/mm);
 fmt = 'y alignment = +-%g mm\n'; fprintf(fout,fmt,rms_aliy/mm);
+fmt = 'roll = +-%g mrad\n'; fprintf(fout,fmt,rms_roll/mrad);
 fmt = 'relative excitation = +-%g %%\n'; fprintf(fout,fmt,rms_ex/pc);
-fmt = 'x launch condition = +-%g mm\n'; fprintf(fout,fmt,rms_x0/mm);
-fmt = 'xp launch condition = +-%g mrad\n'; fprintf(fout,fmt,rms_xp0/mrad);
-fmt = 'y launch condition = +-%g mm\n'; fprintf(fout,fmt,rms_y0/mm);
-fmt = 'yp launch condition = +-%g mrad\n'; fprintf(fout,fmt,rms_yp0/mrad);
+fmt = 'x launching condition = +-%g mm\n'; fprintf(fout,fmt,rms_x0/mm);
+fmt = 'xp launching condition = +-%g mrad\n'; fprintf(fout,fmt,rms_xp0/mrad);
+fmt = 'y launching condition = +-%g mm\n'; fprintf(fout,fmt,rms_y0/mm);
+fmt = 'yp launching condition = +-%g mrad\n'; fprintf(fout,fmt,rms_yp0/mrad);
 fmt = 'number of machines = %i\n\n'; fprintf(fout,fmt,n_maquinas);
 
 fmt = '                          before   after \n'; fprintf(fout,fmt);
@@ -221,10 +235,10 @@ fmt = 'Average V peak-to-peak    %5.3f    %5.3f \n'; fprintf(fout,fmt,Yptp_mean/
 fmt = 'Max. H peak-to-peak       %5.3f    %5.3f \n'; fprintf(fout,fmt,Xptp_max/mm,Xcptp_max/mm);
 fmt = 'Max. V peak-to-peak       %5.3f    %5.3f \n\n'; fprintf(fout,fmt,Yptp_max/mm,Ycptp_max/mm);
 
-fmt = '                          H       V \n'; fprintf(fout,fmt);
-fmt = '                        (mrad)  (mrad) \n'; fprintf(fout,fmt);
-fmt = 'rms corrector strength  %5.3f   %5.3f  \n'; fprintf(fout,fmt,teta_ch_rms/mrad,teta_cv_rms/mrad);
-fmt = 'Max corrector strength  %5.3f   %5.3f  \n\n'; fprintf(fout,fmt,teta_ch_max/mrad,teta_cv_max/mrad);
+fmt = '                         CH      CV      septa \n'; fprintf(fout,fmt);
+fmt = '                        (mrad)  (mrad)  (mrad) \n'; fprintf(fout,fmt);
+fmt = 'rms corrector strength  %5.3f   %5.3f   %5.3f  \n'; fprintf(fout,fmt,teta_cch_rms/mrad,teta_cv_rms/mrad,teta_sep_rms/mrad);
+fmt = 'Max corrector strength  %5.3f   %5.3f   %5.3f  \n\n'; fprintf(fout,fmt,teta_cch_max/mrad,teta_cv_max/mrad,teta_sep_max/mrad);
 
 tetai_ch_rms = std(dteta_ch,0,2);
 tetai_cv_rms = std(dteta_cv,0,2);
@@ -232,6 +246,7 @@ tetai_ch_max = max(abs(dteta_ch),[],2);
 tetai_cv_max = max(abs(dteta_cv),[],2);
 fmt = '      rms     max \n'; fprintf(fout,fmt);
 fmt = '     (mrad)  (mrad) \n'; fprintf(fout,fmt);
+
 for i=1:nch
     fmt = 'CH%i  %5.3f   %5.3f  \n'; fprintf(fout,fmt,i,tetai_ch_rms(i)/mrad,tetai_ch_max(i)/mrad);
 end
