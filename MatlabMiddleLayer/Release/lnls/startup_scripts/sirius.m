@@ -3,13 +3,13 @@ function sirius_new(varargin)
 %
 % Historico
 %
-% 2011-06-02: c??pia modificada da vers??o do LNLS1
-% 2011-04-28: nova vers??o. script transformado em fun????o.
-% 2010-09-16: coment??rios iniciais no c??digo
+% 2011-06-02: copia modificada da versao do LNLS1
+% 2011-04-28: nova versao. script transformado em funcao.
+% 2010-09-16: comentarios iniciais no codigo
 
 Disconnect = false;
 
-default_version = 'SI_V03';
+default_version = 'SI.V03';
 
 for i=length(varargin):-1:1
     if ischar(varargin{i})
