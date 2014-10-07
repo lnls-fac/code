@@ -8,6 +8,46 @@ label = 'Storage ring'
 parameter_list = [
         
   Parameter(
+    name     = 'Storage ring hardedge sagitta of B1 dipoles',
+    group    = 'FAC',
+    value    = Prms.si_hardedge_sagitta_of_B1_dipoles,
+    symbol   = r'<math>S_\text{ag, B1}</math>',
+    units    = 'mm',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring hardedge sagitta of B2 dipoles',
+    group    = 'FAC',
+    value    = Prms.si_hardedge_sagitta_of_B2_dipoles,
+    symbol   = r'<math>S_\text{ag, B2}</math>',
+    units    = 'mm',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring hardedge sagitta of B3 dipoles',
+    group    = 'FAC',
+    value    = Prms.si_hardedge_sagitta_of_B3_dipoles,
+    symbol   = r'<math>S_\text{ag, B3}</math>',
+    units    = 'mm',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
+    name     = 'Storage ring hardedge sagitta of BC dipoles',
+    group    = 'FAC',
+    value    = Prms.si_hardedge_sagitta_of_BC_dipoles,
+    symbol   = r'<math>S_\text{ag, BC}</math>',
+    units    = 'mm',
+    deps     = [],
+    obs      = [],
+  ),
+                    
+  Parameter(
     name     = 'Storage ring number of beam position monitors',
     group    = 'FAC',
     value    = Prms.si_number_of_beam_position_monitors,
