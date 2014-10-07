@@ -30,7 +30,7 @@ struct PassMethod {
     };
 };
 
-const std::string string_passmethods[] = {
+const std::vector<std::string> string_passmethods = {
         "pm_identity_pass",
         "pm_drift_pass",
         "pm_str_mpole_symplectic_pass",
@@ -43,7 +43,7 @@ const std::string string_passmethods[] = {
         "pm_bnd_mpole_symplectic_pass",
 };
 
-const std::string pm_dict[] = {
+const std::vector<std::string> pm_dict = {
         "identity_pass",
         "drift_pass",
         "str_mpole_symplectic4_pass",
@@ -73,7 +73,7 @@ struct Status {
     };
 };
 
-const std::string string_error_messages[] = {
+const std::vector<std::string> string_error_messages = {
         "success",
         "passmethod_not_defined",
         "passmethod_not_implemented",
