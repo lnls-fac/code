@@ -24,7 +24,8 @@ SOURCES_CPP	= 	lattice.cpp \
 			flat_file.cpp optics.cpp \
 			dynap.cpp commands.cpp \
 			output.cpp \
-			kicktable.cpp
+			kicktable.cpp \
+			exec.cpp
 
 LIBS            = tracking_mp/build/tracking_mp.a -lpthread -lgsl -lgslcblas
 INC             = 

@@ -14,10 +14,82 @@
 #include <iostream>
 #include <cmath>
 
-// Important: 	the order of these passmethods and the order
-// ==========	of the pyring passmethods have to be the same
-//				so that python can correctly call trackcpp
-//				module.
+
+struct PassMethod {
+    enum type {
+        pm_identity_pass                  = 0,
+        pm_drift_pass                     = 1,
+        pm_str_mpole_symplectic4_pass     = 2,
+        pm_bnd_mpole_symplectic4_pass     = 3,
+        pm_corrector_pass                 = 4,
+        pm_cavity_pass                    = 5,
+        pm_thinquad_pass                  = 6,
+        pm_thinsext_pass                  = 7,
+        pm_kicktable_pass                 = 8,
+        pm_nr_pms                         = 9
+    };
+};
+
+const std::string string_passmethods[] = {
+        "pm_identity_pass",
+        "pm_drift_pass",
+        "pm_str_mpole_symplectic_pass",
+        "pm_bnd_mpole_symplectic_pass",
+        "pm_corrector_pass",
+        "pm_cavity_pass",
+        "pm_thinquad_pass",
+        "pm_thinsext_pass",
+        "pm_str_mpole_symplectic_pass",
+        "pm_bnd_mpole_symplectic_pass",
+};
+
+const std::string pm_dict[] = {
+        "identity_pass",
+        "drift_pass",
+        "str_mpole_symplectic4_pass",
+        "bnd_mpole_symplectic4_pass",
+        "corrector_pass",
+        "cavity_pass",
+        "thinquad_pass",
+        "thinsext_pass",
+        "kicktable_pass"
+};
+
+struct Status {
+    enum type {
+        success = 0,
+        passmethod_not_defined = 1,
+        passmethod_not_implemented = 2,
+        particle_lost = 3,
+        inconsistent_dimensions = 4,
+        uninitialized_memory = 5,
+        findorbit_not_converged = 6,
+        findorbit_one_turn_matrix_problem = 7,
+        file_not_found = 8,
+        file_not_opened = 9,
+        kicktable_not_defined = 10,
+        kicktable_out_of_range = 11,
+        flat_file_error = 12
+    };
+};
+
+const std::string string_error_messages[] = {
+        "success",
+        "passmethod_not_defined",
+        "passmethod_not_implemented",
+        "particle_lost",
+        "inconsistent_dimensions",
+        "uninitialized_memory",
+        "findorbit_not_converged",
+        "findorbit_one_turn_matrix_problem",
+        "file_not_found",
+        "file_not_opened",
+        "kicktable_not_defined",
+        "kicktable_out_of_range",
+        "flat_file_error"
+};
+
+const std::string string_version = "TRACKC++ version(" + std::string(__DATE__) + " " + std::string(__TIME__) + ")";
 
 struct Plane {
 	enum type {
@@ -27,55 +99,6 @@ struct Plane {
 		z = 3
 	};
 };
-
-struct PassMethod {
-	enum type {
-		pm_identity_pass                  = 0,
-		pm_drift_pass                     = 1,
-		pm_str_mpole_symplectic4_pass     = 2,
-		pm_bnd_mpole_symplectic4_pass     = 3,
-		pm_corrector_pass                 = 4,
-		pm_cavity_pass                    = 5,
-		pm_thinquad_pass                  = 6,
-		pm_thinsext_pass                  = 7,
-		pm_kicktable_pass                 = 8,
-		pm_nr_pms                         = 9
-	};
-};
-
-const std::string pm_dict[] = {
-		"identity_pass",
-		"drift_pass",
-		"str_mpole_symplectic4_pass",
-		"bnd_mpole_symplectic4_pass",
-		"corrector_pass",
-		"cavity_pass",
-		"thinquad_pass",
-		"thinsext_pass",
-		"kicktable_pass"
-};
-
-struct Status {
-	enum type {
-		success = 0,
-		passmethod_not_defined = 1,
-		passmethod_not_implemented = 2,
-		particle_lost = 3,
-		inconsistent_dimensions = 4,
-		uninitialized_memory = 5,
-		findorbit_not_converged = 6,
-		findorbit_one_turn_matrix_problem = 7,
-		file_not_found = 8,
-		file_not_opened = 9,
-		kicktable_not_defined = 10,
-		kicktable_out_of_range = 11,
-		flat_file_error = 12
-	};
-};
-
-extern std::string string_passmethods[];
-extern std::string string_error_messages[];
-extern std::string string_version;
 
 template <typename T> class Pos;
 class Element;
@@ -94,7 +117,6 @@ int sgn(T val) {
 	if (val >= 0) return 1; else return -1;
 }
 
-double get_magnetic_rigidity(const double energy);
 bool isfinite(const double& v);
 std::string get_timestamp();
 

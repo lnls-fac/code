@@ -101,3 +101,8 @@ void del_kicktables(std::vector<Kicktable*>& kicktable_list) {
 	}
 }
 
+Kick Kicktable::interpolate_kicks(const double& rx, const double& ry) const {
+    Kick kick;
+    kick.status = kicktable_getkicks(this, rx, ry, kick.hkick, kick.vkick);
+    return kick;
+}
