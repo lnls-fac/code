@@ -10,13 +10,12 @@ function [r, lattice_title] = sirius_si_lattice(varargin)
 %
 % Todos os inputs comutam e podem ser passados independentemente.
 %
-%
-%
-% 2012-08-28: Nova rede - Ximenes.
-% 2013-08-08: inseri marcadores de IDs de 2 m nos trechos retos. (X.R.R.)
-% 2013-08-12: corretoras rapidas e atualizacao das lentas e dos BPMs (desenho CAD da Liu). (X.R.R.)
-% 2013-10-02: adicionei o mode_version como parametro de input. Fernando.
+% 2012-08-28: nova rede. (xrr)
+% 2013-08-08: inseri marcadores de IDs de 2 m nos trechos retos. (xrr)
+% 2013-08-12: corretoras rapidas e atualizacao das lentas e dos BPMs (desenho CAD da Liu). (xrr)
+% 2013-10-02: adicionei o mode_version como parametro de input. (Fernando)
 % 2014-09-17: modificacao das corretoras para apenas uma par integrado de CV e CH rapidas e lentas no mesmo elemento. (Natalia) 
+% 2014-10-07: atualizados nomes de alguns elementos. (xrr)
 
 global THERING;
 
@@ -26,7 +25,7 @@ global THERING;
 
 % --- system parameters ---
 energy = 3e9;
-mode   = 'C';% a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
+mode   = 'C';   % a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
 version = '02';
 harmonic_number = 864;
 
@@ -54,9 +53,7 @@ set_magnet_strengths;
 
 bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
-%quad_pass_method = 'QuadLinearPass';
 sext_pass_method = 'StrMPoleSymplectic4Pass';
-mult_pass_method = 'ThinMPolePass';
 
 
 %% elements
@@ -67,10 +64,8 @@ mult_pass_method = 'ThinMPolePass';
 
 id_length = 2.0; % [m]
 
-%dia      = drift('dia', 3.2728500, 'DriftPass');
 dia1     = drift('dia', id_length/2, 'DriftPass');
 dia2     = drift('dia', 3.4828500 - id_length/2, 'DriftPass');
-%dib      = drift('dib', 2.909200 + 3.65e-3, 'DriftPass');
 dib1     = drift('dib', id_length/2, 'DriftPass');
 dib2     = drift('dib', 3.0128500 - id_length/2, 'DriftPass');
 d00      = drift('d00', 0.005000, 'DriftPass');
@@ -90,7 +85,6 @@ d30      = drift('d30', 0.300000, 'DriftPass');
 d33      = drift('d33', 0.330000, 'DriftPass');
 d44      = drift('d44', 0.440000, 'DriftPass');
 d45      = drift('d45', 0.450000, 'DriftPass');
-d71      = drift('d71', 0.710000, 'DriftPass');
 
 % --- markers ---
 mc       = marker('mc',      'IdentityPass');
@@ -103,26 +97,23 @@ inicio   = marker('inicio',  'IdentityPass');
 fim      = marker('fim',     'IdentityPass');
 mida     = marker('id_enda',  'IdentityPass');
 midb     = marker('id_endb',  'IdentityPass');
-%mgirder  = marker('mgirder', 'IdentityPass');
 
 % --- beam position monitors ---
 mon      = marker('BPM', 'IdentityPass');
 
 % --- quadrupoles ---
-qaf      = quadrupole('qaf',  0.250000, qaf_strength,  quad_pass_method);
-qad      = quadrupole('qad',  0.140000, qad_strength,  quad_pass_method);
-qbd2     = quadrupole('qbd2', 0.140000, qbd2_strength, quad_pass_method);
-qbf      = quadrupole('qbf',  0.340000, qbf_strength,  quad_pass_method);
-qbd1     = quadrupole('qbd1', 0.140000, qbd1_strength, quad_pass_method);
+qfa      = quadrupole('qfa',  0.250000, qfa_strength,  quad_pass_method);
+qda1     = quadrupole('qda1', 0.140000, qda1_strength, quad_pass_method);
+qdb2     = quadrupole('qdb2', 0.140000, qdb2_strength, quad_pass_method);
+qfb      = quadrupole('qfb',  0.340000, qfb_strength,  quad_pass_method);
+qdb1     = quadrupole('qdb1', 0.140000, qdb1_strength, quad_pass_method);
 qf1      = quadrupole('qf1',  0.250000, qf1_strength,  quad_pass_method);
 qf2      = quadrupole('qf2',  0.250000, qf2_strength,  quad_pass_method);
 qf3      = quadrupole('qf3',  0.250000, qf3_strength,  quad_pass_method);
 qf4      = quadrupole('qf4',  0.250000, qf4_strength,  quad_pass_method);
 
-
 % --- bending magnets --- 
 deg_2_rad = (pi/180);
-
 
 % -- b1 --
 dip_nam =  'b1';
@@ -170,16 +161,11 @@ ch     = corrector('hcm',  0, [0 0], 'CorrectorPass');
 cv     = corrector('vcm',  0, [0 0], 'CorrectorPass');
 crhv   = corrector('crhv', 0, [0,0], 'CorrectorPass');
 
-% ch     = sextupole('hcm',  0, 1*5e-4, 'ThinMPolePass');  % 2.5% rollof at 10 mm
-% cv     = sextupole('vcm',  0, 1*5e-4, 'ThinMPolePass');
-
-%IDm = multipole('IDsmulti', 0, [0 0 0 0], [0 0 0 0], 'ThinMPolePass'); 
-
 % --- sextupoles ---    
-sa1      = sextupole('sa1', 0.150000, sa1_strength, sext_pass_method);
-sa2      = sextupole('sa2', 0.150000, sa2_strength, sext_pass_method);
-sb1      = sextupole('sb1', 0.150000, sb1_strength, sext_pass_method);
-sb2      = sextupole('sb2', 0.150000, sb2_strength, sext_pass_method);
+sfa      = sextupole('sfa',  0.150000, sfa_strength,  sext_pass_method);
+sda      = sextupole('sda',  0.150000, sda_strength,  sext_pass_method);
+sfb      = sextupole('sfb',  0.150000, sfb_strength,  sext_pass_method);
+sdb      = sextupole('sdb',  0.150000, sdb_strength,  sext_pass_method);
 sd1a     = sextupole('sd1a', 0.150000, sd1a_strength, sext_pass_method);
 sf1a     = sextupole('sf1a', 0.150000, sf1a_strength, sext_pass_method);
 sd2a     = sextupole('sd2a', 0.150000, sd2a_strength, sext_pass_method);
@@ -196,8 +182,8 @@ cav = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
 %% lines 
 
-insa   = [ dia1, mida, dia2, ch, cv, crhv, d12, sa2, d12, mon, d12, qaf, d23, qad, d14, d00, sa1, d19, d00];
-insb   = [ dib1, midb, dib2, qbd2, d18, ch, cv, crhv, d16, sb2, d15, mon, d11, qbf, d23, qbd1, d14, d00, sb1, d19, d00];
+insa   = [ dia1, mida, dia2, ch, cv, crhv, d12, sda, d12, mon, d12, qfa, d23, qda1, d14, d00, sfa, d19, d00];
+insb   = [ dib1, midb, dib2, qdb2, d18, ch, cv, crhv, d16, sdb, d15, mon, d11, qfb, d23, qdb1, d14, d00, sfb, d19, d00];
 
 cline1a = [ d45, d00, ch, cv, d16, sd1a, d14, d00, qf1, d12, mon, d11, sf1a, d20, qf2, d14, d00, sd2a, d12, ch, d10, mon, d12, d00];
 cline2a = [ d30, d00, cv, d16, sd3a, d14, d00, qf3, d12, mon, d11, sf2a, d20, qf4, d16, ch, crhv, d33, d10, mon, d12];
@@ -211,24 +197,21 @@ cline4b = [ d22, d00, ch, d12, sd2b, d14, d00, qf2, d20, sf1b, d11, mon, d12, qf
 
 %% Injection Section
 dmiainj  = drift('dmiainj', 0.39, 'DriftPass');
-dinjk3   = drift('dinjk3' , 0.3, 'DriftPass');
-dk3k4    = drift('dk3k4'  , 0.6, 'DriftPass');
-dk4pmm   = drift('dk4pmm' , 0.2, 'DriftPass');
+dinjk3   = drift('dinjk3' , 0.30, 'DriftPass');
+dk3k4    = drift('dk3k4'  , 0.60, 'DriftPass');
+dk4pmm   = drift('dk4pmm' , 0.20, 'DriftPass');
 dpmmcv   = drift('dpmmcv' , 0.1628500, 'DriftPass');
 dcvk1    = drift('dcvk1'  , 0.0728500, 'DriftPass');
-dk1k2    = drift('dk1k2'  , 0.6, 'DriftPass');
-sef      = sextupole('sef', 0.6, 0.0, sext_pass_method); %corrector('sef', 0.6, [0 0], 'CorrectorPass');
-dk2sef   = drift('dk2mia' , 0.8, 'DriftPass');
+dk1k2    = drift('dk1k2'  , 0.60, 'DriftPass');
+sef      = sextupole('sef', 0.60, 0.0, sext_pass_method); %corrector('sef', 0.6, [0 0], 'CorrectorPass');
+dk2sef   = drift('dk2mia' , 0.80, 'DriftPass');
+kick     = corrector('kick',0.60, [0 0], 'CorrectorPass');
+pmm      = sextupole('pmm', 0.60, 0.0, sext_pass_method);
+inj      = marker('inj','IdentityPass');
 
-kick     = corrector('kick',0.6, [0 0], 'CorrectorPass');
-pmm      = sextupole('pmm', 0.6, 0.0, sext_pass_method);
-inj = marker('inj','IdentityPass');
-
-insaend  = [ch, cv, crhv, d12, sa2, d12, mon, d12, qaf, d23, qad, d14, d00, sa1, d19, d00];
+insaend  = [ch, cv, crhv, d12, sda, d12, mon, d12, qfa, d23, qda1, d14, d00, sfa, d19, d00];
 insainj  = [d12, dmiainj, inj, dinjk3, kick, dk3k4, kick, dk4pmm, pmm, dpmmcv, insaend];
 injinsa  = [fliplr(insaend), d12, dcvk1, kick, dk1k2, kick, dk2sef, sef];
-
-
 
 B3BCB3 = [ B3, d13, BC, d13, B3];     
 

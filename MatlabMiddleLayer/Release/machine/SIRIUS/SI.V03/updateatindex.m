@@ -63,48 +63,48 @@ end
 
 
 try
-    % QAF
-    AO.qaf.AT.ATType = 'Quad';
-    AO.qaf.AT.ATIndex = buildatindex(AO.qaf.FamilyName, Indices.qaf);
-    AO.qaf.Position = findspos(THERING, AO.qaf.AT.ATIndex(:,1))';
+    % qfa
+    AO.qfa.AT.ATType = 'Quad';
+    AO.qfa.AT.ATIndex = buildatindex(AO.qfa.FamilyName, Indices.qfa);
+    AO.qfa.Position = findspos(THERING, AO.qfa.AT.ATIndex(:,1))';
 catch
-    warning('QAF family not found in the model.');
+    warning('qfa family not found in the model.');
 end
 
 try
-    % QAD
-    AO.qad.AT.ATType = 'Quad';
-    AO.qad.AT.ATIndex = buildatindex(AO.qad.FamilyName, Indices.qad);
-    AO.qad.Position = findspos(THERING, AO.qad.AT.ATIndex(:,1))';
+    % qda1
+    AO.qda1.AT.ATType = 'Quad';
+    AO.qda1.AT.ATIndex = buildatindex(AO.qda1.FamilyName, Indices.qda1);
+    AO.qda1.Position = findspos(THERING, AO.qda1.AT.ATIndex(:,1))';
 catch
-    warning('QAD family not found in the model.');
+    warning('qda1 family not found in the model.');
 end
 
 try
-    % QBF
-    AO.qbf.AT.ATType = 'Quad';
-    AO.qbf.AT.ATIndex = buildatindex(AO.qbf.FamilyName, Indices.qbf);
-    AO.qbf.Position = findspos(THERING, AO.qbf.AT.ATIndex(:,1))';
+    % qfb
+    AO.qfb.AT.ATType = 'Quad';
+    AO.qfb.AT.ATIndex = buildatindex(AO.qfb.FamilyName, Indices.qfb);
+    AO.qfb.Position = findspos(THERING, AO.qfb.AT.ATIndex(:,1))';
 catch
-    warning('QBF family not found in the model.');
+    warning('qfb family not found in the model.');
 end
 
 try
-    % QBD2
-    AO.qbd2.AT.ATType = 'Quad';
-    AO.qbd2.AT.ATIndex = buildatindex(AO.qbd2.FamilyName, Indices.qbd2);
-    AO.qbd2.Position = findspos(THERING, AO.qbd2.AT.ATIndex(:,1))';
+    % qdb2
+    AO.qdb2.AT.ATType = 'Quad';
+    AO.qdb2.AT.ATIndex = buildatindex(AO.qdb2.FamilyName, Indices.qdb2);
+    AO.qdb2.Position = findspos(THERING, AO.qdb2.AT.ATIndex(:,1))';
 catch
-    warning('QBD2 family not found in the model.');
+    warning('qdb2 family not found in the model.');
 end
 
 try
-    % QBD1
-    AO.qbd1.AT.ATType = 'Quad';
-    AO.qbd1.AT.ATIndex = buildatindex(AO.qbd1.FamilyName, Indices.qbd1);
-    AO.qbd1.Position = findspos(THERING, AO.qbd1.AT.ATIndex(:,1))';
+    % qdb1
+    AO.qdb1.AT.ATType = 'Quad';
+    AO.qdb1.AT.ATIndex = buildatindex(AO.qdb1.FamilyName, Indices.qdb1);
+    AO.qdb1.Position = findspos(THERING, AO.qdb1.AT.ATIndex(:,1))';
 catch
-    warning('QBD1 family not found in the model.');
+    warning('qdb1 family not found in the model.');
 end
 
 try
@@ -129,21 +129,21 @@ catch
 end
 
 try
-    % SA2
-    AO.sa2.AT.ATType = 'Sext';
-    AO.sa2.AT.ATIndex = buildatindex(AO.sa2.FamilyName, Indices.sa2);
-    AO.sa2.Position = findspos(THERING, AO.sa2.AT.ATIndex(:,1))';
+    % sda
+    AO.sda.AT.ATType = 'Sext';
+    AO.sda.AT.ATIndex = buildatindex(AO.sda.FamilyName, Indices.sda);
+    AO.sda.Position = findspos(THERING, AO.sda.AT.ATIndex(:,1))';
 catch
-    warning('SA2 family not found in the model.');
+    warning('sda family not found in the model.');
 end
 
 try
-    % SA1
-    AO.sa1.AT.ATType = 'Sext';
-    AO.sa1.AT.ATIndex = buildatindex(AO.sa1.FamilyName, Indices.sa1);
-    AO.sa1.Position = findspos(THERING, AO.sa1.AT.ATIndex(:,1))';
+    % sfa
+    AO.sfa.AT.ATType = 'Sext';
+    AO.sfa.AT.ATIndex = buildatindex(AO.sfa.FamilyName, Indices.sfa);
+    AO.sfa.Position = findspos(THERING, AO.sfa.AT.ATIndex(:,1))';
 catch
-    warning('SA1 family not found in the model.');
+    warning('sfa family not found in the model.');
 end
 
 
@@ -240,21 +240,21 @@ catch
 end
 
 try
-    % SB1
-    AO.sb1.AT.ATType = 'Sext';
-    AO.sb1.AT.ATIndex = buildatindex(AO.sb1.FamilyName, Indices.sb1);
-    AO.sb1.Position = findspos(THERING, AO.sb1.AT.ATIndex(:,1))';
+    % sfb
+    AO.sfb.AT.ATType = 'Sext';
+    AO.sfb.AT.ATIndex = buildatindex(AO.sfb.FamilyName, Indices.sfb);
+    AO.sfb.Position = findspos(THERING, AO.sfb.AT.ATIndex(:,1))';
 catch
-    warning('SB1 family not found in the model.');
+    warning('sfb family not found in the model.');
 end
 
 try
-    % SB2
-    AO.sb2.AT.ATType = 'Sext';
-    AO.sb2.AT.ATIndex = buildatindex(AO.sb2.FamilyName, Indices.sb2);
-    AO.sb2.Position = findspos(THERING, AO.sb2.AT.ATIndex(:,1))';
+    % sdb
+    AO.sdb.AT.ATType = 'Sext';
+    AO.sdb.AT.ATIndex = buildatindex(AO.sdb.FamilyName, Indices.sdb);
+    AO.sdb.Position = findspos(THERING, AO.sdb.AT.ATIndex(:,1))';
 catch
-    warning('SB2 family not found in the model.');
+    warning('sdb family not found in the model.');
 end
 
 try
@@ -321,8 +321,8 @@ try
          AO.sf1a.AT.ATIndex; ...
          AO.sd1b.AT.ATIndex; ...
          AO.sf1b.AT.ATIndex; ...
-         AO.sa1.AT.ATIndex; ...
-         AO.sa2.AT.ATIndex; ...
+         AO.sfa.AT.ATIndex; ...
+         AO.sda.AT.ATIndex; ...
          AO.sd3a.AT.ATIndex; ...
          AO.sd2a.AT.ATIndex; ...
          AO.sf2a.AT.ATIndex; ...
