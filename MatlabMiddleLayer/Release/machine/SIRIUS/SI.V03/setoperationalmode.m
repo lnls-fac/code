@@ -121,7 +121,7 @@ AD.MCF                 = getmcf('Model');
 AD.BeamCurrent         = 0.500; % [A]
 AD.NrBunches           = AD.HarmonicNumber;
 AD.Coupling            = 0.010;
-AD.OpsData.PrsProfFile = 'sirius_V02_pressure_profile.txt';
+AD.OpsData.PrsProfFile = 'sirius_pressure_profile.txt';
 
 setad(AD);
 switch2sim;
@@ -157,7 +157,7 @@ AD.MCF                 = getmcf('Model');
 AD.BeamCurrent         = 0.500; % [A]
 AD.NrBunches           = AD.HarmonicNumber;
 AD.Coupling            = 0.010;
-AD.OpsData.PrsProfFile = 'sirius_V02_pressure_profile.txt';
+AD.OpsData.PrsProfFile = 'sirius_pressure_profile.txt';
 
 setad(AD);
 switch2sim;
@@ -169,9 +169,9 @@ function set_operationalmode_c
 global THERING;
 
 AD = getad;
-AD.Machine             = 'SIRIUS_V03';           % Will already be defined if setpathmml was used
+AD.Machine             = 'SIRIUS.V03';           % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = 'V03_C02';
+AD.OperationalMode     = 'V03.C02';
 AD.Energy              = 3.0;
 AD.InjectionEnergy     = 3.0;
 AD.ModeName            = 'C';
@@ -193,7 +193,7 @@ AD.MCF                 = getmcf('Model');
 AD.BeamCurrent         = 0.500; % [A]
 AD.NrBunches           = AD.HarmonicNumber;
 AD.Coupling            = 0.010;
-AD.OpsData.PrsProfFile = 'sirius_V03_pressure_profile.txt';
+AD.OpsData.PrsProfFile = 'sirius_pressure_profile.txt';
 
 setad(AD);
 switch2sim;

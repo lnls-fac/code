@@ -12,7 +12,7 @@ function [r, lattice_title] = sirius_si_lattice(varargin)
 %
 %
 %
-% 2012-08-28 Nova rede - Ximenes.
+% 2012-08-28: Nova rede - Ximenes.
 % 2013-08-08: inseri marcadores de IDs de 2 m nos trechos retos. (X.R.R.)
 % 2013-08-12: corretoras rapidas e atualizacao das lentas e dos BPMs (desenho CAD da Liu). (X.R.R.)
 % 2013-10-02: adicionei o mode_version como parametro de input. Fernando.
@@ -30,7 +30,7 @@ mode   = 'C';% a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
 version = '02';
 harmonic_number = 864;
 
-lattice_version = 'SI_V03';
+lattice_version = 'SI.V03';
 % processamento de input (energia e modo de operacao)
 for i=1:length(varargin)
     if ischar(varargin{i}) && length(varargin{i})==1
@@ -42,7 +42,7 @@ for i=1:length(varargin)
     end;
 end
 
-lattice_title = [lattice_version '_' mode version];
+lattice_title = [lattice_version '.' mode version];
 fprintf(['   Loading lattice ' lattice_title ' - ' num2str(energy/1e9) ' GeV' '\n']);
 
 
@@ -298,11 +298,11 @@ anel = [ ...
     sector_11S C11 sector_12S C12 sector_13S C13 sector_14S C14 sector_15S C15 ...
     sector_16S C16 sector_17S C17 sector_18S C18 sector_19S C19 sector_20S C20 ...
 ];
+elist = anel;
 
 
 %% finalization 
 
-elist = anel;
 THERING = buildlat(elist);
 THERING = setcellstruct(THERING, 'Energy', 1:length(THERING), energy);
 
@@ -310,37 +310,36 @@ THERING = setcellstruct(THERING, 'Energy', 1:length(THERING), energy);
 idx = findcells(THERING, 'FamName', 'inicio');
 THERING = [THERING(idx:end) THERING(1:idx-1)];
 
-% checa se ha elementos com comprimentos negativos
+% checks if there are negative-drift elements
 lens = getcellstruct(THERING, 'Length', 1:length(THERING));
 if any(lens < 0)
     error(['AT model with negative drift in ' mfilename ' !\n']);
 end
 
-% Imprime versao do modo
-fprintf(['   Mode Version: ' mode version '\n']);
-
-% Ajuste de frequencia de RF de acordo com comprimento total e numero harmonico
+% adjusts RF frequency according to lattice length and synchronous condition
 const  = lnls_constants;
 L0_tot = findspos(THERING, length(THERING)+1);
 rev_freq    = const.c / L0_tot;
 rf_idx      = findcells(THERING, 'FamName', 'cav');
-THERING{rf_idx}.Frequency = rev_freq * harmonic_number;
-setcavity('on'); 
+rf_frequency = rev_freq * harmonic_number;
+THERING{rf_idx}.Frequency = rf_frequency;
+fprintf(['   RF frequency set to ' num2str(rf_frequency/1e6) ' MHz.\n']);
+
+% by default cavities and radiation is set to off 
+setcavity('off'); 
 setradiation('off');
 
-% Ajusta NumIntSteps
+% sets default NumIntSteps values for elements
 THERING = set_num_integ_steps(THERING);
 
-% Define Camara de Vacuo
-THERING = sirius_set_vacuum_chamber(THERING);
+% define vacuum chamber for all elements
+THERING = set_vacuum_chamber(THERING);
 
-% Define Girders
+% defines girders
 THERING = set_girders(THERING);
-
 
 % pre-carrega passmethods de forma a evitar problema com bibliotecas recem-compiladas
 lnls_preload_passmethods;
-
 
 r = THERING;
 

@@ -11,7 +11,7 @@ end
 % Modo default de carregamento
 OperationalMode = 1;
 
-ltlb_init;
+init;
 setoperationalmode(OperationalMode);
 
 

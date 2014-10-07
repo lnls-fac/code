@@ -16,10 +16,8 @@ checkforao;
 
 % MODES
 ModeCell = { ...
-    '3 GeV - Mode1', ...
-    '3 GeV - Mode2', ...
-    '3 GeV - Mode3', ...
-};
+    '3 GeV - Default', ...
+    };
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Accelerator Dependent Modes %
@@ -92,21 +90,21 @@ function set_operationalmode_mode1
 global THERING;
 
 AD = getad;
-AD.Machine             = 'SIRIUS_V500';  % Will already be defined if setpathmml was used
-AD.SubMachine          = 'LTLB_V200';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = '1';
-AD.Energy              = 0.150;
-AD.InjectionEnergy     = 0.150;
-AD.ModeName            = 'Mode1';
+AD.Machine             = 'SIRIUS';  % Will already be defined if setpathmml was used
+AD.SubMachine          = 'TS.V300';  % Will already be defined if setpathmml was used
+AD.OperationalMode     = 'M0';
+AD.Energy              = 3.0;
+AD.InjectionEnergy     = 3.0;
+AD.ModeName            = 'M0';
 AD.OpsFileExtension    = '';
 
-THERING = sirius_lb_lattice(AD.Energy, AD.ModeName);
-
+THERING = sirius_ts_lattice(AD.Energy, AD.ModeName);
+                                
 AD.DeltaRFDisp         = 2000e-6;
-AD.ATModel             = 'sirius_lb_lattice';
+AD.ATModel             = 'sirius_ts_lattice';
 AD.BeamCurrent         = 0.500; % [A]
 AD.Coupling            = 0.010;
-%AD.OpsData.PrsProfFile = 'sirius_V500_pressure_profile.txt';
+%AD.OpsData.PrsProfFile = 'sirius_V02_pressure_profile.txt';
 
 setad(AD);
 switch2sim;

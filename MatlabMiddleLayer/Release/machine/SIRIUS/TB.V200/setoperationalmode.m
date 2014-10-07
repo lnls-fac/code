@@ -1,23 +1,14 @@
 function setoperationalmode(ModeNumber)
-%SETOPERATIONALMODE - Switches between the various operational modes
-%  setoperationalmode(ModeNumber)
-%
-%  ModeNumber = 1.  3 GeV, AC20 {Default}
-%               2.  3 GeV, AC10
-%
-% History
-%
-% 2013-12-02 Ximenes
-
-
 
 % Check if the AO exists
 checkforao;
 
 % MODES
 ModeCell = { ...
-    '3 GeV - Default', ...
-    };
+    '150 MeV - M0', ...
+    '150 MeV - M1', ...
+    '150 MeV - M2', ...
+};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Accelerator Dependent Modes %
@@ -31,7 +22,11 @@ if nargin < 1
 end
 
 if (ModeNumber == 1)
-    set_operationalmode_default;
+    set_operationalmode_mode1;
+elseif (ModeNumber == 2)
+    set_operationalmode_mode2;
+elseif (ModeNumber == 3)
+    set_operationalmode_mode3;
 else
     error('Operational mode unknown');
 end
@@ -85,26 +80,76 @@ end
 fprintf('   Middlelayer setup for operational mode: %s\n', AD.OperationalMode);
 %atsummary;
 
-function set_operationalmode_default
+function set_operationalmode_mode1
 
 global THERING;
 
 AD = getad;
-AD.Machine             = 'SIRIUS_V02';  % Will already be defined if setpathmml was used
-AD.SubMachine          = 'LTBA_V300';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = '1';
-AD.Energy              = 3.0;
-AD.InjectionEnergy     = 3.0;
-AD.ModeName            = 'default';
+AD.Machine             = 'SIRIUS';  % Will already be defined if setpathmml was used
+AD.SubMachine          = 'TB.V200';  % Will already be defined if setpathmml was used
+AD.OperationalMode     = 'M0';
+AD.Energy              = 0.150;
+AD.InjectionEnergy     = 0.150;
+AD.ModeName            = 'M0';
 AD.OpsFileExtension    = '';
 
-THERING = sirius_ts_lattice(AD.Energy, AD.ModeName);
-                                
+THERING = sirius_tb_lattice(AD.Energy, AD.ModeName);
+
 AD.DeltaRFDisp         = 2000e-6;
-AD.ATModel             = 'sirius_ts_lattice';
+AD.ATModel             = 'sirius_tb_lattice';
 AD.BeamCurrent         = 0.500; % [A]
 AD.Coupling            = 0.010;
-%AD.OpsData.PrsProfFile = 'sirius_V02_pressure_profile.txt';
+%AD.OpsData.PrsProfFile = 'sirius_V500_pressure_profile.txt';
+
+setad(AD);
+switch2sim;
+switch2hw;
+
+function set_operationalmode_mode2
+
+global THERING;
+
+AD = getad;
+AD.Machine             = 'SIRIUS';  % Will already be defined if setpathmml was used
+AD.SubMachine          = 'TB.V200';  % Will already be defined if setpathmml was used
+AD.OperationalMode     = 'M1';
+AD.Energy              = 0.150;
+AD.InjectionEnergy     = 0.150;
+AD.ModeName            = 'M1';
+AD.OpsFileExtension    = '';
+
+THERING = sirius_tb_lattice(AD.Energy, AD.ModeName);
+
+AD.DeltaRFDisp         = 2000e-6;
+AD.ATModel             = 'sirius_tb_lattice';
+AD.BeamCurrent         = 0.500; % [A]
+AD.Coupling            = 0.010;
+%AD.OpsData.PrsProfFile = 'sirius_V500_pressure_profile.txt';
+
+setad(AD);
+switch2sim;
+switch2hw;
+
+function set_operationalmode_mode3
+
+global THERING;
+
+AD = getad;
+AD.Machine             = 'SIRIUS';  % Will already be defined if setpathmml was used
+AD.SubMachine          = 'TB.V200';  % Will already be defined if setpathmml was used
+AD.OperationalMode     = 'M2';
+AD.Energy              = 0.150;
+AD.InjectionEnergy     = 0.150;
+AD.ModeName            = 'M2';
+AD.OpsFileExtension    = '';
+
+THERING = sirius_tb_lattice(AD.Energy, AD.ModeName);
+
+AD.DeltaRFDisp         = 2000e-6;
+AD.ATModel             = 'sirius_tb_lattice';
+AD.BeamCurrent         = 0.500; % [A]
+AD.Coupling            = 0.010;
+%AD.OpsData.PrsProfFile = 'sirius_V500_pressure_profile.txt';
 
 setad(AD);
 switch2sim;
