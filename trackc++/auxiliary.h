@@ -30,19 +30,6 @@ struct PassMethod {
     };
 };
 
-const std::vector<std::string> string_passmethods = {
-        "pm_identity_pass",
-        "pm_drift_pass",
-        "pm_str_mpole_symplectic_pass",
-        "pm_bnd_mpole_symplectic_pass",
-        "pm_corrector_pass",
-        "pm_cavity_pass",
-        "pm_thinquad_pass",
-        "pm_thinsext_pass",
-        "pm_str_mpole_symplectic_pass",
-        "pm_bnd_mpole_symplectic_pass",
-};
-
 const std::vector<std::string> pm_dict = {
         "identity_pass",
         "drift_pass",
