@@ -1,7 +1,7 @@
+from elements import *
+
 #import elements
 #import passmethods
-import pos
-
 #marker     = elements.marker
 #drift      = elements.drift
 #corrector  = elements.corrector
@@ -10,6 +10,6 @@ import pos
 #sextupole  = elements.sextupole
 #rbend      = elements.rbend
 
-pos         = pos.Pos
+
 
 
