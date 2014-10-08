@@ -36,6 +36,9 @@ class Element:
     def __init__(self, fam_name='', length=0.0):
         self._elem = _trackcpp.Element(fam_name, length)
         self._t_in = TranslationVector(self._elem.t_in, _T_SIZE)
+        self._t_out = TranslationVector(self._elem.t_out, _T_SIZE)
+        self._r_in = RotationMatrix(self._elem.r_in, _R_SIZE)
+        self._r_out = RotationMatrix(self._elem.r_out, _R_SIZE)
 
     @property
     def fam_name(self):
@@ -224,6 +227,21 @@ class Element:
         else:
             self._t_in[:] = value
 
+    @property
+    def t_out(self):
+        return self._t_out
+
+    @t_out.setter
+    def t_out(self, value):
+        if isinstance(value, TranslationVector):
+            self._t_out = value
+        else:
+            self._t_out[:] = value
+
+    @property
+    def r_in(self):
+        return self._r_in
+
 
 class _CArray:
 
@@ -232,7 +250,7 @@ class _CArray:
         self._size = size
 
     def __getitem__(self, k):
-        idx = self._get_and_check_indices(k)
+        idx = self._check_and_get_indices(k, self._size)
         if idx is None:
             r = _trackcpp.c_array_get(self._array, k%self._size)
         else:
@@ -242,8 +260,10 @@ class _CArray:
         return r
 
     def __setitem__(self, k, value):
-        idx = self._get_and_check_indices(k)
+        idx = self._check_and_get_indices(k, self._size)
         if idx is None:
+            if not isinstance(value, int):
+                raise TypeError('value must be int')
             _trackcpp.c_array_set(self._array, k%self._size, value)
         else:
             n = len(value)
@@ -252,16 +272,16 @@ class _CArray:
             for t in zip(idx, range(n)):
                 _trackcpp.c_array_set(self._array, t[0], value[t[1]])
 
-    def _get_and_check_indices(self, k):
+    def _check_and_get_indices(self, k, size):
         if isinstance(k, int):
-            if not -self._size <= k < self._size:
+            if not -size <= k < size:
                 raise IndexError('index out of range')
             idx = None
         elif isinstance(k, slice):
-            start, stop, step = k.indices(self._size)
-            idx = range(start, stop, step)
+            k_indices = k.indices(size)
+            idx = range(*k_indices)
         elif isinstance(k, list) or isinstance(k, tuple):
-            if not 0 <= min(k) and self._size <= max(k):
+            if not 0 <= min(k) and size <= max(k):
                 raise IndexError('index out of range')
             idx = k
         else:
@@ -277,3 +297,77 @@ class TranslationVector(_CArray):
 
     def __str__(self):
         return str(self[:])
+
+
+class RotationMatrix(_CArray):
+
+    def __init__(self, array, size):
+        if not isinstance(size, tuple):
+            raise TypeError('size must be tuple')
+        if not len(size) == 2:
+            raise LengthError('matrix must have two sizes')
+
+        self._rows = size[0]
+        self._cols = size[1]
+        self._m_size = (self._rows, self._cols)
+        super().__init__(array, self._rows*self._cols)
+
+    def __getitem__(self, k):
+        self._check_matrix_indices(k)
+        if isinstance(k[0], int) and isinstance(k[1], int):
+            m_idx = self._rows*k[0] + k[1]
+            return _trackcpp.c_array_get(self._array, m_idx)
+        else:
+            idx = []
+            for z in zip(k, self._m_size):
+                i_temp = self._check_and_get_indices(z[0], z[1])
+                if i_temp is None:
+                    idx.append([z[0]])
+                else:
+                    idx.append(i_temp)
+            m = []
+            for i in idx[0]:
+                m.append([])
+                for j in idx[1]:
+                    m_idx = self._rows*i + j
+                    m[-1].append(_trackcpp.c_array_get(self._array, m_idx))
+            return m
+
+    def __setitem__(self, k, value):
+        self._check_matrix_indices(k)
+        if isinstance(k[0], int) and isinstance(k[1], int):
+            if not isinstance(value, int):
+                raise TypeError('value must be int')
+            if (not -self._rows <= k[0] < self._rows and
+                    not -self._cols <= k[1] < self._cols):
+                raise IndexError('index out of range')
+            m_idx = self._rows*(k[0]%self._rows) + (k[1]%self._cols)
+            _trackcpp.c_array_set(self._array, m_idx, value)
+        else:
+            if not isinstance(value, (list, tuple)):
+                raise TypeError('value must be matrix')
+            for row in value:
+                if not isinstance(row, (list, tuple)):
+                    raise TypeError('value must be matrix')
+            idx = []
+            for z in zip(k, self._m_size):
+                i_temp = self._check_and_get_indices(z[0], z[1])
+                if i_temp is None:
+                    idx.append([z[0]%z[1]])
+                else:
+                    idx.append(i_temp)
+            if not len(idx[0]) == len(value):
+                raise LengthError('wrong number of rows')
+            if not len(idx[1]) == len(value[0]):
+                raise LengthError('wrong number of columns')
+            for z in zip(idx[0], range(len(value))):
+                for w in zip(idx[1], range(len(value[0]))):
+                    m_idx = self._rows*z[0] + w[0]
+                    x = value[z[1]][w[1]]
+                    _trackcpp.c_array_set(self._array, m_idx, x)
+
+    def _check_matrix_indices(self, k):
+        if not isinstance(k, tuple):
+            raise TypeError('indices must be tuple')
+        if not len(k) == 2:
+            raise LengthError('two indices are needed')
