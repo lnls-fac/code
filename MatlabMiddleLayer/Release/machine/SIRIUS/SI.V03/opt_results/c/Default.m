@@ -1,11 +1,11 @@
 % Default.m
 %  QUADRUPOLOS
 %  ===========
-qaf_strength	= 3.497480;
-qad_strength	= -2.722980;
-qbd2_strength	= -2.980452;
-qbf_strength	= 3.952166;
-qbd1_strength	= -3.384768;
+qfa_strength	= 3.497480;
+qda1_strength	= -2.722980;
+qdb2_strength	= -2.980452;
+qfb_strength	= 3.952166;
+qdb1_strength	= -3.384768;
 qf1_strength	= 2.302892;
 qf2_strength	= 3.455506;
 qf3_strength	= 2.592721;
@@ -14,10 +14,10 @@ qf4_strength	= 3.275030;
 %  SEXTUPOLOS
 %  ===========
 % nao foi feita a otimizacao nao linear ainda
-sa1_strength	= -22.654177499289305;
-sa2_strength	= 22.743082032932090;
-sb1_strength	= -55.35330091466905;
-sb2_strength	= 57.33175496638485;
+sfa_strength	= -22.654177499289305;
+sda_strength	= 22.743082032932090;
+sfb_strength	= -55.35330091466905;
+sdb_strength	= 57.33175496638485;
 sd1a_strength	= -163.79865993826935;
 sf1a_strength	= 182.15829011874230;
 sd2a_strength	= -71.24537308432165;
