@@ -1,13 +1,11 @@
-if strcmp(caso,'Mode1')
+if strcmp(mode_version,'M0')
     
     %%% Initial Conditions
     IniCond.Dispersion = [0,0,0,0]';
     IniCond.beta = [7, 7];
     IniCond.alpha= [0,0];
     
-    %%% QUADRUPOLOS
-    %  ===========
-    
+    %%% Quadrupoles
     qa1_strength      = -1.903101;
     qa2_strength      = 2.584562;
     qb1_strength      = -3.513677;
@@ -35,15 +33,14 @@ if strcmp(caso,'Mode1')
 %     qe1_strength       = -3.200254231701;
 %     qe2_strength       =  4.613207612477;
     
-elseif strcmp(caso,'Mode2')
+elseif strcmp(mode_version,'M1')
     
     %%% Initial Conditions
     IniCond.Dispersion = [0,0,0,0]';
     IniCond.beta = [10, 10];
     IniCond.alpha= [0,0];
     
-    %%% QUADRUPOLOS
-    %  ===========
+    %%% Quadrupoles
     qa1_strength       = -3.27193264225 ;
     qa2_strength       =  4.600795499551;
     qa3_strength       =  0.0;           
@@ -58,15 +55,14 @@ elseif strcmp(caso,'Mode2')
     qe1_strength       = -3.230379232491;
     qe2_strength       =  4.441941674487;
     
-elseif strcmp(caso,'Mode3')
+elseif strcmp(mode_version,'M2')
     
     %%% Initial Conditions
     IniCond.Dispersion = [0,0,0,0]';
     IniCond.beta = [7, 7];
     IniCond.alpha= [-1.0,-1.0];
     
-    %%% QUADRUPOLOS
-    %  ===========
+    %%% Quadrupoles
     qa1_strength       = -1.533465202697;
     qa2_strength       =  3.777837313931;
     qa3_strength       =  0.0;           

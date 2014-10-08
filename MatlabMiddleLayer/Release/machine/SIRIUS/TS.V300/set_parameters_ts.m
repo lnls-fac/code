@@ -1,8 +1,14 @@
-if strcmpi(caso,'default')
-    
-% forcas baseadas no arquivo LTBA_V300.opa com extracao do booster
-% alterada para antes do QF. Utiliza dipolos do booster [2014-09-25]
-    
+% carrega forcas dos imas de acordo com modo de operacao
+%%% Initial Conditions
+
+if strcmpi(mode_version,'M0')
+        
+    %%% Initial Conditions
+    IniCond.Dispersion = [0.191; 0.0689; 0; 0];
+    IniCond.beta = [6.57, 15.30];
+    IniCond.alpha= [-2.155, 2.22];
+
+    %%% Quadrupoles
     qa1_strength      = 0.843487;
     qa2_strength      = 1.009714;
     qb1_strength      = -0.328651;
@@ -11,8 +17,6 @@ if strcmpi(caso,'default')
     qc2_strength      = 1.805734;
     qc3_strength      = 1.805734;
     qc4_strength      = -1.328187;
-
-%elseif strcmpi(caso,'mismatched_pmm')
     
 else
     error('caso nao implementado');

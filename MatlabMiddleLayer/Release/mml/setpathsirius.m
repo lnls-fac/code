@@ -20,13 +20,13 @@ if nargin>2,
     LinkFlag = varargin{3}; 
 end;
 
-if ~isempty(strfind(SubMachine, 'SI_'))
+if ~isempty(strfind(SubMachine, 'SI.'))
     MachineType = 'StorageRing';
-elseif ~isempty(strfind(SubMachine, 'BO_'))
+elseif ~isempty(strfind(SubMachine, 'BO.'))
     MachineType = 'Booster';
-elseif ~isempty(strfind(SubMachine, 'TB_'))
+elseif ~isempty(strfind(SubMachine, 'TB.'))
     MachineType = 'TransportLine';
-elseif ~isempty(strfind(SubMachine, 'TS_'))
+elseif ~isempty(strfind(SubMachine, 'TS.'))
     MachineType = 'TransportLine';
 end
 

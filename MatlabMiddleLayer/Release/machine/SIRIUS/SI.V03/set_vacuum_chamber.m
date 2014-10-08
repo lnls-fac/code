@@ -1,4 +1,4 @@
-function the_ring = sirius_set_vacuum_chamber(the_ring0)
+function the_ring = set_vacuum_chamber(the_ring0)
 
 % y = +/- y_lim * (1 - (x/x_lim)^n)^(1/n);
 

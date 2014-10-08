@@ -14,7 +14,8 @@ const std::vector<double> Element::default_polynom = std::vector<double>(3,0);
 
 
 // default constructor (constructs a drift element)
-Element::Element(const std::string& fam_name_, const double& length_) {
+Element::Element(const std::string& fam_name_, const double& length_) :
+    fam_name(fam_name_), length(length_) {
 	for(unsigned int i=0; i<6; i++) {
 		t_in[i] = t_out[i] = 0.0;
 		for(unsigned int j=0; j<6; ++j) {
@@ -28,10 +29,17 @@ Element::Element(const std::string& fam_name_, const double& length_) {
 
 };
 
+
 Element Element::marker (const std::string& fam_name_) {
 	Element e = Element(fam_name_, 0);
 	e.pass_method = PassMethod::pm_identity_pass;
 	return e;
+}
+
+Element Element::bpm (const std::string& fam_name_) {
+    Element e = Element(fam_name_, 0);
+    e.pass_method = PassMethod::pm_identity_pass;
+    return e;
 }
 
 Element Element::drift (const std::string& fam_name_, const double& length_) {
