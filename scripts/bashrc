@@ -12,9 +12,10 @@ fi
 
 export FACCODE=$FACROOT/code
 export FACDATA=$FACROOT/data
+export FACLIBS=$FACROOT/lib
 
 # PYTHON
-export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE:$FACCODE/tools
+export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE:$FACCODE/tools:$FACLIBS/python
 
 # FAC SCRIPTS
 export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin

@@ -22,6 +22,7 @@ SOURCES_CPP	= 	lattice.cpp \
 
 LIBS            = tracking_mp/build/tracking_mp.a -lpthread -lgsl -lgslcblas
 INC             = 
+prefix = ../../..
 
 all: _trackcpp.so
 
@@ -33,6 +34,12 @@ trackcpp_wrap.o: trackcpp_wrap.cxx
 
 trackcpp_wrap.cxx: trackcpp.i
 	swig -c++ -python trackcpp.i
+
+install: all | $(prefix)/lib/python/trackcpp
+	cp _trackcpp.so trackcpp.py __init__.py $(prefix)/lib/python/trackcpp
+
+$(prefix)/lib/python/trackcpp:
+	mkdir -p $(prefix)/lib/python/trackcpp
 
 clean:
 	-rm -rf *.o *.so *_wrap.cxx __pycache__ trackcpp.py
