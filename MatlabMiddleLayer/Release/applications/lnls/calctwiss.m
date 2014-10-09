@@ -15,6 +15,7 @@ global THERING;
 np1_flag = false;
 elements = [];
 the_ring = THERING;
+dp = 0;
 for i=1:length(varargin)
     if iscell(varargin{i})
         the_ring = varargin{i};
@@ -23,7 +24,11 @@ for i=1:length(varargin)
             np1_flag = true;
         end
     elseif isnumeric(varargin{i})
-        elements = varargin{i};
+        if length(varargin{i}) ==1
+            dp = varargin{i};
+        else
+            elements = varargin{i};
+        end
     end
 end
 
@@ -35,7 +40,7 @@ if isempty(elements)
     end
 end
 
-[TD, tune, chrom] = twissring(the_ring,0,elements, 'chrom',1e-8);
+[TD, tune, chrom] = twissring(the_ring,dp,elements, 'chrom',1e-8);
 
 for i=1:length(TD)
     the_ring{i}.Twiss = TD(i);
