@@ -59,11 +59,11 @@ class ParameterDefinitions(object):
     si_hardedge_length_of_B3_dipoles =  0.428011 #[m]
     si_hardedge_length_of_BC_dipoles =  0.125394 #[m]
     
-    si_B1_dipole_deflection_angle = 2.76654
-    si_B2_dipole_deflection_angle = 4.10351
-    si_B3_dipole_deflection_angle = 1.42995
-    si_BC_dipole_deflection_angle = 1.40000
-
+    si_B1_dipole_deflection_angle = 2.76654 #[deg]
+    si_B2_dipole_deflection_angle = 4.10351 #[deg]
+    si_B3_dipole_deflection_angle = 1.42995 #[deg]
+    si_BC_dipole_deflection_angle = 1.40000 #[deg]
+    
     si_B1_dipole_bending_radius = si_hardedge_length_of_B1_dipoles / math.radians(si_B1_dipole_deflection_angle)
     si_B2_dipole_bending_radius = si_hardedge_length_of_B2_dipoles / math.radians(si_B2_dipole_deflection_angle)
     si_B3_dipole_bending_radius = si_hardedge_length_of_B3_dipoles / math.radians(si_B3_dipole_deflection_angle)
@@ -74,6 +74,11 @@ class ParameterDefinitions(object):
     si_B3_dipole_magnetic_field = si_beam_magnetic_rigidity / si_B3_dipole_bending_radius
     si_BC_dipole_magnetic_field = si_beam_magnetic_rigidity / si_BC_dipole_bending_radius
 
+    si_hardedge_sagitta_of_B1_dipoles = 1000 * si_B1_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_B1_dipole_deflection_angle))) #[mm]
+    si_hardedge_sagitta_of_B2_dipoles = 1000 * si_B2_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_B2_dipole_deflection_angle))) #[mm]
+    si_hardedge_sagitta_of_B3_dipoles = 1000 * si_B3_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_B3_dipole_deflection_angle))) #[mm]
+    si_hardedge_sagitta_of_BC_dipoles = 1000 * si_BC_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_BC_dipole_deflection_angle))) #[mm]
+     
     si_B1_dipole_critical_energy = optics.critical_energy(
         si_beam_gamma_factor,
         si_B1_dipole_bending_radius)

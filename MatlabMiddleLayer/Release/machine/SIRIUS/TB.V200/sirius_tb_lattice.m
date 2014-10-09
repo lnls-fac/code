@@ -1,4 +1,4 @@
-function [r IniCond] = sirius_lb_lattice(varargin)
+function [r, lattice_title, IniCond] = sirius_tb_lattice(varargin)
 % 2013-08-19 created  Fernando.
 % 2013-12-02 V200 - from OPA (Ximenes)
 
@@ -7,28 +7,26 @@ function [r IniCond] = sirius_lb_lattice(varargin)
 
 % --- system parameters ---
 energy = 0.15e9;
-caso   = 'Mode1';
+lattice_version = 'TB.V200';
+mode = 'M';
+version = '0';
+mode_version = [mode version];
 
 % processamento de input (energia e modo de operacao)
 for i=1:length(varargin)
     if ischar(varargin{i})
-        caso = varargin{i};
+        mode_version = varargin{i};
     else
         energy = varargin{i} * 1e9;
     end;
 end
 
-fprintf(['   Loading LTLB_V200 - ' caso ' - ' num2str(energy/1e9) ' GeV' '\n']);
-
+lattice_title = [lattice_version '.' mode_version];
+fprintf(['   Loading lattice ' lattice_title ' - ' num2str(energy/1e9) ' GeV' '\n']);
 
 % carrega forcas dos imas de acordo com modo de operacao
-%%% Initial Conditions
-IniCond.ElemIndex = 1;
-IniCond.Spos = 0;
-IniCond.ClosedOrbit = [0,0,0,0]';
-IniCond.mu = [0,0];
-%%% Quadrupole strengths:
-set_parameters_ltlb;
+IniCond = struct('ElemIndex',1,'Spos',0,'ClosedOrbit',[0;0;0;0],'mu',[0,0]);
+set_parameters_tb;
 
 
 %% passmethods
@@ -170,12 +168,10 @@ arc1  = [ bspec, lb1, qb1, lb2, qb2, lb3, qb3, lb4, bn];
 line2 = [ lc1, qc1, lc2, qc2, lc3, qc3, lc4];
 arc2  = [ bp, ld1, qd1, ld2, qd2, ld3, bp, le1, qe1, le2, qe2, le3, sep];
 ltlb  = [inicio, line1, arc1, line2, arc2, fim];
-
+elist = ltlb;
 
 
 %% finalization 
-
-elist = ltlb;
 the_line = buildlat(elist);
 the_line = setcellstruct(the_line, 'Energy', 1:length(the_line), energy);
 
@@ -198,8 +194,6 @@ the_line = set_vacuum_chamber(the_line);
 
 % pre-carrega passmethods de forma a evitar problema com bibliotecas recem-compiladas
 % lnls_preload_passmethods;
-
-
 r = the_line;
 
 

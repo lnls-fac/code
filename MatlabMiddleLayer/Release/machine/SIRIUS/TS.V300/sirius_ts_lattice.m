@@ -4,34 +4,29 @@ function [r, lattice_title, IniCond] = sirius_ts_lattice(varargin)
 %% global parameters 
 %  =================
 
+
 % --- system parameters ---
 energy = 3e9;
-caso   = 'default';
-lattice_title = ['LTBA-V300 - ' caso] ;
+lattice_version = 'TS.V300';
+mode = 'M';
+version = '0';
+mode_version = [mode version];
 
 % processamento de input (energia e modo de operacao)
 for i=1:length(varargin)
     if ischar(varargin{i})
-        caso = varargin{i};
+        mode_version = varargin{i};
     else
         energy = varargin{i} * 1e9;
     end;
 end
-fprintf(['   Loading ' lattice_title ' - ' num2str(energy/1e9) ' GeV' '\n']);
 
+lattice_title = [lattice_version '.' mode_version];
+fprintf(['   Loading lattice ' lattice_title ' - ' num2str(energy/1e9) ' GeV' '\n']);
 
 % carrega forcas dos imas de acordo com modo de operacao
-%%% Initial Conditions
-IniCond.ElemIndex = 1;
-IniCond.Spos = 0;
-IniCond.ClosedOrbit = [0,0,0,0]';
-IniCond.mu = [0,0];
-IniCond.Dispersion = [0.191; 0.0689; 0; 0];
-IniCond.beta = [6.57, 15.30];
-IniCond.alpha= [-2.155, 2.22];
-
-%%% Quadrupole strengths:
-set_parameters_ltba;
+IniCond = struct('ElemIndex',1,'Spos',0,'ClosedOrbit',[0;0;0;0],'mu',[0,0]);
+set_parameters_ts;
 
 
 %% passmethods

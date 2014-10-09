@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import fieldmaptrack
 
-#from multiprocessing import Process
-
 class Config:
     
     def __init__(self):
@@ -19,10 +17,26 @@ class Config:
         self.traj_rk_length = None 
         self.traj_rk_nrpts = None
         self.traj_rk_min_rz = None
+        self.traj_save = True
+        self.traj_load_filename = None
+        self.traj_init_rx = None
         self.traj_center_sagitta_flag = True
         self.traj_force_midplane_flag = True
         self.multipoles_r0 = None
-                                  
+        
+def save_trajectory(traj):
+    
+    s = traj.s
+    rx, ry, rz = traj.rx, traj.ry, traj.rz
+    px, py, pz = traj.px, traj.py, traj.pz
+    bx, by, bz = traj.bx, traj.by, traj.bz
+    with open('trajectory.txt', 'w') as fp:
+        fp.write('# trajectory\n')
+        fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
+        for i in range(len(s)):
+            fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(s[i],rx[i],ry[i],rz[i],px[i],py[i],pz[i]))
+                         
+                          
 def raw_fieldmap_analysis(config):
         
     if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
@@ -88,40 +102,70 @@ def calc_sagitta(half_dipole_length, trajectory):
         i += 1
     sagitta = rx[0] - rx[i]
     return sagitta
-              
+            
+            
+def load_trajectory(filename, beam = None, fieldmap = None):
+    traj = fieldmaptrack.Trajectory(beam = beam, fieldmap = fieldmap)
+    lines = [line.strip() for line in open(filename)]
+    s,rx,ry,rz,px,py,pz,bx,by,bz = [],[],[],[],[],[],[],[],[],[]
+    for line in lines[2:]:
+        words = line.split()
+        s.append(float(words[0]))
+        rx.append(float(words[1])), ry.append(float(words[2])), rz.append(float(words[3]))
+        px.append(float(words[4])), py.append(float(words[5])), pz.append(float(words[6]))
+    traj.s = np.array(s)
+    traj.rx, traj.ry, traj.rz = np.array(rx), np.array(ry), np.array(rz)
+    traj.px, traj.py, traj.pz = np.array(px), np.array(py), np.array(pz)
+    traj.bx, traj.by, traj.bz = np.array(rx), np.array(ry), np.array(rz)
+    # calcs field on reference trajectory
+    for i in range(len(s)):
+        traj.bx[i], traj.by[i], traj.bz[i] = traj.fieldmap.interpolate(traj.rx[i], traj.ry[i], traj.rz[i])
+    traj.s_step = traj.s[1] - traj.s[0]
+    return traj
+  
 def trajectory_analysis(config):
     
+    half_dipole_length = config.fmap.length / 2.0
     config.beam = fieldmaptrack.Beam(energy = config.beam_energy)
     
-    # calcs reference trajectory
-    # ==========================
-    # if it is the case, iterates the calculation of the trajectory
-    # until its sagitta is centered in the good field region. This is
-    # accomplished by changing the initial radial position of the trajectory
-    # at the longitudinal center of the dipole.
-    config.traj = fieldmaptrack.Trajectory(beam=config.beam, fieldmap=config.fmap)
-    half_dipole_length = config.fmap.length / 2.0
-    init_rx, init_ry, init_rz = 0.0, 0.0, 0.0
-    init_px, init_py, init_pz = 0.0, 0.0, 1.0
-    rk_min_rz = config.fmap.rz[-1]
-    while True:
-        config.traj.calc_trajectory(init_rx=init_rx, init_ry=init_ry, init_rz=init_rz,   
-                                    init_px=init_px, init_py=init_py, init_pz=init_pz, 
-                                    s_step         = config.traj_rk_s_step,
-                                    s_length       = config.traj_rk_length, 
-                                    s_nrpts        = config.traj_rk_nrpts, 
-                                    min_rz         = rk_min_rz,
-                                    force_midplane = config.traj_force_midplane_flag) 
+    if config.traj_load_filename is not None:
+        config.traj = load_trajectory(config.traj_load_filename, config.beam, config.fmap)
         config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
-        if not config.traj_center_sagitta_flag:
-            break
-        new_init_rx = config.traj_sagitta / 2.0
-        change_init_rx = new_init_rx - init_rx
-        if abs(change_init_rx) < 0.001:
-            break
-        else:
-            init_rx = new_init_rx
+    else:
     
+        
+        
+        # calcs reference trajectory
+        # ==========================
+        # if it is the case, iterates the calculation of the trajectory
+        # until its sagitta is centered in the good field region. This is
+        # accomplished by changing the initial radial position of the trajectory
+        # at the longitudinal center of the dipole.
+        config.traj = fieldmaptrack.Trajectory(beam=config.beam, fieldmap=config.fmap)
+        if config.traj_init_rx is not None:
+            init_rx = config.traj_init_rx
+        else:
+            init_rx = 0.0
+        init_ry, init_rz = 0.0, 0.0
+        init_px, init_py, init_pz = 0.0, 0.0, 1.0
+        rk_min_rz = config.fmap.rz[-1]
+        while True:
+            config.traj.calc_trajectory(init_rx=init_rx, init_ry=init_ry, init_rz=init_rz,   
+                                        init_px=init_px, init_py=init_py, init_pz=init_pz, 
+                                        s_step         = config.traj_rk_s_step,
+                                        s_length       = config.traj_rk_length, 
+                                        s_nrpts        = config.traj_rk_nrpts, 
+                                        min_rz         = rk_min_rz,
+                                        force_midplane = config.traj_force_midplane_flag) 
+            config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
+            if not config.traj_center_sagitta_flag:
+                break
+            new_init_rx = config.traj_sagitta / 2.0
+            change_init_rx = new_init_rx - init_rx
+            if abs(change_init_rx) < 0.001:
+                break
+            else:
+                init_rx = new_init_rx
     
     # prints basic information on the reference trajectory
     # ====================================================
@@ -129,6 +173,10 @@ def trajectory_analysis(config):
     print(config.traj)
     print('{0:<35s} {1} mm'.format('sagitta:', config.traj_sagitta))
     
+    
+    if config.traj_save:
+        save_trajectory(config.traj)
+        
     return config
 
 def multipoles_analysis(config):

@@ -88,10 +88,10 @@ if ModeNumber == 1
 
 elseif ModeNumber == 101
     setlocodata('Nominal');
-    setfamilydata(0,'BPMx','Offset');
-    setfamilydata(0,'BPMy','Offset');
-    setfamilydata(0,'BPMx','Golden');
-    setfamilydata(0,'BPMy','Golden');
+    setfamilydata(0,'bpmx','Offset');
+    setfamilydata(0,'bpmy','Offset');
+    setfamilydata(0,'bpmx','Golden');
+    setfamilydata(0,'bpmy','Golden');
     %setsp('HCM', 0, 'Simulator', 'Physics');
     %setsp('VCM', 0, 'Simulator', 'Physics');
     setfamilydata(0,'TuneDelay');
@@ -112,8 +112,8 @@ function set_operationalmode_High
 global THERING;
 
 AD = getad;
-AD.Machine             = 'BOOSTER_V900';           % Will already be defined if setpathmml was used
-AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
+AD.Machine             = 'SIRIUS';           % Will already be defined if setpathmml was used
+AD.SubMachine          = 'BO.V900';  % Will already be defined if setpathmml was used
 AD.OperationalMode     = '3 GeV';
 AD.Energy              = 3.0;
 AD.InjectionEnergy     = 0.150;
@@ -144,8 +144,8 @@ function set_operationalmode_Low
 global THERING;
 
 AD = getad;
-AD.Machine             = 'BOOSTER_V900';           % Will already be defined if setpathmml was used
-AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
+AD.Machine             = 'SIRIUS';           % Will already be defined if setpathmml was used
+AD.SubMachine          = 'BO.V900';  % Will already be defined if setpathmml was used
 AD.OperationalMode     = '150 MeV';
 AD.Energy              = 0.150;
 AD.InjectionEnergy     = 0.150;
@@ -167,9 +167,6 @@ AD.MCF                 = getmcf('Model');
 setad(AD);
 switch2sim;
 switch2hw; 
-
-
-
 
 
 

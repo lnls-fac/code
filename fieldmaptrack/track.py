@@ -30,8 +30,8 @@ class SerretFrenetCoordSystem:
 class Trajectory:
     
     def __init__(self,
-                 beam,
-                 fieldmap):
+                 beam = None,
+                 fieldmap = None):
         self.beam     = beam
         self.fieldmap = fieldmap
         
@@ -493,9 +493,9 @@ class Trajectory:
         r += '\n{0:<35s} {1}'.format('trajectory_nrpts:', len(self.s))
         r += '\n{0:<35s} {1} mm'.format('trajectory_s_step:', self.s_step) 
         #r += '\n{0:<35s} {1:+.1e} %'.format('trajectory_momentum_error:', 100*self.error_estimate);
-        r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_by@trajectory:', self.by[max_by], s_max_by, rx_max_bx, ry_max_bx, rz_max_bx)
-        r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bx@trajectory:', self.bx[max_bx], s_max_bx, rx_max_by, ry_max_by, rz_max_by)
-        r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bz@trajectory:', self.bz[max_bz], s_max_bz, rx_max_bz, ry_max_bz, rz_max_bz)
+        r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bx@trajectory:', self.bx[bx.index(max_bx)], s_max_bx, rx_max_bx, ry_max_bx, rz_max_bx)
+        r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_by@trajectory:', self.by[by.index(max_by)], s_max_by, rx_max_by, ry_max_bx, rz_max_by)        
+        r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bz@trajectory:', self.bz[bz.index(max_bz)], s_max_bz, rx_max_bz, ry_max_bz, rz_max_bz)
     
         return r
    

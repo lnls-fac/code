@@ -1,7 +1,4 @@
-#include "lattice.h"
-#include "output.h"
-#include "accelerator.h"
-#include "elements.h"
+#include "trackc++.h"
 #include <vector>
 #include <cstdlib>
 
