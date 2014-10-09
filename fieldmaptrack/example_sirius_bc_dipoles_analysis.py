@@ -28,7 +28,7 @@ config.traj_force_midplane_flag = True # forces trajectory on midplane (setting 
 config.traj_init_rx             = None # initial rx
 config.traj_load_filename       = "/home/ximenes/fac_files/data/sirius/si/magnet_modelling/bc/2014-10-07_modelo2_gap_lateral_50mm_modelo_mecanico/trajectory.txt"
 
-config.multipoles_perpendicular_grid = np.linspace(-10,10,31) # grid of points on perpendicular line to ref trajectory [mm]
+config.multipoles_perpendicular_grid = np.linspace(-10,10,41) # grid of points on perpendicular line to ref trajectory [mm]
 config.multipoles_fitting_monomials  = (0,1,2,3,4,5,6,7,8,9,10)    # monomials to include in the polynomial fit of multipoles
 config.multipoles_r0                 = 11.7 # [mm] horizontal position at which polynomial fields are calculated relative to the principal multipole
 

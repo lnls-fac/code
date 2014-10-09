@@ -32,9 +32,9 @@ def save_trajectory(traj):
     bx, by, bz = traj.bx, traj.by, traj.bz
     with open('trajectory.txt', 'w') as fp:
         fp.write('# trajectory\n')
-        fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad] bx[T] by[T] bz[T]\n')
+        fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
         for i in range(len(s)):
-            fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e} {7:+.16e} {8:+.16e} {9:+.16e}\n'.format(s[i],rx[i],ry[i],rz[i],px[i],py[i],pz[i],bx[i],by[i],bz[i]))
+            fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(s[i],rx[i],ry[i],rz[i],px[i],py[i],pz[i]))
                          
                           
 def raw_fieldmap_analysis(config):
@@ -104,8 +104,8 @@ def calc_sagitta(half_dipole_length, trajectory):
     return sagitta
             
             
-def load_trajectory(filename):
-    traj = fieldmaptrack.Trajectory()
+def load_trajectory(filename, beam = None, fieldmap = None):
+    traj = fieldmaptrack.Trajectory(beam = beam, fieldmap = fieldmap)
     lines = [line.strip() for line in open(filename)]
     s,rx,ry,rz,px,py,pz,bx,by,bz = [],[],[],[],[],[],[],[],[],[]
     for line in lines[2:]:
@@ -113,25 +113,27 @@ def load_trajectory(filename):
         s.append(float(words[0]))
         rx.append(float(words[1])), ry.append(float(words[2])), rz.append(float(words[3]))
         px.append(float(words[4])), py.append(float(words[5])), pz.append(float(words[6]))
-        bx.append(float(words[7])), by.append(float(words[8])), bz.append(float(words[9]))
-    traj.s = s
+    traj.s = np.array(s)
     traj.rx, traj.ry, traj.rz = np.array(rx), np.array(ry), np.array(rz)
     traj.px, traj.py, traj.pz = np.array(px), np.array(py), np.array(pz)
-    traj.bx, traj.by, traj.bz = np.array(bx), np.array(by), np.array(bz)
+    traj.bx, traj.by, traj.bz = np.array(rx), np.array(ry), np.array(rz)
+    # calcs field on reference trajectory
+    for i in range(len(s)):
+        traj.bx[i], traj.by[i], traj.bz[i] = traj.fieldmap.interpolate(traj.rx[i], traj.ry[i], traj.rz[i])
     traj.s_step = traj.s[1] - traj.s[0]
     return traj
   
 def trajectory_analysis(config):
     
     half_dipole_length = config.fmap.length / 2.0
+    config.beam = fieldmaptrack.Beam(energy = config.beam_energy)
     
     if config.traj_load_filename is not None:
-        config.traj = load_trajectory(config.traj_load_filename)
-        config.traj.fieldmap = config.fmap
+        config.traj = load_trajectory(config.traj_load_filename, config.beam, config.fmap)
         config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
     else:
     
-        config.beam = fieldmaptrack.Beam(energy = config.beam_energy)
+        
         
         # calcs reference trajectory
         # ==========================
