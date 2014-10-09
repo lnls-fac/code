@@ -328,9 +328,8 @@ def main():
             ok, Queue2Deal = handle_request('STATUS_QUEUE', True)
             if ok:
                 isbigger = set(Queue2Deal.keys()) - set(MyQueue.keys())
-                if not isbigger:
-                    for k in isbigger:
-                        Queue2Deal.pop(k)
+                for k in isbigger:
+                    Queue2Deal.pop(k)
                 deal_with_signals(Queue2Deal)
             
             # Just send the complete jobs if needed, otherwise send jobviews
