@@ -27,6 +27,7 @@ global THERING;
 energy = 3e9;
 mode   = 'C';   % a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
 version = '02';
+strengths = @set_magnet_strengths;
 harmonic_number = 864;
 
 lattice_version = 'SI.V03';
@@ -36,6 +37,8 @@ for i=1:length(varargin)
         mode = varargin{i};
     elseif ischar(varargin{i})
         version = varargin{i};
+    elseif isa(varargin{i},'function_handle')
+        strengths = varargin{i};
     else
         energy = varargin{i} * 1e9;
     end;
@@ -46,7 +49,7 @@ fprintf(['   Loading lattice ' lattice_title ' - ' num2str(energy/1e9) ' GeV' '\
 
 
 % carrega forcas dos imas de acordo com modo de operacao
-set_magnet_strengths;
+strengths();
 
 %% passmethods
 %  ===========
