@@ -151,10 +151,21 @@ linec = [bp, lc1, qc1, lc2, qc2, lc3, qc3, lc4, qc4, lc5];
 lined = [septgr, l20, septfi, bpm];
 ltba  = [inicio, linea, lineb, linec, lined, fim];
 
+%% line extension to PMM
+l34      = drift('l34', 0.34, 'DriftPass');
+lki      = drift('lki', 1.95, 'DriftPass');
+lkipmm   = drift('lkipmm', 0.807, 'DriftPass');
+MIA      = marker('MIA', 'IdentityPass');
+sept_in  = marker('sept_in', 'IdentityPass');
+kick_in  = marker('kick_in', 'IdentityPass');
+PMM      = marker('PMM', 'IdentityPass');
+AN_kipmm = [sept_in, l34, MIA, lki, lkipmm, PMM];
+ltba_estendido  = [inicio, linea, lineb, linec, lined, AN_kipmm, fim];
 
 %% finalization 
 
-elist = ltba;
+%elist = ltba;
+elist = ltba_estendido;
 the_line = buildlat(elist);
 the_line = setcellstruct(the_line, 'Energy', 1:length(the_line), energy);
 

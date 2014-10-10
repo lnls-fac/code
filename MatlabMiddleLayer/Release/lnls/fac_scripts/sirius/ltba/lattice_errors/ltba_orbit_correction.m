@@ -12,12 +12,12 @@ Path = Path(1:ip(end));
 % Errors
 rms_alix = 0.3 * mm;
 rms_aliy = 0.3 * mm;
-rms_roll = 0.4 * mrad;
-rms_ex   = 0.1 * pc;
-rms_x0   = 0.1 * mm;
-rms_xp0  = 0.1 * mrad;
-rms_y0   = 0.1 * mm;
-rms_yp0  = 0.1 * mrad;
+rms_roll = 1 * 0.4 * mrad;
+rms_ex   = 1 * 0.1 * pc;
+rms_x0   = 1 * 0.1 * mm;
+rms_xp0  = 1 * 0.1 * mrad;
+rms_y0   = 1 * 0.1 * mm;
+rms_yp0  = 1 * 0.1 * mrad;
 n_maquinas = 100;
 
 
@@ -52,7 +52,7 @@ x_BPM = zeros(nBPM,n_maquinas);
 y_BPM = x_BPM;
 xc_BPM = x_BPM;
 yc_BPM = x_BPM;
-
+orb_semcorr_fim = zeros(4,n_maquinas);
 
 % Matriz resposta horizontal
 for i=1:nch
@@ -103,7 +103,7 @@ for nmaq=1:n_maquinas
     ltba = lnls_set_misalignmentX(errox, idx, ltba);
     ltba = lnls_set_misalignmentY(erroy, idx, ltba);
     ltba = lnls_set_rotation_ROLL(erroroll, idx, ltba);
-    erroex = lnls_set_excitation(erroex, idx, ltba);
+    ltba = lnls_set_excitation(erroex, idx, ltba);
     
 %    for i=1:length(idx)
 %        erro = [errox(i), 0, erroy(i), 0, 0, 0]; 
@@ -124,7 +124,9 @@ for nmaq=1:n_maquinas
         orbx(i,nmaq)=t(i).ClosedOrbit(1);
         orby(i,nmaq)=t(i).ClosedOrbit(3);
     end
-
+    orb_semcorr_fim(:,nmaq)=t(end).ClosedOrbit;    
+    
+    
 % Orbita nos BPMs
     x_BPM(:,nmaq) = orbx(ind_BPM,nmaq);
     y_BPM(:,nmaq) = orby(ind_BPM,nmaq);
@@ -155,11 +157,19 @@ for nmaq=1:n_maquinas
             orbcx(i,nmaq)=t(i).ClosedOrbit(1);
             orbcy(i,nmaq)=t(i).ClosedOrbit(3);
         end
+        orb_corr_fim(:,nmaq)=t(end).ClosedOrbit;
 
 % Orbita corrigida nos BPMs
         xc_BPM(:,nmaq) = orbcx(ind_BPM,nmaq);
         yc_BPM(:,nmaq) = orbcy(ind_BPM,nmaq);
     end
+    
+    
+%erro de ripple, ajustados em cima da ?rbita corrigida
+    erroex = (-1+2*rand(1,length(idx))) * 1/1000;
+    ltba = lnls_set_excitation(erroex, idx, ltba);
+    t=twissline(ltba,0,Twiss0,1:length(ltba)+1);
+    orb_ripple_fim(:,nmaq)=t(end).ClosedOrbit - orb_corr_fim(:,nmaq);
         
 end
 
@@ -178,6 +188,8 @@ x_BPM_rms = std(x_BPM,0,2);
 y_BPM_rms = std(y_BPM,0,2);
 xc_BPM_rms = std(xc_BPM,0,2);
 yc_BPM_rms = std(yc_BPM,0,2);
+orb_semcorr_fim_rms = std(orb_semcorr_fim,0,2);
+orb_ripple_fim_rms = std(orb_ripple_fim,0,2);
 
 %separando ch e septa
 dteta_sep = [ dteta_ch(1,:) ; dteta_ch(end,:) ];
@@ -254,6 +266,18 @@ for i=1:ncv
     fmt = 'CV%i  %5.3f   %5.3f  \n'; fprintf(fout,fmt,i,tetai_cv_rms(i)/mrad,tetai_cv_max(i)/mrad);
 end
     
+fmt = '\n Vibration study - rms position at line end without correction\n'; fprintf(fout,fmt);
+fmt = 'rms_x : %5.3f mm\n'; fprintf(fout,fmt,orb_semcorr_fim_rms(1)/mm);
+fmt = 'rms_xp: %5.3f mrad\n'; fprintf(fout,fmt,orb_semcorr_fim_rms(2)/mrad);
+fmt = 'rms_y : %5.3f mm\n'; fprintf(fout,fmt,orb_semcorr_fim_rms(3)/mm);
+fmt = 'rms_yp: %5.3f mrad\n'; fprintf(fout,fmt,orb_semcorr_fim_rms(4)/mrad);
+
+fmt = '\n Ripple study \n'; fprintf(fout,fmt);
+fmt = 'rms_x : %5.3f mm\n'; fprintf(fout,fmt,orb_ripple_fim_rms(1)/mm);
+fmt = 'rms_xp: %5.3f mrad\n'; fprintf(fout,fmt,orb_ripple_fim_rms(2)/mrad);
+fmt = 'rms_y : %5.3f mm\n'; fprintf(fout,fmt,orb_ripple_fim_rms(3)/mm);
+fmt = 'rms_yp: %5.3f mrad\n'; fprintf(fout,fmt,orb_ripple_fim_rms(4)/mrad);
+
 fclose(fout);
 
 
@@ -267,88 +291,49 @@ annotation('textbox', [0.3,0.88,0.1,0.1],...
        
 %Plot before correction
 %subplot(5,1,[1,2],'FontSize',14);
-subplot('position',[0.1 0.59 0.85 0.32],'FontSize',14);
+subplot('position',[0.1 0.60 0.85 0.31],'FontSize',14);
 hold all;
 for i=1:n_maquinas
-    plot(s,1e3*orbx(:,i),'Color',[0.8 0.8 1]);
+    plot(s,1e3*abs(orbx(:,i)),'Color',[0.8 0.8 1]);   %horizontal
+    plot(s,-1e3*abs(orby(:,i)),'Color',[1 0.8 0.8]);  %vertical
 end
 plot(s,1e3*orbx_rms,'b','LineWidth',1.5);
-plot(s,-1e3*orbx_rms,'b','LineWidth',1.5);
-ylabel('x [mm]', 'FontSize',14);
+%plot(s,-1e3*orbx_rms,'b','LineWidth',1.5);
+plot(s,-1e3*orby_rms,'r','LineWidth',1.5);
+ylabel('x,y [mm]', 'FontSize',14);
 ylimit=ylim;
 xlimit=xlim;
-text(1,0.8*ylimit(2),'X before correction', 'FontSize',14);
+text(1,0.8*ylimit(2),'X before correction', 'FontSize',14,'Color','b');
+text(1,ylimit(1)+0.2*ylimit(2),'Y before correction', 'FontSize',14,'Color','r');
 grid on;
 box on;
 
 %Plot lattice
 %subplot(5,1,3);
-subplot('position',[0.1 0.45 0.85 0.12]);
+subplot('position',[0.1 0.44 0.85 0.14]);
 lnls_drawlattice(ltba, 1, 0, 1, 1);
 xlim(xlimit);
 axis off;
 
 %Plot after correction
 %subplot(5,1,[4,5],'FontSize',14);
-subplot('position',[0.1 0.12 0.85 0.32],'FontSize',14);
+subplot('position',[0.1 0.12 0.85 0.31],'FontSize',14);
 hold all;
 for i=1:n_maquinas
-    plot(s,1e3*orbcx(:,i),'Color',[0.8 0.8 1]);
+    plot(s,1e3*abs(orbcx(:,i)),'Color',[0.8 0.8 1]);
+    plot(s,-1e3*abs(orbcy(:,i)),'Color',[1 0.8 0.8]);
 end
 plot(s,1e3*orbcx_rms,'b','LineWidth',1.5);
-plot(s,-1e3*orbcx_rms,'b','LineWidth',1.5);
-xlabel('s [m]', 'FontSize',14);
-ylabel('x [mm]', 'FontSize',14);
-ylim(ylimit);
-text(1,0.8*ylimit(2),'X after correction', 'FontSize',14);
-grid on;
-box on;
-
-
-%Create Figure Vertical correction
-figure2 = figure('Color',[1 1 1]);
-annotation('textbox', [0.3,0.88,0.1,0.1],...
-           'FontSize',14,...
-           'FontWeight','bold',...
-           'LineStyle','none',...
-           'String', ['BTS Tansfer Line - ' tit]);
-
-%Plot before correction
-%subplot(5,1,[1,2],'FontSize',14);
-subplot('position',[0.1 0.59 0.85 0.32],'FontSize',14);
-hold all;
-for i=1:n_maquinas
-    plot(s,1e3*orby(:,i),'Color',[1 0.8 0.8]);
-end
-plot(s,1e3*orby_rms,'r','LineWidth',1.5);
-plot(s,-1e3*orby_rms,'r','LineWidth',1.5);
-ylabel('y [mm]', 'FontSize',14);
-ylimit=ylim;
-text(1,0.8*ylimit(2),'Y before correction', 'FontSize',14);
-grid on;
-box on;
-
-%Plot lattice
-%subplot(5,1,3);
-subplot('position',[0.1 0.45 0.85 0.12]);
-lnls_drawlattice(ltba, 1, 0, 1, 1);
-xlim(xlimit);
-axis off;
-
-%Plot after correction
-%subplot(5,1,[4,5],'FontSize',14);
-subplot('position',[0.1 0.12 0.85 0.32],'FontSize',14);
-hold all;
-for i=1:n_maquinas
-    plot(s,1e3*orbcy(:,i),'Color',[1 0.8 0.8]);
-end
-plot(s,1e3*orbcy_rms,'r','LineWidth',1.5);
+%plot(s,-1e3*orbcx_rms,'b','LineWidth',1.5);
 plot(s,-1e3*orbcy_rms,'r','LineWidth',1.5);
 xlabel('s [m]', 'FontSize',14);
-ylabel('y [mm]', 'FontSize',14);
-ylim(ylimit);
-text(1,0.8*ylimit(2),'Y after correction', 'FontSize',14);
+ylabel('x,y [mm]', 'FontSize',14);
+ylimit=ylim;
+text(1,0.8*ylimit(2),'X after correction', 'FontSize',14,'Color','b');
+text(1,ylimit(1)+0.2*ylimit(2),'Y after correction', 'FontSize',14,'Color','r');
 grid on;
 box on;
+
+
 
 
