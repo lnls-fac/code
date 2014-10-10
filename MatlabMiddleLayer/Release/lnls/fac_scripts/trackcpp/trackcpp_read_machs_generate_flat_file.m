@@ -16,10 +16,10 @@ if ~exist('archive_name','var')
 else
     % path = '~/redes_tracy/Sirius/Sirius_v200/flat_files/AC10_test/orb_cor/';
     path = pwd;
-    machines = load([path '/cod_matlab/' archive_name '.mat']);
+    machines = load([path 'cod_matlab/' archive_name '.mat']);
 end
 
-cd('trackcpp');
+% cd('trackcpp');
 [~, result] = system('ls | grep rms | wc -l');
 n_pastas = str2double(result);
 if(length(machines.machine) < n_pastas)
@@ -33,7 +33,7 @@ n_pastas = min([n_pastas, length(machines.machine)]);
 for i=1:n_pastas
     fprintf('machine #%03i...', i);
     flat_name = sprintf('rms%02d/flatfile_rms%02d.txt', i, i);
-    full_name = fullfile(path, 'trackcpp', flat_name);
+    full_name = flat_name;
     the_ring = machines.machine{i};
     the_ring = simplify_kicktables(the_ring);
     if exist('inicio','var')
