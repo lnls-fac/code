@@ -336,8 +336,8 @@ class RotationMatrix(_CArray):
     def __setitem__(self, k, value):
         self._check_matrix_indices(k)
         if isinstance(k[0], int) and isinstance(k[1], int):
-            if not isinstance(value, int):
-                raise TypeError('value must be int')
+            if not isinstance(value, (int, float)):
+                raise TypeError('value must be number')
             if (not -self._rows <= k[0] < self._rows and
                     not -self._cols <= k[1] < self._cols):
                 raise IndexError('index out of range')
