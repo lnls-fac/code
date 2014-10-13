@@ -12,9 +12,9 @@
 %include "stl.i"
 
 namespace std {
-    %template(trackcpp_StringVector) vector<string>;
-    %template(trackcpp_DoubleVector) vector<double>;
-    %template(trackcpp_ElementVector) vector<Element>;
+    %template(cppStringVector) vector<string>;
+    %template(cppDoubleVector) vector<double>;
+    %template(cppElementVector) vector<Element>;
 }
 
 %inline %{

@@ -14,8 +14,8 @@ def _list_str(self):
     return str(list(self))
 
 
-_trackcpp.trackcpp_DoubleVector.__repr__ = _list_repr
-_trackcpp.trackcpp_DoubleVector.__str__ = _list_str
+_trackcpp.cppDoubleVector.__repr__ = _list_repr
+_trackcpp.cppDoubleVector.__str__ = _list_str
 
 
 pass_methods = _trackcpp.pm_dict
@@ -33,8 +33,11 @@ class Element:
 
     "A lattice element."
 
-    def __init__(self, fam_name='', length=0.0):
-        self._elem = _trackcpp.Element(fam_name, length)
+    def __init__(self, element=None):
+        if element is not None:
+            self._elem = element
+        else:
+            self._elem = _trackcpp.Element('', 0.0)
         self._t_in = TranslationVector(self._elem.t_in, _T_SIZE)
         self._t_out = TranslationVector(self._elem.t_out, _T_SIZE)
         self._r_in = RotationMatrix(self._elem.r_in, _R_SIZE)
@@ -371,3 +374,73 @@ class RotationMatrix(_CArray):
             raise TypeError('indices must be tuple')
         if not len(k) == 2:
             raise LengthError('two indices are needed')
+
+
+class Marker(Element):
+    
+    def __init__(self, fam_name):
+        e = _trackcpp.Element_marker(fam_name)
+        super().__init__(e)
+
+
+class Bpm(Element):
+
+    def __init__(self, fam_name):
+        e = _trackcpp.Element_bpm(fam_name)
+        super().__init__(e)
+
+
+class Drift(Element):
+
+    def __init__(self, fam_name, length):
+        e = _trackcpp.Element_drift(fam_name, length)
+        super().__init__(e)
+
+
+class Corrector(Element):
+
+    def __init__(self, fam_name, length, hkick, vkick):
+        e = _trackcpp.Element_corrector(fam_name, length, hkick, vkick)
+        super().__init__(e)
+
+
+class HCorrector(Corrector):
+
+    def __init__(self, fam_name, length, hkick):
+        super().__init__(fam_name, length, hkick, 0.0)
+
+
+class VCorrector(Corrector):
+
+    def __init__(self, fam_name, length, vkick):
+        super().__init__(fam_name, length, 0.0, vkick)
+
+
+class Quadrupole(Element):
+
+    def __init__(self, fam_name, length, K, nr_steps=1):
+        e = _trackcpp.Element_quadrupole(fam_name, length, K, nr_steps)
+        super().__init__(e)
+
+
+class Sextupole(Element):
+
+    def __init__(self, fam_name, length, S, nr_steps=1):
+        e = _trackcpp.Element_sextupole(fam_name, length, S, nr_steps)
+        super().__init__(e)
+
+
+class RBend(Element):
+
+    def __init__(self, fam_name, length, angle, angle_in=0.0, angle_out=0.0,
+                 K=0.0, S=0.0):
+        e = _trackcpp.Element_rbend(fam_name, length, angle,
+                                    angle_in, angle_out, K, S)
+        super().__init__(e)
+
+
+class RFCavity(Element):
+
+    def __init__(self, fam_name, length, frequency, voltage):
+        e = _trackcpp.Element_rfcavity(fam_name, length, frequency, voltage)
+        super().__init__(e)
