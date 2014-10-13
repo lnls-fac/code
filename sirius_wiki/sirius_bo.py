@@ -9,9 +9,9 @@ label = 'Booster'
 parameter_list = [
 
   Parameter(
-    name     = 'Booster extraction dipole quadrupole strength',
+    name     = 'Booster dipole quadrupole strength',
     group    = 'FAC',
-    value    = Prms.bo_extraction_dipole_quadrupole_strength,
+    value    = Prms.bo_dipole_quadrupole_strength,
     symbol   = r'',
     units    = 'm<sup>-2</sup>',
     deps     = [],
@@ -19,9 +19,9 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster extraction dipole sextupole strength',
+    name     = 'Booster dipole sextupole strength',
     group    = 'FAC',
-    value    = Prms.bo_extraction_dipole_sextupole_strength,
+    value    = Prms.bo_dipole_sextupole_strength,
     symbol   = r'',
     units    = 'm<sup>-3</sup>',
     deps     = [],
