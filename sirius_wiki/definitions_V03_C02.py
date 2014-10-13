@@ -447,11 +447,11 @@ class ParameterDefinitions(object):
     bo_hardedge_length_of_long_quadrupoles  = 0.2 # [m]
     
     bo_beam_current          = 2.0 # [mA]
-    bo_lattice_version       = '' 
+    bo_lattice_version       = 'V900' 
     bo_circumference         = 496.8 # [m]
     bo_lattice_symmetry      = 10
     bo_harmonic_number       = 828
-    bo_optics_mode = ''
+    bo_optics_mode           = 'M0'
 
     bo_number_of_dipoles = 50
     bo_number_of_QF_quadrupoles = 50
@@ -469,9 +469,11 @@ class ParameterDefinitions(object):
     bo_hardedge_length_of_SD_sextupoles = 0.2 # [m]
 
     bo_dipole_deflection_angle = 7.2 # [°]
-
+    bo_hardedge_length_of_dipoles =  1.152 # [m]
     bo_dipole_bending_radius = bo_hardedge_length_of_dipoles / math.radians(bo_dipole_deflection_angle)
-
+    bo_dipole_quadrupole_strength = -0.2037   # [1/m^2]
+    bo_dipole_sextupole_strength = -2.2685    # [ 1/m^3]
+    
     bo_maximum_integrated_sextupole = 20.0138457118891 # B''L/2 [T/m]
 
     bo_horizontal_dipole_corrector_maximum_strength = 0.35 # [mrad]
@@ -533,8 +535,8 @@ class ParameterDefinitions(object):
 
     bo_number_of_beam_position_monitors = 50
 
-    bo_horizontal_betatron_tune = 19.204749345767866
-    bo_vertical_betatron_tune   = 7.307442329080478
+    bo_horizontal_betatron_tune = 19.19
+    bo_vertical_betatron_tune   = 7.32
     bo_synchrotron_tune         = 0.004419249840938
 
     bo_horizontal_natural_chromaticity = -33.704073487683672
@@ -554,6 +556,9 @@ class ParameterDefinitions(object):
         bo_injection_beam_beta_factor)
 
     bo_injection_dipole_magnetic_field = bo_injection_beam_magnetic_rigidity / bo_dipole_bending_radius
+    bo_injection_dipole_quadrupole_gradient = bo_injection_beam_magnetic_rigidity * bo_dipole_quadrupole_strength # [T/m]
+    bo_injection_dipole_sextupole_gradient = bo_injection_beam_magnetic_rigidity * bo_dipole_sextupole_strength # [T/m2]
+    
     bo_injection_QF_quadrupole_maximum_gradient = 1.0132009391643900 # [T/m]
     bo_injection_QD_quadrupole_maximum_absolute_gradient = 0.1250865356993070 # [T/m]
 
@@ -567,6 +572,9 @@ class ParameterDefinitions(object):
         bo_extraction_beam_beta_factor)
 
     bo_extraction_dipole_magnetic_field = bo_extraction_beam_magnetic_rigidity / bo_dipole_bending_radius
+    bo_extraction_dipole_quadrupole_gradient = bo_extraction_beam_magnetic_rigidity * bo_dipole_quadrupole_strength # [T/m]
+    bo_extraction_dipole_sextupole_gradient = bo_extraction_beam_magnetic_rigidity * bo_dipole_sextupole_strength # [T/m2]
+
     bo_extraction_QF_quadrupole_maximum_gradient = 20.2640187832877 # [T/m]
     bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
 

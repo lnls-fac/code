@@ -4,10 +4,69 @@
 from parameter import Parameter
 from definitions import ParameterDefinitions as Prms
 
-
 label = 'Booster'
 
 parameter_list = [
+
+  Parameter(
+    name     = 'Booster extraction dipole quadrupole strength',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_quadrupole_strength,
+    symbol   = r'',
+    units    = 'm<sup>-2</sup>',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole sextupole strength',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_sextupole_strength,
+    symbol   = r'',
+    units    = 'm<sup>-3</sup>',
+    deps     = [],
+    obs      = ['<math> \frac{1}{2 B\rho}\frac{d^2B}{dx^2}</math>'],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole sextupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_sextupole_gradient,
+    symbol   = r'',
+    units    = 'T/m<sup>2</sup>',
+    deps     = ['Booster extraction beam magnetic rigidity','Booster dipole sextupole strength'],
+    obs      = ['<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
+  ),
+
+  Parameter(
+    name     = 'Booster injection dipole sextupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_injection_dipole_sextupole_gradient,
+    symbol   = r'',
+    units    = 'T/m<sup>2</sup>',
+    deps     = ['Booster injection beam magnetic rigidity','Booster dipole sextupole strength'],
+    obs      = ['<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole quadrupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_quadrupole_gradient,
+    symbol   = r'',
+    units    = 'T/m',
+    deps     = ['Booster extraction beam magnetic rigidity','Booster dipole quadrupole strength'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster injection dipole quadrupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_injection_dipole_quadrupole_gradient,
+    symbol   = r'',
+    units    = 'T/m',
+    deps     = ['Booster injection beam magnetic rigidity','Booster dipole quadrupole strength'],
+    obs      = [],
+  ),
 
   Parameter(
     name     = 'Booster injection beam energy',
@@ -210,7 +269,7 @@ parameter_list = [
     symbol   = r'<math>h</math>',
     units    = '',
     deps     = [],
-    obs      = [unicode('<section begin=factors/>2<sup>2</sup>×2<sup>3</sup>×23<section end=factors/>',encoding='utf-8')],
+    obs      = [unicode('<section begin=factors/>2<sup>2</sup>×3<sup>2</sup>×23<section end=factors/>',encoding='utf-8')],
   ),
 
   Parameter(
