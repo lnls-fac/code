@@ -1,5 +1,5 @@
 
-import trackcpp.trackcpp as _trackcpp
+import trackcpp as _trackcpp
 
 
 _T_SIZE = 6
