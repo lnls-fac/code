@@ -143,7 +143,10 @@ class FieldMap:
                 self.gap = float(words[1]) #[mm]
                 continue
             if cmd == 'gap_controle[mm]:':
-                self.control_gap = float(words[1]) #[mm]
+                try:
+                    self.control_gap = float(words[1]) #[mm]
+                except:
+                    self.control_gap = None
                 continue
             if cmd == 'comprimento[mm]:':
                 self.length = float(words[1]) #[mm]

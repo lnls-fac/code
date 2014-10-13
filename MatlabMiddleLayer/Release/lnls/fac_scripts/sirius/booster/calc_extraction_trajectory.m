@@ -1,4 +1,4 @@
-function calc_dipole_trajectory
+function calc_extraction_trajectory
 
 mm   = 0.001; % [mm] -> [m] conversion
 mrad = 0.001; % [mrad] -> [rad] conversion  
@@ -9,9 +9,9 @@ folder = fullfile(root_path,'code','MatlabMiddleLayer','Release','lnls','fac_scr
 addpath(folder);
 
 % loads fieldmap
-filename = fullfile(root_path, 'data','sirius_mml','magnet_modelling','MM3D','B_Booster','2014-09-18_Dipolo_Booster_BD_Modelo_6_-80_35mm_-1000_1000mm.txt');
-load_fieldmap(filename, 'suppress_plot');
-%load_fieldmap(filename);
+filename = fullfile(root_path, 'data','sirius','bo', 'magnet_modelling','b','fieldmaps','2014-09-18_Dipolo_Booster_BD_Modelo_6_-80_35mm_-1000_1000mm.txt');
+%load_fieldmap(filename, 'suppress_plot');
+load_fieldmap(filename);
 maxwell_field_reconstruction(0);
 
 % calcs beam parameters (magnetic rigidity, gamma factor, beta, etc)

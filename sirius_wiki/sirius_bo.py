@@ -25,7 +25,7 @@ parameter_list = [
     symbol   = r'',
     units    = 'm<sup>-3</sup>',
     deps     = [],
-    obs      = ['<math> \frac{1}{2 B\rho}\frac{d^2B}{dx^2}</math>'],
+    obs      = [r'<math> \frac{1}{2 B\rho}\frac{d^2B}{dx^2}</math>'],
   ),
 
   Parameter(
@@ -35,7 +35,7 @@ parameter_list = [
     symbol   = r'',
     units    = 'T/m<sup>2</sup>',
     deps     = ['Booster extraction beam magnetic rigidity','Booster dipole sextupole strength'],
-    obs      = ['<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
+    obs      = [r'<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
   ),
 
   Parameter(
@@ -45,7 +45,7 @@ parameter_list = [
     symbol   = r'',
     units    = 'T/m<sup>2</sup>',
     deps     = ['Booster injection beam magnetic rigidity','Booster dipole sextupole strength'],
-    obs      = ['<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
+    obs      = [r'<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
   ),
 
   Parameter(

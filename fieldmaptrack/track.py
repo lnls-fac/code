@@ -40,14 +40,14 @@ class Trajectory:
         #return self.calc_trajectory_rk1(**kwargs)
         return self.calc_trajectory_rk4(**kwargs)
         
-    def calc_rhs(self, alpha, p):
+    def calc_force(self, alpha, p):
         
         rx, ry, rz, px, py, pz = p
         # calcs magnetic field on current position
         try:
             bx,by,bz = self.fieldmap.interpolate(rx,ry,rz)
         except (fieldmap.OutOfRangeRx, fieldmap.OutOfRangeRy):
-            print('extrapolation at ' + str((rx,ry,rz)))
+            raise TrackException('extrapolation at ' + str((rx,ry,rz)))
         except fieldmap.OutOfRangeRz:
             bx,by,bz = 0.0,0.0,0.0
         
@@ -499,3 +499,10 @@ class Trajectory:
     
         return r
    
+    def save(self, file_name):
+        
+        with open(file_name, 'w') as fp:
+            fp.write('# trajectory\n')
+            fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
+            for i in range(len(self.s)):
+                fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(self.s[i],self.rx[i],self.ry[i],self.rz[i],self.px[i],self.py[i],self.pz[i]))
