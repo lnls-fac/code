@@ -1,0 +1,31 @@
+
+#include "interface.h"
+
+
+Status::type track_linepass_wrapper(
+        const Accelerator &accelerator,
+        Pos<double> &orig_pos,
+        std::vector< Pos<double> > &pos,
+        LinePassArgs args) {
+    return track_linepass(accelerator,
+                          orig_pos,
+                          pos,
+                          args.element_offset,
+                          args.lost_plane,
+                          args.trajectory);
+}
+
+Status::type track_ringpass_wrapper (
+        const Accelerator& accelerator,
+        Pos<T> &orig_pos,
+        std::vector< Pos<T> > &pos,
+        RingPassArgs args) {
+    return track_ringpass(accelerator,
+                          orig_pos,
+                          pos,
+                          args.nr_turns,
+                          args.lost_turn,
+                          args.element_offset,
+                          args.lost_plane,
+                          args.trajectory);
+}
