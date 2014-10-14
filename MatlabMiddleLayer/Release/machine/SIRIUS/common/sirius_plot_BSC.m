@@ -1,18 +1,22 @@
-function sirius_plot_twiss(maquina,tipo,save_fig)
-%Funcao que faz o grafico dos parametros de twiss 
-% Antes de executar esse script e necessario rodar o camando
-% sirius('versao') para carregar os caminhos no matlab
+function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
+%Funcao que faz o grafico do tamanho do feixe apenas no booster e anel de
+%armazenmento.  +
+%Antes de executar esse script e necessario rodar o camando
+%sirius('versao') para carregar os caminhos no matlab
 %variaveis de entrada:
 %   maquina - string indicando a maquina que deseja fazer os grafico, pode
 %    ser 'si' para o Anel de armazenamento, 'bo' para o booster e 'tb' ou
 %    'ts' para as linhas de trasnporte linac-booster ou booster-anel.
 %   tipo - fazer o grafico de todas as funcoes de twiss juntas (0) ou
 %   separadas (1). O Default e fazer tudo junto.
+%   coup - acoplamente betatron x-y.
 %   save_fig - flag tipo string para salvar o grafico em .png('png') ou .pdf('pdf'). O
 %   automatico salva em formato .png.
+%   e_spread - no caso das linhas de transporte o input do energy spread e
+%   necessario.
 %Para utilizar o script e necessario rodas ANTES um comamndo carregando a
 %rede da maquina em questao -> sirius('maquina+versao'). Depois disso o
-%scripet se encarrega de fazer o resto.
+%script se encarrega de fazer o resto.
 
 
 
@@ -25,7 +29,10 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         %Define inicio e fim para o grafico (1 periodo)
         mib = findcells(THERING,'FamName','mib');
         ini=1;
-        fim=mib(1);
+        fim=mib(1); 
+        %Calcula dispersao de energia
+        param=atsummary;
+        e_spread=param.naturalEnergySpread;
     elseif strcmp(maquina,'bo')==1
         [THERING titulo]=sirius_bo_lattice;
         titulo=regexprep(titulo,'_','-');
@@ -35,6 +42,9 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         mqf = findcells(THERING,'FamName','qf');
         ini=1;
         fim=mqf(6);
+        %Calcula dispersao de energia
+        param=atsummary;
+        e_spread=param.naturalEnergySpread;
     elseif strcmp(maquina,'tb')==1
         [THERING titulo Twiss0]=sirius_tb_lattice;
         titulo=regexprep(titulo,'_','-');
@@ -42,14 +52,19 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         twiss_tb = twissline(THERING,0.0,Twiss0,1:length(THERING)+1,'chrom'); 
         %Define inicio e fim para o grafico (linha de transporte completa)
         ini=1;
-        fim=length(twiss_tb);
+        fim=length(twiss_tb)-1;
         %Redefine a estrutura de twiss
-        twiss.pos=cat(1,twiss_tb.SPos);
+        pos=cat(1,twiss_tb.SPos);
+        twiss.pos=pos(2:length(pos));
         beta=cat(1,twiss_tb.beta);
-        twiss.betax=beta(:,1);
-        twiss.betay=beta(:,2);
+        twiss.betax=beta(2:length(beta),1);
+        twiss.betay=beta(2:length(beta),2);
         disp=[twiss_tb.Dispersion];
-        twiss.etax=disp(1,:)';
+        twiss.etax=disp(1,2:length(disp))';
+        % Define desvio de energia
+        if exist('e_spread', 'var')==0
+            e_spread=0;
+        end;
     elseif strcmp(maquina,'ts')==1
         [THERING titulo Twiss0]=sirius_ts_lattice;
         titulo=regexprep(titulo,'_','-');
@@ -57,14 +72,19 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         twiss_ts = twissline(THERING,0.0,Twiss0,1:length(THERING)+1,'chrom'); 
         %Define inicio e fim para o grafico (linha de transporte completa)
         ini=1;
-        fim=length(twiss_ts);
+        fim=length(twiss_ts)-1;
         %Redefine a estrutura de twiss
-        twiss.pos=cat(1,twiss_ts.SPos);
+        pos=cat(1,twiss_ts.SPos);
+        twiss.pos=pos(2:length(pos));
         beta=cat(1,twiss_ts.beta);
-        twiss.betax=beta(:,1);
-        twiss.betay=beta(:,2);
+        twiss.betax=beta(2:length(beta),1);
+        twiss.betay=beta(2:length(beta),2);
         disp=[twiss_ts.Dispersion];
-        twiss.etax=disp(1,:)';
+        twiss.etax=disp(1,2:length(disp))';
+        % Define desvio de energia
+        if exist('e_spread', 'var')==0
+            e_spread=0;
+        end;
     else 
         fprinf('Maquina nao reconhecida');
         %break;
@@ -74,28 +94,42 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         tipo = 1;
     end;
     
+    %Guarda tamanho da camara de vacuo
+    Hap=getcellstruct(THERING,'VChamber',1:length(THERING),1);
+    Vap=getcellstruct(THERING,'VChamber',1:length(THERING),2);
+    
+    %Calcula aceitancia
+    Haccep=min(Hap.^2./twiss.betax);
+    Vaccep=min(Vap.^2./twiss.betay);
+    
+    %Calcula beam stay clear
+    HBSC=sqrt(Haccep*twiss.betax+e_spread^2*twiss.etax.^2)*1e3;
+    VBSC=sqrt(Vaccep*twiss.betay+e_spread^2*twiss.etax.^2)*1e3;
+    
+    
     if tipo==0
         Twissfig=figure(1);
         set(Twissfig, 'Position', [1 1 1000 450]);
         axes('FontSize',14);
         xlabel({'s [m]'},'FontSize',14);
-        ylabel({'\beta [m]'},'FontSize',14);
+        ylabel({'Beam stay clear [mm]'},'FontSize',14);
         hold on;
-        bx=plot(twiss.pos(ini:fim),twiss.betax(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
-        by=plot(twiss.pos(ini:fim),twiss.betay(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
+        bx=plot(twiss.pos(ini:fim),HBSC(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
+        by=plot(twiss.pos(ini:fim),VBSC(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
     
         %Creat grid
         grid 'on';
+        box 'on';
         
-        offset=min(min(abs(twiss.betay(ini:fim)),abs(twiss.betax(ini:fim))));
-        top=max(max(abs(twiss.betay(ini:fim)),abs(twiss.betax(ini:fim))));
+        offset=min(min(abs(VBSC(ini:fim)),abs(HBSC(ini:fim))));
+        top=max(max(abs(VBSC(ini:fim)),abs(HBSC(ini:fim))));
            
         %Faz grafico da rede
         Delta=(top+offset)*0.1/3;
-        offset=-offset-2*Delta;
+        offset=offset-2*Delta;
         xlimit=[0 twiss.pos(fim)];
         if strcmp(maquina,'si')==1
-            lnls_drawlattice(THERING,20,offset,1,Delta);
+            lnls_drawlattice(THERING,20,offset,1,Delta);     
             xlim(xlimit);
         elseif strcmp(maquina,'bo')==1
             lnls_drawlattice(THERING,10,offset,1,Delta); 
@@ -107,38 +141,9 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         offset=offset-2*Delta;
         ylim([offset top+2]);
     
-        %Define eixo y original
-        ax1 = findall(Twissfig,'type','axes');
-    
-        %Define eixo y secund?rio
-        ax2 = axes('Parent',Twissfig,'Position',get(ax1(1),'Position'),'XAxisLocation','top','YAxisLocation','right','Color','none','XTickLabel',[],'XColor','k','YColor','g','FontSize', 14);
-        linkaxes([ax1(1) ax2],'x');
-        hold on
-        ex=plot(ax2,twiss.pos(ini:fim),twiss.etax(ini:fim),'LineWidth',1.5,'Color',[0 1 0]);
-        ylabel(ax2,{'\eta_x [m]'},'FontSize',14,'Rot',-90);
-        set(get(ax2,'YLabel'),'Position',get(get(ax2,'YLabel'),'Position')+[0.8 0 0]);
-        
-        %Redefine extremos para casar escala com o eixo esquerdo
-        y2max=max(twiss.etax);
-        y2min=min(twiss.etax);
-        Deltay2=y2max-y2min;
-        y1max=max(max(twiss.betax),max(twiss.betay));
-        y1min=min(min(twiss.betax),min(twiss.betay));
-        Deltay1= y1max-y1min;
-        y1lim=get(ax1,'ylim');
-        Dmin=abs((y1lim(1)-y1min)/Deltay1*Deltay2);
-        Dmax=abs((y1lim(2)-y1max)/Deltay1*Deltay2);
-        ylim(ax2,[(y2min-Dmin) (y2max+Dmax)])
-        y1ticks=get(ax1,'YTick');
-        Dticks=(y2min-Dmin)+abs((y1ticks-y1lim(1))/Deltay1*Deltay2);
-        set(ax2,'Ytick',Dticks);
-        set(ax2,'YTickLabel',sprintf('%1.2f|',Dticks));
-        
-        
-    
         %Insere titulo e legenda
-        title({['Twiss functions - ' titulo]},'FontSize',16,'FontWeight','bold');
-        legend([bx,by],'\beta_x','\beta_y','Location','northwest','boxoff');        
+        title({['Beam Stay Clear - ' titulo]},'FontSize',16,'FontWeight','bold');
+        legend([bx,by],'horizontal','vertical','Location','northwest','boxoff');        
     
         hold off;                
     else    
@@ -150,15 +155,15 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
            'FontSize',14,...
            'FontWeight','bold',...
            'LineStyle','none',...
-           'String', ['Twiss Functions - ' titulo]);
+           'String', ['Beam Stay Clear - ' titulo]);
        
         %Grafico dispersao horizontal
         subplot('position',[0.1 0.59 0.85 0.32],'FontSize',14);
         hold all;
-        plot(twiss.pos(ini:fim),twiss.etax(ini:fim),'LineWidth',1.5,'Color',[0 1 0]);
+        plot(twiss.pos(ini:fim),HBSC(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
         xlim(xlimit);
-        ylab=ylabel('\eta_x [m]', 'FontSize',14);
-        set(ylab, 'position', get(ylab,'position')+[0.6,0,0]);
+        ylab=ylabel('Horizontal BSC [mm]', 'FontSize',14);
+        %set(ylab, 'position', get(ylab,'position')+[0.6,0,0]);
         grid on;
         box on;
 
@@ -182,11 +187,9 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         subplot('position',[0.1 0.12 0.85 0.32],'FontSize',14);
         hold all;
         xlim(xlimit);
-        bx=plot(twiss.pos(ini:fim),twiss.betax(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
-        by=plot(twiss.pos(ini:fim),twiss.betay(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
+        plot(twiss.pos(ini:fim),VBSC(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
         xlabel('s [m]', 'FontSize',14);
-        ylabel({'\beta [m]'},'FontSize',14);
-        legend([bx,by],'\beta_x','\beta_y','Location','northwest','boxoff'); 
+        ylabel({'Vertical BSC [mm]'},'FontSize',14);
         grid on;
         box on; 
     end;
@@ -194,9 +197,9 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
 
     if exist('save_fig', 'var')
         if strcmp(save_fig,'pdf')==1
-            print('-dpdf',[maquina '_twiss.pdf']);
+            print('-dpdf',[maquina '_BSC.pdf']);
         else
-            print('-dpng',[maquina '_twiss.png']);
+            print('-dpng',[maquina '_BSC.png']);
         
     end
    
