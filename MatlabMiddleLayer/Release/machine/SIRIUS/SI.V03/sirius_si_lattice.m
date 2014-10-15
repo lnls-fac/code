@@ -67,9 +67,9 @@ sext_pass_method = 'StrMPoleSymplectic4Pass';
 
 id_length = 2.0; % [m]
 
-dia1     = drift('dia', id_length/2, 'DriftPass');
+dia1     = drift('dia1', id_length/2, 'DriftPass');
 dia2     = drift('dia', 3.4828500 - id_length/2, 'DriftPass');
-dib1     = drift('dib', id_length/2, 'DriftPass');
+dib1     = drift('dib1', id_length/2, 'DriftPass');
 dib2     = drift('dib', 3.0128500 - id_length/2, 'DriftPass');
 d00      = drift('d00', 0.005000, 'DriftPass');
 d10      = drift('d10', 0.100000, 'DriftPass');
