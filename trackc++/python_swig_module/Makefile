@@ -13,7 +13,8 @@ OBJECTS = trackcpp_wrap.o \
 		  passmethods.o \
 		  lattice.o \
 		  flat_file.o \
-		  interface.o
+		  interface.o \
+		  elementswrapper.o
 CPPFLAGS = -std=c++11 -fPIC $(OPT_FLAG)
 LIBS = -lgsl -lblas
 INC = -I/usr/include/python3.4 -I../

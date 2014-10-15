@@ -32,75 +32,60 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 
 Element Element::marker (const std::string& fam_name_) {
 	Element e = Element(fam_name_, 0);
-	e.pass_method = PassMethod::pm_identity_pass;
+    initialize_marker(e);
 	return e;
 }
 
 Element Element::bpm (const std::string& fam_name_) {
     Element e = Element(fam_name_, 0);
-    e.pass_method = PassMethod::pm_identity_pass;
+    initialize_marker(e);
     return e;
 }
 
 Element Element::drift (const std::string& fam_name_, const double& length_) {
 	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_drift_pass;
+    initialize_drift(e);
 	return e;
 }
 
 Element Element::hcorrector(const std::string& fam_name_, const double& length_, const double& hkick_) {
 	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_corrector_pass;
-	e.hkick = hkick_;
+    initialize_corrector(e, hkick_, 0.0);
 	return e;
 }
 
 Element Element::vcorrector(const std::string& fam_name_, const double& length_, const double& vkick_) {
 	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_corrector_pass;
-	e.vkick = vkick_;
+    initialize_corrector(e, 0.0, vkick_);
 	return e;
 }
 
 Element Element::corrector(const std::string& fam_name_, const double& length_, const double& hkick_, const double& vkick_) {
 	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_corrector_pass;
-	e.hkick = hkick_;
-	e.vkick = vkick_;
+    initialize_corrector(e, hkick_, vkick_);
 	return e;
 }
 
-
 Element Element::quadrupole (const std::string& fam_name_, const double& length_, const double& K_, const int nr_steps_) {
 	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
-	e.polynom_b[1] = K_;
+    initialize_quadrupole(e, K_, nr_steps_);
 	return e;
 }
 
 Element Element::sextupole (const std::string& fam_name_, const double& length_, const double& S_, const int nr_steps_) {
 	Element e = Element(fam_name_, length_);
-	e.nr_steps = nr_steps_;
-	e.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
-	e.polynom_b[2] = S_;
+    initialize_sextupole(e, S_, nr_steps_);
 	return e;
 }
 Element Element::rbend (const std::string& fam_name_, const double& length_, const double& angle_, const double& angle_in_, const double& angle_out_, const double& K_, const double& S_) {
-	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_bnd_mpole_symplectic4_pass;
-	e.angle = angle_;
-	e.angle_in = angle_in_;
-	e.angle_out = angle_out_;
-	e.polynom_b[1] = K_;
-	e.polynom_b[2] = S_;
+    Element e = Element(fam_name_, length_);
+    initialize_rbend(e, angle_, angle_in_, angle_out_, K_, S_);
 	return e;
 }
 
 Element Element::rfcavity (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_) {
 	Element e = Element(fam_name_, length_);
-	e.pass_method = PassMethod::pm_cavity_pass;
-	e.frequency = frequency_;
-	e.voltage = voltage_;
+    initialize_rfcavity(e, frequency_, voltage_);
 	return e;
 }
 
@@ -141,5 +126,43 @@ std::ostream& operator<< (std::ostream &out, const Element& el) {
 	return out;
 }
 
+void initialize_marker(Element &element) {
+    element.pass_method = PassMethod::pm_identity_pass;
+}
 
+void initialize_corrector(Element &element, const double &hkick, const double &vkick) {
+    element.pass_method = PassMethod::pm_corrector_pass;
+    element.hkick = hkick;
+    element.vkick = vkick;
+}
 
+void initialize_drift(Element &element) {
+    element.pass_method = PassMethod::pm_drift_pass;
+}
+
+void initialize_rbend(Element &element, const double &angle, const double &angle_in, const double angle_out, const double &K, const double &S) {
+    element.pass_method = PassMethod::pm_bnd_mpole_symplectic4_pass;
+    element.angle = angle;
+    element.angle_in = angle_in;
+    element.angle_out = angle_out;
+    element.polynom_b[1] = K;
+    element.polynom_b[2] = S;
+}
+
+void initialize_quadrupole(Element &element, const double &K, const int &nr_steps) {
+    element.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
+    element.polynom_b[1] = K;
+    element.nr_steps = nr_steps;
+}
+
+void initialize_sextupole(Element &element, const double &S, const int &nr_steps) {
+    element.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;
+    element.polynom_b[2] = S;
+    element.nr_steps = nr_steps;
+}
+
+void initialize_rfcavity(Element &element, const double &frequency, const double &voltage) {
+    element.pass_method = PassMethod::pm_cavity_pass;
+    element.frequency = frequency;
+    element.voltage = voltage;
+}

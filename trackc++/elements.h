@@ -67,12 +67,20 @@ public:
 	static Element corrector  (const std::string& fam_name_, const double& length_, const double& hkick_, const double& vkick_);
 	static Element drift      (const std::string& fam_name_, const double& length_);
 	static Element rbend      (const std::string& fam_name_, const double& length_, const double& angle_, const double& angle_in_ = 0, const double& angle_out_ = 0, const double& K_ = 0, const double& S_ = 0);
-	static Element quadrupole (const std::string& fam_name_, const double& length_, const double& K_, const int nt_steps_ = 1);
+    static Element quadrupole (const std::string& fam_name_, const double& length_, const double& K_, const int nr_steps_ = 1);
 	static Element sextupole  (const std::string& fam_name_, const double& length_, const double& S_, const int nr_steps_ = 1);
 	static Element rfcavity   (const std::string& fam_name_, const double& length_, const double& frequency_, const double& voltage_);
 
 	friend std::ostream& operator<< (std::ostream &out, const Element& el);
 
 };
+
+void initialize_marker(Element& element);
+void initialize_corrector(Element& element, const double& hkick, const double& vkick);
+void initialize_drift(Element& element);
+void initialize_rbend(Element& element, const double& angle, const double& angle_in, const double angle_out, const double& K, const double& S);
+void initialize_quadrupole(Element& element, const double& K, const int& nr_steps);
+void initialize_sextupole(Element& element, const double& S, const int& nr_steps);
+void initialize_rfcavity(Element& element, const double& frequency, const double& voltage);
 
 #endif

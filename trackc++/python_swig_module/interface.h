@@ -22,12 +22,12 @@ Status::type track_linepass_wrapper (
         const Accelerator& accelerator,
         Pos<double>& orig_pos,
         std::vector< Pos<double> >& pos,
-        LinePassArgs args);
+        LinePassArgs& args);
 
 Status::type track_ringpass_wrapper (
         const Accelerator& accelerator,
-        Pos<T> &orig_pos,
-        std::vector< Pos<T> > &pos,
-        RingPassArgs args);
+        Pos<double> &orig_pos,
+        std::vector< Pos<double> > &pos,
+        RingPassArgs& args);
 
 #endif // INTERFACE_H
