@@ -199,22 +199,21 @@ cline3b = [ d44, d11, ch, d16, qf4, d20, sf2b, d11, mon, d12, qf3, d14, d00, sd3
 cline4b = [ d22, d00, ch, d12, sd2b, d14, d00, qf2, d20, sf1b, d11, mon, d12, qf1, d14, d00, sd1b, d16, ch, cv, d33, d00, mon, d12];
 
 %% Injection Section
-dmiainj  = drift('dmiainj', 0.39, 'DriftPass');
-dinjk3   = drift('dinjk3' , 0.30, 'DriftPass');
-dk3k4    = drift('dk3k4'  , 0.60, 'DriftPass');
-dk4pmm   = drift('dk4pmm' , 0.20, 'DriftPass');
-dpmmcv   = drift('dpmmcv' , 0.1628500, 'DriftPass');
-dcvk1    = drift('dcvk1'  , 0.0728500, 'DriftPass');
-dk1k2    = drift('dk1k2'  , 0.60, 'DriftPass');
-sef      = sextupole('sef', 0.60, 0.0, sext_pass_method); %corrector('sef', 0.6, [0 0], 'CorrectorPass');
-dk2sef   = drift('dk2mia' , 0.80, 'DriftPass');
-kick     = corrector('kick',0.60, [0 0], 'CorrectorPass');
-pmm      = sextupole('pmm', 0.60, 0.0, sext_pass_method);
+
+dchinj   = drift('dchinj', 3.1428500, 'DriftPass');
+dinjmia  = drift('dinjmia', 0.34, 'DriftPass');
+dmiakick = drift('dmiakick', 1.95000, 'DriftPass');
+dkickpmm = drift('dkickpmm' , 0.8070, 'DriftPass');
+dpmmch   = drift('dpmmch' , 0.7258500, 'DriftPass');
+%kick     = corrector('kick',0.5, [0 0], 'CorrectorPass');
+%pmm      = sextupole('pmm', 0.5, 0.0, sext_pass_method);
+kick     = marker('kick','IdentityPass');
+pmm      = marker('pmm','IdentityPass');
 inj      = marker('inj','IdentityPass');
 
 insaend  = [ch, cv, crhv, d12, sda, d12, mon, d12, qfa, d23, qda1, d14, d00, sfa, d19, d00];
-insainj  = [d12, dmiainj, inj, dinjk3, kick, dk3k4, kick, dk4pmm, pmm, dpmmcv, insaend];
-injinsa  = [fliplr(insaend), d12, dcvk1, kick, dk1k2, kick, dk2sef, sef];
+insainj  = [dmiakick, kick, dkickpmm, pmm, dpmmch, insaend];
+injinsa  = [fliplr(insaend), dchinj, dinjmia];
 
 B3BCB3 = [ B3, d13, BC, d13, B3];     
 
