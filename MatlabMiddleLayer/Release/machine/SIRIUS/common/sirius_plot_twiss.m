@@ -194,9 +194,9 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
 
     if exist('save_fig', 'var')
         if strcmp(save_fig,'pdf')==1
-            print('-dpdf',[maquina '_twiss.pdf']);
+            print('-dpdf',[maquina 'twiss.pdf']);
         else
-            print('-dpng',[maquina '_twiss.png']);
+            print('-dpng',[maquina 'twiss.png']);
         
     end
    
