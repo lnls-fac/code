@@ -77,9 +77,14 @@ Element Element::sextupole (const std::string& fam_name_, const double& length_,
     initialize_sextupole(e, S_, nr_steps_);
 	return e;
 }
-Element Element::rbend (const std::string& fam_name_, const double& length_, const double& angle_, const double& angle_in_, const double& angle_out_, const double& K_, const double& S_) {
+
+Element Element::rbend (const std::string& fam_name_, const double& length_,
+		const double& angle_, const double& angle_in_, const double& angle_out_,
+		const double& gap_, const double& fint_in_, const double& fint_out_,
+		const std::vector<double>& polynom_a_, const std::vector<double>& polynom_b_,
+		const double& K_, const double& S_) {
     Element e = Element(fam_name_, length_);
-    initialize_rbend(e, angle_, angle_in_, angle_out_, K_, S_);
+    initialize_rbend(e, angle_, angle_in_, angle_out_, gap_, fint_in_, fint_out_, polynom_a_, polynom_b_, K_, S_);
 	return e;
 }
 
@@ -140,14 +145,21 @@ void initialize_drift(Element &element) {
     element.pass_method = PassMethod::pm_drift_pass;
 }
 
-void initialize_rbend(Element &element, const double &angle, const double &angle_in, const double angle_out, const double &K, const double &S) {
+void initialize_rbend(Element& element, const double& angle, const double& angle_in, const double& angle_out, const double& gap, const double& fint_in, const double& fint_out, const std::vector<double>& polynom_a, const std::vector<double>& polynom_b, const double& K, const double& S) {
     element.pass_method = PassMethod::pm_bnd_mpole_symplectic4_pass;
     element.angle = angle;
     element.angle_in = angle_in;
     element.angle_out = angle_out;
+    element.gap = gap;
+    element.fint_in = fint_in;
+    element.fint_out = fint_out;
+    element.polynom_a = polynom_a;
+    element.polynom_b = polynom_b;
     element.polynom_b[1] = K;
     element.polynom_b[2] = S;
 }
+
+
 
 void initialize_quadrupole(Element &element, const double &K, const int &nr_steps) {
     element.pass_method = PassMethod::pm_str_mpole_symplectic4_pass;

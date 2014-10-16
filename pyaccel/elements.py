@@ -29,8 +29,7 @@ def _get_double_matrix(pointer, sizes):
 
 
 class Element(_trackcpp.Element):
-
-
+    
     def __init__(self, fam_name, length=0.0):
         super().__init__(fam_name, length)
         self.t_in = _get_double_array(self._t_in, _T_SIZE)
@@ -40,7 +39,7 @@ class Element(_trackcpp.Element):
 
     def __str__(self):
         s = [''] # get a newline before first attribute
-        for name in self._attributes_to_print:
+        for name in self.__class__._attributes_to_print:
             if name in array_names:
                 value = self.__getattr__(name)[:]
             else:
@@ -55,9 +54,30 @@ class Element(_trackcpp.Element):
         else:
             return super().__getattr__(name)
 
+    @staticmethod
+    def _process_polynoms(polynom_a, polynom_b):
+        # makes sure polynom_a and polynom_b have same size and are initialized
+        pa, pb = polynom_a, polynom_b
+        if pa is None: 
+            pa = [0,0,0]
+        if pb is None: 
+            pb = [0,0,0]
+        n = max([3, len(pa), len(pb)])
+        for i in range(len(pa),n): pa.append(0.0)
+        for i in range(len(pb),n): pb.append(0.0)
+        return pa, pb
+            
 
 class Marker(Element):
 
+    _attributes_to_print = [
+                'fam_name',
+                'length',
+                'pass_method',
+                'hmax',
+                'vmax'
+        ]
+    
     def __init__(self, fam_name):
         """Create a marker element.
         
@@ -66,13 +86,6 @@ class Marker(Element):
         """
         super().__init__(fam_name, 0.0)
         _trackcpp.initialize_marker(self)
-        self._attributes_to_print = [
-                'fam_name',
-                'length',
-                'pass_method',
-                'hmax',
-                'vmax'
-        ]
 
 
 class Bpm(Marker):
@@ -88,6 +101,14 @@ class Bpm(Marker):
 
 class Drift(Element):
 
+    _attributes_to_print = [
+                'fam_name',
+                'length',
+                'pass_method',
+                'hmax',
+                'vmax'
+        ]
+ 
     def __init__(self, fam_name, length):
         """Create a drift element.
 
@@ -97,18 +118,22 @@ class Drift(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_drift(self)
-        self._attributes_to_print = [
-                'fam_name',
-                'length',
-                'pass_method',
-                'hmax',
-                'vmax'
-        ]
+       
 
 
 class Corrector(Element):
 
-    def __init__(self, fam_name, length, hkick, vkick):
+    _attributes_to_print = [
+                'fam_name',
+                'length',
+                'pass_method',
+                'hmax',
+                'vmax',
+                'hkick',
+                'vkick'
+        ]
+
+    def __init__(self, fam_name, hkick, vkick, length = 0.0):
         """Create a corrector element.
 
         Keyword arguments:
@@ -119,20 +144,11 @@ class Corrector(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_corrector(self, hkick, vkick)
-        self._attributes_to_print = [
-                'fam_name',
-                'length',
-                'pass_method',
-                'hmax',
-                'vmax',
-                'hkick',
-                'vkick'
-        ]
-
+        
 
 class HCorrector(Corrector):
 
-    def __init__(self, fam_name, length, hkick):
+    def __init__(self, fam_name, hkick, length = 0.0):
         """Create a horizontal corrector element.
 
         Keyword arguments:
@@ -140,12 +156,12 @@ class HCorrector(Corrector):
         length -- [m]
         hkick -- horizontal kick [rad]
         """
-        super().__init__(fam_name, length, hkick=hkick, vkick=0.0)
+        super().__init__(fam_name, hkick=hkick, vkick=0.0, length=length)
 
 
 class VCorrector(Corrector):
 
-    def __init__(self, fam_name, length, vkick):
+    def __init__(self, fam_name, vkick, length = 0.0):
         """Create a vertical corrector element.
 
         Keyword arguments:
@@ -153,12 +169,27 @@ class VCorrector(Corrector):
         length -- [m]
         vkick -- vertical kick [rad]
         """
-        super().__init__(fam_name, length, hkick=0.0, vkick=vkick)
+        super().__init__(fam_name, hkick=0.0, vkick=vkick, length=length)
 
 
 class Quadrupole(Element):
 
-    def __init__(self, fam_name, length, K, nr_steps=1):
+    _attributes_to_print = [
+                'fam_name',
+                'length',
+                'nr_steps',
+                'polynom_a',
+                'polynom_b',
+                'pass_method',
+                'hmax',
+                'vmax',
+                'r_in',
+                'r_out',
+                't_in',
+                't_out'
+        ]
+    
+    def __init__(self, fam_name, length, K, nr_steps=10):
         """Create a quadrupole element.
 
         Keyword arguments:
@@ -169,25 +200,16 @@ class Quadrupole(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_quadrupole(self, K, nr_steps)
-        self._attributes_to_print = [
-                'fam_name',
-                'length',
-                'nr_steps',
-                'polynom_a',
-                'polynom_b',
-                'pass_method',
-                'hmax',
-                'vmax',
-                'r_in',
-                'r_out',
-                't_in',
-                't_out'
-        ]
+        
 
 
 class Sextupole(Element):
 
-    def __init__(self, fam_name, length, S, nr_steps=1):
+    _attributes_to_print = ['fam_name', 'length', 'nr_steps',
+                            'polynom_a', 'polynom_b', 'pass_method',
+                            'hmax', 'vmax', 'r_in', 'r_out', 't_in', 't_out']
+    
+    def __init__(self, fam_name, length, S, nr_steps=5):
         """Create a sextupole element.
 
         Keyword arguments:
@@ -198,26 +220,16 @@ class Sextupole(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_sextupole(self, S, nr_steps)
-        self._attributes_to_print = [
-                'fam_name',
-                'length',
-                'nr_steps',
-                'polynom_a',
-                'polynom_b',
-                'pass_method',
-                'hmax',
-                'vmax',
-                'r_in',
-                'r_out',
-                't_in',
-                't_out'
-        ]
 
 
 class RBend(Element):
 
-    def __init__(self, fam_name, length, angle, angle_in=0.0, angle_out=0.0,
-            K=0.0, S=0.0):
+    def __init__(self, 
+                 fam_name, length, 
+                 angle, angle_in=0.0, angle_out=0.0,
+                 gap=0.0, fint_in=0.0, fint_out=0.0,
+                 polynom_a=None, polynom_b=None,
+                 K=None, S=None):
         """Create a rectangular dipole element.
 
         Keyword arguments:
@@ -230,7 +242,13 @@ class RBend(Element):
         S -- [m^-3]
         """
         super().__init__(fam_name, length)
-        _trackcpp.initialize_rbend(self, angle, angle_in, angle_out, K, S)
+        polynom_a, polynom_b = super()._process_polynoms(polynom_a, polynom_b)
+        if K is None: K = polynom_b[1]
+        if S is None: S = polynom_b[2]
+        _trackcpp.initialize_rbend(self, 
+                                   angle, angle_in, angle_out, 
+                                   gap, fint_in, fint_out,
+                                   polynom_a, polynom_b, K, S)
 
 
 class RFCavity(Element):
