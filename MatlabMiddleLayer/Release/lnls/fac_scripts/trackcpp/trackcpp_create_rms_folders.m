@@ -12,7 +12,7 @@ end
     
 cd(path);
 fh = fopen('runjob.sh','w');
-fprintf(fh,'#!/bin/bash\n\nsource ~/.bashrc\n\npytrack.py input.py > run.log');
+fprintf(fh,['#!/bin/bash\n\nsource ~/.bashrc\n\npytrack.py ' inpfile ' > run.log']);
 fclose(fh);
 system('chmod gu+wx runjob.sh');
 for ii = 1:nfolder

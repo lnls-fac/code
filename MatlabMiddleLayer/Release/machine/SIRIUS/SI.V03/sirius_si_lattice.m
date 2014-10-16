@@ -102,7 +102,7 @@ mida     = marker('id_enda',  'IdentityPass');
 midb     = marker('id_endb',  'IdentityPass');
 
 % --- beam position monitors ---
-mon      = marker('BPM', 'IdentityPass');
+mon      = marker('bpm', 'IdentityPass');
 
 % --- quadrupoles ---
 qfa      = quadrupole('qfa',  0.250000, qfa_strength,  quad_pass_method);
