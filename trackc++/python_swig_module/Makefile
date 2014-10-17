@@ -5,24 +5,28 @@ CXX = g++
 MACHINE = -m64
 OPT_FLAG = -O3
 SOURCES_I = trackcpp.i
-OBJECTS = trackcpp_wrap.o \
-          elements.o \
-          kicktable.o \
-          trackc++.o \
-          tracking.o \
-		  passmethods.o \
-		  lattice.o \
-		  flat_file.o \
-		  interface.o \
-		  elementswrapper.o
+INTERFACEOBJS = trackcpp_wrap.o \
+		        interface.o \
+		        elementswrapper.o
+TRACKCPPOBJS = elements.o \
+			   kicktable.o \
+			   trackc++.o \
+			   tracking.o \
+			   passmethods.o \
+			   lattice.o \
+			   flat_file.o
+OBJECTS = $(TRACKCPPOBJS) $(INTERFACEOBJS)
 CPPFLAGS = -std=c++11 -fPIC $(OPT_FLAG)
 LIBS = -lgsl -lblas
 INC = -I/usr/include/python3.4 -I../
 prefix = ../../..
 
-#OBJECTS = $(SOURCES_CPP:.cpp=.o) $(SOURCES_CPP:.cxx=.o)
+TRACKCPPSRCS = $(addprefix ../, $(TRACKCPPOBJS:.o=.cpp))
 
 all: _trackcpp.so
+
+$(shell $(CXX) -MM $(TRACKCPPSRCS) > .depend)
+-include .depend
 
 _trackcpp.so: $(OBJECTS)
 	$(CXX) -shared $(OBJECTS) $(LIBS) -o _trackcpp.so
