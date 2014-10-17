@@ -19,17 +19,13 @@ def _get_double_array(pointer, size):
 
 
 def _get_double_matrix(pointer, sizes):
-    double_size = _ctypes.sizeof(_ctypes.c_double)
     address = int(pointer)
-    r = []
-    for i in range(sizes[0]):
-        p = _ctypes.c_double*sizes[1]
-        r.append(p.from_address(address+i*sizes[1]*double_size))
-    return r
+    p = (_ctypes.c_double*sizes[1])*sizes[0]
+    return p.from_address(address)
 
 
 class Element(_trackcpp.Element):
-    
+
     def __init__(self, fam_name, length=0.0):
         super().__init__(fam_name, length)
         self.t_in = _get_double_array(self._t_in, _T_SIZE)
@@ -42,6 +38,11 @@ class Element(_trackcpp.Element):
         for name in self.__class__._attributes_to_print:
             if name in array_names:
                 value = self.__getattr__(name)[:]
+            elif name in matrix_names:
+                matrix = self.__getattr__(name)
+                num_rows = len(matrix)
+                num_cols = len(matrix[0])
+                value = str(num_rows) + 'x' + str(num_cols) + ' matrix'
             else:
                 value = self.__getattr__(name)
             formatted_string = _format_string_to_print_element(name, value)
