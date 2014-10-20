@@ -71,13 +71,7 @@ class Element(_trackcpp.Element):
 
 class Marker(Element):
 
-    _attributes_to_print = [
-                'fam_name',
-                'length',
-                'pass_method',
-                'hmax',
-                'vmax'
-        ]
+    _attributes_to_print = ['fam_name', 'pass_method', 'hmax', 'vmax']
     
     def __init__(self, fam_name):
         """Create a marker element.
@@ -91,6 +85,8 @@ class Marker(Element):
 
 class Bpm(Marker):
 
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hmax', 'vmax']
+    
     def __init__(self, fam_name):
         """Create a beam position monitor element.
 
@@ -102,13 +98,7 @@ class Bpm(Marker):
 
 class Drift(Element):
 
-    _attributes_to_print = [
-                'fam_name',
-                'length',
-                'pass_method',
-                'hmax',
-                'vmax'
-        ]
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hmax', 'vmax']
  
     def __init__(self, fam_name, length):
         """Create a drift element.
@@ -124,15 +114,7 @@ class Drift(Element):
 
 class Corrector(Element):
 
-    _attributes_to_print = [
-                'fam_name',
-                'length',
-                'pass_method',
-                'hmax',
-                'vmax',
-                'hkick',
-                'vkick'
-        ]
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hkick', 'vkick', 'hmax', 'vmax']
 
     def __init__(self, fam_name, hkick, vkick, length = 0.0):
         """Create a corrector element.
@@ -149,6 +131,8 @@ class Corrector(Element):
 
 class HCorrector(Corrector):
 
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hkick', 'hmax', 'vmax']
+    
     def __init__(self, fam_name, hkick, length = 0.0):
         """Create a horizontal corrector element.
 
@@ -162,6 +146,8 @@ class HCorrector(Corrector):
 
 class VCorrector(Corrector):
 
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'vkick', 'hmax', 'vmax']
+    
     def __init__(self, fam_name, vkick, length = 0.0):
         """Create a vertical corrector element.
 
@@ -175,20 +161,9 @@ class VCorrector(Corrector):
 
 class Quadrupole(Element):
 
-    _attributes_to_print = [
-                'fam_name',
-                'length',
-                'nr_steps',
-                'polynom_a',
-                'polynom_b',
-                'pass_method',
-                'hmax',
-                'vmax',
-                'r_in',
-                'r_out',
-                't_in',
-                't_out'
-        ]
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'nr_steps',
+                            'polynom_a', 'polynom_b', 'hmax', 'vmax', 
+                            'r_in', 'r_out', 't_in', 't_out']
     
     def __init__(self, fam_name, length, K, nr_steps=10):
         """Create a quadrupole element.
@@ -206,9 +181,9 @@ class Quadrupole(Element):
 
 class Sextupole(Element):
 
-    _attributes_to_print = ['fam_name', 'length', 'nr_steps',
-                            'polynom_a', 'polynom_b', 'pass_method',
-                            'hmax', 'vmax', 'r_in', 'r_out', 't_in', 't_out']
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'nr_steps',
+                            'polynom_a', 'polynom_b', 'hmax', 'vmax', 
+                            'r_in', 'r_out', 't_in', 't_out']
     
     def __init__(self, fam_name, length, S, nr_steps=5):
         """Create a sextupole element.
@@ -225,6 +200,11 @@ class Sextupole(Element):
 
 class RBend(Element):
 
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 'nr_steps',
+                            'angle', 'angle_in', 'angle_out',
+                            'gap', 'fint_in', 'fint_out',
+                            'polynom_a', 'polynom_b', 'hmax', 'vmax', 
+                            'r_in', 'r_out', 't_in', 't_out']
     def __init__(self, 
                  fam_name, length, 
                  angle, angle_in=0.0, angle_out=0.0,
@@ -254,6 +234,9 @@ class RBend(Element):
 
 class RFCavity(Element):
 
+    _attributes_to_print = ['fam_name', 'pass_method', 'length', 
+                            'frequency', 'voltage', 'hmax', 'vmax']
+    
     def __init__(self, fam_name, length, frequency, voltage):
         """Create an RF cavity element.
 

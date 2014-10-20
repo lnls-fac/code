@@ -8,10 +8,7 @@ function [r, lattice_title] = sirius_bo_lattice(varargin)
 
 global THERING
 
-deg2rad = pi/180;
-const = lnls_constants;
 energy = 0.15e9; % eV
-%lattice_version = 'BO.V900';
 
 lattice_version = 'BO.V900';
 for i=1:length(varargin)
@@ -30,7 +27,6 @@ bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
 sext_pass_method = 'StrMPoleSymplectic4Pass';
 
-
 % a segmented model for the dipole has been created from the
 % approved fieldmap. The segmented model has a longer length 
 % and the different has to be accomodated.
@@ -44,7 +40,6 @@ set_magnets_strength_booster;
 
 lt       = drift('lt',      2.146000, 'DriftPass');
 lt2      = drift('lt2',     2.146000-half_model_diff, 'DriftPass');
-l20      = drift('l20',     0.200000, 'DriftPass');
 l25      = drift('l25',     0.250000, 'DriftPass');
 l25_2    = drift('l25_2',   0.250000-half_model_diff, 'DriftPass');
 l30_2    = drift('l30_2',   0.300000-half_model_diff, 'DriftPass');
@@ -54,7 +49,6 @@ l80      = drift('l80',     0.800000, 'DriftPass');
 l100     = drift('l100',    1.000000, 'DriftPass');
 lm25     = drift('lm25',    1.896000, 'DriftPass');
 lm30     = drift('lm30',    1.846000, 'DriftPass');
-lm40     = drift('lm40',    1.746000, 'DriftPass');
 lm45     = drift('lm45',    1.696000, 'DriftPass');
 lm60     = drift('lm60',    1.546000, 'DriftPass');
 lm66     = drift('lm66',    1.486000, 'DriftPass');
@@ -63,16 +57,19 @@ lm120    = drift('lm120',   0.946000, 'DriftPass');
 lm105    = drift('lm105',   1.096000, 'DriftPass');
 lkk      = drift('lkk',     0.741000, 'DriftPass');
 lm60_kk  = drift('lm60_kk', 0.805000, 'DriftPass');
+l20      = drift('l20',     0.200000, 'DriftPass');
+sfus     = drift('sfus',  1.746000+0.05, 'DriftPass');
+sfds     = drift('sfds',  0.200000-0.05, 'DriftPass');
 
 kick_in  = marker('kick_in', 'IdentityPass');
 kick_ex  = marker('kick_ex', 'IdentityPass');
 sept_in  = marker('sept_in', 'IdentityPass');
 sept_ex  = marker('sept_ex', 'IdentityPass');
 
-qd       = quadrupole('qd', 0.200000, 0.000000, quad_pass_method);
-qf       = quadrupole('qf', 0.100000, 1.882100, quad_pass_method);
-sf       = sextupole ('sf', 0.200000, 6.331497, sext_pass_method);
-sd       = sextupole ('sd', 0.200000, 0.000000, sext_pass_method);
+qd       = quadrupole('qd', 0.200000, qd_strength, quad_pass_method);
+qf       = quadrupole('qf', 0.100000, qf_strength, quad_pass_method);
+sf       = sextupole ('sf', 0.200000, sf_strength, sext_pass_method);
+sd       = sextupole ('sd', 0.200000, sd_strength, sext_pass_method);
     
 bpm      = marker('bpm', 'IdentityPass');
 hcm      = corrector('hcm', 0, [0, 0], 'CorrectorPass');
@@ -164,7 +161,7 @@ lfree     = lt;
 lfree_2   = lt2;
 lqd_2     = [lm45, qd, l25_2];
 lsd_2     = [lm45, sd, l25_2];
-lsf       = [lm40, sf, l20];
+lsf       = [sfus, sf, sfds];
 lch       = [lm25, hcm, l25];
 lcv_2     = [lm30, vcm, l30_2];
 lsdcv_2   = [lm70, vcm, l25, sd, l25_2];
