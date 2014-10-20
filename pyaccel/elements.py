@@ -6,39 +6,100 @@ import trackcpp as _trackcpp
 _T_SIZE = 6
 _R_SIZE = (6, 6)
 
+_p_translation_vector = _ctypes.c_double*_T_SIZE
+_p_rotation_matrix = (_ctypes.c_double*_R_SIZE[1])*_R_SIZE[0]
 
-pass_methods = _trackcpp.pm_dict
-array_names = ['t_in', 't_out']
-matrix_names = ['r_in', 'r_out']
+_t_temp = _p_translation_vector.from_address(0)
+_t_class = _t_temp.__class__
+del(_t_temp)
+
+_r_temp = _p_rotation_matrix.from_address(0)
+_r_class = _r_temp.__class__
+del(_r_temp)
 
 
-def _get_double_array(pointer, size):
+class Vector(_t_class):
+
+    def __repr__(self):
+        return self._get_str('Vector(', ')')
+
+    def __str__(self):
+        return self._get_str()
+
+    def _get_str(self, prefix='', suffix=''):
+        vector = []
+        for value in self:
+            s = "{0: 9.4f}".format(value)
+            if len(s) > 9:
+                s = "{0: .2e}".format(value)
+            vector.append(s)
+        return prefix + '[' + ', '.join(vector) + ']' + suffix
+
+
+class TVector(Vector):
+    pass
+
+
+class RMatrix(list):
+
+    def __repr__(self):
+        return self._get_str('RMatrix(', ')')
+
+    def __str__(self):
+        return self._get_str()
+
+    def _get_str(self, prefix='', suffix='', commas=False):
+        if commas:
+            c = ','
+        else:
+            c = ''
+        n = len(prefix)
+        rows = [prefix + '[' + self[0].__str__() + c]
+        for row in self[1:-1]:
+                rows.append(' '*(n+1) + str(row.__str__()) + c)
+        rows.append(' '*(n+1) + self[-1].__str__() + ']' + suffix)
+        return '\n'.join(rows)
+
+
+def _get_translation_vector(pointer):
     address = int(pointer)
-    p = _ctypes.c_double*size
-    return p.from_address(address)
+    array = _p_translation_vector.from_address(address)
+    array.__class__ = TVector
+    return array
 
 
-def _get_double_matrix(pointer, sizes):
+def _get_rotation_matrix(pointer):
     address = int(pointer)
-    p = (_ctypes.c_double*sizes[1])*sizes[0]
-    return p.from_address(address)
+    double_size = _ctypes.sizeof(_ctypes.c_double)
+    p = _ctypes.c_double*_R_SIZE[1]
+    matrix = RMatrix()
+    for i in range(_R_SIZE[0]):
+        row = p.from_address(address+i*_R_SIZE[1]*double_size)
+        row.__class__ = Vector
+        matrix.append(row)
+    return matrix
 
 
 class Element(_trackcpp.Element):
+    
+    pass_methods = _trackcpp.pm_dict
+    _array_names = ['t_in', 't_out']
+    _matrix_names = ['r_in', 'r_out']
+    _is_initialized = False
 
     def __init__(self, fam_name, length=0.0):
         super().__init__(fam_name, length)
-        self.t_in = _get_double_array(self._t_in, _T_SIZE)
-        self.t_out = _get_double_array(self._t_out, _T_SIZE)
-        self.r_in = _get_double_matrix(self._r_in, _R_SIZE)
-        self.r_out = _get_double_matrix(self._r_out, _R_SIZE)
+        self.t_in = _get_translation_vector(self._t_in)
+        self.t_out = _get_translation_vector(self._t_out)
+        self.r_in = _get_rotation_matrix(self._r_in)
+        self.r_out = _get_rotation_matrix(self._r_out)
 
     def __str__(self):
         s = [''] # get a newline before first attribute
         for name in self.__class__._attributes_to_print:
-            if name in array_names:
+            if name in Element._array_names:
                 value = self.__getattr__(name)[:]
-            elif name in matrix_names:
+            elif name in Element._matrix_names:
                 matrix = self.__getattr__(name)
                 num_rows = len(matrix)
                 num_cols = len(matrix[0])
@@ -322,7 +383,7 @@ _trackcpp.CppDoubleVector.__str__ = _list_str
 #        return idx
 #
 #
-#class TranslationVector(_CArray):
+#class TVector(_CArray):
 #
 #    def __repr__(self):
 #        return str(self[:])
@@ -331,7 +392,7 @@ _trackcpp.CppDoubleVector.__str__ = _list_str
 #        return str(self[:])
 #
 #
-#class RotationMatrix(_CArray):
+#class RMatrix(_CArray):
 #
 #    def __init__(self, array, size):
 #        if not isinstance(size, tuple):
