@@ -1,4 +1,8 @@
-function [the_ring, hkicks, vkicks, codx, cody] = cod_sg(params, nr_sing_values, the_ring0, nr_iterations, goal_codx, goal_cody)
+function [the_ring, hkicks, vkicks, codx, cody] = cod_sg(params, nr_sing_values,...
+                                    the_ring0, nr_iterations, goal_codx, goal_cody)
+
+if ~exist('goal_codx','var'), goal_codx = zeros(size(params.bpm_idx)); end
+if ~exist('goal_cody','var'), goal_cody = zeros(size(params.bpm_idx)); end
 
 the_ring = the_ring0;
 

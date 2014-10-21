@@ -5,6 +5,8 @@ function r = calctwiss(varargin)
 % Inputs opcionais: 
 % 1) the_ring, 
 % 2) 'n+1' : calcula twiss no final do modelo tambem.
+% 3) dp : calcula os parâmetros de twiss para o dado desvio de energia
+% 4) elements : calcula os PT para os elementos especificados
 %
 % 2013-04-24 parametro 'n+1' adicional.
 % 2011-??-?? versao original.
