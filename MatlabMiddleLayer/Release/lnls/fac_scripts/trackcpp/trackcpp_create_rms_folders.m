@@ -3,11 +3,16 @@ cur_dir = pwd;
 
 if ~exist('path','var'), path = pwd; end
 if ~exist('inpfile','var'), inpfile = 'input.py'; end
-if ~exist(fullfile(path,inpfile),'file'), error('input file does not exist');end
-
+if ~exist(fullfile(path,inpfile),'file')
+    [inpfile,path,~] = uigetfile('*.py','Select input file for pytrack', 'input.py');
+    if isnumeric(inpfile)
+        return
+    end
+end
+    
 cd(path);
 fh = fopen('runjob.sh','w');
-fprintf(fh,'#!/bin/bash\n\nsource ~/.bashrc\n\npytrack.py input.py > run.log');
+fprintf(fh,['#!/bin/bash\n\nsource ~/.bashrc\n\npytrack.py ' inpfile ' > run.log']);
 fclose(fh);
 system('chmod gu+wx runjob.sh');
 for ii = 1:nfolder

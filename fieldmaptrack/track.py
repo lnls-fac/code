@@ -26,6 +26,7 @@ class SerretFrenetCoordSystem:
         for i in range(len(grid)):
             points[:,i] = self.p + grid[i] * self.n
         return points    
+
     
 class Trajectory:
     
@@ -433,19 +434,19 @@ class Trajectory:
             p0 = np.array((rx, ry, rz, px, py, pz))
             if self.force_midplane:
                 p0[1] = p0[4] = 0.0
-            k1, bx, by, bz = self.calc_rhs(alpha, p0)
+            k1, bx, by, bz = self.calc_force(alpha, p0)
             p1 = p0 + (h/2.0) * k1
             if self.force_midplane:
                 p1[1] = p1[4] = 0.0
-            k2, _, _, _ = self.calc_rhs(alpha, p1)
+            k2, _, _, _ = self.calc_force(alpha, p1)
             p2 = p0 + (h/2.0) * k2  
             if self.force_midplane:
                 p2[1] = p2[4] = 0.0                    
-            k3, _, _, _ = self.calc_rhs(alpha, p2)
+            k3, _, _, _ = self.calc_force(alpha, p2)
             p3 = p0 + h * k3
             if self.force_midplane:
                 p3[1] = p3[4] = 0.0
-            k4, _, _, _ = self.calc_rhs(alpha, p3)
+            k4, _, _, _ = self.calc_force(alpha, p3)
             
             # stores current position
             self.s.append(s)
@@ -506,3 +507,42 @@ class Trajectory:
             fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
             for i in range(len(self.s)):
                 fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(self.s[i],self.rx[i],self.ry[i],self.rz[i],self.px[i],self.py[i],self.pz[i]))
+
+    def calc_sagitta(self, half_dipole_length):
+        
+        rx = self.rx
+        rz = self.rz
+    
+        if rz[-1] < half_dipole_length:
+            raise TrackException('trajectory path does not exit dipole')
+    
+        i = 0
+        while (rz[i] < half_dipole_length):
+            i += 1
+        sagitta = rx[0] - rx[i]
+        return sagitta
+    
+    def find_intersection_point(self, csys):
+        
+        nx, nz = csys.n[0], csys.n[2]
+        px, pz = csys.p[0], csys.p[2]
+        r = (None, None, None)
+        for i in range(len(self.s)-1):
+            p1x, p1z = self.rx[i], self.rz[i]
+            p2x, p2z = self.rx[i+1], self.rz[i+1]
+            M11 = p2x - p1x
+            M12 = nx
+            M21 = p2z - p1z
+            M22 = nz
+            b1  = p1x - px
+            b2  = p1z - pz
+            det = M11*M22 - M12*M21
+            iM11, iM12 = M22/det, -M12/det
+            iM21, iM22 = -M21/det, M11/det
+            ds = iM11 * b1 + iM12 * b2
+            dx = iM21 * b1 + iM22 * b2
+            if 0.0 <= ds <= 1.0:
+                r = (i, ds, dx)
+                break
+        return r
+         

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 '''
-Date: 20114-10-02
+Date: 2014-10-15
 
-Storage ring:   V03-C02   
-                V03: QAF,QBF now have the same length as other quadrupoles 
-                     new orbit correction system, 180 BPMs
+Current Lattice Versions (see http://10.0.21.132/FAC:Sirius_lattice_versions):
 
-Booster:        V810-OPT2 
-TS:             V300
+SI: V03.C02   
+BO: V900.M0    
+TS: V300
+TB: V200
 
 '''
 
@@ -17,7 +17,9 @@ import math
 
 class ParameterDefinitions(object):
    
-    '''Storage ring parameters'''
+
+    '''Storage ring parameters
+       ======================='''
 
     si_beam_energy            = 3.0  # [GeV]
     si_beam_gamma_factor      = optics.gamma(si_beam_energy)
@@ -26,7 +28,7 @@ class ParameterDefinitions(object):
     si_beam_magnetic_rigidity = optics.brho(si_beam_energy, si_beam_beta_factor)
     
     si_beam_current                      = 350.0 #[mA]
-    si_lattice_version                   = 'V00' 
+    si_lattice_version                   = 'V03' 
     si_lattice_type                      = '5BA'
     si_lattice_circumference             = 518.396 #[m]
     si_lattice_symmetry                  = 10
@@ -93,7 +95,7 @@ class ParameterDefinitions(object):
         si_BC_dipole_bending_radius)
 
 
-    si_optics_mode = "C00"
+    si_optics_mode = "C02"
     si_synchrotron_tune_from_dipoles = 4.364436028401864E-03
     si_synchrotron_tune              = 4.364436028401864E-03
     si_horizontal_betatron_tune = 4.813860814231471E+01
@@ -441,240 +443,214 @@ class ParameterDefinitions(object):
     si_vertical_fast_dipole_corrector_maximum_strength = 25      # [urad]
     si_skew_corrector_maximum_integrated_strength = 0.003 # [1/m]
     
-    '''Booster parameters'''
+
+    '''Booster parameters
+       =================='''
     
+    bo_beam_current           = 2.0 # [mA]
+    bo_lattice_version        = 'V900' 
+    bo_circumference          = 496.8 # [m]
+    bo_lattice_symmetry       = 10
+    bo_harmonic_number        = 828
+    bo_optics_mode            = 'M0'
+    bo_rf_cavity_peak_voltage = 0.95 # [MV]
+    bo_cycling_frequency      = 2.0 # [Hz]
+
+    ''' dipoles '''
+    bo_number_of_dipoles          = 50
+    bo_dipole_deflection_angle    = 7.2 # [°]
+    bo_hardedge_length_of_dipoles = 1.152 # [m]
+    bo_dipole_bending_radius      = bo_hardedge_length_of_dipoles / math.radians(bo_dipole_deflection_angle)
+    bo_dipole_sextupole_strength = -2.2685    # [ 1/m^3]
+    bo_dipoles_alignment_error_tolerance  = 100 # [μm]
+    bo_dipoles_rotation_error_tolerance   = 0.5 # [mrad]
+    bo_dipoles_excitation_error_tolerance = 0.1 # [%]
+    bo_reference_position_for_multipole_contribution_for_dipoles = 17.5 # [mm]
+    bo_systematic_normal_8_pole_error_tolerance_for_dipoles  =  4.0e-4 # systematic errors are absorbed in
+    bo_systematic_normal_10_pole_error_tolerance_for_dipoles = -3.6e-4 # segmented model of the dipole. 
+    bo_systematic_normal_12_pole_error_tolerance_for_dipoles =  2.7e-4 
+    bo_systematic_normal_14_pole_error_tolerance_for_dipoles = -1.3e-4
+    bo_random_normal_6_pole_error_tolerance_for_dipoles      =  5.5e-4
+    bo_random_normal_8_pole_error_tolerance_for_dipoles      =  4.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_dipoles     =  4.0e-4
+    bo_random_normal_12_pole_error_tolerance_for_dipoles     =  4.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_dipoles     =  4.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_dipoles     =  4.0e-4
+    bo_random_normal_18_pole_error_tolerance_for_dipoles     =  4.0e-4
+    bo_random_skew_6_pole_error_tolerance_for_dipoles        =  1.0e-4
+    bo_random_skew_8_pole_error_tolerance_for_dipoles        =  1.0e-4
+    bo_random_skew_10_pole_error_tolerance_for_dipoles       =  1.0e-4
+    bo_random_skew_12_pole_error_tolerance_for_dipoles       =  1.0e-4
+    bo_random_skew_14_pole_error_tolerance_for_dipoles       =  1.0e-4
+    bo_random_skew_16_pole_error_tolerance_for_dipoles       =  1.0e-4
+    bo_random_skew_18_pole_error_tolerance_for_dipoles       =  1.0e-4
+
+    ''' quadrupoles '''
     bo_hardedge_length_of_short_quadrupoles = 0.2 # [m]
     bo_hardedge_length_of_long_quadrupoles  = 0.2 # [m]
-    
-    bo_beam_current          = 2.0 # [mA]
-    bo_lattice_version       = 'V900' 
-    bo_circumference         = 496.8 # [m]
-    bo_lattice_symmetry      = 10
-    bo_harmonic_number       = 828
-    bo_optics_mode           = 'M0'
-
-    bo_number_of_dipoles = 50
     bo_number_of_QF_quadrupoles = 50
     bo_number_of_QD_quadrupoles = 25
-    bo_number_of_SF_sextupoles = 25
-    bo_number_of_SD_sextupoles = 10
-
-    bo_number_of_horizontal_dipole_correctors = 25
-    bo_number_of_vertical_dipole_correctors = 25
-
-    bo_hardedge_length_of_dipoles =  1.152 # [m]
     bo_hardedge_length_of_QF_quadrupoles = bo_hardedge_length_of_long_quadrupoles # [m]
     bo_hardedge_length_of_QD_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
+    bo_dipole_quadrupole_strength = -0.2037   # [1/m^2]
+    bo_quadrupoles_alignment_error_tolerance = 100 # [μm]    
+    bo_quadrupoles_rotation_error_tolerance = 0.5 # [mrad]
+    bo_quadrupoles_excitation_error_tolerance = 0.2 # [%]
+    bo_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
+    bo_systematic_normal_12_pole_error_tolerance_for_quadrupoles = -1.00e-3
+    bo_systematic_normal_20_pole_error_tolerance_for_quadrupoles = +1.10e-3
+    bo_systematic_normal_28_pole_error_tolerance_for_quadrupoles = +0.08e-3
+    bo_random_normal_6_pole_error_tolerance_for_quadrupoles  = 7.0e-4
+    bo_random_normal_8_pole_error_tolerance_for_quadrupoles  = 4.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_quadrupoles = 4.0e-4
+    bo_random_normal_12_pole_error_tolerance_for_quadrupoles = 4.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_quadrupoles = 4.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_quadrupoles = 4.0e-4
+    bo_random_normal_18_pole_error_tolerance_for_quadrupoles = 4.0e-4
+    bo_random_normal_20_pole_error_tolerance_for_quadrupoles = 4.0e-4
+    bo_random_skew_6_pole_error_tolerance_for_quadrupoles    =10.0e-4
+    bo_random_skew_8_pole_error_tolerance_for_quadrupoles    = 5.0e-4
+    bo_random_skew_10_pole_error_tolerance_for_quadrupoles   = 1.0e-4
+    bo_random_skew_12_pole_error_tolerance_for_quadrupoles   = 1.0e-4
+    bo_random_skew_14_pole_error_tolerance_for_quadrupoles   = 1.0e-4
+    bo_random_skew_16_pole_error_tolerance_for_quadrupoles   = 1.0e-4
+    bo_random_skew_18_pole_error_tolerance_for_quadrupoles   = 1.0e-4
+    bo_random_skew_20_pole_error_tolerance_for_quadrupoles   = 1.0e-4
+
+    '''sextupoles'''
+    bo_number_of_SF_sextupoles = 25
+    bo_number_of_SD_sextupoles = 10
     bo_hardedge_length_of_SF_sextupoles = 0.2 # [m]
     bo_hardedge_length_of_SD_sextupoles = 0.2 # [m]
-
-    bo_dipole_deflection_angle = 7.2 # [°]
-    bo_hardedge_length_of_dipoles =  1.152 # [m]
-    bo_dipole_bending_radius = bo_hardedge_length_of_dipoles / math.radians(bo_dipole_deflection_angle)
-    bo_dipole_quadrupole_strength = -0.2037   # [1/m^2]
-    bo_dipole_sextupole_strength = -2.2685    # [ 1/m^3]
-    
     bo_maximum_integrated_sextupole = 20.0138457118891 # B''L/2 [T/m]
+    bo_sextupoles_alignment_error_tolerance = 100 # [μm]
+    bo_sextupoles_rotation_error_tolerance = 0.5 # [mrad]
+    bo_sextupoles_excitation_error_tolerance = 0.2 # [%]
+    bo_reference_position_for_multipole_contribution_for_sextupoles = 17.5 # [mm]
+    bo_systematic_normal_18_pole_error_tolerance_for_sextupoles = -2.4e-2
+    bo_systematic_normal_30_pole_error_tolerance_for_sextupoles = -1.7e-2
+    bo_random_normal_8_pole_error_tolerance_for_sextupoles  = 4.0e-4
+    bo_random_normal_10_pole_error_tolerance_for_sextupoles = 4.0e-4
+    bo_random_normal_12_pole_error_tolerance_for_sextupoles = 4.0e-4
+    bo_random_normal_14_pole_error_tolerance_for_sextupoles = 4.0e-4
+    bo_random_normal_16_pole_error_tolerance_for_sextupoles = 4.0e-4
+    bo_random_normal_18_pole_error_tolerance_for_sextupoles = 4.0e-5
+    bo_random_normal_20_pole_error_tolerance_for_sextupoles = 4.0e-5
+    bo_random_skew_8_pole_error_tolerance_for_sextupoles    = 1.0e-4
+    bo_random_skew_10_pole_error_tolerance_for_sextupoles   = 1.0e-4
+    bo_random_skew_12_pole_error_tolerance_for_sextupoles   = 1.0e-4
+    bo_random_skew_14_pole_error_tolerance_for_sextupoles   = 1.0e-4
+    bo_random_skew_16_pole_error_tolerance_for_sextupoles   = 1.0e-4
+    bo_random_skew_18_pole_error_tolerance_for_sextupoles   = 1.0e-4
+    bo_random_skew_20_pole_error_tolerance_for_sextupoles   = 1.0e-4
 
+
+    '''orbit correction system'''
+    bo_number_of_beam_position_monitors = 50
+    bo_number_of_horizontal_dipole_correctors = 25
+    bo_number_of_vertical_dipole_correctors = 25
     bo_horizontal_dipole_corrector_maximum_strength = 0.35 # [mrad]
     bo_vertical_dipole_corrector_maximum_strength = 0.35 # [mrad]
 
-    bo_dipoles_alignment_error_tolerance = 100 # [μm]
-    bo_quadrupoles_alignment_error_tolerance = 100 # [μm]
-    bo_sextupoles_alignment_error_tolerance = 100 # [μm]
-    
-    bo_dipoles_rotation_error_tolerance = 0.5 # [mrad]
-    bo_quadrupoles_rotation_error_tolerance = 0.5 # [mrad]
-    bo_sextupoles_rotation_error_tolerance = 0.5 # [mrad]
 
-    bo_dipoles_excitation_error_tolerance = 0.1 # [%]
-    bo_quadrupoles_excitation_error_tolerance = 0.2 # [%]
-    bo_sextupoles_excitation_error_tolerance = 0.2 # [%]
+    '''optics'''
+    bo_horizontal_betatron_tune = 19.20475
+    bo_vertical_betatron_tune   = 7.30744
+    bo_horizontal_natural_chromaticity = -35.447586554937516
+    bo_vertical_natural_chromaticity   =  12.502204960185281
 
-    bo_systematic_normal_6_pole_error_tolerance_for_dipoles = -3.0e-4
-    bo_systematic_normal_8_pole_error_tolerance_for_dipoles = 2.0e-4
-    bo_systematic_normal_10_pole_error_tolerance_for_dipoles = 1.0e-3
-    bo_systematic_normal_12_pole_error_tolerance_for_dipoles = -2.0e-3
-    bo_systematic_normal_14_pole_error_tolerance_for_dipoles = 2.0e-3
-    bo_systematic_normal_12_pole_error_tolerance_for_quadrupoles = 6.0e-4
-    bo_systematic_normal_20_pole_error_tolerance_for_quadrupoles = -6.2e-4
-    bo_systematic_normal_28_pole_error_tolerance_for_quadrupoles = -0.5e-4
-    bo_systematic_normal_18_pole_error_tolerance_for_sextupoles = -4.1e-4
-    bo_systematic_normal_30_pole_error_tolerance_for_sextupoles = -4.5e-4
 
-    bo_random_normal_6_pole_error_tolerance_for_dipoles = 3.0e-4
-    bo_random_normal_8_pole_error_tolerance_for_dipoles = 8.0e-5
-    bo_random_normal_10_pole_error_tolerance_for_dipoles = 1.0e-4
-    bo_random_normal_12_pole_error_tolerance_for_dipoles = 6.0e-5
-    bo_random_normal_14_pole_error_tolerance_for_dipoles = 2.0e-4
-    bo_random_normal_6_pole_error_tolerance_for_quadrupoles = 2.8e-4
-    bo_random_normal_8_pole_error_tolerance_for_quadrupoles = 2.0e-4
-    bo_random_normal_10_pole_error_tolerance_for_quadrupoles = 3.0e-5
-    bo_random_normal_12_pole_error_tolerance_for_quadrupoles = 2.0e-4
-    bo_random_normal_14_pole_error_tolerance_for_quadrupoles = 3.0e-4
-    bo_random_normal_16_pole_error_tolerance_for_quadrupoles = 9.0e-5
-    bo_random_normal_18_pole_error_tolerance_for_quadrupoles = 1.0e-4
-    bo_random_normal_20_pole_error_tolerance_for_quadrupoles = 3.0e-5
-    bo_random_normal_8_pole_error_tolerance_for_sextupoles = 5.0e-4
-    bo_random_normal_10_pole_error_tolerance_for_sextupoles = 3.5e-4
-    bo_random_normal_12_pole_error_tolerance_for_sextupoles = 1.0e-4
-    bo_random_normal_14_pole_error_tolerance_for_sextupoles = 1.0e-4
-    bo_random_normal_16_pole_error_tolerance_for_sextupoles = 1.0e-4
-    bo_random_normal_18_pole_error_tolerance_for_sextupoles = 9.0e-5
-    bo_random_normal_20_pole_error_tolerance_for_sextupoles = 5.0e-5
-    bo_random_normal_22_pole_error_tolerance_for_sextupoles = 1.0e-5
-    bo_random_normal_30_pole_error_tolerance_for_sextupoles = 8.0e-5
 
-    bo_random_skew_6_pole_error_tolerance_for_quadrupoles = 2.9e-4
-    bo_random_skew_8_pole_error_tolerance_for_quadrupoles = 1.4e-4
-    bo_random_skew_8_pole_error_tolerance_for_sextupoles = 4.9e-4
-    
-    bo_reference_position_for_multipole_contribution_for_dipoles = 17.5 # [mm]
-    bo_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
-    bo_reference_position_for_multipole_contribution_for_sextupoles = 20 # [mm]
-
-    bo_number_of_beam_position_monitors = 50
-
-    bo_horizontal_betatron_tune = 19.19
-    bo_vertical_betatron_tune   = 7.32
-    bo_synchrotron_tune         = 0.004419249840938
-
-    bo_horizontal_natural_chromaticity = -33.704073487683672
-    bo_vertical_natural_chromaticity   = -13.950562838260794
-
-    bo_rf_cavity_peak_voltage = 0.95 # [MV]
-
-    bo_cycling_frequency = 2.0 # [Hz]
-
+    '''injection'''
     bo_injection_beam_energy        = 0.150 # [GeV]
     bo_injection_beam_gamma_factor  = optics.gamma(bo_injection_beam_energy)
     bo_injection_beam_beta_factor   = optics.beta(bo_injection_beam_gamma_factor)
     bo_injection_beam_velocity      = optics.velocity(bo_injection_beam_beta_factor)
-
     bo_injection_beam_magnetic_rigidity = optics.brho(
         bo_injection_beam_energy,
         bo_injection_beam_beta_factor)
-
     bo_injection_dipole_magnetic_field = bo_injection_beam_magnetic_rigidity / bo_dipole_bending_radius
     bo_injection_dipole_quadrupole_gradient = bo_injection_beam_magnetic_rigidity * bo_dipole_quadrupole_strength # [T/m]
     bo_injection_dipole_sextupole_gradient = bo_injection_beam_magnetic_rigidity * bo_dipole_sextupole_strength # [T/m2]
     
-    bo_injection_QF_quadrupole_maximum_gradient = 1.0132009391643900 # [T/m]
+    bo_injection_QF_quadrupole_maximum_gradient          = 1.0132009391643900 # [T/m]
     bo_injection_QD_quadrupole_maximum_absolute_gradient = 0.1250865356993070 # [T/m]
+    bo_injection_synchrotron_tune                        = 0.009655851289284
 
+    '''extraction'''
     bo_extraction_beam_energy       = 3.0; # [GeV]
     bo_extraction_beam_gamma_factor = optics.gamma(bo_extraction_beam_energy)
     bo_extraction_beam_beta_factor  = optics.beta(bo_extraction_beam_gamma_factor)
     bo_extraction_beam_velocity     = optics.velocity(bo_extraction_beam_beta_factor)
-
     bo_extraction_beam_magnetic_rigidity = optics.brho(
         bo_extraction_beam_energy,
         bo_extraction_beam_beta_factor)
+    bo_extraction_synchrotron_tune  = 0.004419249502613
 
     bo_extraction_dipole_magnetic_field = bo_extraction_beam_magnetic_rigidity / bo_dipole_bending_radius
     bo_extraction_dipole_quadrupole_gradient = bo_extraction_beam_magnetic_rigidity * bo_dipole_quadrupole_strength # [T/m]
     bo_extraction_dipole_sextupole_gradient = bo_extraction_beam_magnetic_rigidity * bo_dipole_sextupole_strength # [T/m2]
-
     bo_extraction_QF_quadrupole_maximum_gradient = 20.2640187832877 # [T/m]
     bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
-
-    bo_extraction_revolution_period = optics.revolution_period(
-        bo_circumference, bo_extraction_beam_velocity)
-
-    bo_extraction_revolution_frequency = optics.revolution_frequency(
-        bo_extraction_revolution_period)
-    
-    bo_extraction_radiation_integral_I1 =  0.357376004142324 # [m]
+    bo_extraction_revolution_period = optics.revolution_period(bo_circumference, bo_extraction_beam_velocity)
+    bo_extraction_revolution_frequency = optics.revolution_frequency(bo_extraction_revolution_period)
+    bo_extraction_radiation_integral_I1 =  0.357375949836236 # [m]
     bo_extraction_radiation_integral_I2 =  0.632474441350948 # [1/m]
     bo_extraction_radiation_integral_I3 =  0.065162582244920 # [1/m^2]
-    bo_extraction_radiation_integral_I4 = -0.139031150720390 # [1/m]
-    bo_extraction_radiation_integral_I5 =  2.029704170935785e-04 # [1/m]
-    bo_extraction_radiation_integral_I6 =  0.008112620479157 # [1/m]
-
+    bo_extraction_radiation_integral_I4 = -0.139031129276436 # [1/m]
+    bo_extraction_radiation_integral_I5 =  0.000202970389114 # [1/m]
+    bo_extraction_radiation_integral_I6 =  0.008112617986838 # [1/m]
     bo_extraction_energy_loss_per_turn = optics.U0(
         bo_extraction_beam_energy, bo_extraction_radiation_integral_I2)
-
-    bo_extraction_linear_momentum_compaction = optics.alpha1(
-        bo_extraction_radiation_integral_I1,
-        bo_circumference)
-    
-    bo_extraction_horizontal_damping_partition_number = optics.Jx(
-        bo_extraction_radiation_integral_I2,
-        bo_extraction_radiation_integral_I4)
-
+    bo_extraction_linear_momentum_compaction = optics.alpha1(bo_extraction_radiation_integral_I1,bo_circumference)
+    bo_extraction_horizontal_damping_partition_number = optics.Jx(bo_extraction_radiation_integral_I2,bo_extraction_radiation_integral_I4)
     bo_extraction_vertical_damping_partition_number = 1.0
-
-    bo_extraction_longitudinal_damping_partition_number = optics.Js(
-        bo_extraction_horizontal_damping_partition_number,
-        bo_extraction_vertical_damping_partition_number)
-
+    bo_extraction_longitudinal_damping_partition_number = optics.Js(bo_extraction_horizontal_damping_partition_number,bo_extraction_vertical_damping_partition_number)
     bo_extraction_natural_emittance = optics.natural_emittance(
         bo_extraction_beam_gamma_factor,
         bo_extraction_horizontal_damping_partition_number,
         bo_extraction_radiation_integral_I2,
         bo_extraction_radiation_integral_I5)
-
     bo_extraction_natural_energy_spread = optics.energy_spread(
         bo_extraction_beam_gamma_factor,
         bo_extraction_radiation_integral_I2,
         bo_extraction_radiation_integral_I3,
         bo_extraction_radiation_integral_I4)
-
     bo_extraction_horizontal_radiation_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_horizontal_damping_partition_number,
         bo_circumference)
-
     bo_extraction_vertical_radiation_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_vertical_damping_partition_number,
         bo_circumference)
-
     bo_extraction_longitudinal_radiation_damping_time = optics.damping_time(
         bo_extraction_beam_energy,
         bo_extraction_radiation_integral_I2,
         bo_extraction_longitudinal_damping_partition_number,
         bo_circumference)
-
-    bo_extraction_rf_frequency = optics.rf_frequency(
-        bo_extraction_revolution_frequency, bo_harmonic_number)
-
-    bo_extraction_rf_wavelength = optics.rf_wavelength(
-        bo_extraction_rf_frequency)
-
-    bo_extraction_radiation_power = optics.radiation_power(
-        bo_extraction_energy_loss_per_turn, bo_beam_current)
-    
-    bo_extraction_overvoltage = optics.overvoltage(
-        bo_rf_cavity_peak_voltage, bo_extraction_energy_loss_per_turn)
-
-    bo_extraction_synchronous_phase = optics.sync_phase(
-        bo_extraction_overvoltage)
-
-    bo_extraction_synchrotron_frequency = optics.frequency_from_tune(
-        bo_extraction_revolution_frequency, bo_synchrotron_tune)
-
+    bo_extraction_rf_frequency = optics.rf_frequency(bo_extraction_revolution_frequency, bo_harmonic_number)
+    bo_extraction_rf_wavelength = optics.rf_wavelength(bo_extraction_rf_frequency)
+    bo_extraction_radiation_power = optics.radiation_power(bo_extraction_energy_loss_per_turn, bo_beam_current)
+    bo_extraction_overvoltage = optics.overvoltage(bo_rf_cavity_peak_voltage, bo_extraction_energy_loss_per_turn)
+    bo_extraction_synchronous_phase = optics.sync_phase(bo_extraction_overvoltage)
+    bo_extraction_synchrotron_frequency = optics.frequency_from_tune(bo_extraction_revolution_frequency, bo_extraction_synchrotron_tune)
     bo_extraction_rf_energy_acceptance = optics.rf_energy_acceptance(
         bo_extraction_overvoltage, bo_extraction_beam_energy,
         bo_extraction_energy_loss_per_turn, bo_harmonic_number,
         bo_extraction_linear_momentum_compaction)
-
-    bo_extraction_slip_factor = optics.slip_factor(
-        bo_extraction_linear_momentum_compaction,
-        bo_extraction_beam_gamma_factor)
-
+    bo_extraction_slip_factor = optics.slip_factor(bo_extraction_linear_momentum_compaction, bo_extraction_beam_gamma_factor)
     bo_extraction_natural_bunch_length = optics.bunch_length(
         bo_extraction_slip_factor,
         bo_extraction_natural_energy_spread,
         bo_extraction_synchrotron_frequency)
+    bo_extraction_natural_bunch_duration = optics.bunch_duration(bo_extraction_natural_bunch_length, bo_extraction_beam_beta_factor)
 
-    bo_extraction_natural_bunch_duration = optics.bunch_duration(
-        bo_extraction_natural_bunch_length,
-        bo_extraction_beam_beta_factor)
 
-    '''Linac parameters'''
+    ''' Linac parameters
+        ================ '''
 
     li_multi_bunch_beam_energy = 150.0 # [MeV]
     li_multi_bunch_rf_frequency = 3.0 # [GHz]

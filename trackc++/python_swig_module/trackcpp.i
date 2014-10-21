@@ -5,6 +5,10 @@
 #include "../kicktable.h"
 #include "../auxiliary.h"
 #include "../accelerator.h"
+#include "../pos.h"
+#include "../tracking.h"
+#include "interface.h"
+#include "elementswrapper.h"
 %}
 %include "carrays.i"
 %include "std_string.i"
@@ -12,9 +16,10 @@
 %include "stl.i"
 
 namespace std {
-    %template(cppStringVector) vector<string>;
-    %template(cppDoubleVector) vector<double>;
-    %template(cppElementVector) vector<Element>;
+    %template(CppStringVector) vector<string>;
+    %template(CppDoubleVector) vector<double>;
+    %template(CppElementVector) vector<Element>;
+    %template(CppPosVector) vector< Pos<double> >;
 }
 
 %inline %{
@@ -26,7 +31,16 @@ void c_array_set(double* v, int i, double x) {
 }
 %}
 
-%include "../elements.h"
+%include "elements.i"
+
 %include "../kicktable.h"
 %include "../auxiliary.h"
 %include "../accelerator.h"
+%include "../pos.h"
+%include "../tracking.h"
+%include "interface.h"
+%include "elementswrapper.h"
+
+%template(DoublePos) Pos<double>;
+
+%template(element_pass) track_elementpass<double>;

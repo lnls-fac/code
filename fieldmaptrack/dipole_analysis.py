@@ -24,18 +24,6 @@ class Config:
         self.traj_force_midplane_flag = True
         self.multipoles_r0 = None
         
-def save_trajectory(traj):
-    
-    s = traj.s
-    rx, ry, rz = traj.rx, traj.ry, traj.rz
-    px, py, pz = traj.px, traj.py, traj.pz
-    bx, by, bz = traj.bx, traj.by, traj.bz
-    with open('trajectory.txt', 'w') as fp:
-        fp.write('# trajectory\n')
-        fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
-        for i in range(len(s)):
-            fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(s[i],rx[i],ry[i],rz[i],px[i],py[i],pz[i]))
-                         
                           
 def raw_fieldmap_analysis(config):
         
@@ -88,20 +76,6 @@ def raw_fieldmap_analysis(config):
     print(config.fmap)
     
     return config    
-
-def calc_sagitta(half_dipole_length, trajectory):
-    
-    rx = trajectory.rx
-    rz = trajectory.rz
-    
-    if rz[-1] < half_dipole_length:
-        raise DipoleAnalysisException('trajectory path does not exit dipole')
-    
-    i = 0
-    while (rz[i] < half_dipole_length):
-        i += 1
-    sagitta = rx[0] - rx[i]
-    return sagitta
             
             
 def load_trajectory(filename, beam = None, fieldmap = None):
@@ -157,7 +131,8 @@ def trajectory_analysis(config):
                                         s_nrpts        = config.traj_rk_nrpts, 
                                         min_rz         = rk_min_rz,
                                         force_midplane = config.traj_force_midplane_flag) 
-            config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
+            config.traj_sagitta = config.traj.calc_sagitta(half_dipole_length)
+            
             if not config.traj_center_sagitta_flag:
                 break
             new_init_rx = config.traj_sagitta / 2.0
@@ -174,8 +149,7 @@ def trajectory_analysis(config):
     print('{0:<35s} {1} mm'.format('sagitta:', config.traj_sagitta))
     
     
-    if config.traj_save:
-        save_trajectory(config.traj)
+    config.traj.save(filename='trajectory.txt')
         
     return config
 

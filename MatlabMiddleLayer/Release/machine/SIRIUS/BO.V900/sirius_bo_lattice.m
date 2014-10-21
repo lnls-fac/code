@@ -1,8 +1,8 @@
-function r = sirius_bo_lattice(varargin)
+function [r, lattice_title] = sirius_bo_lattice(varargin)
 %maquina com simetria 50, formada por dipolos e quadrupolos com sextupolos
 %integrados. 15/08/2012 - Fernando.
 % modelode segmentado dos dipolos. 10/04/2014
-% mudança de padrão para baixa energia.
+% mudan??a de padr??o para baixa energia.
 
 %%% HEADER SECTION %%%
 
@@ -11,6 +11,7 @@ global THERING
 deg2rad = pi/180;
 const = lnls_constants;
 energy = 0.15e9; % eV
+%lattice_version = 'BO.V900';
 
 lattice_version = 'BO.V900';
 for i=1:length(varargin)

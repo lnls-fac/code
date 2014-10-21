@@ -28,7 +28,7 @@ try
     AO.b1.Position = findspos(THERING, AO.b1.AT.ATIndex(:,1+floor(size(AO.b1.AT.ATIndex,2)/2)))';
       
 catch
-    warning('B1 family not found in the model.');
+    warning('b1 family not found in the model.');
 end
 
 try
@@ -38,7 +38,7 @@ try
     AO.b2.Position = findspos(THERING, AO.b2.AT.ATIndex(:,1+floor(size(AO.b2.AT.ATIndex,2)/2)))';
       
 catch
-    warning('B2 family not found in the model.');
+    warning('b2 family not found in the model.');
 end
 
 try
@@ -48,7 +48,7 @@ try
     AO.b3.Position = findspos(THERING, AO.b3.AT.ATIndex(:,1+floor(size(AO.b3.AT.ATIndex,2)/2)))';
       
 catch
-    warning('B3 family not found in the model.');
+    warning('b3 family not found in the model.');
 end
 
 try
@@ -58,7 +58,7 @@ try
     AO.bc.Position = findspos(THERING, AO.bc.AT.ATIndex(:,1+floor(size(AO.bc.AT.ATIndex,2)/2)))';
       
 catch
-    warning('BC family not found in the model.');
+    warning('bc family not found in the model.');
 end
 
 
@@ -125,7 +125,7 @@ try
     AO.qf4.AT.ATIndex = buildatindex(AO.qf4.FamilyName, Indices.qf4);
     AO.qf4.Position = findspos(THERING, AO.qf4.AT.ATIndex(:,1))';
 catch
-    warning('QF1 QF2 QF3 QF4 families not found in the model.');
+    warning('qf1 qf2 qf3 qf4 families not found in the model.');
 end
 
 try
@@ -153,7 +153,7 @@ try
     AO.sd1a.AT.ATIndex = buildatindex(AO.sd1a.FamilyName, Indices.sd1a);
     AO.sd1a.Position = findspos(THERING, AO.sd1a.AT.ATIndex(:,1))';
 catch
-    warning('SD1A family not found in the model.');
+    warning('sd1a family not found in the model.');
 end
 
 try
@@ -162,7 +162,7 @@ try
     AO.sf1a.AT.ATIndex = buildatindex(AO.sf1a.FamilyName, Indices.sf1a);
     AO.sf1a.Position = findspos(THERING, AO.sf1a.AT.ATIndex(:,1))';
 catch
-    warning('SF1A family not found in the model.');
+    warning('sf1a family not found in the model.');
 end
 
 try
@@ -171,7 +171,7 @@ try
     AO.sd2a.AT.ATIndex = buildatindex(AO.sd2a.FamilyName, Indices.sd2a);
     AO.sd2a.Position = findspos(THERING, AO.sd2a.AT.ATIndex(:,1))';
 catch
-    warning('SD2A family not found in the model.');
+    warning('sd2a family not found in the model.');
 end
 
 try
@@ -180,7 +180,7 @@ try
     AO.sd3a.AT.ATIndex = buildatindex(AO.sd3a.FamilyName, Indices.sd3a);
     AO.sd3a.Position = findspos(THERING, AO.sd3a.AT.ATIndex(:,1))';
 catch
-    warning('SD3A family not found in the model.');
+    warning('sd3a family not found in the model.');
 end
 
 
@@ -190,7 +190,7 @@ try
     AO.sf2a.AT.ATIndex = buildatindex(AO.sf2a.FamilyName, Indices.sf2a);
     AO.sf2a.Position = findspos(THERING, AO.sf2a.AT.ATIndex(:,1))';
 catch
-    warning('SF2A family not found in the model.');
+    warning('sf2a family not found in the model.');
 end
 
 try
@@ -199,7 +199,7 @@ try
     AO.sd1b.AT.ATIndex = buildatindex(AO.sd1b.FamilyName, Indices.sd1b);
     AO.sd1b.Position = findspos(THERING, AO.sd1b.AT.ATIndex(:,1))';
 catch
-    warning('SD1B family not found in the model.');
+    warning('sd1b family not found in the model.');
 end
 
 try
@@ -208,7 +208,7 @@ try
     AO.sf1b.AT.ATIndex = buildatindex(AO.sf1b.FamilyName, Indices.sf1b);
     AO.sf1b.Position = findspos(THERING, AO.sf1b.AT.ATIndex(:,1))';
 catch
-    warning('SF1B family not found in the model.');
+    warning('sf1b family not found in the model.');
 end
 
 try
@@ -217,7 +217,7 @@ try
     AO.sd2b.AT.ATIndex = buildatindex(AO.sd2b.FamilyName, Indices.sd2b);
     AO.sd2b.Position = findspos(THERING, AO.sd2b.AT.ATIndex(:,1))';
 catch
-    warning('SD2B family not found in the model.');
+    warning('sd2b family not found in the model.');
 end
 
 try
@@ -226,7 +226,7 @@ try
     AO.sd3b.AT.ATIndex = buildatindex(AO.sd3b.FamilyName, Indices.sd3b);
     AO.sd3b.Position = findspos(THERING, AO.sd3b.AT.ATIndex(:,1))';
 catch
-    warning('SD3B family not found in the model.');
+    warning('sd3b family not found in the model.');
 end
 
 
@@ -236,7 +236,7 @@ try
     AO.sf2b.AT.ATIndex = buildatindex(AO.sf2b.FamilyName, Indices.sf2b);
     AO.sf2b.Position = findspos(THERING, AO.sf2b.AT.ATIndex(:,1))';
 catch
-    warning('SF2B family not found in the model.');
+    warning('sf2b family not found in the model.');
 end
 
 try
@@ -260,19 +260,19 @@ end
 try
     % BPMx
     AO.bpmx.AT.ATType = 'X';
-    AO.bpmx.AT.ATIndex = buildatindex(AO.bpmx.FamilyName, Indices.BPM);
+    AO.bpmx.AT.ATIndex = buildatindex(AO.bpmx.FamilyName, Indices.bpm);
     AO.bpmx.Position = findspos(THERING, AO.bpmx.AT.ATIndex(:,1))';   
 catch
-    warning('BPMx family not found in the model.');
+    warning('bpmx family not found in the model.');
 end
 
 try
     % BPMy
     AO.bpmy.AT.ATType = 'Y';
-    AO.bpmy.AT.ATIndex = buildatindex(AO.bpmy.FamilyName, Indices.BPM);
+    AO.bpmy.AT.ATIndex = buildatindex(AO.bpmy.FamilyName, Indices.bpm);
     AO.bpmy.Position = findspos(THERING, AO.bpmy.AT.ATIndex(:,1))';   
 catch
-    warning('BPMy family not found in the model.');
+    warning('bpmy family not found in the model.');
 end
 
 try
@@ -284,7 +284,7 @@ try
     AO.hcm.AT.ATIndex = buildatindex(AO.hcm.FamilyName, sort(li));
     AO.hcm.Position = findspos(THERING, AO.hcm.AT.ATIndex(:,1))';   
 catch
-    warning('HCM family not found in the model.');
+    warning('hcm family not found in the model.');
 end
 
 
@@ -297,7 +297,7 @@ try
     AO.vcm.AT.ATIndex = buildatindex(AO.vcm.FamilyName, sort(li));
     AO.vcm.Position = findspos(THERING, AO.vcm.AT.ATIndex(:,1))';   
 catch
-    warning('VCM family not found in the model.');
+    warning('vcm family not found in the model.');
 end
 
 

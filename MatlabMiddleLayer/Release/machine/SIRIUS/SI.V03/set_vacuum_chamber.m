@@ -10,10 +10,13 @@ ovu_vchamber   = [0.0117 0.004 2];
 
 bends = findcells(the_ring, 'BendingAngle');
 ivu   = sort([findcells(the_ring, 'FamName', 'id_endb') ...%               findcells(the_ring, 'FamName', 'mia') ...
-              findcells(the_ring, 'FamName', 'mib')]);
+              findcells(the_ring, 'FamName', 'mib') ...
+              findcells(the_ring, 'FamName', 'dib1')]);
 ovu   = sort([findcells(the_ring, 'FamName', 'id_enda') ...%               findcells(the_ring, 'FamName', 'mia') ...
-              findcells(the_ring, 'FamName', 'mia')]);
-other = setdiff(1:length(the_ring), [bends ivu]);
+              findcells(the_ring, 'FamName', 'mia') ...
+              findcells(the_ring, 'FamName', 'dia1')]);
+ovu   = setdiff(ovu, ovu(1:7));    %  remove os markes to trecho de injecao e do trecho da cavidade
+other = setdiff(1:length(the_ring), [bends ivu ovu]);
 
 for i=1:length(bends)
     the_ring{bends(i)}.VChamber = bends_vchamber;

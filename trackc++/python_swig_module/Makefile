@@ -5,19 +5,31 @@ CXX = g++
 MACHINE = -m64
 OPT_FLAG = -O3
 SOURCES_I = trackcpp.i
-SOURCES_CPP = trackcxx_wrap.cxx \
-			  ../elements.cpp \
-			  ../kicktable.cpp \
-			  ../trackc++.cpp
+INTERFACEOBJS = trackcpp_wrap.o \
+		        interface.o \
+		        elementswrapper.o
+TRACKCPPOBJS = elements.o \
+			   kicktable.o \
+			   trackc++.o \
+			   tracking.o \
+			   passmethods.o \
+			   lattice.o \
+			   flat_file.o
+OBJECTS = $(TRACKCPPOBJS) $(INTERFACEOBJS)
 CPPFLAGS = -std=c++11 -fPIC $(OPT_FLAG)
-LIBS =
+LIBS = -lgsl -lblas
 INC = -I/usr/include/python3.4 -I../
 prefix = ../../..
 
+TRACKCPPSRCS = $(addprefix ../, $(TRACKCPPOBJS:.o=.cpp))
+
 all: _trackcpp.so
 
-_trackcpp.so: trackcpp_wrap.o elements.o kicktable.o trackc++.o
-	$(CXX) -shared trackcpp_wrap.o elements.o kicktable.o trackc++.o $(LIBS) -o _trackcpp.so
+$(shell $(CXX) -MM $(TRACKCPPSRCS) > .depend)
+-include .depend
+
+_trackcpp.so: $(OBJECTS)
+	$(CXX) -shared $(OBJECTS) $(LIBS) -o _trackcpp.so
 
 trackcpp_wrap.cxx: trackcpp.i
 	swig -c++ -python trackcpp.i
@@ -33,6 +45,9 @@ clean:
 
 
 %.o: ../%.cpp
+	$(CXX) -c $(CPPFLAGS) $(INC) $< -o $@
+
+%.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) $(INC) $< -o $@
 
 %.o: %.cxx
