@@ -659,7 +659,7 @@ class ParameterDefinitions(object):
     li_multi_bunch_maximum_pulse_to_pulse_energy_variation = 0.25 # [%]
     li_multi_bunch_maximum_pulse_to_pulse_jitter = 100.0 # [ps]
     li_multi_bunch_minimum_pulse_charge = 3.0 # [nC]
-    li_multi_bunch_minimum_pulse_duration = 100.0 # [ns]
+    li_multi_bunch_minimum_pulse_duration = 150.0 # [ns]
     li_multi_bunch_maximum_pulse_duration = 300.0 # [ns]
     li_multi_bunch_repetition_rate = 2.0 # [Hz]
 
@@ -681,18 +681,18 @@ class ParameterDefinitions(object):
     tb_beam_velocity          = optics.velocity(tb_beam_beta_factor)
     tb_beam_magnetic_rigidity = optics.brho(1.0e-3*tb_beam_energy, tb_beam_beta_factor)
 
-    tb_total_length = 22.15 # [m]
+    tb_total_length = 21.2475 # [m]
     tb_number_of_dipoles = 4
     tb_number_of_quadrupoles = 13
-    tb_maximum_quadrupole_gradient = 3.0 # [T/m]
+    tb_maximum_quadrupole_gradient = 10.0 # [T/m]
 
-    tb_arc_length_of_BN_dipoles = 0.3500 # [m]
-    tb_arc_length_of_BP_dipoles = 0.5017 # [m]
+    tb_arc_length_of_BN_dipoles = 0.300 # [m]
+    tb_arc_length_of_BP_dipoles = 0.300 # [m]
     tb_arc_length_of_septum = 0.5000 # [m]
 
     tb_BN_dipole_deflection_angle = 15.0 # [°]
-    tb_BP_dipole_deflection_angle = 21.5 # [°]
-    tb_septum_deflection_angle = 10.0 # [°]
+    tb_BP_dipole_deflection_angle = 15.0 # [°]
+    tb_septum_deflection_angle = 21.75 # [°]
 
     tb_BN_dipole_bending_radius = tb_arc_length_of_BN_dipoles / math.radians(tb_BN_dipole_deflection_angle)
     tb_BP_dipole_bending_radius = tb_arc_length_of_BP_dipoles / math.radians(tb_BN_dipole_deflection_angle)
@@ -702,9 +702,9 @@ class ParameterDefinitions(object):
     tb_BP_dipole_magnetic_field = tb_beam_magnetic_rigidity / tb_BP_dipole_bending_radius
     tb_septum_magnetic_field = tb_beam_magnetic_rigidity / tb_septum_bending_radius
 
-    tb_BN_dipole_sagitta = 11.4 # [mm]
-    tb_BP_dipole_sagitta = 23.5 # [mm]
-    tb_septum_sagitta = 43.5 # [mm]
+    tb_BN_dipole_sagitta = 9.8 # [mm]
+    tb_BP_dipole_sagitta = 9.8 # [mm]
+    tb_septum_sagitta = 23.7 # [mm]
 
     tb_number_of_BN_dipoles = 2
     tb_number_of_BP_dipoles = 2
@@ -712,16 +712,16 @@ class ParameterDefinitions(object):
 
     tb_hardedge_length_of_QA1_quadrupoles = 0.05 # [m]
     tb_hardedge_length_of_QA2_quadrupoles = 0.10 # [m]
-    tb_hardedge_length_of_QB1_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QB2_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QB3_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QC1_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QC2_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QC3_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QD1_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QD2_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QE1_quadrupoles = 0.15 # [m]
-    tb_hardedge_length_of_QE2_quadrupoles = 0.15 # [m]
+    tb_hardedge_length_of_QB1_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QB2_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QB3_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QC1_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QC2_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QC3_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QD1_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QD2_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QE1_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QE2_quadrupoles = 0.10 # [m]
     
     '''Booster to storage ring transport line parameters'''
 
