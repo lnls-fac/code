@@ -10,7 +10,7 @@ function [r, lattice_title, IniCond] = sirius_tb_lattice(varargin)
 energy = 0.15e9;
 lattice_version = 'TB.V300';
 mode = 'M';
-version = '0';
+version = '1';
 mode_version = [mode version];
 
 % processamento de input (energia e modo de operacao)

@@ -28,7 +28,7 @@ beta=cat(1,t.beta);
 s=cat(1,t.SPos);
 %d=cat(1,t.Dispersion);
 %plot(s,beta(:,1),'b',s,beta(:,2),'r',s,d(:,1),'g');
-figure;plot(s,beta(:,1),'b',s,beta(:,2),'r');
+%figure;plot(s,beta(:,1),'b',s,beta(:,2),'r');
 
 ind_BPM = findcells(ltlb, 'FamName', 'BPM');
 ind_ch = findcells(ltlb, 'FamName', 'hcm');
