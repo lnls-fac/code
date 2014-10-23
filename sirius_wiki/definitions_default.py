@@ -684,37 +684,30 @@ class ParameterDefinitions(object):
     tb_total_length = 21.2475 # [m]
     tb_number_of_dipoles = 4
     tb_number_of_quadrupoles = 13
+    tb_number_of_septa = 1
     tb_maximum_quadrupole_gradient = 10.0 # [T/m]
 
-    tb_arc_length_of_BN_dipoles = 0.300 # [m]
-    tb_arc_length_of_BP_dipoles = 0.300 # [m]
+    tb_arc_length_of_dipole = 0.300 # [m]
     tb_arc_length_of_septum = 0.5000 # [m]
 
-    tb_BN_dipole_deflection_angle = 15.0 # [°]
-    tb_BP_dipole_deflection_angle = 15.0 # [°]
+    tb_dipole_deflection_angle = 15.0 # [°]
     tb_septum_deflection_angle = 21.75 # [°]
 
-    tb_BN_dipole_bending_radius = tb_arc_length_of_BN_dipoles / math.radians(tb_BN_dipole_deflection_angle)
-    tb_BP_dipole_bending_radius = tb_arc_length_of_BP_dipoles / math.radians(tb_BN_dipole_deflection_angle)
+    tb_dipole_bending_radius = tb_arc_length_of_dipole / math.radians(tb_dipole_deflection_angle)
     tb_septum_bending_radius = tb_arc_length_of_septum / math.radians(tb_septum_deflection_angle)
 
-    tb_BN_dipole_magnetic_field = tb_beam_magnetic_rigidity / tb_BN_dipole_bending_radius
-    tb_BP_dipole_magnetic_field = tb_beam_magnetic_rigidity / tb_BP_dipole_bending_radius
+    tb_dipole_magnetic_field = tb_beam_magnetic_rigidity / tb_dipole_bending_radius
     tb_septum_magnetic_field = tb_beam_magnetic_rigidity / tb_septum_bending_radius
 
-    tb_BN_dipole_sagitta = 9.8 # [mm]
-    tb_BP_dipole_sagitta = 9.8 # [mm]
+    tb_dipole_sagitta = 9.8 # [mm]
     tb_septum_sagitta = 23.7 # [mm]
 
-    tb_number_of_BN_dipoles = 2
-    tb_number_of_BP_dipoles = 2
-    tb_number_of_septa = 1
 
     tb_hardedge_length_of_QA1_quadrupoles = 0.05 # [m]
     tb_hardedge_length_of_QA2_quadrupoles = 0.10 # [m]
+    tb_hardedge_length_of_QA3_quadrupoles = 0.10 # [m]
     tb_hardedge_length_of_QB1_quadrupoles = 0.10 # [m]
     tb_hardedge_length_of_QB2_quadrupoles = 0.10 # [m]
-    tb_hardedge_length_of_QB3_quadrupoles = 0.10 # [m]
     tb_hardedge_length_of_QC1_quadrupoles = 0.10 # [m]
     tb_hardedge_length_of_QC2_quadrupoles = 0.10 # [m]
     tb_hardedge_length_of_QC3_quadrupoles = 0.10 # [m]
