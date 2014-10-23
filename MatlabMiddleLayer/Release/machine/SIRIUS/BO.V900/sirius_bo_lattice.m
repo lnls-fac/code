@@ -53,6 +53,7 @@ lm45     = drift('lm45',    1.696000, 'DriftPass');
 lm60     = drift('lm60',    1.546000, 'DriftPass');
 lm66     = drift('lm66',    1.486000, 'DriftPass');
 lm70     = drift('lm70',    1.446000, 'DriftPass');
+lm100    = drift('lm100',   1.146000, 'DriftPass');
 lm120    = drift('lm120',   0.946000, 'DriftPass');
 lm105    = drift('lm105',   1.096000, 'DriftPass');
 lkk      = drift('lkk',     0.741000, 'DriftPass');
@@ -65,6 +66,7 @@ kick_in  = marker('kick_in', 'IdentityPass');
 kick_ex  = marker('kick_ex', 'IdentityPass');
 sept_in  = marker('sept_in', 'IdentityPass');
 sept_ex  = marker('sept_ex', 'IdentityPass');
+mqf      = marker('mqf',     'IdentityPass');
 
 qd       = quadrupole('qd', 0.200000, qd_strength, quad_pass_method);
 qf       = quadrupole('qf', 0.100000, qf_strength, quad_pass_method);
@@ -126,35 +128,6 @@ bd = [pb, b01,b02,b03,b04,b05,b06,b07,mb,b07,b06,b05,b04,b03,b02,b01, pb];
  
 rfc = rfcavity('cav', 0, rf_voltage, 0, harmonic_number, 'CavityPass'); % RF frequency will be set later.
 
-% b         = bd;
-% lfree     = lt;
-% lfree2    = lt2;
-% lqd       = [lm45, qd, l25];
-% lsd       = [lm45, sd, l25];
-% lsf       = [lm40, sf, l20];
-% lch       = [lm25, hcm, l25];
-% lcv       = [lm30, vcm, l30];
-% lsdcv     = [lm70, vcm, l25, sd, l25];
-% fodo1     = [qf, lfree, lfree, b, lfree, bpm, lsf, qf];
-% fodo2     = [qf, lfree, lqd, b, fliplr(lcv), bpm, lch, qf];
-% fodo2sd   = [qf, lfree, lqd, b, fliplr(lsdcv), bpm, lch, qf];
-% fodo1sd   = [qf, lfree, lfree, b, fliplr(lsd), bpm, lsf, qf];
-% boos      = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-% lke       = [l60, kick_ex, lkk, kick_ex, lm60_kk];
-% lcvse     = [l36, sept_ex, lm66, vcm, l30];
-% lmonch    = [l100, bpm, lm120, hcm, l20];
-% lsich     = [lm105, sept_in, l80, hcm, l25];
-% lki       = [l60, kick_in, lm60];
-% fodo2kese = [qf, lke, lqd, b, fliplr(lcvse), lmonch, qf];
-% fodo2si   = [qf, lfree, lqd, b, fliplr(lcv), bpm, lsich, qf];
-% fodo1ki   = [qf, lki, lfree, b, lfree, bpm, lsf, qf];
-% boosinj   = [fodo1sd, fodo2kese, fodo1, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-% fodo1rf   = [qf, lfree, rfc, lfree, b, lfree, bpm, lsf, qf];
-% boosrf    = [fodo1sd, fodo2, fodo1, fodo2, fodo1rf, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-% boocor    = [boosinj, boos, boosrf, boos, boos];
-% %booster   = [boos, boos, boos, boos, boos];
-% elist     = boocor;
-
           
 b         = bd;
 lfree     = lt;
@@ -169,22 +142,22 @@ fodo1     = [qf, lfree, lfree_2, b, lfree_2, bpm, lsf, qf];
 fodo2     = [qf, lfree, lqd_2, b, fliplr(lcv_2), bpm, lch, qf];
 fodo2sd   = [qf, lfree, lqd_2, b, fliplr(lsdcv_2), bpm, lch, qf];
 fodo1sd   = [qf, lfree, lfree_2, b, fliplr(lsd_2), bpm, lsf, qf];
-boos      = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2];
+boos      = [fodo1sd, mqf, fodo2, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2sd, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2];
 lke       = [l60, kick_ex, lkk, kick_ex, lm60_kk];
 lcvse_2   = [l36, sept_ex, lm66, vcm, l30_2];
-lmonch    = [l100, bpm, lm120, hcm, l20];
+lmon      = [l100, bpm, lm100];
 lsich     = [lm105, sept_in, l80, hcm, l25];
 lki       = [l60, kick_in, lm60];
-fodo2kese = [qf, lke, lqd_2, b, fliplr(lcvse_2), lmonch, qf];
+fodo2kese = [qf, lke, lqd_2, b, fliplr(lcvse_2), lmon, qf];
 fodo2si   = [qf, lfree, lqd_2, b, fliplr(lcv_2), bpm, lsich, qf];
 fodo1ki   = [qf, lki, lfree_2, b, lfree_2, bpm, lsf, qf];
 fodo1ch   = [qf, fliplr(lch), lfree_2, b, lfree_2, bpm, lsf, qf];
 fodo1rf   = [qf, lfree, rfc, lfree_2, b, lfree_2, bpm, lsf, qf];
 
 %booster   = [boos, boos, boos, boos, boos];
-boosinj   = [fodo1sd, fodo2kese, fodo1ch, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-boosrf    = [fodo1sd, fodo2, fodo1ch, fodo2, fodo1rf, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-boocor    = [boosinj, boos, boosrf, boos, boos];
+boosinj   = [fodo1sd, mqf, fodo2kese, mqf, fodo1ch, mqf, fodo2si, mqf, fodo1ki, mqf, fodo2sd, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2];
+boosrf    = [fodo1sd, mqf, fodo2, mqf, fodo1, mqf, fodo2, mqf, fodo1rf, mqf, fodo2sd, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2];
+boocor    = [mqf, boosinj, mqf, boos, mqf, boosrf, mqf, boos, mqf, boos];
 elist     = boocor;
 
 
