@@ -8,10 +8,7 @@ function [r, lattice_title] = sirius_bo_lattice(varargin)
 
 global THERING
 
-deg2rad = pi/180;
-const = lnls_constants;
 energy = 0.15e9; % eV
-%lattice_version = 'BO.V900';
 
 lattice_version = 'BO.V900';
 for i=1:length(varargin)
@@ -30,7 +27,6 @@ bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
 sext_pass_method = 'StrMPoleSymplectic4Pass';
 
-
 % a segmented model for the dipole has been created from the
 % approved fieldmap. The segmented model has a longer length 
 % and the different has to be accomodated.
@@ -44,7 +40,6 @@ set_magnets_strength_booster;
 
 lt       = drift('lt',      2.146000, 'DriftPass');
 lt2      = drift('lt2',     2.146000-half_model_diff, 'DriftPass');
-l20      = drift('l20',     0.200000, 'DriftPass');
 l25      = drift('l25',     0.250000, 'DriftPass');
 l25_2    = drift('l25_2',   0.250000-half_model_diff, 'DriftPass');
 l30_2    = drift('l30_2',   0.300000-half_model_diff, 'DriftPass');
@@ -54,25 +49,29 @@ l80      = drift('l80',     0.800000, 'DriftPass');
 l100     = drift('l100',    1.000000, 'DriftPass');
 lm25     = drift('lm25',    1.896000, 'DriftPass');
 lm30     = drift('lm30',    1.846000, 'DriftPass');
-lm40     = drift('lm40',    1.746000, 'DriftPass');
 lm45     = drift('lm45',    1.696000, 'DriftPass');
 lm60     = drift('lm60',    1.546000, 'DriftPass');
 lm66     = drift('lm66',    1.486000, 'DriftPass');
 lm70     = drift('lm70',    1.446000, 'DriftPass');
+lm100    = drift('lm100',   1.146000, 'DriftPass');
 lm120    = drift('lm120',   0.946000, 'DriftPass');
 lm105    = drift('lm105',   1.096000, 'DriftPass');
 lkk      = drift('lkk',     0.741000, 'DriftPass');
 lm60_kk  = drift('lm60_kk', 0.805000, 'DriftPass');
+l20      = drift('l20',     0.200000, 'DriftPass');
+sfus     = drift('sfus',  1.746000+0.05, 'DriftPass');
+sfds     = drift('sfds',  0.200000-0.05, 'DriftPass');
 
 kick_in  = marker('kick_in', 'IdentityPass');
 kick_ex  = marker('kick_ex', 'IdentityPass');
 sept_in  = marker('sept_in', 'IdentityPass');
 sept_ex  = marker('sept_ex', 'IdentityPass');
+mqf      = marker('mqf',     'IdentityPass');
 
-qd       = quadrupole('qd', 0.200000, 0.000000, quad_pass_method);
-qf       = quadrupole('qf', 0.100000, 1.882100, quad_pass_method);
-sf       = sextupole ('sf', 0.200000, 6.331497, sext_pass_method);
-sd       = sextupole ('sd', 0.200000, 0.000000, sext_pass_method);
+qd       = quadrupole('qd', 0.200000, qd_strength, quad_pass_method);
+qf       = quadrupole('qf', 0.100000, qf_strength, quad_pass_method);
+sf       = sextupole ('sf', 0.200000, sf_strength, sext_pass_method);
+sd       = sextupole ('sd', 0.200000, sd_strength, sext_pass_method);
     
 bpm      = marker('bpm', 'IdentityPass');
 hcm      = corrector('hcm', 0, [0, 0], 'CorrectorPass');
@@ -129,42 +128,13 @@ bd = [pb, b01,b02,b03,b04,b05,b06,b07,mb,b07,b06,b05,b04,b03,b02,b01, pb];
  
 rfc = rfcavity('cav', 0, rf_voltage, 0, harmonic_number, 'CavityPass'); % RF frequency will be set later.
 
-% b         = bd;
-% lfree     = lt;
-% lfree2    = lt2;
-% lqd       = [lm45, qd, l25];
-% lsd       = [lm45, sd, l25];
-% lsf       = [lm40, sf, l20];
-% lch       = [lm25, hcm, l25];
-% lcv       = [lm30, vcm, l30];
-% lsdcv     = [lm70, vcm, l25, sd, l25];
-% fodo1     = [qf, lfree, lfree, b, lfree, bpm, lsf, qf];
-% fodo2     = [qf, lfree, lqd, b, fliplr(lcv), bpm, lch, qf];
-% fodo2sd   = [qf, lfree, lqd, b, fliplr(lsdcv), bpm, lch, qf];
-% fodo1sd   = [qf, lfree, lfree, b, fliplr(lsd), bpm, lsf, qf];
-% boos      = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-% lke       = [l60, kick_ex, lkk, kick_ex, lm60_kk];
-% lcvse     = [l36, sept_ex, lm66, vcm, l30];
-% lmonch    = [l100, bpm, lm120, hcm, l20];
-% lsich     = [lm105, sept_in, l80, hcm, l25];
-% lki       = [l60, kick_in, lm60];
-% fodo2kese = [qf, lke, lqd, b, fliplr(lcvse), lmonch, qf];
-% fodo2si   = [qf, lfree, lqd, b, fliplr(lcv), bpm, lsich, qf];
-% fodo1ki   = [qf, lki, lfree, b, lfree, bpm, lsf, qf];
-% boosinj   = [fodo1sd, fodo2kese, fodo1, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-% fodo1rf   = [qf, lfree, rfc, lfree, b, lfree, bpm, lsf, qf];
-% boosrf    = [fodo1sd, fodo2, fodo1, fodo2, fodo1rf, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-% boocor    = [boosinj, boos, boosrf, boos, boos];
-% %booster   = [boos, boos, boos, boos, boos];
-% elist     = boocor;
-
           
 b         = bd;
 lfree     = lt;
 lfree_2   = lt2;
 lqd_2     = [lm45, qd, l25_2];
 lsd_2     = [lm45, sd, l25_2];
-lsf       = [lm40, sf, l20];
+lsf       = [sfus, sf, sfds];
 lch       = [lm25, hcm, l25];
 lcv_2     = [lm30, vcm, l30_2];
 lsdcv_2   = [lm70, vcm, l25, sd, l25_2];
@@ -172,22 +142,22 @@ fodo1     = [qf, lfree, lfree_2, b, lfree_2, bpm, lsf, qf];
 fodo2     = [qf, lfree, lqd_2, b, fliplr(lcv_2), bpm, lch, qf];
 fodo2sd   = [qf, lfree, lqd_2, b, fliplr(lsdcv_2), bpm, lch, qf];
 fodo1sd   = [qf, lfree, lfree_2, b, fliplr(lsd_2), bpm, lsf, qf];
-boos      = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2];
+boos      = [fodo1sd, mqf, fodo2, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2sd, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2];
 lke       = [l60, kick_ex, lkk, kick_ex, lm60_kk];
 lcvse_2   = [l36, sept_ex, lm66, vcm, l30_2];
-lmonch    = [l100, bpm, lm120, hcm, l20];
+lmon      = [l100, bpm, lm100];
 lsich     = [lm105, sept_in, l80, hcm, l25];
 lki       = [l60, kick_in, lm60];
-fodo2kese = [qf, lke, lqd_2, b, fliplr(lcvse_2), lmonch, qf];
+fodo2kese = [qf, lke, lqd_2, b, fliplr(lcvse_2), lmon, qf];
 fodo2si   = [qf, lfree, lqd_2, b, fliplr(lcv_2), bpm, lsich, qf];
 fodo1ki   = [qf, lki, lfree_2, b, lfree_2, bpm, lsf, qf];
 fodo1ch   = [qf, fliplr(lch), lfree_2, b, lfree_2, bpm, lsf, qf];
 fodo1rf   = [qf, lfree, rfc, lfree_2, b, lfree_2, bpm, lsf, qf];
 
 %booster   = [boos, boos, boos, boos, boos];
-boosinj   = [fodo1sd, fodo2kese, fodo1ch, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-boosrf    = [fodo1sd, fodo2, fodo1ch, fodo2, fodo1rf, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-boocor    = [boosinj, boos, boosrf, boos, boos];
+boosinj   = [fodo1sd, mqf, fodo2kese, mqf, fodo1ch, mqf, fodo2si, mqf, fodo1ki, mqf, fodo2sd, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2];
+boosrf    = [fodo1sd, mqf, fodo2, mqf, fodo1, mqf, fodo2, mqf, fodo1rf, mqf, fodo2sd, mqf, fodo1, mqf, fodo2, mqf, fodo1, mqf, fodo2];
+boocor    = [mqf, boosinj, mqf, boos, mqf, boosrf, mqf, boos, mqf, boos];
 elist     = boocor;
 
 

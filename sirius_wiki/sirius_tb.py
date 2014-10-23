@@ -90,6 +90,16 @@ parameter_list = [
   ),
 
   Parameter(
+    name     = 'Linac to booster transport line number of septa',
+    group    = 'FAC',
+    value    = Prms.tb_number_of_septa,
+    symbol   = r'<math>N_\text{sep}</math>',
+    units    = '',
+    deps     = [],
+    obs      = [],
+  ),
+                
+  Parameter(
     name     = 'Linac to booster transport line maximum quadrupole gradient',
     group    = 'FAC',
     value    = Prms.tb_maximum_quadrupole_gradient,
@@ -100,20 +110,10 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Linac to booster transport line deflection angle of BN dipoles',
+    name     = 'Linac to booster transport line deflection angle of dipole',
     group    = 'FAC',
-    value    = Prms.tb_BN_dipole_deflection_angle,
-    symbol   = r'<math>\theta_\text{BN}</math>',
-    units    = unicode('°',encoding='utf-8'),
-    deps     = [],
-    obs      = [],
-  ),
-                  
-  Parameter(
-    name     = 'Linac to booster transport line deflection angle of BP dipoles',
-    group    = 'FAC',
-    value    = Prms.tb_BP_dipole_deflection_angle,
-    symbol   = r'<math>\theta_\text{BP}</math>',
+    value    = Prms.tb_dipole_deflection_angle,
+    symbol   = r'<math>\theta_\text{DIP}</math>',
     units    = unicode('°',encoding='utf-8'),
     deps     = [],
     obs      = [],
@@ -130,20 +130,10 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Linac to booster transport line arc length of BN dipoles',
+    name     = 'Linac to booster transport line arc length of dipole',
     group    = 'FAC',
-    value    = Prms.tb_arc_length_of_BN_dipoles,
-    symbol   = r'<math>L_\text{BN}</math>',
-    units    = 'm',
-    deps     = [],
-    obs      = [],
-  ),
-                
-  Parameter(
-    name     = 'Linac to booster transport line arc length of BP dipoles',
-    group    = 'FAC',
-    value    = Prms.tb_arc_length_of_BP_dipoles,
-    symbol   = r'<math>L_\text{BP}</math>',
+    value    = Prms.tb_arc_length_of_dipole,
+    symbol   = r'<math>L_\text{DIP}</math>',
     units    = 'm',
     deps     = [],
     obs      = [],
@@ -160,25 +150,14 @@ parameter_list = [
   ),
                 
   Parameter(
-    name     = 'Linac to booster transport line BN dipole bending radius',
+    name     = 'Linac to booster transport line dipole bending radius',
     group    = 'FAC',
-    value    = Prms.tb_BN_dipole_bending_radius,
-    symbol   = r'<math>\rho_\text{BN}</math>',
+    value    = Prms.tb_dipole_bending_radius,
+    symbol   = r'<math>\rho_\text{DIP}</math>',
     units    = 'm',
-    deps     = ['Linac to booster transport line arc length of BN dipoles',
-                'Linac to booster transport line deflection angle of BN dipoles'],
-    obs      = [r'<math>\rho_\text{BN} = \frac{L_\text{BN}}{\theta_\text{BN}}</math>'],
-  ),
-  
-  Parameter(
-    name     = 'Linac to booster transport line BP dipole bending radius',
-    group    = 'FAC',
-    value    = Prms.tb_BP_dipole_bending_radius,
-    symbol   = r'<math>\rho_\text{BP}</math>',
-    units    = 'm',
-    deps     = ['Linac to booster transport line arc length of BP dipoles',
-                'Linac to booster transport line deflection angle of BP dipoles'],
-    obs      = [r'<math>\rho_\text{BP} = \frac{L_\text{BP}}{\theta_\text{BP}}</math>'],
+    deps     = ['Linac to booster transport line arc length of dipole',
+                'Linac to booster transport line deflection angle of dipole'],
+    obs      = [r'<math>\rho_\text{DIP} = \frac{L_\text{DIP}}{\theta_\text{DIP}}</math>'],
   ),
   
   Parameter(
@@ -193,25 +172,14 @@ parameter_list = [
   ),
   
   Parameter(
-    name     = 'Linac to booster transport line BN dipole magnetic field',
+    name     = 'Linac to booster transport line dipole magnetic field',
     group    = 'FAC',
-    value    = Prms.tb_BN_dipole_magnetic_field,
-    symbol   = r'<math>B_\text{BN}</math>',
+    value    = Prms.tb_dipole_magnetic_field,
+    symbol   = r'<math>B_\text{DIP}</math>',
     units    = 'T',
     deps     = ['Linac to booster transport line beam magnetic rigidity',
-                'Linac to booster transport line BN dipole bending radius'],
-    obs      = [r'<math>B_\text{BN} = \frac{(B\rho)}{\rho_\text{BN}}</math>'],
-  ),
-                
-  Parameter(
-    name     = 'Linac to booster transport line BP dipole magnetic field',
-    group    = 'FAC',
-    value    = Prms.tb_BP_dipole_magnetic_field,
-    symbol   = r'<math>B_\text{BP}</math>',
-    units    = 'T',
-    deps     = ['Linac to booster transport line beam magnetic rigidity',
-                'Linac to booster transport line BP dipole bending radius'],
-    obs      = [r'<math>B_\text{BP} = \frac{(B\rho)}{\rho_\text{BP}}</math>'],
+                'Linac to booster transport line dipole bending radius'],
+    obs      = [r'<math>B_\text{DIP} = \frac{(B\rho)}{\rho_\text{DIP}}</math>'],
   ),
                 
   Parameter(
@@ -226,20 +194,10 @@ parameter_list = [
   ),
                 
   Parameter(
-    name     = 'Linac to booster transport line BN dipole sagitta',
+    name     = 'Linac to booster transport line dipole sagitta',
     group    = 'FAC',
-    value    = Prms.tb_BN_dipole_sagitta,
-    symbol   = r'<math>S_\text{BN}</math>',
-    units    = 'mm',
-    deps     = [],
-    obs      = [],
-  ),
-                
-  Parameter(
-    name     = 'Linac to booster transport line BP dipole sagitta',
-    group    = 'FAC',
-    value    = Prms.tb_BP_dipole_sagitta,
-    symbol   = r'<math>S_\text{BP}</math>',
+    value    = Prms.tb_dipole_sagitta,
+    symbol   = r'<math>S_\text{DIP}</math>',
     units    = 'mm',
     deps     = [],
     obs      = [],
@@ -251,36 +209,6 @@ parameter_list = [
     value    = Prms.tb_septum_sagitta,
     symbol   = r'<math>S_\text{sep}</math>',
     units    = 'mm',
-    deps     = [],
-    obs      = [],
-  ),
-                
-  Parameter(
-    name     = 'Linac to booster transport line number of BN dipoles',
-    group    = 'FAC',
-    value    = Prms.tb_number_of_BN_dipoles,
-    symbol   = r'<math>N_\text{BN}</math>',
-    units    = '',
-    deps     = [],
-    obs      = [],
-  ),
-                
-  Parameter(
-    name     = 'Linac to booster transport line number of BP dipoles',
-    group    = 'FAC',
-    value    = Prms.tb_number_of_BP_dipoles,
-    symbol   = r'<math>N_\text{BP}</math>',
-    units    = '',
-    deps     = [],
-    obs      = [],
-  ),
-                
-  Parameter(
-    name     = 'Linac to booster transport line number of septa',
-    group    = 'FAC',
-    value    = Prms.tb_number_of_septa,
-    symbol   = r'<math>N_\text{sep}</math>',
-    units    = '',
     deps     = [],
     obs      = [],
   ),
@@ -306,6 +234,16 @@ parameter_list = [
   ),
                   
   Parameter(
+    name     = 'Linac to booster transport line hardedge length of QA3 quadrupoles',
+    group    = 'FAC',
+    value    = Prms.tb_hardedge_length_of_QA3_quadrupoles,
+    symbol   = r'<math>L_\text{QA3}</math>',
+    units    = 'm',
+    deps     = [],
+    obs      = [],
+  ),
+                  
+  Parameter(
     name     = 'Linac to booster transport line hardedge length of QB1 quadrupoles',
     group    = 'FAC',
     value    = Prms.tb_hardedge_length_of_QB1_quadrupoles,
@@ -320,16 +258,6 @@ parameter_list = [
     group    = 'FAC',
     value    = Prms.tb_hardedge_length_of_QB2_quadrupoles,
     symbol   = r'<math>L_\text{QB2}</math>',
-    units    = 'm',
-    deps     = [],
-    obs      = [],
-  ),
-                  
-  Parameter(
-    name     = 'Linac to booster transport line hardedge length of QB3 quadrupoles',
-    group    = 'FAC',
-    value    = Prms.tb_hardedge_length_of_QB3_quadrupoles,
-    symbol   = r'<math>L_\text{QB3}</math>',
     units    = 'm',
     deps     = [],
     obs      = [],
