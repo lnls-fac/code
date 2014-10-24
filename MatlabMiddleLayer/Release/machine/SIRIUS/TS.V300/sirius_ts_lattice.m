@@ -165,7 +165,7 @@ ltba_estendido  = [inicio, linea, lineb, linec, lined, AN_kipmm, fim];
 %% finalization 
 
 %elist = ltba;
-elist = ltba_estendido;
+elist = ltba;
 the_line = buildlat(elist);
 the_line = setcellstruct(the_line, 'Energy', 1:length(the_line), energy);
 

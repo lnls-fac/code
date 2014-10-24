@@ -21,14 +21,13 @@ rms_yp0  = 0.1 * mrad;
 rms_dp0  = 0.5 * pc;
 n_maquinas = 100;
 
+t=twissline(ltlb,0.0,Twiss0,1:length(ltlb)+1,'chrom');
 
-t=twissline(ltlb,0,Twiss0,1:length(ltlb)+1,'chrom',0);
- 
-beta=cat(1,t.beta);
 s=cat(1,t.SPos);
-%d=cat(1,t.Dispersion);
-%plot(s,beta(:,1),'b',s,beta(:,2),'r',s,d(:,1),'g');
-%figure;plot(s,beta(:,1),'b',s,beta(:,2),'r');
+beta=cat(1,t.beta);
+disp=[t.Dispersion];
+d=disp(1,:)';
+figure;plot(s,beta(:,1),'b',s,beta(:,2),'r',s,d(:,1),'g');
 
 ind_BPM = findcells(ltlb, 'FamName', 'BPM');
 ind_ch = findcells(ltlb, 'FamName', 'hcm');
@@ -106,12 +105,6 @@ for nmaq=1:n_maquinas
     ltlb = lnls_set_rotation_ROLL(erroroll, idx, ltlb);
     ltlb = lnls_set_excitation(erroex, idx, ltlb);
     
-%    for i=1:length(idx)
-%        erro = [errox(i), 0, erroy(i), 0, 0, 0]; 
-%        ltlb{idx(i)}.T1 = ltlb_Ori{idx(i)}.T1 + erro;
-%        ltlb{idx(i)}.T2 = ltlb_Ori{idx(i)}.T2 - erro;
-%    end
-
 % Orbit without correction
     % Error in lauching conditions
     ex0 = (-1+2*rand(1)) * rms_x0;
@@ -193,14 +186,17 @@ yc_BPM_rms = std(yc_BPM,0,2);
 orb_semcorr_fim_rms = std(orb_semcorr_fim,0,2);
 orb_ripple_fim_rms = std(orb_ripple_fim,0,2);
 
-%separando ch e septa
-dteta_sep = [ dteta_ch(1,:) ; dteta_ch(end,:) ];
-dteta_cch = dteta_ch(2:end-1,:);
+%separando ch, dip e septa
+dteta_sep = dteta_ch(end,:);       %?ltimo
+dteta_cch = dteta_ch(3,:);         %3o
+dteta_dip = [dteta_ch(1:2,:); dteta_ch(4:end-1,:)];   %todos outros
 teta_cch_rms = std(dteta_cch(:));
 teta_sep_rms = std(dteta_sep(:));
+teta_dip_rms = std(dteta_dip(:));
 teta_cv_rms = std(dteta_cv(:));
 teta_cch_max = max(abs(dteta_cch(:)));
 teta_sep_max = max(abs(dteta_sep(:)));
+teta_dip_max = max(abs(dteta_dip(:)));
 teta_cv_max = max(abs(dteta_cv(:)));
 
 % Correction summary
@@ -236,6 +232,7 @@ fmt = 'x launching condition = +-%g mm\n'; fprintf(fout,fmt,rms_x0/mm);
 fmt = 'xp launching condition = +-%g mrad\n'; fprintf(fout,fmt,rms_xp0/mrad);
 fmt = 'y launching condition = +-%g mm\n'; fprintf(fout,fmt,rms_y0/mm);
 fmt = 'yp launching condition = +-%g mrad\n'; fprintf(fout,fmt,rms_yp0/mrad);
+fmt = 'dp/p launching condition = +-%g %\n'; fprintf(fout,fmt,rms_dp0/pc);
 fmt = 'number of machines = %i\n\n'; fprintf(fout,fmt,n_maquinas);
 
 fmt = '                          before   after \n'; fprintf(fout,fmt);
@@ -249,10 +246,10 @@ fmt = 'Average V peak-to-peak    %5.3f    %5.3f \n'; fprintf(fout,fmt,Yptp_mean/
 fmt = 'Max. H peak-to-peak       %5.3f    %5.3f \n'; fprintf(fout,fmt,Xptp_max/mm,Xcptp_max/mm);
 fmt = 'Max. V peak-to-peak       %5.3f    %5.3f \n\n'; fprintf(fout,fmt,Yptp_max/mm,Ycptp_max/mm);
 
-fmt = '                         CH      CV      septa \n'; fprintf(fout,fmt);
-fmt = '                        (mrad)  (mrad)  (mrad) \n'; fprintf(fout,fmt);
-fmt = 'rms corrector strength  %5.3f   %5.3f   %5.3f  \n'; fprintf(fout,fmt,teta_cch_rms/mrad,teta_cv_rms/mrad,teta_sep_rms/mrad);
-fmt = 'Max corrector strength  %5.3f   %5.3f   %5.3f  \n\n'; fprintf(fout,fmt,teta_cch_max/mrad,teta_cv_max/mrad,teta_sep_max/mrad);
+fmt = '                        dip     CH      CV      septa \n'; fprintf(fout,fmt);
+fmt = '                       (mrad)  (mrad)  (mrad)  (mrad) \n'; fprintf(fout,fmt);
+fmt = 'rms corrector strength  %5.3f   %5.3f   %5.3f   %5.3f  \n'; fprintf(fout,fmt,teta_dip_rms/mrad,teta_cch_rms/mrad,teta_cv_rms/mrad,teta_sep_rms/mrad);
+fmt = 'Max corrector strength  %5.3f   %5.3f   %5.3f   %5.3f  \n\n'; fprintf(fout,fmt,teta_dip_max/mrad,teta_cch_max/mrad,teta_cv_max/mrad,teta_sep_max/mrad);
 
 tetai_ch_rms = std(dteta_ch,0,2);
 tetai_cv_rms = std(dteta_cv,0,2);
