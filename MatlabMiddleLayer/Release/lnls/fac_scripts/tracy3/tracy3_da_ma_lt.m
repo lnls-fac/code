@@ -123,6 +123,7 @@ while i < n_calls
                 l = l + 1;
             else
                 fprintf('%-2d-%-3d: ma nao carregou\n',i,k);
+                break;
             end
             Accep(1,:) = spos;
             Accep(2,:) = min(accep(l,1,:), accepRF);
