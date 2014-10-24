@@ -272,7 +272,7 @@ function sirius_calc_stats(N, save_fig, arq_results, arq_machines, scale)
     hold off;
 
     if exist('save_fig', 'var')
-        print('-dpng','COD.png');
+        plot2svg( 'COD_twiss.svg',CODfig);
     end
    
 end

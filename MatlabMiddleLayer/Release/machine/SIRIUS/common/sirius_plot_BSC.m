@@ -10,8 +10,8 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
 %   tipo - fazer o grafico de todas as funcoes de twiss juntas (0) ou
 %   separadas (1). O Default e fazer tudo junto.
 %   coup - acoplamente betatron x-y.
-%   save_fig - flag tipo string para salvar o grafico em .png('png') ou .pdf('pdf'). O
-%   automatico salva em formato .png.
+%   save_fig - flag que indica o desejo de salvar a figure sempre em
+%   formato svg.
 %   e_spread - no caso das linhas de transporte o input do energy spread e
 %   necessario.
 %Para utilizar o script e necessario rodas ANTES um comamndo carregando a
@@ -108,8 +108,8 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
     
     
     if tipo==0
-        Twissfig=figure(1);
-        set(Twissfig, 'Position', [1 1 1000 450]);
+        figure1=figure(1);
+        set(figure1, 'Position', [1 1 1000 450]);
         axes('FontSize',14);
         xlabel({'s [m]'},'FontSize',14);
         ylabel({'Beam stay clear [mm]'},'FontSize',14);
@@ -196,11 +196,11 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
     
 
     if exist('save_fig', 'var')
-        if strcmp(save_fig,'pdf')==1
-            print('-dpdf',[maquina '_BSC.pdf']);
-        else
-            print('-dpng',[maquina '_BSC.png']);
-        
+        %if strcmp(save_fig,'pdf')==1
+        %    print('-dpdf',[maquina '_BSC.pdf']);
+        %else
+        %    print('-dpng',[maquina '_BSC.png']);
+        plot2svg([maquina '_BSC.svg'],figure1);
     end
    
 end

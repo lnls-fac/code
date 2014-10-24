@@ -8,8 +8,8 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
 %    'ts' para as linhas de trasnporte linac-booster ou booster-anel.
 %   tipo - fazer o grafico de todas as funcoes de twiss juntas (0) ou
 %   separadas (1). O Default e fazer tudo junto.
-%   save_fig - flag tipo string para salvar o grafico em .png('png') ou .pdf('pdf'). O
-%   automatico salva em formato .png.
+%   save_fig - flag que indica o desejo de salvar a figure sempre em
+%   formato svg.
 %Para utilizar o script e necessario rodas ANTES um comamndo carregando a
 %rede da maquina em questao -> sirius('maquina+versao'). Depois disso o
 %scripet se encarrega de fazer o resto.
@@ -75,8 +75,8 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
     end;
     
     if tipo==0
-        Twissfig=figure(1);
-        set(Twissfig, 'Position', [1 1 1000 450]);
+        figure1=figure(1);
+        set(figure1, 'Position', [1 1 1000 450]);
         axes('FontSize',14);
         xlabel({'s [m]'},'FontSize',14);
         ylabel({'\beta [m]'},'FontSize',14);
@@ -108,10 +108,10 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         ylim([offset top+2]);
     
         %Define eixo y original
-        ax1 = findall(Twissfig,'type','axes');
+        ax1 = findall(figure1,'type','axes');
     
         %Define eixo y secund?rio
-        ax2 = axes('Parent',Twissfig,'Position',get(ax1(1),'Position'),'XAxisLocation','top','YAxisLocation','right','Color','none','XTickLabel',[],'XColor','k','YColor','g','FontSize', 14);
+        ax2 = axes('Parent',figure1,'Position',get(ax1(1),'Position'),'XAxisLocation','top','YAxisLocation','right','Color','none','XTickLabel',[],'XColor','k','YColor','g','FontSize', 14);
         linkaxes([ax1(1) ax2],'x');
         hold on
         ex=plot(ax2,twiss.pos(ini:fim),twiss.etax(ini:fim),'LineWidth',1.5,'Color',[0 1 0]);
@@ -193,10 +193,11 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
     
 
     if exist('save_fig', 'var')
-        if strcmp(save_fig,'pdf')==1
-            print('-dpdf',[maquina 'twiss.pdf']);
-        else
-            print('-dpng',[maquina 'twiss.png']);
+        %if strcmp(save_fig,'pdf')==1
+        %    print('-dpdf',[maquina 'twiss.pdf']);
+        %else
+        %    print('-dpng',[maquina 'twiss.png']);
+        plot2svg([maquina '_twiss.svg'],figure1);
         
     end
    
