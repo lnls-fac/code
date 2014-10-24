@@ -1,10 +1,10 @@
-function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
+function sirius_calc_stats(N,thering0,save_fig,arqConfig,arqConfig_extra,scale)
 % Script que calcula estatistica das orbitas e otica da maquina e faz o
 % grafico da orbita fechada para N maquinas com erros aleatorios e
 % correcao. As variaveis de entrada obrigatorias sao:
-%   thering0 - modelo sem error da maquina;
 %   N - quantidades de mauiqnas a serem avaliada;
 % Variaveis que podem ser utlizadas:
+%   thering0 - modelo sem error da maquina;
 %   save_fig - salav o grafico em uma figura com extensao .png.
 %   arqConfig - arquivo CONFIG.mat (ou outros nome) onde estao armazenados
 %   parametros principais das maquinas simuladas.
@@ -31,7 +31,11 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
         scale = 1e6;
     end;
     
-           
+    % Se um modelo de anel não é passado, usa o do arquivo de configs.
+    if ~exist('thering0','var')
+        thering0 = r.params.the_ring;
+    end
+    
     %Calcula parametros de twiss da rede sem erros
     twiss0 = calctwiss(thering0);
     
@@ -58,7 +62,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     fprintf('     | (max)  (std)  | (max)  (std)   \n');
     formatSpec=' %3s | %4.2f  %4.2f | %4.2f  %4.2f  \n';  
     
-    if (scale==1e6 | scale==1e3)
+    if (scale==1e6 || scale==1e3)
         bpm = r.params.static.bpm_idx;
         ch=r.params.static.hcm_idx;
         cv=r.params.static.vcm_idx;
@@ -195,7 +199,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     ini=1;
     fim=mib(1);
     posz=twiss0.pos; 
-    CODfig=figure(1);
+    CODfig=figure;
     set(CODfig, 'Position', [1 1 1000 350]);
     axes('FontSize',14);
     hold on;

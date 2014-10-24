@@ -1,12 +1,24 @@
 function tracy3_da_ma_lt(n_calls, the_ring)
 
 % parâmetros para cálculo do tempo de vida
+% segunda fase
+% twi = calctwiss(the_ring);
+% params.emit0 = 2.1e-10;
+% params.E     = 3e9;
+% params.N     = 350e-3/864/1.601e-19*1.72e-6;
+% params.sigE  = 0.96e-3;
+% params.sigS  = 13.1e-3;
+% params.K     = 0.01;
+% accepRF      = 0.05;
+
+% parâmetros para cálculo do tempo de vida
+% primeira fase
 twi = calctwiss(the_ring);
-params.emit0 = 2.05e-10;
+params.emit0 = 2.7e-10;
 params.E     = 3e9;
-params.N     = 350e-3/864/1.601e-19*1.72e-6;
-params.sigE  = 0.96e-3;
-params.sigS  = 13.1e-3;
+params.N     = 100e-3/864/1.601e-19*1.72e-6;
+params.sigE  = 0.87e-3;
+params.sigS  = 3.5e-3;
 params.K     = 0.01;
 accepRF      = 0.05;
 
@@ -26,7 +38,7 @@ yf = yi + scrsz(4)*(2/3);
 % if ~exist('var_plane','var')
 var_plane = 'y'; %determinaçao da abertura dinâmica por varreduda no plano y
 % end
-path = '/home/fac_files/data/sirius_tracy/';
+path = '/home/fac_files/data/sirius/si/beam_dynamics/';
 
 cell_leg_text = cell(1,n_calls);
 pl = zeros(n_calls,3);
