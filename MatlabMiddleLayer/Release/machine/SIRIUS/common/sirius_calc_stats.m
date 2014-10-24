@@ -73,7 +73,7 @@ function sirius_calc_stats(N, save_fig, arq_results, arq_machines, scale)
     fprintf('     | (max)  (std)  | (max)  (std)   \n');
     formatSpec=' %3s | %4.2f  %4.2f | %4.2f  %4.2f  \n';  
     
-    if (scale==1e6 | scale==1e3)
+    if (scale==1e6 || scale==1e3)
         bpm = r.params.static.bpm_idx;
         ch=r.params.static.hcm_idx;
         cv=r.params.static.vcm_idx;

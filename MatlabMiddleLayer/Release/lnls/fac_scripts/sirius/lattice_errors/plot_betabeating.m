@@ -1,47 +1,33 @@
-function plot_betabeating(machbef_fname, machaft_fname, thering_fname)
+function plot_betabeating(config_fname, mach_fname)
 
-clc;
-
-% machbef_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_machines_cod_corrected.mat');
-% machaft_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_machines_cod_coup_opt_corrected.mat');
-% thering_fname = fullfile('CONFIG_V200_AC20_2_symm', 'CONFIG_V200_AC20_2_symm_the_ring.mat');
 
 %% sele��o de arquivos de input
-if ~exist('machbef_fname','var')
-    [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select mat file with machines (before symm)');
+if ~exist('config_fname','var')
+    [FileName,PathName,~] = uigetfile('*.mat','Select mat file with configs');
     if isnumeric(FileName)
         return
     end
-    machbef_fname = fullfile(PathName, FileName);
+    config_fname = fullfile(PathName, FileName);
 end
 
-if ~exist('machaft_fname','var')
-    [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select mat file with machines (after symm)');
+if ~exist('mach_fname','var')
+    [FileName,PathName,~] = uigetfile('*.mat','Select mat file with machines');
     if isnumeric(FileName)
         return
     end
-    machaft_fname = fullfile(PathName, FileName);
-end
-
-if ~exist('thering_fname','var')
-    [FileName,PathName,FilterIndex] = uigetfile('*.mat','Select mat file with nominal THERING');
-    if isnumeric(FileName)
-        return
-    end
-    thering_fname = fullfile(PathName, FileName);
+    mach_fname = fullfile(PathName, FileName);
 end
 
 % carrega dados de arquivos
-data = load(machbef_fname); mach_bef  = data.machine;
-data = load(machaft_fname); mach_aft  = data.machine;
-data = load(thering_fname); the_ring = data.the_ring;
+data = load(config_fname); config  = data.r;
+data = load(mach_fname); mach  = data.machine;
+the_ring = config.params.the_ring;
 
 
 %% calcula �tica
 twiss0 = calctwiss(the_ring);
-for i=1:length(mach_bef)
-    twiss_bef(i) = calctwiss(mach_bef{i});
-    twiss_aft(i) = calctwiss(mach_aft{i});
+for i=1:length(mach)
+    twiss(i) = calctwiss(mach{i});
 end
 
 
@@ -49,29 +35,29 @@ end
 symmetry = 5;
 
 f1 = figure;
-hold all;
+set(f1, 'Position', [1 1 1000 350]);
+h1 = axes('Parent',f1, 'FontSize',14);
+hold on;
 
 xmin = 0; xmax = twiss0.pos(end)/(symmetry - 0.0000001);
 ymin = 0; ymax = 20;
 
 for i=1:length(mach_aft)
-    betax_bef_diff(i,:) = 100*(abs(twiss_bef(i).betax - twiss0.betax))./twiss0.betax;
-    betay_bef_diff(i,:) = 100*(abs(twiss_bef(i).betay - twiss0.betay))./twiss0.betay;
-    betax_aft_diff(i,:) = 100*(abs(twiss_aft(i).betax - twiss0.betax))./twiss0.betax;
-    betay_aft_diff(i,:) = 100*(abs(twiss_aft(i).betay - twiss0.betay))./twiss0.betay;
-    data = betax_bef_diff;
-    plot(twiss_bef(i).pos, data, 'Color', [0.7 0.7 1.0]);
-    data = betay_bef_diff;
-    plot(twiss_bef(i).pos, -data, 'Color', [1.0 0.7 0.7]);
+    betax_diff(i,:) = 100*(abs(twiss_bef(i).betax - twiss0.betax))./twiss0.betax;
+    betay_diff(i,:) = 100*(abs(twiss_bef(i).betay - twiss0.betay))./twiss0.betay;
+    data = betax_diff;
+    plot(h1, twiss(i).pos, data, 'Color', [0.4 0.69 1]);
+    data = betay_diff;
+    plot(h1, twiss_bef(i).pos, -data, 'Color', [1 0.6 0.6]);
 end
-plot(twiss0.pos,  std(betax_bef_diff), 'Color', [0 0 1.0], 'LineWidth', 2.5);
-plot(twiss0.pos,  std(betax_aft_diff), 'Color', [0 0 1.0], 'LineWidth', 2.5);
-plot(twiss0.pos, -std(betay_bef_diff), 'Color', [1.0 0 0], 'LineWidth', 2.5);
-plot(twiss0.pos, -std(betay_aft_diff), 'Color', [1.0 0 0], 'LineWidth', 2.5);
+plot(h1, twiss0.pos,  std(betax_diff), 'Color', [0 0 1.0], 'LineWidth', 2.5);
+plot(h1, twiss0.pos, -std(betay_diff), 'Color', [1.0 0 0], 'LineWidth', 2.5);
 
 %plot(twiss0.pos, twiss0.betax, 'Color', [0 0 1], 'LineWidth', 2.5);
 %axis([xmin, xmax, ymin, ymax]);
 
+annotation('Parent',h1,'textbox', [0.75 0.87 0.05 0.05],'String',{'Horizontal'},'FontSize',16,'FontWeight','bold','FitBoxToText','off','LineStyle','none');
+annotation('Parent',h1,'textbox',[0.75 0.30 0.05 0.05],'String',{'Vertical'},'FontSize',16,'FontWeight','bold','FitBoxToText','off','LineStyle','none');
 
 
 xlabel('Pos [m]');
