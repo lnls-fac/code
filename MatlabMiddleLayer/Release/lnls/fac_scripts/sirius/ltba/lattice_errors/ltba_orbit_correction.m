@@ -12,22 +12,22 @@ Path = Path(1:ip(end));
 % Errors
 rms_alix = 0.3 * mm;
 rms_aliy = 0.3 * mm;
-rms_roll = 1 * 0.4 * mrad;
-rms_ex   = 1 * 0.1 * pc;
-rms_x0   = 1 * 0.1 * mm;
-rms_xp0  = 1 * 0.1 * mrad;
-rms_y0   = 1 * 0.1 * mm;
-rms_yp0  = 1 * 0.1 * mrad;
+rms_roll = 0.4 * mrad;
+rms_ex   = 0.1 * pc;
+rms_x0   = 0.1 * mm;
+rms_xp0  = 0.1 * mrad;
+rms_y0   = 0.1 * mm;
+rms_yp0  = 0.1 * mrad;
+rms_dp0  = 0.1 * pc;
 n_maquinas = 100;
 
-
-t=twissline(ltba,0,Twiss0,1:length(ltba)+1,'chrom',0);
+t=twissline(ltba,0.0,Twiss0,1:length(ltba)+1,'chrom');
  
-beta=cat(1,t.beta);
 s=cat(1,t.SPos);
-%d=cat(1,t.Dispersion);
-%plot(s,beta(:,1),'b',s,beta(:,2),'r',s,d(:,1),'g');
-plot(s,beta(:,1),'b',s,beta(:,2),'r');
+beta=cat(1,t.beta);
+disp=[t.Dispersion];
+d=disp(1,:)';
+figure;plot(s,beta(:,1),'b',s,beta(:,2),'r',s,d(:,1),'g');
 
 ind_BPM = findcells(ltba, 'FamName', 'BPM');
 ind_ch = findcells(ltba, 'FamName', 'hcm');
@@ -105,12 +105,6 @@ for nmaq=1:n_maquinas
     ltba = lnls_set_rotation_ROLL(erroroll, idx, ltba);
     ltba = lnls_set_excitation(erroex, idx, ltba);
     
-%    for i=1:length(idx)
-%        erro = [errox(i), 0, erroy(i), 0, 0, 0]; 
-%        ltba{idx(i)}.T1 = ltba_Ori{idx(i)}.T1 + erro;
-%        ltba{idx(i)}.T2 = ltba_Ori{idx(i)}.T2 - erro;
-%    end
-
 % Orbit without correction
     % Error in lauching conditions
     ex0 = (-1+2*rand(1)) * rms_x0;
@@ -118,8 +112,9 @@ for nmaq=1:n_maquinas
     ey0 = (-1+2*rand(1)) * rms_y0;
     eyp0 = (-1+2*rand(1)) * rms_yp0;
     Twiss0.ClosedOrbit=[ex0; exp0; ey0; eyp0];
+    dp0 = (-1+2*rand(1)) * rms_dp0;
     
-    t=twissline(ltba,0,Twiss0,1:length(ltba)+1);
+    t=twissline(ltba,dp0,Twiss0,1:length(ltba)+1);
     for i=1:length(t)
         orbx(i,nmaq)=t(i).ClosedOrbit(1);
         orby(i,nmaq)=t(i).ClosedOrbit(3);
@@ -152,7 +147,7 @@ for nmaq=1:n_maquinas
         end
 
 % Orbita corrigida
-        t=twissline(ltba,0,Twiss0,1:length(ltba)+1);
+        t=twissline(ltba,dp0,Twiss0,1:length(ltba)+1);
         for i=1:length(t)
             orbcx(i,nmaq)=t(i).ClosedOrbit(1);
             orbcy(i,nmaq)=t(i).ClosedOrbit(3);
@@ -168,7 +163,7 @@ for nmaq=1:n_maquinas
 %erro de ripple, ajustados em cima da ?rbita corrigida
     erroex = (-1+2*rand(1,length(idx))) * 1/1000;
     ltba = lnls_set_excitation(erroex, idx, ltba);
-    t=twissline(ltba,0,Twiss0,1:length(ltba)+1);
+    t=twissline(ltba,dp0,Twiss0,1:length(ltba)+1);
     orb_ripple_fim(:,nmaq)=t(end).ClosedOrbit - orb_corr_fim(:,nmaq);
         
 end
@@ -192,8 +187,8 @@ orb_semcorr_fim_rms = std(orb_semcorr_fim,0,2);
 orb_ripple_fim_rms = std(orb_ripple_fim,0,2);
 
 %separando ch e septa
-dteta_sep = [ dteta_ch(1,:) ; dteta_ch(end,:) ];
-dteta_cch = dteta_ch(2:end-1,:);
+dteta_sep = [ dteta_ch(1,:) ; dteta_ch(end,:) ]; % primeiro e ?ltimo
+dteta_cch = dteta_ch(2:end-1,:);                 % todos os outros
 teta_cch_rms = std(dteta_cch(:));
 teta_sep_rms = std(dteta_sep(:));
 teta_cv_rms = std(dteta_cv(:));
@@ -234,6 +229,7 @@ fmt = 'x launching condition = +-%g mm\n'; fprintf(fout,fmt,rms_x0/mm);
 fmt = 'xp launching condition = +-%g mrad\n'; fprintf(fout,fmt,rms_xp0/mrad);
 fmt = 'y launching condition = +-%g mm\n'; fprintf(fout,fmt,rms_y0/mm);
 fmt = 'yp launching condition = +-%g mrad\n'; fprintf(fout,fmt,rms_yp0/mrad);
+fmt = 'dp/p launching condition = +-%g %\n'; fprintf(fout,fmt,rms_dp0/pc);
 fmt = 'number of machines = %i\n\n'; fprintf(fout,fmt,n_maquinas);
 
 fmt = '                          before   after \n'; fprintf(fout,fmt);
@@ -291,6 +287,7 @@ annotation('textbox', [0.3,0.88,0.1,0.1],...
        
 %Plot before correction
 %subplot(5,1,[1,2],'FontSize',14);
+xlimit=[0 s(end)];
 subplot('position',[0.1 0.60 0.85 0.31],'FontSize',14);
 hold all;
 for i=1:n_maquinas
@@ -302,7 +299,7 @@ plot(s,1e3*orbx_rms,'b','LineWidth',1.5);
 plot(s,-1e3*orby_rms,'r','LineWidth',1.5);
 ylabel('x,y [mm]', 'FontSize',14);
 ylimit=ylim;
-xlimit=xlim;
+xlim(xlimit);
 text(1,0.8*ylimit(2),'X before correction', 'FontSize',14,'Color','b');
 text(1,ylimit(1)+0.2*ylimit(2),'Y before correction', 'FontSize',14,'Color','r');
 grid on;
@@ -329,6 +326,7 @@ plot(s,-1e3*orbcy_rms,'r','LineWidth',1.5);
 xlabel('s [m]', 'FontSize',14);
 ylabel('x,y [mm]', 'FontSize',14);
 ylimit=ylim;
+xlim(xlimit);
 text(1,0.8*ylimit(2),'X after correction', 'FontSize',14,'Color','b');
 text(1,ylimit(1)+0.2*ylimit(2),'Y after correction', 'FontSize',14,'Color','r');
 grid on;

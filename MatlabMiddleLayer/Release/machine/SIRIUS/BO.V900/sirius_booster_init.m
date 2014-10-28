@@ -1,8 +1,5 @@
 function sirius_booster_init(OperationalMode)
 
-
-
-
 if nargin < 1
     OperationalMode = 1;
 end
@@ -13,21 +10,19 @@ setad([]);
 
 
 % Base on the location of this file
-[SIRIUS_ROOT, FileName, ExtentionName] = fileparts(mfilename('fullpath'));
+[SIRIUS_ROOT, ~, ~] = fileparts(mfilename('fullpath'));
 AD.Directory.ExcDataDir = [SIRIUS_ROOT, filesep, 'excitation_curves'];
 AD.Directory.LatticesDef = [SIRIUS_ROOT, filesep, 'lattices_def'];
 setad(AD);
 
-
 % Get the device lists (local function)
 %[OnePerSector, TwoPerSector, ThreePerSector, FourPerSector, FivePerSector, SixPerSector, EightPerSector, TenPerSector, TwelvePerSector, FifteenPerSector, SixteenPerSector, EighteenPerSector, TwentyFourPerSector] = buildthedevicelists;
-
 
 % BENDS
 
 AO.b.FamilyName  = 'b';
 AO.b.MemberOf    = {'PlotFamily'; 'b'; 'BEND'; 'Magnet';};
-AO.b.DeviceList  = getDeviceList(2,25);
+AO.b.DeviceList  = getDeviceList(5,10);
 AO.b.ElementList = (1:size(AO.b.DeviceList,1))';
 AO.b.Status      = ones(size(AO.b.DeviceList,1),1);
 AO.b.Position    = [];
@@ -57,8 +52,8 @@ AO.b.Setpoint.DeltaRespMat = .01;
 
 % QUADS
 AO.qd.FamilyName = 'qd';
-AO.qd.MemberOf    = {'PlotFamily'; 'qd'; 'QUAD'; 'Magnet';};
-AO.qd.DeviceList  = getDeviceList(2,2);
+AO.qd.MemberOf    = {'PlotFamily'; 'qd'; 'QUAD'; 'Magnet'; 'Tune Corrector'};
+AO.qd.DeviceList  = getDeviceList(5,5);
 AO.qd.ElementList = (1:size(AO.qd.DeviceList,1))';
 AO.qd.Status      = ones(size(AO.qd.DeviceList,1),1);
 AO.qd.Position    = [];
@@ -79,8 +74,8 @@ AO.qd.Setpoint.Tolerance     = 0.2;
 AO.qd.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.qf.FamilyName = 'qf';
-AO.qf.MemberOf    = {'PlotFamily'; 'qf'; 'QUAD'; 'Magnet';};
-AO.qf.DeviceList  = getDeviceList(2,10);
+AO.qf.MemberOf    = {'PlotFamily'; 'qf'; 'QUAD'; 'Magnet'; 'Tune Corrector'};
+AO.qf.DeviceList  = getDeviceList(5,10);
 AO.qf.ElementList = (1:size(AO.qf.DeviceList,1))';
 AO.qf.Status      = ones(size(AO.qf.DeviceList,1),1);
 AO.qf.Position    = [];
@@ -102,8 +97,8 @@ AO.qf.Setpoint.DeltaRespMat  = 0.5;
 
 %SEXT
 AO.sd.FamilyName = 'sd';
-AO.sd.MemberOf    = {'PlotFamily'; 'sd'; 'SEXT'; 'Magnet'};
-AO.sd.DeviceList  = getDeviceList(2,2);
+AO.sd.MemberOf    = {'PlotFamily'; 'sd'; 'SEXT'; 'Magnet'; 'Chromaticity Corrector'};
+AO.sd.DeviceList  = getDeviceList(5,2);
 AO.sd.ElementList = (1:size(AO.sd.DeviceList,1))';
 AO.sd.Status      = ones(size(AO.sd.DeviceList,1),1);
 AO.sd.Position    = [];
@@ -124,8 +119,8 @@ AO.sd.Setpoint.Tolerance     = 0.2;
 AO.sd.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sf.FamilyName = 'sf';
-AO.sf.MemberOf    = {'PlotFamily'; 'sf'; 'SEXT'; 'Magnet'};
-AO.sf.DeviceList  = getDeviceList(2,2);
+AO.sf.MemberOf    = {'PlotFamily'; 'sf'; 'SEXT'; 'Magnet'; 'Chromaticity Corrector'};
+AO.sf.DeviceList  = getDeviceList(5,5);
 AO.sf.ElementList = (1:size(AO.sf.DeviceList,1))';
 AO.sf.Status      = ones(size(AO.sf.DeviceList,1),1);
 AO.sf.Position    = [];
@@ -199,7 +194,7 @@ AO.vcm.Setpoint.DeltaRespMat = 0.0005;
 % BPMx
 AO.bpmx.FamilyName  = 'bpmx';
 AO.bpmx.MemberOf    = {'PlotFamily'; 'BPM'; 'bpmx'; 'Diagnostics'};
-AO.bpmx.DeviceList  = getDeviceList(2,25);
+AO.bpmx.DeviceList  = getDeviceList(5,10);
 AO.bpmx.ElementList = (1:size(AO.bpmx.DeviceList,1))';
 AO.bpmx.Status      = ones(size(AO.bpmx.DeviceList,1),1);
 AO.bpmx.Position    = [];
@@ -218,7 +213,7 @@ AO.bpmx.Monitor.PhysicsUnits = 'meter';
 % BPMy
 AO.bpmy.FamilyName  = 'bpmy';
 AO.bpmy.MemberOf    = {'PlotFamily'; 'BPM'; 'bpmy'; 'Diagnostics'};
-AO.bpmy.DeviceList  = getDeviceList(2,25);
+AO.bpmy.DeviceList  = getDeviceList(5,10);
 AO.bpmy.ElementList = (1:size(AO.bpmy.DeviceList,1))';
 AO.bpmy.Status      = ones(size(AO.bpmy.DeviceList,1),1);
 AO.bpmy.Position    = [];
@@ -234,8 +229,6 @@ AO.bpmy.Monitor.Physics2HWParams = 1000;
 AO.bpmy.Monitor.Units        = 'Hardware';
 AO.bpmy.Monitor.HWUnits      = 'mm';
 AO.bpmy.Monitor.PhysicsUnits = 'meter';
-
-
 
 %%%%%%%%
 % Tune %
@@ -256,7 +249,6 @@ AO.TUNE.Monitor.Units        = 'Hardware';
 AO.TUNE.Monitor.HWUnits      = 'kHz';
 AO.TUNE.Monitor.PhysicsUnits = 'Tune';
 AO.TUNE.Monitor.SpecialFunctionGet = @bfreq2tune;
-
 
 %%%%%%%%%%
 %   RF   %
@@ -342,11 +334,10 @@ AO.RF.PhaseCtrl.PhysicsUnits      = 'Degrees';
 AO.RF.PhaseCtrl.Range             = [-200 200];    % ??? 
 AO.RF.PhaseCtrl.Tolerance         = 10;    % ??? 
 
-
-
 %%%%%%%%%%%%%%
 %    DCCT    %
 %%%%%%%%%%%%%%
+
 AO.DCCT.FamilyName               = 'DCCT';
 AO.DCCT.MemberOf                 = {'Diagnostics'; 'DCCT'};
 AO.DCCT.DeviceList               = [1 1];
@@ -364,11 +355,6 @@ AO.DCCT.Monitor.Units            = 'Hardware';
 AO.DCCT.Monitor.HWUnits          = 'Ampere';     
 AO.DCCT.Monitor.PhysicsUnits     = 'Ampere';
 
-
-
-
-
-
 % The operational mode sets the path, filenames, and other important parameters
 % Run setoperationalmode after most of the AO is built so that the Units and Mode fields
 % can be set in setoperationalmode
@@ -376,23 +362,6 @@ setao(AO);
 % setoperationalmode(OperationalMode);
 
 
-
-
-
-% Convert the response matrix delta to hardware units (if it's not already)
-% 'NoEnergyScaling' is needed so that the QMF is not read to get the energy (this is a setup file)  
-
-%AO = getao;
-%AO.hcm.Setpoint.DeltaRespMat  = physics2hw('HCM', 'Setpoint', AO.hcm.Setpoint.DeltaRespMat, AO.hcm.DeviceList, 'NoEnergyScaling');
-%AO.vcm.Setpoint.DeltaRespMat  = physics2hw('VCM', 'Setpoint', AO.vcm.Setpoint.DeltaRespMat, AO.vcm.DeviceList, 'NoEnergyScaling');
-%AO.qf.Setpoint.DeltaRespMat   = physics2hw('QF',  'Setpoint', AO.qf.Setpoint.DeltaRespMat,  AO.qf.DeviceList,  'NoEnergyScaling');
-%AO.qd,Setpoint.DeltaRespMat   = physics2hw('QD',  'Setpoint', AO.qd,Setpoint.DeltaRespMat,  AO.qd,DeviceList,  'NoEnergyScaling');
-%AO.QFC.Setpoint.DeltaRespMat  = physics2hw('QFC', 'Setpoint', AO.QFC.Setpoint.DeltaRespMat, AO.QFC.DeviceList, 'NoEnergyScaling');
-%AO.sf.Setpoint.DeltaRespMat   = physics2hw('SF',  'Setpoint', AO.sf.Setpoint.DeltaRespMat,  AO.sf.DeviceList,  'NoEnergyScaling');
-%AO.sd.Setpoint.DeltaRespMat   = physics2hw('SD',  'Setpoint', AO.sd.Setpoint.DeltaRespMat,  AO.sd.DeviceList,  'NoEnergyScaling');
-%setao(AO);
-
-%sirius_comm_connect_inputdlg;
  
 function DList = getDeviceList(NSector,NDevices)
 
@@ -404,178 +373,5 @@ for i=1:NSector
     DList = [DList; DL];
 end
 
-function [OnePerSector, TwoPerSector, ThreePerSector, FourPerSector, FivePerSector, SixPerSector, EightPerSector, TenPerSector, TwelvePerSector, FifteenPerSector, SixteenPerSector, EighteenPerSector, TwentyFourPerSector] = buildthedevicelists
 
-NSector = 4;
-
-OnePerSector=[];
-TwoPerSector=[];
-ThreePerSector=[];
-FourPerSector=[];
-FivePerSector=[];
-SixPerSector=[];
-EightPerSector=[];
-TenPerSector=[];
-TwelvePerSector=[];
-FifteenPerSector=[];
-SixteenPerSector=[];
-EighteenPerSector=[];
-TwentyFourPerSector=[];
-
-for Sector =1:NSector  
-    
-    OnePerSector = [OnePerSector;
-        Sector 1;];
-    
-    TwoPerSector = [TwoPerSector;
-        Sector 1;
-        Sector 2;];
-    
-    ThreePerSector = [ThreePerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;];
-
-    FourPerSector = [FourPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;];	
-    
-    FivePerSector = [FivePerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;];	
-
-    SixPerSector = [SixPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;];	
-    
-    EightPerSector = [EightPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;];	
-    
-   TenPerSector = [TenPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;
-        Sector 9;
-        Sector 10;];	
-    
-    TwelvePerSector = [TwelvePerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;
-        Sector 9;
-        Sector 10;
-        Sector 11;
-        Sector 12;
-        ];	
-    
-     FifteenPerSector = [FifteenPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;
-        Sector 9;
-        Sector 10;
-        Sector 11;
-        Sector 12;
-        Sector 13;
-        Sector 14;
-        Sector 15;
-        ];
-    
-    SixteenPerSector = [SixteenPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;
-        Sector 9;
-        Sector 10;
-        Sector 11;
-        Sector 12;
-        Sector 13;
-        Sector 14;
-        Sector 15;
-        Sector 16;
-        ];
-    
-     EighteenPerSector = [EighteenPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;
-        Sector 9;
-        Sector 10;
-        Sector 11;
-        Sector 12;
-        Sector 13;
-        Sector 14;
-        Sector 15;
-        Sector 16;
-        Sector 17;
-        Sector 18;
-        ];
-     TwentyFourPerSector = [TwentyFourPerSector;
-        Sector 1;
-        Sector 2;
-        Sector 3;
-        Sector 4;
-        Sector 5;
-        Sector 6;
-        Sector 7;
-        Sector 8;
-        Sector 9;
-        Sector 10;
-        Sector 11;
-        Sector 12;
-        Sector 13;
-        Sector 14;
-        Sector 15;
-        Sector 16;
-        Sector 17;
-        Sector 18;
-        Sector 19;
-        Sector 20;
-        Sector 21;
-        Sector 22;
-        Sector 23;
-        Sector 24;
-        ];
-end
 

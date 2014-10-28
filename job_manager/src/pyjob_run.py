@@ -143,7 +143,8 @@ def deal_with_configs():
 
     # set nice of the job and its children
     def set_nice_process(proc):
-        proc.set_nice(MyConfigs.niceness)
+        if proc.get_nice() < MyConfigs.niceness:
+            proc.set_nice(MyConfigs.niceness)
         proc_list = proc.get_children()
         for proc in proc_list:
             set_nice_process(proc)
@@ -155,8 +156,7 @@ def deal_with_configs():
     for proc in jobid2proc.values():
         state = proc.poll()
         if state is None:
-            if proc.get_nice() < MyConfigs.niceness:
-                set_nice_process(proc)
+            set_nice_process(proc)
             
     return allowed
 

@@ -327,9 +327,7 @@ class ParameterDefinitions(object):
     
     ''' multipole errors for quadrupoles '''
     si_reference_position_for_multipole_contribution_for_quadrupoles = 11.7 # [mm]
-    si_systematic_normal_6_pole_error_tolerance_for_quadrupoles  =  3.0e-8
     si_systematic_normal_8_pole_error_tolerance_for_quadrupoles  =  1.0e-5
-    si_systematic_normal_10_pole_error_tolerance_for_quadrupoles = -2.0e-8
     si_systematic_normal_12_pole_error_tolerance_for_quadrupoles = -3.0e-5
     si_systematic_normal_20_pole_error_tolerance_for_quadrupoles =  8.0e-5    
     si_random_normal_6_pole_error_tolerance_for_quadrupoles      =  4.0e-5
@@ -544,7 +542,10 @@ class ParameterDefinitions(object):
     bo_random_skew_18_pole_error_tolerance_for_sextupoles   = 1.0e-4
     bo_random_skew_20_pole_error_tolerance_for_sextupoles   = 1.0e-4
 
-
+    '''bpms'''
+    bo_beam_position_monitors_alignment_error_tolerance = 500 # [um]
+    
+    
     '''orbit correction system'''
     bo_number_of_beam_position_monitors = 50
     bo_number_of_horizontal_dipole_correctors = 25

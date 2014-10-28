@@ -70,7 +70,7 @@ for i=1:length(machine)
     fprintf('creating %s ...\n', rmsdir);
     system(['mkdir ', rmsdir]); 
     inputfilename = fullfile(rmsdir, 'input.py');
-    flatfilename =  num2str(i, 'flatfile_rms%02i.txt');
+    flatfilename =  'flatfile.txt';
     create_pytrack_input_file(inputfilename, flatfilename, acc_answer, dynap_xy_answer, dynap_ex_answer, dynap_ma_answer);
     lnls_at2flatfile(machine{i}, fullfile(rmsdir, flatfilename));
 end
@@ -155,7 +155,7 @@ if ~isempty(dynap_ma_answer)
     dynap_ma_s_min  = str2double(dynap_ma_answer{4});
     dynap_ma_s_max  = str2double(dynap_ma_answer{5});
     dynap_ma_fam_names = dynap_ma_answer{6};
-    fams = strsplit(dynap_ma_fam_names, ' ');
+    fams = regexp(dynap_ma_fam_names, ' ', 'split');
     dynap_ma_fam_names = ['[', sprintf('"%s",', fams{:}), ']'];
     fprintf(fp, 'dynap_ma_run          = True\n');
     fprintf(fp, 'dynap_ma_flatfilename = flat_filename\n');
@@ -167,6 +167,3 @@ if ~isempty(dynap_ma_answer)
     fprintf(fp, 'dynap_ma_fam_names    = %s\n', dynap_ma_fam_names);
 end
 fclose(fp);
-
-
-

@@ -6,7 +6,11 @@
 qf_strength = 1.8821;
 qd_strength = 0.0;
 sf_strength = 6.331497;
-sd_strength = 0;
+sd_strength = 0.0;
+
+%sf_strength = 6.166385798959297; % set chromx = chromy = 0.5
+%sd_strength = 3.226713535043866; % set chromx = chromy = 0.5
+
 
 %% Testes de erros sistematicos nas componentes quadrupolar e sextupolar do Dipolo:
 
