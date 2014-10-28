@@ -24,7 +24,7 @@ end
 pos = findspos(the_ring, 1:(length(the_ring)+1));
 if exist('bpms_and_cms', 'var')
     
-    bpms = findcells(the_ring, 'FamName', 'BPM');
+    bpms = findcells(the_ring, 'FamName', 'bpm');
     for i=1:length(bpms)
         s = pos(bpms(i));
         line([s s], [0+offset Delta*1.5+offset], 'Color', [0 0 0])

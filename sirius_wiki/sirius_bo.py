@@ -1515,6 +1515,17 @@ parameter_list = [
   ),
 
   Parameter(
+    name     = 'Booster beam position monitors alignment error tolerance',
+    group    = 'FAC',
+    value    = Prms.bo_beam_position_monitors_alignment_error_tolerance,
+    symbol   = r'<math>E_{xy,\text{BPM}}</math>',
+    units    = unicode('μm', encoding='utf-8'),
+    deps     = [],
+    obs      = [r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.',
+                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
+  ),
+                  
+  Parameter(
     name     = 'Booster dipoles alignment error tolerance',
     group    = 'FAC',
     value    = Prms.bo_dipoles_alignment_error_tolerance,

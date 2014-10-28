@@ -16,10 +16,6 @@ function sirius_calc_stats(N, save_fig, arq_results, arq_machines, scale)
     %arq_results = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG.mat';
     %arq_machines = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
     
-    arq_results = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v810/multi.cod.physap/cod_matlab/CONFIG.mat';
-    arq_machines = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v810/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
-    
-    
     % Seleciona e carrega o arquivo com resultado para analise
     default_dir = fullfile(lnls_get_root_folder(), 'data', 'sirius');
     if exist('arq_results', 'var')==0

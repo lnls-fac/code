@@ -544,7 +544,10 @@ class ParameterDefinitions(object):
     bo_random_skew_18_pole_error_tolerance_for_sextupoles   = 1.0e-4
     bo_random_skew_20_pole_error_tolerance_for_sextupoles   = 1.0e-4
 
-
+    '''bpms'''
+    bo_beam_position_monitors_alignment_error_tolerance = 500 # [um]
+    
+    
     '''orbit correction system'''
     bo_number_of_beam_position_monitors = 50
     bo_number_of_horizontal_dipole_correctors = 25
