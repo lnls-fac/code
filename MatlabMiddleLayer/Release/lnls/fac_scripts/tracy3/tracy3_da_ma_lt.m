@@ -68,7 +68,7 @@ yf = yi + scrsz(4)*(2/3);
 var_plane = 'y'; %determinaçao da abertura dinâmica por varreduda no plano y
 % end
 
-path = '/home/fac_files/data/sirius/si/beam_dynamics/';
+path = '/home/fac_files/data/sirius';
 
 cell_leg_text = cell(1,n_calls);
 pl = zeros(n_calls,3);

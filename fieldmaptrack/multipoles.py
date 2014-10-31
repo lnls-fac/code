@@ -76,7 +76,8 @@ class Multipoles:
             reference_field[1,:] = self.trajectory.by
             reference_field[2,:] = self.trajectory.bz
         else:
-            monomials.remove(0) 
+            #monomials.remove(0) 
+            pass
         
         for i in range(len(s)):
             #print(str(i) + '/' + str(len(s)))
@@ -85,17 +86,19 @@ class Multipoles:
             fieldmap_field = self.trajectory.fieldmap.interpolate_set(points)
             if is_ref_trajectory_flag:
                 # trajectory is a reference trajectory
-                
                 field = fieldmap_field - np.tile(reference_field[:,i].reshape((3,1)), (1, len(grid)))
                 self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
                 self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
             else:
                 # trajectory is not a reference trajectory
-                field = fieldmap_field - np.tile(fieldmap_field[:,grid_zero].reshape((3,1)), (1, len(grid)))
-                self.polynom_a[1:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
-                self.polynom_b[1:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
-                self.polynom_a[0,i] = fieldmap_field[0,grid_zero]
-                self.polynom_b[0,i] = fieldmap_field[1,grid_zero]
+                #field = fieldmap_field - np.tile(fieldmap_field[:,grid_zero].reshape((3,1)), (1, len(grid)))
+#                 self.polynom_a[1:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
+#                 self.polynom_b[1:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
+#                 self.polynom_a[0,i] = fieldmap_field[0,grid_zero]
+#                 self.polynom_b[0,i] = fieldmap_field[1,grid_zero]
+                field = fieldmap_field
+                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
+                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
                 
     def calc_multipoles_integrals(self):
         monomials = self.fitting_monomials
@@ -158,3 +161,21 @@ class Multipoles:
             polynom_b = self.polynom_b_hardedge[i]
             r += '\n{0:35s} {1:^12.3e} {2:^+12.3e} {5:^+12.4e} {7:^+12.3e} | {3:^12.3e} {4:^+12.3e} {6:^+12.3e} {8:^+12.3e}'.format('n={0:02d}:'.format(n), max_poly_b, integ_poly_b, max_poly_a, integ_poly_a, integ_poly_b_relative, integ_poly_a_relative, polynom_b, polynom_a)
         return r
+
+    def save(self, filename):
+        
+        with open(filename, 'w') as fp:
+            fp.write('# multipoles\n')
+            fp.write('# s[mm] ')
+            for j in range(len(self.fitting_monomials)):
+                fp.write('polynom_b[n={0}][T/m^n] '.format(self.fitting_monomials[j]))
+            fp.write('\n') 
+            traj = self.trajectory
+            for i in range(len(traj.s)):
+                fp.write('{0:+.16e} '.format(traj.s[i]))
+                for j in range(len(self.fitting_monomials)):
+                    fp.write('{0:+.16e} '.format(self.polynom_b[j, i]))
+                fp.write('\n')
+                
+        
+        

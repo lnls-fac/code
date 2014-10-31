@@ -12,7 +12,7 @@ plot_title = answer{4};
 size_font = 16;
 
 % selects file with random machines and loads it
-fname = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
+%fname = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
 if ~exist('fname','var') || ~exist(fname, 'file')
     default_path = fullfile(lnls_get_root_folder(), 'data','sirius',submachine);
     [FileName,PathName,~] = uigetfile('*.mat','select matlab file with random machines', default_path);

@@ -1,15 +1,18 @@
 %% opt_2:
-% 
-% B_strength = -0.2037;
-% B_sext     = -2.2685; 
-                      
+
 qf_strength = 1.8821;
 qd_strength = 0.0;
 sf_strength = 6.331497;
 sd_strength = 0.0;
 
-%sf_strength = 6.166385798959297; % set chromx = chromy = 0.5
-%sd_strength = 3.226713535043866; % set chromx = chromy = 0.5
+% 2014-10-29 ximenes
+% with new segmented b model
+% tunes corrected to [19.20475, 7.30744]
+% chroms set to [0.5,0.5]
+% qf_strength = +1.882118628753756;
+% qd_strength = -0.883587030955089e-3;
+% sf_strength = 6.167352183794390; 
+% sd_strength = 2.989839869932359; 
 
 
 %% Testes de erros sistematicos nas componentes quadrupolar e sextupolar do Dipolo:

@@ -27,7 +27,6 @@ class SerretFrenetCoordSystem:
             points[:,i] = self.p + grid[i] * self.n
         return points    
 
-    
 class Trajectory:
     
     def __init__(self,
@@ -500,14 +499,31 @@ class Trajectory:
     
         return r
    
-    def save(self, file_name):
+    def save(self, filename):
         
-        with open(file_name, 'w') as fp:
+        with open(filename, 'w') as fp:
             fp.write('# trajectory\n')
             fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
             for i in range(len(self.s)):
                 fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(self.s[i],self.rx[i],self.ry[i],self.rz[i],self.px[i],self.py[i],self.pz[i]))
 
+    def load(self, filename):
+        lines = [line.strip() for line in open(filename)]
+        s,rx,ry,rz,px,py,pz,bx,by,bz = [],[],[],[],[],[],[],[],[],[]
+        for line in lines[2:]:
+            words = line.split()
+            s.append(float(words[0]))
+            rx.append(float(words[1])), ry.append(float(words[2])), rz.append(float(words[3]))
+            px.append(float(words[4])), py.append(float(words[5])), pz.append(float(words[6]))
+        self.s = np.array(s)
+        self.rx, traj.ry, traj.rz = np.array(rx), np.array(ry), np.array(rz)
+        self.px, traj.py, traj.pz = np.array(px), np.array(py), np.array(pz)
+        self.bx, traj.by, traj.bz = np.array(rx), np.array(ry), np.array(rz)
+        # calcs field on reference trajectory
+        for i in range(len(s)):
+            self.bx[i], self.by[i], self.bz[i] = self.fieldmap.interpolate(self.rx[i], self.ry[i], self.rz[i])
+        self.s_step = self.s[1] - self.s[0]
+        
     def calc_sagitta(self, half_dipole_length):
         
         rx = self.rx

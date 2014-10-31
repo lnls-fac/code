@@ -10,7 +10,7 @@ global THERING
 
 energy = 0.15e9; % eV
 
-lattice_version = 'BO.V900';
+lattice_version = 'BO.V901';
 for i=1:length(varargin)
 	energy = varargin{i} * 1e9;
 end
