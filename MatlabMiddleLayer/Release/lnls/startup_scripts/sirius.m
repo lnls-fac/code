@@ -1,22 +1,40 @@
-function sirius_new(varargin)
+function sirius(varargin)
 % Inicializa as estruturas do MML-LNLS e conecta com servidor LNLS1LinkS
 %
 % Historico
 %
+% 2014-10-31: mais posibilidades de especificar submachines.
 % 2011-06-02: copia modificada da versao do LNLS1
 % 2011-04-28: nova versao. script transformado em funcao.
 % 2010-09-16: comentarios iniciais no codigo
 
 Disconnect = false;
 
-default_version = 'SI.V03';
+default_si_version = 'SI.V03';
+default_bo_version = 'BO.V901';
+default_tb_version = 'TB.V300';
+default_ts_version = 'TS.V300';
 
+default_version = default_si_version;
 for i=length(varargin):-1:1
     if ischar(varargin{i})
         if any(strcmpi(varargin{i}, {'SelectServer'})), SelectServer = true; end;
         if any(strcmpi(varargin{i}, {'NoServer'})), NoServer = true; end;
-        if any(strcmpi(varargin{i}, {'Disconnect'})), Disconnect = true; end;
-        if ~isempty(strfind(varargin{i}, 'V')), default_version = varargin{i}; end;
+        if any(strcmpi(varargin{i}, {'Disconnect'})), Disconnect = true; end; 
+        varargin{i} = upper(varargin{i});
+        if isempty(strfind(varargin{i}, 'V'))
+            if strfind(varargin{i}, 'BO')
+                default_version = default_bo_version;
+            elseif strfind(varargin{i}, 'TB')
+                default_version = default_tb_version;
+            elseif strfind(varargin{i}, 'TS')
+                default_version = default_ts_version;
+            elseif strfind(varargin{i}, 'SI')
+                default_version = default_si_version;
+            end
+        else
+            default_version = varargin{i};
+        end
     end
 end
 

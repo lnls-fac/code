@@ -87,8 +87,8 @@ class Multipoles:
             if is_ref_trajectory_flag:
                 # trajectory is a reference trajectory
                 field = fieldmap_field - np.tile(reference_field[:,i].reshape((3,1)), (1, len(grid)))
-                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
-                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
+                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials, s=s[i], print_flag=False)
+                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials, s=s[i], print_flag=False)
             else:
                 # trajectory is not a reference trajectory
                 #field = fieldmap_field - np.tile(fieldmap_field[:,grid_zero].reshape((3,1)), (1, len(grid)))
@@ -97,8 +97,8 @@ class Multipoles:
 #                 self.polynom_a[0,i] = fieldmap_field[0,grid_zero]
 #                 self.polynom_b[0,i] = fieldmap_field[1,grid_zero]
                 field = fieldmap_field
-                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
-                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
+                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials, algorithm='lstsq', s=s[i], print_flag=False)
+                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials, algorithm='lstsq', s=s[i], print_flag=False)
                 
     def calc_multipoles_integrals(self):
         monomials = self.fitting_monomials

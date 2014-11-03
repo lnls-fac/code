@@ -2,7 +2,7 @@ function lnls_plot_cod
 
 
 prompt = {'Submachine (bo/si)', 'COD unit (um/mm)', 'symmetry', 'plot title'};
-defaultanswer = {'bo', 'um', '10', 'Booster V900'};
+defaultanswer = {'bo', 'um', '10', 'Booster V901'};
 answer = inputdlg(prompt,'Select submachine and trackcpp algorithms to run',1,defaultanswer);
 if isempty(answer), return; end;
 submachine = answer{1};
@@ -75,8 +75,8 @@ min_y = min(min(y));
 lnls_drawlattice(machine{1}, symmetry, min_y - 0.1 * (max_y-min_y), 1, 0.05 * (max_y-min_y)/2);
 
 for i=1:size(x,1)
-    plot(s, abs(x(i,:)),  'color', [0.6 0.6 1.0]);
-    plot(s, -abs(y(i,:)), 'color', [1.0 0.6 0.6]);
+    plot(s, abs(x(i,:)),  'color', [0.5 0.5 1.0]);
+    plot(s, -abs(y(i,:)), 'color', [1.0 0.5 0.5]);
 end
 plot(s, abs(x_std),  'color', [0 0 1], 'LineWidth', 3);
 plot(s, -abs(y_std),  'color', [1 0 0], 'LineWidth', 3);

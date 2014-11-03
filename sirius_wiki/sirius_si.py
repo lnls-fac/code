@@ -99,9 +99,9 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Storage ring number of skew correctors',
+    name     = 'Storage ring number of skew quadrupoles',
     group    = 'FAC',
-    value    = Prms.si_number_of_skew_correctors,
+    value    = Prms.si_number_of_skew_quadrupoles,
     symbol   = r'<math>N_\text{skew}</math>',
     units    = '',
     deps     = [],
@@ -149,9 +149,9 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Storage ring skew corrector maximum integrated strength',
+    name     = 'Storage ring skew quadrupole maximum integrated strength',
     group    = 'FAC',
-    value    = Prms.si_skew_corrector_maximum_integrated_strength,
+    value    = Prms.si_skew_quadrupole_maximum_integrated_strength,
     symbol   = r'<math>\theta^\text{fast}_\text{y, max}</math>',
     units    = 'm<sup>-1</sup>',
     deps     = [],

@@ -25,7 +25,8 @@ else
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics', 'oficial', 'v900', 'multi.cod.physap', 'cod_matlab');
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics', 'calcs', 'v900', 'multi.cod.physap.bpm.error.free', 'cod_matlab');
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics', 'calcs', 'v900', 'multi.cod.physap.chroms.corrected', 'cod_matlab');
-    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics', 'calcs', 'v900', 'multi.cod.physap.new.b.model.tune.chroms.corrected', 'cod_matlab');
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics','calcs','v901','multi.cod.physap.prev.bend.sys.multipoles','cod_matlab');
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics','calcs','v901','multi.cod.physap.new.qf.multipoles','cod_matlab');
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics', 'oficial', 'v810', 'multi.cod.physap', 'cod_matlab');                     
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'bo', 'beam_dynamics', 'oficial', 'v810', 'multi.cod.physap.corr.mult.off', 'cod_matlab');                     
 end
