@@ -1382,42 +1382,62 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster extraction QF quadrupole maximum gradient',
+    name     = 'Booster QF quadrupole maximum strength',
     group    = 'FAC',
-    value    = Prms.bo_extraction_QF_quadrupole_maximum_gradient,
-    symbol   = r"<math>B'_\text{QF,max}</math>",
-    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    value    = Prms.bo_QF_quadrupole_maximum_strength,
+    symbol   = r"<math>K_\text{QF,max}</math>",
+    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
     deps     = [],
     obs      = [],
   ),
-                
-  Parameter(
-    name     = 'Booster extraction QD quadrupole maximum absolute gradient',
-    group    = 'FAC',
-    value    = Prms.bo_extraction_QD_quadrupole_maximum_absolute_gradient,
-    symbol   = r"<math>B'_\text{QD,max}</math>",
-    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
-    deps     = [],
-    obs      = ['Bipolar.'],
-  ),
-                
+
   Parameter(
     name     = 'Booster injection QF quadrupole maximum gradient',
     group    = 'FAC',
     value    = Prms.bo_injection_QF_quadrupole_maximum_gradient,
-    symbol   = r"<math>B'_\text{QF,max}</math>",
+    symbol   = r"<math>B'_\text{QF,max,inj}</math>",
     units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    deps     = ['Booster QF quadrupole maximum strength', 'Booster injection beam magnetic rigidity'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction QF quadrupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_QF_quadrupole_maximum_gradient,
+    symbol   = r"<math>B'_\text{QF,max,ext}</math>",
+    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    deps     = ['Booster QF quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = [],
+  ),
+        
+  Parameter(
+    name     = 'Booster QD quadrupole maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_QD_quadrupole_maximum_strength,
+    symbol   = r"<math>K_\text{QD,max}</math>",
+    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
     deps     = [],
     obs      = [],
   ),
-                
+     
   Parameter(
-    name     = 'Booster injection QD quadrupole maximum absolute gradient',
+    name     = 'Booster injection QD quadrupole maximum gradient',
     group    = 'FAC',
-    value    = Prms.bo_injection_QD_quadrupole_maximum_absolute_gradient,
-    symbol   = r"<math>B'_\text{QD,max}</math>",
+    value    = Prms.bo_injection_QD_quadrupole_maximum_gradient,
+    symbol   = r"<math>B'_\text{QD,max,inj}</math>",
     units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
-    deps     = [],
+    deps     = ['Booster QD quadrupole maximum strength', 'Booster injection beam magnetic rigidity'],
+    obs      = ['Bipolar.'],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction QD quadrupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_QD_quadrupole_maximum_gradient,
+    symbol   = r"<math>B'_\text{QD,max,ext}</math>",
+    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    deps     = ['Booster QD quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
     obs      = ['Bipolar.'],
   ),
                 

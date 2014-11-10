@@ -79,6 +79,7 @@ class Multipoles:
             #monomials.remove(0) 
             pass
         
+        self.max_fit_error = (0,0)
         for i in range(len(s)):
             #print(str(i) + '/' + str(len(s)))
             sf = fieldmaptrack.SerretFrenetCoordSystem(self.trajectory, i)
@@ -87,8 +88,10 @@ class Multipoles:
             if is_ref_trajectory_flag:
                 # trajectory is a reference trajectory
                 field = fieldmap_field - np.tile(reference_field[:,i].reshape((3,1)), (1, len(grid)))
-                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials, s=s[i], print_flag=False)
-                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials, s=s[i], print_flag=False)
+                self.polynom_a[:,i], max_error = mathphys.functions.polyfit(grid_meter, field[0,:], monomials)
+                self.max_fit_error = max_error if max_error[0] > self.max_fit_error[0] else self.max_fit_error
+                self.polynom_b[:,i], max_error = mathphys.functions.polyfit(grid_meter, field[1,:], monomials)
+                self.max_fit_error = max_error if max_error[0] > self.max_fit_error[0] else self.max_fit_error
             else:
                 # trajectory is not a reference trajectory
                 #field = fieldmap_field - np.tile(fieldmap_field[:,grid_zero].reshape((3,1)), (1, len(grid)))
@@ -97,8 +100,10 @@ class Multipoles:
 #                 self.polynom_a[0,i] = fieldmap_field[0,grid_zero]
 #                 self.polynom_b[0,i] = fieldmap_field[1,grid_zero]
                 field = fieldmap_field
-                self.polynom_a[:,i] = mathphys.functions.polyfit(grid_meter, field[0,:], monomials, algorithm='lstsq', s=s[i], print_flag=False)
-                self.polynom_b[:,i] = mathphys.functions.polyfit(grid_meter, field[1,:], monomials, algorithm='lstsq', s=s[i], print_flag=False)
+                self.polynom_a[:,i], max_error = mathphys.functions.polyfit(grid_meter, field[0,:], monomials, algorithm='lstsq')
+                self.max_fit_error = max_error if max_error[0] > self.max_fit_error[0] else self.max_fit_error
+                self.polynom_b[:,i], max_error = mathphys.functions.polyfit(grid_meter, field[1,:], monomials, algorithm='lstsq')
+                self.max_fit_error = max_error if max_error[0] > self.max_fit_error[0] else self.max_fit_error
                 
     def calc_multipoles_integrals(self):
         monomials = self.fitting_monomials
@@ -131,11 +136,11 @@ class Multipoles:
         self.polynom_a_hardedge = (self.polynom_a_integral / signed_brho) / half_hedge_len    
         self.polynom_b_hardedge = (self.polynom_b_integral / signed_brho) / half_hedge_len
         
-        for i in range(len(self.polynom_b_integral_relative)):
-            if self.polynom_a_integral_relative[i] == 1.0:
-                self.polynom_a_hardedge[i] = 0.0
-            if self.polynom_b_integral_relative[i] == 1.0:
-                self.polynom_b_hardedge[i] = 0.0
+#         for i in range(len(self.polynom_b_integral_relative)):
+#             if self.polynom_a_integral_relative[i] == 1.0:
+#                 self.polynom_a_hardedge[i] = 0.0
+#             if self.polynom_b_integral_relative[i] == 1.0:
+#                 self.polynom_b_hardedge[i] = 0.0
                         
     def __str__(self):
         
@@ -146,6 +151,7 @@ class Multipoles:
         
         r = ''
         r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in [{1:+f},{2:+f}] mm'.format(nrpts, grid_min, grid_max))
+        r += '\n{0:<35s} {1:.3f}/{2:.3f} G/G'.format('max_fitting_error', 1e4*self.max_fit_error[0], 1e4*abs(self.max_fit_error[1]))
         r += '\n{0:<35s} {1} mm'.format('r0_for_relative_multipoles', self.r0) 
         r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} {7:^12s} | {3:^12s} {4:^12s} {6:^12s} {8:^12s}'.format('<multipole_order n>', 'MaxAbs_Nn', 'Integ_Nn', 'MaxAbs_Sn', 'Integ_Sn', 'Nn/N0(@r0)', 'Sn/S0(@r0)', 'PolynomB', 'PolynomA')
         r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} {7:^12s} | {3:^12s} {4:^12s} {6:^12s} {8:^12s}'.format('<multipole_order n>', '[T/m^n]', '[T.m/m^n]', '[T/m^n]', '[T.m/m^n]', '[]', '[]', '[1/m^n+1]', '[1/m^n+1]')

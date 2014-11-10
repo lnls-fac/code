@@ -466,8 +466,6 @@ class ParameterDefinitions(object):
         bo_injection_beam_energy,
         bo_injection_beam_beta_factor)
     bo_injection_dipole_magnetic_field = bo_injection_beam_magnetic_rigidity / bo_dipole_bending_radius
-    bo_injection_QF_quadrupole_maximum_gradient          = 1.0132009391643900 # [T/m]
-    bo_injection_QD_quadrupole_maximum_absolute_gradient = 0.1250865356993070 # [T/m]
     bo_injection_synchrotron_tune                        = 0.009655851289284
 
     '''extraction'''
@@ -481,8 +479,6 @@ class ParameterDefinitions(object):
     bo_extraction_synchrotron_tune  = 0.004419254284301
 
     bo_extraction_dipole_magnetic_field = bo_extraction_beam_magnetic_rigidity / bo_dipole_bending_radius
-    bo_extraction_QF_quadrupole_maximum_gradient = 20.2640187832877 # [T/m]
-    bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
     bo_extraction_revolution_period = optics.revolution_period(bo_circumference, bo_extraction_beam_velocity)
     bo_extraction_revolution_frequency = optics.revolution_frequency(bo_extraction_revolution_period)
     bo_extraction_radiation_integral_I1 =  0.357375949836236 # [m]
@@ -582,15 +578,30 @@ class ParameterDefinitions(object):
     bo_random_skew_18_pole_error_tolerance_for_dipoles       =  1.0e-4
 
     ''' quadrupoles '''
-    bo_hardedge_length_of_short_quadrupoles = 0.2 # [m]
-    bo_hardedge_length_of_long_quadrupoles  = 0.2 # [m]
     bo_number_of_QF_quadrupoles = 50
     bo_number_of_QD_quadrupoles = 25
+    bo_hardedge_length_of_short_quadrupoles = 0.2 # [m]
+    bo_hardedge_length_of_long_quadrupoles  = 0.2 # [m]
     bo_hardedge_length_of_QF_quadrupoles = bo_hardedge_length_of_long_quadrupoles # [m]
     bo_hardedge_length_of_QD_quadrupoles = bo_hardedge_length_of_short_quadrupoles # [m]
-    bo_quadrupoles_alignment_error_tolerance = 100 # [μm]    
-    bo_quadrupoles_rotation_error_tolerance = 0.5 # [mrad]
+    
+    bo_QF_quadrupole_maximum_strength                     = 2.025 # [1/m^2] 
+    bo_injection_QF_quadrupole_maximum_gradient           = bo_QF_quadrupole_maximum_strength *  bo_injection_beam_magnetic_rigidity # [T/m]
+    bo_extraction_QF_quadrupole_maximum_gradient          = bo_QF_quadrupole_maximum_strength *  bo_extraction_beam_magnetic_rigidity # [T/m]
+
+    bo_QD_quadrupole_maximum_strength                     = 0.250 # [1/m^2] 
+    bo_injection_QD_quadrupole_maximum_gradient           = bo_QD_quadrupole_maximum_strength *  bo_injection_beam_magnetic_rigidity # [T/m]
+    bo_extraction_QD_quadrupole_maximum_gradient          = bo_QD_quadrupole_maximum_strength *  bo_extraction_beam_magnetic_rigidity # [T/m]
+
+    #bo_injection_QF_quadrupole_maximum_gradient           = 1.0132009391643900 # [T/m]
+    #bo_extraction_QF_quadrupole_maximum_gradient          = 20.2640187832877   # [T/m]
+    #bo_injection_QD_quadrupole_maximum_absolute_gradient  = 0.1250865356993070 # [T/m]    
+    #bo_extraction_QD_quadrupole_maximum_absolute_gradient = 2.5017307139861400 # [T/m]
+
+    bo_quadrupoles_alignment_error_tolerance  = 100 # [μm]    
+    bo_quadrupoles_rotation_error_tolerance   = 0.5 # [mrad]
     bo_quadrupoles_excitation_error_tolerance = 0.2 # [%]
+    
     bo_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
     bo_systematic_normal_12_pole_error_tolerance_for_quadrupoles = -1.00e-3
     bo_systematic_normal_20_pole_error_tolerance_for_quadrupoles = +1.10e-3
