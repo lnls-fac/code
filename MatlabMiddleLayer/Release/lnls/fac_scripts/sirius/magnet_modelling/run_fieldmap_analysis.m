@@ -28,7 +28,8 @@ if ~exist('config_file','var')
     %parms = load_config('SIRIUS_QF_MODELO3');
     %parms = load_config('SIRIUS_QD');
     %parms = load_config('SIRIUS_QFC');
-    parms = load_config('SIRIUS_BC_MODELO1_GAP8MM');
+    %parms = load_config('SIRIUS_BC_MODELO1_GAP8MM');
+    parms = load_config('BOOSTER_B_MODELO6-test', 'bo', 'b/old');
 else
     parms = feval(config_file);
 end

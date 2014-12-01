@@ -1382,11 +1382,71 @@ parameter_list = [
   ),
 
   Parameter(
+    name     = 'Booster SF sextupole maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_SF_sextupole_maximum_strength,
+    symbol   = r"<math>\frac{1}{2} S_\text{QF,max}</math>",
+    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster injection SF sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_injection_SF_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B''_\text{SF,max,inj}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster QF sextupole maximum strength', 'Booster injection beam magnetic rigidity'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction SF sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_SF_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B''_\text{SF,max,ext}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster QF sextupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = [],
+  ),
+        
+  Parameter(
+    name     = 'Booster SD sextupole maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_SD_sextupole_maximum_strength,
+    symbol   = r"<math>\frac{1}{2} S_\text{SD,max}</math>",
+    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
+    deps     = [],
+    obs      = [],
+  ),
+     
+  Parameter(
+    name     = 'Booster injection SD sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_injection_SD_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B''_\text{SD,max,inj}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster SD sextupole maximum strength', 'Booster injection beam magnetic rigidity'],
+    obs      = ['Bipolar.'],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction SD sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_SD_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B'_\text{SD,max,ext}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster QD sextupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = ['Bipolar.'],
+  ),
+
+  Parameter(
     name     = 'Booster QF quadrupole maximum strength',
     group    = 'FAC',
     value    = Prms.bo_QF_quadrupole_maximum_strength,
     symbol   = r"<math>K_\text{QF,max}</math>",
-    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
+    units    = unicode('m<sup>-2</sup>', encoding='utf-8'),
     deps     = [],
     obs      = [],
   ),
@@ -1416,7 +1476,7 @@ parameter_list = [
     group    = 'FAC',
     value    = Prms.bo_QD_quadrupole_maximum_strength,
     symbol   = r"<math>K_\text{QD,max}</math>",
-    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
+    units    = unicode('m<sup>-2</sup>', encoding='utf-8'),
     deps     = [],
     obs      = [],
   ),
@@ -1439,16 +1499,6 @@ parameter_list = [
     units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
     deps     = ['Booster QD quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
     obs      = ['Bipolar.'],
-  ),
-                
-  Parameter(
-    name     = 'Booster maximum integrated sextupole',
-    group    = 'FAC',
-    value    = Prms.bo_maximum_integrated_sextupole,
-    symbol   = r"<math>\left( \int \frac{B''}{2}\,\mathrm{d}s \right)_\text{max}</math>",
-    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
-    deps     = [],
-    obs      = [],
   ),
                 
   Parameter(

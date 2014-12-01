@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import fieldmaptrack
 import math
+from fieldmaptrack.common_analysis import *
 
 class Config:
     
@@ -25,6 +26,8 @@ class Config:
         self.traj_force_midplane_flag = True
         self.traj_is_reference_traj = False
         self.multipoles_r0 = None
+        self.model_segmentation = None
+        self.model_multipoles_integral = None
                       
 def raw_fieldmap_analysis(config):
         
@@ -194,7 +197,7 @@ def trajectory_analysis(config):
         
     # saves field on trajectory in file
     config.traj.save_field(filename='field_on_trajectory.txt')
-    
+
     return config
 
 def multipoles_analysis(config):
@@ -211,10 +214,9 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.polynom_b_integral, 0, r0 = config.multipoles_r0)
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, 0, r0 = config.multipoles_r0)
     config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
-        
-         
+             
     # saves multipoles to file
     config.multipoles.save('multipoles.txt')
     
@@ -229,7 +231,7 @@ def multipoles_analysis(config):
              config.config_fig_number += 1
         except:
             config.config_fig_number = 1
-        x,y = config.traj.rz, config.multipoles.polynom_b[n,:]
+        x,y = config.traj.rz, config.multipoles.normal_multipoles[n,:]
         ylabel, title, fname = config.multipoles.get_multipole_labels('normal',n)
         plt.plot(x,y)
         plt.grid(True)
@@ -239,4 +241,43 @@ def multipoles_analysis(config):
         plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + fname + '.pdf')
         plt.clf()
     
+    # plots residual field 
+    #config = plot_residual_field_in_curvilinear_system(config)
+    config = plot_residual_field(config)
     return config
+
+def model_analysis(config):
+    
+    # creates AT model
+    config = create_AT_model(config, config.model_segmentation)
+    
+    # adds discrepancy of deflection angle as error in polynomb[0]
+    l = np.array(config.model_segmentation) / 1000.0
+    m = config.model_multipoles_integral.transpose() / (-config.beam.brho)
+    mi = np.sum(m, axis=1)
+    fmap_deflection    = mi[0]
+    nominal_deflection = abs(config.model_nominal_angle/2)*(math.pi/180.0)
+    error_polynomb = nominal_deflection - fmap_deflection
+    
+    # prints info on model
+    print('--- model polynom_b (rz > 0) ---')
+    fstr = '{0:<6.4f} {1:<+13.06e} '
+    for i in range(m.shape[0]):
+        fstr += '{'+str(i+2)+':<+13.6e} '
+    for i in range(len(l)):
+        val = [l[i]] + [m[0,i]] + list(m[:,i] / l[i])
+        if i == len(l)-1:
+            val[2] = error_polynomb
+        else:
+            val[2] = 0.0
+        print(fstr.format(*val))
+    val = [sum(l)] + [sum(m[0,:])] + [0.0] + list(mi[1:]) 
+    print('---')
+    print(fstr.format(*val))
+    
+    
+     
+    
+    
+    
+    

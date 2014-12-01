@@ -24,7 +24,7 @@ class Config:
         self.traj_load_filename = None
         self.traj_init_rx = None
         self.multipoles_r0 = None
-                      
+  
 def multipoles_analysis(config):
     
     if config.multipoles_perpendicular_grid is None:
@@ -39,9 +39,8 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.polynom_b_integral, main_monomial = 2, r0 = config.multipoles_r0)
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.polynom_b_integral, main_monomial = 0, r0 = config.multipoles_r0)
     config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
-        
          
     # saves multipoles to file
     config.multipoles.save('multipoles.txt')
