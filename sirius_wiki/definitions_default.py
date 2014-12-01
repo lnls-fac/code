@@ -628,7 +628,16 @@ class ParameterDefinitions(object):
     bo_number_of_SD_sextupoles = 10
     bo_hardedge_length_of_SF_sextupoles = 0.2 # [m]
     bo_hardedge_length_of_SD_sextupoles = 0.2 # [m]
-    bo_maximum_integrated_sextupole = 20.0138457118891 # B''L/2 [T/m]
+
+
+    bo_SF_sextupole_maximum_strength                     = 10.000 # [1/m^3] 
+    bo_injection_SF_sextupole_maximum_gradient           = bo_SF_sextupole_maximum_strength *  bo_injection_beam_magnetic_rigidity # [T/m^2]
+    bo_extraction_SF_sextupole_maximum_gradient          = bo_SF_sextupole_maximum_strength *  bo_extraction_beam_magnetic_rigidity # [T/m^2]
+
+    bo_SD_sextupole_maximum_strength                    = 10.000 # [1/m^3] 
+    bo_injection_SD_sextupole_maximum_gradient          = bo_SD_sextupole_maximum_strength *  bo_injection_beam_magnetic_rigidity # [T/m^2]
+    bo_extraction_SD_sextupole_maximum_gradient         = bo_SD_sextupole_maximum_strength *  bo_extraction_beam_magnetic_rigidity # [T/m^2]
+
     bo_sextupoles_alignment_error_tolerance = 100 # [μm]
     bo_sextupoles_rotation_error_tolerance = 0.5 # [mrad]
     bo_sextupoles_excitation_error_tolerance = 0.2 # [%]
