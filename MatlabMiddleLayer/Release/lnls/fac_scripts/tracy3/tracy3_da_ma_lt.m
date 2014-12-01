@@ -15,13 +15,13 @@ function tracy3_da_ma_lt(n_calls, the_ring)
 % primeira fase
 twi = calctwiss(the_ring);
 
-% params.emit0 = 2.7e-10;
-% params.E     = 3e9;
-% params.N     = 100e-3/864/1.601e-19*1.72e-6;
-% params.sigE  = 0.87e-3;
-% params.sigS  = 3.5e-3;
-% params.K     = 0.01;
-% accepRF      = 0.05;
+params.emit0 = 2.7e-10;
+params.E     = 3e9;
+params.N     = 100e-3/864/1.601e-19*1.72e-6;
+params.sigE  = 0.87e-3;
+params.sigS  = 3.5e-3;
+params.K     = 0.01;
+accepRF      = 0.05;
 
 %% storage ring 
 % params.emit0 = 2.05e-10;
@@ -42,13 +42,13 @@ twi = calctwiss(the_ring);
 % accepRF      = 0.0061;
 
 % BOOSTER E = 0.15 GeV
-params.emit0 = 170e-9; % linac
-params.E     = 0.15e9;
-params.N     = 0.6e-3/1/1.601e-19*1.72e-6;
-params.sigE  = 5e-3;    % linac
-params.sigS  = 11.2e-3; % linac
-params.K     = 0.0002;
-accepRF      = 0.033;
+% params.emit0 = 170e-9; % linac
+% params.E     = 0.15e9;
+% params.N     = 0.6e-3/1/1.601e-19*1.72e-6;
+% params.sigE  = 5e-3;    % linac
+% params.sigS  = 11.2e-3; % linac
+% params.K     = 0.0002;
+% accepRF      = 0.033;
 
 
 % parâmetros para a geração das figuras
@@ -65,7 +65,7 @@ xf = xi + scrsz(4)*(2/3);
 yf = yi + scrsz(4)*(2/3);
 
 % if ~exist('var_plane','var')
-var_plane = 'y'; %determinaçao da abertura dinâmica por varreduda no plano y
+var_plane = 'x'; %determinaçao da abertura dinâmica por varreduda no plano x
 % end
 
 path = '/home/fac_files/data/sirius';
