@@ -38,7 +38,7 @@ set_magnets_strength_booster;
 [bd, b_length_segmented] = dipole_segmented_model(bend_pass_method);
 
 b_length_hedge     = 1.152; % [m]
-b_length_segmented = 1.538; % [m]
+% b_length_segmented = 1.538; % [m]
 half_model_diff     = (b_length_segmented - b_length_hedge)/2.0;
 
 lt       = drift('lt',      2.146000, 'DriftPass');

@@ -157,7 +157,7 @@ plot(coordy_x'*1e3,coordyl_x'*1e3,'b.','Parent',axes12);
 % e por fim o diagrama de sintonias
 axes13 = subplot(1,3,3,'Parent',figure1,'FontSize',16);
 ylabel(axes13,'\nu_y'); xlabel(axes13,'\nu_x');
-tunespaceplot(tunes(1)+[-0.25 +0.25],tunes(2)+[-0.25 +0.25],resons,axes13);
+tunespaceplot(floor(tunes(1))+[-0.05 +0.55], floor(tunes(2))+[-0.05 +0.55],resons,axes13);
 hold(axes13,'all');
 plot(tunex_y,tuney_y,'r.','Parent',axes13);
 plot(tunex_x,tuney_x,'b.','Parent',axes13);
