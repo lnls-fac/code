@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import fieldmaptrack
 import math
-from fieldmaptrack.common_analysis import *
+from   fieldmaptrack.common_analysis import *
+import fieldmaptrack.track as track
+
 
 class Config:
     
@@ -28,7 +30,9 @@ class Config:
         self.multipoles_r0 = None
         self.model_segmentation = None
         self.model_multipoles_integral = None
-                      
+                 
+                 
+
 def raw_fieldmap_analysis(config):
         
     if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
@@ -175,7 +179,7 @@ def trajectory_analysis(config):
         config.beam = fieldmaptrack.Beam(energy = config.beam_energy)
         config.traj = fieldmaptrack.Trajectory(beam=config.beam, fieldmap=config.fmap)
         config.traj.load(config.traj_load_filename)
-        config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
+        config.traj_sagitta = config.traj.calc_sagitta(half_dipole_length)
     else:
         if config.traj_is_reference_traj:
             # rescale field so that nominal deflection is reached
@@ -215,7 +219,7 @@ def multipoles_analysis(config):
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
     config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, 0, r0 = config.multipoles_r0)
-    config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
+    #config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
              
     # saves multipoles to file
     config.multipoles.save('multipoles.txt')

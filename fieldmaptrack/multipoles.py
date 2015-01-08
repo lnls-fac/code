@@ -131,7 +131,7 @@ class Multipoles:
             self.skew_multipoles_integral_relative[i]   = self.skew_multipoles_integral[i]   * (r0 ** n) / main_multipole
             self.normal_multipoles_integral_relative[i] = self.normal_multipoles_integral[i] * (r0 ** n) / main_multipole
                    
-    def calc_hardedge_polynomials(self,model_hardedge_length):
+    def cccalc_hardedge_polynomials(self,model_hardedge_length):
         
         beam = self.trajectory.beam
         half_hedge_len = 0.5 * model_hardedge_length * mathphys.units.mm_2_meter
@@ -139,11 +139,6 @@ class Multipoles:
         self.polynom_a_hardedge = (self.skew_multipoles_integral / signed_brho) / half_hedge_len    
         self.polynom_b_hardedge = (self.normal_multipoles_integral / signed_brho) / half_hedge_len
         
-#         for i in range(len(self.polynom_b_integral_relative)):
-#             if self.polynom_a_integral_relative[i] == 1.0:
-#                 self.polynom_a_hardedge[i] = 0.0
-#             if self.polynom_b_integral_relative[i] == 1.0:
-#                 self.polynom_b_hardedge[i] = 0.0
                            
     def __str__(self):
         
@@ -156,8 +151,8 @@ class Multipoles:
         r += '{0:<35s} {1}'.format('perpendicular_grid:', '{0} points in [{1:+f},{2:+f}] mm'.format(nrpts, grid_min, grid_max))
         r += '\n{0:<35s} {1:.3f}/{2:.3f} G/G'.format('max_fitting_error', 1e4*self.max_fit_error[0], 1e4*abs(self.max_fit_error[1]))
         r += '\n{0:<35s} {1} mm'.format('r0_for_relative_multipoles', self.r0) 
-        r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} {7:^12s} | {3:^12s} {4:^12s} {6:^12s} {8:^12s}'.format('<multipole_order n>', 'MaxAbs_Nn', 'Integ_Nn', 'MaxAbs_Sn', 'Integ_Sn', 'Nn/N0(@r0)', 'Sn/S0(@r0)', 'PolynomB', 'PolynomA')
-        r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} {7:^12s} | {3:^12s} {4:^12s} {6:^12s} {8:^12s}'.format('<multipole_order n>', '[T/m^n]', '[T.m/m^n]', '[T/m^n]', '[T.m/m^n]', '[]', '[]', '[1/m^n+1]', '[1/m^n+1]')
+        r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} | {3:^12s} {4:^12s} {6:^12s}'.format('                   ', 'MaxAbs_Nn', 'Integ_Nn', 'MaxAbs_Sn', 'Integ_Sn', 'Nn/N0(@r0)', 'Sn/S0(@r0)')
+        r += '\n{0:<35s} {1:^12s} {2:^12s} {5:^12s} | {3:^12s} {4:^12s} {6:^12s}'.format('<multipole_order n>', '[T/m^n]', '[T.m/m^n]', '[T/m^n]', '[T.m/m^n]', '[]', '[]')
         for i in range(len(monomials)):
             n = monomials[i]
             max_poly_a = max(np.abs(self.skew_multipoles[i,:]))
@@ -165,10 +160,8 @@ class Multipoles:
             integ_poly_a = self.skew_multipoles_integral[i]
             integ_poly_b = self.normal_multipoles_integral[i]
             integ_poly_a_relative = self.skew_multipoles_integral_relative[i]
-            integ_poly_b_relative = self.normal_multipoles_integral_relative[i]
-            polynom_a = self.polynom_a_hardedge[i]
-            polynom_b = self.polynom_b_hardedge[i]
-            r += '\n{0:35s} {1:^12.3e} {2:^+12.3e} {5:^+12.4e} {7:^+12.3e} | {3:^12.3e} {4:^+12.3e} {6:^+12.3e} {8:^+12.3e}'.format('n={0:02d}:'.format(n), max_poly_b, integ_poly_b, max_poly_a, integ_poly_a, integ_poly_b_relative, integ_poly_a_relative, polynom_b, polynom_a)
+            integ_poly_b_relative = self.normal_multipoles_integral_relative[i]        
+            r += '\n{0:35s} {1:^12.3e} {2:^+12.3e} {5:^+12.4e} | {3:^12.3e} {4:^+12.3e} {6:^+12.3e}'.format('n={0:02d}:'.format(n), max_poly_b, integ_poly_b, max_poly_a, integ_poly_a, integ_poly_b_relative, integ_poly_a_relative) 
         return r
 
     def save(self, filename):

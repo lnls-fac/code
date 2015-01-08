@@ -525,9 +525,9 @@ class Trajectory:
             rx.append(float(words[1])), ry.append(float(words[2])), rz.append(float(words[3]))
             px.append(float(words[4])), py.append(float(words[5])), pz.append(float(words[6]))
         self.s = np.array(s)
-        self.rx, traj.ry, traj.rz = np.array(rx), np.array(ry), np.array(rz)
-        self.px, traj.py, traj.pz = np.array(px), np.array(py), np.array(pz)
-        self.bx, traj.by, traj.bz = np.array(rx), np.array(ry), np.array(rz)
+        self.rx, self.ry, self.rz = np.array(rx), np.array(ry), np.array(rz)
+        self.px, self.py, self.pz = np.array(px), np.array(py), np.array(pz)
+        self.bx, self.by, self.bz = np.array(rx), np.array(ry), np.array(rz)
         # calcs field on reference trajectory
         for i in range(len(s)):
             self.bx[i], self.by[i], self.bz[i] = self.fieldmap.interpolate(self.rx[i], self.ry[i], self.rz[i])

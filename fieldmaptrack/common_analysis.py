@@ -4,6 +4,44 @@ import fieldmaptrack
 import math
 from fieldmaptrack.track import Trajectory
 
+class Config:   
+    def __init__(self, fname = None):
+        if fname is not None:
+            with open(fname, 'r') as fp:
+                content = fp.read()
+            lines = content.split('\n')
+            for line in lines:
+                line = line.strip()
+                if len(line) == 0: continue
+                if line[0] is not '#':
+                    attribute, _, value = line.partition(' ')
+                    value = value.strip()
+                    strcode = 'self.{0} = {1}'.format(attribute, value)
+                    #if (value.lower() == 'false') or (value.lower() == 'true'):
+                    #    value = value.lower() in ['true', 'on', 'yes']
+                    #else:
+                    #    try:
+                    #        value = float(value)
+                    #    except:
+                    #        pass
+                    #setattr(self,attribute, value)
+                    exec(strcode)
+            
+          
+def get_analysis_symbol(magnet_type):
+    if magnet_type == 'dipole':
+        import fieldmaptrack.dipole_analysis as dipole_analysis
+        return dipole_analysis
+    if magnet_type == 'quadrupole':
+        import fieldmaptrack.quadrupole_analysis as quadrupole_analysis
+        return quadrupole_analysis
+    if magnet_type == 'sextupole':
+        import fieldmaptrack.sextupole_analysis as sextupole_analysis
+        return sextupole_analysis
+    if config.magnet_type == 'corrector':
+        import fieldmaptrack.corrector_analysis as corrector_analysis
+        return corrector_analysis
+    
 def raw_fieldmap_analysis(config):
         
     if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
