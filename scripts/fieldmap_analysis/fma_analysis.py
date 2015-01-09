@@ -42,38 +42,45 @@ def clean():
 
 def run():
 
-    print('1/6 - cleaning directory...'), os.system('./fma_analysis.py clean')
-    print('2/6 - rawfield analysis...'), os.system('./fma_rawfield.py > rawfield.out')
-    print('3/6 - trajectory calculation...'), os.system('./fma_trajectory.py > trajectory.out')
-    print('4/6 - multipoles calculation...'), os.system('./fma_multipoles.py > multipoles.out')
-    print('5/6 - model creation...'), os.system('./fma_model.py > model.out')
+    print('1/6 - cleaning directory...'), os.system('fma_analysis.py clean')
+    print('2/6 - rawfield analysis...'), os.system('fma_rawfield.py > rawfield.out')
+    print('3/6 - trajectory calculation...'), os.system('fma_trajectory.py > trajectory.out')
+    print('4/6 - multipoles calculation...'), os.system('fma_multipoles.py > multipoles.out')
+    print('5/6 - model creation...'), os.system('fma_model.py > model.out')
     print('6/6 - analysis summary and visualization...'), summary()
 
 def summary():
+
+
+    os.system('rm -rf analysis.txt')
 
     ''' reads and prints summary '''
     try:
         with open('rawfield.out', 'r') as fp:
             content = fp.read()
         print(content)
+        os.system('cat rawfield.out >> analysis.txt')
     except:
         pass
     try:
         with open('trajectory.out', 'r') as fp:
             content = fp.read()
         print(content)
+        os.system('cat trajectory.out >> analysis.txt')
     except:
         pass
     try:
         with open('multipoles.out', 'r') as fp:
             content = fp.read()
         print(content)
+        os.system('cat multipoles.out >> analysis.txt')
     except:
         pass
     try:
         with open('model.out', 'r') as fp:
             content = fp.read()
         print(content)
+        os.system('cat model.out >> analysis.txt')
     except:
         pass
 
@@ -94,6 +101,19 @@ def summary():
         pass
 
 
+def rawfield():
+    os.system('fma_rawfield.py > rawfield.out')
+
+def trajectory():
+    os.system('fma_trajectory.py > trajectory.out')
+
+def multipoles():
+    os.system('fma_multipoles.py > multipoles.out')
+
+def model():
+    os.system('fma_model.py > model.out')
+
+
 if len(sys.argv) != 2:
     help()
 if sys.argv[1] == 'help':
@@ -104,4 +124,16 @@ if sys.argv[1] == 'run':
     run()
 if sys.argv[1] == 'edit':
     edit()
+if sys.argv[1] == 'rawfield':
+    rawfield()
+if sys.argv[1] == 'trajectory':
+    trajectory()
+if sys.argv[1] == 'multipoles':
+    multipoles()
+if sys.argv[1] == 'model':
+    model()
+if sys.argv[1] == 'summary':
+    summary()
+
+
 

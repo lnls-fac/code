@@ -5,7 +5,6 @@ import math
 from   fieldmaptrack.common_analysis import *
 import fieldmaptrack.track as track
 
-
 class Config:
     
     def __init__(self):
@@ -30,60 +29,6 @@ class Config:
         self.multipoles_r0 = None
         self.model_segmentation = None
         self.model_multipoles_integral = None
-                 
-                 
-
-def raw_fieldmap_analysis(config):
-        
-    if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
-        config.fmap_extrapolation_exponents = (2,3,4,5,6,7,8,9,10)
-
-    # loads fieldmap from file
-    # ========================
-    config.fmap = fieldmaptrack.FieldMap(config.fmap_filename)
-    
-    # plots basic data
-    # ================
-    
-    # -- longitudinal profile at (x,y) = (0,0)
-    try:
-        config.config_fig_number += 1
-    except:
-        config.config_fig_number = 1
-    x,y = config.fmap.rz, config.fmap.by[config.fmap.ry_zero][config.fmap.rx_zero,:]
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rz [mm]'), plt.ylabel('by [mm]')
-    plt.title(config.config_label + '\n' + 'Longitudinal profile of vertical field')
-    plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + 'by-vs-rz.pdf')
-    plt.clf()
-    
-    # -- transversal profile at (y,z) = (0,0)
-    try:
-        config.config_fig_number += 1
-    except:
-        config.config_fig_number = 1
-    x, y = config.fmap.rx, config.fmap.by[config.fmap.ry_zero][:,config.fmap.rz_zero]
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rx [mm]'), plt.ylabel('by [T]')
-    plt.title(config.config_label + '\n' + 'Transverse profile of vertical field')
-    plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) +  'by-vs-rx.pdf')
-    plt.clf()
-    
-    
-    # calculates missing integrals
-    # ============================
-    if config.fmap_extrapolation_flag:
-        config.fmap.field_extrapolation_analysis(threshold_field_fraction = config.fmap_extrapolation_threshold_field_fraction, 
-                                        polyfit_exponents = config.fmap_extrapolation_exponents)
-
-    # prints basic raw information on the fieldmap
-    # ============================================
-    print('--- fieldmap ---')
-    print(config.fmap)
-    
-    return config    
                         
 def calc_reference_trajectory_good_field_region(config):  
     # calcs reference trajectory
@@ -218,7 +163,7 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, 0, r0 = config.multipoles_r0)
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = 0, r0 = config.multipoles_r0)
     #config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
              
     # saves multipoles to file
@@ -250,34 +195,7 @@ def multipoles_analysis(config):
     config = plot_residual_field(config)
     return config
 
-def model_analysis(config):
-    
-    # creates AT model
-    config = create_AT_model(config, config.model_segmentation)
-    
-    # adds discrepancy of deflection angle as error in polynomb[0]
-    l = np.array(config.model_segmentation) / 1000.0
-    m = config.model_multipoles_integral.transpose() / (-config.beam.brho)
-    mi = np.sum(m, axis=1)
-    fmap_deflection    = mi[0]
-    nominal_deflection = abs(config.model_nominal_angle/2)*(math.pi/180.0)
-    error_polynomb = nominal_deflection - fmap_deflection
-    
-    # prints info on model
-    print('--- model polynom_b (rz > 0) ---')
-    fstr = '{0:<6.4f} {1:<+13.06e} '
-    for i in range(m.shape[0]):
-        fstr += '{'+str(i+2)+':<+13.6e} '
-    for i in range(len(l)):
-        val = [l[i]] + [m[0,i]] + list(m[:,i] / l[i])
-        if i == len(l)-1:
-            val[2] = error_polynomb
-        else:
-            val[2] = 0.0
-        print(fstr.format(*val))
-    val = [sum(l)] + [sum(m[0,:])] + [0.0] + list(mi[1:]) 
-    print('---')
-    print(fstr.format(*val))
+
     
     
      

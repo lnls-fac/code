@@ -45,4 +45,4 @@ complete -W "--sure --help"                                                     
 complete -W "--jobs --status --user --description --explicate --choose --help"                                                          pyjob_qstat.py
 complete -W "--jobs --status --user --description --signal --priority --possibleHosts --help"                                           pyjob_qsig.py
 complete -W "--just-print --si --bo --tb --ts --li --help --list-all --sort"                                                            updatewiki
-complete -W "help clean edit run summary"                                                                                               fma_analysis.py
+complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma_analysis.py

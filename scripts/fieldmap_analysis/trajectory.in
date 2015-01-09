@@ -72,3 +72,6 @@
   traj_rk_nrpts                   None 
 
 
+# whether to save trajectory to an ASCII file
+
+  traj_save                       True

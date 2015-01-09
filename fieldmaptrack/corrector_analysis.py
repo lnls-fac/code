@@ -39,8 +39,8 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.polynom_b_integral, main_monomial = 0, r0 = config.multipoles_r0)
-    config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = 0, r0 = config.multipoles_r0)
+    #config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
          
     # saves multipoles to file
     config.multipoles.save('multipoles.txt')
@@ -56,7 +56,7 @@ def multipoles_analysis(config):
              config.config_fig_number += 1
         except:
             config.config_fig_number = 1
-        x,y = config.traj.rz, config.multipoles.polynom_b[n,:]
+        x,y = config.traj.rz, config.multipoles.normal_multipoles[n,:]
         ylabel, title, fname = config.multipoles.get_multipole_labels('normal',n)
         plt.plot(x,y)
         plt.grid(True)
