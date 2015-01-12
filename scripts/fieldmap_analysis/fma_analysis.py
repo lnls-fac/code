@@ -38,7 +38,7 @@ def edit():
 
 def clean():
 
-    os.system('rm -rf *.out *.txt *.pdf *.pkl')
+    os.system('rm -rf *.out *.txt *.pdf *.pkl *~')
 
 def run():
 
