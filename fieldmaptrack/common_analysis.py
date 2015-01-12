@@ -298,11 +298,11 @@ def create_AT_model(config, segmentation):
     
     s     = np.copy(config.traj.s)
     p     = np.copy(config.multipoles.normal_multipoles)
-    
+    nr_monomials = len(p[:,0])
     # interpolates multipoles on segmentation points
     s_seg = np.cumsum(segmentation)
-    p_seg = np.zeros((len(p[:,0]), len(s_seg)))
-    for i in range(len(s_seg)):
+    p_seg = np.zeros((nr_monomials, len(s_seg)))
+    for i in range(nr_monomials):
         p_seg[i,:] = np.interp(x=s_seg, xp=s, fp=p[i,:])
     # adds interpolated points to data and sorts
     s = np.append(s, s_seg)
@@ -334,22 +334,36 @@ def model_analysis(config):
     mi = np.sum(m, axis=1)
     fmap_deflection    = mi[0]
     nominal_deflection = abs(config.model_nominal_angle/2)*(math.pi/180.0)
-    error_polynomb = nominal_deflection - fmap_deflection
+    error_polynomb = -(nominal_deflection - fmap_deflection)
     
     # prints info on model
-    print('--- model polynom_b (rz > 0) ---')
-    fstr = '{0:<6.4f} {1:<+13.06e} '
+    nr_monomials = len(config.multipoles.fitting_monomials)
+    
+    monomials = []
+    strapp = '{0:^6s} {1:^14s} '
+    for i in range(nr_monomials):
+        strapp += '{'+'{0}'.format(2+i)+':^14s} '
+        monomials.append('PolynomB(n='+'{0:d}'.format(config.multipoles.fitting_monomials[i])+')')
+    
+    m[0,:] *= nominal_deflection / fmap_deflection
+    
+    print('--- model polynom_b (rz > 0). units: [mm] for length, [rad] for angle and [m],[T] for polynom_b ---')
+    print(strapp.format('len[mm]', 'angle[rad]', *monomials))
+    
+    fstr = '{0:<7.4f} {1:<+14.06e} '
     for i in range(m.shape[0]):
-        fstr += '{'+str(i+2)+':<+13.6e} '
+        fstr += '{'+str(i+2)+':<+14.6e} '
     for i in range(len(l)):
         val = [l[i]] + [m[0,i]] + list(m[:,i] / l[i])
         if i == len(l)-1:
-            val[2] = error_polynomb
+            val[2] = error_polynomb / l[i]
         else:
             val[2] = 0.0
         print(fstr.format(*val))
     val = [sum(l)] + [sum(m[0,:])] + [0.0] + list(mi[1:]) 
-    print('---')
+    print('--- integrated polynom_b (rz > 0). units: [mm] for length, [rad] for angle and [m],[T] for polynom_b ---')
+    #val[1] = nominal_deflection
+    val[2] = error_polynomb / val[0]
     print(fstr.format(*val))
     
     return config

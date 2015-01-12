@@ -23,6 +23,7 @@ config.multipoles_fitting_monomials  = (0,1,2,3,4,5,6)      # monomials to inclu
 config.multipoles_r0                 = 17.5                 # [mm] horizontal position at which polynomial fields are calculated relative to the principal multipole
 
 config.model_segmentation = (196, 192, 158, 34, 30, 158, 1)
+#config.model_segmentation = (196+192+158+34+30+158+1,)
 
 #if __name__ == "__main__":
     
