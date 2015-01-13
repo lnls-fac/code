@@ -33,6 +33,7 @@ if strcmpi(answer{1}, 'bo')
         params.K     = 0.0002;
         params.I     = 0.6;
         params.nrBun = 1;
+        accepRF      = ats.energyacceptance;
     end 
 else
     path = '/home/fac_files/data/sirius/si/beam_dynamics';
@@ -46,12 +47,16 @@ else
     params.K     = 0.0002;
     params.I     = 350;
     params.nrBun = 864;
+    accepRF      = ats.energyacceptance;
 end
 
 
 % users selects beam lifetime parameters
-prompt = {'Emitance[nm.rad]', 'Energy spread', 'Bunch length [mm]', 'Coupling [%]', 'Current [mA]', 'Nr bunches'};
-defaultanswer = {num2str(params.emit0/1e-9), num2str(params.sigE), num2str(params.sigS*1000), num2str(100*params.K), num2str(params.I), num2str(params.nrBun)};
+prompt = {'Emitance[nm.rad]', 'Energy spread', 'Bunch length [mm]',...
+          'Coupling [%]', 'Current [mA]', 'Nr bunches', 'RF Energy Acceptance [%]'};
+defaultanswer = {num2str(params.emit0/1e-9), num2str(params.sigE), ...
+                 num2str(params.sigS*1000), num2str(100*params.K), ...
+                 num2str(params.I), num2str(params.nrBun), num2str(accepRF*100)};
 answer = inputdlg(prompt,'Parameters for beam lifetime calculation', 1, defaultanswer);
 if isempty(answer), return; end;
 params.emit0 = str2double(answer{1})*1e-9;
@@ -60,9 +65,11 @@ params.sigS  = str2double(answer{3})/1000;
 params.K     = str2double(answer{4})/100;
 params.I     = str2double(answer{5})/1000;
 params.nrBun = round(str2double(answer{6}));
+accepRF      = str2double(answer{7})/100;
 
 params.N     = params.I/params.nrBun/1.601e-19*ats.revTime;
 
+twi = calctwiss(the_ring);
 % parâmetros para cálculo do tempo de vida
 % segunda fase
 % twi = calctwiss(the_ring);
@@ -76,15 +83,13 @@ params.N     = params.I/params.nrBun/1.601e-19*ats.revTime;
 
 % parâmetros para cálculo do tempo de vida
 % primeira fase
-twi = calctwiss(the_ring);
-
-params.emit0 = 2.7e-10;
-params.E     = 3e9;
-params.N     = 100e-3/864/1.601e-19*1.72e-6;
-params.sigE  = 0.87e-3;
-params.sigS  = 3.5e-3;
-params.K     = 0.01;
-accepRF      = 0.05;
+% params.emit0 = 2.7e-10;
+% params.E     = 3e9;
+% params.N     = 100e-3/864/1.601e-19*1.72e-6;
+% params.sigE  = 0.87e-3;
+% params.sigS  = 3.5e-3;
+% params.K     = 0.01;
+% accepRF      = 0.05;
 
 %% storage ring 
 % params.emit0 = 2.05e-10;

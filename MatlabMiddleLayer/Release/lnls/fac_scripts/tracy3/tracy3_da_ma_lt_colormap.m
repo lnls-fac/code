@@ -1,8 +1,73 @@
-function tracy3_da_ma_lt_colormap(the_ring)
+function tracy3_da_ma_lt_colormap()
 
-% selects data folder
-path = lnls_get_root_folder();
-path = fullfile(path, 'data', 'sirius','si','beam_dynamics');
+global THERING;
+
+% users selects submachine
+prompt = {'Submachine (bo/si)', 'energy [GeV]'};
+defaultanswer = {'bo', '0.150'};
+answer = inputdlg(prompt,'Select submachine, energy and nr of plots', 1, defaultanswer);
+if isempty(answer), return; end;
+energy = str2double(answer{2});
+
+if strcmpi(answer{1}, 'bo')
+    path = '/home/fac_files/data/sirius/bo/beam_dynamics';
+    sirius('BO');
+    the_ring = THERING;
+    ats = getappdata(0, 'ATSUMMARY');
+    if (energy == 0.15)
+        % BOOSTER (equillibirum parameters from LINAC)
+        params.E     = energy * 1e9;
+        params.emit0 = 170e-9;  % linac
+        params.sigE  = 5.0e-3;  % linac
+        params.sigS  = 11.2e-3; % linac
+        accepRF      = 0.033;
+        params.K     = 0.0002;
+        params.I     = 0.6;
+        params.nrBun = 1;
+    else
+        params.E     = energy * 1e9;
+        params.emit0 = ats.naturalEmittance;
+        params.sigE  = ats.naturalEnergySpread;
+        params.sigS  = ats.bunchlength;
+        params.K     = 0.0002;
+        params.I     = 0.6;
+        params.nrBun = 1;
+        accepRF      = ats.energyacceptance;
+    end 
+else
+    path = '/home/fac_files/data/sirius/si/beam_dynamics';
+    sirius;
+    the_ring = THERING;
+    ats = getappdata(0, 'ATSUMMARY');
+    params.E     = energy * 1e9;
+    params.emit0 = ats.naturalEmittance;
+    params.sigE  = ats.naturalEnergySpread;
+    params.sigS  = ats.bunchlength;
+    params.K     = 0.0002;
+    params.I     = 350;
+    params.nrBun = 864;
+    accepRF      = ats.energyacceptance;
+end
+
+
+% users selects beam lifetime parameters
+prompt = {'Emitance[nm.rad]', 'Energy spread', 'Bunch length [mm]',...
+          'Coupling [%]', 'Current [mA]', 'Nr bunches', 'RF Energy Acceptance [%]'};
+defaultanswer = {num2str(params.emit0/1e-9), num2str(params.sigE), ...
+                 num2str(params.sigS*1000), num2str(100*params.K), ...
+                 num2str(params.I), num2str(params.nrBun), num2str(accepRF*100)};
+answer = inputdlg(prompt,'Parameters for beam lifetime calculation', 1, defaultanswer);
+if isempty(answer), return; end;
+params.emit0 = str2double(answer{1})*1e-9;
+params.sigE  = str2double(answer{2});
+params.sigS  = str2double(answer{3})/1000;
+params.K     = str2double(answer{4})/100;
+params.I     = str2double(answer{5})/1000;
+params.nrBun = round(str2double(answer{6}));
+accepRF      = str2double(answer{7})/100;
+params.N     = params.I/params.nrBun/1.601e-19*ats.revTime;
+
+twi = calctwiss(the_ring);
 
 size_font = 28;
 type_colormap = 'Jet';
@@ -14,16 +79,6 @@ mostra = 0; % 0 = porcentagem de part perdidas
 % 1 = número medio de voltas
 % 2 = posicao em que foram perdidas
 % 3 = plano em que foram perdidas
-
-%parametros para calculo de tempo de vida touschek;
-twi = calctwiss(the_ring);
-params.emit0 = 2.7e-10;
-params.E     = 3e9;
-params.N     = 100e-3/864/1.601e-19*1.72e-6;
-params.sigE  = 0.87e-3;
-params.sigS  = 3.5e-3;
-params.K     = 0.01;
-accepRF      = 0.05;
 
 % loops over random machine, loading and plotting data
 count = 0; countdp = 0;
