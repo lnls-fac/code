@@ -2,7 +2,7 @@
 %  QUADRUPOLOS
 %  ===========
 qfa_strength	= 3.497480;
-qda1_strength	= -2.722980;
+qda_strength	= -2.722980;
 qdb2_strength	= -2.980452;
 qfb_strength	= 3.942337;
 qdb1_strength	= -3.384768;
@@ -13,17 +13,19 @@ qf4_strength	= 3.275030;
 
 
 % primeira otimizacao feita no opa. Ponto inicial do MOGA
-sfa_strength	= -18.735973;
-sda_strength	=  25.748891;
-sfb_strength	= -52.006908;
-sdb_strength	=  67.257587;
-sd1a_strength	=-153.945789;
-sf1a_strength	= 194.414838;
-sd2a_strength	= -80.931116;
-sd3a_strength	=-149.313413;
-sf2a_strength	= 121.138218;
-sd1b_strength	=-158.398218;
-sf1b_strength	= 243.515902;
-sd2b_strength	=-117.109382;
-sd3b_strength	=-161.865044;
-sf2b_strength	= 180.271499;
+sda_strength	= -18.735973;
+sfa_strength	=  25.748891;
+sdb_strength	= -52.006908;
+sfb_strength	=  67.257587;
+
+sd1_strength	=-153.945789;
+sf1_strength	= 194.414838;
+sd2_strength	= -80.931116;
+sd3_strength	=-149.313413;
+sf2_strength	= 121.138218;
+
+sd6_strength	=-158.398218;
+sf4_strength	= 243.515902;
+sd5_strength	=-117.109382;
+sd4_strength	=-161.865044;
+sf3_strength	= 180.271499;

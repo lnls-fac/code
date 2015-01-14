@@ -53,7 +53,6 @@ strengths();
 
 %% passmethods
 %  ===========
-
 bend_pass_method = 'BndMPoleSymplectic4Pass';
 quad_pass_method = 'StrMPoleSymplectic4Pass';
 sext_pass_method = 'StrMPoleSymplectic4Pass';
@@ -62,32 +61,31 @@ sext_pass_method = 'StrMPoleSymplectic4Pass';
 %% elements
 %  ========
 
-
 % --- drift spaces ---
 
 id_length = 2.0; % [m]
 
 dia1     = drift('dia1', id_length/2, 'DriftPass');
-dia2     = drift('dia', 3.4828500 - id_length/2, 'DriftPass');
+dia2     = drift('dia',  3.4828500 - id_length/2, 'DriftPass');
 dib1     = drift('dib1', id_length/2, 'DriftPass');
-dib2     = drift('dib', 3.0128500 - id_length/2, 'DriftPass');
-d00      = drift('d00', 0.005000, 'DriftPass');
-d10      = drift('d10', 0.100000, 'DriftPass');
-d11      = drift('d11', 0.110000, 'DriftPass');
-d12      = drift('d12', 0.120000, 'DriftPass');
-d13      = drift('d13', 0.130000, 'DriftPass');
-d14      = drift('d14', 0.140000, 'DriftPass');
-d15      = drift('d15', 0.150000, 'DriftPass');
-d16      = drift('d16', 0.160000, 'DriftPass');
-d18      = drift('d18', 0.180000, 'DriftPass');
-d19      = drift('d19', 0.190000, 'DriftPass');
-d20      = drift('d20', 0.200000, 'DriftPass');
-d22      = drift('d22', 0.220000, 'DriftPass');
-d23      = drift('d23', 0.230000, 'DriftPass');
-d30      = drift('d30', 0.300000, 'DriftPass');
-d33      = drift('d33', 0.330000, 'DriftPass');
-d44      = drift('d44', 0.440000, 'DriftPass');
-d45      = drift('d45', 0.450000, 'DriftPass');
+dib2     = drift('dib',  3.0128500 - id_length/2, 'DriftPass');
+d00      = drift('d00',  0.005000, 'DriftPass');
+d10      = drift('d10',  0.100000, 'DriftPass');
+d11      = drift('d11',  0.110000, 'DriftPass');
+d12      = drift('d12',  0.120000, 'DriftPass');
+d13      = drift('d13',  0.130000, 'DriftPass');
+d14      = drift('d14',  0.140000, 'DriftPass');
+d15      = drift('d15',  0.150000, 'DriftPass');
+d16      = drift('d16',  0.160000, 'DriftPass');
+d18      = drift('d18',  0.180000, 'DriftPass');
+d19      = drift('d19',  0.190000, 'DriftPass');
+d20      = drift('d20',  0.200000, 'DriftPass');
+d22      = drift('d22',  0.220000, 'DriftPass');
+d23      = drift('d23',  0.230000, 'DriftPass');
+d30      = drift('d30',  0.300000, 'DriftPass');
+d33      = drift('d33',  0.330000, 'DriftPass');
+d44      = drift('d44',  0.440000, 'DriftPass');
+d45      = drift('d45',  0.450000, 'DriftPass');
 
 % --- markers ---
 mc       = marker('mc',      'IdentityPass');
@@ -107,7 +105,7 @@ mon      = marker('bpm', 'IdentityPass');
 
 % --- quadrupoles ---
 qfa      = quadrupole('qfa',  0.250000, qfa_strength,  quad_pass_method);
-qda1     = quadrupole('qda1', 0.140000, qda1_strength, quad_pass_method);
+qda      = quadrupole('qda',  0.140000, qda_strength, quad_pass_method);
 qdb2     = quadrupole('qdb2', 0.140000, qdb2_strength, quad_pass_method);
 qfb      = quadrupole('qfb',  0.340000, qfb_strength,  quad_pass_method);
 qdb1     = quadrupole('qdb1', 0.140000, qdb1_strength, quad_pass_method);
@@ -125,9 +123,9 @@ dip_len =  0.828080;
 dip_ang =  2.766540 * deg_2_rad;
 dip_K   = -0.78;
 dip_S   =  0.00;
-h1      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-B1      = [h1 mb1 h2];
+h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
+h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
+B1      =  [h1 mb1 h2];
 
 % -- b2 --
 dip_nam =  'b2';
@@ -135,9 +133,9 @@ dip_len =  1.228262;
 dip_ang =  4.103510 * deg_2_rad;
 dip_K   = -0.78;
 dip_S   =  0.00;
-h1      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);    
-B2      = [h1 mb2 h2];
+h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
+h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);    
+B2      =  [h1 mb2 h2];
 
 % -- b3 --
 dip_nam =  'b3';
@@ -145,9 +143,9 @@ dip_len =  0.428011;
 dip_ang =  1.429950 * deg_2_rad;
 dip_K   = -0.78;
 dip_S   =  0.00;
-h1      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-B3      = [h1 mb3 h2];
+h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
+h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
+B3      =  [h1 mb3 h2];
 
 % -- bc --
 dip_nam =  'bc';
@@ -155,9 +153,9 @@ dip_len =  0.125394;
 dip_ang =  1.4 * deg_2_rad;
 dip_K   =  0.00;
 dip_S   = -21.4;
-bce     = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
-bcs     = rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
-BC      = [bce mc bcs];
+bce     =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+bcs     =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+BC      =  [bce mc bcs];
 
 
 % --- correctors ---
@@ -166,134 +164,136 @@ cv     = corrector('vcm',  0, [0 0], 'CorrectorPass');
 crhv   = corrector('crhv', 0, [0,0], 'CorrectorPass');
 
 % --- sextupoles ---    
-sfa      = sextupole('sfa',  0.150000, sfa_strength,  sext_pass_method);
-sda      = sextupole('sda',  0.150000, sda_strength,  sext_pass_method);
-sfb      = sextupole('sfb',  0.150000, sfb_strength,  sext_pass_method);
-sdb      = sextupole('sdb',  0.150000, sdb_strength,  sext_pass_method);
-sd1a     = sextupole('sd1a', 0.150000, sd1a_strength, sext_pass_method);
-sf1a     = sextupole('sf1a', 0.150000, sf1a_strength, sext_pass_method);
-sd2a     = sextupole('sd2a', 0.150000, sd2a_strength, sext_pass_method);
-sd3a     = sextupole('sd3a', 0.150000, sd3a_strength, sext_pass_method);
-sf2a     = sextupole('sf2a', 0.150000, sf2a_strength, sext_pass_method);
-sd1b     = sextupole('sd1b', 0.150000, sd1b_strength, sext_pass_method);
-sf1b     = sextupole('sf1b', 0.150000, sf1b_strength, sext_pass_method);
-sd2b     = sextupole('sd2b', 0.150000, sd2b_strength, sext_pass_method);
-sd3b     = sextupole('sd3b', 0.150000, sd3b_strength, sext_pass_method);
-sf2b     = sextupole('sf2b', 0.150000, sf2b_strength, sext_pass_method);
-           
+sda     = sextupole('sda',  0.150000, sda_strength,  sext_pass_method);
+sfa     = sextupole('sfa',  0.150000, sfa_strength,  sext_pass_method);
+sdb     = sextupole('sdb',  0.150000, sdb_strength,  sext_pass_method);
+sfb     = sextupole('sfb',  0.150000, sfb_strength,  sext_pass_method);
+
+sd1    = sextupole('sd1', 0.150000, sd1_strength, sext_pass_method);
+sf1    = sextupole('sf1', 0.150000, sf1_strength, sext_pass_method);
+sd2    = sextupole('sd2', 0.150000, sd2_strength, sext_pass_method);
+sd3    = sextupole('sd3', 0.150000, sd3_strength, sext_pass_method);
+sf2    = sextupole('sf2', 0.150000, sf2_strength, sext_pass_method);
+
+sd6     = sextupole('sd6', 0.150000, sd6_strength, sext_pass_method);
+sf4     = sextupole('sf4', 0.150000, sf4_strength, sext_pass_method);
+sd5     = sextupole('sd5', 0.150000, sd5_strength, sext_pass_method);
+sd4     = sextupole('sd4', 0.150000, sd4_strength, sext_pass_method);
+sf3     = sextupole('sf3', 0.150000, sf3_strength, sext_pass_method);
+        
 % --- rf cavity ---
 cav = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
-%% lines 
 
-insa   = [dia1, mida, dia2, girder, ch, cv, crhv, d12, sda, d12, mon, ...
-           d12,  qfa,  d23,  qda1, d14, d00, sfa, d19, d00, girder];
-insb   = [dib1, midb, dib2, girder, qdb2,  d18,  ch,  cv, crhv, d16, sdb, ...
-           d15,  mon,  d11,   qfb,   d23, qdb1, d14, d00,  sfb, d19, d00, girder];
-
-cline1a = [ girder, d45, d00, ch, cv, d16, sd1a, d14, d00, qf1, d12, mon, d11, ...
-           sf1a, d20, qf2, d14, d00, sd2a, d12, ch, d10, mon, d12, d00, girder];
-cline2a = [ girder, d30, d00, cv, d16, sd3a, d14, d00, qf3, d12, mon, d11, sf2a, ...
-            d20, qf4, d16, ch, crhv, d33, d10, mon, d12, girder];
-cline3a = [ girder, d44, d11, ch, d16, qf4, d20, sf2a, d11, mon, d12, qf3, d14, ...
-            d00, sd3a, d16, cv, crhv, d30, d00, girder];
-cline4a = [ girder, d22, d00, ch,  d12, sd2a, d14, d00, qf2, d20, sf1a, d11, mon, ...
-            d12, qf1, d14, d00, sd1a, d16, ch, cv, d33, d00, mon, d12, girder];
-
-cline1b = [ girder, d45, d00, ch, cv, d16, sd1b, d14, d00, qf1, d12, mon, d11, ...
-           sf1b, d20, qf2, d14, d00, sd2b, d12, ch, d10, mon, d12, d00, girder];
-cline2b = [ girder, d30, d00, cv, d16, sd3b, d14, d00, qf3, d12, mon, d11, sf2b, ...
-            d20, qf4, d16, ch, crhv, d33, d10, mon, d12, girder];
-cline3b = [ girder, d44, d11, ch, d16, qf4, d20, sf2b, d11, mon, d12, qf3, d14, ...
-            d00, sd3b, d16, cv, crhv, d30, d00, girder];
-cline4b = [ girder, d22, d00, ch, d12, sd2b, d14, d00, qf2, d20, sf1b, d11, mon, ...
-            d12, qf1, d14, d00, sd1b, d16, ch, cv, d33, d00, mon, d12, girder];
-
-%% Injection Section
-
-dchinj   = drift('dchinj', 3.1428500, 'DriftPass');
-dinjmia  = drift('dinjmia', 0.34, 'DriftPass');
+% --- injection Section ---
+dchinj   = drift('dchinj',   3.1428500, 'DriftPass');
+dinjmia  = drift('dinjmia',  0.34, 'DriftPass');
 dmiakick = drift('dmiakick', 1.95000, 'DriftPass');
-dkickpmm = drift('dkickpmm' , 0.8070, 'DriftPass');
-dpmmch   = drift('dpmmch' , 0.7258500, 'DriftPass');
-%kick     = corrector('kick',0.5, [0 0], 'CorrectorPass');
-%pmm      = sextupole('pmm', 0.5, 0.0, sext_pass_method);
+dkickpmm = drift('dkickpmm', 0.8070, 'DriftPass');
+dpmmch   = drift('dpmmch',   0.7258500, 'DriftPass');
 kick     = marker('kick','IdentityPass');
 pmm      = marker('pmm','IdentityPass');
-inj      = marker('inj','IdentityPass');
-
-insaend  = [girder, ch, cv, crhv, d12, sda, d12, mon, d12, qfa, d23, qda1, d14, d00, sfa, d19, d00, girder];
-insainj  = [dmiakick, kick, dkickpmm, pmm, dpmmch, insaend];
-injinsa  = [fliplr(insaend), dchinj, dinjmia];
-
-B3BCB3 = [ B3, d13, BC, d13, B3];     
 
 
-%% the_ring  
-
-% Lattice Ordering
-% ----------------
-% 
-% R01 C01 R02 C02 R03 C03 R04 C04 R05 C05 R06 C06 R07 C07 R08 C08 R09 C09 R10 C10
-% R11 C11 R12 C12 R13 C13 R14 C14 R15 C15 R16 C16 R17 C17 R18 C18 R19 C19 R20 C20
-% 
-% High Beta (mia) : R01, R03, R05, R07, R09, R11, R13, R15, R17, R19
-% Low  Beta (mib) : R02, R04, R06, R08, R10, R12, R14, R16, R18, R20
-%
-% injection: straight section R01
-% cavities:  straight section R03
 
 
-sector_01S = [injinsa fim inicio mia insainj];  % injection sector, marker of the lattice model starting element
-sector_03S = [fliplr(insa) mia cav insa];       % sector with cavities
-sector_05S = [fliplr(insa) mia insa];
-sector_07S = [fliplr(insa) mia insa];
-sector_09S = [fliplr(insa) mia insa];
-sector_11S = [fliplr(insa) mia insa];
-sector_13S = [fliplr(insa) mia insa];
-sector_15S = [fliplr(insa) mia insa];
-sector_17S = [fliplr(insa) mia insa];
-sector_19S = [fliplr(insa) mia insa];
- 
-sector_02S = [fliplr(insb) mib insb];
-sector_04S = [fliplr(insb) mib insb];
-sector_06S = [fliplr(insb) mib insb];
-sector_08S = [fliplr(insb) mib insb];
-sector_10S = [fliplr(insb) mib insb];
-sector_12S = [fliplr(insb) mib insb];
-sector_14S = [fliplr(insb) mib insb];
-sector_16S = [fliplr(insb) mib insb];
-sector_18S = [fliplr(insb) mib insb];
-sector_20S = [fliplr(insb) mib insb];
+%% LINES
+
+tm1a = [girder, d00, d19, sda, d00, d14, qda, d23, qfa, d12, mon, d12, sfa, d12, crhv, cv, ch, girder];              % high beta xxM1 girder
+tm2a = fliplr(tm1a);                                                                                                 % high beta xxM2 girder
+tida = [dia2, mida, dia1, mia, dia1, mida, dia2];                                                                    % high beta ID straight section
+tcav = [dia2, dia1, mia, cav, dia1, dia2];                                                                           % high beta RF cavity straight section 
+tinj = [dchinj, dinjmia, fim, inicio, mia, dmiakick, kick, dkickpmm, pmm, dpmmch];                                   % high beta INJ straight section
+tm1b = [girder, d00, d19, sdb, d00, d14, qdb1, d23, qfb, d11, mon, d15, sfb, d16, crhv, cv, ch, d18, qdb2, girder];  % low beta xxM1 girder
+tm2b = fliplr(tm1b);                                                                                                 % low beta xxM2 girder
+tidb = [dib2, midb, dib1, mib, dib1, midb, dib2];                                                                    % low beta ID straight section
+
+tc3  = [d13, BC, d13]; % arc sector between B3-B3 (including BC dipole)
+tc1a = [girder, d45, d00, ch, cv, d16, sd1, d14, d00, qf1, d12, mon, d11, sf1, d20, qf2, d14, d00, sd2, d12, ch, d10, mon, d12, d00, girder]; % arc sector in between B1-B2
+tc2a = [girder, d30, d00, cv, d16, sd3, d14, d00, qf3, d12, mon, d11, sf2, d20, qf4, d16, ch, crhv, d33, d10, mon, d12, girder];              % arc sector in between B2-B3
+tc4a = [girder, d44, d11, ch, d16, qf4, d20, sf3, d11, mon, d12, qf3, d14, d00, sd4, d16, cv, crhv, d30, d00, girder];                        % arc sector in between B3-B2
+tc5a = [girder, d22, d00, ch, d12, sd5, d14, d00, qf2, d20, sf4, d11, mon, d12, qf1, d14, d00, sd6, d16, ch, cv, d33, d00, mon, d12, girder]; % arc sector in between B2-B1
+tc1b = fliplr(tc5a);
+tc2b = fliplr(tc4a);
+tc4b = fliplr(tc2a);
+tc5b = fliplr(tc1a);
+
+%% GIRDERS
+
+% straight sections
+G01S = tinj; G02S = tidb;
+G03S = tcav; G04S = tidb;
+G05S = tida; G06S = tidb;
+G07S = tida; G08S = tidb;
+G09S = tida; G10S = tidb;
+G11S = tida; G12S = tidb;
+G13S = tida; G14S = tidb;
+G15S = tida; G16S = tidb;
+G17S = tida; G18S = tidb;
+G19S = tida; G20S = tidb;
+
+% down and upstream straight sections
+G01M1 = tm1a; G01M2 = tm2a; G02M1 = tm1b; G02M2 = tm2b;
+G03M1 = tm1a; G03M2 = tm2a; G04M1 = tm1b; G04M2 = tm2b;
+G05M1 = tm1a; G05M2 = tm2a; G06M1 = tm1b; G06M2 = tm2b;
+G07M1 = tm1a; G07M2 = tm2a; G08M1 = tm1b; G08M2 = tm2b;
+G09M1 = tm1a; G09M2 = tm2a; G10M1 = tm1b; G10M2 = tm2b;
+G11M1 = tm1a; G11M2 = tm2a; G12M1 = tm1b; G12M2 = tm2b;
+G13M1 = tm1a; G13M2 = tm2a; G14M1 = tm1b; G14M2 = tm2b;
+G15M1 = tm1a; G15M2 = tm2a; G16M1 = tm1b; G16M2 = tm2b;
+G17M1 = tm1a; G17M2 = tm2a; G18M1 = tm1b; G18M2 = tm2b;
+G19M1 = tm1a; G19M2 = tm2a; G20M1 = tm1b; G20M2 = tm2b;
+
+% dispersive arcs
+G01C1 = tc1a; G01C2 = tc2a; G01C3 = tc3; G01C4 = tc4a; G01C5 = tc5a;
+G02C1 = tc1b; G02C2 = tc2b; G02C3 = tc3; G02C4 = tc4b; G02C5 = tc5b;
+G03C1 = tc1a; G03C2 = tc2a; G03C3 = tc3; G03C4 = tc4a; G03C5 = tc5a;
+G04C1 = tc1b; G04C2 = tc2b; G04C3 = tc3; G04C4 = tc4b; G04C5 = tc5b;
+G05C1 = tc1a; G05C2 = tc2a; G05C3 = tc3; G05C4 = tc4a; G05C5 = tc5a;
+G06C1 = tc1b; G06C2 = tc2b; G06C3 = tc3; G06C4 = tc4b; G06C5 = tc5b;
+G07C1 = tc1a; G07C2 = tc2a; G07C3 = tc3; G07C4 = tc4a; G07C5 = tc5a;
+G08C1 = tc1b; G08C2 = tc2b; G08C3 = tc3; G08C4 = tc4b; G08C5 = tc5b;
+G09C1 = tc1a; G09C2 = tc2a; G09C3 = tc3; G09C4 = tc4a; G09C5 = tc5a;
+G10C1 = tc1b; G10C2 = tc2b; G10C3 = tc3; G10C4 = tc4b; G10C5 = tc5b;
+G11C1 = tc1a; G11C2 = tc2a; G11C3 = tc3; G11C4 = tc4a; G11C5 = tc5a;
+G12C1 = tc1b; G12C2 = tc2b; G12C3 = tc3; G12C4 = tc4b; G12C5 = tc5b;
+G13C1 = tc1a; G13C2 = tc2a; G13C3 = tc3; G13C4 = tc4a; G13C5 = tc5a;
+G14C1 = tc1b; G14C2 = tc2b; G14C3 = tc3; G14C4 = tc4b; G14C5 = tc5b;
+G15C1 = tc1a; G15C2 = tc2a; G15C3 = tc3; G15C4 = tc4a; G15C5 = tc5a;
+G16C1 = tc1b; G16C2 = tc2b; G16C3 = tc3; G16C4 = tc4b; G16C5 = tc5b;
+G17C1 = tc1a; G17C2 = tc2a; G17C3 = tc3; G17C4 = tc4a; G17C5 = tc5a;
+G18C1 = tc1b; G18C2 = tc2b; G18C3 = tc3; G18C4 = tc4b; G18C5 = tc5b;
+G19C1 = tc1a; G19C2 = tc2a; G19C3 = tc3; G19C4 = tc4a; G19C5 = tc5a;
+G20C1 = tc1b; G20C2 = tc2b; G20C3 = tc3; G20C4 = tc4b; G20C5 = tc5b;
 
 
-C01 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C02 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C03 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C04 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C05 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C06 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C07 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C08 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C09 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C10 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C11 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C12 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C13 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C14 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C15 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C16 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C17 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C18 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
-C19 = [ B1 cline1a B2 cline2a B3BCB3 cline3b B2 cline4b B1 ];
-C20 = [ B1 cline1b B2 cline2b B3BCB3 cline3a B2 cline4a B1 ];
+%% SECTORS # 01..20
 
-anel = [ ...
-    sector_01S C01 sector_02S C02 sector_03S C03 sector_04S C04 sector_05S C05 ...
-    sector_06S C06 sector_07S C07 sector_08S C08 sector_09S C09 sector_10S C10 ...
-    sector_11S C11 sector_12S C12 sector_13S C13 sector_14S C14 sector_15S C15 ...
-    sector_16S C16 sector_17S C17 sector_18S C18 sector_19S C19 sector_20S C20 ...
-];
+S01 = [G01M1, G01S, G01M2, B1, G01C1, B2, G01C2, B3, G01C3, B3, G01C4, B2, G01C5, B1];
+S02 = [G02M1, G02S, G02M2, B1, G02C1, B2, G02C2, B3, G02C3, B3, G02C4, B2, G02C5, B1];
+S03 = [G03M1, G03S, G03M2, B1, G03C1, B2, G03C2, B3, G03C3, B3, G03C4, B2, G03C5, B1];
+S04 = [G04M1, G04S, G04M2, B1, G04C1, B2, G04C2, B3, G04C3, B3, G04C4, B2, G04C5, B1];
+S05 = [G05M1, G05S, G05M2, B1, G05C1, B2, G05C2, B3, G05C3, B3, G05C4, B2, G05C5, B1];
+S06 = [G06M1, G06S, G06M2, B1, G06C1, B2, G06C2, B3, G06C3, B3, G06C4, B2, G06C5, B1];
+S07 = [G07M1, G07S, G07M2, B1, G07C1, B2, G07C2, B3, G07C3, B3, G07C4, B2, G07C5, B1];
+S08 = [G08M1, G08S, G08M2, B1, G08C1, B2, G08C2, B3, G08C3, B3, G08C4, B2, G08C5, B1];
+S09 = [G09M1, G09S, G09M2, B1, G09C1, B2, G09C2, B3, G09C3, B3, G09C4, B2, G09C5, B1];
+S10 = [G10M1, G10S, G10M2, B1, G10C1, B2, G10C2, B3, G10C3, B3, G10C4, B2, G10C5, B1];
+S11 = [G11M1, G11S, G11M2, B1, G11C1, B2, G11C2, B3, G11C3, B3, G11C4, B2, G11C5, B1];
+S12 = [G12M1, G12S, G12M2, B1, G12C1, B2, G12C2, B3, G12C3, B3, G12C4, B2, G12C5, B1];
+S13 = [G13M1, G13S, G13M2, B1, G13C1, B2, G13C2, B3, G13C3, B3, G13C4, B2, G13C5, B1];
+S14 = [G14M1, G14S, G14M2, B1, G14C1, B2, G14C2, B3, G14C3, B3, G14C4, B2, G14C5, B1];
+S15 = [G15M1, G15S, G15M2, B1, G15C1, B2, G15C2, B3, G15C3, B3, G15C4, B2, G15C5, B1];
+S16 = [G16M1, G16S, G16M2, B1, G16C1, B2, G16C2, B3, G16C3, B3, G16C4, B2, G16C5, B1];
+S17 = [G17M1, G17S, G17M2, B1, G17C1, B2, G17C2, B3, G17C3, B3, G17C4, B2, G17C5, B1];
+S18 = [G18M1, G18S, G18M2, B1, G18C1, B2, G18C2, B3, G18C3, B3, G18C4, B2, G18C5, B1];
+S19 = [G19M1, G19S, G19M2, B1, G19C1, B2, G19C2, B3, G19C3, B3, G19C4, B2, G19C5, B1];
+S20 = [G20M1, G20S, G20M2, B1, G20C1, B2, G20C2, B3, G20C3, B3, G20C4, B2, G20C5, B1];
+
+
+%% THERING
+
+anel = [S01,S02,S03,S04,S05,S06,S07,S08,S09,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20];
 elist = anel;
 
 

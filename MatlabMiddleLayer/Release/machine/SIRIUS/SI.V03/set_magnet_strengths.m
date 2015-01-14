@@ -5,12 +5,12 @@ if strcmpi(mode,'A')
         %%% QUADRUPOLOS
         %  ===========
         
-        qfa_strength   = 2.515526;
-        qda1_strength  = -2.602399;
-        qf1_strength   = 2.372377;
-        qf2_strength   = 3.351939;
-        qf3_strength   = 3.062241;
-        qf4_strength   = 2.726014;
+        qfa_strength   =  2.515526;
+        qda_strength   = -2.602399;
+        qf1_strength   =  2.372377;
+        qf2_strength   =  3.351939;
+        qf3_strength   =  3.062241;
+        qf4_strength   =  2.726014;
         
         % vinculos para o modo AC20
         qdb1_strength  = qda1_strength;
@@ -19,20 +19,20 @@ if strcmpi(mode,'A')
         
         %%% SEXTUPOLOS
         % ==========
-        sda_strength   =   27.260886;
-        sfa_strength   =  -53.895434;
-        sd1a_strength  =  -85.452385;
-        sf1a_strength  =  186.287910;
-        sd2a_strength  = -127.382337;
-        sd3a_strength  = -154.506764;
-        sf2a_strength  =  156.861444;
-        sd1b_strength  =  sd1a_strength;
-        sf1b_strength  =  sf1a_strength;
-        sd2b_strength  =  sd2a_strength;
-        sd3b_strength  =  sd3a_strength;
-        sf2b_strength  =  sf2a_strength;
+        sfa_strength =   27.260886;
+        sda_strength =  -53.895434;
+        sd1_strength =  -85.452385;
+        sf1_strength =  186.287910;
+        sd2_strength = -127.382337;
+        sd3_strength = -154.506764;
+        sf2_strength =  156.861444;
+        sd6_strength =  sd1_strength;
+        sf4_strength =  sf1_strength;
+        sd5_strength =  sd2_strength;
+        sd4_strength =  sd3_strength;
+        sf3_strength =  sf2_strength;
         
-        % v???nculos para o modo AC20
+        % vinculos para o modo AC20
         sfb_strength   = sfa_strength;
         sdb_strength   = sda_strength;
     else
@@ -47,7 +47,7 @@ elseif strcmpi(mode,'B')
         %%% QUADRUPOLOS
         %  ===========
         qfa_strength       =  2.536876;
-        qda1_strength      = -2.730416;
+        qda_strength       = -2.730416;
         qdb2_strength      = -3.961194;
         qfb_strength       =  3.902838;
         qdb1_strength      = -2.966239;
@@ -57,20 +57,21 @@ elseif strcmpi(mode,'B')
         qf4_strength       =  2.707639;
         %%% SEXTUPOLOS
         %  ==========
-        sfa_strength       = -115.7829759411277/2;
-        sda_strength       =   49.50386128829739/2;
-        sfb_strength       = -214.5386552515188/2;
-        sdb_strength       =  133.1252391065637/2;
-        sd1a_strength      = -302.6188062085843/2;
-        sf1a_strength      =  369.5045185071228/2;
-        sd2a_strength      = -164.3042864671946/2;
-        sd3a_strength      = -289.9270429064217/2;
-        sf2a_strength      =  333.7039740852999/2;
-        sd1b_strength      = -302.6188062085843/2;
-        sf1b_strength      =  369.5045185071228/2;
-        sd2b_strength      = -164.3042864671946/2;
-        sd3b_strength      = -289.9270429064217/2;
-        sf2b_strength      =  333.7039740852999/2;
+        sda_strength       = -115.7829759411277/2;
+        sfa_strength       =   49.50386128829739/2;
+        sdb_strength       = -214.5386552515188/2;
+        sfb_strength       =  133.1252391065637/2;
+        
+        sd1_strength      = -302.6188062085843/2;
+        sf1_strength      =  369.5045185071228/2;
+        sd2_strength      = -164.3042864671946/2;
+        sd3_strength      = -289.9270429064217/2;
+        sf2_strength      =  333.7039740852999/2;
+        sd6_strength      = -302.6188062085843/2;
+        sf4_strength      =  369.5045185071228/2;
+        sd5_strength      = -164.3042864671946/2;
+        sd4_strength      = -289.9270429064217/2;
+        sf3_strength      =  333.7039740852999/2;
         
     elseif strncmpi(version,'opt_results',11)
         
