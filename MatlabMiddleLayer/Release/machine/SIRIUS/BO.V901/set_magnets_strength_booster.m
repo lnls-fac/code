@@ -11,10 +11,10 @@
 % tuney  =  7.31417
 % chromx =  +0.5
 % chromy =  +0.5
-qd_strength = 0.01121907309893941;
-qf_strength = 1.876071307737087;
-sf_strength = 12.34910246282437/2;
-sd_strength = 7.051860735882379/2;
+% qd_strength = 0.01121907309893941;
+% qf_strength = 1.876071307737087;
+% sf_strength = 12.34910246282437/2;
+% sd_strength = 7.051860735882379/2;
 
 
 % 2014-12-01 ximenes
@@ -23,10 +23,10 @@ sd_strength = 7.051860735882379/2;
 % tuney  =  7.31417
 % chromx =  +0.5
 % chromy =  +0.5
-% qf_strength = 1.882125768941849;
-% qd_strength = -0.001423074311685;
-% sf_strength =  6.167055148707040; 
-% sd_strength = 2.858726129029919; 
+qf_strength = 1.882125768941849;
+qd_strength = -0.001423074311685;
+sf_strength =  6.167055148707040; 
+sd_strength = 2.858726129029919; 
 
 % % 2014-10-29 ximenes
 % % with new segmented b model
