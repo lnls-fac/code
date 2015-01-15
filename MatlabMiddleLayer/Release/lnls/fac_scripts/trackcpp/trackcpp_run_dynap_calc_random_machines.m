@@ -10,7 +10,7 @@ if strcmpi(answer{1}, 'bo')
     accelerator_defaultanswer = {'0.15', '828', 'on', 'on', 'on'};
     dynap_xy_defaultanswer = {'5000', '0',     '100', '-0.018','+0.018','30','0','0.006'};
     dynap_ex_defaultanswer = {'5000', '0.001', '80', '-0.03','+0.03','50','-0.018','0'};
-    dynap_ma_defaultanswer = {'2000', '0.01', '0.001', '0', '49.681', 'mqf mb bpm'};
+    dynap_ma_defaultanswer = {'2000', '0.005', '0.001', '0', '49.681', 'mqf mb pb'};
 else
     % storage ring default parm values
     accelerator_defaultanswer = {'3.00', '864', 'on', 'on', 'on'};
