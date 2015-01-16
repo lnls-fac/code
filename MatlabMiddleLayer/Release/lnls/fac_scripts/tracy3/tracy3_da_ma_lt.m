@@ -4,16 +4,23 @@ global THERING;
 
 % users selects submachine
 prompt = {'Submachine (bo/si)', 'energy [GeV]', 'number of plots'};
-defaultanswer = {'bo', '0.150', '2'};
+defaultanswer = {'si', '3.0', '2'};
 answer = inputdlg(prompt,'Select submachine, energy and nr of plots', 1, defaultanswer);
 if isempty(answer), return; end;
 energy = str2double(answer{2});
 n_calls = round(str2double(answer{3}));
 
 if strcmpi(answer{1}, 'bo')
+    
     path = '/home/fac_files/data/sirius/bo/beam_dynamics';
-    sirius('BO');
-    the_ring = THERING;
+    r = which('sirius_bo_lattice.m');
+    if isempty(r)
+        sirius('BO');
+        the_ring = THERING;
+    else
+        the_ring = sirius_bo_lattice(energy);
+    end
+    
     ats = getappdata(0, 'ATSUMMARY');
     if (energy == 0.15)
         % BOOSTER (equillibirum parameters from LINAC)
@@ -37,22 +44,28 @@ if strcmpi(answer{1}, 'bo')
     end 
 else
     path = '/home/fac_files/data/sirius/si/beam_dynamics';
-    sirius;
-    the_ring = THERING;
+    r = which('sirius_si_lattice.m');
+    if isempty(r)
+        sirius('SI');
+        the_ring = THERING;
+    else
+        the_ring = sirius_si_lattice(energy);
+    end
+    
     ats = getappdata(0, 'ATSUMMARY');
     params.E     = energy * 1e9;
     params.emit0 = ats.naturalEmittance;
     params.sigE  = ats.naturalEnergySpread;
-    params.sigS  = ats.bunchlength;
-    params.K     = 0.0002;
-    params.I     = 350;
+    params.sigS  = 3.5e-3; % takes IBS into account
+    params.K     = 0.01;
+    params.I     = 100;
     params.nrBun = 864;
     accepRF      = ats.energyacceptance;
 end
 
 
 % users selects beam lifetime parameters
-prompt = {'Emitance[nm.rad]', 'Energy spread', 'Bunch length [mm]',...
+prompt = {'Emitance[nm.rad]', 'Energy spread', 'Bunch length (with IBS) [mm]',...
           'Coupling [%]', 'Current [mA]', 'Nr bunches', 'RF Energy Acceptance [%]'};
 defaultanswer = {num2str(params.emit0/1e-9), num2str(params.sigE), ...
                  num2str(params.sigS*1000), num2str(100*params.K), ...
