@@ -1,14 +1,135 @@
-function tracy3_da_ma_lt(n_calls, the_ring)
+function tracy3_da_ma_lt()
+
+global THERING;
+
+% users selects submachine
+prompt = {'Submachine (bo/si)', 'energy [GeV]', 'number of plots'};
+defaultanswer = {'si', '3.0', '2'};
+answer = inputdlg(prompt,'Select submachine, energy and nr of plots', 1, defaultanswer);
+if isempty(answer), return; end;
+energy = str2double(answer{2});
+n_calls = round(str2double(answer{3}));
+
+if strcmpi(answer{1}, 'bo')
+    
+    path = '/home/fac_files/data/sirius/bo/beam_dynamics';
+    r = which('sirius_bo_lattice.m');
+    if isempty(r)
+        sirius('BO');
+        the_ring = THERING;
+    else
+        the_ring = sirius_bo_lattice(energy);
+    end
+    
+    ats = getappdata(0, 'ATSUMMARY');
+    if (energy == 0.15)
+        % BOOSTER (equillibirum parameters from LINAC)
+        params.E     = energy * 1e9;
+        params.emit0 = 170e-9;  % linac
+        params.sigE  = 5.0e-3;  % linac
+        params.sigS  = 11.2e-3; % linac
+        accepRF      = 0.033;
+        params.K     = 0.0002;
+        params.I     = 0.6;
+        params.nrBun = 1;
+    else
+        params.E     = energy * 1e9;
+        params.emit0 = ats.naturalEmittance;
+        params.sigE  = ats.naturalEnergySpread;
+        params.sigS  = ats.bunchlength;
+        params.K     = 0.0002;
+        params.I     = 0.6;
+        params.nrBun = 1;
+        accepRF      = ats.energyacceptance;
+    end 
+else
+    path = '/home/fac_files/data/sirius/si/beam_dynamics';
+    r = which('sirius_si_lattice.m');
+    if isempty(r)
+        sirius('SI');
+        the_ring = THERING;
+    else
+        the_ring = sirius_si_lattice(energy);
+    end
+    
+    ats = getappdata(0, 'ATSUMMARY');
+    params.E     = energy * 1e9;
+    params.emit0 = ats.naturalEmittance;
+    params.sigE  = ats.naturalEnergySpread;
+    params.sigS  = 3.5e-3; % takes IBS into account
+    params.K     = 0.01;
+    params.I     = 100;
+    params.nrBun = 864;
+    accepRF      = ats.energyacceptance;
+end
+
+
+% users selects beam lifetime parameters
+prompt = {'Emitance[nm.rad]', 'Energy spread', 'Bunch length (with IBS) [mm]',...
+          'Coupling [%]', 'Current [mA]', 'Nr bunches', 'RF Energy Acceptance [%]'};
+defaultanswer = {num2str(params.emit0/1e-9), num2str(params.sigE), ...
+                 num2str(params.sigS*1000), num2str(100*params.K), ...
+                 num2str(params.I), num2str(params.nrBun), num2str(accepRF*100)};
+answer = inputdlg(prompt,'Parameters for beam lifetime calculation', 1, defaultanswer);
+if isempty(answer), return; end;
+params.emit0 = str2double(answer{1})*1e-9;
+params.sigE  = str2double(answer{2});
+params.sigS  = str2double(answer{3})/1000;
+params.K     = str2double(answer{4})/100;
+params.I     = str2double(answer{5})/1000;
+params.nrBun = round(str2double(answer{6}));
+accepRF      = str2double(answer{7})/100;
+
+params.N     = params.I/params.nrBun/1.601e-19*ats.revTime;
+
+twi = calctwiss(the_ring);
+% parâmetros para cálculo do tempo de vida
+% segunda fase
+% twi = calctwiss(the_ring);
+% params.emit0 = 2.1e-10;
+% params.E     = 3e9;
+% params.N     = 350e-3/864/1.601e-19*1.72e-6;
+% params.sigE  = 0.96e-3;
+% params.sigS  = 13.1e-3;
+% params.K     = 0.01;
+% accepRF      = 0.05;
 
 % parâmetros para cálculo do tempo de vida
-twi = calctwiss(the_ring);
-params.emit0 = 2.05e-10;
-params.E     = 3e9;
-params.N     = 350e-3/864/1.601e-19*1.72e-6;
-params.sigE  = 0.96e-3;
-params.sigS  = 13.1e-3;
-params.K     = 0.01;
-accepRF      = 0.05;
+% primeira fase
+% params.emit0 = 2.7e-10;
+% params.E     = 3e9;
+% params.N     = 100e-3/864/1.601e-19*1.72e-6;
+% params.sigE  = 0.87e-3;
+% params.sigS  = 3.5e-3;
+% params.K     = 0.01;
+% accepRF      = 0.05;
+
+%% storage ring 
+% params.emit0 = 2.05e-10;
+% params.E     = 3e9;
+% params.N     = 350e-3/864/1.601e-19*1.72e-6;
+% params.sigE  = 0.96e-3;
+% params.sigS  = 13.1e-3;
+% params.K     = 0.01;
+% accepRF      = 0.05;
+
+% % booster E = 3.00 GeV
+% params.emit0 = 3.5e-9;
+% params.E     = 3e9;
+% params.N     = 0.6e-3/1/1.601e-19*1.72e-6;
+% params.sigE  = 8.7e-4;
+% params.sigS  = 11.2e-3;
+% params.K     = 0.0002;
+% accepRF      = 0.0061;
+
+% BOOSTER E = 0.15 GeV
+% params.emit0 = 170e-9; % linac
+% params.E     = 0.15e9;
+% params.N     = 0.6e-3/1/1.601e-19*1.72e-6;
+% params.sigE  = 5e-3;    % linac
+% params.sigS  = 11.2e-3; % linac
+% params.K     = 0.0002;
+% accepRF      = 0.033;
 
 % parâmetros para a geração das figuras
 color_vec = {'b','r','g','m','c','k','y'};
@@ -24,9 +145,8 @@ xf = xi + scrsz(4)*(2/3);
 yf = yi + scrsz(4)*(2/3);
 
 % if ~exist('var_plane','var')
-var_plane = 'y'; %determinaçao da abertura dinâmica por varreduda no plano y
+var_plane = 'x'; %determinaçao da abertura dinâmica por varreduda no plano x
 % end
-path = '/home/fac_files/data/sirius_tracy/';
 
 cell_leg_text = cell(1,n_calls);
 pl = zeros(n_calls,3);
@@ -102,6 +222,7 @@ while i < n_calls
                 l = l + 1;
             else
                 fprintf('%-2d-%-3d: ma nao carregou\n',i,k);
+                break;
             end
             Accep(1,:) = spos;
             Accep(2,:) = min(accep(l,1,:), accepRF);

@@ -1,41 +1,52 @@
-function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
+function sirius_calc_stats(N, save_fig, arq_results, arq_machines, scale)
 % Script que calcula estatistica das orbitas e otica da maquina e faz o
 % grafico da orbita fechada para N maquinas com erros aleatorios e
-% correcao. As variaveis de entrada obrigatorias sao:
-%   thering0 - modelo sem error da maquina;
-%   N - quantidades de mauiqnas a serem avaliada;
-% Variaveis que podem ser utlizadas:
-%   save_fig - salav o grafico em uma figura com extensao .png.
-%   arqConfig - arquivo CONFIG.mat (ou outros nome) onde estao armazenados
-%   parametros principais das maquinas simuladas.
-%   arqConfig_extra - arquivo com as maquina com error e correcaoes
-%   desejadas.
-%   scale - escala para os graficos. Usualmente no caso de maquinas sem
-%   correcao de orbita deve ser 1e3, com correcao de orbita 1e6 e no caso
-%   de testes apenar com erros dinamicos 1e9. 
+% correcao. 
+%
+% Variaveis que podem ser utilizadas:
+%   N            - quantidades de maquinas a serem avaliada;
+%   save_fig     - salva o grafico em uma figura com extensao .png.
+%   arq_results  - arquivo CONFIG.mat (ou outros nome) onde estao armazenados
+%                  parametros principais das maquinas simuladas.
+%   arq_machines - arquivo com as maquina com error e correcoes desejadas.
+%   scale        - escala para os graficos. Usualmente no caso de maquinas sem
+%                  correcao de orbita deve ser 1e3, com correcao de orbita 1e6 e no caso
+%                  de testes apenar com erros dinamicos 1e9. 
 
-
-    %Seleciona e carrega os arquivos para analise
-    if exist('arqConfig', 'var')==0
-        [FileName,PathName] = uigetfile('*.mat','Select the MATLAB Config.mat file');
-        load([PathName FileName]);
-    end;
+    %arq_results = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG.mat';
+    %arq_machines = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
     
-    if exist('arqConfig_extra', 'var')==0
-        [FileName,PathName] = uigetfile('*.mat','Select the MATLAB file with the stats to be analyzed');
-        load([PathName FileName]);
-    end; 
+    % Seleciona e carrega o arquivo com resultado para analise
+    default_dir = fullfile(lnls_get_root_folder(), 'data', 'sirius');
+    if exist('arq_results', 'var')==0
+        [FileName,PathName] = uigetfile('*.mat','Select the *.mat file with analysis results', fullfile(default_dir, 'CONFIG.mat'));
+        arq_results = fullfile(PathName,FileName);
+    end
+    data = load(arq_results); r = data.r;
+    
+     % Seleciona e carrega o arquivo com maquinas aleatorias 
+    if exist('arq_machines', 'var')==0
+        [FileName,PathName] = uigetfile('*.mat','Select the *.mat file with random machines', fullfile(PathName, '*.mat'));
+        arq_machines = fullfile(PathName,FileName);
+    end
+    data = load(arq_machines); machine = data.machine;
     
     % Define uma escala para os graficos
     if exist('scale', 'var')==0
         scale = 1e6;
     end;
     
+    if ~exist('N','var')
+        N = length(machine);
+    end
            
-    %Calcula parametros de twiss da rede sem erros
+    % Calcula parametros de twiss da rede sem erros
+    if ~exist('thering0','var')
+        thering0 = r.params.the_ring;
+    end
     twiss0 = calctwiss(thering0);
     
-    %Armazena todos os valoes de twiss das N maquina num vetor de cells
+    % Armazena todos os valoes de twiss das N maquina num vetor de cells
     for i=1:N
         if scale==1e3
             sext_idx = getappdata(0, 'Sextupole_Idx');
@@ -58,7 +69,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     fprintf('     | (max)  (std)  | (max)  (std)   \n');
     formatSpec=' %3s | %4.2f  %4.2f | %4.2f  %4.2f  \n';  
     
-    if (scale==1e6 | scale==1e3)
+    if (scale==1e6 || scale==1e3)
         bpm = r.params.static.bpm_idx;
         ch=r.params.static.hcm_idx;
         cv=r.params.static.vcm_idx;
@@ -86,16 +97,15 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
 
     % Calcula estatisticas da forca das corretoras
     if scale==1e3
-        fprintf('id |  kickX[mrad]   |  kickY[mrad]     \n');
+        fprintf('%3s | %15s | %15s\n', 'id', 'kickX[mrad]', 'kickY[mrad]');
     elseif scale==1e6
-        fprintf('id |  kickX[urad]   |  kickY[urad]     \n');
+        fprintf('%3s | %15s | %15s\n', 'id', 'kickX[urad]', 'kickY[urad]');
     else
-        fprintf('id |  kickX[nrad]   |  kickY[nrad]     \n');
+        fprintf('%3s | %15s | %15s\n', 'id', 'kickX[nrad]', 'kickY[nrad]');
     end
-    fprintf('   |  (max)  (std)  |  (max)  (std)    \n');
-    formatSpec=' %3d | %4.2f  %4.2f | %4.2f  %4.2f \n';  
+    fprintf('%3s | %15s | %15s\n', ' ', ' (max)   (std) ', ' (max)   (std) ');
     
-    
+    formatSpec='%03d | %7.2f %7.2f | %7.2f %7.2f \n';  
     for i=1:N
         kick_x(i)=max(abs(getcellstruct(twiss(i).THERING,'KickAngle',ch,1)))*scale;
         kick_y(i)=max(abs(getcellstruct(twiss(i).THERING,'KickAngle',cv,2)))*scale;
@@ -108,8 +118,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     fprintf(formatSpec,'stat',max(kick_x),max(std_kickx),max(kick_y),max(std_kicky));
     fprintf('\n\n\n')
 
-                
-    %Calcula estatisticas e o beta-beat em X e Y da cada maquina simulada
+    % Calcula estatisticas e o beta-beat em X e Y da cada maquina simulada
     fprintf('ind | b-beat X (%%) | b-beat Y (%%)  \n');    
     formatSpec='%3d |     %4.2f    |     %4.2f \n';  
     
@@ -123,7 +132,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     fprintf(formatSpec,'stat',mean(beatx),mean(beaty));
     fprintf('\n\n\n');
     
-    %Calcula variacao de orbita total
+    % Calcula variacao de orbita total
     if scale==1e3
         fprintf('ind |     cod X (mm)    |     cod Y (mm)    \n');
     elseif scale==1e6
@@ -135,7 +144,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     formatSpec='%3d |   %4.2f     %4.2f   |  %4.2f     %4.2f\n';    
        
     for i=1:N
-        %calcula maximo e desvio padrao da orbita fechada no BC
+        % Calcula maximo e desvio padrao da orbita fechada no BC
         maxBCx(i)  = max(abs(twiss(i).cox))*scale;
         stdBCx(i)  = std(twiss(i).cox)*scale;
         codx_sigmax(i)  = max(abs(twiss(i).cox)./sqrt(0.2772*1e-9*twiss(i).betax+0.00083^2*twiss(i).etax.^2));
@@ -157,44 +166,55 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     fprintf('\n\n\n')
     
 
-    %Calcula variacao de orbita no BC
-    if scale==1e3
-        fprintf('ind |      cod BC X (mm)      |      cod BC Y (mm)    \n');    
-    elseif scale==1e6
-        fprintf('ind |      cod BC X (um)      |      cod BC Y (um)    \n');    
-    else
-        fprintf('ind |      cod BC X (nm)      |      cod BC Y (nm)    \n');    
-    end
-    fprintf('    |         pos            angle        |         pos            angle       \n');
-    fprintf('    |  (max)     (std)    (max)    (std)  |  (max)     (std)    (max)    (std) \n');
-    formatSpec='%3d |  %5.3f    %5.3f   %5.3f    %5.3f  |  %5.3f    %5.3f   %5.3f    %5.3f  \n';  
-    
-    %seleciona posicao dos marcadores do centro do BC (mc)
+    % Seleciona posicao dos marcadores do centro do BC (mc)
     mc = findcells(thering0,'FamName','mc');
     
-    for i=1:N
-        %calcula maximo e desvio padrao da orbita fechada e do angulo no BC
-        maxBCx(i)  = max(abs(twiss(i).cox(mc)))*scale;
-        maxBCxp(i)  = max(abs(twiss(i).coxp(mc)))*scale;
-        stdBCx(i)  = std(twiss(i).cox(mc))*scale;
-        stdBCxp(i)  = std(twiss(i).coxp(mc))*scale;
-        maxBCy(i)  = max(abs(twiss(i).coy(mc)))*scale;
-        maxBCyp(i)  = max(abs(twiss(i).coyp(mc)))*scale;
-        stdBCy(i)  = std(twiss(i).coy(mc))*scale;
-        stdBCyp(i)  = std(twiss(i).coyp(mc))*scale;
-        fprintf(formatSpec,i,maxBCx(i),stdBCx(i),maxBCxp(i),stdBCxp(i),maxBCy(i),stdBCy(i),maxBCyp(i),stdBCyp(i));
+    if ~isempty(mc)
+        % Calcula variacao de orbita no BC
+        if scale==1e3
+            fprintf('ind |      cod BC X (mm)      |      cod BC Y (mm)    \n');    
+        elseif scale==1e6
+            fprintf('ind |      cod BC X (um)      |      cod BC Y (um)    \n');    
+        else
+            fprintf('ind |      cod BC X (nm)      |      cod BC Y (nm)    \n');    
+        end
+        fprintf('    |         pos            angle        |         pos            angle       \n');
+        fprintf('    |  (max)     (std)    (max)    (std)  |  (max)     (std)    (max)    (std) \n');
+        formatSpec='%3d |  %5.3f    %5.3f   %5.3f    %5.3f  |  %5.3f    %5.3f   %5.3f    %5.3f  \n';  
+     
+        for i=1:N
+            % Calcula maximo e desvio padrao da orbita fechada e do angulo no BC
+            maxBCx(i)  = max(abs(twiss(i).cox(mc)))*scale;
+            maxBCxp(i)  = max(abs(twiss(i).coxp(mc)))*scale;
+            stdBCx(i)  = std(twiss(i).cox(mc))*scale;
+            stdBCxp(i)  = std(twiss(i).coxp(mc))*scale;
+            maxBCy(i)  = max(abs(twiss(i).coy(mc)))*scale;
+            maxBCyp(i)  = max(abs(twiss(i).coyp(mc)))*scale;
+            stdBCy(i)  = std(twiss(i).coy(mc))*scale;
+            stdBCyp(i)  = std(twiss(i).coyp(mc))*scale;
+            fprintf(formatSpec,i,maxBCx(i),stdBCx(i),maxBCxp(i),stdBCxp(i),maxBCy(i),stdBCy(i),maxBCyp(i),stdBCyp(i));
+        end
+        fprintf('---------------------------------------------------------------------------\n');
+        formatSpec='%4s|  %5.3f    %5.3f   %5.3f    %5.3f  |  %5.3f    %5.3f   %5.3f    %5.3f \n';  
+        fprintf(formatSpec,'stat',mean(maxBCx),mean(stdBCx),mean(maxBCxp),mean(stdBCxp),mean(maxBCy),mean(stdBCy),mean(maxBCyp),mean(stdBCyp));
+        fprintf('\n\n\n')
     end
-    fprintf('---------------------------------------------------------------------------\n');
-    formatSpec='%4s|  %5.3f    %5.3f   %5.3f    %5.3f  |  %5.3f    %5.3f   %5.3f    %5.3f \n';  
-    fprintf(formatSpec,'stat',mean(maxBCx),mean(stdBCx),mean(maxBCxp),mean(stdBCxp),mean(maxBCy),mean(stdBCy),mean(maxBCyp),mean(stdBCyp));
-    fprintf('\n\n\n')
     
-    %Faz o grafico das orbitas e rms de 1 setor
-    mib = findcells(thering0,'FamName','mib');
-    mia = findcells(thering0,'FamName','mia');
+    % Faz o grafico das orbitas e rms de 1 setor
     ini=1;
-    fim=mib(1);
+    idx = findcells(thering0,'FamName','mib');
+    if isempty(idx)
+        idx = findcells(thering0, 'FamName', 'mqf');
+        if isempty(idx)
+            idx = findcells(thering0, 'FamName', 'MQF');
+        end
+        fim = idx(2);
+    else
+        fim = idx(1);
+    end
+  
     posz=twiss0.pos; 
+    nper = posz(end)/posz(fim);
     CODfig=figure(1);
     set(CODfig, 'Position', [1 1 1000 350]);
     axes('FontSize',14);
@@ -212,10 +232,11 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
         offset=max(offset,max(abs(twiss(i).coy(ini:fim)))*scale);
         top=max(top,max(abs(twiss(i).cox(ini:fim)))*scale);
     end
-    %Faz grafico da rede
+    
+    % Faz grafico da rede
     Delta=(top+offset)*0.1/3;
     offset=-offset-2*Delta;
-    lnls_drawlattice(thering0,20,offset,1,Delta);
+    lnls_drawlattice(thering0,nper,offset,1,Delta);
     offset=offset-2*Delta;
     ylim([offset top+2]);
 
@@ -247,7 +268,7 @@ function calc_stats(thering0,N,save_fig,arqConfig,arqConfig_extra,scale)
     hold off;
 
     if exist('save_fig', 'var')
-        print('-dpng','COD.png');
+        plot2svg( 'COD_twiss.svg',CODfig);
     end
    
 end

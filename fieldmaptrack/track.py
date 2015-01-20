@@ -27,7 +27,6 @@ class SerretFrenetCoordSystem:
             points[:,i] = self.p + grid[i] * self.n
         return points    
 
-    
 class Trajectory:
     
     def __init__(self,
@@ -37,10 +36,17 @@ class Trajectory:
         self.fieldmap = fieldmap
         
     def calc_trajectory(self, **kwargs):
-        
         #return self.calc_trajectory_rk1(**kwargs)
         return self.calc_trajectory_rk4(**kwargs)
         
+    def calc_reference_point(self):
+        """calcs reference point defined as intersection of two asymptoctic straight section lines"""
+        x1,z1 = self.rx[-2], self.rz[-2]
+        x2,z2 = self.rx[-1], self.rz[-1]
+        a = (x2-x1)/(z2-z1)
+        b = 0.5*((x1+x2) - a * (z1+z2))
+        return (b,0.0)
+     
     def calc_force(self, alpha, p):
         
         rx, ry, rz, px, py, pz = p
@@ -486,7 +492,8 @@ class Trajectory:
         s_max_bz,rx_max_bz,ry_max_bz,rz_max_bz = self.s[bz.index(max_bz)], self.rx[bz.index(max_bz)], self.ry[bz.index(max_bz)], self.rz[bz.index(max_bz)] 
         theta_x = math.atan(self.px[-1]/self.pz[-1])
         theta_y = math.atan(self.py[-1]/self.pz[-1])
- 
+        ref_point = self.calc_reference_point()
+        
         r  = ''
         r +=   '{0:<35s} {1:+.4e} deg.'.format('horizontal_deflection_angle:', theta_x * (180.0/math.pi))
         r += '\n{0:<35s} {1:+.4e} deg.'.format('vertical_deflection_angle:', theta_y * (180.0/math.pi)) 
@@ -497,17 +504,43 @@ class Trajectory:
         r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bx@trajectory:', self.bx[bx.index(max_bx)], s_max_bx, rx_max_bx, ry_max_bx, rz_max_bx)
         r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_by@trajectory:', self.by[by.index(max_by)], s_max_by, rx_max_by, ry_max_bx, rz_max_by)        
         r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bz@trajectory:', self.bz[bz.index(max_bz)], s_max_bz, rx_max_bz, ry_max_bz, rz_max_bz)
-    
+        r += '\n{0:<35s} {1:+f} mm'.format('rx position of reference point:', ref_point[0])
+        r += '\n{0:<35s} {1:+f} mm'.format('initial rx position of trajectory:', self.rx[0])
         return r
    
-    def save(self, file_name):
+    def save(self, filename):
         
-        with open(file_name, 'w') as fp:
+        with open(filename, 'w') as fp:
             fp.write('# trajectory\n')
             fp.write('# s[mm] rx[mm] ry[mm] rz[mm] px[rad] py[rad] pz[rad]\n')
             for i in range(len(self.s)):
                 fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(self.s[i],self.rx[i],self.ry[i],self.rz[i],self.px[i],self.py[i],self.pz[i]))
 
+    def load(self, filename):
+        lines = [line.strip() for line in open(filename)]
+        s,rx,ry,rz,px,py,pz,bx,by,bz = [],[],[],[],[],[],[],[],[],[]
+        for line in lines[2:]:
+            words = line.split()
+            s.append(float(words[0]))
+            rx.append(float(words[1])), ry.append(float(words[2])), rz.append(float(words[3]))
+            px.append(float(words[4])), py.append(float(words[5])), pz.append(float(words[6]))
+        self.s = np.array(s)
+        self.rx, self.ry, self.rz = np.array(rx), np.array(ry), np.array(rz)
+        self.px, self.py, self.pz = np.array(px), np.array(py), np.array(pz)
+        self.bx, self.by, self.bz = np.array(rx), np.array(ry), np.array(rz)
+        # calcs field on reference trajectory
+        for i in range(len(s)):
+            self.bx[i], self.by[i], self.bz[i] = self.fieldmap.interpolate(self.rx[i], self.ry[i], self.rz[i])
+        self.s_step = self.s[1] - self.s[0]
+     
+    def save_field(self, filename):
+        
+        with open(filename, 'w') as fp:
+            fp.write('# field on trajectory\n')
+            fp.write('# s[mm] rx[mm] ry[mm] rz[mm] bx[T] by[T] bz[T]\n')
+            for i in range(len(self.s)):
+                fp.write('{0:.16e} {1:+.16e} {2:+.16e} {3:+.16e} {4:+.16e} {5:+.16e} {6:+.16e}\n'.format(self.s[i], self.rx[i], self.ry[i], self.rz[i], self.bx[i], self.by[i], self.bz[i]))
+                   
     def calc_sagitta(self, half_dipole_length):
         
         rx = self.rx

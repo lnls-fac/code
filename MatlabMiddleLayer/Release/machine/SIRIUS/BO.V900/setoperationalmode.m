@@ -130,7 +130,7 @@ AD.DeltaRFDisp         = 2000e-6;
 %AD.DeltaRFChro         = [-2000 -1000 0 1000 2000] * 1e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
 
-AD.TuneDelay           = 3.0;  
+AD.TuneDelay           = 0.0;  
 AD.ATModel             = 'sirius_bo_lattice';
 AD.Chromaticity.Golden = [1; 1];
 AD.MCF                 = getmcf('Model');
@@ -159,7 +159,7 @@ AD.HarmonicNumber      = 828;
 AD.DeltaRFDisp         = 2000e-6;
 AD.DeltaRFChro         = 1e-6 * linspace(-3000,3000,11);
 
-AD.TuneDelay           = 3.0;  
+AD.TuneDelay           = 0.0;  
 AD.ATModel             = 'sirius_bo_lattice';
 AD.Chromaticity.Golden = [1; 1];
 AD.MCF                 = getmcf('Model');

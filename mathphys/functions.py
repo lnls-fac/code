@@ -1,7 +1,9 @@
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
-def polyfit(x,y,monomials):
+def polyfit(x,y,monomials, algorithm='lstsq'):
+    
     X = np.zeros((len(x),len(monomials)))
     N = np.zeros((len(x),len(monomials)))
     for i in range(X.shape[1]):
@@ -13,37 +15,22 @@ def polyfit(x,y,monomials):
     XNt = np.transpose(XN) 
     b =  np.dot(XNt,y_)
     X =  np.dot(XNt, XN)
-    r = np.linalg.lstsq(X, b)
-    return r[0][:,0]
-        
-        
-        
     
-    
-# pi = math.pi
-# 
-# def sin(x):
-#     
-#     if type(x) is numpy.ndarray:
-#         return numpy.sin(x)
-#     else:
-#         return math.sin(x)
-#     
-# def cos(x):
-#     
-#     if type(x) is numpy.ndarray:
-#         return numpy.cos(x)
-#     else:
-#         return math.cos(x)
-#     
-# def tan(x):
-#     
-#     if type(x) is numpy.ndarray:
-#         return numpy.tan(x)
-#     else:
-#         return math.tan(x)
+    if algorithm is 'lstsq':
+        r      = np.linalg.lstsq(X,b)
+        coeffs = r[0][:,0]
+    else:
+        r       = np.linalg.solve(X,b)
+        coeffs  = r[:,0]
 
+    # finds maximum diff and its base value        
+    y_fitted   = np.dot(XN, coeffs)
+    y_diff     = abs(y_fitted - y_[:,0])
+    max_error  = max(y_diff)
+    idx        = [i for i,value in enumerate(y_diff) if value == max_error]
+    base_value = y_[idx[0],0] 
 
+    return (coeffs, (max_error,base_value))
     
     
     

@@ -2,6 +2,8 @@ function respm = calc_respm_coupling(the_ring, bpms, hcms, vcms, scms)
 
 stepK = 0.001;
 
+fprintf('nr skewcorr: %03i\n', length(scms));
+
 v0 = calc_residue_coupling(the_ring, bpms, hcms, vcms);
 M = zeros(length(v0),length(scms));
 lnls_create_waitbar('Calcs Coupling Response Matrix',0.5,length(scms));

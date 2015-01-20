@@ -665,12 +665,32 @@ parameter_list = [
   ),
 
   Parameter(
+    name     = 'Booster dipole quadrupole integrated strength',
+    group    = 'FAC',
+    value    = Prms.bo_dipole_quadrupole_integrated_strength,
+    symbol   = r'',
+    units    = 'm<sup>-1</sup>',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster dipole sextupole integrated strength',
+    group    = 'FAC',
+    value    = Prms.bo_dipole_sextupole_integrated_strength,
+    symbol   = r'',
+    units    = 'm<sup>-2</sup>',
+    deps     = [],
+    obs      = [],
+  ),
+
+  Parameter(
     name     = 'Booster dipole quadrupole strength',
     group    = 'FAC',
     value    = Prms.bo_dipole_quadrupole_strength,
     symbol   = r'',
     units    = 'm<sup>-2</sup>',
-    deps     = [],
+    deps     = ['Booster dipole quadrupole integrated strength', 'Booster hardedge length of dipoles'],
     obs      = [],
   ),
 
@@ -680,37 +700,27 @@ parameter_list = [
     value    = Prms.bo_dipole_sextupole_strength,
     symbol   = r'',
     units    = 'm<sup>-3</sup>',
-    deps     = [],
+    deps     = ['Booster dipole sextupole integrated strength', 'Booster hardedge length of dipoles'],
     obs      = [r'<math> \frac{1}{2 B\rho}\frac{d^2B}{dx^2}</math>'],
   ),
 
   Parameter(
-    name     = 'Booster extraction dipole sextupole gradient',
+    name     = 'Booster injection dipole quadrupole integrated gradient',
     group    = 'FAC',
-    value    = Prms.bo_extraction_dipole_sextupole_gradient,
+    value    = Prms.bo_injection_dipole_quadrupole_integrated_gradient,
     symbol   = r'',
-    units    = 'T/m<sup>2</sup>',
-    deps     = ['Booster extraction beam magnetic rigidity','Booster dipole sextupole strength'],
-    obs      = [r'<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
+    units    = 'T',
+    deps     = ['Booster dipole quadrupole integrated strength','Booster injection beam magnetic rigidity'],
+    obs      = [],
   ),
 
   Parameter(
-    name     = 'Booster injection dipole sextupole gradient',
+    name     = 'Booster injection dipole sextupole integrated gradient',
     group    = 'FAC',
-    value    = Prms.bo_injection_dipole_sextupole_gradient,
+    value    = Prms.bo_injection_dipole_sextupole_integrated_gradient,
     symbol   = r'',
-    units    = 'T/m<sup>2</sup>',
-    deps     = ['Booster injection beam magnetic rigidity','Booster dipole sextupole strength'],
-    obs      = [r'<math> \frac{1}{2}\frac{d^2B}{dx^2}</math>'],
-  ),
-
-  Parameter(
-    name     = 'Booster extraction dipole quadrupole gradient',
-    group    = 'FAC',
-    value    = Prms.bo_extraction_dipole_quadrupole_gradient,
-    symbol   = r'',
-    units    = 'T/m',
-    deps     = ['Booster extraction beam magnetic rigidity','Booster dipole quadrupole strength'],
+    units    = 'T',
+    deps     = ['Booster dipole sextupole integrated strength','Booster injection beam magnetic rigidity'],
     obs      = [],
   ),
 
@@ -719,8 +729,78 @@ parameter_list = [
     group    = 'FAC',
     value    = Prms.bo_injection_dipole_quadrupole_gradient,
     symbol   = r'',
+    units    = 'T',
+    deps     = ['Booster injection dipole quadrupole integrated gradient','Booster hardedge length of dipoles'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster injection dipole sextupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_injection_dipole_sextupole_gradient,
+    symbol   = r'',
+    units    = 'T',
+    deps     = ['Booster injection dipole sextupole integrated gradient','Booster hardedge length of dipoles'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster injection dipole integrated field',
+    group    = 'FAC',
+    value    = Prms.bo_injection_dipole_integrated_field,
+    symbol   = r'(BL)_{inj}',
+    units    = 'T.m',
+    deps     = ['Booster injection beam magnetic rigidity','Booster dipole deflection angle'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole quadrupole integrated gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_quadrupole_integrated_gradient,
+    symbol   = r'',
+    units    = 'T',
+    deps     = ['Booster dipole quadrupole integrated strength','Booster extraction beam magnetic rigidity'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole sextupole integrated gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_sextupole_integrated_gradient,
+    symbol   = r'',
+    units    = 'T',
+    deps     = ['Booster dipole sextupole integrated strength','Booster extraction beam magnetic rigidity'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole quadrupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_quadrupole_gradient,
+    symbol   = r'',
     units    = 'T/m',
-    deps     = ['Booster injection beam magnetic rigidity','Booster dipole quadrupole strength'],
+    deps     = ['Booster extraction dipole quadrupole integrated gradient','Booster hardedge length of dipoles'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole sextupole gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_sextupole_gradient,
+    symbol   = r'',
+    units    = 'T/m',
+    deps     = ['Booster extraction dipole sextupole integrated gradient','Booster hardedge length of dipoles'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction dipole integrated field',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_dipole_integrated_field,
+    symbol   = r'(BL)_{ext}',
+    units    = 'T.m',
+    deps     = ['Booster extraction beam magnetic rigidity','Booster dipole deflection angle'],
     obs      = [],
   ),
 
@@ -1191,6 +1271,16 @@ parameter_list = [
   ),
 
   Parameter(
+    name     = 'Booster hardedge sagitta of dipoles',
+    group    = 'FAC',
+    value    = Prms.bo_hardedge_sagitta_of_dipoles,
+    symbol   = r'<math>s_\text{DIP}</math>',
+    units    = 'mm',
+    deps     = ['Booster dipole bending radius', 'Booster dipole deflection angle'],
+    obs      = [r'<math>S_\text{ag, DIP} = \rho (1 - \cos \theta_\text{DIP} / 2)</math>'],
+  ),
+
+  Parameter(
     name     = 'Booster injection beam magnetic rigidity',
     group    = 'FAC',
     value    = Prms.bo_injection_beam_magnetic_rigidity,
@@ -1292,53 +1382,123 @@ parameter_list = [
   ),
 
   Parameter(
-    name     = 'Booster extraction QF quadrupole maximum gradient',
+    name     = 'Booster SF sextupole maximum strength',
     group    = 'FAC',
-    value    = Prms.bo_extraction_QF_quadrupole_maximum_gradient,
-    symbol   = r"<math>B'_\text{QF,max}</math>",
-    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    value    = Prms.bo_SF_sextupole_maximum_strength,
+    symbol   = r"<math>\frac{1}{2} S_\text{QF,max}</math>",
+    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
     deps     = [],
     obs      = [],
   ),
-                
+
   Parameter(
-    name     = 'Booster extraction QD quadrupole maximum absolute gradient',
+    name     = 'Booster injection SF sextupole maximum gradient',
     group    = 'FAC',
-    value    = Prms.bo_extraction_QD_quadrupole_maximum_absolute_gradient,
-    symbol   = r"<math>B'_\text{QD,max}</math>",
-    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    value    = Prms.bo_injection_SF_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B''_\text{SF,max,inj}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster QF sextupole maximum strength', 'Booster injection beam magnetic rigidity'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction SF sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_SF_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B''_\text{SF,max,ext}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster QF sextupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = [],
+  ),
+        
+  Parameter(
+    name     = 'Booster SD sextupole maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_SD_sextupole_maximum_strength,
+    symbol   = r"<math>\frac{1}{2} S_\text{SD,max}</math>",
+    units    = unicode('m<sup>-3</sup>', encoding='utf-8'),
     deps     = [],
+    obs      = [],
+  ),
+     
+  Parameter(
+    name     = 'Booster injection SD sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_injection_SD_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B''_\text{SD,max,inj}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster SD sextupole maximum strength', 'Booster injection beam magnetic rigidity'],
     obs      = ['Bipolar.'],
   ),
-                
+
+  Parameter(
+    name     = 'Booster extraction SD sextupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_SD_sextupole_maximum_gradient,
+    symbol   = r"<math>\frac{1}{2} B'_\text{SD,max,ext}</math>",
+    units    = unicode('T·m<sup>-2</sup>', encoding='utf-8'),
+    deps     = ['Booster QD sextupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = ['Bipolar.'],
+  ),
+
+  Parameter(
+    name     = 'Booster QF quadrupole maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_QF_quadrupole_maximum_strength,
+    symbol   = r"<math>K_\text{QF,max}</math>",
+    units    = unicode('m<sup>-2</sup>', encoding='utf-8'),
+    deps     = [],
+    obs      = [],
+  ),
+
   Parameter(
     name     = 'Booster injection QF quadrupole maximum gradient',
     group    = 'FAC',
     value    = Prms.bo_injection_QF_quadrupole_maximum_gradient,
-    symbol   = r"<math>B'_\text{QF,max}</math>",
+    symbol   = r"<math>B'_\text{QF,max,inj}</math>",
     units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    deps     = ['Booster QF quadrupole maximum strength', 'Booster injection beam magnetic rigidity'],
+    obs      = [],
+  ),
+
+  Parameter(
+    name     = 'Booster extraction QF quadrupole maximum gradient',
+    group    = 'FAC',
+    value    = Prms.bo_extraction_QF_quadrupole_maximum_gradient,
+    symbol   = r"<math>B'_\text{QF,max,ext}</math>",
+    units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
+    deps     = ['Booster QF quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = [],
+  ),
+        
+  Parameter(
+    name     = 'Booster QD quadrupole maximum strength',
+    group    = 'FAC',
+    value    = Prms.bo_QD_quadrupole_maximum_strength,
+    symbol   = r"<math>K_\text{QD,max}</math>",
+    units    = unicode('m<sup>-2</sup>', encoding='utf-8'),
     deps     = [],
     obs      = [],
   ),
-                
+     
   Parameter(
-    name     = 'Booster injection QD quadrupole maximum absolute gradient',
+    name     = 'Booster injection QD quadrupole maximum gradient',
     group    = 'FAC',
-    value    = Prms.bo_injection_QD_quadrupole_maximum_absolute_gradient,
-    symbol   = r"<math>B'_\text{QD,max}</math>",
+    value    = Prms.bo_injection_QD_quadrupole_maximum_gradient,
+    symbol   = r"<math>B'_\text{QD,max,inj}</math>",
     units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
-    deps     = [],
+    deps     = ['Booster QD quadrupole maximum strength', 'Booster injection beam magnetic rigidity'],
     obs      = ['Bipolar.'],
   ),
-                
+
   Parameter(
-    name     = 'Booster maximum integrated sextupole',
+    name     = 'Booster extraction QD quadrupole maximum gradient',
     group    = 'FAC',
-    value    = Prms.bo_maximum_integrated_sextupole,
-    symbol   = r"<math>\left( \int \frac{B''}{2}\,\mathrm{d}s \right)_\text{max}</math>",
+    value    = Prms.bo_extraction_QD_quadrupole_maximum_gradient,
+    symbol   = r"<math>B'_\text{QD,max,ext}</math>",
     units    = unicode('T·m<sup>-1</sup>', encoding='utf-8'),
-    deps     = [],
-    obs      = [],
+    deps     = ['Booster QD quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
+    obs      = ['Bipolar.'],
   ),
                 
   Parameter(
@@ -1514,6 +1674,17 @@ parameter_list = [
     obs      = [],
   ),
 
+  Parameter(
+    name     = 'Booster beam position monitors alignment error tolerance',
+    group    = 'FAC',
+    value    = Prms.bo_beam_position_monitors_alignment_error_tolerance,
+    symbol   = r'<math>E_{xy,\text{BPM}}</math>',
+    units    = unicode('μm', encoding='utf-8'),
+    deps     = [],
+    obs      = [r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.',
+                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
+  ),
+                  
   Parameter(
     name     = 'Booster dipoles alignment error tolerance',
     group    = 'FAC',

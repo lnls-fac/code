@@ -3,7 +3,8 @@ harmonic_number = 828
 
 def create_lattice(energy = default_energy):
 
-    from pyaccel import Drift, Marker, Quadrupole, Sextupole, HCorrector, VCorrector, RBend
+    from pyaccel import Drift, Marker, Quadrupole, Sextupole, HCorrector, VCorrector, RBend, RFCavity
+    from pyaccel.lattice import buildlat
     
     rf_voltage = 150e3 if energy == 0.15 else 950e3
         
@@ -64,31 +65,31 @@ def create_lattice(energy = default_energy):
                 gap=0, fint_in=0, fint_out=0, 
                 polynom_a=[0,0,0,0,0,0,0], 
                 polynom_b=[+0.000000000000000E+00, -9.506765125433098E-02, -1.657771745012960E+00, +2.456999406155903E+01, 
-                           +4.157933504094569E+03, +5.002371662930900E+03, -1.022424406403009E+08], bend_pass_method);
+                           +4.157933504094569E+03, +5.002371662930900E+03, -1.022424406403009E+08])
     b04 = RBend(fam_name='b', length=3.399999999999992E-02, 
                 angle=+3.412178069747464E-03, angle_in=0, angle_out=0, 
                 gap=0, fint_in=0, fint_out=0, 
                 polynom_a=[0,0,0,0,0,0,0],
                 polynom_b=[+0.000000000000000E+00, -2.079714071591720E-01, -1.920477735683628E+00, +5.810211405032815E+00,
-                           -3.509300682929235E+03, +6.420776809816113E+04, +6.291399026007216E+07], bend_pass_method);
+                           -3.509300682929235E+03, +6.420776809816113E+04, +6.291399026007216E+07])
     b05 = RBend(fam_name='b', length=1.580000000000000E-01, 
                 angle=+1.662526504959806E-02, angle_in=0, angle_out=0, 
                 gap=0, fint_in=0, fint_out=0, 
                 polynom_a=[0,0,0,0,0,0,0],
                 polynom_b=[+0.000000000000000E+00, -1.859620865317806E-01, -1.883162915218852E+00, -1.596178727167645E-01, 
-                           -8.441889487347562E+01, +1.847758710080948E+03, -1.274410000899198E+06], bend_pass_method);
+                           -8.441889487347562E+01, +1.847758710080948E+03, -1.274410000899198E+06])
     b06 = RBend(fam_name='b', length=1.920000000000000E-01, 
                 angle=+1.994573240088625E-02, angle_in=0, angle_out=0, 
                 gap=0, fint_in=0, fint_out=0, 
                 polynom_a=[0,0,0,0,0,0,0], 
                 polynom_b=[+0.000000000000000E+00, -2.119930065064550E-01, -1.926905039970153E+00, -3.604593481630426E+00,
-                           -8.571181055182160E+01, -7.508028910206927E+03, -1.055179786595804E+06], bend_pass_method);
+                           -8.571181055182160E+01, -7.508028910206927E+03, -1.055179786595804E+06])
     b07 = RBend(fam_name='b', length=1.960000000000000E-01, 
                 angle=+2.019544084717638E-02, angle_in=0, angle_out=0, 
                 gap=0, fint_in=0, fint_out=0, 
                 polynom_a=[0,0,0,0,0,0,0],
                 polynom_b=[+0.000000000000000E+00, -2.272573009556761E-01, -1.993793351671241E+00, -6.474955824281598E+00, 
-                           +2.179224582442633E+02, -2.005269082855995E+04, -7.440279279190110E+06], bend_pass_method); 
+                           +2.179224582442633E+02, -2.005269082855995E+04, -7.440279279190110E+06]) 
      
     pb = Marker(fam_name='pb')
     mb = Marker(fam_name='mb')
@@ -105,20 +106,29 @@ def create_lattice(energy = default_energy):
     lcv_2     = [lm30, vcm, l30_2];
     lsdcv_2   = [lm70, vcm, l25, sd, l25_2];
     fodo1     = [qf, lfree, lfree_2, b, lfree_2, bpm, lsf, qf];
-    fodo2     = [qf, lfree, lqd_2, b, fliplr(lcv_2), bpm, lch, qf];
-    fodo2sd   = [qf, lfree, lqd_2, b, fliplr(lsdcv_2), bpm, lch, qf];
-    fodo1sd   = [qf, lfree, lfree_2, b, fliplr(lsd_2), bpm, lsf, qf];
-    boos      = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2];
-    lke       = [l60, kick_ex, lkk, kick_ex, lm60_kk];
-    lcvse_2   = [l36, sept_ex, lm66, vcm, l30_2];
-    lmonch    = [l100, bpm, lm120, hcm, l20];
-    lsich     = [lm105, sept_in, l80, hcm, l25];
-    lki       = [l60, kick_in, lm60];
-    fodo2kese = [qf, lke, lqd_2, b, fliplr(lcvse_2), lmonch, qf];
-    fodo2si   = [qf, lfree, lqd_2, b, fliplr(lcv_2), bpm, lsich, qf];
-    fodo1ki   = [qf, lki, lfree_2, b, lfree_2, bpm, lsf, qf];
-    fodo1ch   = [qf, fliplr(lch), lfree_2, b, lfree_2, bpm, lsf, qf];
-    fodo1rf   = [qf, lfree, rfc, lfree_2, b, lfree_2, bpm, lsf, qf];
+    fodo2     = [qf, lfree, lqd_2, b, lcv_2[::-1], bpm, lch, qf]
+    fodo2sd   = [qf, lfree, lqd_2, b, lsdcv_2[::-1], bpm, lch, qf]
+    fodo1sd   = [qf, lfree, lfree_2, b, lsd_2[::-1], bpm, lsf, qf]
+    boos      = [fodo1sd, fodo2, fodo1, fodo2, fodo1, fodo2sd, fodo1, fodo2, fodo1, fodo2]
+    lke       = [l60, kick_ex, lkk, kick_ex, lm60_kk]
+    lcvse_2   = [l36, sept_ex, lm66, vcm, l30_2]
+    lmonch    = [l100, bpm, lm120, hcm, l20]
+    lsich     = [lm105, sept_in, l80, hcm, l25]
+    lki       = [l60, kick_in, lm60]
+    fodo2kese = [qf, lke, lqd_2, b, lcvse_2[::-1], lmonch, qf]
+    fodo2si   = [qf, lfree, lqd_2, b, lcv_2[::-1], bpm, lsich, qf]
+    fodo1ki   = [qf, lki, lfree_2, b, lfree_2, bpm, lsf, qf]
+    fodo1ch   = [qf, lch[::-1], lfree_2, b, lfree_2, bpm, lsf, qf]
+    fodo1rf   = [qf, lfree, rfc, lfree_2, b, lfree_2, bpm, lsf, qf]
 
-                    
-the_ring = create_lattice(energy=0.15)
+    boosinj   = [fodo1sd, fodo2kese, fodo1ch, fodo2si, fodo1ki, fodo2sd, fodo1, fodo2, fodo1, fodo2]
+    boosrf    = [fodo1sd, fodo2, fodo1ch, fodo2, fodo1rf, fodo2sd, fodo1, fodo2, fodo1, fodo2]
+    boocor    = [boosinj, boos, boosrf, boos, boos]
+    elist     = boocor
+
+    the_ring  = buildlat(elist)
+    print(len(the_ring))
+    
+    return the_ring
+                
+

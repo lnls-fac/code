@@ -164,6 +164,8 @@ class FieldMap:
         return ix
     
     def __get_iy(self, ry):
+        if self.ry_nrpts == 1:
+            return 0
         iy = int(math.floor((ry - self.ry_min) / self.ry_step)) if self.ry_nrpts > 1 else 0
         iy = iy-1 if iy == self.ry_nrpts-1 else iy
         return iy
@@ -197,13 +199,15 @@ class FieldMap:
     
             if rz > self.rz_max:
                 if self._bx_pos_coeffs is None:
-                    raise OutOfRangeRzMax('rz = {0:f} > rz_max = {1:f} [mm]'.format(rz, self.rz_max))
-                bx_pos_coeffs = self._bx_pos_coeffs[iy][ix]
-                by_pos_coeffs = self._by_pos_coeffs[iy][ix]
-                bz_pos_coeffs = self._bz_pos_coeffs[iy][ix]
-                bx = field_rz_extrapolate(rz, bx_pos_coeffs)
-                by = field_rz_extrapolate(rz, by_pos_coeffs)
-                bz = field_rz_extrapolate(rz, bz_pos_coeffs)
+                    bx, by, bz = 0,0,0
+                    #raise OutOfRangeRzMax('rz = {0:f} > rz_max = {1:f} [mm]'.format(rz, self.rz_max))
+                else:
+                    bx_pos_coeffs = self._bx_pos_coeffs[iy][ix]
+                    by_pos_coeffs = self._by_pos_coeffs[iy][ix]
+                    bz_pos_coeffs = self._bz_pos_coeffs[iy][ix]
+                    bx = field_rz_extrapolate(rz, bx_pos_coeffs)
+                    by = field_rz_extrapolate(rz, by_pos_coeffs)
+                    bz = field_rz_extrapolate(rz, bz_pos_coeffs)
             elif rz < self.rz_min:
                 if self._bx_neg_coeffs is None:
                     raise OutOfRangeRzMin('rz = {0:f} < rz_min = {1:f} [mm]'.format(rz, self.rz_min))
@@ -418,7 +422,7 @@ class FieldMap:
         r += '\n{0:<35s} {1}'.format('filename:', self.filename)
         r += '\n{0:<35s} {1}'.format('magnet_label:', self.magnet_label)
         r += '\n{0:<35s} {1} mm'.format('magnet_length:', self.length)
-        r += '\n{0:<35s} {1}'.format('main_coil_current:', self.current)
+        r += '\n{0:<35s} {1} A'.format('main_coil_current:', self.current)
         try:
             r += '\n{0:<35s} {1} mm'.format('magnetic_gap:', self.gap)
         except:

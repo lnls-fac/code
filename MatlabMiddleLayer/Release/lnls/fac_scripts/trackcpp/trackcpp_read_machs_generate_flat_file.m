@@ -12,14 +12,15 @@ if ~exist('archive_name','var')
                             'cod_matlab', 'CONFIG_machines_cod_corrected.mat'));
     if isnumeric(path), return; end;
     machines = load(fullfile(path, FileName));
-    path = pwd;
+    cd(fullfile(path,'..','trackcpp'));
+    %path = pwd;
 else
     % path = '~/redes_tracy/Sirius/Sirius_v200/flat_files/AC10_test/orb_cor/';
     path = pwd;
     machines = load([path 'cod_matlab/' archive_name '.mat']);
 end
 
-% cd('trackcpp');
+
 [~, result] = system('ls | grep rms | wc -l');
 n_pastas = str2double(result);
 if(length(machines.machine) < n_pastas)

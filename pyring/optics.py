@@ -171,7 +171,6 @@ def fractunes_coupled(ring, m66 = None, m66_list = None, closed_orbit = None):
     """ returns coupled fractional tunes """
     raise Exception('fractunes_coupled: not yet implemented')
 
-
 def twiss (line, refpts = None, m66 = None, m66_list = None, closed_orbit = None, twiss_in = None):
     """ returns uncoupled Twiss parameters """
     

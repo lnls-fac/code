@@ -99,9 +99,9 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Storage ring number of skew correctors',
+    name     = 'Storage ring number of skew quadrupoles',
     group    = 'FAC',
-    value    = Prms.si_number_of_skew_correctors,
+    value    = Prms.si_number_of_skew_quadrupoles,
     symbol   = r'<math>N_\text{skew}</math>',
     units    = '',
     deps     = [],
@@ -149,9 +149,9 @@ parameter_list = [
   ),
                   
   Parameter(
-    name     = 'Storage ring skew corrector maximum integrated strength',
+    name     = 'Storage ring skew quadrupole maximum integrated strength',
     group    = 'FAC',
-    value    = Prms.si_skew_corrector_maximum_integrated_strength,
+    value    = Prms.si_skew_quadrupole_maximum_integrated_strength,
     symbol   = r'<math>\theta^\text{fast}_\text{y, max}</math>',
     units    = 'm<sup>-1</sup>',
     deps     = [],
@@ -2384,17 +2384,6 @@ parameter_list = [
   ),
                        
   Parameter(
-    name     = 'Storage ring systematic normal 6-pole error tolerance for quadrupoles',
-    group    = 'FAC',
-    value    = Prms.si_systematic_normal_6_pole_error_tolerance_for_quadrupoles,
-    symbol   = r'<math>M_{B_2/B_0,QUAD}^{\text{sys,normal}}</math>',
-    units    = '',
-    deps     = ['Storage ring reference position for multipole contribution for quadrupoles'],
-    obs      = [r'Relative value, calculated at <math>r_0</math>.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
-  ),
-                  
-  Parameter(
     name     = 'Storage ring systematic normal 8-pole error tolerance for quadrupoles',
     group    = 'FAC',
     value    = Prms.si_systematic_normal_8_pole_error_tolerance_for_quadrupoles,
@@ -2405,17 +2394,6 @@ parameter_list = [
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
                   
-  Parameter(
-    name     = 'Storage ring systematic normal 10-pole error tolerance for quadrupoles',
-    group    = 'FAC',
-    value    = Prms.si_systematic_normal_10_pole_error_tolerance_for_quadrupoles,
-    symbol   = r'<math>M_{B_4/B_0,QUAD}^{\text{sys,normal}}</math>',
-    units    = '',
-    deps     = ['Storage ring reference position for multipole contribution for quadrupoles'],
-    obs      = [r'Relative value, calculated at <math>r_0</math>.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
-  ),
-    
   Parameter(
     name     = 'Storage ring systematic normal 12-pole error tolerance for quadrupoles',
     group    = 'FAC',

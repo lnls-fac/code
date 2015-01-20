@@ -19,6 +19,7 @@ export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE:$FACCODE/tools:$FACLIBS/pyth
 
 # FAC SCRIPTS
 export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin
+export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
 
 #ELEGANT AND OAG CONFIGS:
 
@@ -43,4 +44,5 @@ complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --
 complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
 complete -W "--jobs --status --user --description --explicate --choose --help"                                                          pyjob_qstat.py
 complete -W "--jobs --status --user --description --signal --priority --possibleHosts --help"                                           pyjob_qsig.py
-complete -W "--just-print --si --bo --tb --ts --help --list-all --sort"                                                                                   updatewiki
+complete -W "--just-print --si --bo --tb --ts --li --help --list-all --sort"                                                            updatewiki
+complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma_analysis.py
