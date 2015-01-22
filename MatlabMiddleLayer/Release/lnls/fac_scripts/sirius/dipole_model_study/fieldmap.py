@@ -248,35 +248,35 @@ class FieldMap:
             
             return (bx, by, bz)
         
-#         brho = 10.00692271077752     # [T.m]
-#         btype = 'b2'
-#         if btype == 'b1':
-#             b_length = 828.08            # [mm]
-#             b_field  = - (2.766540/2.828549) * 0.583502298783241 # [T]
-#             ksi      = 3.0               # [mm]
-#             K        = -0.78 *1          # [1/m^2]
-#         elif btype == 'b2':
-#             b_length = 1228.262          # [mm]
-#             b_field  = - (4.103510/4.103511) * (4.103510/4.307675) * 0.583502298783241 # [T]
-#             ksi      = 3.0               # [mm]
-#             K        = -0.78 *1          # [1/m^2]
-#         elif btype == 'b3':
-#             b_length = 428.011            # [mm]
-#             b_field  =  - 0.583502298783241 # [T]
-#             ksi      = 3.0               # [mm]
-#             K        = -0.78 *1          # [1/m^2]
-#            
-#         # XRR
-#         Grad = (-K*brho)/1000            # [T/mm]  
-#         if rz < b_length/2.0 and rz > -b_length/2.0:
-#             f = 1.0 #1.0/(1.0 + math.exp((rz-b_length/2.0)/ksi))
-#         else:
-#             f = 0.0
-#             
-#         #f = 1.0/(1.0 + math.exp((rz-b_length/2.0)/ksi))
-#         g = Grad * rx         
-#         by = (b_field + g) * f
-#         return (0.0,by,0.0)
+        brho = 10.00692271077752     # [T.m]
+        btype = 'b2'
+        if btype == 'b1':
+            b_length = 828.08            # [mm]
+            b_field  = - (2.766540/2.828549) * 0.583502298783241 # [T]
+            ksi      = 3.0               # [mm]
+            K        = -0.78 *1          # [1/m^2]
+        elif btype == 'b2':
+            b_length = 1228.262          # [mm]
+            b_field  = - (4.103510/4.103511) * (4.103510/4.307675) * 0.583502298783241 # [T]
+            ksi      = 3.0               # [mm]
+            K        = -0.78 *1          # [1/m^2]
+        elif btype == 'b3':
+            b_length = 428.011            # [mm]
+            b_field  =  - 0.583502298783241 # [T]
+            ksi      = 3.0               # [mm]
+            K        = -0.78 *1          # [1/m^2]
+           
+        # XRR
+        Grad = (-K*brho)/1000            # [T/mm]  
+        if rz < b_length/2.0 and rz > -b_length/2.0:
+            f = 1.0 #1.0/(1.0 + math.exp((rz-b_length/2.0)/ksi))
+        else:
+            f = 0.0
+            
+        #f = 1.0/(1.0 + math.exp((rz-b_length/2.0)/ksi))
+        g = Grad * rx         
+        by = (b_field + g) * f
+        return (0.0,by,0.0)
             
             
         # gets transverse coordinates indices into the regular rectangular grid

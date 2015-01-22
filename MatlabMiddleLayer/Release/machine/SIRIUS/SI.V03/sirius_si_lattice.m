@@ -128,6 +128,28 @@ h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2,
 h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
 B1      =  [h1 mb1 h2];
 
+% h01 = rbend_sirius(dip_nam, dip_len/20, 0.0518852721 * dip_ang, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h02 = rbend_sirius(dip_nam, dip_len/20, 0.0512870662 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h03 = rbend_sirius(dip_nam, dip_len/20, 0.0507564228 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h04 = rbend_sirius(dip_nam, dip_len/20, 0.0502936449 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h05 = rbend_sirius(dip_nam, dip_len/20, 0.0498981163 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h06 = rbend_sirius(dip_nam, dip_len/20, 0.0495693104 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h07 = rbend_sirius(dip_nam, dip_len/20, 0.0493067897 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h08 = rbend_sirius(dip_nam, dip_len/20, 0.0491102044 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h09 = rbend_sirius(dip_nam, dip_len/20, 0.0489792928 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h10 = rbend_sirius(dip_nam, dip_len/20, 0.0489138805 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h11 = rbend_sirius(dip_nam, dip_len/20, 0.0489138805 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h12 = rbend_sirius(dip_nam, dip_len/20, 0.0489792928 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h13 = rbend_sirius(dip_nam, dip_len/20, 0.0491102044 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h14 = rbend_sirius(dip_nam, dip_len/20, 0.0493067897 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h15 = rbend_sirius(dip_nam, dip_len/20, 0.0495693104 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h16 = rbend_sirius(dip_nam, dip_len/20, 0.0498981163 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h17 = rbend_sirius(dip_nam, dip_len/20, 0.0502936449 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h18 = rbend_sirius(dip_nam, dip_len/20, 0.0507564228 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h19 = rbend_sirius(dip_nam, dip_len/20, 0.0512870662 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h20 = rbend_sirius(dip_nam, dip_len/20, 0.0518852721 * dip_ang, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% B1      =  [h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, mb1, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, ];
+
 % -- b2 --
 dip_nam =  'b2';
 dip_len =  1.228262;
@@ -138,6 +160,28 @@ h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2,
 h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method); 
 B2      =  [h1 mb2 h2];
 
+% h01 = rbend_sirius(dip_nam, dip_len/20, 0.0540934519 * dip_ang, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h02 = rbend_sirius(dip_nam, dip_len/20, 0.0527892374 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h03 = rbend_sirius(dip_nam, dip_len/20, 0.0516326263 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h04 = rbend_sirius(dip_nam, dip_len/20, 0.0506278936 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h05 = rbend_sirius(dip_nam, dip_len/20, 0.0497720973 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h06 = rbend_sirius(dip_nam, dip_len/20, 0.0490627307 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h07 = rbend_sirius(dip_nam, dip_len/20, 0.0484977159 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h08 = rbend_sirius(dip_nam, dip_len/20, 0.0480753972 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h09 = rbend_sirius(dip_nam, dip_len/20, 0.0477945371 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h10 = rbend_sirius(dip_nam, dip_len/20, 0.0476543126 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h11 = rbend_sirius(dip_nam, dip_len/20, 0.0476543126 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h12 = rbend_sirius(dip_nam, dip_len/20, 0.0477945371 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h13 = rbend_sirius(dip_nam, dip_len/20, 0.0480753972 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h14 = rbend_sirius(dip_nam, dip_len/20, 0.0484977159 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h15 = rbend_sirius(dip_nam, dip_len/20, 0.0490627307 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h16 = rbend_sirius(dip_nam, dip_len/20, 0.0497720973 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h17 = rbend_sirius(dip_nam, dip_len/20, 0.0506278936 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h18 = rbend_sirius(dip_nam, dip_len/20, 0.0516326263 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h19 = rbend_sirius(dip_nam, dip_len/20, 0.0527892374 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h20 = rbend_sirius(dip_nam, dip_len/20, 0.0540934519 * dip_ang, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% B2      =  [h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, mb2, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, ];
+
 % -- b3 --
 dip_nam =  'b3';
 dip_len =  0.428011;
@@ -147,6 +191,28 @@ dip_S   =  0.00;
 h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
 h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
 B3      =  [h1 mb3 h2];
+
+% h01 = rbend_sirius(dip_nam, dip_len/20, 0.0505076291 * dip_ang, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h02 = rbend_sirius(dip_nam, dip_len/20, 0.0503470926 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h03 = rbend_sirius(dip_nam, dip_len/20, 0.0502045052 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h04 = rbend_sirius(dip_nam, dip_len/20, 0.0500798520 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h05 = rbend_sirius(dip_nam, dip_len/20, 0.0499730885 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h06 = rbend_sirius(dip_nam, dip_len/20, 0.0498841770 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h07 = rbend_sirius(dip_nam, dip_len/20, 0.0498130857 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h08 = rbend_sirius(dip_nam, dip_len/20, 0.0497597892 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h09 = rbend_sirius(dip_nam, dip_len/20, 0.0497242689 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h10 = rbend_sirius(dip_nam, dip_len/20, 0.0497065118 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h11 = rbend_sirius(dip_nam, dip_len/20, 0.0497065118 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h12 = rbend_sirius(dip_nam, dip_len/20, 0.0497242689 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h13 = rbend_sirius(dip_nam, dip_len/20, 0.0497597892 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h14 = rbend_sirius(dip_nam, dip_len/20, 0.0498130857 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h15 = rbend_sirius(dip_nam, dip_len/20, 0.0498841770 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h16 = rbend_sirius(dip_nam, dip_len/20, 0.0499730885 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h17 = rbend_sirius(dip_nam, dip_len/20, 0.0500798520 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h18 = rbend_sirius(dip_nam, dip_len/20, 0.0502045052 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h19 = rbend_sirius(dip_nam, dip_len/20, 0.0503470926 * dip_ang, 0*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% h20 = rbend_sirius(dip_nam, dip_len/20, 0.0505076291 * dip_ang, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+% B3      =  [h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, mb3, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, ];
 
 % -- bc --
 dip_nam =  'bc';
