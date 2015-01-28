@@ -294,7 +294,42 @@ def plot_residual_field(config):
     
     return config
     
+    
 def create_AT_model(config, segmentation):
+    
+    s     = np.copy(config.traj.s)
+    p     = np.copy(config.multipoles.normal_multipoles)
+    nr_monomials = len(p[:,0])
+    nr_segments  = len(segmentation)
+    
+    seg_border     = np.append([0.0], np.cumsum(segmentation))
+    seg_multipoles = np.zeros((nr_monomials, nr_segments))
+    model_multipoles_integral = np.zeros((nr_segments, nr_monomials))
+    for i in range(nr_segments-1):
+        s1, s2 = seg_border[i], seg_border[i+1]
+        # interpolates multipolos on borders of segment
+        m1, m2 = np.zeros((nr_monomials, 1)), np.zeros((nr_monomials, 1))
+        for j in range(nr_monomials):
+            m1[j,:], m2[j,:] = np.interp(x = s1, xp=s, fp=p[j,:]), np.interp(x = s2, xp=s, fp=p[j,:])
+        # calcs integral of multipoles within segment
+        sel = (s >= s1) & (s <= s2)
+        seg_s = np.append(np.append([s1], s[sel]), [s2])
+        seg_m = np.append(np.append(m1, p[:,sel], axis=1), m2, axis=1)
+        model_multipoles_integral[i,:] = np.trapz(x = seg_s/1000, y = seg_m)
+    # last segment accumulates the remainder of the integrated multipoles
+    s2  = seg_border[-2]
+    m2 = np.zeros((nr_monomials, 1))
+    for j in range(nr_monomials):
+        m2[j,:] = np.interp(x = s2, xp=s, fp=p[j,:])
+    sel = (s >= s2)
+    seg_s = np.append([s2], s[sel])
+    seg_m = np.append(m2, p[:,sel], axis=1)
+    model_multipoles_integral[-1,:] = np.trapz(x = seg_s/1000, y = seg_m)
+        
+    config.model_multipoles_integral = model_multipoles_integral
+    return config
+
+def create_AT_model_orig(config, segmentation):
     
     s     = np.copy(config.traj.s)
     p     = np.copy(config.multipoles.normal_multipoles)
@@ -323,10 +358,66 @@ def create_AT_model(config, segmentation):
     
     return config
      
+     
 def model_analysis(config):
     
     # creates AT model
     config = create_AT_model(config, config.model_segmentation)
+    
+    # adds discrepancy of deflection angle as error in polynomb[0]
+    l = np.array(config.model_segmentation) / 1000.0
+    m = config.model_multipoles_integral.transpose() / (-config.beam.brho)
+    mi = np.sum(m, axis=1)
+    if 0 not in config.multipoles.fitting_monomials:
+        fmap_deflection  = 0.0
+        error_deflection = 0.0
+    else:
+        fmap_deflection    = mi[0]
+        nominal_deflection = abs(config.model_nominal_angle/2)*(math.pi/180.0)
+        error_deflection = -(nominal_deflection - fmap_deflection)
+    
+    # prints info on model
+    nr_monomials = len(config.multipoles.fitting_monomials)
+    
+    monomials = []
+    strapp = '{0:^6s} {1:^14s} '
+    for i in range(nr_monomials):
+        strapp += '{'+'{0}'.format(2+i)+':^14s} '
+        monomials.append('PolynomB(n='+'{0:d}'.format(config.multipoles.fitting_monomials[i])+')')
+    
+    if fmap_deflection != 0.0:
+        m[0,:] *= nominal_deflection / fmap_deflection
+    
+    print('--- model polynom_b (rz > 0). units: [mm] for length, [rad] for angle and [m],[T] for polynom_b ---')
+    print(strapp.format('len[mm]', 'angle[rad]', *monomials))
+    
+    fstr = '{0:<7.4f} {1:<+14.06e} '
+    for i in range(m.shape[0]):
+        fstr += '{'+str(i+2)+':<+14.6e} '
+    for i in range(len(l)):
+        if 0 not in config.multipoles.fitting_monomials:
+            val = [l[i]] + [0.0] + list(m[:,i] / l[i])
+        else:
+            val = [l[i]] + [m[0,i]] + list(m[:,i] / l[i])
+            if i == len(l)-1:
+                val[2] = error_deflection / l[i]
+            else:
+                val[2] = 0.0
+        print(fstr.format(*val))
+#     if 0 not in config.multipoles.fitting_monomials:
+#         val = [sum(l)] + [0.0] + list(mi)
+#     else:
+#         val = [sum(l)] + [sum(m[0,:])] + [0.0] + list(mi[1:])
+#         val[2] = error_deflection / val[0] 
+#     print('--- integrated polynom_b (rz > 0). units: [mm] for length, [rad] for angle and [m],[T] for polynom_b ---')
+#     print(fstr.format(*val))
+    
+    return config
+
+def model_analysis_orig(config):
+    
+    # creates AT model
+    config = create_AT_model_orig(config, config.model_segmentation)
     
     # adds discrepancy of deflection angle as error in polynomb[0]
     l = np.array(config.model_segmentation) / 1000.0

@@ -1,6 +1,6 @@
 function sirius_dipole_model_study
 
-btype = 'b3';
+btype = 'b2';
 
 if (strcmpi(btype,'b1'))
     data = importdata('b1_field_on_trajectory.txt');

@@ -131,13 +131,13 @@ class Multipoles:
             self.skew_multipoles_integral_relative[i]   = self.skew_multipoles_integral[i]   * (r0 ** n) / main_multipole
             self.normal_multipoles_integral_relative[i] = self.normal_multipoles_integral[i] * (r0 ** n) / main_multipole
                    
-    def cccalc_hardedge_polynomials(self,model_hardedge_length):
-        
-        beam = self.trajectory.beam
-        half_hedge_len = 0.5 * model_hardedge_length * mathphys.units.mm_2_meter
-        signed_brho = - 1.0 * beam.brho
-        self.polynom_a_hardedge = (self.skew_multipoles_integral / signed_brho) / half_hedge_len    
-        self.polynom_b_hardedge = (self.normal_multipoles_integral / signed_brho) / half_hedge_len
+#     def cccalc_hardedge_polynomials(self,model_hardedge_length):
+#         
+#         beam = self.trajectory.beam
+#         half_hedge_len = 0.5 * model_hardedge_length * mathphys.units.mm_2_meter
+#         signed_brho = - 1.0 * beam.brho
+#         self.polynom_a_hardedge = (self.skew_multipoles_integral / signed_brho) / half_hedge_len    
+#         self.polynom_b_hardedge = (self.normal_multipoles_integral / signed_brho) / half_hedge_len
         
                            
     def __str__(self):
