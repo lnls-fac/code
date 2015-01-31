@@ -30,7 +30,7 @@ version = '03';
 strengths = @set_magnet_strengths;
 harmonic_number = 864;
 
-lattice_version = 'SI.V03';
+lattice_version = 'SI.V04';
 % processamento de input (energia e modo de operacao)
 for i=1:length(varargin)
     if ischar(varargin{i}) && length(varargin{i})==1
@@ -118,47 +118,14 @@ qf4      = quadrupole('qf4',  0.250000, qf4_strength,  quad_pass_method);
 deg_2_rad = (pi/180);
 
 
-% -- b1 --
-dip_nam =  'b1';
-dip_len =  0.828080;
-dip_ang =  2.766540 * deg_2_rad;
-dip_K   = -0.78;
-dip_S   =  0.00;
-h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-B1      =  [h1 mb1 h2];
-
-% -- b2 --
-dip_nam =  'b2';
-dip_len =  1.228262;
-dip_ang =  4.103510 * deg_2_rad;
-dip_K   = -0.78;
-dip_S   =  0.00;
-h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method); 
-B2      =  [h1 mb2 h2];
-
-% -- b3 --
-dip_nam =  'b3';
-dip_len =  0.428011;
-dip_ang =  1.429950 * deg_2_rad;
-dip_K   = -0.78;
-dip_S   =  0.00;
-h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-B3      =  [h1 mb3 h2];
-
-
-
-
-dip_K      =  -0.784798210832;
-
-% -- b1 --
-dip_nam =  'b1';
-dip_len =  0.828080;
-dip_S   =  0.00;
-dip_ang_b1 =  2.766540 * deg_2_rad;
 dip_ang_b3 =  1.429950 * deg_2_rad;
+dip_K      =  -0.784798210832;
+dip_S   =  0.00;
+
+% -- b1 --
+dip_nam =  'b1';
+dip_len =  0.828080;
+dip_ang_b1 =  2.766540 * deg_2_rad;
 h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang_b1/2, dip_ang_b3/2, 0, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
 h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang_b1/2, 0, dip_ang_b3/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
 B1      =  [h1 mb1 h2];
@@ -166,19 +133,18 @@ B1      =  [h1 mb1 h2];
 % -- b2 --
 dip_nam =  'b2';
 dip_len =  1.228262;
-dip_S   =  0.00;
 dip_ang_b2 =  4.103510 * deg_2_rad;
-h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang_b2/2, dip_ang_b3/2, 0, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang_b2/2, 0, dip_ang_b3/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);    
-B2      =  [h1 mb2 h2];
+h1      =  rbend_sirius(dip_nam, dip_len/3, dip_ang_b2/3, dip_ang_b3/2, 0, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+h2      =  rbend_sirius(dip_nam, dip_len/3, dip_ang_b2/3, 0, 0           , 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+h3      =  rbend_sirius(dip_nam, dip_len/3, dip_ang_b2/3, 0, dip_ang_b3/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+B2      =  [h1 mb2 h2 h3];
 
 % -- b3 --
 dip_nam =  'b3';
 dip_len =  0.428011;
 dip_ang =  1.429950 * deg_2_rad;
-dip_S   =  0.00;
-h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
-h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);                    
+h1      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 1*dip_ang/2, 0*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
+h2      =  rbend_sirius(dip_nam, dip_len/2, dip_ang/2, 0*dip_ang/2, 1*dip_ang/2, 0, 0, 0, [0 0 0], [0 dip_K dip_S], bend_pass_method);
 B3      =  [h1 mb3 h2];
 
 % -- bc --

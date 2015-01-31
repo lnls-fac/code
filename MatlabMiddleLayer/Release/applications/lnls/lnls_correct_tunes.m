@@ -1,5 +1,5 @@
-function [the_ring0, converged, tunes0] = correct_tunes(the_ring, families, goal_tunes, max_iter, tolerancia)
-% [the_ring0, converged, tunes] = sirius_correct_tune(the_ring, families, goal_tune, max_iter, tolerancia)
+function [the_ring0, converged, tunes0] = lnls_correct_tunes(the_ring, families, goal_tunes, max_iter, tolerancia)
+% [the_ring0, converged, tunes] = lnls_correct_tune(the_ring, families, goal_tune, max_iter, tolerancia)
 % 
 % Correct tunes with specified quadrupole families.
 % Inputs:

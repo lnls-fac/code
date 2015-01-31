@@ -1,5 +1,4 @@
 function y = lnls_meansqr(x,dim)
-%VAR Variance.
 %   For vectors, Y = lnls_meansqr(X) returns the mean square of the values in X.  For
 %   matrices, Y is a row vector containing the mean square of each column of
 %   X.  For N-D arrays, lnls_meansqr operates along the first non-singleton
