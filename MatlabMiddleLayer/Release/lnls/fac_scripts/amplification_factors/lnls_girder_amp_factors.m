@@ -1,104 +1,101 @@
-function girder = lnls_girder_amp_factors(res)
+function girder = lnls_girder_amp_factors(res, bpm_on)
+%function girder = lnls_girder_amp_factors(res)
+%
+% Calculates the amplification factors for orbit, correctors, betabeating
+% and angle of the beam resulting from horizontal and vertical
+% misalignments and roatation errors in girders.
+%
+% INPUTS: 
+% bpm_on     - Flag indicating if the bpms move correlated to the girder.
+%
+% structure with fields:
+%   the_ring
+%   symmetry   - up to which longitudinal position to calculate
+%   mis_err    - which is the misalignment error to apply to each girder
+%   rot_err    - Rotation error to apply to the magnets on the girder;
+%   cod_cor    - structure with fields: nr_sv, nr_iter, bpm_idx, hcm_idx,
+%                vcm_idx, cod_respm. If non-existent, the calculation will
+%                be performed without orbit correction;
+%   where2calc - cell array of vectors with indexes of points of the_ring
+%                where to average the amplification factors;
+%
+% OUTPUT: structure with fields:
+%   bpm_on - Flag indicating if the bpms moved with the girders
+%   pos - longitudinal position of the girders
+%   ind - index of the first element in the the_ring lattice which belongs
+%         to the girder
+%   misx, misy - structures with amplification factors fields:
+%   roll            orbx, orby - MxN matrices with orbit Amplif. Factors
+%                   betx, bety - MxN matrices with betabeating Amplif. Factors
+%                   coup       - 1xN vector with beam angle Amplif. Factors
+%                   corx,cory  - 1XN vectros with correctors strength AF.
+%                where M is the length of where2calc and N is #girders in the
+%                sector of the_ring defined by the symmetry variable.
+%
+% Creation 2015-02-02 by Fernando.
+girder.bpm_on = bpm_on;
 
 the_ring = res.the_ring;
 twi = calctwiss(the_ring);
-mis_err = res.mis_err;
+position = findspos(the_ring,1:length(the_ring));
+max_pos = position(end)/res.symmetry + 1e-3;
 
-mia = findcells(the_ring,'FamName','mia');
-mib = findcells(the_ring,'FamName','mib');
-mc  = findcells(the_ring,'FamName','mc');
-indcs = 1:mia(2);
-indcs = findcells(the_ring(indcs),'Girder');
-[girders,in,~] = unique(getcellstruct(the_ring,'Girder',indcs));
-[~,in2,~] = unique(getcellstruct(the_ring,'Girder',indcs),'first');
-in = ceil((in+in2)/2);
+funcs = {@lnls_set_misalignmentX,...
+    @lnls_set_misalignmentY,...
+    @lnls_set_rotation_ROLL};
+miss = {'misx','misy','roll'};
+errs = {res.mis_err,res.mis_err,res.rot_err};
 
-for pla = {'x','y'}
-    pl = pla{1};
-    misalign = str2func(['lnls_set_misalignment' upper(pl)]);
-    mis = ['mis' pl];
-    girder.before.(mis).orb = zeros(8,length(girders));%1,2=all 3,4=mia 5,6=mib 7,8=mc
-    girder.before.(mis).opt = zeros(3,length(girders));
-    for ong = {'bpm_on','bpm_off'}
-        on = ong{1};
-        girder.(on).slow.(mis).orb = zeros(2,length(girders));
-        girder.(on).slow.(mis).opt = zeros(3,length(girders));
-        girder.(on).slow.(mis).cor = zeros(2,length(girders));
-        girder.(on).fast.(mis).orb = zeros(6,length(girders));%1,2=mia 3,4=mib 5,6=mc
-        girder.(on).fast.(mis).opt = zeros(3,length(girders));
-        girder.(on).fast.(mis).cor = zeros(2,length(girders));
-    end
-    for i = 1:length(girders)
-        %apply alignment errors
-        gir = girders{i};
-        fprintf([gir ', ']);
-        ind = findcells(the_ring,'Girder',gir);
+indcs = findcells(the_ring,'FamName','girder');
+indcs = indcs(position(indcs) < max_pos);
+nelem = length(indcs)-1; % the last girder does not end inside the sector
+girders = unique(getcellstruct(the_ring,'Girder',indcs));
+girder.ind = indcs;
+for i1 = 1:nelem
+    %apply alignment errors
+    gir = girders{i1};
+    fprintf([gir ', ']);
+    ind = findcells(the_ring,'Girder',gir);
+    girder.pos(i1) = mean(position([ind(1),ind(end)+1]));
+    for i2=1:length(miss)
+        misalign = funcs{i2};
+        mis = miss{i2};
+        mis_err = errs{i2};
         err = repmat(mis_err,1,length(ind));
         the_ring_err = misalign(err,ind,the_ring);
         
-        % get values before correction
-        boba = findorbit4(the_ring_err,0,1:length(the_ring));
-        girder.before.(mis).orb([1,2],i) = sqrt(lnls_meansqr(boba([1 3],:),2))/mis_err;
-        girder.before.(mis).orb([3,4],i) = sqrt(lnls_meansqr(boba([1 3],mia),2))/mis_err;
-        girder.before.(mis).orb([5,6],i) = sqrt(lnls_meansqr(boba([1 3],mib),2))/mis_err;
-        girder.before.(mis).orb([7,8],i) = sqrt(lnls_meansqr(boba([1 3],mc),2))/mis_err;
-        twi_err = calctwiss(the_ring_err);
-        girder.before.(mis).opt([1,2],i) = sqrt(lnls_meansqr([(twi.betax-twi_err.betax)./twi.betax,...
-                                         (twi.betay-twi_err.betay)./twi.betay]))'/mis_err;
-        girder.before.(mis).opt(3,i) = lnls_calc_emittance_coupling(the_ring_err,1e-3);
-        
-        % perform slow and fast correction
-        ibpm = findcells(the_ring(ind),'FamName','bpm');
-        for ong = {'bpm_on','bpm_off'}
-            on = ong{1};
-            for mod = {'slow','fast'}
-                mo = mod{1};
-                par = res.params.(mo);
-                goal_codx = zeros(size(par.bpm_idx));
-                goal_cody = zeros(size(par.bpm_idx));
-                ref = zeros(4,length(the_ring));
-                if strcmp(pl,'x'), ref(1,ind) = mis_err; else ref(3,ind) = mis_err; end
-                if strcmp(on, 'bpm_on') && ~isempty(ibpm)
-                    if strcmp(pl,'x')
-                        for ii = ibpm, goal_codx(par.bpm_idx == ind(ii)) = mis_err; end
-                    else
-                        for ii = ibpm, goal_cody(par.bpm_idx == ind(ii)) = mis_err; end
-                    end
+        if isfield(res,'cod_cor')
+            ibpm = findcells(the_ring(ind),'FamName','bpm');
+            par = res.cod_cor;
+            goal_codx = zeros(size(par.bpm_idx));
+            goal_cody = zeros(size(par.bpm_idx));
+            if bpm_on && ~isempty(ibpm)
+                if strcmp(mis,'misx')
+                    for ii = ibpm, goal_codx(par.bpm_idx == ind(ii)) = mis_err; end
+                elseif strcmp(mis,'misy')
+                    for ii = ibpm, goal_cody(par.bpm_idx == ind(ii)) = mis_err; end
                 end
-                [the_ring_corr, hkicks, vkicks] = correct_orbit(the_ring_err,par,goal_codx,goal_cody);
-                if strcmp(mo,'slow')
-                    boba = sqrt(lnls_meansqr(findorbit4(the_ring_corr,0,1:length(the_ring))-ref,2))/mis_err;
-                    girder.(on).(mo).(mis).orb(:,i) = boba([1 3]);
-                    twi_err = calctwiss(the_ring_corr);
-                    girder.(on).(mo).(mis).opt([1,2],i) = sqrt(lnls_meansqr([(twi.betax-twi_err.betax)./twi.betax,...
-                        (twi.betay-twi_err.betay)./twi.betay]))'/mis_err;
-                else
-                    boba = findorbit4(the_ring_corr,0,1:length(the_ring));
-                    girder.(on).(mo).(mis).orb([1,2],i) = sqrt(lnls_meansqr(boba([1,3],mia),2))/mis_err;
-                    girder.(on).(mo).(mis).orb([3,4],i) = sqrt(lnls_meansqr(boba([1,3],mib),2))/mis_err;
-                    girder.(on).(mo).(mis).orb([5,6],i) = sqrt(lnls_meansqr(boba([1,3],mc),2))/mis_err;
-                    mi = sort([mia mib mc]);
-                    twi_err = calctwiss(the_ring_corr,mi);
-                    girder.(on).(mo).(mis).opt([1,2],i) = sqrt(lnls_meansqr([(twi.betax(mi)-twi_err.betax)./twi.betax(mi),...
-                        (twi.betay(mi)-twi_err.betay)./twi.betay(mi)]))'/mis_err;
-                end
-                girder.(on).(mo).(mis).opt(3,i) = lnls_calc_emittance_coupling(the_ring_corr,1e-3);
-                girder.(on).(mo).(mis).cor(:,i) =  [sqrt(lnls_meansqr(hkicks)); sqrt(lnls_meansqr(vkicks))]/mis_err;
             end
+            [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(par, par.nr_sv, ...
+                            the_ring_err, par.nr_iter, goal_codx, goal_cody);
         end
-    end
-    fprintf('\n');
-    [girder.indcs,I] = sort(indcs(in));
-    girder.pos = twi.pos(girder.indcs);
-    girder.before.(mis).orb = girder.before.(mis).orb(:,I);
-    girder.before.(mis).opt = girder.before.(mis).opt(:,I);
-    for ong = {'bpm_on','bpm_off'}
-        on = ong{1};
-        for mod = {'slow','fast'}
-            mo = mod{1};
-            girder.(on).(mo).(mis).orb = girder.(on).(mo).(mis).orb(:,I);
-            girder.(on).(mo).(mis).opt = girder.(on).(mo).(mis).opt(:,I);
-            girder.(on).(mo).(mis).cor = girder.(on).(mo).(mis).cor(:,I);
+        ref = zeros(4,length(the_ring));
+        if strcmp(mis,'misx'), ref(1,ind) = mis_err;
+        elseif strcmp(mis,'misy'), ref(3,ind) = mis_err; end
+        boba = findorbit4(the_ring_err,0,1:length(the_ring)) - ref;
+        twi_err = calctwiss(the_ring_err);
+        for i3=1:length(res.where2calc)
+            girder.(mis).orbx(i3,i1) = sqrt(lnls_meansqr(boba(1,res.where2calc{i3}),2))/mis_err;
+            girder.(mis).orby(i3,i1) = sqrt(lnls_meansqr(boba(3,res.where2calc{i3}),2))/mis_err;
+            girder.(mis).betx(i3,i1) = sqrt(lnls_meansqr((twi.betax(res.where2calc{i3})-twi_err.betax(res.where2calc{i3}))./twi.betax(res.where2calc{i3})))/mis_err;
+            girder.(mis).bety(i3,i1) = sqrt(lnls_meansqr((twi.betay(res.where2calc{i3})-twi_err.betay(res.where2calc{i3}))./twi.betay(res.where2calc{i3})))/mis_err;
+        end
+        Tilt2 = calccoupling(the_ring_err,false);
+        girder.(mis).coup(i1) = sqrt(lnls_meansqr(Tilt2))/mis_err;
+        if isfield(res,'cod_cor')
+            girder.(mis).corx(i1) =  sqrt(lnls_meansqr(hkicks))/mis_err;
+            girder.(mis).cory(i1) =  sqrt(lnls_meansqr(vkicks))/mis_err;
         end
     end
 end
+fprintf('\n');

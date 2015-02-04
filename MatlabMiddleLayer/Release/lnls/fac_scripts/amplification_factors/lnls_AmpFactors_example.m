@@ -1,5 +1,5 @@
-function res = example(the_ring, name)
-% function res = calc_err_effects(the_ring, name)
+function res = lnls_AmpFactors_example(the_ring, name)
+% function res = lnls_AmpFactors_example(the_ring, name)
 %
 % Calculates amplification factors for magnets, bpms and girders for the
 % lattice the_ring.
@@ -47,8 +47,9 @@ res.slow.nrsegs = [ones(1,9), ...
                    ones(1, 14),...
                    [2 2 2 2]];
 
-res.slow.results.bpm    = calc_bpms_amp_factors(res.slow);
-res.slow.results.mags   = calc_mag_amp_factors(res.slow);
+res.slow.results.bpm       = lnls_bpms_amp_factors(res.slow);
+res.slow.results.mags      = lnls_mag_amp_factors(res.slow);
+res.slow.results.girder_on = lnls_girder_amp_factors(res.slow, true);
 
 %fast orbit correction system
 res.fast = res.slow;
@@ -63,8 +64,9 @@ res.fast.cod_cor.cod_respm = res.fast.cod_cor.cod_respm.respm;
 res.fast.cod_cor.nr_sv = 160;
 res.fast.cod_cor.nr_iter = 3;
 
-res.fast.results.mags   = calc_mag_amp_factors(res.fast);
-res.fast.results.bpm    = calc_bpms_amp_factors(res.fast);
+res.fast.results.mags       = lnls_mag_amp_factors(res.fast);
+res.fast.results.bpm        = lnls_bpms_amp_factors(res.fast);
+res.fast.results.girder_off = lnls_girder_amp_factors(res.fast, false);
 
 
 % Without Correction
@@ -73,7 +75,8 @@ res.wocor = rmfield(res.wocor,{'cod_cor','results'});
 res.wocor.where2calclabels = {'all','mia','mib','mc'};
 res.wocor.where2calc = {1:length(the_ring), mia, mib, mc};
 
-res.wocor.results.mags   = calc_mag_amp_factors(res.wocor);
+res.wocor.results.mags   = lnls_mag_amp_factors(res.wocor);
+res.wocor.results.girder = lnls_girder_amp_factors(res.wocor, true);
 
 %% Save results
 
@@ -84,6 +87,6 @@ catch
     cd(name);
 end
 
-save(name,'res');
+save([name '.mat'],'res');
 
 cd('..');

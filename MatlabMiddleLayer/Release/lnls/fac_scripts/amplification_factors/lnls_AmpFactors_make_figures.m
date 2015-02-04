@@ -7,7 +7,7 @@ end
 global ctrl hax
 % Create a figure and an axes to contain a 3-D surface plot.
 figure('Position',[984, 200, 882, 636]);
-hax = axes('Units','pixels', 'Position',[135.8, 86.2, 706.2, 408.8]);
+hax = axes('Units','pixels', 'Position',[100.8, 86.2, 741.2, 408.8]);
 
 
 % Popup to control the configuration
@@ -60,6 +60,8 @@ uicontrol('Style', 'pushbutton', 'String', 'Clear',...
 uicontrol('Style', 'pushbutton', 'String', 'Figure',...
     'Position', [723 544 50 20],'Callback', @create_figure);
 
+
+ctrl.sumsqr = [];
 end
 
 
@@ -161,12 +163,19 @@ for i=1:length(ind)
         end
     end
 end
+if isempty(erro)
+    fprintf('None of the elements has this type of error.\n');
+    return;
+end
 [pos I] = sort(pos);
 erro = erro(I);
 
 % color = {'b','r','g','m','c'};
 string = [str_conf, '.', str_sys, '.', str_err, '.', str_efct, '.', str_clc,'.',str_errVal];
 plot(hax, pos, erro,'Color',cor, 'DisplayName',string,'LineWidth',2);
+
+sumsqr = sprintf('%8.4f',sqrt(res{val_conf}.(str_sys).symmetry*sum(erro.^2)));
+ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+90*j 20 80 20],'String',sumsqr);
 
 if isempty(chil)
     maxy = max(erro);
@@ -183,8 +192,10 @@ end
 
 
 function clear_plot(hObj,event)
-global hax
+global hax ctrl
 hold(hax,'off');
+delete(ctrl.sumsqr(:));
+ctrl.sumsqr = [];
 cla(hax)
 
 end

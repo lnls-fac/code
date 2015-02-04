@@ -2,6 +2,10 @@
 
 # descubro o ip da máquina
 ip=$( ifconfig | grep -A 2 eth0 | grep "inet add" | cut --delimiter=":" -f 2 | cut --delimiter="B" -f 1 )
+if [ -z "$ip" ]; then
+    ip=$( ifconfig | grep -A 2 eth1 | grep "inet add" | cut --delimiter=":" -f 2 | cut --delimiter="B" -f 1 )
+fi
+
 ip=${ip//[[:blank:]]/}
 
 # descubro o hostname da máquina
