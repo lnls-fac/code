@@ -8,8 +8,8 @@ else
     order = varargin{1};
 end
 
-[~, RING] = setcavity('off', RING);
-[~,~,~,~,~,~, RING] = setradiation('off', RING);
+RING = setcavity('off', RING);
+RING = setradiation('off', RING);
 
 RingLength = findspos(RING,length(RING)+1);
 

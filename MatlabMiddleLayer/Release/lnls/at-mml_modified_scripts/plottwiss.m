@@ -20,7 +20,7 @@ i(find(Sx > Lsector)) = [];
 if i(end)+1 <= length(Sx), i(end+1) = i(end) + 1; end
 
 
-%figure
+figure
 clf reset;
 [ax,h1,h2] = plotyy(Sx(i), [BetaX(i) BetaY(i)], Sx(i), EtaX(i));
 
