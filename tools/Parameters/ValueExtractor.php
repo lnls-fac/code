@@ -29,6 +29,7 @@ class ValueExtractor {
             return false;
 
         $result = substr($this->text, $pos_s+$len_s, $pos_e-$pos_s-$len_s);
+        
         return $result;
     }
 }
