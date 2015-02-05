@@ -13,7 +13,6 @@ if (!defined('MEDIAWIKI')) {
 }
 
 require('FacParameter.php');
-require('ValueExtractor.php');
 
 $wgExtensionCredits['other'][] = array(
     'name' => 'Parameters',
@@ -26,6 +25,7 @@ $wgExtensionCredits['other'][] = array(
 $wgHooks['ParserFirstCallInit'][] = 'fac_parameter_parser_init';
 $wgHooks['EditFormPreloadText'][] = 'fac_edit_form_preload_text';
 $wgHooks['EditFilter'][] = 'fac_edit_filter';
+$wgHooks['TitleMove'][] = 'fac_title_move';
 $wgHooks['ArticleDelete'][] = 'fac_article_delete';
 
 function fac_parameter_parser_init(Parser $parser)
@@ -67,7 +67,7 @@ function fac_edit_form_preload_text(&$text, &$title)
 {
     $name = FacParameter::get_name_if_parameter($title);
     if (!$name)
-        return true; // not a parameter page
+        return true; # not a parameter page
 
     $text = FacParameter::get_parameter_template();
 }
@@ -76,7 +76,7 @@ function fac_edit_filter($editor, $text, $section, &$error, $summary)
 {
     $name = FacParameter::get_name_if_parameter($editor->getTitle());
     if (!$name)
-        return true; // not a parameter page
+        return true; # not a parameter page
 
     $prm = new FacParameterWriter($name, $text);
     $result = $prm->write();
@@ -85,8 +85,28 @@ function fac_edit_filter($editor, $text, $section, &$error, $summary)
         $error = '<span style="color: red">Missing field';
         if (count($prm->missing_fields) > 1)
             $error .= 's';
-        $error .= ': ' . implode(', ', $prm->missing_fields) . '</span>';
+        $error .= ':' . implode(', ', $prm->missing_fields) . '</span>';
     }
+
+    return true;
+}
+
+function fac_title_move(Title $title, Title $newTitle, User $user)
+{
+    $ns = substr(FacParameter::parameter_namespace, 0, -1); # remove colon
+
+    if($title->getSubjectNsText() != $ns)
+        return true; # source title not in parameter namespace
+   
+    if ($newTitle->getSubjectNsText() != $ns) {
+        $prm = new FacParameterEraser($title->getText());
+        $prm->erase();
+
+        return true;
+    }
+
+    $prm = new FacParameterWriter($title->getText());
+    $prm->rename_parameter($newTitle->getText());
 
     return true;
 }
@@ -95,7 +115,7 @@ function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason, &$error)
 {
     $name = FacParameter::get_name_if_parameter($wikiPage->getTitle());
     if (!$name)
-        return true; // not a parameter page
+        return true; # not a parameter page
 
     $prm = new FacParameterEraser($name);
     $result = $prm->erase();    
