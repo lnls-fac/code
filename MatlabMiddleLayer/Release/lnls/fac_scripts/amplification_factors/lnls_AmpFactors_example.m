@@ -11,8 +11,8 @@ function res = lnls_AmpFactors_example(the_ring, name)
 % the output is the correct format to be used in the function
 % lnls_AmpFactors_make_figures(res) for visualization of the data.
 %
-% See also lnls_AmpFactors_make_figures lnls_mag_amp_factors
-% lnls_bpms_amp_factors lnls_girder_amp_factors
+% See also lnls_AmpFactors_make_figures lnls_AmpFactors_magnets
+% lnls_AmpFactors_bpms lnls_AmpFactors_girders
 % lnls_AmpFactors_make_txtSummary
 
 
@@ -47,9 +47,10 @@ res.slow.nrsegs = [ones(1,9), ...
                    ones(1, 14),...
                    [2 2 2 2]];
 
-res.slow.results.bpm       = lnls_bpms_amp_factors(res.slow);
-res.slow.results.mags      = lnls_mag_amp_factors(res.slow);
-res.slow.results.girder_on = lnls_girder_amp_factors(res.slow, true);
+res.slow.results.mags       = lnls_AmpFactors_magnets(res.slow);
+res.slow.results.bpm        = lnls_AmpFactors_bpms(res.slow);
+res.slow.results.girder_on  = lnls_AmpFactors_girders(res.slow, true);
+res.slow.results.girder_off = lnls_AmpFactors_girders(res.slow, false);
 
 %fast orbit correction system
 res.fast = res.slow;
@@ -64,9 +65,10 @@ res.fast.cod_cor.cod_respm = res.fast.cod_cor.cod_respm.respm;
 res.fast.cod_cor.nr_sv = 160;
 res.fast.cod_cor.nr_iter = 3;
 
-res.fast.results.mags       = lnls_mag_amp_factors(res.fast);
-res.fast.results.bpm        = lnls_bpms_amp_factors(res.fast);
-res.fast.results.girder_off = lnls_girder_amp_factors(res.fast, false);
+res.fast.results.mags       = lnls_AmpFactors_magnets(res.fast);
+res.fast.results.bpm        = lnls_AmpFactors_bpms(res.fast);
+res.fast.results.girder_on  = lnls_AmpFactors_girders(res.fast, true);
+res.fast.results.girder_off = lnls_AmpFactors_girders(res.fast, false);
 
 
 % Without Correction
@@ -75,8 +77,8 @@ res.wocor = rmfield(res.wocor,{'cod_cor','results'});
 res.wocor.where2calclabels = {'all','mia','mib','mc'};
 res.wocor.where2calc = {1:length(the_ring), mia, mib, mc};
 
-res.wocor.results.mags   = lnls_mag_amp_factors(res.wocor);
-res.wocor.results.girder = lnls_girder_amp_factors(res.wocor, true);
+res.wocor.results.mags   = lnls_AmpFactors_magnets(res.wocor);
+res.wocor.results.girder = lnls_AmpFactors_girders(res.wocor, true);
 
 %% Save results
 

@@ -1,46 +1,61 @@
 function lnls_AmpFactors_make_figures(res)
-% Example code for uicontrol reference page
+% function res = lnls_AmpFactors_make_figures(res)
+%
+% Interface to visualize the magnets, bpms and girders amplification
+% factors calculated with the other functions in the same folder as this
+% file.
+%
+% INPUT: cell array of structures. Each structure must have the fields
+% defined by the lnls_AmpFactors_example.m function.
+%
+%
+% See also lnls_AmpFactors_example lnls_AmpFactors_magnets
+% lnls_AmpFactors_bpms lnls_AmpFactors_girders
+% lnls_AmpFactors_make_txtSummary
+
+
+% If the input is not a structure, turn it into one.
 if ~iscell(res)
     res = {res};
 end
 
 global ctrl hax
-% Create a figure and an axes to contain a 3-D surface plot.
+% Create a figure and an axes for plots.
 figure('Position',[984, 200, 882, 636]);
 hax = axes('Units','pixels', 'Position',[100.8, 86.2, 741.2, 408.8]);
 
 
-% Popup to control the configuration
+% Popup to control the the effect on the ring of the selected error
 string = {'orbx','orby','corx','cory','coup','betx','bety'};
 uicontrol('Style','text','Position',[534.3 607 70 20],'String','Effect');
 ctrl.efct = uicontrol('Style', 'popup','String', string,'Position', [534.3 587 70 20]);
 
-% Popup to control the configuration
+% Popup to control the points where amplification factors were averaged
 string = {'empty'};
 uicontrol('Style','text','Position',[764 607 100 20],'String','Points Avgd.');
 ctrl.wre2clc = uicontrol('Style', 'popup','String', string,'Position', [764 587 100 20]);
 
+% Popup to control the orbit correction system employed 
 sys_names = fieldnames(res{1});
 sys_names = sys_names(~strcmp('name',sys_names));
-% Popup to control the configuration
 uicontrol('Style','text','Position',[167.3 607 70 20],'String','System');
 ctrl.sys = uicontrol('Style', 'popup','String', sys_names,...
     'Position', [167.3 587 70 20],'Callback', {@fun_sys,res});
 
+% Popup to control the Configuration Selected
 string = getcellstruct(res,'name',1:length(res));
-% Popup to control the configuration
 uicontrol('Style','text','Position',[20 607 120 20],'String','Configuration');
 ctrl.config = uicontrol('Style', 'popup','String', string,...
     'Position', [20 587 120 20],'Callback', {@fun_config,res});
 
-% Popup to control the configuration
+% Popup to control the type of error whose effect on the ring will be shown
 string = {'misx','misy','exci','roll'};
 uicontrol('Style','text','Position',[397 607 100 20],'String','Type of Error');
 ctrl.err = uicontrol('Style', 'popup', 'String', string,'Position', [397 587 100 20]);
 
+% Checkbox to control the type of elements to which the errors were applied
 sys_names = fieldnames(res{1});
 res_names = fieldnames(res{1}.(sys_names{2}).results);
-% Popup to control the configuration
 uicontrol('Style','text','Position',[284.7 607 80 20],'String','Elements');
 ctrl.res = zeros(1,length(res_names));
 for i=1:length(res_names)
@@ -174,8 +189,8 @@ erro = erro(I);
 string = [str_conf, '.', str_sys, '.', str_err, '.', str_efct, '.', str_clc,'.',str_errVal];
 plot(hax, pos, erro,'Color',cor, 'DisplayName',string,'LineWidth',2);
 
-sumsqr = sprintf('%8.4f',sqrt(res{val_conf}.(str_sys).symmetry*sum(erro.^2)));
-ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+90*j 20 80 20],'String',sumsqr);
+sumsqr = sprintf('%9.4g',sqrt(res{val_conf}.(str_sys).symmetry*sum(erro.^2)));
+ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+95*j 20 90 20],'String',sumsqr);
 
 if isempty(chil)
     maxy = max(erro);

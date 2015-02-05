@@ -12,15 +12,15 @@
 % qf3_strength	= 2.598620907195018;
 % qf4_strength	= 3.25264861900015;
 
-qfa_strength	= 3.429985476365;
-qda_strength	= -2.439940899137;
-qdb2_strength	= -3.132615276172;
-qfb_strength	= 3.979430331999;
-qdb1_strength	= -3.405445213384;
-qf1_strength	= 2.283068839860731;
-qf2_strength	= 3.466545249380189;
-qf3_strength	= 2.598620907195018;
-qf4_strength	= 3.25264861900015;
+qfa_strength	= 3.487110399101;
+qda_strength	= -2.733162320723;
+qdb2_strength	= -2.7498005193;
+qfb_strength	= 3.925490441357;
+qdb1_strength	= -3.462818426461;
+qf1_strength	= 2.324878059882;
+qf2_strength	= 3.434750417269;
+qf3_strength	= 2.565818901967;
+qf4_strength	= 3.290801041283;
 
 %  SEXTUPOLOS
 %  ===========

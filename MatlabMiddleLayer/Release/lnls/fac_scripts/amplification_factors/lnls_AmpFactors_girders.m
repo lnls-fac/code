@@ -1,9 +1,9 @@
-function girder = lnls_girder_amp_factors(res, bpm_on)
-%function girder = lnls_girder_amp_factors(res)
+function girder = lnls_AmpFactors_girders(res, bpm_on)
+%function girder = lnls_AmpFactors_girders(res, bpm_on)
 %
 % Calculates the amplification factors for orbit, correctors, betabeating
 % and angle of the beam resulting from horizontal and vertical
-% misalignments and roatation errors in girders.
+% misalignments and rotation errors in girders.
 %
 % INPUTS: 
 % bpm_on     - Flag indicating if the bpms move correlated to the girder.
@@ -79,10 +79,10 @@ for i1 = 1:nelem
             [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(par, par.nr_sv, ...
                             the_ring_err, par.nr_iter, goal_codx, goal_cody);
         end
-        ref = zeros(4,length(the_ring));
-        if strcmp(mis,'misx'), ref(1,ind) = mis_err;
-        elseif strcmp(mis,'misy'), ref(3,ind) = mis_err; end
-        boba = findorbit4(the_ring_err,0,1:length(the_ring)) - ref;
+%         ref = zeros(4,length(the_ring));
+%         if strcmp(mis,'misx'), ref(1,ind) = mis_err;
+%         elseif strcmp(mis,'misy'), ref(3,ind) = mis_err; end
+        boba = findorbit4(the_ring_err,0,1:length(the_ring));% - ref;
         twi_err = calctwiss(the_ring_err);
         for i3=1:length(res.where2calc)
             girder.(mis).orbx(i3,i1) = sqrt(lnls_meansqr(boba(1,res.where2calc{i3}),2))/mis_err;

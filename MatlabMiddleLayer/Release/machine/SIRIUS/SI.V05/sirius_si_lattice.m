@@ -30,7 +30,7 @@ version = '03';
 strengths = @set_magnet_strengths;
 harmonic_number = 864;
 
-lattice_version = 'SI.V04';
+lattice_version = 'SI.V05';
 % processamento de input (energia e modo de operacao)
 for i=1:length(varargin)
     if ischar(varargin{i}) && length(varargin{i})==1
@@ -68,24 +68,22 @@ id_length = 2.0; % [m]
 dia1     = drift('dia1', id_length/2, 'DriftPass');
 dia2     = drift('dia',  3.4828500 + 0.00035 - id_length/2, 'DriftPass');
 dib1     = drift('dib1', id_length/2, 'DriftPass');
-dib2     = drift('dib',  3.0128500 + 0.00035 - id_length/2, 'DriftPass');
-d00      = drift('d00',  0.005000, 'DriftPass');
+dib2     = drift('dib',  3.0128500 + 0.00035 -0.003 - id_length/2, 'DriftPass');
 d10      = drift('d10',  0.100000, 'DriftPass');
-d11      = drift('d11',  0.110000, 'DriftPass');
 d12      = drift('d12',  0.120000, 'DriftPass');
 d13      = drift('d13',  0.130000, 'DriftPass');
 d14      = drift('d14',  0.140000, 'DriftPass');
 d15      = drift('d15',  0.150000, 'DriftPass');
 d16      = drift('d16',  0.160000, 'DriftPass');
-d18      = drift('d18',  0.180000, 'DriftPass');
-d19      = drift('d19',  0.190000, 'DriftPass');
-d20      = drift('d20',  0.200000, 'DriftPass');
+d17      = drift('d17',  0.170000, 'DriftPass');
 d22      = drift('d22',  0.220000, 'DriftPass');
 d23      = drift('d23',  0.230000, 'DriftPass');
+d24      = drift('d24',  0.240000, 'DriftPass');
 d30      = drift('d30',  0.300000, 'DriftPass');
 d33      = drift('d33',  0.330000, 'DriftPass');
 d44      = drift('d44',  0.440000, 'DriftPass');
 d45      = drift('d45',  0.450000, 'DriftPass');
+d56      = drift('d56',  0.560000, 'DriftPass');
 
 % --- markers ---
 mc       = marker('mc',      'IdentityPass');
@@ -104,15 +102,15 @@ girder   = marker('girder',  'IdentityPass');
 mon      = marker('bpm', 'IdentityPass');
 
 % --- quadrupoles ---
-qfa      = quadrupole('qfa',  0.250000, qfa_strength,  quad_pass_method);
-qda      = quadrupole('qda',  0.140000, qda_strength, quad_pass_method);
-qdb2     = quadrupole('qdb2', 0.140000, qdb2_strength, quad_pass_method);
-qfb      = quadrupole('qfb',  0.340000, qfb_strength,  quad_pass_method);
-qdb1     = quadrupole('qdb1', 0.140000, qdb1_strength, quad_pass_method);
-qf1      = quadrupole('qf1',  0.250000, qf1_strength,  quad_pass_method);
-qf2      = quadrupole('qf2',  0.250000, qf2_strength,  quad_pass_method);
-qf3      = quadrupole('qf3',  0.250000, qf3_strength,  quad_pass_method);
-qf4      = quadrupole('qf4',  0.250000, qf4_strength,  quad_pass_method);
+qfa      = quadrupole('qfa',  0.200000, qfa_strength,  quad_pass_method);
+qda      = quadrupole('qda',  0.200000, qda_strength, quad_pass_method);
+qdb2     = quadrupole('qdb2', 0.200000, qdb2_strength, quad_pass_method);
+qfb      = quadrupole('qfb',  0.250000, qfb_strength,  quad_pass_method);
+qdb1     = quadrupole('qdb1', 0.200000, qdb1_strength, quad_pass_method);
+qf1      = quadrupole('qf1',  0.200000, qf1_strength,  quad_pass_method);
+qf2      = quadrupole('qf2',  0.200000, qf2_strength,  quad_pass_method);
+qf3      = quadrupole('qf3',  0.200000, qf3_strength,  quad_pass_method);
+qf4      = quadrupole('qf4',  0.200000, qf4_strength,  quad_pass_method);
 
 % --- bending magnets --- 
 deg_2_rad = (pi/180);
@@ -199,24 +197,25 @@ pmm      = marker('pmm','IdentityPass');
 
 %% LINES
 
-tm1a = [girder, d00, d19, sda, d00, d14, qda, d23, qfa, d12, mon, d12, sfa, d12, crhv, cv, ch, girder];              % high beta xxM1 girder
+tm1a = [girder, d17, sda, d14, qda, d23, qfa, d13, mon, d13, sfa, d12, crhv, cv, ch, girder];              % high beta xxM1 girder
 tm2a = fliplr(tm1a);                                                                                                 % high beta xxM2 girder
 tida = [dia2, mida, dia1, mia, dia1, mida, dia2];                                                                    % high beta ID straight section
 tcav = [dia2, dia1, mia, cav, dia1, dia2];                                                                           % high beta RF cavity straight section 
 tinj = [dchinj, dinjmia, fim, inicio, mia, dmiakick, kick, dkickpmm, pmm, dpmmch];                                   % high beta INJ straight section
-tm1b = [girder, d00, d19, sdb, d00, d14, qdb1, d23, qfb, d11, mon, d15, sfb, d16, crhv, cv, ch, d18, qdb2, girder];  % low beta xxM1 girder
+tm1b = [girder, d17, sdb, d14, qdb1, d24, qfb, d13, mon, d17, sfb, d17, crhv, cv, ch, d15, qdb2, girder];  % low beta xxM1 girder
 tm2b = fliplr(tm1b);                                                                                                 % low beta xxM2 girder
 tidb = [dib2, midb, dib1, mib, dib1, midb, dib2];                                                                    % low beta ID straight section
 
 tc3  = [d13, BC, d13]; % arc sector between B3-B3 (including BC dipole)
-tc1a = [girder, d45, d00, ch, cv, d16, sd1, d14, d00, qf1, d12, mon, d11, sf1, d20, qf2, d14, d00, sd2, d12, ch, d10, mon, d12, d00, girder]; % arc sector in between B1-B2
-tc2a = [girder, d30, d00, cv, d16, sd3, d14, d00, qf3, d12, mon, d11, sf2, d20, qf4, d16, ch, crhv, d33, d10, mon, d12, girder];              % arc sector in between B2-B3
-tc4a = [girder, d44, d11, ch, d16, qf4, d20, sf3, d11, mon, d12, qf3, d14, d00, sd4, d16, cv, crhv, d30, d00, girder];                        % arc sector in between B3-B2
-tc5a = [girder, d22, d00, ch, d12, sd5, d14, d00, qf2, d20, sf4, d11, mon, d12, qf1, d14, d00, sd6, d16, ch, cv, d33, d00, mon, d12, girder]; % arc sector in between B2-B1
-tc1b = fliplr(tc5a);
-tc2b = fliplr(tc4a);
-tc4b = fliplr(tc2a);
-tc5b = fliplr(tc1a);
+tc1a = [girder, d45, ch, cv, d16, sd1, d17, qf1, d13, mon, d13, sf1, d23, qf2, d17, sd2, d12, ch, d10, mon, d12, girder]; % arc sector in between B1-B2
+tc2a = [girder, d30, cv, d16, sd3, d17, qf3, d13, mon, d13, sf2, d23, qf4, d17, ch, crhv, d44, mon, d12, girder];              % arc sector in between B2-B3
+tc4a = [girder, d56, ch, d17, qf4, d23, sf3, d13, mon, d13, qf3, d17, sd4, d16, cv, crhv, d30, girder];                        % arc sector in between B3-B2
+tc5a = [girder, d22, ch, d12, sd5, d17, qf2, d23, sf4, d13, mon, d13, qf1, d17, sd6, d16, ch, cv, d33, mon, d12, girder]; % arc sector in between B2-B1
+
+tc1b = [girder, d45, ch, cv, d16, sd6, d17, qf1, d13, mon, d13, sf4, d23, qf2, d17, sd5, d12, ch, d10, mon, d12, girder]; % arc sector in between B1-B2
+tc2b = [girder, d30, cv, d16, sd4, d17, qf3, d13, mon, d13, sf3, d23, qf4, d17, ch, crhv, d44, mon, d12, girder];              % arc sector in between B2-B3
+tc4b = [girder, d56, ch, d17, qf4, d23, sf2, d13, mon, d13, qf3, d17, sd3, d16, cv, crhv, d30, girder];                        % arc sector in between B3-B2
+tc5b = [girder, d22, ch, d12, sd2, d17, qf2, d23, sf1, d13, mon, d13, qf1, d17, sd1, d16, ch, cv, d33, mon, d12, girder]; % arc sector in between B2-B1
 
 %% GIRDERS
 

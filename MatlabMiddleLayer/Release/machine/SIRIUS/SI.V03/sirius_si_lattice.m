@@ -280,10 +280,10 @@ tc1a = [girder, d45, d00, ch, cv, d16, sd1, d14, d00, qf1, d12, mon, d11, sf1, d
 tc2a = [girder, d30, d00, cv, d16, sd3, d14, d00, qf3, d12, mon, d11, sf2, d20, qf4, d16, ch, crhv, d33, d10, mon, d12, girder];              % arc sector in between B2-B3
 tc4a = [girder, d44, d11, ch, d16, qf4, d20, sf3, d11, mon, d12, qf3, d14, d00, sd4, d16, cv, crhv, d30, d00, girder];                        % arc sector in between B3-B2
 tc5a = [girder, d22, d00, ch, d12, sd5, d14, d00, qf2, d20, sf4, d11, mon, d12, qf1, d14, d00, sd6, d16, ch, cv, d33, d00, mon, d12, girder]; % arc sector in between B2-B1
-tc1b = fliplr(tc5a);
-tc2b = fliplr(tc4a);
-tc4b = fliplr(tc2a);
-tc5b = fliplr(tc1a);
+tc1b = [girder, d45, d00, ch, cv, d16, sd6, d14, d00, qf1, d12, mon, d11, sf4, d20, qf2, d14, d00, sd5, d12, ch, d10, mon, d12, d00, girder]; % arc sector in between B1-B2
+tc2b = [girder, d30, d00, cv, d16, sd4, d14, d00, qf3, d12, mon, d11, sf3, d20, qf4, d16, ch, crhv, d33, d10, mon, d12, girder];              % arc sector in between B2-B3
+tc4b = [girder, d44, d11, ch, d16, qf4, d20, sf2, d11, mon, d12, qf3, d14, d00, sd3, d16, cv, crhv, d30, d00, girder];                        % arc sector in between B3-B2
+tc5b = [girder, d22, d00, ch, d12, sd2, d14, d00, qf2, d20, sf1, d11, mon, d12, qf1, d14, d00, sd1, d16, ch, cv, d33, d00, mon, d12, girder]; % arc sector in between B2-B1
 
 %% GIRDERS
 

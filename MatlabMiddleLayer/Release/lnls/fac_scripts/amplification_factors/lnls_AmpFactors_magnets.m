@@ -1,5 +1,5 @@
-function mag = lnls_mag_amp_factors(res)
-%function mag = lnls_mag_amp_factors(res)
+function mag = lnls_AmpFactors_magnets(res)
+%function mag = lnls_AmpFactors_magnets(res)
 %
 % Calculates the amplification factors for orbit, correctors, betabeating
 % and angle of the beam resulting from horizontal and vertical

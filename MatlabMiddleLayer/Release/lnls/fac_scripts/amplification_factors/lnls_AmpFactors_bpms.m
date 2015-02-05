@@ -1,5 +1,5 @@
-function bpm = lnls_bpms_amp_factors(res)
-%function bpm = lnls_bpms_amp_factors(res)
+function bpm = lnls_AmpFactors_bpms(res)
+%function bpm = lnls_AmpFactors_bpms(res)
 %
 % Calculates the amplification factors for orbit, correctors, betabeating
 % and angle of the beam resulting from horizontal and vertical
