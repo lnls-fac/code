@@ -55,7 +55,7 @@ def raw_fieldmap_analysis(config):
     x,y = config.fmap.rz, config.fmap.by[config.fmap.ry_zero][config.fmap.rx_zero,:]
     plt.plot(x,y)
     plt.grid(True)
-    plt.xlabel('rz [mm]'), plt.ylabel('by [mm]')
+    plt.xlabel('rz [mm]'), plt.ylabel('by [T]')
     plt.title(config.config_label + '\n' + 'Longitudinal profile of vertical field')
     plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + 'by-vs-rz.pdf')
     plt.clf()
@@ -140,55 +140,6 @@ def trajectory_analysis(config):
     
     return config
 
-def plot_residual_field_old(config):
-
-    main_monomials = config.multipoles_main_monomials
-    
-    r0 = config.multipoles_r0/1000.0
-    x = np.linspace(0,1.0 * r0,100)
-        
-    # by field reconstructed from fitted polynomials
-    dby, by0 = 0*x, 0*x
-    n   = config.multipoles.fitting_monomials
-    m   = config.multipoles.polynom_b_integral 
-    for i in range(len(n)):
-        if n[i] not in main_monomials:
-            dby += m[i] * (x ** n[i]) # [T.m]
-        else:
-            by0 += m[i] * (x ** n[i]) # [T.m]
-    
-    
-    # by field calculated from fieldmap interpolation
-    z = config.fmap.rz[config.fmap.rz >= 0.0]
-    by = 0*x
-    points = np.zeros((3,len(z)))
-    points[2,:] = z
-    for i in range(len(x)):    
-        points[0,:] = 1000*x[i]
-        field = config.fmap.interpolate_set(points)
-        by[i] = np.trapz(y = field[1,:], x = z/1.0e3) # [T.m]
-    dby2 = by - 1*by0
-        
-    try:
-        config.config_fig_number += 1
-    except:
-        config.config_fig_number = 1 
-        
-    kick1 = 1e6 * dby / config.beam.brho   
-    kick2 = 1e6 * dby2 / config.beam.brho
-    plt.plot(x*1000,kick1)
-    plt.plot(x*1000,kick2)
-    #plt.gca().get_yaxis().get_major_formatter().set_powerlimits((0, 0))
-    plt.xlabel('x [mm]')
-    plt.ylabel('residual integrated field [urad]')
-    plt.grid('on')
-    #plt.plot(x*1000,dby_r02)
-    plt.show()
-        
-    
-    
-    return config
-
 def plot_residual_field_in_curvilinear_system(config):
 
     """ NOT TO BE USED! """
@@ -250,15 +201,14 @@ def plot_residual_field(config):
     x = np.linspace(0,1.0*r0, 60)
         
     # by field reconstructed from fitted polynomials
-    dby, by0 = 0*x, 0*x
+    dby, by_nominal = 0*x, 0*x
     n   = config.multipoles.fitting_monomials
     m   = config.multipoles.normal_multipoles_integral 
     for i in range(len(n)):
         if n[i] not in main_monomials:
             dby += m[i] * (x ** n[i]) # [T.m]
         else:
-            #dby += m[i] * (x ** n[i]) # [T.m]
-            by0 += m[i] * (x ** n[i]) # [T.m]
+            by_nominal += m[i] * (x ** n[i]) # [T.m]
     
     # by field integration
     s = config.traj.s
@@ -271,9 +221,25 @@ def plot_residual_field(config):
     intby = 0*x
     for i in range(len(x)):
         intby[i] = np.trapz(y = by[:,i], x = s/1.0e3) # [T.m]
-    dby2 = intby - by0
+    dby2 = intby - 1*by_nominal
     
-
+    
+    # by field integration (rawfield)
+    iz = list(config.fmap.rz).index(0.0)
+    ix = list(config.fmap.rx).index(0.0)
+    rz  = config.fmap.rz[iz:]/1000.0
+    by  = config.fmap.by[0][ix:,iz:]
+    rx  = config.fmap.rx[ix:]/1000.0
+    intby = [0] * len(rx)
+    for i in range(len(rx)):
+        intby[i] = np.trapz(y = by[i,:], x = rz) # [T.m]
+    by_nominal_rawfieldgrid = 0 * rx
+    for i in range(len(n)):
+        if n[i] in main_monomials:
+            by_nominal_rawfieldgrid += m[i] * (rx ** n[i]) # [T.m]
+    dby3 = np.array(intby) - 1*by_nominal_rawfieldgrid
+    
+    
     # plots curves
     try:
         config.config_fig_number += 1
@@ -281,8 +247,11 @@ def plot_residual_field(config):
         config.config_fig_number = 1 
     kick1 = 1e6 * dby / config.beam.brho   
     kick2 = 1e6 * dby2 / config.beam.brho
+    kick3 = 1e6 * dby3 / config.beam.brho
     plt.plot(x*1000,kick1, label='sum of integrated multipoles')
-    plt.plot(x*1000,kick2, label='integrated field on parallel lines')
+    plt.plot(x*1000,kick2, label='integrated interpolated field on parallel lines')
+    plt.plot(rx*1000,kick3, label='integrated raw field on parallel lines')
+    #plt.xlim(1000*x[0],1000*x[-1])
     #plt.gca().get_yaxis().get_major_formatter().set_powerlimits((0, 0))
     plt.xlabel('x [mm]')
     plt.ylabel('residual integrated field [urad]')
@@ -293,8 +262,7 @@ def plot_residual_field(config):
     plt.clf()  
     
     return config
-    
-    
+        
 def create_AT_model(config, segmentation):
     
     s     = np.copy(config.traj.s)
@@ -357,7 +325,6 @@ def create_AT_model_orig(config, segmentation):
     config.model_multipoles_integral[-1,:] = np.trapz(x = s[sel]/1000, y = p[:,sel])   
     
     return config
-     
      
 def model_analysis(config):
     
