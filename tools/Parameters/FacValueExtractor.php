@@ -1,13 +1,13 @@
 <?php
 
-class ValueExtractor {
+class FacValueExtractor {
     const tag_begin_open = "<section begin=";
     const tag_end_open = "<section end=";
     const tag_close = "/>";
 
     var $text;
 
-    function ValueExtractor($text)
+    function FacValueExtractor($text)
     {
         $this->text = $text;        
     }

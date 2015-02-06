@@ -2,11 +2,10 @@
 /**
  * Parameters extension.
  *
- * Custom create and edit pages for machine parameters, with tags for
- * inclusion in other pages.
+ * Read and write parameters to and from database.
  */
 
-if (!defined('MEDIAWIKI')) {    
+if (!defined('MEDIAWIKI')) {
     echo("This is an extension to the MediaWiki package and cannot be run ".
         "standalone.\n");
     die(-1);
@@ -106,7 +105,7 @@ function fac_title_move(Title $title, Title $newTitle, User $user)
     }
 
     $prm = new FacParameterWriter($title->getText());
-    $prm->rename_parameter($newTitle->getText());
+    $prm->rename($newTitle->getText());
 
     return true;
 }

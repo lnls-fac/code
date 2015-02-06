@@ -1,6 +1,7 @@
 <?php
 
 class FacConnection {
+    # Move to external file with appropriate permissions
     const server_address = '127.0.0.1';
     const user = 'prm_editor';
     const password = 'prm0';
@@ -102,7 +103,8 @@ class FacTable extends FacConnection {
         else
             $query = $this->build_update_parameter_query($db_fields);
 
-        return $this->mysqli->query($query);
+        $result = $this->mysqli->query($query);
+        return $result && $this->mysqli->commit();
     }
     
     function get_db_fields($fields)
@@ -178,7 +180,7 @@ class FacTable extends FacConnection {
         if (!$this->mysqli)
             return false;
 
-        $r = $this->read_all_with_name_from_table($parameter, $expression);
+        $r = $this->read_all_with_name_from_table($parameter, 'expression');
         if ($r->num_rows > 0) {
             $query = "UPDATE expression SET expression='" .
                 $expression . "' WHERE name='" .
@@ -234,6 +236,19 @@ class FacTable extends FacConnection {
 
         return $this->mysqli->query($query);
     }
+    
+    function read_expression($parameter)
+    {
+        $query = "SELECT * FROM expression WHERE name='" .
+            $parameter . "';";
+        $r = $this->mysqli->query($query);
+
+        $row = $r->fetch_assoc();
+        if (!$row)
+            return false;
+        else
+            return $row['expression'];
+    }
 }
 
 class FacEvaluator extends FacConnection {
@@ -267,14 +282,19 @@ class FacEvaluator extends FacConnection {
     function evaluate()
     {
         $expr = $this->replace_parameters($this->expression);
+
         if (!$this->validate_final_expression($expr))
             throw new Exception('invalid expression');
-        else
-            return eval($expr);
+        else {
+            $extended_expr = '$r = ' . $expr . ';';
+            eval($extended_expr);
+            return $r;
+        }
     }
 
     function replace_parameters($expression)
     {
+
         if ($depth++ >= self::max_depth)
             throw new Exception('max depth achieved');
 
@@ -282,7 +302,7 @@ class FacEvaluator extends FacConnection {
             throw new Exception('double quotes not matching');
 
         $parameters = array();
-        $split = explode('"', $parameters);
+        $split = explode('"', $expression);
         for ($i = 0; $i < count($split); $i++)
             if ($i % 2)
                 array_push($parameters, $split[$i]);
@@ -295,7 +315,7 @@ class FacEvaluator extends FacConnection {
             $value = strval($this->parameters[$p]);
             $expression = str_replace($parameter, $value, $expression);
         }
-
+        
         return $expression;
     }
 
@@ -323,7 +343,7 @@ class FacEvaluator extends FacConnection {
         else
             $value = $row['value'];
 
-        return array($row['is_derived'], $value);
+        return array('is_derived' => $row['is_derived'], 'value' => $value);
     }
 
     function read_expression($parameter)
@@ -368,18 +388,24 @@ class FacDependentTracker extends FacConnection {
     {
         $query = "SELECT * FROM dependency;";
         $r = $this->mysqli->query($query);
-        $table = $r->fetch_all();
 
+        $table = array();
+        for ($i = 0; $i < $r->num_rows; $i++) {
+            array_push($table, $r->fetch_row());
+        }
+        
         $s = new FacSet();
-        $t = new FacSet($this->parameter);
+        $t = new FacSet();
+        $t->put($this->parameter);
         $n = $s->count();
+
         while (true) {
             $u = new FacSet();
             foreach ($table as $row)
                 foreach($t->elements as $e)
                     if ($row[1] == $e) {
                         $u->put($row[0]);
-                        $s->put($row[0]);
+                        $s->put($row[0]);                    
                     }
 
             $new_n = $s->count();
@@ -396,12 +422,6 @@ class FacDependentTracker extends FacConnection {
 
 class FacSet {
     public $elements = array();
-
-    function FacSet(array $elements)
-    {
-        foreach ($elements as $x)
-            $this->put($x);
-    }
 
     function put($x)
     {

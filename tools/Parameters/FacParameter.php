@@ -1,8 +1,11 @@
 <?php
 
 require('FacTable.php');
-require('ValueExtractor.php');
+require('FacValueExtractor.php');
 
+/**
+ * Base class for parameters.
+ */
 class FacParameter {
     const parameter_namespace = "Parameter:";
 
@@ -12,6 +15,10 @@ class FacParameter {
 
     protected $parameter;
 
+    /**
+     * Check if title is in parameter namespace and return name.
+     * @return Name if in parameter namespace, false otherwise
+     */
     public static function get_name_if_parameter($title)
     {
         $n = strlen(self::parameter_namespace);
@@ -21,6 +28,10 @@ class FacParameter {
             return substr($title, $n);
     }
 
+    /**
+     * Get parameter template text for edit pages.
+     * @return String with text
+     */
     public static function get_parameter_template()
     {
         $template = "==Data==\n" .
@@ -64,7 +75,7 @@ class FacParameterWriter extends FacParameter {
     function FacParameterWriter($name, $text)
     {
         $this->FacParameter($name);
-        $this->value_extractor = new ValueExtractor($text);
+        $this->value_extractor = new FacValueExtractor($text);
     }
 
     function write()
@@ -81,7 +92,7 @@ class FacParameterWriter extends FacParameter {
             return $this->write_all($values);
     }
 
-    function get_values()
+    private function get_values()
     {
         $values = array('name' => $this->parameter);
         foreach (self::$valid_fields as $field)
@@ -90,7 +101,7 @@ class FacParameterWriter extends FacParameter {
         return $values;
     }
 
-    function get_value($field)
+    private function get_value($field)
     {
         if (in_array($field, self::$valid_fields)) {
             return $this->value_extractor->get_value($field);
@@ -98,33 +109,45 @@ class FacParameterWriter extends FacParameter {
             return false;
     }
 
-    function write_all($values)
+    private function write_all($values)
     {
         $table = new FacTable();
+        $r = true;
 
-        if ($values['is_derived'] === 'True') {
-            $table->erase_dependencies($values['name']);
-
-            $deps = $this->get_dependencies($values['value']);
-            if ($deps === false)
-                return false;
+        if ($values['is_derived'] === 'True') 
+            $r = $r and $this->write_derived_fields($values, $table);
             
-            $r = $table->write_dependencies($values['name'], $deps);
-            if ($r === false)
-                return false;
-
-            $r = $table->write_expression($values['name'], $values['value']);
-            if ($r === false)
-                return false;
-        } else {
-            ;
-        }
+        $e = new FacEvaluator($values['value']);
+        $values['value'] = $e->evaluate();
         
-        return $table->write_parameter($values);
+        $r = $r and $table->write_parameter($values);
+
+        $d = new FacDependentTracker($values['name']);            
+        $dependents = $d->get_dependents();
+        return $r and $this->update_dependents($dependents, $table);
+    }
+
+    private function write_derived_fields($values, $table)
+    {
+        $table->erase_dependencies($values['name']);
+
+        $deps = array_unique($this->get_dependencies($values['value']));
+        if ($deps === false)
+            return false;
+
+        $r = $table->write_dependencies($values['name'], $deps);
+        if ($r === false)
+            return false;
+
+        $r = $table->write_expression($values['name'], $values['value']);
+        if ($r === false)
+            return false;
+
+        return true;
     }
 
     # Should move?
-    function get_dependencies($expression)
+    private function get_dependencies($expression)
     {
         $n = substr_count($expression, '"');
         if ($n % 2)
@@ -140,7 +163,20 @@ class FacParameterWriter extends FacParameter {
         return $deps;
     }
 
-    function rename_parameter($new_name)
+    private function update_dependents($dependents, $table)
+    {
+        $result = true;
+        foreach($dependents as $d) {
+            $p = $table->read_parameter($d);
+            $e = new FacEvaluator($table->read_expression($p['name']));
+            $p['value'] = $e->evaluate();
+            $result = $result && $table->write_parameter($p);
+        }
+
+        return $result;
+    }
+
+    function rename($new_name)
     {
         $table = new FacTable();
         $table->rename_parameter($this->parameter, $new_name);
