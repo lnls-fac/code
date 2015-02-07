@@ -35,23 +35,31 @@ function fac_parameter_parser_init(Parser $parser)
 
 function fac_parameter_render($input, array $args, Parser $parser, PPFrame $frame)
 {
-    $field = fac_get_field_arg($args);
-
     $prm = new FacParameterReader($input);
     $fields = $prm->read($input);
+    if (!$fields)
+        return fac_get_parameter_not_found_message($input, $parser, $frame);
 
-    if (!$fields) {
-        $output = '<pre style="color: red">' .
-            'Error: parameter ' . $input . ' not found!</pre>';
-        return $parser->recursiveTagParse($output, $frame);
-    }
-
-    if ($field)
-        $output = $fields[$field];
-    else
-        $output = $fields['value'] . " " . $fields['units'];
+    $output = fac_get_parameter_field($fields, $args);
 
     return htmlspecialchars($parser->recursiveTagParse($output, $frame));
+}
+
+function fac_get_parameter_not_found_message($name, $parser, $frame)
+{
+    $msg = "'''<span style=\"color: red\">Error: parameter \"" .
+        htmlspecialchars($name) . "\" not found!</span>'''";
+
+    return $parser->recursiveTagParse($msg, $frame);
+}
+
+function fac_get_parameter_field($fields, array $args)
+{
+    $field = fac_get_field_arg($args);
+    if ($field)
+        return $fields[$field];
+    else
+        return $fields['value'] . " " . $fields['units'];
 }
 
 function fac_get_field_arg(array $args)
@@ -79,15 +87,21 @@ function fac_edit_filter($editor, $text, $section, &$error, $summary)
 
     $prm = new FacParameterWriter($name, $text);
     $result = $prm->write();
-
-    if (!$result) {
-        $error = '<span style="color: red">Missing field';
-        if (count($prm->missing_fields) > 1)
-            $error .= 's';
-        $error .= ':' . implode(', ', $prm->missing_fields) . '</span>';
-    }
+    if (!$result)
+        $error = fac_get_missing_fields_message($prm->missing_fields);
 
     return true;
+}
+
+function fac_get_missing_fields_message($missing_fields)
+{
+    $msg = "<span style=\"color: red\">Missing field";
+    if (count($missing_fields) > 1)
+        $msg .= "s";
+    $field_list = htmlspecialchars(implode(', ', $missing_fields));
+    $msg .= ": " . $field_list . "</span>";
+
+    return $msg;
 }
 
 function fac_title_move(Title $title, Title $newTitle, User $user)
@@ -97,17 +111,19 @@ function fac_title_move(Title $title, Title $newTitle, User $user)
     if($title->getSubjectNsText() != $ns)
         return true; # source title not in parameter namespace
    
-    if ($newTitle->getSubjectNsText() != $ns) {
-        $prm = new FacParameterEraser($title->getText());
-        $prm->erase();
-
-        return true;
-    }
+    if ($newTitle->getSubjectNsText() != $ns)
+        return fac_erase_parameter($title->getText());
 
     $prm = new FacParameterWriter($title->getText());
     $prm->rename($newTitle->getText());
 
     return true;
+}
+
+function fac_erase_parameter($name)
+{
+    $prm = new FacParameterEraser($name);
+    return $prm->erase();
 }
 
 function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason, &$error)
@@ -116,12 +132,7 @@ function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason, &$error)
     if (!$name)
         return true; # not a parameter page
 
-    $prm = new FacParameterEraser($name);
-    $result = $prm->erase();    
-    if (!$result)
-        return false;
-    else
-        return true;
+    return fac_erase_parameter($name);
 }
 
 ?>

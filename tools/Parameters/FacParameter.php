@@ -30,7 +30,7 @@ class FacParameter {
 
     /**
      * Get parameter template text for edit pages.
-     * @return String with text
+     * @return String with template text
      */
     public static function get_parameter_template()
     {
@@ -114,11 +114,15 @@ class FacParameterWriter extends FacParameter {
         $table = new FacTable();
         $r = true;
 
-        if ($values['is_derived'] === 'True') 
-            $r = $r and $this->write_derived_fields($values, $table);
-            
-        $e = new FacEvaluator($values['value']);
-        $values['value'] = $e->evaluate();
+        if ($values['is_derived'] === 'True')  {
+            $e = new FacEvaluator($values['value']);
+            $r = $r and $this->write_derived_fields(
+                $values['value'],
+                $e->get_dependencies(),
+                $table
+            );
+            $values['value'] = $e->evaluate();
+        }
         
         $r = $r and $table->write_parameter($values);
 
@@ -127,40 +131,24 @@ class FacParameterWriter extends FacParameter {
         return $r and $this->update_dependents($dependents, $table);
     }
 
-    private function write_derived_fields($values, $table)
+    private function write_derived_fields($expression, $dependencies, $table)
     {
-        $table->erase_dependencies($values['name']);
-
-        $deps = array_unique($this->get_dependencies($values['value']));
-        if ($deps === false)
+        if ($dependencies === false)
             return false;
 
-        $r = $table->write_dependencies($values['name'], $deps);
+        $r = $table->erase_dependencies($this->parameter);
         if ($r === false)
             return false;
 
-        $r = $table->write_expression($values['name'], $values['value']);
+        $r = $table->write_dependencies($this->parameter, $dependencies);
+        if ($r === false)
+            return false;
+
+        $r = $table->write_expression($this->parameter, $expression);
         if ($r === false)
             return false;
 
         return true;
-    }
-
-    # Should move?
-    private function get_dependencies($expression)
-    {
-        $n = substr_count($expression, '"');
-        if ($n % 2)
-            return false;
-
-        $deps = array();
-        $split = explode('"', $expression);
-
-        for ($i = 0; $i < count($split); $i++)
-            if ($i % 2)
-                array_push($deps, $split[$i]);
-
-        return $deps;
     }
 
     private function update_dependents($dependents, $table)
@@ -168,9 +156,13 @@ class FacParameterWriter extends FacParameter {
         $result = true;
         foreach($dependents as $d) {
             $p = $table->read_parameter($d);
+            if (!$p) {
+                $result = false;
+                break;
+            }
             $e = new FacEvaluator($table->read_expression($p['name']));
             $p['value'] = $e->evaluate();
-            $result = $result && $table->write_parameter($p);
+            $result = $result and $table->write_parameter($p);
         }
 
         return $result;
@@ -193,11 +185,12 @@ class FacParameterEraser extends FacParameter {
     {
         $table = new FacTable();
 
-        $rd = $table->erase_dependencies($this->parameter);
-        $re = $table->erase_expression($this->parameter);
-        $rp = $table->erase_parameter($this->parameter);
+        $r = true;
+        $r = $r and $table->erase_dependencies($this->parameter);
+        $r = $r and $table->erase_expression($this->parameter);
+        $r = $r and $table->erase_parameter($this->parameter);
 
-        return ($rd && $re && $rp);
+        return $r;
     }
 }
 

@@ -104,7 +104,7 @@ class FacTable extends FacConnection {
             $query = $this->build_update_parameter_query($db_fields);
 
         $result = $this->mysqli->query($query);
-        return $result && $this->mysqli->commit();
+        return $result and $this->mysqli->commit();
     }
     
     function get_db_fields($fields)
@@ -205,7 +205,7 @@ class FacTable extends FacConnection {
                 $new_name . "' WHERE name='" .
                 $name . "';";
 
-            $r = true && $this->mysqli->query($query);
+            $r = $r and $this->mysqli->query($query);
         }
 
         return $r;
@@ -266,7 +266,8 @@ class FacEvaluator extends FacConnection {
         'sin', 'cos', 'tan'
     );
 
-    public $expression;
+    private $expression;
+    private $dependencies;
     private $parameters;
     private $depth;
 
@@ -274,19 +275,27 @@ class FacEvaluator extends FacConnection {
     {
         $this->FacConnection();
 
-        $this->expression = $expression;
         $this->parameters = array();
         $this->depth = 0;
+
+        $r = $this->replace_parameters($expression);
+        $this->expression = $r[0];
+        $this->dependencies = $r[1];
+    }
+
+    function get_dependencies()
+    {
+        return $this->dependencies;
     }
 
     function evaluate()
     {
-        $expr = $this->replace_parameters($this->expression);
-
-        if (!$this->validate_final_expression($expr))
-            throw new Exception('invalid expression');
+        if (!$this->expression)
+            return false;
+        elseif (!$this->validate_final_expression($this->expression))
+            throw new MWException('invalid expression');
         else {
-            $extended_expr = '$r = ' . $expr . ';';
+            $extended_expr = '$r = ' . $this->expression . ';';
             eval($extended_expr);
             return $r;
         }
@@ -294,20 +303,16 @@ class FacEvaluator extends FacConnection {
 
     function replace_parameters($expression)
     {
-
         if ($depth++ >= self::max_depth)
-            throw new Exception('max depth achieved');
-
+            throw new MWException('max depth achieved');
+        
         if (substr_count($expression, '"') % 2)
-            throw new Exception('double quotes not matching');
+            return array(false, false);
 
-        $parameters = array();
-        $split = explode('"', $expression);
-        for ($i = 0; $i < count($split); $i++)
-            if ($i % 2)
-                array_push($parameters, $split[$i]);
+        $dt = new FacDependencyTracker($expression);
+        $deps = $dt->get_dependencies();
 
-        foreach ($parameters as $p) {
+        foreach ($deps as $p) {
             if (!in_array($p, $this->parameters))
                 $this->parameters[$p] = $this->get_value_or_expression($p);
 
@@ -316,14 +321,16 @@ class FacEvaluator extends FacConnection {
             $expression = str_replace($parameter, $value, $expression);
         }
         
-        return $expression;
+        return array($expression, $deps);
     }
 
     function get_value_or_expression($parameter)
     {
         $p = $this->read_parameter($parameter);
-        if ($p['is_derived'])
-            return '(' . $this->replace_parameters($p['value']) . ')';
+        if ($p === false)
+            return false;
+        elseif ($p['is_derived'])
+            return '(' . $this->replace_parameters($p['value'])[0] . ')';
         else
             return $p['value'];
     }
@@ -336,7 +343,7 @@ class FacEvaluator extends FacConnection {
 
         $row = $r->fetch_assoc();
         if (!$row)
-            throw new Exception('parameter ' . $parameter . ' not found');
+            return false;
 
         if ($row['is_derived'])
             $value = $this->read_expression($parameter);
@@ -354,7 +361,7 @@ class FacEvaluator extends FacConnection {
 
         $row = $r->fetch_assoc();
         if (!$row)
-            throw new Exception('expression for ' . $parameter . ' not found');
+            return false;
         else
             return $row['expression'];
     }
@@ -372,6 +379,31 @@ class FacEvaluator extends FacConnection {
             return true;
         else
             return false;
+    }
+}
+
+class FacDependencyTracker {
+    private $expression;
+
+    function FacDependencyTracker($expression)
+    {
+        $this->expression = $expression;
+    }
+
+    function get_dependencies()
+    {
+        $n = substr_count($this->expression, '"');
+        if ($n % 2)
+            return false;
+
+        $deps = array();
+        $split = explode('"', $this->expression);
+
+        for ($i = 0; $i < count($split); $i++)
+            if ($i % 2)
+                array_push($deps, $split[$i]);
+
+        return array_unique($deps);
     }
 }
 
