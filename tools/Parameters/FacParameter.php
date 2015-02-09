@@ -112,11 +112,10 @@ class FacParameterWriter extends FacParameter {
     private function write_all($values)
     {
         $table = new FacTable();
-        $r = true;
 
         if ($values['is_derived'] === 'True')  {
             $e = new FacEvaluator($values['value']);
-            $r = $r and $this->write_derived_fields(
+            $this->write_derived_fields(
                 $values['value'],
                 $e->get_dependencies(),
                 $table
@@ -124,54 +123,38 @@ class FacParameterWriter extends FacParameter {
             $values['value'] = $e->evaluate();
         }
         
-        $r = $r and $table->write_parameter($values);
+        $table->write_parameter($values);
 
         $d = new FacDependentTracker($values['name']);            
         $dependents = $d->get_dependents();
-        return $r and $this->update_dependents($dependents, $table);
+        $this->update_dependents($dependents, $table);
+
+        return $table->commit();
     }
 
     private function write_derived_fields($expression, $dependencies, $table)
     {
-        if ($dependencies === false)
-            return false;
-
-        $r = $table->erase_dependencies($this->parameter);
-        if ($r === false)
-            return false;
-
-        $r = $table->write_dependencies($this->parameter, $dependencies);
-        if ($r === false)
-            return false;
-
-        $r = $table->write_expression($this->parameter, $expression);
-        if ($r === false)
-            return false;
-
-        return true;
+        $table->erase_dependencies($this->parameter);
+        $table->write_dependencies($this->parameter, $dependencies);
+        $table->write_expression($this->parameter, $expression);
     }
 
     private function update_dependents($dependents, $table)
     {
-        $result = true;
         foreach($dependents as $d) {
             $p = $table->read_parameter($d);
-            if (!$p) {
-                $result = false;
-                break;
-            }
             $e = new FacEvaluator($table->read_expression($p['name']));
             $p['value'] = $e->evaluate();
-            $result = $result and $table->write_parameter($p);
+            $table->write_parameter($p);
         }
-
-        return $result;
     }
 
     function rename($new_name)
     {
         $table = new FacTable();
         $table->rename_parameter($this->parameter, $new_name);
+
+        return $table->commit();
     }
 }
 
@@ -185,12 +168,11 @@ class FacParameterEraser extends FacParameter {
     {
         $table = new FacTable();
 
-        $r = true;
-        $r = $r and $table->erase_dependencies($this->parameter);
-        $r = $r and $table->erase_expression($this->parameter);
-        $r = $r and $table->erase_parameter($this->parameter);
+        $table->erase_dependencies($this->parameter);
+        $table->erase_expression($this->parameter);
+        $table->erase_parameter($this->parameter);
 
-        return $r;
+        return $table->commit();
     }
 }
 

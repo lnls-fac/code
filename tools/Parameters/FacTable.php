@@ -1,5 +1,7 @@
 <?php
 
+class FacException extends Exception { }
+
 class FacConnection {
     # Move to external file with appropriate permissions
     const server_address = '127.0.0.1';
@@ -9,7 +11,7 @@ class FacConnection {
 
     protected $mysqli;
 
-    function FacConnection()
+    function __construct()
     {
         $this->mysqli = new mysqli(
             self::server_address,
@@ -17,27 +19,45 @@ class FacConnection {
             self::password,
             self::database
         );
-        if ($this->mysqli->connect_errno) {
-            echo "Failed to connect to MySQL: " . $this->mysqli->connect_error;
-            $this->mysqli = false;
-        }
+        if ($this->mysqli->connect_errno)
+            throw new FacException('could not connect to database!');
+        else
+            $this->mysqli->autocommit(false);
+    }
+
+    function escape($s)
+    {
+        return $this->mysqli->real_escape_string($s);
+    }
+
+    function query($query)
+    {
+        $r = $this->mysqli->query($query);
+        if (!$r) {
+            $this->mysqli->rollback();
+            throw new FacException('database query failed');
+        } else
+            return $r;
+    }
+
+    function commit()
+    {
+        return $this->mysqli->commit();
     }
 }
 
 class FacTable extends FacConnection {
     function FacTable()
     {
-        $this->FacConnection();
+        parent::__construct();
     }
 
     function read_parameter($name)
     {
-        if (!$this->mysqli)
-            return false;
-
         $r = $this->read_all_with_name_from_table($name, 'parameter');
-        if (!$r)
-            return false;
+
+        if ($r->num_rows == 0)
+            throw new FacException('parameter "' . $name . '" not found!');
         else {
             $row = $r->fetch_assoc();
             return $this->get_text_fields($row);
@@ -46,12 +66,10 @@ class FacTable extends FacConnection {
 
     function read_all_with_name_from_table($name, $table)
     {
-        $query = "SELECT * FROM " .
-            $this->mysqli->real_escape_string($table) .
-            " WHERE name='" .
-            $this->mysqli->real_escape_string($name) . "';";
+        $query = "SELECT * FROM " . $this->escape($table) .
+            " WHERE name='" . $this->escape($name) . "';";
 
-        return $this->mysqli->query($query);
+        return $this->query($query);
     }
 
     function get_text_fields($cols)
@@ -92,9 +110,6 @@ class FacTable extends FacConnection {
 
     function write_parameter($fields)
     {
-        if (!$this->mysqli)
-            return false;
-
         $db_fields = $this->get_db_fields($fields);
 
         $r = $this->read_parameter($db_fields['name']);
@@ -103,8 +118,7 @@ class FacTable extends FacConnection {
         else
             $query = $this->build_update_parameter_query($db_fields);
 
-        $result = $this->mysqli->query($query);
-        return $result and $this->mysqli->commit();
+        $result = $this->query($query);
     }
     
     function get_db_fields($fields)
@@ -143,12 +157,12 @@ class FacTable extends FacConnection {
 
     function convert_identity($value)
     {
-        return $this->mysqli->real_escape_string($value);
+        return $this->escape($value);
     }
 
     function strip_math_tags($value)
     {
-        return $this->mysqli->real_escape_string(strip_tags($value));
+        return $this->escape(strip_tags($value));
     }
 
     function convert_bool_text_to_integer($value)
@@ -161,9 +175,6 @@ class FacTable extends FacConnection {
 
     function write_dependencies($parameter, array $dependencies)
     {
-        if (!$this->mysqli)
-            return false;
-
         $query = "INSERT INTO dependency VALUES ";
         $values = array();
         foreach($dependencies as $dep) {
@@ -172,14 +183,11 @@ class FacTable extends FacConnection {
         }
         $query .= implode(', ', $values) . ";";
 
-        return $this->mysqli->query($query);
+        return $this->query($query);
     }
 
     function write_expression($parameter, $expression)
     {
-        if (!$this->mysqli)
-            return false;
-
         $r = $this->read_all_with_name_from_table($parameter, 'expression');
         if ($r->num_rows > 0) {
             $query = "UPDATE expression SET expression='" .
@@ -190,25 +198,21 @@ class FacTable extends FacConnection {
                 $parameter . "', '" . $expression . "');";
         }
 
-        return $this->mysqli->query($query);
+        return $this->query($query);
     }
 
     function rename_parameter($name, $new_name)
     {
-        if (!$this->mysqli)
-            return false;
-
         $tables = array('parameter', 'dependency', 'expression');
-        $r = true;
         foreach ($tables as $table) {
             $query = "UPDATE " . $table . " SET name='" .
                 $new_name . "' WHERE name='" .
                 $name . "';";
 
-            $r = $r and $this->mysqli->query($query);
+            $this->query($query);
         }
 
-        return $r;
+        return true;
     }
 
     function erase_parameter($parameter)
@@ -228,26 +232,24 @@ class FacTable extends FacConnection {
 
     function erase($table, $parameter)
     {
-        if (!$this->mysqli)
-            return false;
-
         $query = "DELETE FROM " . $table . " WHERE name='" .
             $parameter . "';";
 
-        return $this->mysqli->query($query);
+        return $this->query($query);
     }
     
     function read_expression($parameter)
     {
         $query = "SELECT * FROM expression WHERE name='" .
             $parameter . "';";
-        $r = $this->mysqli->query($query);
+        $r = $this->query($query);
+        if ($r->num_rows == 0) {
+            $msg = 'expression for parameter "' . $parameter . '" not found';
+            throw new FacException($msg);
+        }
 
         $row = $r->fetch_assoc();
-        if (!$row)
-            return false;
-        else
-            return $row['expression'];
+        return $row['expression'];
     }
 }
 
@@ -273,14 +275,14 @@ class FacEvaluator extends FacConnection {
 
     function FacEvaluator($expression)
     {
-        $this->FacConnection();
+        parent::__construct();
 
         $this->parameters = array();
         $this->depth = 0;
 
         $r = $this->replace_parameters($expression);
-        $this->expression = $r[0];
-        $this->dependencies = $r[1];
+        $this->expression = $r['expression'];
+        $this->dependencies = $r['dependencies'];
     }
 
     function get_dependencies()
@@ -290,24 +292,21 @@ class FacEvaluator extends FacConnection {
 
     function evaluate()
     {
-        if (!$this->expression)
-            return false;
-        elseif (!$this->validate_final_expression($this->expression))
-            throw new MWException('invalid expression');
-        else {
+        if ($this->validate_final_expression($this->expression)) {
             $extended_expr = '$r = ' . $this->expression . ';';
             eval($extended_expr);
             return $r;
-        }
+        } else
+            throw new FacException('invalid expression');
     }
 
     function replace_parameters($expression)
     {
         if ($depth++ >= self::max_depth)
-            throw new MWException('max depth achieved');
+            throw new FacException('max depth achieved');
         
         if (substr_count($expression, '"') % 2)
-            return array(false, false);
+            throw new FacException('number of quotes did not match');
 
         $dt = new FacDependencyTracker($expression);
         $deps = $dt->get_dependencies();
@@ -321,17 +320,16 @@ class FacEvaluator extends FacConnection {
             $expression = str_replace($parameter, $value, $expression);
         }
         
-        return array($expression, $deps);
+        return array('expression' => $expression, 'dependencies' => $deps);
     }
 
     function get_value_or_expression($parameter)
     {
         $p = $this->read_parameter($parameter);
-        if ($p === false)
-            return false;
-        elseif ($p['is_derived'])
-            return '(' . $this->replace_parameters($p['value'])[0] . ')';
-        else
+        if ($p['is_derived']) {
+            $r = $this->replace_parameters($p['value']);
+            return '(' . $r['expression'] . ')';
+        } else
             return $p['value'];
     }
 
@@ -339,11 +337,13 @@ class FacEvaluator extends FacConnection {
     {
         $query = "SELECT * FROM parameter WHERE name='" .
             $parameter . "';";
-        $r = $this->mysqli->query($query);
+        $r = $this->query($query);
 
         $row = $r->fetch_assoc();
-        if (!$row)
-            return false;
+        if (!$row) {
+            $msg = 'parameter "' . $parameter . '" not found!';
+            throw new FacException($msg);
+        }
 
         if ($row['is_derived'])
             $value = $this->read_expression($parameter);
@@ -357,12 +357,13 @@ class FacEvaluator extends FacConnection {
     {
         $query = "SELECT * FROM expression WHERE name='" .
             $parameter . "';";
-        $r = $this->mysqli->query($query);
+        $r = $this->query($query);
 
         $row = $r->fetch_assoc();
-        if (!$row)
-            return false;
-        else
+        if (!$row) {
+            $msg = 'expression for "' . $parameter . '" not found!';
+            throw new FacException($msg);
+        } else
             return $row['expression'];
     }
 
@@ -393,8 +394,10 @@ class FacDependencyTracker {
     function get_dependencies()
     {
         $n = substr_count($this->expression, '"');
-        if ($n % 2)
-            return false;
+        if ($n % 2) {
+            $msg = 'quotes in ' . $this->expression . ' did not match';
+            throw new FacException($msg);
+        }
 
         $deps = array();
         $split = explode('"', $this->expression);
@@ -412,14 +415,14 @@ class FacDependentTracker extends FacConnection {
 
     function FacDependentTracker($parameter)
     {
-        $this->FacConnection();
+        parent::__construct();
         $this->parameter = $parameter;
     }
 
     function get_dependents()
     {
         $query = "SELECT * FROM dependency;";
-        $r = $this->mysqli->query($query);
+        $r = $this->query($query);
 
         $table = array();
         for ($i = 0; $i < $r->num_rows; $i++) {
@@ -465,6 +468,13 @@ class FacSet {
     {
         return count($this->elements);
     }
+}
+
+function fac_write($filename, $msg)
+{
+    $f = fopen('/tmp/' . $filename . '.txt', 'a');
+    fwrite($f, $msg . "\n");
+    fclose($f);
 }
 
 ?>

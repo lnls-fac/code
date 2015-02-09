@@ -25,6 +25,7 @@ $wgHooks['ParserFirstCallInit'][] = 'fac_parameter_parser_init';
 $wgHooks['EditFormPreloadText'][] = 'fac_edit_form_preload_text';
 $wgHooks['EditFilter'][] = 'fac_edit_filter';
 $wgHooks['TitleMove'][] = 'fac_title_move';
+$wgHooks['AbortMove'][] = 'fac_abort_move';
 $wgHooks['ArticleDelete'][] = 'fac_article_delete';
 
 function fac_parameter_parser_init(Parser $parser)
@@ -33,24 +34,29 @@ function fac_parameter_parser_init(Parser $parser)
     return true;
 }
 
-function fac_parameter_render($input, array $args, Parser $parser, PPFrame $frame)
+function fac_parameter_render($input, array $args, Parser $parser,
+    PPFrame $frame)
 {
     $prm = new FacParameterReader($input);
-    $fields = $prm->read($input);
-    if (!$fields)
-        return fac_get_parameter_not_found_message($input, $parser, $frame);
 
-    $output = fac_get_parameter_field($fields, $args);
-
-    return htmlspecialchars($parser->recursiveTagParse($output, $frame));
+    try {
+        $fields = $prm->read($input);
+        $output = fac_get_parameter_field($fields, $args);
+        return htmlspecialchars($parser->recursiveTagParse($output, $frame));
+    } catch(FacException $e) {
+        $output = fac_get_error_message('Error: ' . $e->getMessage());
+        return $parser->recursiveTagParse($output, $frame);
+    }
 }
 
-function fac_get_parameter_not_found_message($name, $parser, $frame)
+function fac_get_error_message($msg, $bold=true)
 {
-    $msg = "'''<span style=\"color: red\">Error: parameter \"" .
-        htmlspecialchars($name) . "\" not found!</span>'''";
+    if ($bold)
+        $s = "'''";
+    else
+        $s = "";
 
-    return $parser->recursiveTagParse($msg, $frame);
+    return $s . "<span style=\"color: red\">" . $msg . "</span>" . $s;
 }
 
 function fac_get_parameter_field($fields, array $args)
@@ -85,54 +91,79 @@ function fac_edit_filter($editor, $text, $section, &$error, $summary)
     if (!$name)
         return true; # not a parameter page
 
-    $prm = new FacParameterWriter($name, $text);
-    $result = $prm->write();
-    if (!$result)
-        $error = fac_get_missing_fields_message($prm->missing_fields);
+    try {
+        $prm = new FacParameterWriter($name, $text);
+        $result = $prm->write();
+        if (!$result)
+            $error = fac_get_missing_fields_message($prm->missing_fields);
+    } catch (FacException $e) {
+        $error = fac_get_error_message('Error: ' . $e->getMessage());
+    }
 
     return true;
 }
 
 function fac_get_missing_fields_message($missing_fields)
 {
-    $msg = "<span style=\"color: red\">Missing field";
+    $msg = "Missing field";
     if (count($missing_fields) > 1)
         $msg .= "s";
     $field_list = htmlspecialchars(implode(', ', $missing_fields));
-    $msg .= ": " . $field_list . "</span>";
+    $msg .= ": " . $field_list;
 
-    return $msg;
+    return fac_get_error_message($msg, false);
 }
 
 function fac_title_move(Title $title, Title $newTitle, User $user)
 {
     $ns = substr(FacParameter::parameter_namespace, 0, -1); # remove colon
 
-    if($title->getSubjectNsText() != $ns)
-        return true; # source title not in parameter namespace
-   
-    if ($newTitle->getSubjectNsText() != $ns)
-        return fac_erase_parameter($title->getText());
+    $old_ns = $title->getSubjectNsText();
+    $new_ns = $newTitle->getSubjectNsText();
 
+    if(($old_ns != $ns) or ($new_ns != $ns))
+        return true; # not in parameter namespace
+   
     $prm = new FacParameterWriter($title->getText());
     $prm->rename($newTitle->getText());
 
     return true;
 }
 
-function fac_erase_parameter($name)
+function fac_abort_move(Title $oldTitle, Title $newTitle, User $user,
+    &$error, $reason)
 {
-    $prm = new FacParameterEraser($name);
-    return $prm->erase();
+    $ns = substr(FacParameter::parameter_namespace, 0, -1); # remove colon
+
+    if ($oldTitle->getSubjectNsText() != $ns) {
+        if ($newTitle->getSubjectNsText() == $ns) {
+            $error = 'Cannot move to parameter namespace!';
+            return false;
+        }
+    } else {
+        if ($newTitle->getSubjectNsText() != $ns) {
+            $error = 'Cannot move out of parameter namespace!';
+            return false;
+        } else {
+            if ($newTitle->exists()) {
+                $error = 'Cannot overwrite existing parameter!';
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
-function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason, &$error)
+function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason,
+    &$error)
 {
     $name = FacParameter::get_name_if_parameter($wikiPage->getTitle());
     if (!$name)
         return true; # not a parameter page
 
-    return fac_erase_parameter($name);
+    $prm = new FacParameterEraser($name);
+    return $prm->erase();
 }
 
 ?>
