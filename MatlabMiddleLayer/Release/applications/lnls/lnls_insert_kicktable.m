@@ -13,6 +13,8 @@ lens_dws = getcellstruct(the_ring0, 'Length', idx_pos:idx_dws);
 % builds the id flanking drifts in the line
 ups_drift = the_ring0{idx_ups};
 dws_drift = the_ring0{idx_dws};
+ups_drift.PassMethod = 'DriftPass';
+dws_drift.PassMethod = 'DriftPass';
 ups_drift.Length = sum(lens_ups) - (id_length/2);
 dws_drift.Length = sum(lens_dws) - (id_length/2);
 if (ups_drift.Length < 0) || (dws_drift.Length < 0)
