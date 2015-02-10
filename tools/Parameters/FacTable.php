@@ -185,8 +185,12 @@ class FacTable extends FacConnection {
 
     function write_dependencies($parameter, array $dependencies)
     {
+        if (count($dependencies) == 0)
+            return true;
+
         $query = "INSERT INTO dependency VALUES ";
         $values = array();
+
         foreach($dependencies as $dep) {
             $value = "('" . $parameter . "', '" . $dep . "')";
             array_push($values, $value);
@@ -287,10 +291,11 @@ class FacEvaluator extends FacConnection {
     {
         parent::__construct();
 
-        if ($parameter)
+        if ($parameter) {
             $this->parameters = array(
-                $parameter);
-        else
+                $parameter['name'] => $parameter['value']
+            );
+        } else
             $this->parameters = array();
 
         $this->depth = 0;
@@ -311,8 +316,10 @@ class FacEvaluator extends FacConnection {
             $extended_expr = '$r = ' . $this->expression . ';';
             eval($extended_expr);
             return $r;
-        } else
+        } else {
+            fac_write('expression', $this->expression);
             throw new FacException('invalid expression');
+        }
     }
 
     function replace_parameters($expression)
@@ -327,7 +334,7 @@ class FacEvaluator extends FacConnection {
         $deps = $dt->get_dependencies();
 
         foreach ($deps as $p) {
-            if (!in_array($p, $this->parameters))
+            if (!array_key_exists($p, $this->parameters))
                 $this->parameters[$p] = $this->get_value_or_expression($p);
 
             $parameter = '"' . $p . '"';

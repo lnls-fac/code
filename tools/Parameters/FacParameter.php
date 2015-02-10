@@ -104,9 +104,9 @@ class FacParameterWriter extends FacParameter {
         $table = new FacTable();
 
         if ($values['is_derived'] === 'True')  {
-            $e = new FacEvaluator($values['value']);
+            $e = new FacEvaluator($values['value'], $values);
             $this->write_derived_fields(
-                $values['value'],
+                $values,
                 $e->get_dependencies(),
                 $table
             );
@@ -115,25 +115,28 @@ class FacParameterWriter extends FacParameter {
         
         $table->write_parameter($values);
 
-        $d = new FacDependentTracker($values['name']);            
-        $dependents = $d->get_dependents();
-        $this->update_dependents($dependents, $table);
+        $this->update_dependents($values, $table);
 
         return $table->commit();
     }
 
-    private function write_derived_fields($expression, $dependencies, $table)
+    private function write_derived_fields($parameter, $dependencies, $table)
     {
         $table->erase_dependencies($this->parameter);
         $table->write_dependencies($this->parameter, $dependencies);
-        $table->write_expression($this->parameter, $expression);
+        $table->write_expression($this->parameter, $parameter['value']);
     }
 
-    private function update_dependents($dependents, $table)
+    private function update_dependents($parameter, $table)
     {
+        $dt = new FacDependentTracker($parameter['name']);
+        $dependents = $dt->get_dependents();
         foreach($dependents as $d) {
             $p = $table->read_parameter($d);
-            $e = new FacEvaluator($table->read_expression($p['name']));
+            $e = new FacEvaluator(
+                $table->read_expression($p['name']),
+                $parameter
+            );
             $p['value'] = $e->evaluate();
             $table->write_parameter($p);
         }

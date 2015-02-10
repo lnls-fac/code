@@ -24,29 +24,62 @@ $wgExtensionCredits['other'][] = array(
 $wgHooks['ParserFirstCallInit'][] = 'fac_parameter_parser_init';
 $wgHooks['EditFormPreloadText'][] = 'fac_edit_form_preload_text';
 $wgHooks['EditFilter'][] = 'fac_edit_filter';
+$wgHooks['EditPage::attemptSave'][] = 'fac_attempt_save';
 $wgHooks['TitleMove'][] = 'fac_title_move';
 $wgHooks['AbortMove'][] = 'fac_abort_move';
 $wgHooks['ArticleDelete'][] = 'fac_article_delete';
 
 function fac_parameter_parser_init(Parser $parser)
 {
-    $parser->setHook("parameter", "fac_parameter_render");
+    $parser->setHook("sirius", "fac_sirius_parameter_render");
+    $parser->setHook("sirius_value", "fac_sirius_value_parameter_render");
+    $parser->setHook("sirius_units", "fac_sirius_units_parameter_render");
     return true;
 }
 
-function fac_parameter_render($input, array $args, Parser $parser,
+function fac_sirius_parameter_render($input, array $args, Parser $parser,
     PPFrame $frame)
 {
-    $prm = new FacParameterReader($input);
-
     try {
-        $fields = $prm->read($input);
-        $output = fac_get_parameter_field($fields, $args);
-        return htmlspecialchars($parser->recursiveTagParse($output, $frame));
+        $prm = new FacParameterReader($input);
+        $fields = $prm->read();
+        $output = fac_get_sirius_parameter_with_args($fields, $args);
+        return $parser->recursiveTagParse($output, $frame);
     } catch(FacException $e) {
         $output = fac_get_error_message('Error: ' . $e->getMessage());
         return $parser->recursiveTagParse($output, $frame);
     }
+}
+
+function fac_get_sirius_parameter_with_args($fields, $args)
+{
+    $field = fac_get_arg_value('field', $args);
+    $format = fac_get_arg_value('format', $args);
+    $link = fac_get_arg_value('link', $args);
+
+    if ($format) {
+        fac_write('debug', $fields['value']);
+        $fields['value'] = sprintf($format, $fields['value']);
+        fac_write('debug', $fields['value']);
+    }
+
+    if (strtoupper($link) != 'FALSE')
+        $fields['value'] = '[[' . FacParameter::parameter_namespace .
+            $fields['name'] . '|' . $fields['value'] . ']]';
+
+    if ($field)
+        return $fields[$field];
+    else
+        return $fields['value'] . " " . $fields['units'];
+
+}
+
+function fac_get_arg_value($arg, array $args)
+{
+    if (array_key_exists($arg, $args))
+        return $args[$arg];
+    else
+        return false;
 }
 
 function fac_get_error_message($msg, $bold=true)
@@ -59,21 +92,19 @@ function fac_get_error_message($msg, $bold=true)
     return $s . "<span style=\"color: red\">" . $msg . "</span>" . $s;
 }
 
-function fac_get_parameter_field($fields, array $args)
+function fac_sirius_value_parameter_render($input, array $args,
+    Parser $parser, PPFrame $frame)
 {
-    $field = fac_get_field_arg($args);
-    if ($field)
-        return $fields[$field];
-    else
-        return $fields['value'] . " " . $fields['units'];
+    $args['field'] = 'value';
+    return fac_sirius_parameter_render($input, $args, $parser, $frame);
 }
 
-function fac_get_field_arg(array $args)
+function fac_sirius_units_parameter_render($input, array $args,
+    Parser $parser, PPFrame $frame)
 {
-    if (array_key_exists('field', $args))
-        return $args['field'];
-    else
-        return false;
+    $args['field'] = 'units';
+    $args['link'] = 'FALSE';
+    return fac_sirius_parameter_render($input, $args, $parser, $frame);
 }
 
 function fac_edit_form_preload_text(&$text, &$title)
@@ -112,6 +143,13 @@ function fac_get_missing_fields_message($missing_fields)
     $msg .= ": " . $field_list;
 
     return fac_get_error_message($msg, false);
+}
+
+function fac_attempt_save($editPage)
+{
+    $a = $editPage->getArticle()->getPage()->getText();
+    $a .= "Test";
+    fac_write('article', $a);
 }
 
 function fac_title_move(Title $title, Title $newTitle, User $user)
