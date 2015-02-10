@@ -123,9 +123,13 @@ function fac_title_move(Title $title, Title $newTitle, User $user)
 
     if(($old_ns != $ns) or ($new_ns != $ns))
         return true; # not in parameter namespace
-   
-    $prm = new FacParameterWriter($title->getText());
-    $prm->rename($newTitle->getText());
+
+    try {
+        $prm = new FacParameterWriter($title->getText());
+        $prm->rename($newTitle->getText());
+    } catch(FacException $e) {
+        return false;
+    }
 
     return true;
 }
@@ -162,8 +166,14 @@ function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason,
     if (!$name)
         return true; # not a parameter page
 
-    $prm = new FacParameterEraser($name);
-    return $prm->erase();
+    try {
+        $prm = new FacParameterEraser($name);
+        $prm->erase();
+        return true;
+    } catch(FacException $e) {
+        $error = fac_get_error_message($e->getMessage(), false);
+        return false;
+    }
 }
 
 ?>
