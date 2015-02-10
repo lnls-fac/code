@@ -3,9 +3,7 @@
 require('FacTable.php');
 require('FacValueExtractor.php');
 
-/**
- * Base class for parameters.
- */
+
 class FacParameter {
     const parameter_namespace = "Parameter:";
 
@@ -15,10 +13,6 @@ class FacParameter {
 
     protected $parameter;
 
-    /**
-     * Check if title is in parameter namespace and return name.
-     * @return Name if in parameter namespace, false otherwise
-     */
     public static function get_name_if_parameter($title)
     {
         $n = strlen(self::parameter_namespace);
@@ -28,10 +22,6 @@ class FacParameter {
             return substr($title, $n);
     }
 
-    /**
-     * Get parameter template text for edit pages.
-     * @return String with template text
-     */
     public static function get_parameter_template()
     {
         $template = "==Data==\n" .

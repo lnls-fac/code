@@ -4,7 +4,7 @@ class FacException extends Exception { }
 
 class FacConnection {
     # Move to external file with appropriate permissions
-    const server_address = '127.0.0.1';
+    const server_address = '10.0.21.44';
     const user = 'prm_editor';
     const password = 'prm0';
     const database = 'parameters';
@@ -112,11 +112,11 @@ class FacTable extends FacConnection {
     {
         $db_fields = $this->get_db_fields($fields);
 
-        $r = $this->read_parameter($db_fields['name']);
-        if (!$r)
-            $query = $this->build_insert_query($db_fields, 'parameter');
-        else
+        $r = $this->check_parameter_exists($db_fields['name']);
+        if ($r)
             $query = $this->build_update_parameter_query($db_fields);
+        else
+            $query = $this->build_insert_query($db_fields, 'parameter');
 
         $result = $this->query($query);
     }
@@ -133,6 +133,16 @@ class FacTable extends FacConnection {
                 $db_fields[$key] = $this->convert_identity($value);
         }
         return $db_fields;
+    }
+
+    function check_parameter_exists($parameter)
+    {
+        $r = $this->read_all_with_name_from_table($parameter, 'parameter');
+
+        if ($r->num_rows == 0)
+            return false;
+        else
+            return true;
     }
     
     function build_insert_query($values, $table)
@@ -273,11 +283,16 @@ class FacEvaluator extends FacConnection {
     private $parameters;
     private $depth;
 
-    function FacEvaluator($expression)
+    function FacEvaluator($expression, $parameter=false)
     {
         parent::__construct();
 
-        $this->parameters = array();
+        if ($parameter)
+            $this->parameters = array(
+                $parameter);
+        else
+            $this->parameters = array();
+
         $this->depth = 0;
 
         $r = $this->replace_parameters($expression);
@@ -306,7 +321,7 @@ class FacEvaluator extends FacConnection {
             throw new FacException('max depth achieved');
         
         if (substr_count($expression, '"') % 2)
-            throw new FacException('number of quotes did not match');
+            throw new FacException('quote mismatch');
 
         $dt = new FacDependencyTracker($expression);
         $deps = $dt->get_dependencies();
