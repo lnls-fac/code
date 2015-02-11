@@ -1,7 +1,7 @@
 <?php
 
-require('FacTable.php');
-require('FacValueExtractor.php');
+require_once('FacTable.php');
+require_once('FacValueExtractor.php');
 
 
 class FacParameter {
@@ -39,16 +39,16 @@ class FacParameter {
         return $template;
     }
 
-    function FacParameter($name)
+    function __construct($name)
     {
         $this->parameter = $name;
     }
 }
 
 class FacParameterReader extends FacParameter {
-    function FacParameterReader($name)
+    function __construct($name)
     {
-        $this->FacParameter($name);
+        parent::__construct($name);
     }
 
     function read()
@@ -56,15 +56,21 @@ class FacParameterReader extends FacParameter {
         $table = new FacTable();
         return $table->read_parameter($this->parameter);
     }
+
+    function read_expression()
+    {
+        $table = new FacTable();
+        return $table->read_expression($this->parameter);
+    }
 }
 
 class FacParameterWriter extends FacParameter {
     public $missing_fields = array();
     private $value_extractor;
 
-    function FacParameterWriter($name, $text)
+    function __construct($name, $text)
     {
-        $this->FacParameter($name);
+        parent::__construct($name);
         $this->value_extractor = new FacValueExtractor($text);
     }
 
@@ -152,9 +158,9 @@ class FacParameterWriter extends FacParameter {
 }
 
 class FacParameterEraser extends FacParameter {
-    function FacParameterEraser($name)
+    function __construct($name)
     {
-        $this->FacParameter($name);
+        parent::__construct($name);
     }
 
     function erase()

@@ -11,7 +11,8 @@ if (!defined('MEDIAWIKI')) {
     die(-1);
 }
 
-require('FacParameter.php');
+require_once('FacParameter.php');
+require_once('FacTextReplacer.php');
 
 $wgExtensionCredits['other'][] = array(
     'name' => 'Parameters',
@@ -23,8 +24,9 @@ $wgExtensionCredits['other'][] = array(
 
 $wgHooks['ParserFirstCallInit'][] = 'fac_parameter_parser_init';
 $wgHooks['EditFormPreloadText'][] = 'fac_edit_form_preload_text';
+$wgHooks['EditFormInitialText'][] = 'fac_edit_form_initial_text';
 $wgHooks['EditFilter'][] = 'fac_edit_filter';
-$wgHooks['EditPage::attemptSave'][] = 'fac_attempt_save';
+$wgHooks['PageContentSave'][] = 'fac_page_content_save';
 $wgHooks['TitleMove'][] = 'fac_title_move';
 $wgHooks['AbortMove'][] = 'fac_abort_move';
 $wgHooks['ArticleDelete'][] = 'fac_article_delete';
@@ -57,11 +59,8 @@ function fac_get_sirius_parameter_with_args($fields, $args)
     $format = fac_get_arg_value('format', $args);
     $link = fac_get_arg_value('link', $args);
 
-    if ($format) {
-        fac_write('debug', $fields['value']);
+    if ($format)
         $fields['value'] = sprintf($format, $fields['value']);
-        fac_write('debug', $fields['value']);
-    }
 
     if (strtoupper($link) != 'FALSE')
         $fields['value'] = '[[' . FacParameter::parameter_namespace .
@@ -114,6 +113,34 @@ function fac_edit_form_preload_text(&$text, &$title)
         return true; # not a parameter page
 
     $text = FacParameter::get_parameter_template();
+    return true;
+}
+
+function fac_edit_form_initial_text($editPage)
+{
+    $name = FacParameter::get_name_if_parameter($editPage->getTitle());
+    if (!$name)
+        return true; # not a parameter page
+
+    try {
+        $prm = new FacParameterReader($name);
+        $fields = $prm->read();
+    
+        if (strtoupper($fields['is_derived']) != 'TRUE')
+            return true;
+
+        $expression = $prm->read_expression();
+    } catch(FacException $e) {
+        return false;
+    }
+    
+    $text = $editPage->textbox1;
+    $replacer = new FacTextReplacer($text);
+    $new_text = $replacer->replace_value($expression);
+
+    $editPage->textbox1 = $new_text;
+
+    return true;
 }
 
 function fac_edit_filter($editor, $text, $section, &$error, $summary)
@@ -145,11 +172,28 @@ function fac_get_missing_fields_message($missing_fields)
     return fac_get_error_message($msg, false);
 }
 
-function fac_attempt_save($editPage)
+function fac_page_content_save(&$wikiPage, &$user, &$content, &$summary,
+    $isMinor, $isWatch, $section, &$flags, &$status)
 {
-    $a = $editPage->getArticle()->getPage()->getText();
-    $a .= "Test";
-    fac_write('article', $a);
+    $name = FacParameter::get_name_if_parameter($wikiPage->getTitle());
+    if (!$name)
+        return true; # not a parameter page
+
+    try {
+        $prm = new FacParameterReader($name);
+        $fields = $prm->read();
+    } catch(FacException $e) {
+        return false;
+    }
+
+    if (strtoupper($fields['is_derived']) != 'TRUE')
+        return true;
+
+    $text = $content->getNativeData();
+    $replacer = new FacTextReplacer($text);
+    $new_text = $replacer->replace_value($fields['value']);
+
+    $content = new WikitextContent($new_text);
 }
 
 function fac_title_move(Title $title, Title $newTitle, User $user)

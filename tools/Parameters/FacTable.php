@@ -47,7 +47,7 @@ class FacConnection {
 }
 
 class FacTable extends FacConnection {
-    function FacTable()
+    function __construct()
     {
         parent::__construct();
     }
@@ -287,7 +287,7 @@ class FacEvaluator extends FacConnection {
     private $parameters;
     private $depth;
 
-    function FacEvaluator($expression, $parameter=false)
+    function __construct($expression, $parameter=false)
     {
         parent::__construct();
 
@@ -316,10 +316,8 @@ class FacEvaluator extends FacConnection {
             $extended_expr = '$r = ' . $this->expression . ';';
             eval($extended_expr);
             return $r;
-        } else {
-            fac_write('expression', $this->expression);
+        } else
             throw new FacException('invalid expression');
-        }
     }
 
     function replace_parameters($expression)
@@ -408,7 +406,7 @@ class FacEvaluator extends FacConnection {
 class FacDependencyTracker {
     private $expression;
 
-    function FacDependencyTracker($expression)
+    function __construct($expression)
     {
         $this->expression = $expression;
     }
@@ -435,7 +433,7 @@ class FacDependencyTracker {
 class FacDependentTracker extends FacConnection {
     private $parameter;
 
-    function FacDependentTracker($parameter)
+    function __construct($parameter)
     {
         parent::__construct();
         $this->parameter = $parameter;
