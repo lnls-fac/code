@@ -125,6 +125,9 @@ class FacParameterWriter extends FacParameter {
     {
         $table = new FacTable();
 
+        $table->erase_dependencies($values['name']);
+        $table->erase_expression($values['name']);
+
         if ($values['is_derived'] === 'True')  {
             $e = new FacEvaluator($values['value'], $values);
             $this->write_derived_fields(
@@ -144,7 +147,6 @@ class FacParameterWriter extends FacParameter {
 
     private function write_derived_fields($parameter, $dependencies, $table)
     {
-        $table->erase_dependencies($this->parameter);
         $table->write_dependencies($this->parameter, $dependencies);
         $table->write_expression($this->parameter, $parameter['value']);
     }
