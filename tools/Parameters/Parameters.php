@@ -154,7 +154,7 @@ function fac_edit_form_preload_text(&$text, &$title)
     if (!$name)
         return true; # not a parameter page
 
-    $text = FacParameter::get_parameter_template();
+    $text = FacParameter::get_parameter_template($name);
     return true;
 }
 

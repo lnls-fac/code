@@ -22,7 +22,7 @@ class FacParameter {
             return substr($title, $n);
     }
 
-    public static function get_parameter_template()
+    public static function get_parameter_template($name)
     {
         $template = "==Data==\n" .
             "<section begin=data/>\n" .
@@ -31,7 +31,7 @@ class FacParameter {
             "* Derived: <section begin=is_derived/>False<section end=is_derived/>\n" .
             "* Value: <section begin=value/><section end=value/>\n" .
             "* Units: <section begin=units/><section end=units/>\n" .
-            "* Deps: <section begin=deps/><section end=deps/>\n" .
+            "* Dependencies: <section begin=deps/><dependencies>" . $name . "</dependencies><section end=deps/>\n" .
             "<section end=data/>\n" .
             "==Observations==\n" .
             "<section begin=obs/>\n" .
