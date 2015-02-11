@@ -1,13 +1,15 @@
-function [ATCavityIndex the_ring] = setcavity(InputString, the_ring0)
+function [the_ring, ATCavityIndex] = setcavity(InputString, the_ring0)
 %SETCAVITY - Set the RF cavity state
 %  ATCavityIndex = setcavity(InputString)
-%  [ATCavityIndex the_ring] = setcavity(InputString, the_ring0)
+%  [ the_ring, ATCavityIndex] = setcavity(InputString, the_ring0)
 %
 %  INPUTS
 %  1. 'On', 'Off', or PassMethod {Default: no change}
+%  2. the_ring ring where the cavity state must be set.
 %
 %  OUTPUTS
 %  1. ATCavityIndex - AT Index of the RF cavities
+%  2. the_ring - ring with the cavity set
 %
 %  NOTES
 %  1. For more than one cavity, the InputString can have more than one row.
@@ -16,6 +18,7 @@ function [ATCavityIndex the_ring] = setcavity(InputString, the_ring0)
 
 %  Written by Greg Portmann
 %  modified by Ximenes (2013-04-17) so that user may specify a AT model
+%  modified by Fernando (2015-01-29 so that the_ring is the first output
 %  other than THERING
 
 global THERING

@@ -1,6 +1,11 @@
-function [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling(the_ring)
+function [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling(the_ring,complete)
 %CALCCOUPLING - Calculates the coupling and tilt of the AT model
 %  [Tilt, Eta, EpsX, EpsY, EmittanceRatio, ENV, DP, DL, BeamSize] = calccoupling
+%
+%  INPUTS
+%  1. the_ring - model of the ring, if not supplied THERING is called
+%  2. complete - a flag indicating if Emittances and Ratio will be
+%                calculated (default: true)
 %
 %  OUTPUTS
 %  1. Tilt - Tilts of the emittance ellipse [radian]
@@ -17,106 +22,22 @@ function [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling(the_
 %     is in the MML.  Whenever changing THERING use updateatindex to sync the MML.
 
 %  Written by James Safranek
-
 global THERING
-
 if ~exist('the_ring','var')
     the_ring = THERING;
 end
-
-const = lnls_constants;
-C0 = const.c;  % Speed of light [m/s]
-
-ati = atindex(the_ring);
-L0 = findspos(the_ring, length(the_ring)+1);
-
-% HarmNumber = 936;
-% THERING{ati.RF}.Frequency = HarmNumber*C0/L0;
-% THERING{ati.RF}.PassMethod = 'CavityPass';
-% for i = ati.RF
-%     THERING{i}.Frequency = THERING{i}.HarmNumber*C0/L0;
-%     THERING{i}.PassMethod = 'CavityPass';
-% end
-
-
-[PassMethod, ATIndex, FamName, PassMethodOld, ATIndexOld, FamNameOld, the_ring] = setradiation('On', the_ring);
-
-CavityState = getcavity;
-[ATCavityIndex, the_ring] = setcavity('On', the_ring);
-
-
-% Get all the AT elements that add radiation
-BendCell = findmemberof('BEND');
-iBend = family2atindex(BendCell);
-for ii = 1:length(iBend)
-    if size(iBend{ii},2) > 1
-        iBend{ii} = sort(iBend{ii}(:));
-        nanindx = find(isnan(iBend{ii}));
-        iBend{ii}(nanindx) = [];
-    end
+if ~exist('complete','var')
+    complete = true;
 end
-iBend = cell2mat(iBend(:));
 
+[the_ring, ~, ~, ~, ~, ATIndex, ~] = setradiation('On', the_ring);
 
-QuadCell = findmemberof('QUAD');
-iQuad = family2atindex(QuadCell);
-for ii = 1:length(iQuad)
-    if size(iQuad{ii},2) > 1
-        iQuad{ii} = sort(iQuad{ii}(:));
-        nanindx = find(isnan(iQuad{ii}));
-        iQuad{ii}(nanindx) = [];
-    end
-end
-iQuad = cell2mat(iQuad(:));
+the_ring = setcavity('On', the_ring);
 
-
-SextCell = findmemberof('SEXT');
-iSext = family2atindex(SextCell);
-for ii = 1:length(iSext)
-    if size(iSext{ii},2) > 1
-        iSext{ii} = sort(iSext{ii}(:));
-        nanindx = find(isnan(iSext{ii}));
-        iSext{ii}(nanindx) = [];
-    end
-end
-iSext = cell2mat(iSext(:));
-
-
-RadiationElemIndex = sort([iBend(:); iQuad(:); iSext(:)]');
-%RadiationElemIndex(find(isnan(RadiationElemIndex))) = [];
-
-[ENV, DP, DL] = ohmienvelope(the_ring, RadiationElemIndex, 1:length(the_ring)+1);
+[ENV, DP, DL] = ohmienvelope(the_ring, ATIndex', 1:length(the_ring)+1);
 
 sigmas = cat(2, ENV.Sigma);
 Tilt = cat(2, ENV.Tilt);
-spos = findspos(the_ring, 1:length(the_ring)+1);
-
-[TwissData, tune, chrom]  = twissring(the_ring, 0, 1:length(the_ring)+1, 'chrom');
-
-
-% The the passmethods back
-setpassmethod(ATIndexOld, PassMethodOld);
-[ATCavityIndex, the_ring] = setcavity(CavityState, the_ring);
-
-
-% Calculate tilts
-Beta = cat(1,TwissData.beta);
-spos = cat(1,TwissData.SPos);
-
-Eta = cat(2,TwissData.Dispersion);
-EpsX = (sigmas(1,:).^2-Eta(1,:).^2*DP^2)./Beta(:,1)';
-EpsY = (sigmas(2,:).^2-Eta(3,:).^2*DP^2)./Beta(:,2)';
-
-% RMS tilt
-TiltRMS = norm(Tilt)/sqrt(length(Tilt));
-EtaY = Eta(3,:);
-
-EpsX0 = mean(EpsX);
-EpsY0 = mean(EpsY);
-%EpsX0 = median(EpsX);
-%EpsY0 = median(EpsY);
-Ratio = EpsY0 / EpsX0;
-
 
 % Fix imaginary data
 % ohmienvelope seems to return complex when very close to zero
@@ -128,9 +49,30 @@ if ~isreal(sigmas(2,:))
     % Sigma is positive so this should be ok
     sigmas(2,:) = abs(sigmas(2,:));
 end
+
+if nargout ==0 || complete
+    [TwissData, ~, ~]  = twissring(the_ring, 0, 1:length(the_ring)+1, 'chrom');
     
+    % Calculate tilts
+    Beta = cat(1,TwissData.beta);
+    spos = cat(1,TwissData.SPos);
+    
+    Eta = cat(2,TwissData.Dispersion);
+    EpsX = (sigmas(1,:).^2-Eta(1,:).^2*DP^2)./Beta(:,1)';
+    EpsY = (sigmas(2,:).^2-Eta(3,:).^2*DP^2)./Beta(:,2)';
+    
+    EpsX0 = mean(EpsX);
+    EpsY0 = mean(EpsY);
+    %EpsX0 = median(EpsX);
+    %EpsY0 = median(EpsY);
+    Ratio = EpsY0 / EpsX0;
+end
 
 if nargout == 0
+    L0 = findspos(the_ring, length(the_ring)+1);
+    % RMS tilt
+    TiltRMS = norm(Tilt)/sqrt(length(Tilt));
+    EtaY = Eta(3,:);
     fprintf('   RMS Tilt = %f [degrees]\n', (180/pi) * TiltRMS);
     fprintf('   RMS Vertical Dispersion = %f [m]\n', norm(EtaY)/sqrt(length(EtaY)));
     fprintf('   Mean Horizontal Emittance = %f [nm rad]\n', 1e9*EpsX0);

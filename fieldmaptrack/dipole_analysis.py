@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import fieldmaptrack
 import math
+from   fieldmaptrack.common_analysis import *
+import fieldmaptrack.track as track
 
 class Config:
     
@@ -25,58 +27,8 @@ class Config:
         self.traj_force_midplane_flag = True
         self.traj_is_reference_traj = False
         self.multipoles_r0 = None
-                      
-def raw_fieldmap_analysis(config):
-        
-    if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
-        config.fmap_extrapolation_exponents = (2,3,4,5,6,7,8,9,10)
-
-    # loads fieldmap from file
-    # ========================
-    config.fmap = fieldmaptrack.FieldMap(config.fmap_filename)
-    
-    # plots basic data
-    # ================
-    
-    # -- longitudinal profile at (x,y) = (0,0)
-    try:
-        config.config_fig_number += 1
-    except:
-        config.config_fig_number = 1
-    x,y = config.fmap.rz, config.fmap.by[config.fmap.ry_zero][config.fmap.rx_zero,:]
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rz [mm]'), plt.ylabel('by [mm]')
-    plt.title(config.config_label + '\n' + 'Longitudinal profile of vertical field')
-    plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + 'by-vs-rz.pdf')
-    plt.clf()
-    
-    # -- transversal profile at (y,z) = (0,0)
-    try:
-        config.config_fig_number += 1
-    except:
-        config.config_fig_number = 1
-    x, y = config.fmap.rx, config.fmap.by[config.fmap.ry_zero][:,config.fmap.rz_zero]
-    plt.plot(x,y)
-    plt.grid(True)
-    plt.xlabel('rx [mm]'), plt.ylabel('by [T]')
-    plt.title(config.config_label + '\n' + 'Transverse profile of vertical field')
-    plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) +  'by-vs-rx.pdf')
-    plt.clf()
-    
-    
-    # calculates missing integrals
-    # ============================
-    if config.fmap_extrapolation_flag:
-        config.fmap.field_extrapolation_analysis(threshold_field_fraction = config.fmap_extrapolation_threshold_field_fraction, 
-                                        polyfit_exponents = config.fmap_extrapolation_exponents)
-
-    # prints basic raw information on the fieldmap
-    # ============================================
-    print('--- fieldmap ---')
-    print(config.fmap)
-    
-    return config    
+        self.model_segmentation = None
+        self.model_multipoles_integral = None
                         
 def calc_reference_trajectory_good_field_region(config):  
     # calcs reference trajectory
@@ -172,7 +124,7 @@ def trajectory_analysis(config):
         config.beam = fieldmaptrack.Beam(energy = config.beam_energy)
         config.traj = fieldmaptrack.Trajectory(beam=config.beam, fieldmap=config.fmap)
         config.traj.load(config.traj_load_filename)
-        config.traj_sagitta = calc_sagitta(half_dipole_length, config.traj)
+        config.traj_sagitta = config.traj.calc_sagitta(half_dipole_length)
     else:
         if config.traj_is_reference_traj:
             # rescale field so that nominal deflection is reached
@@ -194,7 +146,7 @@ def trajectory_analysis(config):
         
     # saves field on trajectory in file
     config.traj.save_field(filename='field_on_trajectory.txt')
-    
+
     return config
 
 def multipoles_analysis(config):
@@ -211,10 +163,9 @@ def multipoles_analysis(config):
                                          fitting_monomials=config.multipoles_fitting_monomials)
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
-    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.polynom_b_integral, 0, r0 = config.multipoles_r0)
-    config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
-        
-         
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = 0, r0 = config.multipoles_r0)
+    #config.multipoles.calc_hardedge_polynomials(config.model_hardedge_length)
+             
     # saves multipoles to file
     config.multipoles.save('multipoles.txt')
     
@@ -229,7 +180,7 @@ def multipoles_analysis(config):
              config.config_fig_number += 1
         except:
             config.config_fig_number = 1
-        x,y = config.traj.rz, config.multipoles.polynom_b[n,:]
+        x,y = config.traj.rz, config.multipoles.normal_multipoles[n,:]
         ylabel, title, fname = config.multipoles.get_multipole_labels('normal',n)
         plt.plot(x,y)
         plt.grid(True)
@@ -239,4 +190,16 @@ def multipoles_analysis(config):
         plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + fname + '.pdf')
         plt.clf()
     
+    # plots residual field 
+    #config = plot_residual_field_in_curvilinear_system(config)
+    config = plot_residual_field(config)
     return config
+
+
+    
+    
+     
+    
+    
+    
+    

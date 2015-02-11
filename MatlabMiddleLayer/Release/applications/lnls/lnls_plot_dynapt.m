@@ -12,4 +12,4 @@ for i=(length(x)-1:-1:1)
     yy = [yy 0 y(i)];
 end
 line(xx,yy,'Color',color);
-axis([-20 20 0 12]);
+%axis([-20 20 0 12]);

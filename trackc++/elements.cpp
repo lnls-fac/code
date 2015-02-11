@@ -27,7 +27,20 @@ Element::Element(const std::string& fam_name_, const double& length_) :
 		}
 	}
 
-};
+}
+
+const std::string& Element::get_pass_method() {
+    return pm_dict[pass_method];
+}
+
+void Element::set_pass_method(const std::string &pass_method_) {
+    int i;
+    for(i = 0; i<pm_dict.size(); i++)
+        if (pm_dict[i] == pass_method_)
+            break;
+    if (i < pm_dict.size())
+        pass_method = i;
+}
 
 
 Element Element::marker (const std::string& fam_name_) {

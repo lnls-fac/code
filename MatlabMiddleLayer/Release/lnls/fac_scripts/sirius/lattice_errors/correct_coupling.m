@@ -25,6 +25,11 @@ for i=selection
         best_fm = init_fm;
         for s=sv_list
             [machine{i} skewstr coup_vec] = coup_sg(r, s, machine{i}, nr_iterations);
+            if ~exist('best_machine','var')
+                best_skewstr  = skewstr;
+                best_machine  = machine{i};
+                best_coupvec  = coup_vec;
+            end
             fm = sqrt(sum(coup_vec.^2)/length(coup_vec));
             if (fm < best_fm)
                 best_fm       = fm;

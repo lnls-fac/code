@@ -25,13 +25,43 @@ class SerretFrenetCoordSystem:
         points = np.zeros((3,len(grid)))
         for i in range(len(grid)):
             points[:,i] = self.p + grid[i] * self.n
-        return points    
+        return points  
+    
+    def find_intersection(self, trajectory):
 
+        s  = trajectory.s
+        rx = trajectory.rx  
+        rz = trajectory.rz
+        
+        hit_i, hit_alpha, hit_dx = 0, None, None
+        for i in range(len(s)-1):
+            M11   = rx[i+1] - rx[i]
+            M12   = -self.n[0]
+            M21   = rz[i+1] - rz[i]
+            M22   = -self.n[2]
+            B1    = self.p[0] - rx[i]
+            B2    = self.p[2] - rz[i]
+            detM  = M11 * M22 - M12 * M21
+            invM  = [[M22/detM, -M12/detM], [-M21/detM, M22/detM]]
+            alpha = invM[0][0] * B1 + invM[0][1] * B2 
+            dx    = invM[1][0] * B1 + invM[1][1] * B2
+            if hit_alpha is None or abs(alpha) < abs(hit_alpha):
+                hit_i, hit_alpha, hit_dx = i, alpha, dx
+        if hit_i == 0 and hit_alpha < 0.0:
+            # left extrapolation
+            return (hit_i, hit_alpha, hit_dx)
+        elif hit_i == len(s)-1 and hit_alpha > 1.0:
+            # right extrapolation
+            return (hit_i, hit_alpha, hit_dx)
+        else:
+            # interpolation
+            return (hit_i, hit_alpha, hit_dx)
+      
 class Trajectory:
     
     def __init__(self,
-                 beam = None,
-                 fieldmap = None):
+                beam = None,
+                fieldmap = None):
         self.beam     = beam
         self.fieldmap = fieldmap
         
@@ -525,9 +555,9 @@ class Trajectory:
             rx.append(float(words[1])), ry.append(float(words[2])), rz.append(float(words[3]))
             px.append(float(words[4])), py.append(float(words[5])), pz.append(float(words[6]))
         self.s = np.array(s)
-        self.rx, traj.ry, traj.rz = np.array(rx), np.array(ry), np.array(rz)
-        self.px, traj.py, traj.pz = np.array(px), np.array(py), np.array(pz)
-        self.bx, traj.by, traj.bz = np.array(rx), np.array(ry), np.array(rz)
+        self.rx, self.ry, self.rz = np.array(rx), np.array(ry), np.array(rz)
+        self.px, self.py, self.pz = np.array(px), np.array(py), np.array(pz)
+        self.bx, self.by, self.bz = np.array(rx), np.array(ry), np.array(rz)
         # calcs field on reference trajectory
         for i in range(len(s)):
             self.bx[i], self.by[i], self.bz[i] = self.fieldmap.interpolate(self.rx[i], self.ry[i], self.rz[i])
@@ -556,7 +586,7 @@ class Trajectory:
         return sagitta
     
     def find_intersection_point(self, csys):
-        
+         
         nx, nz = csys.n[0], csys.n[2]
         px, pz = csys.p[0], csys.p[2]
         r = (None, None, None)
