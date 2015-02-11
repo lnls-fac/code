@@ -36,6 +36,8 @@ function fac_parameter_parser_init(Parser $parser)
     $parser->setHook("sirius", "fac_sirius_parameter_render");
     $parser->setHook("sirius_value", "fac_sirius_value_parameter_render");
     $parser->setHook("sirius_units", "fac_sirius_units_parameter_render");
+    $parser->setHook("dependencies", "fac_dependencies_parameter_render");
+    $parser->setHook("dependents", "fac_dependents_parameter_render");
     return true;
 }
 
@@ -104,6 +106,46 @@ function fac_sirius_units_parameter_render($input, array $args,
     $args['field'] = 'units';
     $args['link'] = 'FALSE';
     return fac_sirius_parameter_render($input, $args, $parser, $frame);
+}
+
+function fac_dependencies_parameter_render($input, array $args,
+    Parser $parser, PPFrame $frame)
+{
+    try {
+        $prm = new FacParameterReader($input);
+        $deps = $prm->read_dependencies();
+        $deps_with_links = fac_add_link_to_parameters($deps);
+        $output = implode(', ', $deps_with_links);
+        return $parser->recursiveTagParse($output, $frame);
+    } catch(FacException $e) {
+        $output = fac_get_error_message('Error: ' . $e->getMessage());
+        return $parser->recursiveTagParse($output, $frame);
+    }
+}
+
+function fac_add_link_to_parameters($parameters)
+{
+    $result = array();
+    foreach ($parameters as $p) {
+        $s = '[[' . FacParameter::parameter_namespace . $p . '|' . $p . ']]';
+        array_push($result, $s);
+    }
+    return $result;
+}
+
+function fac_dependents_parameter_render($input, array $args, Parser $parser,
+    PPFrame $frame)
+{
+    try {
+        $prm = new FacParameterReader($input);
+        $deps = $prm->read_dependents();
+        $deps_with_links = fac_add_link_to_parameters($deps);
+        $output = implode(', ', $deps_with_links);
+        return $parser->recursiveTagParse($output, $frame);
+    } catch(FacException $e) {
+        $output = fac_get_error_message('Error: ' . $e->getMessage());
+        return $parser->recursiveTagParse($output, $frame);
+    }
 }
 
 function fac_edit_form_preload_text(&$text, &$title)

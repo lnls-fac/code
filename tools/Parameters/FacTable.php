@@ -108,6 +108,19 @@ class FacTable extends FacConnection {
             return "False";
     }
 
+    function read_dependencies($name)
+    {
+        $r = $this->read_all_with_name_from_table($name, 'dependency');
+
+        $rows = $r->fetch_all();
+
+        $deps = array();
+        foreach ($rows as $row)
+            array_push($deps, $row[1]);
+
+        return $deps;
+    }
+
     function write_parameter($fields)
     {
         $db_fields = $this->get_db_fields($fields);

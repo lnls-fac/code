@@ -62,6 +62,22 @@ class FacParameterReader extends FacParameter {
         $table = new FacTable();
         return $table->read_expression($this->parameter);
     }
+
+    function read_dependencies()
+    {
+        $table = new FacTable();
+        $deps = $table->read_dependencies($this->parameter);
+        sort($deps);
+        return $deps;
+    }
+
+    function read_dependents()
+    {
+        $dt = new FacDependentTracker($this->parameter);
+        $deps = $dt->get_dependents();
+        sort($deps);        
+        return $deps;
+    }
 }
 
 class FacParameterWriter extends FacParameter {
