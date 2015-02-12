@@ -38,7 +38,7 @@ class Multipoles:
             pot = '{0}'.format(n)
             ylabel = title + ' [T/m$^\mathrm{'+pot+'}$]'
             
-        fname = type + '_' + 'b{0}bx{0}'.format(n)
+        fname = type + '_' + 'b{0}rx{0}'.format(n)
         return ylabel, title, fname       
          
     def calc_multipoles(self, is_ref_trajectory_flag = False):

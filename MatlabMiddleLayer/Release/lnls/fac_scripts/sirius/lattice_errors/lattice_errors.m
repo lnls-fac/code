@@ -36,7 +36,11 @@ else
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadrupoles', 'all', 'model1', 'multi.cod.tune.coup.physap', 'cod_matlab');                     
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadrupoles', 'all', 'model2', 'multi.cod.tune.coup.physap', 'cod_matlab');                     
     %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadrupoles', 'all', 'model1', 'multi.cod.tune.coup.physap.noerrors', 'cod_matlab');                     
-    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadrupoles', 'all', 'model2', 'multi.cod.tune.coup.physap.noerrors', 'cod_matlab');                     
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadrupoles', 'all', 'model2', 'multi.cod.tune.coup.physap.noerrors', 'cod_matlab');                     
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.sextupoles', 'model1', 'multi.cod.tune.coup.physap', 'cod_matlab');                     
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.sextupoles', 'model1', 'multi.cod.tune.coup.physap', 'cod_matlab');                     
+    %config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadrupoles', 'all', 'model3', 'multi.cod.tune.coup.physap', 'cod_matlab');                     
+    config_folder = fullfile(lnls_get_root_folder(), 'data', 'sirius', 'si', 'beam_dynamics', 'calcs', 'v03', 'study.quadsandsexts', 'multi.cod.tune.coup.physap', 'cod_matlab');                     
 end
 
 cd(config_folder);

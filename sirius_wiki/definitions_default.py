@@ -80,7 +80,35 @@ class ParameterDefinitions(object):
     si_hardedge_sagitta_of_B2_dipoles = 1000 * si_B2_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_B2_dipole_deflection_angle))) #[mm]
     si_hardedge_sagitta_of_B3_dipoles = 1000 * si_B3_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_B3_dipole_deflection_angle))) #[mm]
     si_hardedge_sagitta_of_BC_dipoles = 1000 * si_BC_dipole_bending_radius * (1.0 - math.cos(0.5*math.radians(si_BC_dipole_deflection_angle))) #[mm]
-     
+    
+
+    si_number_of_SDA_sextupoles = 20
+    si_number_of_SFA_sextupoles = 20
+    si_number_of_SDB_sextupoles = 20
+    si_number_of_SFB_sextupoles = 20
+
+    si_hardedge_length_of_SDA_sextupoles = 0.15 #[m]
+    si_hardedge_length_of_SFA_sextupoles = 0.15 #[m]
+    si_hardedge_length_of_SDB_sextupoles = 0.15 #[m]
+    si_hardedge_length_of_SFB_sextupoles = 0.15 #[m] 
+
+    si_maximum_integrated_sextupolar_field_of_SDA_sextupoles = 360 #[T/m]
+    si_maximum_integrated_sextupolar_field_of_SFA_sextupoles = 360 #[T/m]
+    si_maximum_integrated_sextupolar_field_of_SDB_sextupoles = 360 #[T/m]
+    si_maximum_integrated_sextupolar_field_of_SFB_sextupoles = 360 #[T/m]
+
+    si_hardedge_maximum_sextupolar_field_of_SDA_sextupoles = si_maximum_integrated_sextupolar_field_of_SDA_sextupoles / si_hardedge_length_of_SDA_sextupoles; #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SFA_sextupoles = si_maximum_integrated_sextupolar_field_of_SFA_sextupoles / si_hardedge_length_of_SFA_sextupoles; #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SDB_sextupoles = si_maximum_integrated_sextupolar_field_of_SDB_sextupoles / si_hardedge_length_of_SDB_sextupoles; #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SFB_sextupoles = si_maximum_integrated_sextupolar_field_of_SFB_sextupoles / si_hardedge_length_of_SFB_sextupoles; #[T/m^2]
+
+    si_hardedge_maximum_strength_of_SDA_sextupoles = si_hardedge_maximum_sextupolar_field_of_SDA_sextupoles / si_beam_magnetic_rigidity;
+    si_hardedge_maximum_strength_of_SFA_sextupoles = si_hardedge_maximum_sextupolar_field_of_SFA_sextupoles / si_beam_magnetic_rigidity;
+    si_hardedge_maximum_strength_of_SDB_sextupoles = si_hardedge_maximum_sextupolar_field_of_SDB_sextupoles / si_beam_magnetic_rigidity;
+    si_hardedge_maximum_strength_of_SFB_sextupoles = si_hardedge_maximum_sextupolar_field_of_SFB_sextupoles / si_beam_magnetic_rigidity;
+
+
+
     si_B1_dipole_critical_energy = optics.critical_energy(
         si_beam_gamma_factor,
         si_B1_dipole_bending_radius)

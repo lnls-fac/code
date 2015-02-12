@@ -413,7 +413,8 @@ def_bpm_names = [ ...
     'AMP08A'; 'AMP08B'; 'AMP09A'; 'AMP09B'; 'AMP10A'; 'AMP10B'; ...
     'AMU11A'; 'AMU11B'; 'AMP12A'; 'AMP12B'; 'AMP01A' ];
 
-bba_data_file = 'C:\Arq\MatlabMiddleLayer\Release\machine\LNLS1\StorageRingData\User\Optics\bba_data.mat';
+bba_data_file = 'C:\Arq\fac_files\code\MatlabMiddleLayer\Release\machine\LNLS1\StorageRingData\User\Optics\bba_data.mat';
+
 bba_data = [];
 if exist(bba_data_file, 'file'), load(bba_data_file); end;
 data.time_stamp = bba.initial_time_stamp;

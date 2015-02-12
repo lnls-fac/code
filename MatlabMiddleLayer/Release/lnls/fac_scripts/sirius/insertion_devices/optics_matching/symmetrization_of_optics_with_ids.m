@@ -100,7 +100,8 @@ function the_ring = insert_ids_set(the_ring_old, ids, strength)
 [~,  id_ssections_number] = get_id_ssections_indices(the_ring_old, ids);
 
 % excludes markers for the end of 2-meter IDs
-the_ring = the_ring_old(setdiff(1:length(the_ring_old), findcells(the_ring_old, 'FamName', 'id_end')));
+%the_ring = the_ring_old(setdiff(1:length(the_ring_old), findcells(the_ring_old, 'FamName', 'id_end')));
+the_ring = the_ring_old(setdiff(setdiff(1:length(the_ring_old), findcells(the_ring_old, 'FamName', 'id_enda')),  findcells(the_ring_old, 'FamName', 'id_endb')));
 %the_ring = the_ring_old;
 
 for i=1:length(ids)

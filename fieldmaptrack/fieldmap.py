@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from scipy import interpolate
 
 class OutOfRange(Exception):
     pass
@@ -146,10 +147,21 @@ class FieldMap:
         # field data
         self.bx, self.by, self.bz = data[:,3].view(), data[:,4].view(), data[:,5].view()
         self.bx.shape, self.by.shape, self.bz.shape = (-1,self.rx_nrpts), (-1,self.rx_nrpts), (-1,self.rx_nrpts)
+        
+        # lookup tables for field interpolation
+        kind = 'cubic'
+        self.bxf = interpolate.interp2d(self.rx, self.rz, self.bx, kind=kind)
+        self.byf = interpolate.interp2d(self.rx, self.rz, self.by, kind=kind)
+        self.bzf = interpolate.interp2d(self.rx, self.rz, self.bz, kind=kind)
+        
         self.bx = [np.transpose(self.bx)]
         self.by = [np.transpose(self.by)]
         self.bz = [np.transpose(self.bz)]
         
+       
+        
+
+
         
         ''' header section '''
         lines = content[:idx].split('\n')
@@ -224,6 +236,8 @@ class FieldMap:
     def interpolate(self, rx_global, ry_global, rz_global):
 
         
+      
+        
         def rz_interpolate(rz, ix, iy):
                 
             def field_rz_extrapolate(rz, coeffs):
@@ -272,9 +286,7 @@ class FieldMap:
             return (bx,by,bz)
         
         def interpolate_in_plane(bx,by,bz,ix,iy):
-            
             ix1, ix2 = ix, ix+1 if self.rx_nrpts > 1 else ix
-            
             # prev x
             bx_x1, by_x1, bz_x1 = rz_interpolate(rz = rz, ix = ix1, iy = iy)
             # next x
@@ -284,9 +296,9 @@ class FieldMap:
             bx = bx_x1 + fdx * (bx_x2 - bx_x1)
             by = by_x1 + fdx * (by_x2 - by_x1)
             bz = bz_x1 + fdx * (bz_x2 - bz_x1)
-            
             return (bx, by, bz)
                     
+        
         
         
         # converts to local coordinate system
@@ -294,29 +306,35 @@ class FieldMap:
         rx =  C * (rx_global - self.translation[0]) + S * (rz_global - self.translation[1])
         ry =  ry_global
         rz = -S * (rx_global - self.translation[0]) + C * (rz_global - self.translation[1])
+                
+        if rx < self.rx_min:
+            raise OutOfRangeRxMin('rx = {0:f} < rx_min = {1:f} [mm]'.format(rx, self.rx_min))
+        if rx > self.rx_max:
+            raise OutOfRangeRxMax('rx = {0:f} > rx_max = {1:f} [mm]'.format(rx, self.rx_max))
         
+        field = (self.bxf(rx, rz), self.byf(rx, rz), self.bzf(rx, rz))    
     
-        if self.field_function is not None:
-            # in case a function that returns field is defined
-            field = self.field_function(rx, ry, rz) 
-        else:
-            # gets transverse coordinates indices into the regular rectangular grid
-            try:        
-                ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = True)
-            except OutOfRangeRz:
-                ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = False)
-            # upper and lower fieldmaps
-            bx_y1, bx_y2 = self.bx[iy], self.bx[iy+1] if self.ry_nrpts > 1 else self.bx[iy]
-            by_y1, by_y2 = self.by[iy], self.by[iy+1] if self.ry_nrpts > 1 else self.by[iy]
-            bz_y1, bz_y2 = self.bz[iy], self.bz[iy+1] if self.ry_nrpts > 1 else self.bz[iy]
-            bx_y1, by_y1, bz_y1 = interpolate_in_plane(bx_y1, by_y1, bz_y1, ix, iy)
-            bx_y2, by_y2, bz_y2 = interpolate_in_plane(bx_y2, by_y2, bz_y2, ix, iy)
-            # interpolate in z
-            fdy = (ry - self.ry[iy])/self.ry_step if self.ry_step != 0.0 else 0.0
-            bx = bx_y1 + fdy * (bx_y2 - bx_y1)
-            by = by_y1 + fdy * (by_y2 - by_y1)
-            bz = bz_y1 + fdy * (bz_y2 - bz_y1)
-            field = (bx,by,bz)
+#         if self.field_function is not None:
+#             # in case a function that returns field is defined
+#             field = self.field_function(rx, ry, rz) 
+#         else:
+#             # gets transverse coordinates indices into the regular rectangular grid
+#             try:        
+#                 ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = True)
+#             except OutOfRangeRz:
+#                 ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = False)
+#             # upper and lower fieldmaps
+#             bx_y1, bx_y2 = self.bx[iy], self.bx[iy+1] if self.ry_nrpts > 1 else self.bx[iy]
+#             by_y1, by_y2 = self.by[iy], self.by[iy+1] if self.ry_nrpts > 1 else self.by[iy]
+#             bz_y1, bz_y2 = self.bz[iy], self.bz[iy+1] if self.ry_nrpts > 1 else self.bz[iy]
+#             bx_y1, by_y1, bz_y1 = interpolate_in_plane(bx_y1, by_y1, bz_y1, ix, iy)
+#             bx_y2, by_y2, bz_y2 = interpolate_in_plane(bx_y2, by_y2, bz_y2, ix, iy)
+#             # interpolate in z
+#             fdy = (ry - self.ry[iy])/self.ry_step if self.ry_step != 0.0 else 0.0
+#             bx = bx_y1 + fdy * (bx_y2 - bx_y1)
+#             by = by_y1 + fdy * (by_y2 - by_y1)
+#             bz = bz_y1 + fdy * (bz_y2 - bz_y1)
+#             field = (bx,by,bz)
         
         # converts field back to global coordinates
         bx =  C * field[0] - S * field[2]
