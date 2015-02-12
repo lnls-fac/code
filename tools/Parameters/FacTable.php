@@ -1,5 +1,8 @@
 <?php
 
+require_once('FacFunctions.php');
+
+
 class FacException extends Exception { }
 
 class FacConnection {
@@ -286,13 +289,30 @@ class FacEvaluator extends FacConnection {
     static $valid_symbols = array(
         ' ', '.', '(', ')', ',',
         '0', '1', '2', '3', '4',
-        '5', '6', '7', '8', '9'
+        '5', '6', '7', '8', '9',
+        'e', 'E'
     );
     static $valid_operators = array('+', '-', '*', '/');
     static $valid_functions = array(
         'sqrt', 'pow', 'exp',
         'asin', 'acos', 'atan',
-        'sin', 'cos', 'tan'
+        'sin', 'cos', 'tan',
+        'joule_2_ev', 'gamma', 'beta',
+        'velocity', 'brho', 'critical_energy',
+        'U0', 'sync_phase', 'rf_energy_acceptance',
+        'natural_emittance', 'energy_spread', 'revolution_pediod',
+        'revolution_frequency', 'rf_frequency', 'number_of_electrons',
+        'overvoltage', 'alpha1', 'Jx',
+        'Js', 'frequency_from_tune', 'damping_time',
+        'radiation_power', 'rf_wavelength', 'slip_factor',
+        'bunch_length', 'bunch_duration', 'id_deflection_parameter',
+        'id_mean_power'
+    );
+    static $valid_constants = array(
+        '$light_speed', '$vacuum_permeability', '$elementary_charge',
+        '$electron_mass', '$electron_rest_energy', '$vacuum_permitticity',
+        '$joule_2_eV', '$reduced_planck_constant', '$rad_cgamma',
+        '$Cq', '$Ca'
     );
 
     private $expression;
@@ -325,6 +345,18 @@ class FacEvaluator extends FacConnection {
 
     function evaluate()
     {
+        global $light_speed;
+        global $vacuum_permeability;
+        global $elementary_charge;
+        global $electron_mass;
+        global $electron_rest_energy;
+        global $vacuum_permitticity;
+        global $joule_2_eV;
+        global $reduced_planck_constant;
+        global $rad_cgamma;
+        global $Cq;
+        global $Ca;
+
         if ($this->validate_final_expression($this->expression)) {
             $extended_expr = '$r = ' . $this->expression . ';';
             eval($extended_expr);
@@ -402,12 +434,16 @@ class FacEvaluator extends FacConnection {
 
     function validate_final_expression($expression)
     {
+        fac_write('expression', $expression);
+        foreach (self::$valid_functions as $f)
+            $expression = str_replace($f, '', $expression);
+        foreach (self::$valid_constants as $c)
+            $expression = str_replace($c, '', $expression);
         foreach (self::$valid_symbols as $s)
             $expression = str_replace($s, '', $expression);
         foreach (self::$valid_operators as $o)
             $expression = str_replace($o, '', $expression);
-        foreach (self::$valid_functions as $f)
-            $expression = str_replace($f, '', $expression);
+        fac_write('expression', $expression);
 
         if ($expression === '')
             return true;

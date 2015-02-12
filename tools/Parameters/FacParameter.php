@@ -82,12 +82,14 @@ class FacParameterReader extends FacParameter {
 
 class FacParameterWriter extends FacParameter {
     public $missing_fields = array();
+    private $write_to_db;
     private $value_extractor;
 
-    function __construct($name, $text)
+    function __construct($name, $text, $write_to_db=true)
     {
         parent::__construct($name);
         $this->value_extractor = new FacValueExtractor($text);
+        $this->write_to_db = $write_to_db;
     }
 
     function write()
@@ -125,8 +127,10 @@ class FacParameterWriter extends FacParameter {
     {
         $table = new FacTable();
 
-        $table->erase_dependencies($values['name']);
-        $table->erase_expression($values['name']);
+        if ($this->write_to_db) {
+            $table->erase_dependencies($values['name']);
+            $table->erase_expression($values['name']);
+        }
 
         if ($values['is_derived'] === 'True')  {
             $e = new FacEvaluator($values['value'], $values);

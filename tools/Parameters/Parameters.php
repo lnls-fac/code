@@ -25,6 +25,7 @@ $wgExtensionCredits['other'][] = array(
 $wgHooks['ParserFirstCallInit'][] = 'fac_parameter_parser_init';
 $wgHooks['EditFormPreloadText'][] = 'fac_edit_form_preload_text';
 $wgHooks['EditFormInitialText'][] = 'fac_edit_form_initial_text';
+$wgHooks['EditPageGetPreviewContent'][] = 'fac_edit_page_get_preview_content';
 $wgHooks['EditFilter'][] = 'fac_edit_filter';
 $wgHooks['PageContentSave'][] = 'fac_page_content_save';
 $wgHooks['TitleMove'][] = 'fac_title_move';
@@ -185,6 +186,20 @@ function fac_edit_form_initial_text($editPage)
     return true;
 }
 
+function fac_edit_page_get_preview_content($editPage, &$content)
+{
+    #$name = FacParameter::get_name_if_parameter($editPage->getTitle());
+    #if (!$name)
+    #    return true; # not a parameter page
+
+    #$text = $content->getNativeData();
+    #$replacer = new FacTextReplacer($text);
+    #$value = '<sirius_value link=False>' . $name . '</sirius_value>';
+    #$text = $replacer->replace_value($value);
+
+    #$content = new WikitextContent($text);
+}
+
 function fac_edit_filter($editor, $text, $section, &$error, $summary)
 {
     $name = FacParameter::get_name_if_parameter($editor->getTitle());
@@ -221,19 +236,15 @@ function fac_page_content_save(&$wikiPage, &$user, &$content, &$summary,
     if (!$name)
         return true; # not a parameter page
 
-    try {
-        $prm = new FacParameterReader($name);
-        $fields = $prm->read();
-    } catch(FacException $e) {
-        return false;
-    }
-
-    if (strtoupper($fields['is_derived']) != 'TRUE')
-        return true;
-
     $text = $content->getNativeData();
     $replacer = new FacTextReplacer($text);
-    $new_text = $replacer->replace_value($fields['value']);
+
+    # Fields and values to replace
+    $values = array(
+        'value' => '<sirius_value link=False>' . $name . '</sirius_value>',
+        'deps' => '<dependencies>' . $name . '</dependencies>'
+    );
+    $new_text = $replacer->replace($values);
 
     $content = new WikitextContent($new_text);
 }
