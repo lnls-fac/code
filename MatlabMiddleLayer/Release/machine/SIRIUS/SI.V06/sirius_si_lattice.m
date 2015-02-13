@@ -72,6 +72,7 @@ dib1 = drift('dib1', id_length/2, 'DriftPass');
 dib2 = drift('dib',  3.0128500 + 0.00035 -0.03 - id_length/2, 'DriftPass');
 d030 = drift('d030',  0.030000, 'DriftPass');
 d100 = drift('d100',  0.100000, 'DriftPass');
+d105 = drift('d105',  0.105000, 'DriftPass');
 d120 = drift('d120',  0.120000, 'DriftPass');
 d130 = drift('d130',  0.130000, 'DriftPass');
 d160 = drift('d160',  0.160000, 'DriftPass');
@@ -79,14 +80,14 @@ d170 = drift('d170',  0.170000, 'DriftPass');
 d180 = drift('d180',  0.180000, 'DriftPass');
 d220 = drift('d220',  0.220000, 'DriftPass');
 d230 = drift('d230',  0.230000, 'DriftPass');
-d255 = drift('d255',  0.255000, 'DriftPass');
+d245 = drift('d245',  0.245000, 'DriftPass');
 d260 = drift('d260',  0.260000, 'DriftPass');
 d300 = drift('d300',  0.300000, 'DriftPass');
 d330 = drift('d330',  0.330000, 'DriftPass');
 d440 = drift('d440',  0.440000, 'DriftPass');
 d450 = drift('d450',  0.450000, 'DriftPass');
 d560 = drift('d560',  0.560000, 'DriftPass');
-d115 = drift('d115',  0.115000, 'DriftPass');
+
 
 % --- markers ---
 mc       = marker('mc',      'IdentityPass');
@@ -108,7 +109,7 @@ mon      = marker('bpm', 'IdentityPass');
 qfa      = quadrupole('qfa',  0.200000, qfa_strength,  quad_pass_method);
 qda      = quadrupole('qda',  0.140000, qda_strength,  quad_pass_method);
 qdb2     = quadrupole('qdb2', 0.140000, qdb2_strength, quad_pass_method);
-qfb      = quadrupole('qfb',  0.280000, qfb_strength,  quad_pass_method);
+qfb      = quadrupole('qfb',  0.300000, qfb_strength,  quad_pass_method);
 qdb1     = quadrupole('qdb1', 0.140000, qdb1_strength, quad_pass_method);
 qf1      = quadrupole('qf1',  0.200000, qf1_strength,  quad_pass_method);
 qf2      = quadrupole('qf2',  0.200000, qf2_strength,  quad_pass_method);
@@ -205,7 +206,7 @@ tm2a = fliplr(tm1a);                                                            
 tida = [dia2, mida, dia1, mia, dia1, mida, dia2];                                                                    % high beta ID straight section
 tcav = [dia2, dia1, mia, cav, dia1, dia2];                                                                           % high beta RF cavity straight section 
 tinj = [dchinj, dinjmia, fim, inicio, mia, dmiakick, kick, dkickpmm, pmm, dpmmch];                                   % high beta INJ straight section
-tm1b = [girder, d170, sdb, d170, qdb1, d255, qfb, d115, mon, d170, sfb, d170, crhv, cv, ch, d180, qdb2, girder, d030];  % low beta xxM1 girder
+tm1b = [girder, d170, sdb, d170, qdb1, d245, qfb, d105, mon, d170, sfb, d170, crhv, cv, ch, d180, qdb2, girder, d030];  % low beta xxM1 girder
 tm2b = fliplr(tm1b);                                                                                                 % low beta xxM2 girder
 tidb = [dib2, midb, dib1, mib, dib1, midb, dib2];                                                                    % low beta ID straight section
 

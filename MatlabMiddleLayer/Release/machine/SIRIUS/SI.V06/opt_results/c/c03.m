@@ -1,14 +1,15 @@
 %  QUADRUPOLOS
 %  ===========
-qfa_strength	=  4.337864157487;
-qda_strength	= -2.721463396256;
-qdb2_strength	= -2.679475658128;
-qfb_strength	=  4.713411865067;
-qdb1_strength	= -3.450435383080;
-qf1_strength	=  3.002991760231;
-qf2_strength	=  4.178862583989;
-qf3_strength	=  3.530199631443;
-qf4_strength	=  3.785698578969;
+
+qfa_strength	=  4.331271834520;
+qda_strength	= -2.720438819214;
+qdb2_strength	= -2.702467046569;
+qfb_strength	=  4.430048103785;
+qdb1_strength	= -3.488905217117;
+qf1_strength	=  3.001855430894;
+qf2_strength	=  4.181227115362;
+qf3_strength	=  3.526789974296;
+qf4_strength	=  3.794996618349;
 
 %  SEXTUPOLOS
 %  ===========
