@@ -5,23 +5,26 @@ require_once('FacValueExtractor.php');
 
 class FacTextReplacer {
     private $text;
+    private $value_extractor;
 
     function __construct($text)
     {
         $this->text = $text;
+        $this->value_extractor = new FacValueExtractor($text);
     }
 
-    function replace_value($value)
+    function is_derived()
     {
-        $value_extractor = new FacValueExtractor($this->text);
-        $expression = $value_extractor->get_value('value');
-        return str_replace($expression, $value, $this->text); 
+        $is_derived = $this->value_extractor->get_value('is_derived');
+        if (strtoupper($is_derived) == 'TRUE')
+            return true;
+        else
+            return false;
     }
 
     function replace($values)
     {
         $text = $this->text;
-        $ve = new FacValueExtractor($text);
 
         foreach ($values as $field => $value) {
             $start = FacValueExtractor::tag_begin_open . $field .

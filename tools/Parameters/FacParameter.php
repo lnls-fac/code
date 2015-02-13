@@ -82,14 +82,12 @@ class FacParameterReader extends FacParameter {
 
 class FacParameterWriter extends FacParameter {
     public $missing_fields = array();
-    private $write_to_db;
     private $value_extractor;
 
-    function __construct($name, $text, $write_to_db=true)
+    function __construct($name, $text)
     {
         parent::__construct($name);
         $this->value_extractor = new FacValueExtractor($text);
-        $this->write_to_db = $write_to_db;
     }
 
     function write()
@@ -127,10 +125,8 @@ class FacParameterWriter extends FacParameter {
     {
         $table = new FacTable();
 
-        if ($this->write_to_db) {
-            $table->erase_dependencies($values['name']);
-            $table->erase_expression($values['name']);
-        }
+        $table->erase_dependencies($values['name']);
+        $table->erase_expression($values['name']);
 
         if ($values['is_derived'] === 'True')  {
             $e = new FacEvaluator($values['value'], $values);
@@ -176,6 +172,24 @@ class FacParameterWriter extends FacParameter {
         $table->rename_parameter($this->parameter, $new_name);
 
         return $table->commit();
+    }
+
+    function check()
+    {
+        $values = $this->get_values();
+        
+        foreach ($values as $field => $value)
+            if ($value === false) # empty string is valid, so check for ===
+                array_push($this->missing_fields, $field);
+
+        if (count($this->missing_fields) > 0)
+            return false;
+
+        $e = new FacEvaluator($values['value'], $values);
+        $value = $e->evaluate();
+        $deps = $e->get_dependencies();
+
+        return array('value' => $value, 'dependencies' => $deps);
     }
 }
 

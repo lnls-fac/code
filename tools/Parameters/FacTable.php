@@ -297,10 +297,11 @@ class FacEvaluator extends FacConnection {
         'sqrt', 'pow', 'exp',
         'asin', 'acos', 'atan',
         'sin', 'cos', 'tan',
+        'deg2rad', 'rad2deg',
         'joule_2_ev', 'gamma', 'beta',
         'velocity', 'brho', 'critical_energy',
         'U0', 'sync_phase', 'rf_energy_acceptance',
-        'natural_emittance', 'energy_spread', 'revolution_pediod',
+        'natural_emittance', 'energy_spread', 'revolution_period',
         'revolution_frequency', 'rf_frequency', 'number_of_electrons',
         'overvoltage', 'alpha1', 'Jx',
         'Js', 'frequency_from_tune', 'damping_time',
@@ -434,7 +435,6 @@ class FacEvaluator extends FacConnection {
 
     function validate_final_expression($expression)
     {
-        fac_write('expression', $expression);
         foreach (self::$valid_functions as $f)
             $expression = str_replace($f, '', $expression);
         foreach (self::$valid_constants as $c)
@@ -443,7 +443,6 @@ class FacEvaluator extends FacConnection {
             $expression = str_replace($s, '', $expression);
         foreach (self::$valid_operators as $o)
             $expression = str_replace($o, '', $expression);
-        fac_write('expression', $expression);
 
         if ($expression === '')
             return true;

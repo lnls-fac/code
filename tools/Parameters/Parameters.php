@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Parameters extension.
  *
  * Read and write parameters to and from database.
@@ -91,7 +91,12 @@ function fac_get_error_message($msg, $bold=true)
     else
         $s = "";
 
-    return $s . "<span style=\"color: red\">" . $msg . "</span>" . $s;
+    return $s . fac_get_coloured_text($msg) . $s;
+}
+
+function fac_get_coloured_text($text, $colour='red')
+{
+    return '<span style="color: ' . $colour . '">' . $text . '</span>';
 }
 
 function fac_sirius_value_parameter_render($input, array $args,
@@ -128,7 +133,7 @@ function fac_add_link_to_parameters($parameters)
 {
     $result = array();
     foreach ($parameters as $p) {
-        $s = '[[' . FacParameter::parameter_namespace . $p . '|' . $p . ']]';
+        $s = fac_get_parameter_link($p);
         array_push($result, $s);
     }
     return $result;
@@ -179,7 +184,7 @@ function fac_edit_form_initial_text($editPage)
     
     $text = $editPage->textbox1;
     $replacer = new FacTextReplacer($text);
-    $new_text = $replacer->replace_value($expression);
+    $new_text = $replacer->replace(array('value' => $expression));
 
     $editPage->textbox1 = $new_text;
 
@@ -188,16 +193,55 @@ function fac_edit_form_initial_text($editPage)
 
 function fac_edit_page_get_preview_content($editPage, &$content)
 {
-    #$name = FacParameter::get_name_if_parameter($editPage->getTitle());
-    #if (!$name)
-    #    return true; # not a parameter page
+    $name = FacParameter::get_name_if_parameter($editPage->getTitle());
+    if (!$name)
+        return true; # not a parameter page
 
-    #$text = $content->getNativeData();
-    #$replacer = new FacTextReplacer($text);
-    #$value = '<sirius_value link=False>' . $name . '</sirius_value>';
-    #$text = $replacer->replace_value($value);
+    $text = $content->getNativeData();
+    $replacer = new FacTextReplacer($text);
+    if (!$replacer->is_derived())
+        return true;
 
-    #$content = new WikitextContent($text);
+    $prm = new FacParameterWriter($name, $text);
+
+    try {
+        $r = $prm->check();
+        if (!$r) {
+            $err = fac_get_missing_fields_message($prm->missing_fields);
+            $text .= "\n'''" . $err . "'''";
+            $content = new Wikitextcontent($text);
+            return true;
+        }
+    } catch(FacException $e) {
+        $msg = "'''Error: " . $e->getMessage() . "'''";
+        $text .= "\n" . fac_get_coloured_text($msg);
+        $content = new Wikitextcontent($text);
+        return true;
+    }
+
+    $deps = array();
+    foreach ($r['dependencies'] as $d)
+        array_push($deps, fac_get_parameter_link($d));
+    $new_values = array(
+        'value' => $r['value'],
+        'deps' => implode(', ', $deps)
+    );
+
+    $new_text = $replacer->replace($new_values);
+
+    $content = new WikitextContent($new_text);
+
+    return true;
+}
+
+function fac_get_parameter_link($name, $label=false)
+{
+    if (!$label)
+        $label = $name;
+
+    $s = '[[' . FacParameter::parameter_namespace . $name . '|'
+        . $label . ']]';
+    return $s;
 }
 
 function fac_edit_filter($editor, $text, $section, &$error, $summary)
@@ -239,6 +283,9 @@ function fac_page_content_save(&$wikiPage, &$user, &$content, &$summary,
     $text = $content->getNativeData();
     $replacer = new FacTextReplacer($text);
 
+    if (!$replacer->is_derived())
+        return true;
+
     # Fields and values to replace
     $values = array(
         'value' => '<sirius_value link=False>' . $name . '</sirius_value>',
@@ -247,6 +294,8 @@ function fac_page_content_save(&$wikiPage, &$user, &$content, &$summary,
     $new_text = $replacer->replace($values);
 
     $content = new WikitextContent($new_text);
+
+    return true;
 }
 
 function fac_title_move(Title $title, Title $newTitle, User $user)
