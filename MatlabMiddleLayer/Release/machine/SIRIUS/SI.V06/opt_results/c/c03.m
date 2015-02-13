@@ -1,15 +1,27 @@
 %  QUADRUPOLOS
 %  ===========
 
-qfa_strength	=  4.331271834520;
-qda_strength	= -2.720438819214;
-qdb2_strength	= -2.702467046569;
-qfb_strength	=  4.430048103785;
-qdb1_strength	= -3.488905217117;
-qf1_strength	=  3.001855430894;
-qf2_strength	=  4.181227115362;
-qf3_strength	=  3.526789974296;
-qf4_strength	=  3.794996618349;
+% linear matching solution (a) 
+% qfa_strength	=  4.337538462266;
+% qda_strength	= -2.727127326195;
+% qdb2_strength	= -2.711742554604;
+% qfb_strength	=  4.450277464368;
+% qdb1_strength	= -3.530572998382;
+% qf1_strength	=  2.993545831042;
+% qf2_strength	=  4.185930194899;
+% qf3_strength	=  3.547341930675;
+% qf4_strength	=  3.775183773000;
+
+% linear matching (b)
+qfa_strength	=  4.342664572458;
+qda_strength	= -2.734251614033;
+qdb2_strength	= -2.603150998495;
+qfb_strength	=  4.436280611804;
+qdb1_strength	= -3.557463702864;
+qf1_strength	=  2.980740492038;
+qf2_strength	=  4.194037698430;
+qf3_strength	=  3.552598330025;
+qf4_strength	=  3.765300909354;
 
 %  SEXTUPOLOS
 %  ===========
