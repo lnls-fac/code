@@ -97,15 +97,15 @@ class ParameterDefinitions(object):
     si_maximum_integrated_sextupolar_field_of_SDB_sextupoles = 360 #[T/m]
     si_maximum_integrated_sextupolar_field_of_SFB_sextupoles = 360 #[T/m]
 
-    si_hardedge_maximum_sextupolar_field_of_SDA_sextupoles = si_maximum_integrated_sextupolar_field_of_SDA_sextupoles / si_hardedge_length_of_SDA_sextupoles; #[T/m^2]
-    si_hardedge_maximum_sextupolar_field_of_SFA_sextupoles = si_maximum_integrated_sextupolar_field_of_SFA_sextupoles / si_hardedge_length_of_SFA_sextupoles; #[T/m^2]
-    si_hardedge_maximum_sextupolar_field_of_SDB_sextupoles = si_maximum_integrated_sextupolar_field_of_SDB_sextupoles / si_hardedge_length_of_SDB_sextupoles; #[T/m^2]
-    si_hardedge_maximum_sextupolar_field_of_SFB_sextupoles = si_maximum_integrated_sextupolar_field_of_SFB_sextupoles / si_hardedge_length_of_SFB_sextupoles; #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SDA_sextupoles = si_maximum_integrated_sextupolar_field_of_SDA_sextupoles / si_hardedge_length_of_SDA_sextupoles #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SFA_sextupoles = si_maximum_integrated_sextupolar_field_of_SFA_sextupoles / si_hardedge_length_of_SFA_sextupoles #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SDB_sextupoles = si_maximum_integrated_sextupolar_field_of_SDB_sextupoles / si_hardedge_length_of_SDB_sextupoles #[T/m^2]
+    si_hardedge_maximum_sextupolar_field_of_SFB_sextupoles = si_maximum_integrated_sextupolar_field_of_SFB_sextupoles / si_hardedge_length_of_SFB_sextupoles #[T/m^2]
 
-    si_hardedge_maximum_strength_of_SDA_sextupoles = si_hardedge_maximum_sextupolar_field_of_SDA_sextupoles / si_beam_magnetic_rigidity;
-    si_hardedge_maximum_strength_of_SFA_sextupoles = si_hardedge_maximum_sextupolar_field_of_SFA_sextupoles / si_beam_magnetic_rigidity;
-    si_hardedge_maximum_strength_of_SDB_sextupoles = si_hardedge_maximum_sextupolar_field_of_SDB_sextupoles / si_beam_magnetic_rigidity;
-    si_hardedge_maximum_strength_of_SFB_sextupoles = si_hardedge_maximum_sextupolar_field_of_SFB_sextupoles / si_beam_magnetic_rigidity;
+    si_hardedge_maximum_strength_of_SDA_sextupoles = si_hardedge_maximum_sextupolar_field_of_SDA_sextupoles / si_beam_magnetic_rigidity
+    si_hardedge_maximum_strength_of_SFA_sextupoles = si_hardedge_maximum_sextupolar_field_of_SFA_sextupoles / si_beam_magnetic_rigidity
+    si_hardedge_maximum_strength_of_SDB_sextupoles = si_hardedge_maximum_sextupolar_field_of_SDB_sextupoles / si_beam_magnetic_rigidity
+    si_hardedge_maximum_strength_of_SFB_sextupoles = si_hardedge_maximum_sextupolar_field_of_SFB_sextupoles / si_beam_magnetic_rigidity
 
 
 
