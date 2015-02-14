@@ -7,7 +7,7 @@ class FacException extends Exception { }
 
 class FacConnection {
     # Move to external file with appropriate permissions
-    const server_address = '10.0.21.44';
+    const server_address = '127.0.0.1';
     const user = 'prm_editor';
     const password = 'prm0';
     const database = 'parameters';

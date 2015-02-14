@@ -62,12 +62,20 @@ function fac_get_sirius_parameter_with_args($fields, $args)
     $format = fac_get_arg_value('format', $args);
     $link = fac_get_arg_value('link', $args);
 
-    if ($format)
-        $fields['value'] = sprintf($format, $fields['value']);
+    if ($format) {
+        $s = strtolower(sprintf($format, $fields['value']));
+        $p = strpos($s, 'e');
+        if ($p !== false) {
+            $e = substr($s, $p, 2); # 'e' plus sign
+            $s = str_replace($e, '×10<sup>', $s) . '</sup>';
+        }
+        $fields['value'] = $s;
+    }
 
-    if (strtoupper($link) != 'FALSE')
-        $fields['value'] = '[[' . FacParameter::parameter_namespace .
-            $fields['name'] . '|' . $fields['value'] . ']]';
+    if (strtoupper($link) != 'FALSE') {
+        $v = fac_get_parameter_link($fields['name'], $fields['value']);
+        $fields['value'] = $v;
+    }
 
     if ($field)
         return $fields[$field];
