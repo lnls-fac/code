@@ -204,7 +204,7 @@ class FieldMap:
                 continue
             if cmd == 'corrente[a]:':
                 try:
-                    self.current = float(words[1])#[A]
+                    self.current = words[1]#[A]
                 except ValueError:
                     self.current = None
                 continue
