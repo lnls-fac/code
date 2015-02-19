@@ -488,7 +488,7 @@ class Trajectory:
             self.s.append(s)
             self.rx.append(rx), self.ry.append(ry), self.rz.append(rz) 
             self.px.append(px), self.py.append(py), self.pz.append(pz)
-            self.bx.append(bx), self.by.append(by), self.bz.append(bz)
+            self.bx.append(bx[0]), self.by.append(by[0]), self.bz.append(bz[0])
             
             # propagates to next point
             rx, ry, rz, px, py, pz = p0 + (h/6.0) * (k1 + 2*k2 + 2*k3 + k4) 
@@ -510,13 +510,15 @@ class Trajectory:
         self.s = np.array(self.s)
         self.rx, self.ry, self.rz = np.array(self.rx), np.array(self.ry), np.array(self.rz)   
         self.px, self.py, self.pz = np.array(self.px), np.array(self.py), np.array(self.pz)
-        self.bx, self.by, self.bz = np.array(self.bx), np.array(self.by), np.array(self.bz)
+        #self.bx, self.by, self.bz = np.array(self.bx), np.array(self.by), np.array(self.bz)
         self.error_estimate = math.sqrt(self.px[-1]**2 + self.py[-1]**2 + self.pz[-1]**2) - 1.0                        
+                      
                          
     def __str__(self):
-        
+    
         bx,by,bz = [abs(x) for x in self.bx], [abs(x) for x in self.by], [abs(x) for x in self.bz]
         max_bx, max_by, max_bz = max(bx), max(by), max(bz)
+    
         s_max_bx,rx_max_bx,ry_max_bx,rz_max_bx = self.s[bx.index(max_bx)], self.rx[bx.index(max_bx)], self.ry[bx.index(max_bx)], self.rz[bx.index(max_bx)]
         s_max_by,rx_max_by,ry_max_by,rz_max_by = self.s[by.index(max_by)], self.rx[by.index(max_by)], self.ry[by.index(max_by)], self.rz[by.index(max_by)]
         s_max_bz,rx_max_bz,ry_max_bz,rz_max_bz = self.s[bz.index(max_bz)], self.rx[bz.index(max_bz)], self.ry[bz.index(max_bz)], self.rz[bz.index(max_bz)] 
@@ -531,6 +533,7 @@ class Trajectory:
         r += '\n{0:<35s} {1}'.format('trajectory_nrpts:', len(self.s))
         r += '\n{0:<35s} {1} mm'.format('trajectory_s_step:', self.s_step) 
         #r += '\n{0:<35s} {1:+.1e} %'.format('trajectory_momentum_error:', 100*self.error_estimate);
+            
         r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bx@trajectory:', self.bx[bx.index(max_bx)], s_max_bx, rx_max_bx, ry_max_bx, rz_max_bx)
         r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_by@trajectory:', self.by[by.index(max_by)], s_max_by, rx_max_by, ry_max_bx, rz_max_by)        
         r += '\n{0:<35s} {1:+f} Tesla at (s,rx,ry,rz) = ({2},{3},{4},{5}) mm'.format('max_abs_bz@trajectory:', self.bz[bz.index(max_bz)], s_max_bz, rx_max_bz, ry_max_bz, rz_max_bz)

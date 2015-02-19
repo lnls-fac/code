@@ -7,8 +7,8 @@ import numpy as np
 config = analysis.Config()
 
 # raw-field analysis
-config.config_label          = 'bc_model2_controlgap_50mm_modelo_mecanico_inclinado_450urad' # identification label
-config.fmap_filename         = '/home/fac_files/data/sirius/si/magnet_modelling/bc/fieldmaps/2014-12-15_Dipolo_Anel_BC_Modelo2_gap_lateral_50mm_modelo_mecanico_-50_50mm_-2000_2000mm_inclinado_450urad.txt'
+config.config_label          = 'bc_model2_controlgap_50mm_modelo_mecanico' # identification label
+config.fmap_filename         = '/home/fac_files/data/sirius/si/magnet_modelling/bc/fieldmaps/2014-10-07_Dipolo_Anel_BC_Modelo2_gap_lateral_50mm_modelo_mecanico_-50_50mm_-2000_2000mm.txt'
 config.beam_energy           = 3.0     # [GeV] electron beam energy 
 config.model_hardedge_length = 125.394 # [mm]  model hard-edge length of the magnet 
 config.model_nominal_angle   = 1.4     # [deg] model nominal deflection angle of the magnet
@@ -33,6 +33,6 @@ if __name__ == "__main__":
     print('{0:<35s} {1}'.format('label:', config.config_label))
     
     config = analysis.raw_fieldmap_analysis(config)
-    #config = analysis.trajectory_analysis(config)
-    #config = analysis.multipoles_analysis(config)
-    #config = analysis.model_analysis(config)
+    config = analysis.trajectory_analysis(config)
+    config = analysis.multipoles_analysis(config)
+    config = analysis.model_analysis(config)
