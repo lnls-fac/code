@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS parameters.expression (
     expression VARCHAR(4095)
 );
 
-CREATE USER 'prm_editor'@'localhost' IDENTIFIED BY 'prm0';
+CREATE USER 'prm_editor'@'%' IDENTIFIED BY 'prm0';
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON parameters.* TO
-    'prm_editor'@'localhost';
+    'prm_editor'@'%';
