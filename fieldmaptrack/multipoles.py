@@ -106,8 +106,7 @@ class Multipoles:
                 self.max_fit_error = max_error if max_error[0] > self.max_fit_error[0] else self.max_fit_error
                 self.normal_multipoles[:,i], max_error = mathphys.functions.polyfit(grid_meter, field[1,:], monomials, algorithm='*lstsq')
                 self.max_fit_error = max_error if max_error[0] > self.max_fit_error[0] else self.max_fit_error              
-            
-                
+                  
     def calc_multipoles_integrals(self):
         monomials = self.fitting_monomials
         self.skew_multipoles_integral = np.zeros(self.skew_multipoles.shape[0])
@@ -130,16 +129,7 @@ class Multipoles:
             n = self.fitting_monomials[i]
             self.skew_multipoles_integral_relative[i]   = self.skew_multipoles_integral[i]   * (r0 ** n) / main_multipole
             self.normal_multipoles_integral_relative[i] = self.normal_multipoles_integral[i] * (r0 ** n) / main_multipole
-                   
-#     def cccalc_hardedge_polynomials(self,model_hardedge_length):
-#         
-#         beam = self.trajectory.beam
-#         half_hedge_len = 0.5 * model_hardedge_length * mathphys.units.mm_2_meter
-#         signed_brho = - 1.0 * beam.brho
-#         self.polynom_a_hardedge = (self.skew_multipoles_integral / signed_brho) / half_hedge_len    
-#         self.polynom_b_hardedge = (self.normal_multipoles_integral / signed_brho) / half_hedge_len
-        
-                           
+                                  
     def __str__(self):
         
         nrpts = len(self.perpendicular_grid)
