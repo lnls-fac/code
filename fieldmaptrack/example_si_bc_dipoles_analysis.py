@@ -20,7 +20,7 @@ config.traj_load_filename       = "/home/ximenes/fac_files/data/sirius/si/magnet
 
 config.multipoles_main_monomials     = [0,2]
 config.multipoles_perpendicular_grid = np.linspace(-10,10,41) # grid of points on perpendicular line to ref trajectory [mm]
-config.multipoles_fitting_monomials  = (0,1,2,3,4,5,6,7,8,9,10)    # monomials to include in the polynomial fit of multipoles
+config.multipoles_normal_field_fitting_monomials  = (0,1,2,3,4,5,6,7,8,9,10)    # monomials to include in the polynomial fit of multipoles
 config.multipoles_r0                 = 11.7 # [mm] horizontal position at which polynomial fields are calculated relative to the principal multipole
 
 config.model_segmentation = (125.394,)

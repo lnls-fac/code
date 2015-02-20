@@ -19,7 +19,7 @@ config.traj_is_reference_traj   = False     # Rescale field so that nominal defl
 
 config.multipoles_main_monomials     = [1]
 config.multipoles_perpendicular_grid = np.linspace(-18,18,37)  # grid of points on perpendicular line to ref trajectory [mm]
-config.multipoles_fitting_monomials  = (1,3,5,7,9,11) # monomials to include in the polynomial fit of multipoles 
+config.multipoles_normal_field_fitting_monomials  = (1,3,5,7,9,11) # monomials to include in the polynomial fit of multipoles 
 config.multipoles_r0                 = 17.5                    # [mm] horizontal position at which polynomial fields are calculated relative to the principal multipole
 
 if __name__ == "__main__":
