@@ -5,9 +5,9 @@ import math
 from fieldmaptrack.track import Trajectory
 import fieldmaptrack.common_analysis
 
-
 class Config:
     def __init__(self, fname = None):
+        """loads parameters from a file"""
         if fname is not None:
             with open(fname, 'r') as fp:
                 content = fp.read()
@@ -21,8 +21,8 @@ class Config:
                     strcode = 'self.{0} = {1}'.format(attribute, value)
                     exec(strcode)
 
-
 def get_analysis_symbol(magnet_type):
+    """returns analysis module according to magnet type"""
     if magnet_type == 'dipole':
         import fieldmaptrack.dipole_analysis as dipole_analysis
         return dipole_analysis
@@ -37,18 +37,12 @@ def get_analysis_symbol(magnet_type):
         return corrector_analysis
 
 def raw_fieldmap_analysis(config):
-
-    if config.fmap_extrapolation_flag and config.fmap_extrapolation_exponents is None:
-        config.fmap_extrapolation_exponents = (2,3,4,5,6,7,8,9,10)
+    """does raw fieldmap analysis"""
 
     # loads fieldmap from file
-    # ========================
     config.fmap = fieldmaptrack.FieldMap(config.fmap_filename)
 
-    # plots basic data
-    # ================
-
-    # -- longitudinal profile at (x,y) = (0,0)
+    # plots basic data, longitudinal profile at (x,y) = (0,0)
     try:
         config.config_fig_number += 1
     except:
@@ -61,7 +55,7 @@ def raw_fieldmap_analysis(config):
     plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) + 'by-vs-rz.pdf')
     plt.clf()
 
-    # -- transversal profile at (y,z) = (0,0)
+    # plots basic data, transversal profile at (y,z) = (0,0)
     try:
         config.config_fig_number += 1
     except:
@@ -74,15 +68,12 @@ def raw_fieldmap_analysis(config):
     plt.savefig(config.config_label + '_fig{0:02d}_'.format(config.config_fig_number) +  'by-vs-rx.pdf')
     plt.clf()
 
-
     # calculates missing integrals
-    # ============================
     if config.fmap_extrapolation_flag:
         config.fmap.field_extrapolation_analysis(threshold_field_fraction = config.fmap_extrapolation_threshold_field_fraction,
                                         polyfit_exponents = config.fmap_extrapolation_exponents)
 
     # prints basic raw information on the fieldmap
-    # ============================================
     print('--- fieldmap ---')
     print(config.fmap)
 
@@ -144,6 +135,39 @@ def trajectory_analysis(config):
 
     return config
 
+def multipoles_analysis(config):
+
+    # calcs multipoles around reference trajectory
+    # ============================================
+    config.multipoles = fieldmaptrack.Multipoles(trajectory=config.traj,
+                                         perpendicular_grid=config.multipoles_perpendicular_grid,
+                                         normal_field_fitting_monomials=config.multipoles_normal_field_fitting_monomials,
+                                         skew_field_fitting_monomials=config.multipoles_skew_field_fitting_monomials)
+    config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
+    config.multipoles.calc_multipoles_integrals()
+    main_monomial = {'corrector':0, 'dipole':0, 'quadrupole':1, 'sextupole':2}[config.magnet_type]
+    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = main_monomial, r0 = config.multipoles_r0, is_skew = False)
+
+    # saves multipoles to file
+    config.multipoles.save('multipoles.txt')
+
+    # prints basic information on multipoles
+    # ======================================
+    print('--- multipoles on reference trajectory (rz > 0) ---')
+    print(config.multipoles)
+
+    # plots normal multipoles
+    config = plot_normal_multipoles(config)
+    # plots skew multipoles
+    config = plot_skew_multipoles(config)
+
+    # plots residual normal field
+    config = plot_residual_normal_field(config)
+    # plots residual skew field
+    config = plot_residual_skew_field(config)
+
+    return config
+
 def plot_residual_field_in_curvilinear_system(config):
 
     """ NOT TO BE USED! """
@@ -193,8 +217,6 @@ def plot_residual_field_in_curvilinear_system(config):
     #plt.plot(x*1000,dby_r02)
     plt.show()
 
-
-
     return config
 
 def plot_normal_multipoles(config):
@@ -218,7 +240,6 @@ def plot_normal_multipoles(config):
 
 def plot_skew_multipoles(config):
 
-    print(config.multipoles_skew_field_fitting_monomials)
     for i in range(len(config.multipoles_skew_field_fitting_monomials)):
         n = config.multipoles_skew_field_fitting_monomials[i]
         try:
@@ -490,13 +511,6 @@ def model_analysis(config):
             else:
                 val[2] = 0.0
         print(fstr.format(*val))
-#     if 0 not in config.multipoles.normal_field_fitting_monomials:
-#         val = [sum(l)] + [0.0] + list(mi)
-#     else:
-#         val = [sum(l)] + [sum(m[0,:])] + [0.0] + list(mi[1:])
-#         val[2] = error_deflection / val[0]
-#     print('--- integrated polynom_b (rz > 0). units: [mm] for length, [rad] for angle and [m],[T] for polynom_b ---')
-#     print(fstr.format(*val))
 
     return config
 

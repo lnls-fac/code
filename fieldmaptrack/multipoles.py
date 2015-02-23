@@ -21,7 +21,7 @@ class Multipoles:
             self.skew_field_fitting_monomials = skew_field_fitting_monomials
 
     def get_multipole_labels(self, type, n):
-        
+
         if n == 0:
             title  = type.title() + ' dipolar field'
             ylabel = title + ' [T]'
