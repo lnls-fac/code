@@ -1,55 +1,67 @@
-function [geom chrom] = sextupolar_1storder_drive_terms(beta,eta,mu,SPos,plota)
+function sext = sextupolar_1storder_drive_terms(sext,n_per,tunes)
 
-betax = beta(:,1);
-etax  = eta(:,1);
-betay = beta(:,2);
+indcs = 1:length(sext);
+betax = getcellstruct(sext,'betax',indcs);
+betay = getcellstruct(sext,'betay',indcs);
+etax  = getcellstruct(sext,'etax',indcs);
+mux = getcellstruct(sext,'mux',indcs);
+muy = getcellstruct(sext,'muy',indcs);
+mu = [mux, muy];
 
-geom(:,1) = (1/24)*betax.^(3/2).*(exp(1i*mu*[1 0]')); %h21000
-geom(:,2) = (1/24)*betax.^(3/2).*(exp(1i*mu*[3 0]')); %h30000
-geom(:,3) = -(1/4)*betax.^(1/2).*betay.*(exp(1i*mu*[1 0]')); %h10110
-geom(:,4) = -(1/8)*betax.^(1/2).*betay.*(exp(1i*mu*[1 2]')); %h10200
-geom(:,5) = -(1/8)*betax.^(1/2).*betay.*(exp(1i*mu*[1 -2]')); %h10020
+%Harmonic (Geometric) Terms
+r.h21000 = -( 1/8)*hijklm([2,1,0,0,0],betax,betay,etax,mu,Jx,Jy,delta) .* ...
+                   AijklmN([2-1,0-0],tunes,n_per);
+r.h30000 = -(1/24)*hijklm([3,0,0,0,0],betax,betay,etax,mu,Jx,Jy,delta) .* ...
+                   AijklmN([3-0,0-0],tunes,n_per);
+r.h10110 =  ( 1/4)*hijklm([1,0,1,1,0],betax,betay,etax,mu,Jx,Jy,delta) .* ...
+                   AijklmN([1-0,1-1],tunes,n_per); 
+r.h10200 =  ( 1/8)*hijklm([1,0,2,0,0],betax,betay,etax,mu,Jx,Jy,delta) .* ...
+                   AijklmN([1-0,2-0],tunes,n_per); 
+r.h10020 =  ( 1/8)*hijklm([1,0,0,2,0],betax,betay,etax,mu,Jx,Jy,delta) .* ...
+                   AijklmN([1-0,0-2],tunes,n_per); 
 
-geom(:,6) = conj(geom(:,1)); %h12000
-geom(:,7) = conj(geom(:,2)); %h03000
-geom(:,8) = conj(geom(:,3)); %h01110
-geom(:,9) = conj(geom(:,4)); %h01020
-geom(:,10) = conj(geom(:,5)); %h01200
+r.h12000 = conj(r.h21000);
+r.h03000 = conj(r.h30000);
+r.h01110 = conj(r.h10110);
+r.h01020 = conj(r.h10200);
+r.h01200 = conj(r.h10020);
+
+%Chromatic Terms
+r.h11001 = -(1/2)*hijklm([1,1,0,0,1],betax,betay,etax,mu,Jx,Jy,delta).* ...
+                   AijklmN([1-1,0-0],tunes,n_per);
+r.h00111 =  (1/2)*hijklm([0,0,1,1,1],betax,betay,etax,mu,Jx,Jy,delta).* ...
+                   AijklmN([0-0,1-1],tunes,n_per);
+r.h20001 = -(1/4)*hijklm([2,0,0,0,1],betax,betay,etax,mu,Jx,Jy,delta).* ...
+                   AijklmN([2-0,0-0],tunes,n_per);
+r.h00201 =  (1/4)*hijklm([0,0,2,0,1],betax,betay,etax,mu,Jx,Jy,delta).* ...
+                   AijklmN([0-0,2-0],tunes,n_per);
+r.h10002 = -(1/2)*hijklm([1,0,0,0,2],betax,betay,etax,mu,Jx,Jy,delta).* ...
+                   AijklmN([1-0,0-0],tunes,n_per); 
+
+r.h02001 = conj(r.h20001);
+r.h00021 = conj(r.h00201);
+r.h01002 = conj(r.h10002);
+
+fields = fieldnames(r);
+for i = 1:length(fields)
+    sext = setcellstruct(sext,fields{i},indcs,r.(fields{i}));
+end
 
 
-chrom(:,1) = (1/2)*betax.*etax; %h11001
-chrom(:,2) =-(1/2)*betay.*etax; %h00111
-chrom(:,3) = (1/2)*betax.^(1/2).*etax.^2.*(exp(1i*mu*[1 0]')); %h10002
-chrom(:,4) = (1/4)*betax.*etax.*(exp(1i*mu*[2 0]')); %h20001
-chrom(:,5) = -(1/4)*etax.*betay.*(exp(1i*mu*[0 2]')); %h00201
 
-chrom(:,6) = conj(chrom(:,3)); %h01002
-chrom(:,7) = conj(chrom(:,4)); %h02001
-chrom(:,8) = conj(chrom(:,5)); %h00021
+function hijklm = hijklm(vec,betax,betay,etax, mu,Jx,Jy,delta)
 
-if plota
-    figure
-    subplot(4,1,1);
-    plot(SPos,2*real(chrom(:,1:2)));
-    xlim([0 SPos(end)]);
-    grid on
-    
-    subplot(4,1,2);
-    plot(SPos,2*real(geom(:,1:5)));
-    xlim([0 SPos(end)]);
-    grid on
-    legend('h21000','h30000','h10110','h10200','h10020');
-    
-    
-    subplot(4,1,3);
-    plot(SPos,2*real(chrom(:,3:5)));
-    xlim([0 SPos(end)]);
-    grid on
-    legend('h10002','h20001','h00201');
-    
-    subplot(4,1,4);
-    drawlattice(0, 1, gca, SPos(end));
-    xlabel('Position [m]');
-    % axis off;
-    grid on
+i = vec(1);
+j = vec(2);
+k = vec(3);
+l = vec(4);
+m = vec(5);
+hijklm = (2*Jx*betax).^((i+j)/2).*(2*Jy*betay).^((k+l)/2)*(delta*etax).^m.*exp(1i*mu*[(i-j),(k-l)]');
+
+
+function AijklmN = AijklmN(n,tunes,n_per)
+
+AijklmN = 1;
+if n_per ~= 1
+    AijklmN = exp(1i*(n_per-1)*n*tunes/2).*sin(n_per*n*tunes/2)/sin(n*tunes/2);
 end

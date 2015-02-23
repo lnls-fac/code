@@ -1,17 +1,20 @@
 function machine = correct_tune_machines(r, selection)
 
 fprintf(['--- correct_tunes [' datestr(now) '] ---\n']);
-
+fprintf('Goal Tunes :');fprintf(' %7.4f ',r.params.static.tune_goal);
+fprintf('\nFamilies Used for Correction :');fprintf(' %s ',r.params.static.tune_families{:});
+fprintf('\nMax Number of Orbit Correction iterations : %4d\n',r.params.static.tune_max_iter);
+fprintf('Tolerância : %7.2e\n\n', r.params.static.tune_tolerancia);
 machine = r.machine;
 
-fprintf('%3s | %9s | %11s %7.4f %7.4f\n', 'i', 'converged', 'goal_tunes:', r.params.static.tune_goal);
+fprintf('%3s | %15s | %9s | %15s \n', 'mac','initial tunes', 'converge?', 'final tunes');
 for i=selection
-    [machine{i}, converged, tunes0] = lnls_correct_tunes(machine{i}, r.params.static.tune_families, ...
+    [machine{i}, converged, tunes0, tunesi] = lnls_correct_tunes(machine{i}, r.params.static.tune_families, ...
         r.params.static.tune_goal, r.params.static.tune_max_iter, r.params.static.tune_tolerancia);
     if converged
-        fprintf('%03i | %9s |\n', i, '   yes   ');
+        fprintf('%03i | %7.4f %7.4f | %9s | %7.4f %7.4f \n', i, tunesi,'   yes   ', tunes0);
     else
-        fprintf('%03i | %9s | %11s %7.4f %7.4f \n', i, '   no    ', 'tunes:',tunes0);
+        fprintf('%03i | %7.4f %7.4f | %9s | %7.4f %7.4f \n', i, tunesi,'   no    ', tunes0);
     end
 end
 
