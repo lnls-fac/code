@@ -1,4 +1,4 @@
-function tracy3_da_ma_lt()
+function tracy3_da_ma_lt(path)
 
 global THERING;
 
@@ -11,8 +11,9 @@ energy = str2double(answer{2});
 n_calls = round(str2double(answer{3}));
 
 if strcmpi(answer{1}, 'bo')
-    
-    path = '/home/fac_files/data/sirius/bo/beam_dynamics';
+    if ~exist('path','var')
+        path = '/home/fac_files/data/sirius/bo/beam_dynamics';
+    end
     r = which('sirius_bo_lattice.m');
     if isempty(r)
         sirius('BO');
@@ -43,7 +44,9 @@ if strcmpi(answer{1}, 'bo')
         accepRF      = ats.energyacceptance;
     end 
 else
-    path = '/home/fac_files/data/sirius/si/beam_dynamics';
+    if ~exist('path','var')
+        path = '/home/fac_files/data/sirius/si/beam_dynamics';
+    end
     r = which('sirius_si_lattice.m');
     if isempty(r)
         sirius('SI');
@@ -175,8 +178,8 @@ while i < n_calls
         end
         %     if nr_rms == 0, nr_rms = n_pastas; end
         
-        [~, na, ext] = fileparts(path); na=[na ext]; na = {na};
-        cell_leg_text(i) = inputdlg('Digite a legenda','Legenda',1,na);
+        na = regexp(path,'/','split');
+        cell_leg_text(i) = inputdlg('Digite a legenda','Legenda',1,na(end-2));
         
         j=1;
         m=1;

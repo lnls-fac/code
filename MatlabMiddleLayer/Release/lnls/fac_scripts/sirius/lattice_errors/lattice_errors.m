@@ -54,6 +54,7 @@ if ~exist('r','var')
 end
 selection = 1:r.config.nr_machines;
 %selection = 4;
+diary([r.config.label '_summary.txt']);
 fprintf('\n');
 
 if ~isfield(r,'questiona') || r.questiona
@@ -122,7 +123,8 @@ if r.config.simulate_static
             % sextupolos e os IDs (apos 1a iteracao da correcao)
             fprintf('< correcting COD ... > \n\n');
             r=correct_cod_slow(r,selection,r.params.static.cod_sextupoles_ramp, ...
-                          r.params.static.cod_svs, r.params.static.cod_nr_iter);
+                          r.params.static.cod_svs, r.params.static.cod_max_nr_iter, ...
+                          r.params.static.cod_tolerancia);
         end
     end
     if r.params.static.cod_correction_flag
@@ -145,7 +147,9 @@ if r.config.simulate_static
         % faz correcao de acoplamento
         fprintf('< correcting coupling... > \n\n');
         r.machine = correct_coupling(r, selection, r.params.static.coup_svs, ...
-                                     r.params.static.coup_nr_iter);
+                                     r.params.static.coup_max_nr_iter, ...
+                                     r.params.static.coup_tolerancia);
+
         name_saved_machines = [name_saved_machines '_coup'];
         r = archive_machines(r, 'save', name_saved_machines);
     end
@@ -188,5 +192,6 @@ end
 save([r.config.label '.mat'], 'r');
 
 % finalizacoes
+diary 'off'
 fclose('all');
 cd('../');
