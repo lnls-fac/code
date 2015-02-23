@@ -231,9 +231,9 @@ parameter_list = [
   Parameter(name='SI errors ripple dipole',     group='FAC', is_derived=False, value=Prms.si_errors_ripple_dipole, symbol=r'<math>E_\text{ripp, dip}</math>', units='ppm', deps=[], obs=[], ),
   Parameter(name='SI errors ripple quadrupole', group='FAC', is_derived=False, value=Prms.si_errors_ripple_quadrupole, symbol=r'<math>E_\text{ripp, quad}</math>', units='ppm', deps=[], obs=[], ),
   Parameter(name='SI errors ripple sextupole',  group='FAC', is_derived=False, value=Prms.si_errors_ripple_sextupole, symbol=r'<math>E_\text{ripp, sext}</math>', units='ppm', deps=[], obs=[], ),
-  Parameter(name='SI errors vibration dipole', group='FAC', is_derived=False, value=Prms.si_errors_vibration_dipole, symbol=r'<mat h>E_\text{vib, dip}</math>', units='nm', deps=[], obs=[], ),
-  Parameter(name='SI errors vibration quadrupole', group='FAC', is_derived=False, value=Prms.si_errors_vibration_quadrupole, symbol=r'<mat h>E_\text{vib, quad}</math>', units='nm', deps=[], obs=[], ),
-  Parameter(name='SI errors vibration sextupole', group='FAC', is_derived=False, value=Prms.si_errors_vibration_sextupole, symbol=r'<mat h>E_\text{vib, sext}</math>', units='nm', deps=[], obs=[], ),
+  Parameter(name='SI errors vibration dipole', group='FAC', is_derived=False, value=Prms.si_errors_vibration_dipole, symbol=r'<math>E_\text{vib, dip}</math>', units='nm', deps=[], obs=[], ),
+  Parameter(name='SI errors vibration quadrupole', group='FAC', is_derived=False, value=Prms.si_errors_vibration_quadrupole, symbol=r'<math>E_\text{vib, quad}</math>', units='nm', deps=[], obs=[], ),
+  Parameter(name='SI errors vibration sextupole', group='FAC', is_derived=False, value=Prms.si_errors_vibration_sextupole, symbol=r'<math>E_\text{vib, sext}</math>', units='nm', deps=[], obs=[], ),
 
 ]
 

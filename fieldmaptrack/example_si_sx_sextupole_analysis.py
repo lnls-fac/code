@@ -21,7 +21,7 @@ config.multipoles_main_monomials     = [2,]
 #config.multipoles_perpendicular_grid = np.linspace(-11.5,11.5,41)  # grid of points on perpendicular line to ref trajectory [mm]
 config.multipoles_perpendicular_grid = np.linspace(-12,12,49)  # grid of points on perpendicular line to ref trajectory [mm]
 
-config.multipoles_fitting_monomials  = (0,2,4,6,8,10,14) # monomials to include in the polynomial fit of multipoles 
+config.multipoles_normal_field_fitting_monomials  = (0,2,4,6,8,10,14) # monomials to include in the polynomial fit of multipoles 
 config.multipoles_r0                 = 11.7                    # [mm] horizontal position at which polynomial fields are calculated relative to the principal multipole
 
 config.model_segmentation            = [150.0/2.0,] 

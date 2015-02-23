@@ -57,12 +57,9 @@ plt.show()
 sf = track.SerretFrenetCoordSystem(ref_traj, point_idx = 500);
 idx, alpha, dx = sf.find_intersection(new_traj)
 new_traj.px
+    
 
-
-
-        
-
-multipoles = multipoles.Multipoles(trajectory = trajectory, perpendicular_grid=perp_grid, fitting_monomials=fit_monomials)
+multipoles = multipoles.Multipoles(trajectory = trajectory, perpendicular_grid=perp_grid, normal_field_fitting_monomials=fit_monomials)
 multipoles.calc_multipoles(is_ref_trajectory_flag = False)
 
 import matplotlib.pyplot as plt
@@ -90,7 +87,7 @@ print('ok')
 # 
 # config.multipoles_main_monomials     = [0,1]
 # config.multipoles_perpendicular_grid = np.linspace(-10,10,41) # grid of points on perpendicular line to ref trajectory [mm]
-# config.multipoles_fitting_monomials  = (0,1,2,3,4,5,6,7,8,9,10)    # monomials to include in the polynomial fit of multipoles
+# config.multipoles_normal_field_fitting_monomials  = (0,1,2,3,4,5,6,7,8,9,10)    # monomials to include in the polynomial fit of multipoles
 # config.multipoles_r0                 = 11.7 # [mm] horizontal position at which polynomial fields are calculated relative to the principal multipole
 # 
 # config.model_segmentation = 6 * [828.08/6]
