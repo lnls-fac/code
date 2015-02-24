@@ -18,7 +18,7 @@ class FacParameter {
         $n = strlen(self::parameter_namespace);
         if (substr($title, 0, $n) != self::parameter_namespace)
             return false;
-        else    
+        else
             return substr($title, $n);
     }
 
@@ -75,7 +75,7 @@ class FacParameterReader extends FacParameter {
     {
         $dt = new FacDependentTracker($this->parameter);
         $deps = $dt->get_dependents();
-        sort($deps);        
+        sort($deps);
         return $deps;
     }
 }
@@ -93,12 +93,7 @@ class FacParameterWriter extends FacParameter {
     function write()
     {
         $values = $this->get_values();
-        
-        foreach ($values as $field => $value)
-            if ($value === false) # empty string is valid, so check for ===
-                array_push($this->missing_fields, $field);
-
-        if (count($this->missing_fields) > 0)
+        if ($this->has_missing_fields($values))
             return false;
         else
             return $this->write_all($values);
@@ -121,10 +116,18 @@ class FacParameterWriter extends FacParameter {
             return false;
     }
 
+    private function has_missing_fields($values)
+    {
+        foreach ($values as $field => $value)
+            if ($value === false) # empty string is valid, so check for ===
+                array_push($this->missing_fields, $field);
+
+        return (count($this->missing_fields) > 0);
+    }
+
     private function write_all($values)
     {
         $table = new FacTable();
-
         $table->erase_dependencies($values['name']);
         $table->erase_expression($values['name']);
 
@@ -137,9 +140,8 @@ class FacParameterWriter extends FacParameter {
             );
             $values['value'] = $e->evaluate();
         }
-        
-        $table->write_parameter($values);
 
+        $table->write_parameter($values);
         $this->update_dependents($values, $table);
 
         return $table->commit();
@@ -177,12 +179,7 @@ class FacParameterWriter extends FacParameter {
     function check()
     {
         $values = $this->get_values();
-        
-        foreach ($values as $field => $value)
-            if ($value === false) # empty string is valid, so check for ===
-                array_push($this->missing_fields, $field);
-
-        if (count($this->missing_fields) > 0)
+        if ($this->has_missing_fields($values))
             return false;
 
         $e = new FacEvaluator($values['value'], $values);
