@@ -7,7 +7,7 @@ class FacException extends Exception { }
 
 class FacConnection {
     # Move to external file with appropriate permissions
-    const server_address = '127.0.0.1';
+    const server_address = '10.0.21.71';
     const user = 'prm_editor';
     const password = 'prm0';
     const database = 'parameters';
@@ -136,7 +136,7 @@ class FacTable extends FacConnection {
 
         $result = $this->query($query);
     }
-    
+
     function get_db_fields($fields)
     {
         $db_fields = array();
@@ -160,7 +160,7 @@ class FacTable extends FacConnection {
         else
             return true;
     }
-    
+
     function build_insert_query($values, $table)
     {
         $query = "INSERT INTO " . $table . " VALUES (" .
@@ -267,7 +267,7 @@ class FacTable extends FacConnection {
 
         return $this->query($query);
     }
-    
+
     function read_expression($parameter)
     {
         $query = "SELECT * FROM expression WHERE name='" .
@@ -370,7 +370,7 @@ class FacEvaluator extends FacConnection {
     {
         if ($depth++ >= self::max_depth)
             throw new FacException('max depth achieved');
-        
+
         if (substr_count($expression, '"') % 2)
             throw new FacException('quote mismatch');
 
@@ -385,7 +385,7 @@ class FacEvaluator extends FacConnection {
             $value = strval($this->parameters[$p]);
             $expression = str_replace($parameter, $value, $expression);
         }
-        
+
         return array('expression' => $expression, 'dependencies' => $deps);
     }
 
@@ -496,7 +496,7 @@ class FacDependentTracker extends FacConnection {
         for ($i = 0; $i < $r->num_rows; $i++) {
             array_push($table, $r->fetch_row());
         }
-        
+
         $s = new FacSet();
         $t = new FacSet();
         $t->put($this->parameter);
@@ -508,7 +508,7 @@ class FacDependentTracker extends FacConnection {
                 foreach($t->elements as $e)
                     if ($row[1] == $e) {
                         $u->put($row[0]);
-                        $s->put($row[0]);                    
+                        $s->put($row[0]);
                     }
 
             $new_n = $s->count();
@@ -516,7 +516,7 @@ class FacDependentTracker extends FacConnection {
                 $n = $new_n;
                 $t = $u;
             } else
-                break;            
+                break;
         }
 
         return $s->elements;
