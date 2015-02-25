@@ -1,5 +1,6 @@
 <?php
 
+# Constants
 $light_speed = 299792458; # [m/s] - definition
 $vacuum_permeability = 4*pi()*1e-7; # [T.m/A] - definition
 $elementary_charge = 1.602176565e-19; # [C] - 2014-06-11
@@ -81,14 +82,14 @@ function sync_phase($q)
 
 function rf_energy_acceptance($q, $energy, $U0, $h, $alpha)
 {
-    /* 
+    /*
      * RF energy acceptance [%] from overvoltage, ebeam energy [GeV],
      * energy loss U0 per turn [keV], harmonic number h and linear compaction
      * factor alpha
      */
-    
+
     $Fq = 0.0;
-        
+
     if ($q > 1.0)
         $Fq = 2.0*(sqrt($q*$q-1.0) - acos(1.0/$q));
 
@@ -99,7 +100,7 @@ function rf_energy_acceptance($q, $energy, $U0, $h, $alpha)
 
 function natural_emittance($gamma, $Jx, $I2, $I5)
 {
-    /* 
+    /*
      * Natural emittance [nm·rad] from ebeam gamma factor, damping partitio
      * number Jx, I2[1/m] and I5 [1/m]
      */
@@ -111,7 +112,7 @@ function natural_emittance($gamma, $Jx, $I2, $I5)
 
 function energy_spread($gamma, $I2, $I3, $I4)
 {
-    /* 
+    /*
      * Natural energy spread from ebeam gamma factor, I2[1/m], I3[1/m^2] and
      * I4[1/m]
      */
@@ -123,7 +124,7 @@ function energy_spread($gamma, $I2, $I3, $I4)
 
 function revolution_period($circumference, $velocity)
 {
-    /* Revolution period [μs] from circumference [m] and velocity[m/s] */    
+    /* Revolution period [μs] from circumference [m] and velocity[m/s] */
     return 1.0e6 * $circumference / $velocity;
 }
 
@@ -135,7 +136,7 @@ function revolution_frequency($revolution_period)
 
 function rf_frequency($revolution_frequency, $harmonic_number)
 {
-    /* 
+    /*
      * RF frequency [MHz] from revolution frequency [MHz] and
      * harmonic number
      */
@@ -145,7 +146,7 @@ function rf_frequency($revolution_frequency, $harmonic_number)
 function number_of_electrons($current, $revolution_period)
 {
     /*
-     * Number of electrons from beam current [mA] and 
+     * Number of electrons from beam current [mA] and
      * revolution period [μs]
      */
     global $elementary_charge;
@@ -185,7 +186,7 @@ function frequency_from_tune($revolution_frequency, $tune)
 
 function damping_time($energy, $I2, $J, $circumference)
 {
-    /* 
+    /*
      * Radiation damping time [ms] from beam energy [GeV], radiation integral
      * I2 [1/m], damping partition number and circumference [m]
      */
@@ -196,7 +197,7 @@ function damping_time($energy, $I2, $J, $circumference)
 
 function radiation_power($current, $U0)
 {
-    /* 
+    /*
      * Radiation power [kW] from beam current [mA] and
      * energy loss per turn [keV]
      */
@@ -244,13 +245,13 @@ function id_deflection_parameter($field, $period)
 {
     /* Insertion device deflection parameter from field [T] and period [mm] */
     global $light_speed;
-    
+
     return 1e-9 * $period * $field * $light_speed / (joule_2_ev($electron_rest_energy)/1.0e6) / (2*pi());
 }
 
 function id_mean_power($energy, $current, $period, $nr_periods, $k)
 {
-    /* 
+    /*
      * Insertion device mean power from beam energy [GeV], current [mA],
      * ID period [mm], ID nr periods and k.
      *
