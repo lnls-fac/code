@@ -96,12 +96,10 @@ function fac_format_value($format, $value)
     return $s;
 }
 
-function fac_get_error_message($msg, $bold=true)
+function fac_get_error_message($msg)
 {
     $s = fac_get_coloured_text($msg);
-
-    if ($bold)
-        $s = fac_get_bold_text($s);
+    $s = fac_get_bold_text($s);
 
     return $s;
 }
@@ -231,7 +229,7 @@ function fac_edit_page_get_preview_content($editPage, &$content)
         $r = $prm->check();
         if (!$r) {
             $err = fac_get_missing_fields_message($prm->missing_fields);
-            $text .= "\n" . fac_get_bold_text($err);
+            $text .= "\n" . $err;
             $content = new Wikitextcontent($text);
             return true;
         } elseif (!is_array($r))
@@ -291,7 +289,7 @@ function fac_get_missing_fields_message($missing_fields)
     $field_list = htmlspecialchars(implode(', ', $missing_fields));
     $msg .= ": " . $field_list;
 
-    return fac_get_error_message($msg, false);
+    return fac_get_error_message($msg);
 }
 
 function fac_page_content_save(&$wikiPage, &$user, &$content, &$summary,
@@ -376,7 +374,7 @@ function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason,
         $prm->erase();
         return true;
     } catch(FacException $e) {
-        $error = fac_get_error_message($e->getMessage(), false);
+        $error = fac_get_error_message($e->getMessage());
         return false;
     }
 }
