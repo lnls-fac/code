@@ -234,7 +234,8 @@ function fac_edit_page_get_preview_content($editPage, &$content)
             $text .= "\n" . fac_get_bold_text($err);
             $content = new Wikitextcontent($text);
             return true;
-        }
+        } elseif (!is_array($r))
+            return true; # not a derived parameter
     } catch(FacException $e) {
         $msg = fac_get_bold_text('Error: ' . $e->getMessage());
         $text .= "\n" . fac_get_coloured_text($msg);
@@ -243,9 +244,6 @@ function fac_edit_page_get_preview_content($editPage, &$content)
     }
 
     $replacer = new FacTextReplacer($text);
-    if (!$replacer->is_derived())
-        return true;
-
     $new_values = fac_get_derived_values_to_replace($r);
     $new_text = $replacer->replace($new_values);
     $content = new WikitextContent($new_text);

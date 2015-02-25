@@ -182,6 +182,9 @@ class FacParameterWriter extends FacParameter {
         if ($this->has_missing_fields($values))
             return false;
 
+        if (strtolower($values['is_derived']) != 'true')
+            return true;
+
         $e = new FacEvaluator($values['value'], $values);
         $value = $e->evaluate();
         $deps = $e->get_dependencies();

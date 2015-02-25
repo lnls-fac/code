@@ -35,6 +35,7 @@ class FacConnection {
 
     function query($query)
     {
+        fac_write('query', $query);
         $r = $this->mysqli->query($query);
         if (!$r) {
             $this->mysqli->rollback();
