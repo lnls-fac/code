@@ -158,7 +158,6 @@ class FacParameterWriter extends FacParameter {
         $dt = new FacDependentTracker($parameter['name']);
         $dependents = $dt->get_dependents();
         foreach($dependents as $d) {
-            fac_write('deps', $d);
             $p = $table->read_parameter($d);
             $e = new FacEvaluator(
                 $p['name'],

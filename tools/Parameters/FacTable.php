@@ -371,8 +371,6 @@ class FacEvaluator extends FacConnection {
 
     function replace_parameters($expression)
     {
-        fac_write('initial_expr', $expression);
-
         if ($depth++ >= self::max_depth)
             throw new FacException('max depth achieved');
 
@@ -390,8 +388,6 @@ class FacEvaluator extends FacConnection {
             $value = strval($this->parameters[$p]);
             $expression = str_replace($parameter, $value, $expression);
         }
-
-        fac_write('final_expr', $expression);
 
         return array('expression' => $expression, 'dependencies' => $deps);
     }
@@ -543,13 +539,6 @@ class FacSet {
     {
         return count($this->elements);
     }
-}
-
-function fac_write($filename, $msg)
-{
-    $f = fopen('/tmp/' . $filename . '.txt', 'a');
-    fwrite($f, $msg . "\n");
-    fclose($f);
 }
 
 ?>
