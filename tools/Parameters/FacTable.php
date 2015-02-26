@@ -23,7 +23,7 @@ class FacConnection {
             self::database
         );
         if ($this->mysqli->connect_errno)
-            throw new FacException('could not connect to database!');
+            throw new FacException('could not connect to database');
         else
             $this->mysqli->autocommit(false);
     }
@@ -60,7 +60,7 @@ class FacTable extends FacConnection {
         $r = $this->read_all_with_name_from_table($name, 'parameter');
 
         if ($r->num_rows == 0)
-            throw new FacException('parameter "' . $name . '" not found!');
+            throw new FacException('parameter "' . $name . '" not found');
         else {
             $row = $r->fetch_assoc();
             return $this->get_text_fields($row);
@@ -316,14 +316,17 @@ class FacEvaluator extends FacConnection {
         '$Cq', '$Ca'
     );
 
+    private $name;
     private $expression;
     private $dependencies;
     private $parameters;
     private $depth;
 
-    function __construct($expression, $parameter=false)
+    function __construct($name, $expression, $parameter=false)
     {
         parent::__construct();
+
+        $this->name = $name;
 
         if ($parameter) {
             $this->parameters = array(
@@ -363,11 +366,13 @@ class FacEvaluator extends FacConnection {
             eval($extended_expr);
             return $r;
         } else
-            throw new FacException('invalid expression');
+            throw new FacException('invalid expression for ' . $this->name);
     }
 
     function replace_parameters($expression)
     {
+        fac_write('initial_expr', $expression);
+
         if ($depth++ >= self::max_depth)
             throw new FacException('max depth achieved');
 
@@ -385,6 +390,8 @@ class FacEvaluator extends FacConnection {
             $value = strval($this->parameters[$p]);
             $expression = str_replace($parameter, $value, $expression);
         }
+
+        fac_write('final_expr', $expression);
 
         return array('expression' => $expression, 'dependencies' => $deps);
     }
@@ -407,7 +414,7 @@ class FacEvaluator extends FacConnection {
 
         $row = $r->fetch_assoc();
         if (!$row) {
-            $msg = 'parameter "' . $parameter . '" not found!';
+            $msg = 'parameter "' . $parameter . '" not found';
             throw new FacException($msg);
         }
 
@@ -427,7 +434,7 @@ class FacEvaluator extends FacConnection {
 
         $row = $r->fetch_assoc();
         if (!$row) {
-            $msg = 'expression for "' . $parameter . '" not found!';
+            $msg = 'expression for "' . $parameter . '" not found';
             throw new FacException($msg);
         } else
             return $row['expression'];

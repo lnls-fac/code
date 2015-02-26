@@ -344,16 +344,16 @@ function fac_abort_move(Title $oldTitle, Title $newTitle, User $user,
 
     if ($oldTitle->getSubjectNsText() != $ns) {
         if ($newTitle->getSubjectNsText() == $ns) {
-            $error = 'Cannot move to parameter namespace!';
+            $error = 'Cannot move to parameter namespace';
             return false;
         }
     } else {
         if ($newTitle->getSubjectNsText() != $ns) {
-            $error = 'Cannot move out of parameter namespace!';
+            $error = 'Cannot move out of parameter namespace';
             return false;
         } else {
             if ($newTitle->exists()) {
-                $error = 'Cannot overwrite existing parameter!';
+                $error = 'Cannot overwrite existing parameter';
                 return false;
             }
         }
