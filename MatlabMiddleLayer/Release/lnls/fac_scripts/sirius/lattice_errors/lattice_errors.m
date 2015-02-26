@@ -139,7 +139,8 @@ if r.config.simulate_static
         % faz simetrizacao da rede
         fprintf('< symmetrizing optics of random machines... > \n\n');
         r.machine = correct_optics(r, selection, r.params.static.optics_svs, ...
-                                   r.params.static.optics_nr_iter);
+                                     r.params.static.optics_max_nr_iter, ...
+                                     r.params.static.optics_tolerancia);
         name_saved_machines = [name_saved_machines '_symm'];
         r = archive_machines(r, 'save', name_saved_machines); % liga IDs antes de salvar
     end

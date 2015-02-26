@@ -1,29 +1,34 @@
-function respm = calc_respm_optics(the_ring0, kbs_idx)
+function respm = calc_respm_optics(the_ring, tune, bpms, hcms, vcms, kbs, nper)
 
-delta_k = 0.001;
-the_ring = the_ring0;
+if ~exist('nper','var'), nper = 1; end
+stepK = 0.001;
 
-v0 = calc_residue_optics(the_ring, the_ring0);
-M = zeros(length(v0), length(kbs_idx));
-lnls_create_waitbar('optics',0.25,length(kbs_idx));
-for i=1:length(kbs_idx)
-    k_init = getcellstruct(the_ring, 'K', kbs_idx(i));
-    the_ring = setcellstruct(the_ring, 'K', kbs_idx(i), k_init - 0.5 * delta_k);
-    the_ring = setcellstruct(the_ring, 'PolynomB', kbs_idx(i), k_init - 0.5 * delta_k, 1, 2);
-    v1 = calc_residue_optics(the_ring, the_ring0);
-    the_ring = setcellstruct(the_ring, 'K', kbs_idx(i), k_init + 1.0 * delta_k);
-    the_ring = setcellstruct(the_ring, 'PolynomB', kbs_idx(i), k_init + 1.0 * delta_k, 1, 2);
-    v2 = calc_residue_optics(the_ring, the_ring0);
-    the_ring = setcellstruct(the_ring, 'K', kbs_idx(i), k_init - 0.5 * delta_k);
-    the_ring = setcellstruct(the_ring, 'PolynomB', kbs_idx(i), k_init - 0.5 * delta_k, 1, 2);
-    M(:,i) = (v2 - v1) / delta_k;
-    lnls_update_waitbar(i);
+fprintf('nr quadcorr: %03i\n', length(kbs));
+
+v0 = calc_residue_optics(the_ring, tune, bpms, hcms, vcms, nper);
+M = zeros(length(v0),length(kbs));
+
+
+len_kbs = length(kbs)/nper;
+if logical(mod(len_kbs,1))
+    len_kbs = len_kbs*nper;
+    nper = 1;
+end
+
+lnls_create_waitbar('Calcs Optics Response Matrix',0.5,len_kbs);
+K = getcellstruct(the_ring, 'PolynomB', kbs(1:len_kbs), 1, 2);
+for i1=1:len_kbs
+    the_ring_calc = setcellstruct(the_ring, 'PolynomB', kbs(i1), K(i1) + stepK/2, 1, 2);
+    v2 = calc_residue_optics(the_ring_calc, tune, bpms, hcms, vcms, nper); % the replication for equivalent
+    the_ring_calc = setcellstruct(the_ring, 'PolynomB', kbs(i1), K(i1) - stepK/2, 1, 2);% skews is done
+    v1 = calc_residue_optics(the_ring_calc, tune, bpms, hcms, vcms, nper);% inside this function
+    M(:,i1:len_kbs:end) = (v2 - v1) / stepK;
+    lnls_update_waitbar(i1)
 end
 lnls_delete_waitbar;
 
-[U,S,V] = svd(M,'econ');
 respm.M = M;
+[U,S,V] = svd(M,'econ');
 respm.U = U;
 respm.V = V;
 respm.S = S;
-    

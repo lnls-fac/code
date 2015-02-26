@@ -22,6 +22,13 @@ fprintf(['--- initialization [' datestr(now) '] ---\n']);
 
 params = r.params;
 
+% Making sure knobs are in the right order:
+params.static.bpm_idx = sort(params.static.bpm_idx);
+params.static.scm_idx = sort(params.static.scm_idx);
+params.static.hcm_idx = sort(params.static.hcm_idx);
+params.static.vcm_idx = sort(params.static.vcm_idx);
+r.params.static.kbs_idx = sort(params.static.kbs_idx);
+
 %RandStream.setDefaultStream(RandStream('mt19937ar','seed', 131071));
 RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
  
@@ -50,7 +57,9 @@ if r.config.simulate_static
         if (~read_cod_respm || ~exist(fname, 'file') || ~isfield(data, 'the_ring') || ~isequal(data.the_ring,  params.the_ring))
 %             the_ring = set_ids(params.the_ring, 'off');
             the_ring = params.the_ring;
-            cod_respm = calc_respm_cod(the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx);
+            cod_respm = calc_respm_cod(the_ring, params.static.bpm_idx, ...
+                          params.static.hcm_idx, params.static.vcm_idx, ...
+                          params.static.nper);
             %cod_respm = calc_respm_cod(params.the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx);
             params.static.cod_respm = cod_respm.respm;
             the_ring = params.the_ring;
@@ -63,7 +72,9 @@ if r.config.simulate_static
     fname = [r.config.label '_respm_coupling.mat'];
     if params.static.coup_correction_flag
         if (~read_coup_respm || ~exist(fname, 'file'))
-            coup_respm = calc_respm_coupling(params.the_ring, params.static.bpm_idx, params.static.hcm_idx, params.static.vcm_idx, params.static.scm_idx);
+            coup_respm = calc_respm_coupling(params.the_ring, params.static.bpm_idx, ...
+                                       params.static.hcm_idx, params.static.vcm_idx, ...
+                                       params.static.scm_idx, params.static.nper);
             params.static.coup_respm = coup_respm;
             save(fname, 'coup_respm');
         else
@@ -76,7 +87,10 @@ if r.config.simulate_static
     fname = [r.config.label '_respm_optics.mat'];
     if params.static.optics_correction_flag
         if (~read_opt_respm || ~exist(fname, 'file'))
-            opt_respm = calc_respm_optics(params.the_ring, params.static.kbs_idx);
+            opt_respm = calc_respm_optics(params.the_ring, params.static.tune_goal, ...
+                                    params.static.bpm_idx, params.static.hcm_idx, ...
+                                    params.static.vcm_idx, params.static.kbs_idx, ...
+                                    params.static.nper);
             params.static.opt_respm = opt_respm;
             save(fname, 'opt_respm');
         else
