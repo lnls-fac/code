@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -89,7 +89,7 @@ def summary():
     try:
         os.system('ls *fig*.pdf 1> /dev/null 2> /dev/null && rm -rf analysis.pdf')
         os.system('ls *fig*.pdf 1> /dev/null 2> /dev/null && pdfunite *.pdf analysis.pdf')
-        os.system('rm -rf *fig*.pdf')    
+        os.system('rm -rf *fig*.pdf')
     except:
         pass
 
@@ -134,6 +134,3 @@ if sys.argv[1] == 'model':
     model()
 if sys.argv[1] == 'summary':
     summary()
-
-
-

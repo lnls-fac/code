@@ -1,81 +1,54 @@
-function machine = correct_coupling(r, selection, sv_list, nr_iterations)
+function machine = correct_coupling(r, selection, sing_vals, max_nr_iters, tolerancia)
 
-global THERING;
-
-fprintf(['--- correct_coupling [' datestr(now) '] ---\n']);
-
-machine = r.machine;
-
-if ischar(sv_list) && strcmpi(sv_list, 'all')
-    sv_list = min(size(r.params.static.coup_respm.M));
+if ischar(sing_vals) && strcmpi(sing_vals, 'all')
+    sing_vals = min(size(r.params.static.coup_respm.M));
 end
 
+fprintf(['--- correct_coupling [' datestr(now) '] ---\n']);
+fprintf('\nNumber Of Singular Values : %4d\n',sing_vals);
+fprintf('Max Number of Orbit Correction iterations : %4d\n',max_nr_iters);
+fprintf('Tolerância : %7.2e\n\n', tolerancia);
+machine = r.machine;
+
+fprintf('mac | Max Kl |  chi2  | Tilt  |      Coup[%%]      | NIters | NRedStr\n');
+fprintf('    | [1/mm] |        | [deg] |  Ey/Ex  | Tracking|        |\n');
+fprintf('%s',repmat('-',1,69));
 for i=selection
-        THERING = machine{i};
-        Ratio=0;
-        Tilt = 0;
+        R=0;
+        T = 0;
         try
-            [Tilt, Eta, EpsX, EpsY, Ratio, ENV, DP, DL, sigmas] = calccoupling;
+            [T, ~, ~, ~, R, ~, ~, ~, ~] = calccoupling(machine{i});
         catch
         end
-        Ratio_lnls = mean(lnls_calc_emittance_coupling(machine{i}));
-        init_fm = calc_residue_coupling(THERING, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
-        %init_fm = init_fm(r.params.ele_idx);
-        init_fm = sqrt(sum(init_fm.^2)/length(init_fm));
-        best_fm = init_fm;
-        for s=sv_list
-            [machine{i} skewstr coup_vec] = coup_sg(r, s, machine{i}, nr_iterations);
-            if ~exist('best_machine','var')
-                best_skewstr  = skewstr;
-                best_machine  = machine{i};
-                best_coupvec  = coup_vec;
-            end
-            fm = sqrt(sum(coup_vec.^2)/length(coup_vec));
-            if (fm < best_fm)
-                best_fm       = fm;
-                best_skewstr  = skewstr;
-                best_machine  = machine{i};
-                best_coupvec  = coup_vec;
-            else
-                machine{i} = best_machine;
-            end
-        end 
-        % restores best config of orbit correction singular values
-        machine{i} = best_machine;
-        coup_vec   = best_coupvec;
-        skewstr    = best_skewstr;
-        THERING = machine{i};
-        Ratio2_lnls = mean(lnls_calc_emittance_coupling(machine{i}));
-        Ratio2=0;
-        Tilt2 = 0;
+        RTr = mean(lnls_calc_emittance_coupling(machine{i}));
+        [machine{i}, skewstr, iniFM, bestFM, iter, n_times] = coup_sg(r, ...
+                                sing_vals, machine{i}, max_nr_iters,tolerancia);
+        RTr2 = mean(lnls_calc_emittance_coupling(machine{i}));
+        R2=0;
+        T2 = 0;
         try
-            [Tilt2, Eta2, EpsX2, EpsY2, Ratio2, ENV2, DP2, DL2, sigmas2] = calccoupling;
+            [T2, ~, ~, ~, R2, ~, ~, ~, ~] = calccoupling(machine{i});
         catch
         end
         %fprintf('%03i| skewstr[1/m^2] %+6.4f(max) %6.4f(std) | coup %8.5f (std) | tilt[deg] %5.2f -> %5.2f (std), k[%%] %5.2f -> %5.2f (std)\n', i, max(abs(skewstr)), std(skewstr), best_fm, std(Tilt)*180/pi, std(Tilt2)*180/pi, 100*Ratio, 100*Ratio2);
-        fprintf('%03i| skewstr[1/m^2] %+6.4f(max) | chi2: %8.5f -> %8.5f | tilt[deg]: %8.5f -> %8.5f | coup[%%]: %8.5f -> %8.5f | coup_lnls[%%]: %8.5f -> %8.5f\n', i, max(abs(skewstr)), init_fm, best_fm, std(Tilt)*180/pi, std(Tilt2)*180/pi,  100*Ratio, 100*Ratio2,  100*Ratio_lnls, 100*Ratio2_lnls);     
+        fprintf('\n%03d | %6s | %6.3f | %5.2f | %7.3f | %7.3f |  %4s  |  %4s \n',...
+            i, ' ', iniFM, std(T)*180/pi,  100*[R, RTr],' ',' ');  
+        fprintf('%3s | %6.2f | %6.3f | %5.2f | %7.4f | %7.4f |  %4d  |  %4d \n',...
+            ' ', 1000*max(abs(skewstr)), bestFM, std(T2)*180/pi,  100*[R2, RTr2], iter, n_times);
+        fprintf('%s',repmat('-',1,69));
 end
-
-% hkicks = zeros(length(machine), length(r.params.the_ring));
-% vkicks = zeros(length(machine), length(r.params.the_ring));
-% for i=selection
-%     hkicks(i,r.params.hcm_idx) = getcellstruct(machine{i}, 'KickAngle', r.params.hcm_idx, 1, 1);
-%     vkicks(i,r.params.vcm_idx) = getcellstruct(machine{i}, 'KickAngle', r.params.vcm_idx, 1, 2);
-% end
-% dlmwrite([r.config.label '_cor_codx.dat'],    1e6*codx,   'precision', '%+8.2f', 'newline', 'pc', 'delimiter', ' ');
-% dlmwrite([r.config.label '_cor_cody.dat'],    1e6*cody,   'precision', '%+8.2f', 'newline', 'pc', 'delimiter', ' ');
-% dlmwrite([r.config.label '_hkicks.dat'],      1e3*hkicks, 'precision', '%+8.5f', 'newline', 'pc', 'delimiter', ' ');
-% dlmwrite([r.config.label '_vkicks.dat'],      1e3*vkicks, 'precision', '%+8.5f', 'newline', 'pc', 'delimiter', ' ');
-    
 fprintf('\n');
 
 
-function [the_ring skewstr coup_vec] = coup_sg(r, nr_sing_values, the_ring0, nr_iterations)
+function [the_ring, skewstr, init_fm,best_fm, iter, n_times] = coup_sg(r, nr_sing_values,...
+                                                the_ring, max_nr_iters, tolerancia)
 
-the_ring = the_ring0;
+if ~exist('tolerancia','var'), tolerancia = 1e-5; end
+tolerancia = abs(tolerancia);
+
+skew_lst = r.params.static.scm_idx;
 
 [U,S,V] = svd(r.params.static.coup_respm.M, 'econ');
-
 % selection of singular values
 iS = diag(1./diag(S));
 diS = diag(iS);
@@ -83,17 +56,42 @@ diS(nr_sing_values+1:end) = 0;
 iS = diag(diS);
 CM = -(V*iS*U');
 
-for k=1:nr_iterations
+best_coupvec = calc_residue_coupling(the_ring, r.params.static.bpm_idx,...
+                    r.params.static.hcm_idx, r.params.static.vcm_idx);
+best_skew    = the_ring(skew_lst);
+best_fm = sqrt(lnls_meansqr(best_coupvec));
+init_fm = best_fm;
+factor = 1;
+n_times = 0;
+for iter = 1:max_nr_iters
     % calcs kicks
-    coup_vec = calc_residue_coupling(the_ring, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
-    delta_kicks = CM * coup_vec;
+    delta_kicks = factor*CM * best_coupvec;
     
     % sets kicks
-    init_kicks = getcellstruct(the_ring, 'PolynomA', r.params.static.scm_idx, 1, 2);
+    init_kicks = getcellstruct(the_ring, 'PolynomA', skew_lst, 1, 2);
     tota_kicks = init_kicks + delta_kicks;
-    the_ring   = setcellstruct(the_ring, 'PolynomA', r.params.static.scm_idx, tota_kicks, 1, 2);
+    the_ring   = setcellstruct(the_ring, 'PolynomA', skew_lst, tota_kicks, 1, 2);
+
+    coup_vec = calc_residue_coupling(the_ring, r.params.static.bpm_idx, ...
+                      r.params.static.hcm_idx, r.params.static.vcm_idx);
+    fm = sqrt(lnls_meansqr(coup_vec));
+    residue = abs(best_fm-fm)/best_fm;
+    if (fm < best_fm)
+        best_fm      = fm;
+        best_skew    = the_ring(skew_lst);
+        factor = 1; % reset the correction strength to 1
+        best_coupvec  = coup_vec;
+    else
+        the_ring(skew_lst) = best_skew;
+        factor = factor * 0.75; % reduces the strength of the correction
+        n_times = n_times + 1; % to check how many times it passed here;
+    end
+    % breaks the loop in case convergence is reached
+    if residue < tolerancia
+        break;
+    end
 end
 skewstr = getcellstruct(the_ring, 'PolynomA', r.params.static.scm_idx, 1, 2);
-coup_vec = calc_residue_coupling(the_ring, r.params.static.bpm_idx, r.params.static.hcm_idx, r.params.static.vcm_idx);
+skewstr = skewstr.*getcellstruct(the_ring, 'Length', r.params.static.scm_idx);
 
 

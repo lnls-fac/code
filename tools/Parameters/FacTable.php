@@ -1,10 +1,13 @@
 <?php
 
+require_once('FacFunctions.php');
+
+
 class FacException extends Exception { }
 
 class FacConnection {
     # Move to external file with appropriate permissions
-    const server_address = '10.0.21.44';
+    const server_address = '10.0.21.71';
     const user = 'prm_editor';
     const password = 'prm0';
     const database = 'parameters';
@@ -20,7 +23,7 @@ class FacConnection {
             self::database
         );
         if ($this->mysqli->connect_errno)
-            throw new FacException('could not connect to database!');
+            throw new FacException('could not connect to database');
         else
             $this->mysqli->autocommit(false);
     }
@@ -47,7 +50,7 @@ class FacConnection {
 }
 
 class FacTable extends FacConnection {
-    function FacTable()
+    function __construct()
     {
         parent::__construct();
     }
@@ -57,7 +60,7 @@ class FacTable extends FacConnection {
         $r = $this->read_all_with_name_from_table($name, 'parameter');
 
         if ($r->num_rows == 0)
-            throw new FacException('parameter "' . $name . '" not found!');
+            throw new FacException('parameter "' . $name . '" not found');
         else {
             $row = $r->fetch_assoc();
             return $this->get_text_fields($row);
@@ -108,6 +111,19 @@ class FacTable extends FacConnection {
             return "False";
     }
 
+    function read_dependencies($name)
+    {
+        $r = $this->read_all_with_name_from_table($name, 'dependency');
+
+        $rows = $r->fetch_all();
+
+        $deps = array();
+        foreach ($rows as $row)
+            array_push($deps, $row[1]);
+
+        return $deps;
+    }
+
     function write_parameter($fields)
     {
         $db_fields = $this->get_db_fields($fields);
@@ -120,7 +136,7 @@ class FacTable extends FacConnection {
 
         $result = $this->query($query);
     }
-    
+
     function get_db_fields($fields)
     {
         $db_fields = array();
@@ -144,7 +160,7 @@ class FacTable extends FacConnection {
         else
             return true;
     }
-    
+
     function build_insert_query($values, $table)
     {
         $query = "INSERT INTO " . $table . " VALUES (" .
@@ -251,7 +267,7 @@ class FacTable extends FacConnection {
 
         return $this->query($query);
     }
-    
+
     function read_expression($parameter)
     {
         $query = "SELECT * FROM expression WHERE name='" .
@@ -273,23 +289,44 @@ class FacEvaluator extends FacConnection {
     static $valid_symbols = array(
         ' ', '.', '(', ')', ',',
         '0', '1', '2', '3', '4',
-        '5', '6', '7', '8', '9'
+        '5', '6', '7', '8', '9',
+        'e', 'E'
     );
     static $valid_operators = array('+', '-', '*', '/');
     static $valid_functions = array(
         'sqrt', 'pow', 'exp',
         'asin', 'acos', 'atan',
-        'sin', 'cos', 'tan'
+        'sin', 'cos', 'tan',
+        'deg2rad', 'rad2deg',
+        'joule_2_ev', 'gamma', 'beta',
+        'velocity', 'brho', 'critical_energy',
+        'U0', 'sync_phase', 'rf_energy_acceptance',
+        'natural_emittance', 'energy_spread', 'revolution_period',
+        'revolution_frequency', 'rf_frequency', 'number_of_electrons',
+        'overvoltage', 'alpha1', 'Jx',
+        'Js', 'frequency_from_tune', 'damping_time',
+        'radiation_power', 'rf_wavelength', 'slip_factor',
+        'bunch_length', 'bunch_duration', 'id_deflection_parameter',
+        'id_mean_power'
+    );
+    static $valid_constants = array(
+        '$light_speed', '$vacuum_permeability', '$elementary_charge',
+        '$electron_mass', '$electron_rest_energy', '$vacuum_permitticity',
+        '$joule_2_eV', '$reduced_planck_constant', '$rad_cgamma',
+        '$Cq', '$Ca'
     );
 
+    private $name;
     private $expression;
     private $dependencies;
     private $parameters;
     private $depth;
 
-    function FacEvaluator($expression, $parameter=false)
+    function __construct($name, $expression, $parameter=false)
     {
         parent::__construct();
+
+        $this->name = $name;
 
         if ($parameter) {
             $this->parameters = array(
@@ -312,21 +349,31 @@ class FacEvaluator extends FacConnection {
 
     function evaluate()
     {
+        global $light_speed;
+        global $vacuum_permeability;
+        global $elementary_charge;
+        global $electron_mass;
+        global $electron_rest_energy;
+        global $vacuum_permitticity;
+        global $joule_2_eV;
+        global $reduced_planck_constant;
+        global $rad_cgamma;
+        global $Cq;
+        global $Ca;
+
         if ($this->validate_final_expression($this->expression)) {
             $extended_expr = '$r = ' . $this->expression . ';';
             eval($extended_expr);
             return $r;
-        } else {
-            fac_write('expression', $this->expression);
-            throw new FacException('invalid expression');
-        }
+        } else
+            throw new FacException('invalid expression for ' . $this->name);
     }
 
     function replace_parameters($expression)
     {
         if ($depth++ >= self::max_depth)
             throw new FacException('max depth achieved');
-        
+
         if (substr_count($expression, '"') % 2)
             throw new FacException('quote mismatch');
 
@@ -341,7 +388,7 @@ class FacEvaluator extends FacConnection {
             $value = strval($this->parameters[$p]);
             $expression = str_replace($parameter, $value, $expression);
         }
-        
+
         return array('expression' => $expression, 'dependencies' => $deps);
     }
 
@@ -363,7 +410,7 @@ class FacEvaluator extends FacConnection {
 
         $row = $r->fetch_assoc();
         if (!$row) {
-            $msg = 'parameter "' . $parameter . '" not found!';
+            $msg = 'parameter "' . $parameter . '" not found';
             throw new FacException($msg);
         }
 
@@ -383,7 +430,7 @@ class FacEvaluator extends FacConnection {
 
         $row = $r->fetch_assoc();
         if (!$row) {
-            $msg = 'expression for "' . $parameter . '" not found!';
+            $msg = 'expression for "' . $parameter . '" not found';
             throw new FacException($msg);
         } else
             return $row['expression'];
@@ -391,12 +438,14 @@ class FacEvaluator extends FacConnection {
 
     function validate_final_expression($expression)
     {
+        foreach (self::$valid_functions as $f)
+            $expression = str_replace($f, '', $expression);
+        foreach (self::$valid_constants as $c)
+            $expression = str_replace($c, '', $expression);
         foreach (self::$valid_symbols as $s)
             $expression = str_replace($s, '', $expression);
         foreach (self::$valid_operators as $o)
             $expression = str_replace($o, '', $expression);
-        foreach (self::$valid_functions as $f)
-            $expression = str_replace($f, '', $expression);
 
         if ($expression === '')
             return true;
@@ -408,7 +457,7 @@ class FacEvaluator extends FacConnection {
 class FacDependencyTracker {
     private $expression;
 
-    function FacDependencyTracker($expression)
+    function __construct($expression)
     {
         $this->expression = $expression;
     }
@@ -435,7 +484,7 @@ class FacDependencyTracker {
 class FacDependentTracker extends FacConnection {
     private $parameter;
 
-    function FacDependentTracker($parameter)
+    function __construct($parameter)
     {
         parent::__construct();
         $this->parameter = $parameter;
@@ -450,7 +499,7 @@ class FacDependentTracker extends FacConnection {
         for ($i = 0; $i < $r->num_rows; $i++) {
             array_push($table, $r->fetch_row());
         }
-        
+
         $s = new FacSet();
         $t = new FacSet();
         $t->put($this->parameter);
@@ -462,7 +511,7 @@ class FacDependentTracker extends FacConnection {
                 foreach($t->elements as $e)
                     if ($row[1] == $e) {
                         $u->put($row[0]);
-                        $s->put($row[0]);                    
+                        $s->put($row[0]);
                     }
 
             $new_n = $s->count();
@@ -470,7 +519,7 @@ class FacDependentTracker extends FacConnection {
                 $n = $new_n;
                 $t = $u;
             } else
-                break;            
+                break;
         }
 
         return $s->elements;
@@ -490,13 +539,6 @@ class FacSet {
     {
         return count($this->elements);
     }
-}
-
-function fac_write($filename, $msg)
-{
-    $f = fopen('/tmp/' . $filename . '.txt', 'a');
-    fwrite($f, $msg . "\n");
-    fclose($f);
 }
 
 ?>

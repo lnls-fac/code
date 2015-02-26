@@ -7,7 +7,7 @@ class FacValueExtractor {
 
     var $text;
 
-    function FacValueExtractor($text)
+    function __construct($text)
     {
         $this->text = $text;        
     }

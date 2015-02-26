@@ -25,7 +25,6 @@ class OutOfRangeRzMin(OutOfRangeRz):
 class IrregularFieldMap(Exception):
     pass
 
-
 class FieldMapSet:
     
     def __init__(self):
@@ -50,17 +49,14 @@ class FieldMapSet:
             field[:,i] = self.interpolate(*points[:,i])
         return field
    
-    
 class FieldMap:
     
     def __init__(self, 
                  fname = None, 
                  field_function = None,
                  polyfit_exponents = None,
-                 analysis_missing_field = False,
                  rotation = 0.0,
-                 translation = (0,0),
-                 threshold_field_fraction = 0.5):
+                 translation = (0,0)):
         
         self.filename = fname
         self.fieldmap_label = None
@@ -100,20 +96,11 @@ class FieldMap:
         # field and to thus obtain numerical estimates of the field integrals outside the fieldmap.
         # these estimates are stored in the lists below.
         #
-        self.clear_extrapolation_coefficients()
-        self.bx_missing_integral  = None  # list of estimated bx field line integrals outside the region of the field map
-        self.by_missing_integral  = None  # list of estimated by field line integrals outside the region of the field map
-        self.bz_missing_integral  = None  # list of estimated bz field line integrals outside the region of the field map
          
         # reads fieldmap from givem filename
         if self.filename is not None:   
             self.read_fieldmap(self.filename)
         
-        # does field extrapolation analysis 
-        if analysis_missing_field:
-            self.field_extrapolation_analysis(polyfit_exponents = polyfit_exponents, 
-                                                threshold_field_fraction = threshold_field_fraction)
-
     def read_fieldmap(self, fname):
 
         with open(fname, 'r') as fp:
@@ -204,28 +191,11 @@ class FieldMap:
                 continue
             if cmd == 'corrente[a]:':
                 try:
-                    self.current = float(words[1])#[A]
+                    self.current = words[1]#[A]
                 except ValueError:
                     self.current = None
                 continue
-                 
-    def __get_ix(self, rx):
-        ix = int(math.floor((rx - self.rx_min) / self.rx_step)) if self.rx_nrpts > 1 else 0
-        ix = ix-1 if ix == self.rx_nrpts-1 else ix
-        return ix
-    
-    def __get_iy(self, ry):
-        if self.ry_nrpts == 1:
-            return 0
-        iy = int(math.floor((ry - self.ry_min) / self.ry_step)) if self.ry_nrpts > 1 else 0
-        iy = iy-1 if iy == self.ry_nrpts-1 else iy
-        return iy
-    
-    def __get_iz(self, rz):
-        iz = int(math.floor((rz - self.rz_min) / self.rz_step)) if self.rz_nrpts > 1 else 0
-        iz = iz-1 if iz == self.rz_nrpts-1 else iz
-        return iz
-               
+                                
     def interpolate_set(self, points):
         
         field = np.zeros(points.shape)
@@ -234,72 +204,6 @@ class FieldMap:
         return field
     
     def interpolate(self, rx_global, ry_global, rz_global):
-
-        
-      
-        
-        def rz_interpolate(rz, ix, iy):
-                
-            def field_rz_extrapolate(rz, coeffs):
-                try:
-                    b = np.zeros(rz.shape)
-                except AttributeError:
-                    b = 0.0
-                x = 1.0/rz
-                for i in range(len(coeffs)):
-                    b += coeffs[i] * (x ** self.__polyfit_exponents[i])
-                    return b
-                
-            if rz > self.rz_max:
-                if self._bx_pos_coeffs is None:
-                    bx, by, bz = 0,0,0
-                    #raise OutOfRangeRzMax('rz = {0:f} > rz_max = {1:f} [mm]'.format(rz, self.rz_max))
-                else:
-                    bx_pos_coeffs = self._bx_pos_coeffs[iy][ix]
-                    by_pos_coeffs = self._by_pos_coeffs[iy][ix]
-                    bz_pos_coeffs = self._bz_pos_coeffs[iy][ix]
-                    bx = field_rz_extrapolate(rz, bx_pos_coeffs)
-                    by = field_rz_extrapolate(rz, by_pos_coeffs)
-                    bz = field_rz_extrapolate(rz, bz_pos_coeffs)
-            elif rz < self.rz_min:
-                if self._bx_neg_coeffs is None:
-                    raise OutOfRangeRzMin('rz = {0:f} < rz_min = {1:f} [mm]'.format(rz, self.rz_min))
-                bx_neg_coeffs = self._bx_neg_coeffs[iy][ix]
-                by_neg_coeffs = self._by_neg_coeffs[iy][ix]
-                bz_neg_coeffs = self._bz_neg_coeffs[iy][ix]
-                bx = field_rz_extrapolate(rz, bx_neg_coeffs)
-                by = field_rz_extrapolate(rz, by_neg_coeffs)
-                bz = field_rz_extrapolate(rz, bz_neg_coeffs)
-            else:
-
-                iz = self.__get_iz(rz)
-                iz1, iz2 = iz, iz+1 if self.rz_nrpts > 1 else iz
-                fdz = (rz - self.rz[iz1])/self.rz_step if self.rz_step != 0.0 else 0.0
-                
-                b = self.bx[iy][ix,:]
-                bx = b[iz1] + fdz * (b[iz2] - b[iz1])
-                b = self.by[iy][ix,:]
-                by = b[iz1] + fdz * (b[iz2] - b[iz1])
-                b = self.bz[iy][ix,:]
-                bz = b[iz1] + fdz * (b[iz2] - b[iz1])
-                
-            return (bx,by,bz)
-        
-        def interpolate_in_plane(bx,by,bz,ix,iy):
-            ix1, ix2 = ix, ix+1 if self.rx_nrpts > 1 else ix
-            # prev x
-            bx_x1, by_x1, bz_x1 = rz_interpolate(rz = rz, ix = ix1, iy = iy)
-            # next x
-            bx_x2, by_x2, bz_x2 = rz_interpolate(rz = rz, ix = ix2, iy = iy)
-            # interpolate in x
-            fdx = (rx - self.rx[ix1])/self.rx_step if self.rx_step != 0.0 else 0.0
-            bx = bx_x1 + fdx * (bx_x2 - bx_x1)
-            by = by_x1 + fdx * (by_x2 - by_x1)
-            bz = bz_x1 + fdx * (bz_x2 - bz_x1)
-            return (bx, by, bz)
-                    
-        
-        
         
         # converts to local coordinate system
         C, S = math.cos(self.rotation), math.sin(self.rotation)
@@ -313,180 +217,13 @@ class FieldMap:
             raise OutOfRangeRxMax('rx = {0:f} > rx_max = {1:f} [mm]'.format(rx, self.rx_max))
         
         field = (self.bxf(rx, rz), self.byf(rx, rz), self.bzf(rx, rz))    
-    
-#         if self.field_function is not None:
-#             # in case a function that returns field is defined
-#             field = self.field_function(rx, ry, rz) 
-#         else:
-#             # gets transverse coordinates indices into the regular rectangular grid
-#             try:        
-#                 ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = True)
-#             except OutOfRangeRz:
-#                 ix, iy, _ = self.pos2indices(rx, ry, rz, raise_exception_flag = False)
-#             # upper and lower fieldmaps
-#             bx_y1, bx_y2 = self.bx[iy], self.bx[iy+1] if self.ry_nrpts > 1 else self.bx[iy]
-#             by_y1, by_y2 = self.by[iy], self.by[iy+1] if self.ry_nrpts > 1 else self.by[iy]
-#             bz_y1, bz_y2 = self.bz[iy], self.bz[iy+1] if self.ry_nrpts > 1 else self.bz[iy]
-#             bx_y1, by_y1, bz_y1 = interpolate_in_plane(bx_y1, by_y1, bz_y1, ix, iy)
-#             bx_y2, by_y2, bz_y2 = interpolate_in_plane(bx_y2, by_y2, bz_y2, ix, iy)
-#             # interpolate in z
-#             fdy = (ry - self.ry[iy])/self.ry_step if self.ry_step != 0.0 else 0.0
-#             bx = bx_y1 + fdy * (bx_y2 - bx_y1)
-#             by = by_y1 + fdy * (by_y2 - by_y1)
-#             bz = bz_y1 + fdy * (bz_y2 - bz_y1)
-#             field = (bx,by,bz)
-        
+            
         # converts field back to global coordinates
         bx =  C * field[0] - S * field[2]
         bz =  S * field[0] + C * field[2]
         field = (bx, field[1], bz)
         
-        return field
-          
-    def integral_z(self, coeffs = None, field_line = None, rz_inf = -float('inf'), rz_sup = float('inf')):
-        if coeffs is not None:
-            integral = 0.0
-            for i in range(len(coeffs)):
-                n = self.__polyfit_exponents[i]
-                integral += coeffs[i] * (rz_sup**(1-n) - rz_inf**(1-n)) / (1.0-n)
-            return integral
-        else:
-            raise NotImplementedError
-                
-    def index2indices(self, i):
-        raise NotImplementedError
-
-    def pos2indices(self, rx,ry,rz, raise_exception_flag = True):
-        
-        if raise_exception_flag:
-            if rx > self.rx_max:
-                raise OutOfRangeRxMax('rx = {0:f} > rx_max = {1:f} [mm]'.format(rx, self.rx_max))
-            if rx < self.rx_min:
-                raise OutOfRangeRxMin('rx = {0:f} < rx_min = {1:f} [mm]'.format(rx, self.rx_min))
-            if ry > self.ry_max:
-                raise OutOfRangeRyMax('ry = {0:f} > ry_max = {1:f} [mm]'.format(ry, self.ry_max))
-            if ry < self.ry_min:
-                raise OutOfRangeRyMin('ry = {0:f} < ry_min = {1:f} [mm]'.format(ry, self.ry_min))
-            if rz > self.rz_max:
-                raise OutOfRangeRzMax('rz = {0:f} > rz_max = {1:f} [mm]'.format(rz, self.rz_max))
-            if rz < self.rz_min:
-                raise OutOfRangeRzMin('rz = {0:f} < rz_min = {1:f} [mm]'.format(rz, self.rz_min))
-            
-        iy = self.__get_iy(ry)
-        ix = self.__get_ix(rx)
-        iz = self.__get_iz(rz)
-        return ix,iy,iz
-
-    def clear_extrapolation_coefficients(self):
-        self._bx_pos_coeffs, self._bx_neg_coeffs = None, None
-        self._by_pos_coeffs, self._by_neg_coeffs = None, None
-        self._bz_pos_coeffs, self._bz_neg_coeffs = None, None
-        
-    def field_extrapolation_analysis(self, threshold_field_fraction = 0.5, polyfit_exponents = None):
-        
-        if polyfit_exponents is None:
-            self.__polyfit_exponents = [2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-        else:
-            self.__polyfit_exponents = polyfit_exponents
-
-        
-        def calc_poly_coeffs(yplane_idx, fieldline_idx, field_component, threshold_field_fraction = threshold_field_fraction):
-            
-         
-            field = field_component[yplane_idx]
-            nr = len(self.__polyfit_exponents)
-            
-            '''rz > 0 extrapolation'''
-            rz = self.rz[self.rz_zero+1:]
-            field_line = field[fieldline_idx,self.rz_zero+1:]
-            threshold_field = max(abs(field_line)) * threshold_field_fraction
-            idx = np.where(abs(field_line) < threshold_field)[0]
-            z = rz[idx]
-            b = field_line[idx]
-            x = 1.0/z
-            vb = np.zeros((nr,1))
-            vm = np.zeros((nr,nr))
-            for idx_row in range(nr):
-                n_row = self.__polyfit_exponents[idx_row]
-                vb[idx_row,0] = np.dot(b, x**n_row)
-                for idx_col in range(nr):
-                    n_col = self.__polyfit_exponents[idx_col]
-                    vm[idx_row, idx_col] = np.sum(x**(n_row+n_col))
-            pos_coeffs = np.linalg.solve(vm, vb)[:,0]
-            
-            '''
-            zl = np.linspace(z[0],20*z[-1],1000)
-            bl = self.field_extrapole(pos_coeffs, zl)
-            plt.plot(z,b)
-            plt.plot(zl,bl)
-            plt.show()
-            binteg = self.field_integrate(coeffs = pos_coeffs, rz_inf = self.rz_max, rz_sup = float('inf'))
-            '''
-            
-            '''rz < 0 extrapolation'''
-            rz = self.rz[:self.rz_zero]
-            field_line = field[fieldline_idx,:self.rz_zero]
-            threshold_field = max(abs(field_line)) * threshold_field_fraction
-            idx = np.where(abs(field_line) < threshold_field)[0]
-            z = rz[idx]
-            b = field_line[idx]
-            x = 1.0/z
-            vb = np.zeros((nr,1))
-            vm = np.zeros((nr,nr))
-            for idx_row in range(nr):
-                n_row = self.__polyfit_exponents[idx_row]
-                vb[idx_row,0] = np.dot(b, x**n_row)
-                for idx_col in range(nr):
-                    n_col = self.__polyfit_exponents[idx_col]
-                    vm[idx_row, idx_col] = np.sum(x**(n_row+n_col))
-            neg_coeffs = np.linalg.solve(vm, vb)[:,0]
-            
-            return (pos_coeffs,neg_coeffs)
-                    
-        self._bx_pos_coeffs, self._bx_neg_coeffs = [], []
-        self._by_pos_coeffs, self._by_neg_coeffs = [], []
-        self._bz_pos_coeffs, self._bz_neg_coeffs = [], []
-        self.bx_missing_integral = []
-        self.by_missing_integral = []
-        self.bz_missing_integral = []
-            
-        for yplane_idx in range(len(self.by)):
-            bx_pos_coeffs, by_pos_coeffs, bz_pos_coeffs = [], [], []
-            bx_neg_coeffs, by_neg_coeffs, bz_neg_coeffs = [], [], []
-            bx_missing_integral, by_missing_integral, bz_missing_integral = [], [], []
-            for fieldline_idx in range(self.by[yplane_idx].shape[0]):
-                #print(fieldline_idx)
-                # bx
-                pos_coeff, neg_coeff = calc_poly_coeffs(yplane_idx, fieldline_idx, self.bx)
-                bx_pos_coeffs.append(pos_coeff)
-                bx_neg_coeffs.append(neg_coeff)
-                binteg  = self.integral_z(coeffs = pos_coeff, rz_inf = self.rz_max, rz_sup = float('inf'))
-                binteg += self.integral_z(coeffs = neg_coeff, rz_inf = -float('inf'), rz_sup = self.rz_min)
-                bx_missing_integral.append(binteg) 
-                # by
-                pos_coeff, neg_coeff = calc_poly_coeffs(yplane_idx, fieldline_idx, self.by)
-                by_pos_coeffs.append(pos_coeff)
-                by_neg_coeffs.append(neg_coeff)
-                binteg  = self.integral_z(coeffs = pos_coeff, rz_inf = self.rz_max, rz_sup = float('inf'))
-                binteg += self.integral_z(coeffs = neg_coeff, rz_inf = -float('inf'), rz_sup = self.rz_min)
-                by_missing_integral.append(binteg)
-                # bz
-                pos_coeff, neg_coeff = calc_poly_coeffs(yplane_idx, fieldline_idx, self.bz)
-                bz_pos_coeffs.append(pos_coeff)
-                bz_neg_coeffs.append(neg_coeff)
-                binteg  = self.integral_z(coeffs = pos_coeff, rz_inf = self.rz_max, rz_sup = float('inf'))
-                binteg += self.integral_z(coeffs = neg_coeff, rz_inf = -float('inf'), rz_sup = self.rz_min)
-                bz_missing_integral.append(binteg)
-             
-            self._bx_pos_coeffs.append(bx_pos_coeffs)
-            self._bx_neg_coeffs.append(bx_neg_coeffs)
-            self._by_pos_coeffs.append(by_pos_coeffs)
-            self._by_neg_coeffs.append(by_neg_coeffs)
-            self._bz_pos_coeffs.append(bz_pos_coeffs)
-            self._bz_neg_coeffs.append(bz_neg_coeffs)
-            self.bx_missing_integral.append(bx_missing_integral)
-            self.by_missing_integral.append(by_missing_integral)
-            self.bz_missing_integral.append(bz_missing_integral)
+        return field                       
       
     def __str__(self):
         r = ''
@@ -523,21 +260,7 @@ class FieldMap:
         r += '\n{0:<35s} (min:{1:+8.5f} max:{2:+8.5f}) (min:{3:+8.5f} max:{4:+8.5f}) Tesla'.format('bz@(all)(axis):', 
         np.amin(self.bz[self.ry_zero]), np.amax(self.bz[self.ry_zero]), min(self.bz[self.ry_zero][self.rx_zero]), max(self.bz[self.ry_zero][self.rx_zero]))
         
-        if self.bx_missing_integral is not None:
-            missing_Lbx = [abs(x) for x in self.bx_missing_integral[self.ry_zero]]
-            max_missing_Lbx = max(missing_Lbx)
-            rx_max = missing_Lbx.index(max_missing_Lbx)
-            r += '\n{0:<35s} {1:.2E} T.m at rx = {2:+d} mm'.format('missing_int{Bx.drz}(max):', max_missing_Lbx/1000, rx_max)
-        if self.by_missing_integral is not None:
-            missing_Lby = [abs(x) for x in self.by_missing_integral[self.ry_zero]]
-            max_missing_Lby = max(missing_Lby)
-            rx_max = missing_Lby.index(max_missing_Lby)
-            r += '\n{0:<35s} {1:.2E} T.m at rx = {2:+d} mm'.format('missing_int{By.drz}(max):', max_missing_Lby/1000, rx_max)
-        if self.bz_missing_integral is not None:
-            missing_Lbz = [abs(x) for x in self.bz_missing_integral[self.ry_zero]]
-            max_missing_Lbz = max(missing_Lbz)
-            rx_max = missing_Lbz.index(max_missing_Lbz)
-            r += '\n{0:<35s} {1:.2E} T.m at rx = {2:+d} mm'.format('missing_int{Bz.drz}(max):', max_missing_Lbz/1000, rx_max)
+        
         return r
       
             
