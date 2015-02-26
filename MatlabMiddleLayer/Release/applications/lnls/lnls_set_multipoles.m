@@ -56,4 +56,5 @@ for ii=1:len_idx
     end
     new_ring{idx_i}.PolynomB = polB;
     new_ring{idx_i}.PolynomA = polA;
+    new_ring{idx_i}.MaxOrder = max([length(polB), length(polA)])-1;
 end

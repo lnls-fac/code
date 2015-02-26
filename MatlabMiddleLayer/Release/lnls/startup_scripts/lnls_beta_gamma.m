@@ -1,4 +1,4 @@
-function [beta gamma b_rho] = lnls_beta_gamma(energy)
+function [beta, gamma, b_rho] = lnls_beta_gamma(energy)
 % lnls_beta_gamma: calculates particle energy derived quantities
 %
 % Units:
