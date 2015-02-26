@@ -1,6 +1,6 @@
 function varargout = fcident(varargin)
 
-siso2mimo_derate_factor = 0.1;
+siso2mimo_derate_factor = 1/3;
 
 if ischar(varargin{1}) && strcmpi(varargin{1}, 'init')
     npts_packet = varargin{2};
@@ -21,23 +21,26 @@ if ischar(varargin{1}) && strcmpi(varargin{1}, 'init')
         end
         fcdata = [fcdata; zeros(npts_packet*expinfo.duration - size(fcdata,1), size(fcdata,2))];
     end
-    
+    fcdata = [fcdata; zeros(npts_packet*expinfo.duration - size(fcdata,1), size(fcdata,2))];
+
     varargout = {fcdata, expout};
 else
     i = varargin{1};
     npts_packet = varargin{2};
     expinfo = varargin{3};
     fprintf('packet #%d: ', i+1);
-    
+
     expnumber = floor(i/(expinfo.duration + expinfo.pauselength));
+
     i_ = rem(i,(expinfo.duration + expinfo.pauselength));
     repeatprofiles_after = size(expinfo.profiles,1) + 1;
     profile_number = rem(expnumber, repeatprofiles_after);
+
     if i_ < expinfo.pauselength || (~expinfo.uncorrelated && (profile_number == 0))
         packet = zeros(npts_packet, expinfo.ncols);
         expinterval = true;
         fprintf('pause');
-       
+
     else
         if profile_number == 0
             profile = diag(ones(1, size(expinfo.profiles,2)))*siso2mimo_derate_factor;
