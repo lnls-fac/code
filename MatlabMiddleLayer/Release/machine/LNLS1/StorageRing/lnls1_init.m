@@ -1056,7 +1056,7 @@ AO.BPMx.Status      = ones(size(AO.BPMx.DeviceList,1),1);
 %AO.BPMx.Status([20 23])  = [0 0]; % AMP11A and AMP11B OFF
 AO.BPMx.Offset      = Orbit.OffsetOrbit(:,1);
 AO.BPMx.Golden      = Orbit.GoldenOrbit(:,1);
-AO.BPMx.Status(6)   = 0; % Desliga AMP03C   
+%AO.BPMx.Status(6)   = 0; % Desliga AMP03C   
 
 
 
@@ -1095,7 +1095,7 @@ AO.BPMy.Offset      = Orbit.OffsetOrbit(:,2);
 AO.BPMy.Golden      = Orbit.GoldenOrbit(:,2);
 AO.BPMy.Position    = [];
 AO.BPMy.CommonNames = AO.BPMx.CommonNames;
-AO.BPMy.Status(6)   = 0; % Desliga AMP03C   
+%AO.BPMy.Status(6)   = 0; % Desliga AMP03C   
 
 AO.BPMy.Monitor.MemberOf = {'BPMy'; 'Monitor';};
 AO.BPMy.Monitor.Mode = 'Simulator';
