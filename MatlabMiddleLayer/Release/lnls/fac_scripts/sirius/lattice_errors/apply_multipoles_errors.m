@@ -24,17 +24,14 @@ for ii =1:length(families);
     config_fam = config.(families{ii});
     
     rms_monomials = config_fam.rms.order;
-    sys_monomials = config_fam.sys.order;
     r0 = config_fam.r0;
     main_monomial = config_fam.main_multipole;
     idx = errors.(families{ii}).indcs;
     
-    Bn_norm = zeros(max([rms_monomials, sys_monomials]),length(idx));
+    Bn_norm = zeros(max(rms_monomials),length(idx));
     An_norm = Bn_norm;
     Bn_norm(rms_monomials,:) = squeeze(errors_fam.rms.Bn_norm(machine,:,:));
     An_norm(rms_monomials,:) = squeeze(errors_fam.rms.An_norm(machine,:,:));
-    Bn_norm(sys_monomials,:) = Bn_norm(sys_monomials,:) + repmat(config_fam.sys.main_values',1,length(idx));
-    An_norm(sys_monomials,:) = An_norm(sys_monomials,:) + repmat(config_fam.sys.skew_values',1,length(idx));
-    
+        
     the_ring  = lnls_set_multipoles(the_ring, Bn_norm, An_norm, main_monomial, r0, idx);
 end

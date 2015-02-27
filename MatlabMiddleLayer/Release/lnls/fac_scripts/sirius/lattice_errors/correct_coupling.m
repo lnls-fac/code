@@ -48,7 +48,10 @@ tolerancia = abs(tolerancia);
 
 skew_lst = r.params.static.scm_idx;
 
-[U,S,V] = svd(r.params.static.coup_respm.M, 'econ');
+respm = r.params.static.coup_respm;
+U = respm.U;
+V = respm.V;
+S = respm.S;
 % selection of singular values
 iS = diag(1./diag(S));
 diS = diag(iS);

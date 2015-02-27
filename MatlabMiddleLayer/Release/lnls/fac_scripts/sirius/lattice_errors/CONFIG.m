@@ -111,20 +111,22 @@ r.config.static.girder.sigma_roll  =  0.20 * mrad * 1;
 
 % parameters for slow correction algorithms
 
+% parameters for slow correction algorithms
+r.params.static.nper = 10; % for matrices calculation
 %cod
-% selection = [1 1 1 1  1 1  1 1 1 1];
+% selection = [1 1 1   1 1 1   1 1 1];
 % selection = repmat(selection, 1, 20);
-r.params.static.bpm_idx = findcells(r.params.the_ring, 'FamName', 'bpm');
+r.params.static.bpm_idx = sort(findcells(r.params.the_ring, 'FamName', 'bpm'));
 % r.params.static.bpm_idx = r.params.static.bpm_idx(logical(selection));
 
-% selection = [1 1 1 1   1 1 1 1];
+% selection = [1  1 1  0 1  1 0  1 1  1];
 % selection = repmat(selection, 1, 20);
-r.params.static.hcm_idx = findcells(r.params.the_ring, 'FamName', 'hcm');
+r.params.static.hcm_idx = sort(findcells(r.params.the_ring, 'FamName', 'hcm'));
 % r.params.static.hcm_idx = r.params.static.hcm_idx(logical(selection));
 
-% selection = [1 1 1   1 1 1];
+% selection = [1  1 1  1 1  1];
 % selection = repmat(selection, 1, 20);
-r.params.static.vcm_idx = findcells(r.params.the_ring, 'FamName', 'vcm');
+r.params.static.vcm_idx = sort(findcells(r.params.the_ring, 'FamName', 'vcm'));
 % r.params.static.vcm_idx = r.params.static.vcm_idx(logical(selection));
 
 r.params.static.cod_correction_flag = true;
@@ -133,25 +135,34 @@ r.params.static.cod_svs        = 'all';
 r.params.static.cod_max_nr_iter = 50;
 r.params.static.cod_tolerancia  = 1e-5;
 
+
 %optics
-r.params.static.kbs_idx = findcells(r.params.the_ring, 'K');
-r.params.static.kbs_idx = setdiff(r.params.static.kbs_idx, findcells(r.params.the_ring, 'BendingAngle'));
-r.params.static.optics_correction_flag = false;
-r.params.static.optics_svs     = 180:20:260;
-r.params.static.optics_nr_iter = 2; 
+labels = {'qfa','qdb2','qfb','qdb1','qda','qf1','qf2','qf3','qf4'};
+knobs=[];
+for i=1:length(labels)
+    knobs = [knobs, findcells(r.params.the_ring,'FamName',labels{i})];
+end
+r.params.static.kbs_idx = sort(knobs);
+r.params.static.optics_correction_flag = true;
+r.params.static.optics_svs     = 156;
+r.params.static.optics_max_nr_iter = 50;
+r.params.static.optics_tolerancia  = 1e-5;
 
 %coupling
-r.params.static.scm_idx = [findcells(r.params.the_ring, 'FamName', 'sda')];
-r.params.static.scm_idx = [r.params.static.scm_idx findcells(r.params.the_ring, 'FamName', 'sdb')];
-r.params.static.scm_idx = [r.params.static.scm_idx findcells(r.params.the_ring, 'FamName', 'sf1')];
-r.params.static.scm_idx = [r.params.static.scm_idx findcells(r.params.the_ring, 'FamName', 'sf4')];
-r.params.static.coup_correction_flag = true;
+labels = {'sda','sdb','sf1','sf4'};
+knobs=[];
+for i=1:length(labels)
+    knobs = [knobs, findcells(r.params.the_ring,'FamName',labels{i})];
+end
+r.params.static.scm_idx = sort(knobs);
+r.params.static.coup_correction_flag = false;
 r.params.static.coup_svs       = 'all';
 r.params.static.coup_max_nr_iter = 50;
 r.params.static.coup_tolerancia  = 1e-5;
 
+
 %tune
-r.params.static.tune_correction_flag = true;
+r.params.static.tune_correction_flag = false;
 r.params.static.tune_families        = {'qfa','qdb2','qfb','qdb1','qda'};
 r.params.static.tune_goal            = ats.tunes;
 r.params.static.tune_max_iter        = 10;

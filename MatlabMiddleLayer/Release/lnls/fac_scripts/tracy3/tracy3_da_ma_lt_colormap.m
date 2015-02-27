@@ -1,4 +1,4 @@
-function tracy3_da_ma_lt_colormap()
+function tracy3_da_ma_lt_colormap(path)
 
 global THERING;
 
@@ -11,7 +11,9 @@ energy = str2double(answer{2});
 
 if strcmpi(answer{1}, 'bo')
     
-    path = '/home/fac_files/data/sirius/bo/beam_dynamics';
+    if ~exist('path','var')
+        path = '/home/fac_files/data/sirius/bo/beam_dynamics';
+    end
     r = which('sirius_bo_lattice.m');
     if isempty(r)
         sirius('BO');
@@ -42,7 +44,9 @@ if strcmpi(answer{1}, 'bo')
         accepRF      = ats.energyacceptance;
     end 
 else
-    path = '/home/fac_files/data/sirius/si/beam_dynamics';
+    if ~exist('path','var')
+        path = '/home/fac_files/data/sirius/si/beam_dynamics';
+    end
     r = which('sirius_si_lattice.m');
     if isempty(r)
         sirius('SI');
