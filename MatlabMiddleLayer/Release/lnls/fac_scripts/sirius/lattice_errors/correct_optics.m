@@ -82,7 +82,7 @@ CM = -(V*iS*U');
 best_optvec = calc_residue_optics(the_ring, tune, r.params.static.bpm_idx,...
                     r.params.static.hcm_idx, r.params.static.vcm_idx);
 best_quad    = the_ring(quad_lst);
-best_fm = sqrt(lnls_meansqr(best_optvec));
+best_fm = sqrt(sumsqr(best_optvec));
 init_fm = best_fm;
 init_kicks = getcellstruct(the_ring, 'PolynomB', quad_lst, 1, 2);
 factor = 1;
@@ -98,7 +98,7 @@ for iter = 1:max_nr_iters
 
     opt_vec = calc_residue_optics(the_ring, tune, r.params.static.bpm_idx, ...
                       r.params.static.hcm_idx, r.params.static.vcm_idx);
-    fm = sqrt(lnls_meansqr(opt_vec));
+    fm = sqrt(sumsqr(opt_vec));
     residue = abs(best_fm-fm)/best_fm;
     if (fm < best_fm)
         best_fm      = fm;

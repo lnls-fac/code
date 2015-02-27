@@ -1,7 +1,10 @@
 function v = calc_residue_optics(the_ring, tune0, bpms, hcms, vcms, nper)
 
-DISPWEIGHT = 1e4;   % m
-TUNEWEIGHT = 1e8; % tune
+% Total lenght of the residue vector is 135182
+TRANSWEIGHT = 1/(180*(160 + 120))      * 1e2; % order of centimeters
+MIRWEIGHT   = 1/(10*120*(160 + 120)/4) * 1e2; % order of centimeters
+DISPWEIGHT  = 1/(180 + 10*120/2)       * 1e4; % order of tenth of milimeters
+TUNEWEIGHT  = 1/2                      * 1e2; % order of 10^-2
 
 % twiss0 = getappdata(0, 'TwissTheRing0');
 % if isempty(twiss0)
@@ -75,9 +78,9 @@ v = [v;A];
 %Translational Symmetries:
 sym = 10;
 A = circshift(Mxx,[nr_bpms, nr_hcms]/sym);
-v = [v; reshape(A-Mxx,nr_bpms*nr_hcms,nper)];
-A = circshift(Myy,[len_bpm, len_vcm]); %the last bpm turns into the first
-v = [v; reshape(A-Myy,nr_bpms*nr_vcms,nper)];
+v = [v; TRANSWEIGHT * reshape(A-Mxx,nr_bpms*nr_hcms,nper)];
+A = circshift(Myy,[nr_bpms, nr_vcms]/sym); %the last bpm turns into the first
+v = [v; TRANSWEIGHT * reshape(A-Myy,nr_bpms*nr_vcms,nper)];
 indcs = ~indcs;
 A = circshift(Dispersion(indcs,:,:),sum(indcs)/sym);
 v = [v; DISPWEIGHT * reshape(A-Dispersion(indcs,:,:),sum(indcs),nper)];
@@ -109,8 +112,8 @@ for i1=Psym
         Ax1 = mat2cell(Ax1,lenB/2*[1 1], lenH/2*[1 1]);
         Ay1 = mat2cell(Ay1,lenB/2*[1 1], lenV/2*[1 1]);
         D1 = mat2cell(D1,lenB/2*[1 1]);
-        Ax2(:,:,n) = (Ax1{1,1} - rot90(Ax1{2,2},2))';
-        Ay2(:,:,n) = (Ay1{1,1} - rot90(Ay1{2,2},2))';
+        Ax2(:,:,n) = MIRWEIGHT*(Ax1{1,1} - rot90(Ax1{2,2},2))';
+        Ay2(:,:,n) = MIRWEIGHT*(Ay1{1,1} - rot90(Ay1{2,2},2))';
         D2(:,:,n) = DISPWEIGHT * (D1{1} - fliplr(D1{2}))';
     end
     v = [v;reshape([Ax2;Ay2;D2],lenB/2*((lenH + lenV)/2+1),nper)];

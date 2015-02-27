@@ -109,26 +109,14 @@ r.config.static.girder.sigma_roll  =  0.20 * mrad * 1;
 % r.config.static.girder.sigma_pitch =  20 * mrad * 0;
 
 
-% parameters for slow correction algorithms
 
-% parameters for slow correction algorithms
+%% parameters for slow correction algorithms
 r.params.static.nper = 10; % for matrices calculation
-%cod
-% selection = [1 1 1   1 1 1   1 1 1];
-% selection = repmat(selection, 1, 20);
 r.params.static.bpm_idx = sort(findcells(r.params.the_ring, 'FamName', 'bpm'));
-% r.params.static.bpm_idx = r.params.static.bpm_idx(logical(selection));
-
-% selection = [1  1 1  0 1  1 0  1 1  1];
-% selection = repmat(selection, 1, 20);
 r.params.static.hcm_idx = sort(findcells(r.params.the_ring, 'FamName', 'hcm'));
-% r.params.static.hcm_idx = r.params.static.hcm_idx(logical(selection));
-
-% selection = [1  1 1  1 1  1];
-% selection = repmat(selection, 1, 20);
 r.params.static.vcm_idx = sort(findcells(r.params.the_ring, 'FamName', 'vcm'));
-% r.params.static.vcm_idx = r.params.static.vcm_idx(logical(selection));
 
+%cod
 r.params.static.cod_correction_flag = true;
 r.params.static.cod_sextupoles_ramp = [0 1];
 r.params.static.cod_svs        = 'all';
@@ -137,25 +125,25 @@ r.params.static.cod_tolerancia  = 1e-5;
 
 
 %optics
+r.params.static.optics_correction_flag = false;
 labels = {'qfa','qdb2','qfb','qdb1','qda','qf1','qf2','qf3','qf4'};
 knobs=[];
 for i=1:length(labels)
     knobs = [knobs, findcells(r.params.the_ring,'FamName',labels{i})];
 end
 r.params.static.kbs_idx = sort(knobs);
-r.params.static.optics_correction_flag = true;
 r.params.static.optics_svs     = 156;
 r.params.static.optics_max_nr_iter = 50;
 r.params.static.optics_tolerancia  = 1e-5;
 
 %coupling
+r.params.static.coup_correction_flag = false;
 labels = {'sda','sdb','sf1','sf4'};
 knobs=[];
 for i=1:length(labels)
     knobs = [knobs, findcells(r.params.the_ring,'FamName',labels{i})];
 end
 r.params.static.scm_idx = sort(knobs);
-r.params.static.coup_correction_flag = false;
 r.params.static.coup_svs       = 'all';
 r.params.static.coup_max_nr_iter = 50;
 r.params.static.coup_tolerancia  = 1e-5;
@@ -253,7 +241,7 @@ r.config.dynamic.families.quads.labels = {'qfa','qdb2','qfb','qdb1','qda',...
 r.config.dynamic.families.quads.nrsegs = ones(1,9);
 r.config.dynamic.families.sexts.labels = {'sda','sfa','sd1','sf1','sd2','sd3',...
                             'sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb'};
-r.config.dynamic.families.sexts.nrsegs = ones(1, 9);
+r.config.dynamic.families.sexts.nrsegs = ones(1, 14);
 r.config.dynamic.families.bends.labels = {'b1','b2','b3'};
 r.config.dynamic.families.bends.nrsegs = [2 2 2];
 r.config.dynamic.families.cbend.labels = {'bc'};

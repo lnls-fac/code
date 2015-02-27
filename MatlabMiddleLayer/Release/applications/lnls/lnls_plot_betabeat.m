@@ -1,4 +1,4 @@
-function lnls_plot_betabeat(config_fname, mach_fname)
+function lnls_plot_betabeat(default_path, config_fname, mach_fname)
 
 prompt = {'Submachine (bo/si)', 'symmetry', 'plot title'};
 defaultanswer = {'si', '10', 'V03-C03'};
@@ -9,14 +9,17 @@ symmetry = str2double(answer{2});
 plot_title = answer{3};
 size_font = 16;
 
-if ~exist('config_fname','var') || ~exist(config_fname, 'file')
+if ~exist('default_path','var'),
     default_path = fullfile(lnls_get_root_folder(), 'data','sirius',submachine);
+end
+if ~exist('config_fname','var') || ~exist(config_fname, 'file')
     [FileName,PathName,~] = uigetfile('*.mat','Select mat file with configs', default_path);
     if isnumeric(FileName), return; end
     config_fname = fullfile(PathName, FileName);
+    default_path = PathName;
 end
 if ~exist('mach_fname','var') || ~exist(mach_fname, 'file')
-    [FileName,PathName,~] = uigetfile('*.mat','Select matlab file with random machines',PathName);
+    [FileName,PathName,~] = uigetfile('*.mat','Select matlab file with random machines',default_path);
     if isnumeric(FileName), return; end
     mach_fname = fullfile(PathName, FileName);
 end
@@ -51,15 +54,15 @@ for i=1:length(mach)
     plot(h1, s, dbetax(i,sel), 'Color', [0.5 0.5 1]);
     plot(h1, s, -dbetay(i,sel), 'Color', [1 0.5 0.5]);
     fprintf('%03i | %6.2f %6.2f | %6.2f %6.2f \n', i, ...
-        max(abs(dbetax(i,:))), std(dbetax(i,:)), ...
-        max(abs(dbetay(i,:))), std(dbetay(i,:)));
+        max(dbetax(i,:)), sqrt(lnls_meansqr(dbetax(i,:))), ...
+        max(dbetay(i,:)), sqrt(lnls_meansqr(dbetay(i,:))));
 end
 fprintf('\n\n Estimative of emsemble properties:\n\n');
-fprintf('std (dbetax, dbetay) [%%]: (%.3f, %.3f)\n', std(dbetax(:)), std(dbetay(:)));
+fprintf('std (dbetax, dbetay) [%%]: (%.3f, %.3f)\n', sqrt(lnls_meansqr(dbetax(:))), sqrt(lnls_meansqr(dbetay(:))));
 fprintf('max (dbetax, dbetay) [%%]: (%.3f, %.3f)\n', max(dbetax(:)), max(dbetay(:)));
 
-plot(h1, s,  std(dbetax(:,sel)), 'Color', [0 0 1.0], 'LineWidth', 3);
-plot(h1, s, -std(dbetay(:,sel)), 'Color', [1.0 0 0], 'LineWidth', 3);
+plot(h1, s,  sqrt(lnls_meansqr(dbetax(:,sel))), 'Color', [0 0 1.0], 'LineWidth', 3);
+plot(h1, s, -sqrt(lnls_meansqr(dbetay(:,sel))), 'Color', [1.0 0 0], 'LineWidth', 3);
 line([min(s) max(s)], [0 0], 'Color', [0,0,0]);
 annotation('textbox', [0.75 0.87 0.05 0.05],'String',{'Horizontal'},'FontSize',16,'FontWeight','bold','FitBoxToText','off','LineStyle','none');
 annotation('textbox',[0.75 0.30 0.05 0.05],'String',{'Vertical'},'FontSize',16,'FontWeight','bold','FitBoxToText','off','LineStyle','none');
