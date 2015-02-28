@@ -6,7 +6,7 @@ import time
 import requests
 import pywikibot
 import pywikibot.pagegenerators
-import password
+import config
 
 
 PARAMETER_NS = 104
@@ -22,9 +22,9 @@ titles = []
 for page in g:
     titles.append(page.title())
 
-USER = 'afonso'
-PASSWORD = password.password
-BASEURL = 'http://10.0.21.163/mediawiki-1.23.1/api.php'
+USER = config.user
+PASSWORD = config.password
+BASEURL = config.baseurl + 'api.php'
 REASON = 'Change parameter naming scheme'
 
 prms = '?action=login&lgname=%s&lgpassword=%s&format=json' % (USER, PASSWORD)
