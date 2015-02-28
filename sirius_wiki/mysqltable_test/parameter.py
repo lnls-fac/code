@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 class Parameter:
-    
+
     def __init__(self, name, group='FAC', symbol='', is_derived=False, value=None, units='', deps='', obs=''):
         self.name        = name
         self.group       = group
         self.symbol      = symbol
         self.is_derived  = is_derived
-        self.value       = value 
+        self.value       = value
         self.units       = units
         self.deps        = deps
         self.obs         = obs
-        self.DEFAULT_OBS = 'Automatically generated, manual changes may be overwritten. Comments may be added in the [[Parameter_Talk:' + self.name + '|Discussion]] section of this page.'
+        #self.DEFAULT_OBS = 'Automatically generated, manual changes may be overwritten. Comments may be added in the [[Parameter_Talk:' + self.name + '|Discussion]] section of this page.'
 
     def __str__(self):
         r = (self.name + ': ' + str(self.value) + ' ' + self.units)
@@ -26,7 +26,7 @@ class Parameter:
     def create_wiki_deps(self):
         deps = ''
         for dep in self.deps:
-            if deps is not '': 
+            if deps is not '':
                 deps = deps + ', '
             deps = deps + '[[Parameter:' + str(dep) + '|' + str(dep) + ']]'
         return deps
@@ -52,5 +52,5 @@ class Parameter:
         obs = ''
         for s in self.obs:
             obs += '* ' + s + '\n'
-        obs += '* ' + self.DEFAULT_OBS + '\n'
+        #obs += '* ' + self.DEFAULT_OBS + '\n'
         return obs
