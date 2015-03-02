@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 Replace parameter names from pages, according to correspondence in dictionary.
@@ -7,16 +8,21 @@ Replace parameter names from pages, according to correspondence in dictionary.
 import re
 import pywikibot
 import pywikibot.pagegenerators
+import prmnametable
 
 
 PARAMETER_NS = 104
 TABLE_NS = 118
 
+NAMESPACES_TO_REPLACE = [
+    TABLE_NS,
+]
+
 PARAMETER_NS_STR = 'Parameter:'
 
-RE_LINK_WITH_TEMPLATE = '\[\[[^\]]*\{[^\[]*\]\]'
+RE_LINK_WITH_TEMPLATE = '\[\[[^\]]*\{[^\[#]*\]\]'
 RE_LINK_WITHOUT_TEMPLATE = '\[\[[^\]\{]*\]\]'
-RE_TEMPLATE = '\{\{[^\{]*\}\}'
+RE_TEMPLATE = '\{\{[^\{#]*\}\}'
 
 MACHINES = {
     'Linac': 'LI',
@@ -34,12 +40,7 @@ for m in MACHINES.keys() + MACHINES.values():
     for s in SPECIALISATIONS:
         TEMPLATES.append(m + ' ' + s)
 
-TABLE = {
-    'Storage ring beam gamma factor': 'SI beam gamma factor',
-    'Storage ring horizontal tune': 'SI optics tune horizontal',
-    'Storage ring vertical tune': 'SI optics tune vertical',
-    'Storage ring number of long straight sections': 'SI lattice long straight section number',
-}
+TABLE = prmnametable.TABLE
 
 
 def replace_parameters(text):
@@ -90,15 +91,18 @@ def get_link_replacement(link):
         return None
 
     parts = link.split('|')
+
     name = parts[0].lstrip(PARAMETER_NS_STR)
-    if name not in TABLE:
+    if name in TABLE:
+        name = TABLE[name]
+    else:
+        print(name + ' not in table!')
         return None
 
-    new_name = TABLE[name]
     if len(parts) == 1:
-        return '[[' + PARAMETER_NS_STR + new_name + ']]'
+        return '[[' + PARAMETER_NS_STR + name + ']]'
     elif len(parts) == 2:
-        return '[[' + PARAMETER_NS_STR + new_name + '|' + parts[1] + ']]'
+        return '[[' + PARAMETER_NS_STR + name + '|' + parts[1] + ']]'
     else:
         return None
 
@@ -145,6 +149,7 @@ def get_specialised_template_replacement(template, specialisation=None):
     if name in TABLE:
         name = TABLE[name]
     else:
+        print(name + ' not in table!')
         return None
     repl += name + '</' + tag + '>'
 
@@ -161,18 +166,14 @@ def strip_link_braces(link):
 
 if __name__ == '__main__':
     site = pywikibot.Site('en', 'siriuswiki')
-    g = pywikibot.pagegenerators.AllpagesPageGenerator(
-        site=site,
-        namespace=TABLE_NS
-    )
 
-    i = 0
-    pages = []
-    for page in g:
-        pages.append(page)
-        i += 1
+    for namespace in NAMESPACES_TO_REPLACE:
+        g = pywikibot.pagegenerators.AllpagesPageGenerator(
+            site=site,
+            namespace=namespace
+        )
 
-    page = pages[45]
-    text = replace_parameters(page.text)
-
-    print(text)
+        for page in g:
+            page.text = replace_parameters(page.text)
+            # page.save()
+            print(page.text)
