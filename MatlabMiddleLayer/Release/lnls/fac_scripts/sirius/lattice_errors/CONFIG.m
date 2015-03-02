@@ -171,7 +171,7 @@ r.params.static.tune_tolerancia      = 1e-6;
 
 %% Multipoles
 r.config.multipoles.cutoff_errors = 2;
-
+r.config.multipoles.sys_error_function = @sirius_si_multipole_systematic_errors;
 
 % famílias dos multipolos
 r.config.multipoles.families.quads.labels = {'qfa','qdb2','qfb','qdb1','qda',...

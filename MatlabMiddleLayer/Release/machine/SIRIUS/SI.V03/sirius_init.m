@@ -359,7 +359,7 @@ AO.qf4.Setpoint.DeltaRespMat  = 0.5;
 %%
 
 AO.sda.FamilyName = 'sda';
-AO.sda.MemberOf    = {'PlotFamily'; 'sda'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sda.MemberOf    = {'PlotFamily'; 'sda'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector';'SEXT-SKEW'};
 AO.sda.DeviceList  = getDeviceList(10,2);
 AO.sda.ElementList = (1:size(AO.sda.DeviceList,1))';
 AO.sda.Status      = ones(size(AO.sda.DeviceList,1),1);
@@ -381,7 +381,7 @@ AO.sda.Setpoint.Tolerance     = 0.2;
 AO.sda.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sfa.FamilyName = 'sfa';
-AO.sfa.MemberOf    = {'PlotFamily'; 'sfa'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sfa.MemberOf    = {'PlotFamily'; 'sfa'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
 AO.sfa.DeviceList  = getDeviceList(10,2);
 AO.sfa.ElementList = (1:size(AO.sfa.DeviceList,1))';
 AO.sfa.Status      = ones(size(AO.sfa.DeviceList,1),1);
@@ -403,7 +403,7 @@ AO.sfa.Setpoint.Tolerance     = 0.2;
 AO.sfa.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd1.FamilyName = 'sd1';
-AO.sd1.MemberOf    = {'PlotFamily'; 'sd1'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sd1.MemberOf    = {'PlotFamily'; 'sd1'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
 AO.sd1.DeviceList  = getDeviceList(10,2);
 AO.sd1.ElementList = (1:size(AO.sd1.DeviceList,1))';
 AO.sd1.Status      = ones(size(AO.sd1.DeviceList,1),1);
@@ -425,7 +425,7 @@ AO.sd1.Setpoint.Tolerance     = 0.2;
 AO.sd1.Setpoint.DeltaRespMat  = 0.5;
 
 AO.sf1.FamilyName = 'sf1';
-AO.sf1.MemberOf    = {'PlotFamily'; 'sf1'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sf1.MemberOf    = {'PlotFamily'; 'sf1'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-SKEW'};
 AO.sf1.DeviceList  = getDeviceList(10,2);
 AO.sf1.ElementList = (1:size(AO.sf1.DeviceList,1))';
 AO.sf1.Status      = ones(size(AO.sf1.DeviceList,1),1);
@@ -447,7 +447,7 @@ AO.sf1.Setpoint.Tolerance     = 0.2;
 AO.sf1.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd2.FamilyName = 'sd2';
-AO.sd2.MemberOf    = {'PlotFamily'; 'sd2'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sd2.MemberOf    = {'PlotFamily'; 'sd2'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
 AO.sd2.DeviceList  = getDeviceList(10,2);
 AO.sd2.ElementList = (1:size(AO.sd2.DeviceList,1))';
 AO.sd2.Status      = ones(size(AO.sd2.DeviceList,1),1);
@@ -469,7 +469,7 @@ AO.sd2.Setpoint.Tolerance     = 0.2;
 AO.sd2.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd3.FamilyName = 'sd3';
-AO.sd3.MemberOf    = {'PlotFamily'; 'sd3'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sd3.MemberOf    = {'PlotFamily'; 'sd3'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-VCM'};
 AO.sd3.DeviceList  = getDeviceList(10,2);
 AO.sd3.ElementList = (1:size(AO.sd3.DeviceList,1))';
 AO.sd3.Status      = ones(size(AO.sd3.DeviceList,1),1);
@@ -491,7 +491,7 @@ AO.sd3.Setpoint.Tolerance     = 0.2;
 AO.sd3.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sf2.FamilyName = 'sf2';
-AO.sf2.MemberOf    = {'PlotFamily'; 'sf2'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sf2.MemberOf    = {'PlotFamily'; 'sf2'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
 AO.sf2.DeviceList  = getDeviceList(10,2);
 AO.sf2.ElementList = (1:size(AO.sf2.DeviceList,1))';
 AO.sf2.Status      = ones(size(AO.sf2.DeviceList,1),1);
@@ -513,7 +513,7 @@ AO.sf2.Setpoint.Tolerance     = 0.2;
 AO.sf2.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd6.FamilyName = 'sd6';
-AO.sd6.MemberOf    = {'PlotFamily'; 'sd6'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sd6.MemberOf    = {'PlotFamily'; 'sd6'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
 AO.sd6.DeviceList  = getDeviceList(10,2);
 AO.sd6.ElementList = (1:size(AO.sd6.DeviceList,1))';
 AO.sd6.Status      = ones(size(AO.sd6.DeviceList,1),1);
@@ -535,7 +535,7 @@ AO.sd6.Setpoint.Tolerance     = 0.2;
 AO.sd6.Setpoint.DeltaRespMat  = 0.5;
 
 AO.sf4.FamilyName = 'sf4';
-AO.sf4.MemberOf    = {'PlotFamily'; 'sf4'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sf4.MemberOf    = {'PlotFamily'; 'sf4'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-SKEW'};
 AO.sf4.DeviceList  = getDeviceList(10,2);
 AO.sf4.ElementList = (1:size(AO.sf4.DeviceList,1))';
 AO.sf4.Status      = ones(size(AO.sf4.DeviceList,1),1);
@@ -557,7 +557,7 @@ AO.sf4.Setpoint.Tolerance     = 0.2;
 AO.sf4.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd5.FamilyName = 'sd5';
-AO.sd5.MemberOf    = {'PlotFamily'; 'sd5'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sd5.MemberOf    = {'PlotFamily'; 'sd5'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
 AO.sd5.DeviceList  = getDeviceList(10,2);
 AO.sd5.ElementList = (1:size(AO.sd5.DeviceList,1))';
 AO.sd5.Status      = ones(size(AO.sd5.DeviceList,1),1);
@@ -579,7 +579,7 @@ AO.sd5.Setpoint.Tolerance     = 0.2;
 AO.sd5.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd4.FamilyName = 'sd4';
-AO.sd4.MemberOf    = {'PlotFamily'; 'sd4'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sd4.MemberOf    = {'PlotFamily'; 'sd4'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-VCM'};
 AO.sd4.DeviceList  = getDeviceList(10,2);
 AO.sd4.ElementList = (1:size(AO.sd4.DeviceList,1))';
 AO.sd4.Status      = ones(size(AO.sd4.DeviceList,1),1);
@@ -601,7 +601,7 @@ AO.sd4.Setpoint.Tolerance     = 0.2;
 AO.sd4.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sf3.FamilyName = 'sf3';
-AO.sf3.MemberOf    = {'PlotFamily'; 'sf3'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sf3.MemberOf    = {'PlotFamily'; 'sf3'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
 AO.sf3.DeviceList  = getDeviceList(10,2);
 AO.sf3.ElementList = (1:size(AO.sf3.DeviceList,1))';
 AO.sf3.Status      = ones(size(AO.sf3.DeviceList,1),1);
@@ -623,7 +623,7 @@ AO.sf3.Setpoint.Tolerance     = 0.2;
 AO.sf3.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sfb.FamilyName = 'sfb';
-AO.sfb.MemberOf    = {'PlotFamily'; 'sfb'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sfb.MemberOf    = {'PlotFamily'; 'sfb'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
 AO.sfb.DeviceList  = getDeviceList(10,2);
 AO.sfb.ElementList = (1:size(AO.sfb.DeviceList,1))';
 AO.sfb.Status      = ones(size(AO.sfb.DeviceList,1),1);
@@ -645,7 +645,7 @@ AO.sfb.Setpoint.Tolerance     = 0.2;
 AO.sfb.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sdb.FamilyName = 'sdb';
-AO.sdb.MemberOf    = {'PlotFamily'; 'sdb'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'};
+AO.sdb.MemberOf    = {'PlotFamily'; 'sdb'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-SKEW'};
 AO.sdb.DeviceList  = getDeviceList(10,2);
 AO.sdb.ElementList = (1:size(AO.sdb.DeviceList,1))';
 AO.sdb.Status      = ones(size(AO.sdb.DeviceList,1),1);
