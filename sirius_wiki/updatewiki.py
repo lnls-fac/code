@@ -124,10 +124,10 @@ def lists_all_parameters():
             print('{0:03d}. {1}'.format(i+1, submachine.parameter_list[i].name))
     
     list_submachine(sirius_si)
-    list_submachine(sirius_bo)
-    list_submachine(sirius_li)
-    list_submachine(sirius_ts)
-    list_submachine(sirius_tb)
+    #list_submachine(sirius_bo)
+    #list_submachine(sirius_li)
+    #list_submachine(sirius_ts)
+    #list_submachine(sirius_tb)
     
 def print_help(argv):
     print('NAME')
