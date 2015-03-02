@@ -1,5 +1,5 @@
 
-"""
+
   Parameter(
     name='Booster reference position for multipole contribution for dipoles',
     group='FAC', is_derived=True,
@@ -295,7 +295,7 @@
     units='',
     deps=['Booster reference position for multipole contribution for quadrupoles'],
     obs=[r'Relative value, calculated at <math>r_0</math>.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 
+                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'),
                 'Rotating coil measurement of QF prototype magnets'],
   ),
 
@@ -464,7 +464,7 @@
     deps=[],
     obs=[],
   ),
-  
+
   Parameter(
     name='Booster systematic normal 18-pole error tolerance for sextupoles',
     group='FAC', is_derived=True,
@@ -786,16 +786,6 @@
   ),
 
   Parameter(
-    name='Booster extraction dipole integrated field',
-    group='FAC', is_derived=True,
-    value=Prms.bo_extraction_dipole_integrated_field,
-    symbol=r'(BL)_{ext}',
-    units='T.m',
-    deps=['Booster extraction beam magnetic rigidity','Booster dipole deflection angle'],
-    obs=[],
-  ),
-
-  Parameter(
     name='Booster horizontal betatron tune',
     group='FAC', is_derived=True,
     value=Prms.bo_horizontal_betatron_tune,
@@ -805,7 +795,7 @@
                 'Booster optics mode'],
     obs=[],
   ),
-                
+
   Parameter(
     name='Booster vertical betatron tune',
     group='FAC', is_derived=True,
@@ -816,7 +806,7 @@
                 'Booster optics mode'],
     obs=[],
   ),
-                  
+
   Parameter(
     name='Booster extraction synchrotron tune',
     group='FAC', is_derived=True,
@@ -828,7 +818,7 @@
     obs=[],
   ),
 
- 
+
 
   Parameter(
     name='Booster optics mode',
@@ -840,7 +830,7 @@
     obs=[],
   ),
 
- 
+
 
   Parameter(
     name='Booster extraction radiation integral I1',
@@ -863,7 +853,7 @@
                 'Booster lattice version'],
     obs=[r'<math>I_\text{2} = \oint{\frac{1}{\rho_x^2}\,ds}</math>'],
   ),
-   
+
   Parameter(
     name='Booster extraction radiation integral I3',
     group='FAC', is_derived=True,
@@ -874,7 +864,7 @@
                 'Booster lattice version'],
     obs=[r'<math>I_\text{3} = \oint{\frac{1}{|\rho_x|^3}\,ds}</math>'],
   ),
-                  
+
   Parameter(
     name='Booster extraction radiation integral I4',
     group='FAC', is_derived=True,
@@ -885,7 +875,7 @@
                 'Booster lattice version'],
     obs=[r'<math>I_\text{4} = \frac{\eta_x(s_0) \tan \theta(s_0)}{\rho_x^2} + \oint{\frac{\eta_x}{\rho_x^3} \left(1 + 2 \rho_x^2 k\right)\,ds} + \frac{\eta_x(s_1) \tan \theta(s_1)}{\rho_x^2}</math>'],
   ),
-                  
+
   Parameter(
     name='Booster extraction radiation integral I5',
     group='FAC', is_derived=True,
@@ -898,7 +888,7 @@
     obs=[r'<math>I_\text{5} = \oint{\frac{H_x}{|\rho_x|^3}\,ds}</math>',
                 r"<math>H_x \equiv \gamma_x \eta_x^2 + 2 \alpha_x \eta_x \eta_x^' + \beta_x {\eta_x^'}^2</math>"],
   ),
-                  
+
   Parameter(
     name='Booster extraction radiation integral I6',
     group='FAC', is_derived=True,
@@ -921,7 +911,7 @@
                 'Booster circumference'],
     obs=[r'<math>\alpha_\text{1} = \frac{I_\text{1}}{C}</math>'],
   ),
- 
+
   Parameter(
     name='Booster extraction beam magnetic rigidity',
     group='FAC', is_derived=True,
@@ -987,7 +977,7 @@
     obs=["Its value is derived from Robinson's sum rule.",
                 r'<math>J_s = 4 - J_x - J_y</math>'],
   ),
- 
+
   Parameter(
     name='Booster extraction natural emittance',
     group='FAC', is_derived=True,
@@ -1000,7 +990,7 @@
                 'Booster extraction radiation integral I2'],
     obs=[r'<math>\epsilon_0 = C_\text{q} \frac{\gamma^2}{J_x} \frac{I_\text{5}}{I_\text{2}}</math>'],
   ),
-  
+
   Parameter(
     name='Booster extraction natural energy spread',
     group='FAC', is_derived=True,
@@ -1013,7 +1003,7 @@
                 'Booster extraction radiation integral I4'],
     obs=[r'<math>\sigma_\delta = \sqrt{C_\text{q} \gamma^2 \frac{I_\text{3}}{2 I_\text{2} + I_\text{4}}}</math>'],
   ),
-  
+
   Parameter(
     name='Booster extraction horizontal radiation damping time',
     group='FAC', is_derived=True,
@@ -1082,7 +1072,7 @@
     deps=[],
     obs=[r'<math>B_\text{inj} = \frac{(B\rho)_\text{inj}}{\rho}</math>'],
   ),
-  
+
   Parameter(
     name='Booster extraction dipole magnetic field',
     group='FAC', is_derived=True,
@@ -1174,7 +1164,7 @@
                 'Booster harmonic number'],
     obs=[],
   ),
-  
+
   Parameter(
     name='Booster number of SF sextupoles',
     group='FAC', is_derived=True,
@@ -1244,7 +1234,7 @@
     deps=['Booster QF sextupole maximum strength', 'Booster extraction beam magnetic rigidity'],
     obs=[],
   ),
-        
+
   Parameter(
     name='Booster SD sextupole maximum strength',
     group='FAC', is_derived=True,
@@ -1254,7 +1244,7 @@
     deps=[],
     obs=[],
   ),
-     
+
   Parameter(
     name='Booster injection SD sextupole maximum gradient',
     group='FAC', is_derived=True,
@@ -1304,7 +1294,7 @@
     deps=['Booster QF quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
     obs=[],
   ),
-        
+
   Parameter(
     name='Booster QD quadrupole maximum strength',
     group='FAC', is_derived=True,
@@ -1314,7 +1304,7 @@
     deps=[],
     obs=[],
   ),
-     
+
   Parameter(
     name='Booster injection QD quadrupole maximum gradient',
     group='FAC', is_derived=True,
@@ -1334,7 +1324,7 @@
     deps=['Booster QD quadrupole maximum strength', 'Booster extraction beam magnetic rigidity'],
     obs=['Bipolar.'],
   ),
-                
+
   Parameter(
     name='Booster extraction energy loss per turn',
     group='FAC', is_derived=True,
@@ -1345,7 +1335,7 @@
                 'Booster extraction radiation integral I2'],
     obs=[r'<math>U_0 = \oint{P_\gamma dt} = \frac{C_\gamma}{2\pi} E^4_0 I_2</math>'],
   ),
-  
+
   Parameter(
     name='Booster extraction radiation power',
     group='FAC', is_derived=True,
@@ -1356,7 +1346,7 @@
                 'Booster beam current'],
     obs=[r'<math>P = U_0 I</math>'],
   ),
-  
+
   Parameter(
     name='Booster RF cavity peak voltage',
     group='FAC', is_derived=True,
@@ -1366,7 +1356,7 @@
     deps=[],
     obs=[],
   ),
-  
+
   Parameter(
     name='Booster extraction RF wavelength',
     group='FAC', is_derived=True,
@@ -1376,7 +1366,7 @@
     deps=['Booster extraction RF frequency'],
     obs=[r'<math>\lambda_\text{RF} = \frac{c}{f_\text{RF}}</math>'],
   ),
-  
+
   Parameter(
     name='Booster extraction overvoltage',
     group='FAC', is_derived=True,
@@ -1387,7 +1377,7 @@
                 'Booster extraction energy loss per turn'],
     obs=[r'<math>q = \frac{eV_\text{RF}}{U_0}</math>'],
   ),
-  
+
   Parameter(
     name='Booster extraction synchronous phase',
     group='FAC', is_derived=True,
@@ -1408,7 +1398,7 @@
                 'Booster synchrotron tune'],
     obs=[r'<math>f_s = f_\text{rev} \left( \nu_s - \lfloor \nu_s\rfloor \right)</math>'],
   ),
- 
+
   Parameter(
     name='Booster extraction RF energy acceptance',
     group='FAC', is_derived=True,
@@ -1423,7 +1413,7 @@
     obs=[r'<math>\epsilon_\text{max} = \sqrt{\frac{1}{\pi h \alpha_x} \frac{U_0}{E} F(q)}</math>',
                 r'<math>F(q) = 2 \left( \sqrt{q^2 - 1} - \cos^{-1} (1/q) \right)</math>'],
   ),
-                            
+
   Parameter(
     name='Booster extraction slip factor',
     group='FAC', is_derived=True,
@@ -1434,7 +1424,7 @@
                 'Booster extraction beam gamma factor'],
     obs=[r'<math>\eta = \alpha_1 - \frac{1}{\gamma^2}</math>'],
   ),
- 
+
   Parameter(
     name='Booster extraction natural bunch length',
     group='FAC', is_derived=True,
@@ -1509,28 +1499,6 @@
   ),
 
   Parameter(
-    name='Booster beam position monitors alignment error tolerance',
-    group='FAC', is_derived=True,
-    value=Prms.bo_beam_position_monitors_alignment_error_tolerance,
-    symbol=r'<math>E_{xy,\text{BPM}}</math>',
-    units=unicode('μm', encoding='utf-8'),
-    deps=[],
-    obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
-  ),
-                  
-  Parameter(
-    name='Booster dipoles alignment error tolerance',
-    group='FAC', is_derived=True,
-    value=Prms.bo_dipoles_alignment_error_tolerance,
-    symbol=r'<math>E_{xy,\text{DIP}}</math>',
-    units=unicode('μm', encoding='utf-8'),
-    deps=[],
-    obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
-  ),
-
-  Parameter(
     name='Booster quadrupoles alignment error tolerance',
     group='FAC', is_derived=True,
     value=Prms.bo_quadrupoles_alignment_error_tolerance,
@@ -1553,17 +1521,6 @@
   ),
 
   Parameter(
-    name='Booster dipoles rotation error tolerance',
-    group='FAC', is_derived=True,
-    value=Prms.bo_dipoles_rotation_error_tolerance,
-    symbol=r'<math>E_{\theta,\text{DIP}}</math>',
-    units='mrad',
-    deps=[],
-    obs=[r'Random rotation error (standard deviation) around longitudinal axis.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
-  ),
-
-  Parameter(
     name='Booster quadrupoles rotation error tolerance',
     group='FAC', is_derived=True,
     value=Prms.bo_quadrupoles_rotation_error_tolerance,
@@ -1582,17 +1539,6 @@
     units='mrad',
     deps=[],
     obs=[r'Random rotation error (standard deviation) around longitudinal axis.',
-                unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
-  ),
-
-  Parameter(
-    name='Booster dipoles excitation error tolerance',
-    group='FAC', is_derived=True,
-    value=Prms.bo_dipoles_excitation_error_tolerance,
-    symbol=r'<math>E_{\text{exc,DIP}}</math>',
-    units='%',
-    deps=[],
-    obs=[r'Static or low frequency random excitation error (standard deviation).',
                 unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')],
   ),
 
@@ -1628,5 +1574,3 @@
     deps=[],
     obs=[],
   ),
-      
-  """        
