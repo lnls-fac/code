@@ -8,7 +8,6 @@ TABLE = {
     'Booster cycling frequency': 'BO ramp cycling frequency',
 
     'Booster injection beam energy': 'BO beam injection energy',
-    #'Booster beam current': 'BO beam injection current',
     'Booster injection beam gamma factor': 'BO beam injection gamma factor',
     'Booster injection beam beta factor': 'BO beam injection beta factor',
     'Booster injection beam velocity': 'BO beam injection velocity',
@@ -43,17 +42,18 @@ TABLE = {
     'Booster hardedge sagitta of dipoles': 'BO magnet dipole hardedge sagitta',
     'Booster dipole quadrupole strength': 'BO magnet dipole hardedge quadrupole strength',
     'Booster dipole sextupole strength': 'BO magnet dipole hardedge sextupole strength',
+    'Booster dipole integrated field': 'BO magnet dipole extraction integrated field',
 
-    'Booster injection dipole magnetic field': 'BO magnet dipole hardedge magnetic field injection',
-    #'': 'BO magnet dipole hardedge critical energy injection',
-    'Booster extraction dipole magnetic field': 'BO magnet dipole hardedge magnetic field extraction',
-    #'': 'BO magnet dipole hardedge critical energy extraction',
+    'Booster injection dipole magnetic field': 'BO magnet dipole injection hardedge magnetic field',
+    #'': 'BO magnet dipole injection hardedge critical energy',
+    'Booster extraction dipole magnetic field': 'BO magnet dipole extraction hardedge magnetic field',
+    #'': 'BO magnet dipole extraction hardedge critical energy',
 
     'Booster optics mode': 'BO optics default mode',
     'Booster horizontal betatron tune': 'BO optics tune horizontal',
     'Booster vertical betatron tune': 'BO optics tune vertical',
-    #'': 'BO optics tune synchrotron injection',
-    'Booster extraction synchrotron tune': 'BO optics tune synchrotron extraction',
+    #'': 'BO optics injection tune synchrotron',
+    'Booster extraction synchrotron tune': 'BO optics extraction tune synchrotron',
     #'': 'BO optics chromaticity horizontal',
     #'': 'BO optics chromaticity vertical',
     'Booster horizontal natural chromaticity': 'BO optics natural chromaticity horizontal',
@@ -63,7 +63,10 @@ TABLE = {
     #'': 'BO optics extraction betatron frequency horizontal',
     #'': 'BO optics injection betatron frequency vertical',
     #'': 'BO optics extraction betatron frequency vertical',
-
+    'Booster beam position monitors alignment error tolerance': 'BO error alignment bpm',
+    'Booster dipoles alignment error tolerance': 'BO error alignment dipole',
+    'Booster dipoles excitation error tolerance': 'BO error excitation dipole',
+    'Booster dipoles rotation error tolerance': 'BO error rotation dipole',
 
 
     'Storage ring beam gamma factor': 'SI beam gamma factor',
