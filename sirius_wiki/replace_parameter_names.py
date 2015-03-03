@@ -42,50 +42,50 @@ for m in MACHINES.keys() + MACHINES.values():
 
 TABLE = prmnametable.TABLE
 
+flag_print = False
 
-def replace_parameters(text):
-    text = replace_links_with_templates(text)
-    text = replace_links(text)
-    text = replace_templates(text)
-
+def replace_parameters(text, parameters_not_in_table):
+    text = replace_links_with_templates(text, parameters_not_in_table)
+    text = replace_links(text, parameters_not_in_table)
+    text = replace_templates(text, parameters_not_in_table)
     return text
 
 
-def replace_links_with_templates(text):
+def replace_links_with_templates(text, parameters_not_in_table):
     links = re.findall(RE_LINK_WITH_TEMPLATE, text)
     for link in links:
         templates = re.findall(RE_TEMPLATE, link)
         if not len(templates) == 1:
             continue
 
-        repl = get_template_replacement(templates[0])
+        repl = get_template_replacement(templates[0], parameters_not_in_table)
         if repl is not None:
             text = text.replace(link, repl)
 
     return text
 
 
-def replace_links(text):
+def replace_links(text, parameters_not_in_table):
     links = re.findall(RE_LINK_WITHOUT_TEMPLATE, text)
     for link in links:
-        repl = get_link_replacement(link)
+        repl = get_link_replacement(link, parameters_not_in_table)
         if repl is not None:
             text = text.replace(link, repl)
 
     return text
 
 
-def replace_templates(text):
+def replace_templates(text, parameters_not_in_table):
     templates = re.findall(RE_TEMPLATE, text)
     for t in templates:
-        repl = get_template_replacement(t)
+        repl = get_template_replacement(t, parameters_not_in_table)
         if repl is not None:
             text = text.replace(t, repl)
 
     return text
 
 
-def get_link_replacement(link):
+def get_link_replacement(link, parameters_not_in_table):
     link = strip_link_braces(link)
     if not link.startswith(PARAMETER_NS_STR):
         return None
@@ -96,7 +96,9 @@ def get_link_replacement(link):
     if name in TABLE:
         name = TABLE[name]
     else:
-        print(name + ' not in table!')
+        parameters_not_in_table.add(name)
+        if flag_print:
+            print(name + ' not in table!')
         return None
 
     if len(parts) == 1:
@@ -107,7 +109,7 @@ def get_link_replacement(link):
         return None
 
 
-def get_template_replacement(template):
+def get_template_replacement(template, parameters_not_in_table):
     for T in TEMPLATES:
         if template.find(T) > 0:
             break
@@ -116,15 +118,15 @@ def get_template_replacement(template):
 
     for s in SPECIALISATIONS:
         if template.find(s) > 0:
-            repl = get_specialised_template_replacement(template, s)
+            repl = get_specialised_template_replacement(template, parameters_not_in_table, s)
             break
     else:
-        repl = get_specialised_template_replacement(template)
+        repl = get_specialised_template_replacement(template, parameters_not_in_table)
 
     return repl
 
 
-def get_specialised_template_replacement(template, specialisation=None):
+def get_specialised_template_replacement(template, parameters_not_in_table, specialisation=None):
     t = strip_template_braces(template)
     s = t.split('|')
 
@@ -149,7 +151,9 @@ def get_specialised_template_replacement(template, specialisation=None):
     if name in TABLE:
         name = TABLE[name]
     else:
-        print(name + ' not in table!')
+        parameters_not_in_table.add(name)
+        if flag_print:
+            print(name + ' not in table!')
         return None
     repl += name + '</' + tag + '>'
 
@@ -165,8 +169,11 @@ def strip_link_braces(link):
 
 
 if __name__ == '__main__':
+
+    REGEXP_title = 'Storage ring .*'
     site = pywikibot.Site('en', 'siriuswiki')
 
+    parameters_not_in_table = set()
     for namespace in NAMESPACES_TO_REPLACE:
         g = pywikibot.pagegenerators.AllpagesPageGenerator(
             site=site,
@@ -174,6 +181,12 @@ if __name__ == '__main__':
         )
 
         for page in g:
-            page.text = replace_parameters(page.text)
-            # page.save()
-            print(page.text)
+            searchobj =re.search(REGEXP_title, page.title())
+            if searchobj:
+                print('(' + str(len(parameters_not_in_table)) + ') -- ' + page.title())
+                page.text = replace_parameters(page.text, parameters_not_in_table )
+                #page.save()
+                #print(page.text.encode('utf-8'))
+    
+    for parameter in parameters_not_in_table:
+        print(parameter) 

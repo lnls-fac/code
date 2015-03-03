@@ -9,13 +9,13 @@ import pywikibot.pagegenerators
 import config
 
 
-NS_PARAMETER = 104
+PARAMETER_NS = 104
 
 site = pywikibot.Site('en', 'siriuswiki')
 
 g = pywikibot.pagegenerators.AllpagesPageGenerator(
     site=site,
-    namespace=NS_PARAMETER
+    namespace=PARAMETER_NS
 )
 
 titles = []

@@ -45,6 +45,13 @@ bo_optics_radiation_integral_i4 = -0.138994900353256 # [1/m]
 bo_optics_radiation_integral_i5 =  0.000202971145667 # [1/m]
 bo_optics_radiation_integral_i6 =  0.008106555542826 # [1/m]
 
+bo_error_alignment_bpm = 500 # [um]
+bo_error_alignment_dipole = 100 # [μm]
+
+bo_error_rotation_dipole = 0.5 # [mrad]
+
+bo_error_excitation_dipole = 0.1 # [%]
+
 
 
 """
@@ -94,15 +101,11 @@ bo_optics_radiation_integral_i6 =  0.008106555542826 # [1/m]
     bo_injection_dipole_sextupole_integrated_gradient  = - bo_dipole_sextupole_integrated_strength * bo_injection_beam_magnetic_rigidity  # [T/m]
     bo_injection_dipole_quadrupole_gradient = bo_injection_dipole_quadrupole_integrated_gradient / bo_hardedge_length_of_dipoles # [T/m]
     bo_injection_dipole_sextupole_gradient  = bo_injection_dipole_sextupole_integrated_gradient / bo_hardedge_length_of_dipoles # [T/m^2]
-    bo_extraction_dipole_integrated_field = bo_extraction_beam_magnetic_rigidity * (math.pi/180.0) * bo_dipole_deflection_angle # [T.m]
     bo_extraction_dipole_quadrupole_integrated_gradient = - bo_dipole_quadrupole_integrated_strength * bo_extraction_beam_magnetic_rigidity # [T]
     bo_extraction_dipole_sextupole_integrated_gradient  = - bo_dipole_sextupole_integrated_strength * bo_extraction_beam_magnetic_rigidity  # [T/m]
     bo_extraction_dipole_quadrupole_gradient = bo_extraction_dipole_quadrupole_integrated_gradient / bo_hardedge_length_of_dipoles # [T/m]
     bo_extraction_dipole_sextupole_gradient  = bo_extraction_dipole_sextupole_integrated_gradient / bo_hardedge_length_of_dipoles # [T/m^2]
 
-    bo_dipoles_alignment_error_tolerance    = 100 # [μm]
-    bo_dipoles_rotation_error_tolerance     = 0.5 # [mrad]
-    bo_dipoles_excitation_error_tolerance   = 0.1 # [%]
     bo_reference_position_for_multipole_contribution_for_dipoles = 17.5 # [mm]
 
     bo_systematic_normal_8_pole_error_tolerance_for_dipoles  =  4.0e-4 # segmented model of the dipole shows much
@@ -206,8 +209,7 @@ bo_optics_radiation_integral_i6 =  0.008106555542826 # [1/m]
     bo_random_skew_18_pole_error_tolerance_for_sextupoles   = 1.0e-4
     bo_random_skew_20_pole_error_tolerance_for_sextupoles   = 1.0e-4
 
-    '''bpms'''
-    bo_beam_position_monitors_alignment_error_tolerance = 500 # [um]
+
 
     '''orbit correction system'''
     bo_number_of_beam_position_monitors = 50
@@ -259,6 +261,7 @@ parameter_list = [
   Parameter(name='BO magnet dipole number',                         group='FAC', is_derived=False, value=bo_magnet_dipole_number, symbol=r'<math>N_\text{dip}</math>', units='', deps=[], obs=[], ),
   Parameter(name='BO magnet dipole deflection angle',               group='FAC', is_derived=False, value=bo_magnet_dipole_deflection_angle, symbol=r'<math>\theta_\text{dip}</math>', units=unicode('°',encoding='utf-8'), deps=[], obs=[], ),
   Parameter(name='BO magnet dipole hardedge length',                group='FAC', is_derived=False, value=bo_magnet_dipole_hardedge_length, symbol=r'<math>L_\text{dip}</math>', units='m', deps=[], obs=[], ),
+  Parameter(name='BO magnet dipole extraction integrated field', group='FAC', is_derived=True, value='"BO beam extraction magnetic rigidity" * deg2rad("BO magnet dipole deflection angle")', symbol=r'(BL)_{ext}', units='T.m', deps=[], obs=[], ),
   Parameter(name='BO magnet dipole integrated quadrupole strength', group='FAC', is_derived=False, value=bo_magnet_dipole_integrated_quadrupole_strength, symbol=r'<math>(LK)_\text{dip}</math>', units='m<sup>-1</sup>', deps=[], obs=[],),
   Parameter(name='BO magnet dipole integrated sextupole strength',  group='FAC', is_derived=False, value=bo_magnet_dipole_integrated_sextupole_strength, symbol=r'<math>(LS)_\text{dip}</math>', units='m<sup>-2</sup>', deps=[], obs=[],),
 
@@ -267,16 +270,16 @@ parameter_list = [
   Parameter(name='BO magnet dipole hardedge quadrupole strength',   group='FAC', is_derived=True,  value='"BO magnet dipole integrated quadrupole strength"/"BO magnet dipole hardedge length"', symbol=r'<math>K_\text{dip}</math>', units='m<sup>-2</sup>', obs=[r'<math>K_\text{dip} \equiv \frac{(LK)_\text{dip}}{L_\text{dip}}</math>'],),
   Parameter(name='BO magnet dipole hardedge sextupole strength',    group='FAC', is_derived=True,  value='"BO magnet dipole integrated sextupole strength"/"BO magnet dipole hardedge length"', symbol=r'<math>S_\text{dip}</math>', units='m<sup>-3</sup>', obs=[r'<math>S_\text{dip} \equiv \frac{(LS)_\text{dip}}{L_\text{dip}}</math>'],),
 
-  Parameter(name='BO magnet dipole hardedge magnetic field injection',  group='FAC', is_derived=True, value='"BO beam injection magnetic rigidity" / "BO magnet dipole hardedge bending radius"', symbol=r'<math>B_\text{inj}</math>', units='T', obs=[r'<math>B_\text{inj} = \frac{(B\rho)}{\rho}</math>'], ),
-  Parameter(name='BO magnet dipole hardedge critical energy injection', group='FAC', is_derived=True, value='critical_energy("BO beam injection gamma factor", "BO magnet dipole hardedge bending radius")', symbol=r'<math>\epsilon_\text{c,inj}</math>', units='keV', obs=[r'<math>\epsilon_\text{c,inj} = \frac{3}{2} \hbar c \frac{\gamma_\text{inj}^3}{\rho}</math>'], ),
-  Parameter(name='BO magnet dipole hardedge magnetic field extraction',  group='FAC', is_derived=True, value='"BO beam extraction magnetic rigidity" / "BO magnet dipole hardedge bending radius"', symbol=r'<math>B_\text{ext}</math>', units='T', obs=[r'<math>B_\text{ext} = \frac{(B\rho)}{\rho}</math>'], ),
-  Parameter(name='BO magnet dipole hardedge critical energy extraction', group='FAC', is_derived=True, value='critical_energy("BO beam extraction gamma factor", "BO magnet dipole hardedge bending radius")', symbol=r'<math>\epsilon_\text{c,ext}</math>', units='keV', obs=[r'<math>\epsilon_\text{c,ext} = \frac{3}{2} \hbar c \frac{\gamma_\text{ext}^3}{\rho}</math>'], ),
+  Parameter(name='BO magnet dipole injection hardedge magnetic field',  group='FAC', is_derived=True, value='"BO beam injection magnetic rigidity" / "BO magnet dipole hardedge bending radius"', symbol=r'<math>B_\text{inj}</math>', units='T', obs=[r'<math>B_\text{inj} = \frac{(B\rho)}{\rho}</math>'], ),
+  Parameter(name='BO magnet dipole injection hardedge critical energy', group='FAC', is_derived=True, value='critical_energy("BO beam injection gamma factor", "BO magnet dipole hardedge bending radius")', symbol=r'<math>\epsilon_\text{c,inj}</math>', units='keV', obs=[r'<math>\epsilon_\text{c,inj} = \frac{3}{2} \hbar c \frac{\gamma_\text{inj}^3}{\rho}</math>'], ),
+  Parameter(name='BO magnet dipole extraction hardedge magnetic field',  group='FAC', is_derived=True, value='"BO beam extraction magnetic rigidity" / "BO magnet dipole hardedge bending radius"', symbol=r'<math>B_\text{ext}</math>', units='T', obs=[r'<math>B_\text{ext} = \frac{(B\rho)}{\rho}</math>'], ),
+  Parameter(name='BO magnet dipole extraction hardedge critical energy', group='FAC', is_derived=True, value='critical_energy("BO beam extraction gamma factor", "BO magnet dipole hardedge bending radius")', symbol=r'<math>\epsilon_\text{c,ext}</math>', units='keV', obs=[r'<math>\epsilon_\text{c,ext} = \frac{3}{2} \hbar c \frac{\gamma_\text{ext}^3}{\rho}</math>'], ),
 
   Parameter(name='BO optics default mode',  group='FAC', is_derived=False, value=bo_optics_default_mode, symbol='', units='', obs=[], ),
   Parameter(name='BO optics tune horizontal',  group='FAC', is_derived=False, value=bo_optics_tune_horizontal, symbol=r'<math>\nu_x</math>', units='', deps=['BO optics default mode'], obs=[], ),
   Parameter(name='BO optics tune vertical',  group='FAC', is_derived=False, value=bo_optics_tune_vertical, symbol=r'<math>\nu_y</math>', units='', deps=['BO optics default mode'], obs=[], ),
-  Parameter(name='BO optics tune synchrotron injection',   group='FAC', is_derived=False, value=bo_optics_tune_synchrotron_injection, symbol=r'<math>\nu_\text{s, inj}</math>', units='', deps=['BO optics default mode'], obs=[], ),
-  Parameter(name='BO optics tune synchrotron extraction',  group='FAC', is_derived=False, value=bo_optics_tune_synchrotron_extraction, symbol=r'<math>\nu_\text{s, ext}</math>', units='', deps=['BO optics default mode'], obs=[], ),
+  Parameter(name='BO optics injection tune synchrotron',   group='FAC', is_derived=False, value=bo_optics_tune_synchrotron_injection, symbol=r'<math>\nu_\text{s, inj}</math>', units='', deps=['BO optics default mode'], obs=[], ),
+  Parameter(name='BO optics extraction tune synchrotron',  group='FAC', is_derived=False, value=bo_optics_tune_synchrotron_extraction, symbol=r'<math>\nu_\text{s, ext}</math>', units='', deps=['BO optics default mode'], obs=[], ),
   Parameter(name='BO optics chromaticity horizontal',  group='FAC', is_derived=False, value=bo_optics_chromaticity_horizontal, symbol=r'<math>\xi_x</math>', units='', deps=['BO optics default mode'], obs=[], ),
   Parameter(name='BO optics chromaticity vertical',    group='FAC', is_derived=False, value=bo_optics_chromaticity_vertical,   symbol=r'<math>\xi_y</math>', units='', deps=['BO optics default mode'], obs=[], ),
   Parameter(name='BO optics natural chromaticity horizontal',  group='FAC', is_derived=False, value=bo_optics_natural_chromaticity_horizontal, symbol=r'<math>\xi_{0,x}</math>', units='', deps=['BO optics default mode'], obs=[], ),
@@ -286,5 +289,13 @@ parameter_list = [
   Parameter(name='BO optics extraction betatron frequency horizontal', group='FAC', is_derived=True, value='frequency_from_tune("BO beam extraction revolution frequency", "BO optics tune horizontal")', symbol=r'<math>f_\text{x, ext}</math>', units='kHz', obs=[r'<math>f_\text{x, ext} \equiv f_\text{inj,rev} \text{frac}(\nu_x)</math>'], ),
   Parameter(name='BO optics injection betatron frequency vertical',  group='FAC', is_derived=True, value='frequency_from_tune("BO beam injection revolution frequency",  "BO optics tune vertical")', symbol=r'<math>f_\text{y, inj}</math>', units='kHz', obs=[r'<math>f_\text{y, inj} \equiv f_\text{inj,rev} \text{frac}(\nu_y)</math>'], ),
   Parameter(name='BO optics extraction betatron frequency vertical', group='FAC', is_derived=True, value='frequency_from_tune("BO beam extraction revolution frequency", "BO optics tune vertical")', symbol=r'<math>f_\text{y, ext}</math>', units='kHz', obs=[r'<math>f_\text{y, ext} \equiv f_\text{inj,rev} \text{frac}(\nu_y)</math>'], ),
+
+  Parameter(name='BO error alignment bpm', group='FAC', is_derived=False, value=bo_error_alignment_bpm, symbol=r'<math>E_{xy,\text{BPM}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')]),
+  Parameter(name='BO error alignment dipole', group='FAC', is_derived=False, value=bo_error_alignment_dipole, symbol=r'<math>E_{xy,\text{DIP}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')]),
+
+  Parameter(name='BO error excitation dipole', group='FAC', is_derived=False, value=bo_error_excitation_dipole, symbol=r'<math>E_{\text{exc,DIP}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')]),
+
+  Parameter(name='BO error rotation dipole', group='FAC', is_derived=False, value=bo_error_rotation_dipole, symbol=r'<math>E_{\theta,\text{DIP}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')]),
+
 
 ]
