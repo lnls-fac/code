@@ -66,9 +66,9 @@ the_ring0 = start_at_last_element(the_ring0, 'mc'); % shifts model to start at c
 twiss0 = calc_short_twiss(the_ring0); % calcs original twiss parameters
 fprintf('tunes: %9.6f %9.6f\n', twiss0.tunes(1), twiss0.tunes(2));
 
+
 % inserts IDs and does initial symmetrization
 the_ring = insert_ids_set(the_ring0, ids, 1.0);
-%the_ring = insert_ids_set(the_ring0, ids2, 1.0);
 the_ring = locally_symmetrize_ids(the_ring, twiss0, ids, fitting_tol_symm, max_nr_iters);
 
 
@@ -82,17 +82,12 @@ for i=1:3
         nr_iters = nr_iters + 1;
     end
     twiss = calc_short_twiss(the_ring);
-
     the_ring = locally_symmetrize_ids(the_ring, twiss, ids, fitting_tol_symm, max_nr_iters);
-    %twiss = calc_short_twiss(the_ring); % calcs original twiss parameters
-
 end
 
 % saves lattice model with ids
 the_ring = restore_lattice_ordering(the_ring);
 save('the_ring_withids.mat', 'the_ring');
-%save('the_ring_withids_ac10_5_2014-05-15_phase2.mat', 'the_ring');
-
 
 
 function the_ring = insert_ids_set(the_ring_old, ids, strength)
@@ -157,7 +152,7 @@ end
 
 function the_ring = restore_lattice_ordering(the_ring_old)
 
-the_ring = start_at_first_element(the_ring_old, 'inicio');
+the_ring = start_at_first_element(the_ring_old, 'start');
 
 % re-label all quadrupolos flanking IDs to original strings
 dipoles = findcells(the_ring, 'BendingAngle');

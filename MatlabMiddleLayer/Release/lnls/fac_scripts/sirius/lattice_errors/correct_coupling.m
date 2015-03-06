@@ -11,7 +11,7 @@ fprintf('Tolerância : %7.2e\n\n', tolerancia);
 machine = r.machine;
 
 fprintf('mac | Max Kl |  chi2  | Tilt  |      Coup[%%]      | NIters | NRedStr\n');
-fprintf('    | [1/mm] |        | [deg] |  Ey/Ex  | Tracking|        |\n');
+fprintf('    | [1/Km] |        | [deg] |  Ey/Ex  | Tracking|        |\n');
 fprintf('%s',repmat('-',1,69));
 for i=selection
         R=0;
@@ -37,7 +37,7 @@ for i=selection
             ' ', 1000*max(abs(skewstr)), bestFM, std(T2)*180/pi,  100*[R2, RTr2], iter, n_times);
         fprintf('%s',repmat('-',1,69));
 end
-fprintf('\n');
+fprintf('\n\n');
 
 
 function [the_ring, skewstr, init_fm,best_fm, iter, n_times] = coup_sg(r, nr_sing_values,...
