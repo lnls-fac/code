@@ -111,13 +111,13 @@ def get_link_replacement(link, parameters_not_in_table):
 
 def get_template_replacement(template, parameters_not_in_table):
     for T in TEMPLATES:
-        if template.find(T) > 0:
+        if template.find(T) >= 0:
             break
     else:
         return None
 
     for s in SPECIALISATIONS:
-        if template.find(s) > 0:
+        if template.find(s) >= 0:
             repl = get_specialised_template_replacement(template, parameters_not_in_table, s)
             break
     else:
@@ -187,9 +187,9 @@ if __name__ == '__main__':
                 page.text = replace_parameters(page.text, parameters_not_in_table )
                 #page.save()
                 #print(page.text.encode('utf-8'))
-    
+   
     print('')
     print('-- parameters not found in the conversion table --')
     print('')
     for parameter in parameters_not_in_table:
-        print(parameter) 
+        print(parameter)
