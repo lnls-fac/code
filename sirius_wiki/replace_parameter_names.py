@@ -9,7 +9,7 @@ import re
 import pywikibot
 import pywikibot.pagegenerators
 import prmnametable
-
+import sirius_si
 
 PARAMETER_NS = 104
 TABLE_NS = 118
@@ -188,5 +188,8 @@ if __name__ == '__main__':
                 #page.save()
                 #print(page.text.encode('utf-8'))
     
+    print('')
+    print('-- parameters not found in the conversion table --')
+    print('')
     for parameter in parameters_not_in_table:
         print(parameter) 
