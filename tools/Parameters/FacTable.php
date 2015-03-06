@@ -294,9 +294,6 @@ class FacEvaluator extends FacConnection {
     );
     static $valid_operators = array('+', '-', '*', '/');
     static $valid_functions = array(
-        'sqrt', 'pow', 'exp',
-        'asin', 'acos', 'atan',
-        'sin', 'cos', 'tan',
         'deg2rad', 'rad2deg',
         'joule_2_ev', 'gamma', 'beta',
         'velocity', 'brho', 'critical_energy',
@@ -307,7 +304,10 @@ class FacEvaluator extends FacConnection {
         'Js', 'frequency_from_tune', 'damping_time',
         'radiation_power', 'rf_wavelength', 'slip_factor',
         'bunch_length', 'bunch_duration', 'id_deflection_parameter',
-        'id_mean_power'
+        'id_mean_power',
+        'sqrt', 'pow', 'exp',
+        'asin', 'acos', 'atan',
+        'sin', 'cos', 'tan',
     );
     static $valid_constants = array(
         '$light_speed', '$vacuum_permeability', '$elementary_charge',
