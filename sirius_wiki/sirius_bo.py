@@ -87,6 +87,74 @@ bo_error_alignment_sextupole = 100 # [μm]
 bo_error_rotation_sextupole = 0.5 # [mrad]
 bo_error_excitation_sextupole = 0.2 # [%]
 
+bo_error_multipole_dipole_reference_position = 17.5 # [mm]
+
+bo_error_multipole_dipole_systematic_normal_8_pole  =  4.0e-4 # segmented model of the dipole shows much
+bo_error_multipole_dipole_systematic_normal_10_pole = -3.6e-4 # lower multipole errors. Nevertheless these values are
+bo_error_multipole_dipole_systematic_normal_12_pole =  2.7e-4 # kept as spec for real measurements.
+bo_error_multipole_dipole_systematic_normal_14_pole = -1.3e-4
+
+bo_error_multipole_dipole_random_normal_6_pole      =  5.5e-4
+bo_error_multipole_dipole_random_normal_8_pole      =  4.0e-4
+bo_error_multipole_dipole_random_normal_10_pole     =  4.0e-4
+bo_error_multipole_dipole_random_normal_12_pole     =  4.0e-4
+bo_error_multipole_dipole_random_normal_14_pole     =  4.0e-4
+bo_error_multipole_dipole_random_normal_16_pole     =  4.0e-4
+bo_error_multipole_dipole_random_normal_18_pole     =  4.0e-4
+
+bo_error_multipole_dipole_random_skew_6_pole        =  1.0e-4
+bo_error_multipole_dipole_random_skew_8_pole        =  1.0e-4
+bo_error_multipole_dipole_random_skew_10_pole       =  1.0e-4
+bo_error_multipole_dipole_random_skew_12_pole       =  1.0e-4
+bo_error_multipole_dipole_random_skew_14_pole       =  1.0e-4
+bo_error_multipole_dipole_random_skew_16_pole       =  1.0e-4
+bo_error_multipole_dipole_random_skew_18_pole       =  1.0e-4
+
+bo_error_multipole_quadrupole_reference_position = 17.5 # [mm]
+
+bo_error_multipole_quadrupole_systematic_normal_12_pole = -1.00e-3
+bo_error_multipole_quadrupole_systematic_normal_20_pole = +1.10e-3
+bo_error_multipole_quadrupole_systematic_normal_28_pole = +0.08e-3
+
+bo_error_multipole_quadrupole_random_normal_6_pole  = 7.0e-4
+bo_error_multipole_quadrupole_random_normal_8_pole  = 4.0e-4
+
+bo_error_multipole_quadrupole_random_normal_10_pole = 4.0e-4
+bo_error_multipole_quadrupole_random_normal_12_pole = 4.0e-4
+bo_error_multipole_quadrupole_random_normal_14_pole = 4.0e-4
+bo_error_multipole_quadrupole_random_normal_16_pole = 4.0e-4
+bo_error_multipole_quadrupole_random_normal_18_pole = 4.0e-4
+bo_error_multipole_quadrupole_random_normal_20_pole = 4.0e-4
+
+bo_error_multipole_quadrupole_random_skew_6_pole    =10.0e-4
+bo_error_multipole_quadrupole_random_skew_8_pole    = 5.0e-4
+bo_error_multipole_quadrupole_random_skew_10_pole   = 1.0e-4
+bo_error_multipole_quadrupole_random_skew_12_pole   = 1.0e-4
+bo_error_multipole_quadrupole_random_skew_14_pole   = 1.0e-4
+bo_error_multipole_quadrupole_random_skew_16_pole   = 1.0e-4
+bo_error_multipole_quadrupole_random_skew_18_pole   = 1.0e-4
+bo_error_multipole_quadrupole_random_skew_20_pole   = 1.0e-4
+
+bo_error_multipole_sextupole_reference_position = 17.5 # [mm]
+
+bo_error_multipole_sextupole_systematic_normal_18_pole = -2.4e-2
+bo_error_multipole_sextupole_systematic_normal_30_pole = -1.7e-2
+
+bo_error_multipole_sextupole_random_normal_8_pole  = 4.0e-4
+bo_error_multipole_sextupole_random_normal_10_pole = 4.0e-4
+bo_error_multipole_sextupole_random_normal_12_pole = 4.0e-4
+bo_error_multipole_sextupole_random_normal_14_pole = 4.0e-4
+bo_error_multipole_sextupole_random_normal_16_pole = 4.0e-4
+bo_error_multipole_sextupole_random_normal_18_pole = 4.0e-5
+bo_error_multipole_sextupole_random_normal_20_pole = 4.0e-5
+
+bo_error_multipole_sextupole_random_skew_8_pole    = 1.0e-4
+bo_error_multipole_sextupole_random_skew_10_pole   = 1.0e-4
+bo_error_multipole_sextupole_random_skew_12_pole   = 1.0e-4
+bo_error_multipole_sextupole_random_skew_14_pole   = 1.0e-4
+bo_error_multipole_sextupole_random_skew_16_pole   = 1.0e-4
+bo_error_multipole_sextupole_random_skew_18_pole   = 1.0e-4
+bo_error_multipole_sextupole_random_skew_20_pole   = 1.0e-4
 
 """
     bo_optics_beam_size_horizontal_long_straight_section  = 7.009486798878925E+01 #[um]
@@ -101,74 +169,7 @@ bo_error_excitation_sextupole = 0.2 # [%]
     bo_optics_beam_divergence_vertical_long_straight_section    = 8.536265817057522E-01 #[urad]
     bo_optics_beam_divergence_vertical_short_straight_section   = 1.415244044631019E+00 #[urad]
     bo_optics_beam_divergence_vertical_dipole_bc                = 6.866611249310436E-01 #[urad]
-
-    ''' dipoles '''
-
-    bo_reference_position_for_multipole_contribution_for_dipoles = 17.5 # [mm]
-
-    bo_systematic_normal_8_pole_error_tolerance_for_dipoles  =  4.0e-4 # segmented model of the dipole shows much
-    bo_systematic_normal_10_pole_error_tolerance_for_dipoles = -3.6e-4 # lower multipole errors. Nevertheless these values are
-    bo_systematic_normal_12_pole_error_tolerance_for_dipoles =  2.7e-4 # kept as spec for real measurements.
-    bo_systematic_normal_14_pole_error_tolerance_for_dipoles = -1.3e-4 #
-    bo_random_normal_6_pole_error_tolerance_for_dipoles      =  5.5e-4
-    bo_random_normal_8_pole_error_tolerance_for_dipoles      =  4.0e-4
-    bo_random_normal_10_pole_error_tolerance_for_dipoles     =  4.0e-4
-    bo_random_normal_12_pole_error_tolerance_for_dipoles     =  4.0e-4
-    bo_random_normal_14_pole_error_tolerance_for_dipoles     =  4.0e-4
-    bo_random_normal_16_pole_error_tolerance_for_dipoles     =  4.0e-4
-    bo_random_normal_18_pole_error_tolerance_for_dipoles     =  4.0e-4
-    bo_random_skew_6_pole_error_tolerance_for_dipoles        =  1.0e-4
-    bo_random_skew_8_pole_error_tolerance_for_dipoles        =  1.0e-4
-    bo_random_skew_10_pole_error_tolerance_for_dipoles       =  1.0e-4
-    bo_random_skew_12_pole_error_tolerance_for_dipoles       =  1.0e-4
-    bo_random_skew_14_pole_error_tolerance_for_dipoles       =  1.0e-4
-    bo_random_skew_16_pole_error_tolerance_for_dipoles       =  1.0e-4
-    bo_random_skew_18_pole_error_tolerance_for_dipoles       =  1.0e-4
-
-    ''' quadrupoles '''
-
-    bo_reference_position_for_multipole_contribution_for_quadrupoles = 17.5 # [mm]
-    bo_systematic_normal_12_pole_error_tolerance_for_quadrupoles = -1.00e-3
-    bo_systematic_normal_20_pole_error_tolerance_for_quadrupoles = +1.10e-3
-    bo_systematic_normal_28_pole_error_tolerance_for_quadrupoles = +0.08e-3
-    bo_random_normal_6_pole_error_tolerance_for_quadrupoles  = 7.0e-4
-    bo_random_normal_8_pole_error_tolerance_for_quadrupoles  = 4.0e-4
-    bo_random_normal_10_pole_error_tolerance_for_quadrupoles = 4.0e-4
-    bo_random_normal_12_pole_error_tolerance_for_quadrupoles = 4.0e-4
-    bo_random_normal_14_pole_error_tolerance_for_quadrupoles = 4.0e-4
-    bo_random_normal_16_pole_error_tolerance_for_quadrupoles = 4.0e-4
-    bo_random_normal_18_pole_error_tolerance_for_quadrupoles = 4.0e-4
-    bo_random_normal_20_pole_error_tolerance_for_quadrupoles = 4.0e-4
-    bo_random_skew_6_pole_error_tolerance_for_quadrupoles    =10.0e-4
-    bo_random_skew_8_pole_error_tolerance_for_quadrupoles    = 5.0e-4
-    bo_random_skew_10_pole_error_tolerance_for_quadrupoles   = 1.0e-4
-    bo_random_skew_12_pole_error_tolerance_for_quadrupoles   = 1.0e-4
-    bo_random_skew_14_pole_error_tolerance_for_quadrupoles   = 1.0e-4
-    bo_random_skew_16_pole_error_tolerance_for_quadrupoles   = 1.0e-4
-    bo_random_skew_18_pole_error_tolerance_for_quadrupoles   = 1.0e-4
-    bo_random_skew_20_pole_error_tolerance_for_quadrupoles   = 1.0e-4
-
-    '''sextupoles'''
-
-    bo_reference_position_for_multipole_contribution_for_sextupoles = 17.5 # [mm]
-    bo_systematic_normal_18_pole_error_tolerance_for_sextupoles = -2.4e-2
-    bo_systematic_normal_30_pole_error_tolerance_for_sextupoles = -1.7e-2
-    bo_random_normal_8_pole_error_tolerance_for_sextupoles  = 4.0e-4
-    bo_random_normal_10_pole_error_tolerance_for_sextupoles = 4.0e-4
-    bo_random_normal_12_pole_error_tolerance_for_sextupoles = 4.0e-4
-    bo_random_normal_14_pole_error_tolerance_for_sextupoles = 4.0e-4
-    bo_random_normal_16_pole_error_tolerance_for_sextupoles = 4.0e-4
-    bo_random_normal_18_pole_error_tolerance_for_sextupoles = 4.0e-5
-    bo_random_normal_20_pole_error_tolerance_for_sextupoles = 4.0e-5
-    bo_random_skew_8_pole_error_tolerance_for_sextupoles    = 1.0e-4
-    bo_random_skew_10_pole_error_tolerance_for_sextupoles   = 1.0e-4
-    bo_random_skew_12_pole_error_tolerance_for_sextupoles   = 1.0e-4
-    bo_random_skew_14_pole_error_tolerance_for_sextupoles   = 1.0e-4
-    bo_random_skew_16_pole_error_tolerance_for_sextupoles   = 1.0e-4
-    bo_random_skew_18_pole_error_tolerance_for_sextupoles   = 1.0e-4
-    bo_random_skew_20_pole_error_tolerance_for_sextupoles   = 1.0e-4
 """
-
 
 parameter_list = [
     Parameter(name='BO lattice version', group='FAC', is_derived=False, value=bo_lattice_version, symbol='', units='', deps=[], obs=[], ),
@@ -320,4 +321,72 @@ parameter_list = [
     Parameter(name='BO error excitation sextupole', group='FAC', is_derived=False,value=bo_error_excitation_sextupole, symbol=r'<math>E_{\text{exc,SEXT}}</math>',units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
 
     Parameter(name='BO error alignment bpm', group='FAC', is_derived=False, value=bo_error_alignment_bpm, symbol=r'<math>E_{xy,\text{BPM}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')]),
+
+    Parameter(name='BO error multipole dipole reference position', group='FAC', is_derived=False, value=bo_error_multipole_dipole_reference_position, symbol=r'<math>r_{0,\text{DIP}}</math>', units='mm', deps=[], obs=[], ),
+
+    Parameter(name='BO error multipole dipole systematic normal 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_systematic_normal_8_pole, symbol=r'<math>M_{B_3/B_0,DIP}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole systematic normal 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_systematic_normal_10_pole, symbol=r'<math>M_{B_4/B_0,DIP}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole dipole reference position'],  obs=[r'Relative value, calculated at <math>r_0</math>.', 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole systematic normal 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_systematic_normal_12_pole, symbol=r'<math>M_{B_5/B_0,DIP}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole systematic normal 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_systematic_normal_14_pole, symbol=r'<math>M_{B_6/B_0,DIP}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', 'From approved model1 of 2013-05-07'], ),
+
+    Parameter(name='BO error multipole dipole random normal 6-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_6_pole, symbol=r'<math>M_{B_2/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random normal 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_8_pole, symbol=r'<math>M_{B_3/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random normal 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_10_pole, symbol=r'<math>M_{B_4/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random normal 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_12_pole, symbol=r'<math>M_{B_5/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random normal 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_14_pole, symbol=r'<math>M_{B_6/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random normal 16-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_16_pole, symbol=r'<math>M_{B_7/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random normal 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_normal_18_pole, symbol=r'<math>M_{B_8/B_0,DIP}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+
+    Parameter(name='BO error multipole dipole random skew 6-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_6_pole, symbol=r'<math>M_{B_2/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random skew 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_8_pole, symbol=r'<math>M_{B_3/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random skew 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_10_pole, symbol=r'<math>M_{B_4/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random skew 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_12_pole, symbol=r'<math>M_{B_5/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random skew 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_14_pole, symbol=r'<math>M_{B_6/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random skew 16-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_16_pole, symbol=r'<math>M_{B_7/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+    Parameter(name='BO error multipole dipole random skew 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_dipole_random_skew_18_pole, symbol=r'<math>M_{B_8/B_0,DIP}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole dipole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model1 of 2013-05-07'], ),
+
+    Parameter(name='BO error multipole quadrupole reference position', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_reference_position, symbol=r'<math>r_{0,\text{QUAD}}</math>', units='mm', deps=[], obs=[], ),
+
+    Parameter(name='BO error multipole quadrupole systematic normal 12-pole',group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_systematic_normal_12_pole, symbol=r'<math>M_{B_5/B_1,QUAD}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.',], ),
+    Parameter(name='BO error multipole quadrupole systematic normal 20-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_systematic_normal_20_pole, symbol=r'<math>M_{B_9/B_1,QUAD}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.'], ),
+    Parameter(name='BO error multipole quadrupole systematic normal 28-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_systematic_normal_28_pole, symbol=r'<math>M_{B_{13}/B_1,QUAD}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.'], ),
+
+    Parameter(name='BO error multipole quadrupole random normal 6-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_6_pole, symbol=r'<math>M_{B_2/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_8_pole, symbol=r'<math>M_{B_3/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_10_pole, symbol=r'<math>M_{B_4/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_12_pole, symbol=r'<math>M_{B_5/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_14_pole, symbol=r'<math>M_{B_6/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 16-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_16_pole, symbol=r'<math>M_{B_7/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_18_pole, symbol=r'<math>M_{B_8/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random normal 20-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_normal_20_pole, symbol=r'<math>M_{B_9/B_1,QUAD}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+
+    Parameter(name='BO error multipole quadrupole random skew 6-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_6_pole, symbol=r'<math>M_{B_2/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_8_pole, symbol=r'<math>M_{B_3/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_10_pole, symbol=r'<math>M_{B_4/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_12_pole, symbol=r'<math>M_{B_5/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_14_pole, symbol=r'<math>M_{B_6/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 16-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_16_pole, symbol=r'<math>M_{B_7/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_18_pole, symbol=r'<math>M_{B_8/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+    Parameter(name='BO error multipole quadrupole random skew 20-pole', group='FAC', is_derived=False, value=bo_error_multipole_quadrupole_random_skew_20_pole, symbol=r'<math>M_{B_9/B_1,QUAD}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole quadrupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'Rotating coil measurement of QF prototype magnets'], ),
+
+    Parameter(name='BO error multipole sextupole reference position', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_reference_position, symbol=r'<math>r_{0,\text{SEXT}}</math>', units='mm', deps=[], obs=[], ),
+
+    Parameter(name='BO error multipole sextupole systematic normal 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_systematic_normal_18_pole, symbol=r'<math>M_{B_8/B_2,SEXT}^{\text{sys,normal}}</math>',units='',deps=['BO error multipole sextupole reference position'],obs=[r'Relative value, calculated at <math>r_0</math>.','From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole systematic normal 30-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_systematic_normal_30_pole, symbol=r'<math>M_{B_{14}/B_2,SEXT}^{\text{sys,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', 'From approved model3 of 2013-06-05'], ),
+
+    Parameter(name='BO error multipole sextupole random normal 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_8_pole, symbol=r'<math>M_{B_3/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random normal 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_10_pole, symbol=r'<math>M_{B_4/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random normal 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_12_pole, symbol=r'<math>M_{B_5/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random normal 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_14_pole, symbol=r'<math>M_{B_6/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random normal 16-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_16_pole, symbol=r'<math>M_{B_7/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random normal 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_18_pole, symbol=r'<math>M_{B_8/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random normal 20-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_normal_20_pole, symbol=r'<math>M_{B_9/B_2,SEXT}^{\text{rnd,normal}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+
+    Parameter(name='BO error multipole sextupole random skew 8-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_8_pole, symbol=r'<math>M_{B_3/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random skew 10-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_10_pole, symbol=r'<math>M_{B_4/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random skew 12-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_12_pole, symbol=r'<math>M_{B_5/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random skew 14-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_14_pole, symbol=r'<math>M_{B_6/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random skew 16-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_16_pole, symbol=r'<math>M_{B_7/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random skew 18-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_18_pole, symbol=r'<math>M_{B_8/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
+    Parameter(name='BO error multipole sextupole random skew 20-pole', group='FAC', is_derived=False, value=bo_error_multipole_sextupole_random_skew_20_pole, symbol=r'<math>M_{B_9/B_2,SEXT}^{\text{rnd,skew}}</math>', units='', deps=['BO error multipole sextupole reference position'], obs=[r'Relative value, calculated at <math>r_0</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8'), 'From approved model3 of 2013-06-05'], ),
 ]
