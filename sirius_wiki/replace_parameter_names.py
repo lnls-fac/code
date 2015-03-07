@@ -5,6 +5,7 @@
 Replace parameter names from pages, according to correspondence in dictionary.
 """
 
+import os
 import re
 import pywikibot
 import pywikibot.pagegenerators
@@ -43,6 +44,7 @@ for m in MACHINES.keys() + MACHINES.values():
 TABLE = prmnametable.TABLE
 
 flag_print = False
+bot_default_comment = ('Automatically updated by ' + os.path.basename(__file__))
 
 def replace_parameters(text, parameters_not_in_table):
     text = replace_links_with_templates(text, parameters_not_in_table)
@@ -185,9 +187,9 @@ if __name__ == '__main__':
             if searchobj:
                 print('(' + str(len(parameters_not_in_table)) + ') -- ' + page.title())
                 page.text = replace_parameters(page.text, parameters_not_in_table )
-                #page.save()
+                #page.save(bot_default_comment)
                 #print(page.text.encode('utf-8'))
-   
+
     print('')
     print('-- parameters not found in the conversion table --')
     print('')
