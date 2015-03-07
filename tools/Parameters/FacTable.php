@@ -281,6 +281,15 @@ class FacTable extends FacConnection {
         $row = $r->fetch_assoc();
         return $row['expression'];
     }
+
+    function get_parameter_list($subsystem)
+    {
+        $query = "SELECT name FROM parameter WHERE name LIKE '" .
+            $this->escape($subsystem) . "%';";
+        $r = $this->query($query);
+
+        return $r->fetch_all();
+    }
 }
 
 class FacEvaluator extends FacConnection {
