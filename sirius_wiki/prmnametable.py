@@ -167,7 +167,7 @@ TABLE = {
     'Booster random normal 14-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random normal 14-pole',
     'Booster random normal 16-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random normal 16-pole',
     'Booster random normal 18-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random normal 18-pole',
-    'Booster random normal 20-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random normal 20-pole',,
+    'Booster random normal 20-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random normal 20-pole',
 
     'Booster random skew 6-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random skew 6-pole',
     'Booster random skew 8-pole error tolerance for quadrupoles': 'BO error multipole quadrupole random skew 8-pole',
