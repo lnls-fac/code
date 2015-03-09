@@ -38,6 +38,8 @@ function fac_parameter_parser_init(Parser $parser)
     $parser->setHook("sirius_units", "fac_sirius_units_parameter_render");
     $parser->setHook("dependencies", "fac_dependencies_parameter_render");
     $parser->setHook("dependents", "fac_dependents_parameter_render");
+    $parser->setHook("parameter_list", "fac_parameter_list_parameter_render");
+
     return true;
 }
 
@@ -177,6 +179,39 @@ function fac_dependents_parameter_render($input, array $args, Parser $parser,
     }
 
     return $parser->recursiveTagParse($output, $frame);
+}
+
+function fac_parameter_list_parameter_render($input, array $args,
+    Parser $parser, PPFrame $frame)
+{
+    try {
+        $prm = new FacParameterLister($input);
+        $list = $prm->get_list();
+        if ($list === false) {
+            $error = 'Error: subsystem ' . $input . ' not found';
+            $output = fac_get_error_message($error);
+        } else {
+            $list = fac_add_link_to_parameters($list);
+            $output = fac_get_parameter_list_text($list);
+        }
+    } catch(FacException $e) {
+        $output = fac_get_error_message('Error: ' . $e->getMessage());
+    }
+
+    return $parser->recursiveTagParse($output, $frame);
+}
+
+function fac_get_parameter_list_text($parameters)
+{
+    $last = array_pop($parameters);
+
+    $text = "";
+    foreach($parameters as $p)
+        $text .= "* " . $p . "\n";
+
+    $text .= "* " . $last;
+
+    return $text;
 }
 
 function fac_edit_form_preload_text(&$text, &$title)

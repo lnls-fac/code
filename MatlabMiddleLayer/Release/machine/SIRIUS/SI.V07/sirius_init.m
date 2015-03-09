@@ -32,7 +32,7 @@ MMLROOT = getmmlroot('IgnoreTheAD');
 %[OnePerSector, TwoPerSector, ThreePerSector, FourPerSector, FivePerSector, SixPerSector, EightPerSector, TenPerSector, TwelvePerSector, FifteenPerSector, SixteenPerSector, EighteenPerSector, TwentyFourPerSector] = buildthedevicelists;
 
 
-% BENDS
+%% dipoles
 
 AO.b1.FamilyName  = 'b1';
 AO.b1.MemberOf    = {'PlotFamily'; 'b1'; 'BEND'; 'Magnet';};
@@ -157,6 +157,7 @@ AO.bc.Setpoint.Range        = [0 300];
 AO.bc.Setpoint.Tolerance    = .1;
 AO.bc.Setpoint.DeltaRespMat = .01;
 
+%% quadrupoles 
 
 AO.qfa.FamilyName = 'qfa';
 AO.qfa.MemberOf    = {'PlotFamily'; 'qfa'; 'QUAD'; 'Magnet';'q20';};
@@ -356,10 +357,11 @@ AO.qf4.Setpoint.PhysicsUnits  = 'meter^-2';
 AO.qf4.Setpoint.Range         = [0 225];
 AO.qf4.Setpoint.Tolerance     = 0.2;
 AO.qf4.Setpoint.DeltaRespMat  = 0.5;
-%%
+
+%% sextupoles
 
 AO.sda.FamilyName = 'sda';
-AO.sda.MemberOf    = {'PlotFamily'; 'sda'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector';'SEXT-SKEW'};
+AO.sda.MemberOf    = {'PlotFamily'; 'sda'; 'SEXT'; 'Magnet';};
 AO.sda.DeviceList  = getDeviceList(10,2);
 AO.sda.ElementList = (1:size(AO.sda.DeviceList,1))';
 AO.sda.Status      = ones(size(AO.sda.DeviceList,1),1);
@@ -381,7 +383,7 @@ AO.sda.Setpoint.Tolerance     = 0.2;
 AO.sda.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sfa.FamilyName = 'sfa';
-AO.sfa.MemberOf    = {'PlotFamily'; 'sfa'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
+AO.sfa.MemberOf    = {'PlotFamily'; 'sfa'; 'SEXT'; 'Magnet';};
 AO.sfa.DeviceList  = getDeviceList(10,2);
 AO.sfa.ElementList = (1:size(AO.sfa.DeviceList,1))';
 AO.sfa.Status      = ones(size(AO.sfa.DeviceList,1),1);
@@ -403,7 +405,7 @@ AO.sfa.Setpoint.Tolerance     = 0.2;
 AO.sfa.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd1.FamilyName = 'sd1';
-AO.sd1.MemberOf    = {'PlotFamily'; 'sd1'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
+AO.sd1.MemberOf    = {'PlotFamily'; 'sd1'; 'SEXT'; 'Magnet';};
 AO.sd1.DeviceList  = getDeviceList(10,2);
 AO.sd1.ElementList = (1:size(AO.sd1.DeviceList,1))';
 AO.sd1.Status      = ones(size(AO.sd1.DeviceList,1),1);
@@ -425,7 +427,7 @@ AO.sd1.Setpoint.Tolerance     = 0.2;
 AO.sd1.Setpoint.DeltaRespMat  = 0.5;
 
 AO.sf1.FamilyName = 'sf1';
-AO.sf1.MemberOf    = {'PlotFamily'; 'sf1'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-SKEW'};
+AO.sf1.MemberOf    = {'PlotFamily'; 'sf1'; 'SEXT'; 'Magnet';};
 AO.sf1.DeviceList  = getDeviceList(10,2);
 AO.sf1.ElementList = (1:size(AO.sf1.DeviceList,1))';
 AO.sf1.Status      = ones(size(AO.sf1.DeviceList,1),1);
@@ -447,7 +449,7 @@ AO.sf1.Setpoint.Tolerance     = 0.2;
 AO.sf1.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd2.FamilyName = 'sd2';
-AO.sd2.MemberOf    = {'PlotFamily'; 'sd2'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
+AO.sd2.MemberOf    = {'PlotFamily'; 'sd2'; 'SEXT'; 'Magnet';};
 AO.sd2.DeviceList  = getDeviceList(10,2);
 AO.sd2.ElementList = (1:size(AO.sd2.DeviceList,1))';
 AO.sd2.Status      = ones(size(AO.sd2.DeviceList,1),1);
@@ -469,7 +471,7 @@ AO.sd2.Setpoint.Tolerance     = 0.2;
 AO.sd2.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd3.FamilyName = 'sd3';
-AO.sd3.MemberOf    = {'PlotFamily'; 'sd3'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-VCM'};
+AO.sd3.MemberOf    = {'PlotFamily'; 'sd3'; 'SEXT'; 'Magnet';};
 AO.sd3.DeviceList  = getDeviceList(10,2);
 AO.sd3.ElementList = (1:size(AO.sd3.DeviceList,1))';
 AO.sd3.Status      = ones(size(AO.sd3.DeviceList,1),1);
@@ -491,7 +493,7 @@ AO.sd3.Setpoint.Tolerance     = 0.2;
 AO.sd3.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sf2.FamilyName = 'sf2';
-AO.sf2.MemberOf    = {'PlotFamily'; 'sf2'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
+AO.sf2.MemberOf    = {'PlotFamily'; 'sf2'; 'SEXT'; 'Magnet';};
 AO.sf2.DeviceList  = getDeviceList(10,2);
 AO.sf2.ElementList = (1:size(AO.sf2.DeviceList,1))';
 AO.sf2.Status      = ones(size(AO.sf2.DeviceList,1),1);
@@ -513,7 +515,7 @@ AO.sf2.Setpoint.Tolerance     = 0.2;
 AO.sf2.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd6.FamilyName = 'sd6';
-AO.sd6.MemberOf    = {'PlotFamily'; 'sd6'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
+AO.sd6.MemberOf    = {'PlotFamily'; 'sd6'; 'SEXT'; 'Magnet';};
 AO.sd6.DeviceList  = getDeviceList(10,2);
 AO.sd6.ElementList = (1:size(AO.sd6.DeviceList,1))';
 AO.sd6.Status      = ones(size(AO.sd6.DeviceList,1),1);
@@ -535,7 +537,7 @@ AO.sd6.Setpoint.Tolerance     = 0.2;
 AO.sd6.Setpoint.DeltaRespMat  = 0.5;
 
 AO.sf4.FamilyName = 'sf4';
-AO.sf4.MemberOf    = {'PlotFamily'; 'sf4'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-SKEW'};
+AO.sf4.MemberOf    = {'PlotFamily'; 'sf4'; 'SEXT'; 'Magnet';};
 AO.sf4.DeviceList  = getDeviceList(10,2);
 AO.sf4.ElementList = (1:size(AO.sf4.DeviceList,1))';
 AO.sf4.Status      = ones(size(AO.sf4.DeviceList,1),1);
@@ -557,7 +559,7 @@ AO.sf4.Setpoint.Tolerance     = 0.2;
 AO.sf4.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd5.FamilyName = 'sd5';
-AO.sd5.MemberOf    = {'PlotFamily'; 'sd5'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
+AO.sd5.MemberOf    = {'PlotFamily'; 'sd5'; 'SEXT'; 'Magnet';};
 AO.sd5.DeviceList  = getDeviceList(10,2);
 AO.sd5.ElementList = (1:size(AO.sd5.DeviceList,1))';
 AO.sd5.Status      = ones(size(AO.sd5.DeviceList,1),1);
@@ -579,7 +581,7 @@ AO.sd5.Setpoint.Tolerance     = 0.2;
 AO.sd5.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sd4.FamilyName = 'sd4';
-AO.sd4.MemberOf    = {'PlotFamily'; 'sd4'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-VCM'};
+AO.sd4.MemberOf    = {'PlotFamily'; 'sd4'; 'SEXT'; 'Magnet';};
 AO.sd4.DeviceList  = getDeviceList(10,2);
 AO.sd4.ElementList = (1:size(AO.sd4.DeviceList,1))';
 AO.sd4.Status      = ones(size(AO.sd4.DeviceList,1),1);
@@ -601,7 +603,7 @@ AO.sd4.Setpoint.Tolerance     = 0.2;
 AO.sd4.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sf3.FamilyName = 'sf3';
-AO.sf3.MemberOf    = {'PlotFamily'; 'sf3'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HCM'};
+AO.sf3.MemberOf    = {'PlotFamily'; 'sf3'; 'SEXT'; 'Magnet';};
 AO.sf3.DeviceList  = getDeviceList(10,2);
 AO.sf3.ElementList = (1:size(AO.sf3.DeviceList,1))';
 AO.sf3.Status      = ones(size(AO.sf3.DeviceList,1),1);
@@ -623,7 +625,7 @@ AO.sf3.Setpoint.Tolerance     = 0.2;
 AO.sf3.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sfb.FamilyName = 'sfb';
-AO.sfb.MemberOf    = {'PlotFamily'; 'sfb'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-HVCM'};
+AO.sfb.MemberOf    = {'PlotFamily'; 'sfb'; 'SEXT'; 'Magnet';};
 AO.sfb.DeviceList  = getDeviceList(10,2);
 AO.sfb.ElementList = (1:size(AO.sfb.DeviceList,1))';
 AO.sfb.Status      = ones(size(AO.sfb.DeviceList,1),1);
@@ -645,7 +647,7 @@ AO.sfb.Setpoint.Tolerance     = 0.2;
 AO.sfb.Setpoint.DeltaRespMat  = 0.5; 
 
 AO.sdb.FamilyName = 'sdb';
-AO.sdb.MemberOf    = {'PlotFamily'; 'sdb'; 'SEXT'; 'Magnet'; 'Coupling Corrector'; 'Chromaticity Corrector'; 'SEXT-SKEW'};
+AO.sdb.MemberOf    = {'PlotFamily'; 'sdb'; 'SEXT'; 'Magnet';};
 AO.sdb.DeviceList  = getDeviceList(10,2);
 AO.sdb.ElementList = (1:size(AO.sdb.DeviceList,1))';
 AO.sdb.Status      = ones(size(AO.sdb.DeviceList,1),1);
@@ -667,61 +669,122 @@ AO.sdb.Setpoint.Tolerance     = 0.2;
 AO.sdb.Setpoint.DeltaRespMat  = 0.5; 
 
 
-%%
-%%%%%%%%%%%%%%%%%%%%%
-% Corrector Magnets %
-%%%%%%%%%%%%%%%%%%%%%
+%% correctors
 
-% hcm
-AO.hcm.FamilyName  = 'hcm';
-AO.hcm.MemberOf    = {'PlotFamily'; 'COR'; 'hcm'; 'Magnet'};
-AO.hcm.DeviceList  = getDeviceList(10,16);
-AO.hcm.ElementList = (1:size(AO.hcm.DeviceList,1))';
-AO.hcm.Status      = ones(size(AO.hcm.DeviceList,1),1);
-%AO.hcm.Status      = repmat([0 1 0 1 1 0 1 0]',20,1);
-AO.hcm.Position    = [];
+% chs
+AO.chs.FamilyName  = 'chs';
+AO.chs.MemberOf    = {'PlotFamily'; 'COR'; 'chs'; 'Magnet';'hcm';'hcm_slow';};
+AO.chs.DeviceList  = getDeviceList(10,16);
+AO.chs.ElementList = (1:size(AO.chs.DeviceList,1))';
+AO.chs.Status      = ones(size(AO.chs.DeviceList,1),1);
+AO.chs.Position    = [];
+AO.chs.Monitor.MemberOf = {'Horizontal'; 'COR'; 'chs'; 'Magnet';};
+AO.chs.Monitor.Mode     = 'Simulator';
+AO.chs.Monitor.DataType = 'Scalar';
+AO.chs.Monitor.Units        = 'Physics';
+AO.chs.Monitor.HWUnits      = 'Ampere';
+AO.chs.Monitor.PhysicsUnits = 'Radian';
+AO.chs.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'hcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.chs.Setpoint.Mode = 'Simulator';
+AO.chs.Setpoint.DataType = 'Scalar';
+AO.chs.Setpoint.Units        = 'Physics';
+AO.chs.Setpoint.HWUnits      = 'Ampere';
+AO.chs.Setpoint.PhysicsUnits = 'Radian';
+AO.chs.Setpoint.Range        = [-10 10];
+AO.chs.Setpoint.Tolerance    = 0.00001;
+AO.chs.Setpoint.DeltaRespMat = 0.0005; 
 
-AO.hcm.Monitor.MemberOf = {'Horizontal'; 'COR'; 'hcm'; 'Magnet';};
-AO.hcm.Monitor.Mode = 'Simulator';
-AO.hcm.Monitor.DataType = 'Scalar';
-AO.hcm.Monitor.Units        = 'Physics';
-AO.hcm.Monitor.HWUnits      = 'Ampere';
-AO.hcm.Monitor.PhysicsUnits = 'Radian';
+% cvs
+AO.cvs.FamilyName  = 'cvs';
+AO.cvs.MemberOf    = {'PlotFamily'; 'COR'; 'cvs'; 'Magnet';'vcm';'vcm_slow';};
+AO.cvs.DeviceList  = getDeviceList(10,12);
+AO.cvs.ElementList = (1:size(AO.cvs.DeviceList,1))';
+AO.cvs.Status      = ones(size(AO.cvs.DeviceList,1),1);
+AO.cvs.Position    = [];
+AO.cvs.Monitor.MemberOf = {'Horizontal'; 'COR'; 'cvs'; 'Magnet';};
+AO.cvs.Monitor.Mode     = 'Simulator';
+AO.cvs.Monitor.DataType = 'Scalar';
+AO.cvs.Monitor.Units        = 'Physics';
+AO.cvs.Monitor.HWUnits      = 'Ampere';
+AO.cvs.Monitor.PhysicsUnits = 'Radian';
+AO.cvs.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'vcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.cvs.Setpoint.Mode = 'Simulator';
+AO.cvs.Setpoint.DataType = 'Scalar';
+AO.cvs.Setpoint.Units        = 'Physics';
+AO.cvs.Setpoint.HWUnits      = 'Ampere';
+AO.cvs.Setpoint.PhysicsUnits = 'Radian';
+AO.cvs.Setpoint.Range        = [-10 10];
+AO.cvs.Setpoint.Tolerance    = 0.00001;
+AO.cvs.Setpoint.DeltaRespMat = 0.0005; 
 
-AO.hcm.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'hcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
-AO.hcm.Setpoint.Mode = 'Simulator';
-AO.hcm.Setpoint.DataType = 'Scalar';
-AO.hcm.Setpoint.Units        = 'Physics';
-AO.hcm.Setpoint.HWUnits      = 'Ampere';
-AO.hcm.Setpoint.PhysicsUnits = 'Radian';
-AO.hcm.Setpoint.Range        = [-10 10];
-AO.hcm.Setpoint.Tolerance    = 0.00001;
-AO.hcm.Setpoint.DeltaRespMat = 0.0005; 
+% chf
+AO.chf.FamilyName  = 'chf';
+AO.chf.MemberOf    = {'PlotFamily'; 'COR'; 'chf'; 'Magnet';'hcm';'hcm_fast';};
+AO.chf.DeviceList  = getDeviceList(10,8);
+AO.chf.ElementList = (1:size(AO.chf.DeviceList,1))';
+AO.chf.Status      = ones(size(AO.chf.DeviceList,1),1);
+AO.chf.Position    = [];
+AO.chf.Monitor.MemberOf = {'Horizontal'; 'COR'; 'chf'; 'Magnet';};
+AO.chf.Monitor.Mode     = 'Simulator';
+AO.chf.Monitor.DataType = 'Scalar';
+AO.chf.Monitor.Units        = 'Physics';
+AO.chf.Monitor.HWUnits      = 'Ampere';
+AO.chf.Monitor.PhysicsUnits = 'Radian';
+AO.chf.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'hcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.chf.Setpoint.Mode = 'Simulator';
+AO.chf.Setpoint.DataType = 'Scalar';
+AO.chf.Setpoint.Units        = 'Physics';
+AO.chf.Setpoint.HWUnits      = 'Ampere';
+AO.chf.Setpoint.PhysicsUnits = 'Radian';
+AO.chf.Setpoint.Range        = [-10 10];
+AO.chf.Setpoint.Tolerance    = 0.00001;
+AO.chf.Setpoint.DeltaRespMat = 0.0005; 
 
-% vcm
-AO.vcm.FamilyName  = 'vcm';
-AO.vcm.MemberOf    = {'PlotFamily'; 'COR'; 'vcm'; 'Magnet'};
-AO.vcm.DeviceList  = getDeviceList(10,12);
-AO.vcm.ElementList = (1:size(AO.vcm.DeviceList,1))';
-AO.vcm.Status      = ones(size(AO.vcm.DeviceList,1),1);
-%AO.vcm.Status      = repmat([1 0 1 0 0 1 0 1]',20,1);
-AO.vcm.Position    = [];
-AO.vcm.Monitor.MemberOf = {'Vertical'; 'COR'; 'vcm'; 'Magnet';};
-AO.vcm.Monitor.Mode = 'Simulator';
-AO.vcm.Monitor.DataType = 'Scalar';
-AO.vcm.Monitor.Units        = 'Physics';
-AO.vcm.Monitor.HWUnits      = 'Ampere';
-AO.vcm.Monitor.PhysicsUnits = 'Radian';
+% cvf
+AO.cvf.FamilyName  = 'cvf';
+AO.cvf.MemberOf    = {'PlotFamily'; 'COR'; 'cvf'; 'Magnet';'vcm';'vcm_fast';};
+AO.cvf.DeviceList  = getDeviceList(10,8);
+AO.cvf.ElementList = (1:size(AO.cvf.DeviceList,1))';
+AO.cvf.Status      = ones(size(AO.cvf.DeviceList,1),1);
+AO.cvf.Position    = [];
+AO.cvf.Monitor.MemberOf = {'Horizontal'; 'COR'; 'cvf'; 'Magnet';};
+AO.cvf.Monitor.Mode     = 'Simulator';
+AO.cvf.Monitor.DataType = 'Scalar';
+AO.cvf.Monitor.Units        = 'Physics';
+AO.cvf.Monitor.HWUnits      = 'Ampere';
+AO.cvf.Monitor.PhysicsUnits = 'Radian';
+AO.cvf.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'vcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.cvf.Setpoint.Mode = 'Simulator';
+AO.cvf.Setpoint.DataType = 'Scalar';
+AO.cvf.Setpoint.Units        = 'Physics';
+AO.cvf.Setpoint.HWUnits      = 'Ampere';
+AO.cvf.Setpoint.PhysicsUnits = 'Radian';
+AO.cvf.Setpoint.Range        = [-10 10];
+AO.cvf.Setpoint.Tolerance    = 0.00001;
+AO.cvf.Setpoint.DeltaRespMat = 0.0005; 
 
-AO.vcm.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'vcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
-AO.vcm.Setpoint.Mode = 'Simulator';
-AO.vcm.Setpoint.DataType = 'Scalar';
-AO.vcm.Setpoint.Units        = 'Physics';
-AO.vcm.Setpoint.HWUnits      = 'Ampere';
-AO.vcm.Setpoint.PhysicsUnits = 'Radian';
-AO.vcm.Setpoint.Range        = [-10 10];
-AO.vcm.Setpoint.Tolerance    = 0.00001;
-AO.vcm.Setpoint.DeltaRespMat = 0.0005; 
+% qs
+AO.qs.FamilyName  = 'qs';
+AO.qs.MemberOf    = {'PlotFamily'; 'COR'; 'qs'; 'Magnet';};
+AO.qs.DeviceList  = getDeviceList(10,8);
+AO.qs.ElementList = (1:size(AO.qs.DeviceList,1))';
+AO.qs.Status      = ones(size(AO.qs.DeviceList,1),1);
+AO.qs.Position    = [];
+AO.qs.Monitor.MemberOf = {'Horizontal'; 'COR'; 'qs'; 'Magnet';};
+AO.qs.Monitor.Mode     = 'Simulator';
+AO.qs.Monitor.DataType = 'Scalar';
+AO.qs.Monitor.Units        = 'Physics';
+AO.qs.Monitor.HWUnits      = 'Ampere';
+AO.qs.Monitor.PhysicsUnits = 'Radian';
+AO.qs.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.qs.Setpoint.Mode = 'Simulator';
+AO.qs.Setpoint.DataType = 'Scalar';
+AO.qs.Setpoint.Units        = 'Physics';
+AO.qs.Setpoint.HWUnits      = 'Ampere';
+AO.qs.Setpoint.PhysicsUnits = 'Radian';
+AO.qs.Setpoint.Range        = [-10 10];
+AO.qs.Setpoint.Tolerance    = 0.00001;
+AO.qs.Setpoint.DeltaRespMat = 0.0005; 
 
 
 % skewcm

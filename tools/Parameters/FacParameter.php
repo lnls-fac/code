@@ -212,4 +212,31 @@ class FacParameterEraser extends FacParameter {
     }
 }
 
+class FacParameterLister {
+    static $valid_subsystems = array('LI', 'TB', 'BO', 'TS', 'SI');
+    private $subsystem;
+
+    function __construct($subsystem)
+    {
+        $this->subsystem = $subsystem;
+    }
+
+    function get_list()
+    {
+        if (!in_array($this->subsystem, self::$valid_subsystems))
+            return false;
+
+        $table = new FacTable();
+        $parameters = $table->get_parameter_list($this->subsystem);
+
+        $list = array();
+        foreach ($parameters as $p)
+            array_push($list, $p[0]);
+
+        sort($list);
+
+        return $list;
+    }
+}
+
 ?>
