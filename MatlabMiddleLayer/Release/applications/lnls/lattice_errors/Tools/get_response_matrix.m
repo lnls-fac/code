@@ -20,12 +20,12 @@ myy = zeros(len_bpms, len_vcms);
 
 for i=1:len_bpms
     for j=1:len_hcms
-        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i),hcms(j));
+        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i),hcms(j),the_ring{j});
         mxx(i,j) = cxx;
         myx(i,j) = cyx;
     end
     for j=1:len_vcms
-        [~, ~, cxy, cyy] = get_C(M,T,bpms(i),vcms(j));
+        [~, ~, cxy, cyy] = get_C(M,T,bpms(i),vcms(j),the_ring{j});
         mxy(i,j) = cxy;
         myy(i,j) = cyy;
     end
@@ -71,7 +71,7 @@ MR = [mxx, mxy; myx, myy];
 % M = [mxx, mxy; myx, myy];
 
 
-function [cxx, cyx, cxy, cyy] = get_C(M,T,i,j)
+function [cxx, cyx, cxy, cyy] = get_C(M,T,i,j,element)
 % cxy --> orbit at bpm x due to kick in corrector y
 
 R_j = T(:,:,j);
@@ -86,7 +86,7 @@ end
 D = diag(ones(1,size(M,1)));
 C = (D - M_i) \ R_ij;
 
-cxx = C(1,2);
-cyx = C(3,2);
-cxy = C(1,4);
-cyy = C(3,4);
+cxx = (element.Length/2) * C(1,1) + C(1,2);
+cyx = (element.Length/2) * C(3,1) + C(3,2);
+cxy = (element.Length/2) * C(1,3) + C(1,4);
+cyy = (element.Length/2) * C(3,3) + C(3,4);
