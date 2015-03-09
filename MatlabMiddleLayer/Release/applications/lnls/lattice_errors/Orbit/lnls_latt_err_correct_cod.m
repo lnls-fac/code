@@ -1,4 +1,50 @@
-function machine = correct_cod(name, machine, orbit, goal_codx, goal_cody)
+function machine = lnls_latt_err_correct_cod(name, machine, orbit, goal_codx, goal_cody)
+% function machine = lnls_latt_err_correct_cod(name, machine, orbit, goal_codx, goal_cody)
+%
+% Correct orbit of several machines.
+%
+% INPUTS:
+%   name     : name of the file to which the inputs will be saved
+%   machine  : cell array of lattice models to correct the orbit.
+%   goal_codx: horizontal reference orbit to use in correction. May be a vector
+%      defining the orbit for each bpm. In this case the reference will be the
+%      same for all the machines. Or Can be a matrix with dimension
+%      nr_machines X nr_bpms, to define different orbits among the machines.
+%      If not passed a default of zero will be used;
+%   goal_cody: same as goal_codx but for the vertical plane.
+%   orbit    : structure with fields:
+%      bpm_idx   - bpm indexes in the model;
+%      hcm_idx   - horizontal correctors indexes in the model;
+%      vcm_idx   - vertical correctors indexes in the model;
+%      sext_ramp - If existent, must be a vector with components less than
+%         one, denoting a fraction of sextupoles strengths used in each step
+%         of the correction. For example, if sext_ramp = [0,1] the correction
+%         algorithm will be called two times for each machine. In the first
+%         time the sextupoles strengths will be zeroed and in the second
+%         time they will be set to their correct value.
+%      svs      - may be a number denoting how many singular values will be
+%         used in the correction or the string 'all' to use all singular
+%         values. Default: 'all';
+%      max_nr_iter - maximum number of iteractions the correction
+%         algortithm will perform at each call for each machine;
+%      tolerance - if in two subsequent iteractions the relative difference
+%         between the error function values is less than this value the
+%         correction is considered to have converged and will terminate.
+%      correct2bba_orbit - if true, the goal orbit will be set in relation
+%         to the magnetic center of the quadrupole nearest to each bpm.
+%      simul_bpm_err - if true, the Offset field defined in the bpms in the
+%         lattice will be used to simulate an error in the determination of
+%         the goal orbit. Notice that there must exist an Offset field defined
+%         in the lattice models of the machine array for each bpm, in order to
+%         this simulation work. Otherwise an error will occur.
+%      respm - structure with fields M, S, V, U which are the response
+%         matrix and its SVD decomposition. If NOT present, the function
+%         WILL CALCULATE the response matrix for each machine in each step
+%         defined by sext_ramp.
+%
+% OUTPUT:
+%   machine : cell array of lattice models with the orbit corrected.
+%      
 
 nr_mach = length(machine);
 
@@ -12,6 +58,8 @@ if ~exist('goal_cody','var')
 elseif size(goal_cody,1) == 1
     goal_cody = repmat(goal_cody,nr_mach,1);
 end
+
+if ~isfield(orbit,'sext_ramp'), orbit.sext_ramp = 1; end;
 
 save([name,'_correct_cod_input.mat'], 'orbit', 'goal_codx', 'goal_cody');
 
