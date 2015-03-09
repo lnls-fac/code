@@ -70,5 +70,6 @@ setpathsirius('SIRIUS', default_version, 'sirius_link');
 cd(cdir);
 clear cdir;
 
+addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','applications','lnls','lattice_errors')), '-begin');
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','tracy3'), '-begin');
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','trackcpp'), '-begin');
