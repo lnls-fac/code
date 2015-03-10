@@ -1,4 +1,4 @@
-function machine = lnls_latt_err_study()
+function machine = sirius_si_lattice_errors_analysis()
 
 fprintf('\n')
 fprintf('Lattice Errors Run\n');
@@ -132,7 +132,7 @@ finalizations();
         end
         
         % generates error vectors
-        nr_machines   = 1;
+        nr_machines   = 20;
         rndtype       = 'gaussian';
         cutoff_errors = 1;
         fprintf('-  generating errors ...\n');
@@ -240,19 +240,17 @@ finalizations();
         % QUADRUPOLES
         % quadM multipoles from model3 fieldmap '2015-02-05 Quadrupolo_Anel_QM_Modelo 3_-12_12mm_-500_500mm_156.92A.txt'
         multi.quadsM.labels = {'qfa','qfb','qdb2','qf1','qf2','qf3','qf4'};
-        multi.quadsM.nrsegs = ones(1,7);
         multi.quadsM.main_multipole = 2;% positive for normal negative for skew
         multi.quadsM.r0 = 11.7e-3;
-        multi.quadsM.order       = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
+        multi.quadsM.order     = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
         multi.quadsM.main_vals = 1*ones(1,8)*4e-5;
         multi.quadsM.skew_vals = 1*ones(1,8)*1e-5;
         
         % quadC multipoles from model2 fielmap '2015-01-27 Quadrupolo_Anel_QC_Modelo 2_-12_12mm_-500_500mm.txt'
         multi.quadsC.labels = {'qdb1','qda'};
-        multi.quadsC.nrsegs = ones(1,2);
         multi.quadsC.main_multipole = 2;% positive for normal negative for skew
         multi.quadsC.r0 = 11.7e-3;
-        multi.quadsC.order       = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
+        multi.quadsC.order     = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
         multi.quadsC.main_vals = 1*ones(1,8)*4e-5;
         multi.quadsC.skew_vals = 1*ones(1,8)*1e-5;
         
@@ -260,10 +258,9 @@ finalizations();
         % SEXTUPOLES
         % multipoles from model1 fieldmap 'Sextupolo_Anel_S_Modelo 1_-12_12mm_-500_500mm.txt'
         multi.sexts.labels = {'sda','sfa','sd1','sf1','sd2','sd3','sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb'};
-        multi.sexts.nrsegs = ones(1, 14);
         multi.sexts.main_multipole = 3;% positive for normal negative for skew
         multi.sexts.r0 = 11.7e-3;
-        multi.sexts.order       = [4   5   6   7   8   9   10  11]; % 1 for dipole
+        multi.sexts.order     = [4   5   6   7   8   9   10  11]; % 1 for dipole
         multi.sexts.main_vals = 1*ones(1,8)*4e-5;
         multi.sexts.skew_vals = 1*ones(1,8)*1e-5;
         
@@ -273,7 +270,6 @@ finalizations();
         %optimized (2015/02/02) as base for comparison with the other alternative with
         %incrusted coils in the poles for independent control of que gradient.
         multi.bends.labels = {'b1','b2','b3', 'bc'};
-        multi.bends.nrsegs = [2 3 2 2];
         multi.bends.main_multipole = 1;% positive for normal negative for skew
         multi.bends.r0 = 11.7e-3;
         multi.bends.order = [ 3   4   5   6   7   8   9 ]; % 1 for dipole
@@ -290,6 +286,13 @@ finalizations();
                 multi.(family).nrsegs(j) = family_data.(labels{j}).nr_segs;
             end
         end
+        
+        % adds systematic multipole errors to random machines
+        for i=1:length(machine)
+            machine{i} = sirius_si_multipole_systematic_errors(machine{i});
+        end
+        fname = which('sirius_si_multipole_systematic_errors');
+        copyfile(fname, [name '_multipole_systematic_errors.m']);
         
         cutoff_errors = 2;
         multi_errors  = lnls_latt_err_generate_multipole_errors(name, the_ring, multi, length(machine), cutoff_errors);

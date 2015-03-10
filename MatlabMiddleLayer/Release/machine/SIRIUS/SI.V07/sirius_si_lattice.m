@@ -381,21 +381,21 @@ data.cvs.ATIndex = data.cvs.ATIndex';
 idx = [];
 idx = [idx findcells(the_ring, 'FamName', 'cf')];
 idx = sort(idx);
-data.chf.ATIndex = reshape(idx,data.chf.nr_segs,[])';
+data.chf.ATIndex = reshape(idx,data.chf.nr_segs,[]);
 data.chf.ATIndex = data.chf.ATIndex';
 
 % cvf - skew quad correctors
 idx = [];
 idx = [idx findcells(the_ring, 'FamName', 'cf')];
 idx = sort(idx);
-data.cvf.ATIndex = reshape(idx,data.cvf.nr_segs,[])';
+data.cvf.ATIndex = reshape(idx,data.cvf.nr_segs,[]);
 data.cvf.ATIndex = data.cvf.ATIndex';
 
 % qs - skew quad correctors
 idx = [];
 idx = [idx findcells(the_ring, 'FamName', 'cf')];
 idx = sort(idx);
-data.qs.ATIndex = reshape(idx,data.qs.nr_segs,[])';
+data.qs.ATIndex = reshape(idx,data.qs.nr_segs,[]);
 data.qs.ATIndex = data.qs.ATIndex';
 
 

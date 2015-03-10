@@ -1,18 +1,16 @@
-function new_the_ring = sirius_si_multipole_systematic_errors(the_ring, parameters)
+function new_the_ring = sirius_si_multipole_systematic_errors(the_ring)
 
 % multipole order convention: n=0(dipole), n=1(quadrupole), and so on. 
-
-parameter_just_print = (exist('parameters', 'var') && isfield(parameters, 'just_print') && (parameters.just_print));
-    
+   
 new_the_ring = the_ring;
-
 
 % DIPOLES
 % =======
-%The default systematic multipoles for the dipoles were changed.
-%Now we are using the values of a standard pole dipole which Ricardo
-%optimized (2015/02/02) as base for comparison with the other alternative with
-%incrusted coils in the poles for independent control of que gradient.
+% The default systematic multipoles for the dipoles were changed.
+% Now we are using the values of a standard pole dipole which Ricardo
+% optimized (2015/02/02) as base for comparison with the other alternative with
+% incrusted coils in the poles for independent control of que gradient.
+
 model_name    = 'BEND';
 r0            = 11.7/1000;
 monomials     =   [2,      3,      4,     5,     6];
@@ -20,12 +18,7 @@ Bn_normal     = 1*[1.4e-4 -6.7e-5 -5.1e-4 5.9e-5 3.3e-4];
 An_skew       = 1*[0.0     0.0     0.0    0.0    0.0]; 
 main_monomial = {0, 'normal'}; 
 families      = findmemberof(model_name);
-if (parameter_just_print)
-    printfamily(model_name, r0, monomials, Bn_normal, An_skew, main_monomial, families);
-else
-    new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
-end
-
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
 
 % QUADRUPOLES Q14 MODEL2
 % ======================
@@ -36,11 +29,7 @@ Bn_normal     = 1*[-3.6e-4, +1.4e-3, -5.9e-04, +5.7e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
 main_monomial = {1, 'normal'}; 
 families      = findmemberof(model_name);
-if (parameter_just_print)
-    printfamily(model_name, r0, monomials, Bn_normal, An_skew, main_monomial, families);
-else
-    new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
-end
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
 
 % QUADRUPOLES Q20 MODEL3
 % ======================
@@ -51,11 +40,7 @@ Bn_normal     = 1*[-3.7e-4, +1.4e-3, -5.7e-04, +3.8e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
 main_monomial = {1, 'normal'}; 
 families      = findmemberof(model_name);
-if (parameter_just_print)
-    fprintf('model name: %s', model_name);
-else
-    new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
-end
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
 
 % QUADRUPOLES Q30 MODEL4
 % ======================
@@ -66,11 +51,7 @@ Bn_normal     = 1*[-3.9e-4, +1.5e-3, -6.0e-04, +4.8e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
 main_monomial = {1, 'normal'}; 
 families      = findmemberof(model_name);
-if (parameter_just_print)
-    fprintf('model name: %s', model_name);
-else
-    new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
-end
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
 
 % SEXTUPOLES
 % ==========
@@ -86,18 +67,9 @@ An_skew       = 1*[ 0.0,     0.0,     0.0,     0.0];
 % An_skew       = 1*[+0.0e-0, +0.0e-0];
 main_monomial = {2, 'normal'}; 
 families      = findmemberof(model_name);
-if (parameter_just_print)
-    fprintf('model name: %s', model_name);
-else
-    new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
-end
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
 
 
-
-
-function printfamily(model_name, r0, monomials, Bn_normal, An_skew, main_monomial, families)
-
-fprintf('model name: %s', model_name);
 
 function new_the_ring = insert_multipoles(the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0)
 

@@ -145,7 +145,8 @@ def multipoles_analysis(config):
                                          skew_field_fitting_monomials=config.multipoles_skew_field_fitting_monomials)
     config.multipoles.calc_multipoles(is_ref_trajectory_flag = False)
     config.multipoles.calc_multipoles_integrals()
-    main_monomial = {'corrector':0, 'dipole':0, 'quadrupole':1, 'sextupole':2}[config.magnet_type]
+    #main_monomial = {'corrector':0, 'dipole':0, 'quadrupole':1, 'sextupole':2}[config.magnet_type]
+    main_monomial = config.normalization_monomial
     config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = main_monomial, r0 = config.multipoles_r0, is_skew = False)
 
     # saves multipoles to file
