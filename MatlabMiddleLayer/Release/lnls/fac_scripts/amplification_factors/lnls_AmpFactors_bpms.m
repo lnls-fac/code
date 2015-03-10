@@ -53,8 +53,8 @@ for i2=1:nelem
         goal_codx = zeros(size(res.cod_cor.bpm_idx));
         goal_cody = zeros(size(res.cod_cor.bpm_idx));
         if strcmp(mis,'misx'), goal_codx(i2) = mis_err; else goal_cody(i2) = mis_err; end
-        [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(res.cod_cor, res.cod_cor.nr_sv, the_ring, ...
-            res.cod_cor.nr_iter,goal_codx,goal_cody);
+        [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(res.cod_cor, the_ring, ...
+                                                      goal_codx,goal_cody);
         boba = findorbit4(the_ring_err,0,1:length(the_ring));
         twi_err = calctwiss(the_ring_err);
         for i4=1:length(res.where2calc)

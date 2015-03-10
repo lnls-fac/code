@@ -76,8 +76,8 @@ for i1 = 1:nelem
                     for ii = ibpm, goal_cody(par.bpm_idx == ind(ii)) = mis_err; end
                 end
             end
-            [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(par, par.nr_sv, ...
-                            the_ring_err, par.nr_iter, goal_codx, goal_cody);
+            [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(par, the_ring_err, ...
+                                                          goal_codx, goal_cody);
         end
 %         ref = zeros(4,length(the_ring));
 %         if strcmp(mis,'misx'), ref(1,ind) = mis_err;
