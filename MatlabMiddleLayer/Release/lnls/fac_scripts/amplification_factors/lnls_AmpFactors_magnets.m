@@ -66,8 +66,7 @@ for i1 = 1:length(res.labels)
             err = repmat(mis_err,1,res.nrsegs(i1));
             the_ring_err = misalign(err,ind,the_ring);
             if isfield(res,'cod_cor')
-                [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(res.cod_cor, res.cod_cor.nr_sv, ...
-                    the_ring_err, res.cod_cor.nr_iter);
+                [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(res.cod_cor, the_ring_err);
             end
             boba = findorbit4(the_ring_err,0,1:length(the_ring));
             twi_err = calctwiss(the_ring_err);

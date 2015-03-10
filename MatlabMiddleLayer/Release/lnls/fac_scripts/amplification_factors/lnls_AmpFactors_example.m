@@ -35,10 +35,13 @@ res.slow.cod_cor.bpm_idx = findcells(the_ring,'FamName','bpm');
 res.slow.cod_cor.hcm_idx = findcells(the_ring,'FamName','hcm');
 res.slow.cod_cor.vcm_idx = findcells(the_ring,'FamName','vcm');
 res.slow.cod_cor.cod_respm = calc_respm_cod(the_ring, res.slow.cod_cor.bpm_idx,...
-                            res.slow.cod_cor.hcm_idx, res.slow.cod_cor.vcm_idx);
+                            res.slow.cod_cor.hcm_idx, res.slow.cod_cor.vcm_idx,10);
 res.slow.cod_cor.cod_respm = res.slow.cod_cor.cod_respm.respm;
-res.slow.cod_cor.nr_sv = 280;
-res.slow.cod_cor.nr_iter = 3;
+res.slow.cod_cor.svs               = 'all';
+res.slow.cod_cor.max_nr_iter       = 50;
+res.slow.cod_cor.tolerance         = 1e-5;
+res.slow.cod_cor.correct2bba_orbit = false;
+res.slow.cod_cor.simul_bpm_err     = false;
 
 res.slow.labels = {'qfa','qdb2','qfb','qdb1','qda','qf1','qf2','qf3','qf4', ...
     'sda','sfa','sd1','sf1','sd2','sd3','sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb', ...
@@ -60,10 +63,13 @@ res.fast.cod_cor.bpm_idx = res.slow.cod_cor.bpm_idx(logical(repmat([1,0,0,0,1,1,
 res.fast.cod_cor.hcm_idx = findcells(the_ring,'FamName','crhv');
 res.fast.cod_cor.vcm_idx = res.fast.cod_cor.hcm_idx;
 res.fast.cod_cor.cod_respm = calc_respm_cod(the_ring, res.fast.cod_cor.bpm_idx,...
-                            res.fast.cod_cor.hcm_idx, res.fast.cod_cor.vcm_idx);
+                            res.fast.cod_cor.hcm_idx, res.fast.cod_cor.vcm_idx, 10);
 res.fast.cod_cor.cod_respm = res.fast.cod_cor.cod_respm.respm;
-res.fast.cod_cor.nr_sv = 160;
-res.fast.cod_cor.nr_iter = 3;
+res.fast.cod_cor.svs               = 'all';
+res.fast.cod_cor.max_nr_iter       = 50;
+res.fast.cod_cor.tolerance         = 1e-5;
+res.fast.cod_cor.correct2bba_orbit = false;
+res.fast.cod_cor.simul_bpm_err     = false;
 
 res.fast.results.mags       = lnls_AmpFactors_magnets(res.fast);
 res.fast.results.bpm        = lnls_AmpFactors_bpms(res.fast);
@@ -82,9 +88,9 @@ res.wocor.results.girder = lnls_AmpFactors_girders(res.wocor, true);
 
 %% Save results
 
-try
+if exist(name,'dir')
     cd(name);
-catch
+else
     mkdir(name);
     cd(name);
 end
