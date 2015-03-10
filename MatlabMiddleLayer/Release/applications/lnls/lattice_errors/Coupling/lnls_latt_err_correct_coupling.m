@@ -1,4 +1,36 @@
-function machine = correct_coupling(machine, coup)
+function machine = lnls_latt_err_correct_coupling(name, machine, coup)
+% function machine = lnls_latt_err_correct_optics(name, machine, coup)
+%
+% Correct coupling of several machines.
+%
+% INPUTS:
+%   name     : name of the file to which the inputs will be saved;
+%   machine  : cell array of lattice models to symmetrize the optics.
+%   coup     : structure with fields:
+%      bpm_idx   - bpm indexes in the model;
+%      hcm_idx   - horizontal correctors indexes in the model;
+%      vcm_idx   - vertical correctors indexes in the model;
+%      scm_idx   - indexes of the skew quads which will be used to symmetrize;
+%      svs       - may be a number denoting how many singular values will be
+%         used in the correction or the string 'all' to use all singular
+%         values. Default: 'all';
+%      max_nr_iter - maximum number of iteractions the correction
+%         algortithm will perform at each call for each machine;
+%      tolerance - if in two subsequent iteractions the relative difference
+%         between the error function values is less than this value the
+%         correction is considered to have converged and will terminate.
+%      simul_bpm_corr_err - if true, the Gains field defined in the bpms  and 
+%         the Gain field defined in the correctors in thelattice will be used
+%         to simulate gain errors in these elements, changing the response
+%         matrix calculated. Notice that the supra cited fields must exist
+%         in the lattice models of the machine array for each bpm and corrector
+%         in order for this this simulation to work. Otherwise an error will occur.
+%      respm - structure with fields M, S, V, U which are the coupling response
+%         matrix and its SVD decomposition. If NOT present, the function
+%         WILL CALCULATE the coupling response matrix for each machine.
+%
+% OUTPUT:
+%   machine : cell array of lattice models with the orbit corrected.
 
 nr_machines = length(machine);
 

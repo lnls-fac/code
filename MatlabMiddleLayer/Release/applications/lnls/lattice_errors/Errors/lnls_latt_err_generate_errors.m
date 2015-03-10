@@ -1,5 +1,4 @@
 function errors = lnls_latt_err_generate_errors(name, the_ring, config, nr_mach, cutoff, rndtype)
-% function errors = generate_errors(name, the_ring, config, nr_machines, cutoff_errors, rndtype)
 %
 % Generates random errors to be applied in the model by the function
 % apply_errors.
@@ -42,8 +41,9 @@ function errors = lnls_latt_err_generate_errors(name, the_ring, config, nr_mach,
 %
 %  modified 2015/03/05 by Fernando.
 %
-% SEE ALSO: apply_errors, correct_cod, correct_coupling, correct_optics,
-% correct_tunes
+% SEE ALSO: lnls_latt_err_apply_errors, lnls_latt_err_correct_cod, 
+% lnls_latt_err_correct_coupling, lnls_latt_err_correct_optics,
+% lnls_latt_err_correct_tune_machines
 
 fprintf('\nGenerating Errors for %d machines ...\n',nr_mach);
 errors.errors_x      = zeros(nr_mach, length(the_ring));
