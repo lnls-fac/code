@@ -54,7 +54,7 @@ for i=1:nr_machines
     [y_max_bpm,y_rms_bpm] = get_max_rms(cody(bpm),1e3);
     fprintf('%03i| %5.2f   %5.2f | %5.2f   %5.2f | %5.2f   %5.2f | %5.2f   %5.2f |\n',i,x_max_all,x_rms_all,x_max_bpm,x_rms_bpm,y_max_all,y_rms_all,y_max_bpm,y_rms_bpm);
 end
-fprintf('    --------------------------------------------------------------- \n');
+fprintf('------------------------------------------------------------------- \n');
 
 
 function the_ring = apply_errors_one_machine(the_ring0, errors, machine, fraction)

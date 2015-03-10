@@ -17,21 +17,18 @@ function machine = lnls_latt_err_correct_tune_machines(tune, machine)
 %   machine : cell array of lattice models with the tune corrected.
 %
 
-fprintf(['--- correct_tunes [' datestr(now) '] ---\n']);
-fprintf('Goal Tunes :');fprintf(' %7.4f ',tune.goal);
-fprintf('\nFamilies Used for Correction :');fprintf(' %s ',tune.families{:});
-fprintf('\nMax Number of Orbit Correction iterations : %4d\n',tune.max_iter);
-fprintf('Tolerância : %7.2e\n\n', tune.tolerance);
-
-fprintf('%3s | %15s | %9s | %15s \n', 'mac','initial tunes', 'converge?', 'final tunes');
+fprintf('-  goal tunes:');fprintf(' %9.6f ',tune.goal);
+fprintf('   families used for correction:');fprintf(' %s ',tune.families{:});
+fprintf('   maximum number of tune correction iterations: %4d\n',tune.max_iter);
+fprintf('   tolerance: %8.2e\n\n', tune.tolerance);
+fprintf('\n');
+fprintf('    ------------------------------------------------------- \n');
+fprintf('   |    initial tunes    | converged |     final tunes     |\n');
+fprintf('---|-------------------------------------------------------|\n');
 for i=1:length(machine)
-    [machine{i}, converged, tunes0, tunesi] = lnls_correct_tunes(machine{i}, tune.families, ...
-        tune.goal, tune.max_iter, tune.tolerance);
-    if converged
-        fprintf('%03i | %7.4f %7.4f | %9s | %7.4f %7.4f \n', i, tunesi,'   yes   ', tunes0);
-    else
-        fprintf('%03i | %7.4f %7.4f | %9s | %7.4f %7.4f \n', i, tunesi,'   no    ', tunes0);
-    end
+    [machine{i}, converged, tunesf, tunesi] = lnls_correct_tunes(machine{i}, tune.families, tune.goal, tune.max_iter, tune.tolerance);
+    if (converged), cstr = 'yes'; else cstr = 'no'; end;
+    fprintf('%03i| %9.6f %9.6f |    %3s    | %9.6f %9.6f |\n',i,tunesi,cstr,tunesf);
 end
-
+fprintf('---|-------------------------------------------------------|\n');
 fprintf('\n');

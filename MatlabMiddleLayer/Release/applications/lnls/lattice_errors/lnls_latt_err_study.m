@@ -9,16 +9,16 @@ name = 'CONFIG'; name_saved_machines = name;
 initializations();
 
 % next a nominal model is chosen for the study 
-the_ring = create_nominal_model();
+[the_ring, family_data] = create_nominal_model();
 
 % application of errors to the nominal model
-machine  = create_apply_errors(the_ring);
+machine  = create_apply_errors(the_ring, family_data);
 
 % orbit correction is performed
-machine  = correct_orbit(machine);
+machine  = correct_orbit(machine, family_data);
 
 % next, coupling correction
-machine  = correct_coupling(machine);
+machine  = correct_coupling(machine, family_data);
 
 % tune correction
 machine  = correct_tune(machine);
@@ -55,7 +55,7 @@ finalizations()
     end
 
 %% Definition of the nominal AT model
-    function the_ring = create_nominal_model()
+    function [the_ring, family_data] = create_nominal_model()
         
         fprintf('\n<nominal model> [%s]\n\n', datestr(now));
         
@@ -64,7 +64,7 @@ finalizations()
         % loaded with 'sirius' command the appropriate lattice version.
         fprintf('-  loading model ...\n');
         fprintf('   file: %s\n', which('sirius_si_lattice'));
-        the_ring = sirius_si_lattice();
+        [the_ring, ~, family_data] = sirius_si_lattice();
         
         % sets cavity and radiation off for 4D trackings
         fprintf('-  turning radiation and cavity off ...\n');
@@ -77,7 +77,7 @@ finalizations()
     end
 
 %% Magnet Errors:
-    function machine = create_apply_errors(the_ring)
+    function machine = create_apply_errors(the_ring, family_segmentation)
         
         fprintf('\n<error generation and random machines creation> [%s]\n\n', datestr(now));
         
@@ -140,12 +140,12 @@ finalizations()
     end
 
 %% Cod Correction
-    function machine = correct_orbit(machine)
+    function machine = correct_orbit(machine, family_segmentation)
         
         fprintf('\n<closed-orbit distortions correction> [%s]\n\n', datestr(now));
         
         % parameters for slow correction algorithms
-        orbit.bpm_idx = sirius_si_bpm_indices(the_ring);
+        orbit.bpm_idx = family_segmentation.sirius_si_bpm_indices(the_ring);
         orbit.hcm_idx = sirius_si_chs_indices(the_ring);
         orbit.vcm_idx = sirius_si_cvs_indices(the_ring);
         
@@ -209,12 +209,15 @@ finalizations()
 
 %% Tune Correction
     function machine = correct_tune(machine)
+        
+        fprintf('\n<tune correction> [%s]\n\n', datestr(now));
+        
         tune.correction_flag = false;
         tune.families        = {'qfa','qdb2','qfb','qdb1','qda'};
         [~, tune.goal]       = twissring(the_ring,0,1:length(the_ring)+1);
         tune.max_iter        = 10;
         tune.tolerance       = 1e-6;
-        
+     
         % faz correcao de tune
         machine = lnls_latt_err_correct_tune_machines(tune, machine);
         
@@ -224,6 +227,9 @@ finalizations()
 
 %% Multipoles insertion
     function machine = create_apply_multipoles(machine)
+        
+        fprintf('\n<application of multipole errors> [%s]\n\n', datestr(now));
+        
         % QUADRUPOLES
         % quadM multipoles from model3 fieldmap '2015-02-05 Quadrupolo_Anel_QM_Modelo 3_-12_12mm_-500_500mm_156.92A.txt'
         multi.quadsM.labels = {'qfa','qfb','qdb2','qf1','qf2','qf3','qf4'};
@@ -263,7 +269,7 @@ finalizations()
         multi.bends.nrsegs = [2 3 2 2];
         multi.bends.main_multipole = 1;% positive for normal negative for skew
         multi.bends.r0 = 11.7e-3;
-        multi.bends.order       = [ 3   4   5   6   7   8   9 ]; % 1 for dipole
+        multi.bends.order = [ 3   4   5   6   7   8   9 ]; % 1 for dipole
         multi.bends.main_vals = 1*ones(1,7)*4e-5;
         multi.bends.skew_vals = 1*ones(1,7)*1e-5;
         

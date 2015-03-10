@@ -3,7 +3,9 @@ function info = collect_info_coup(the_ring, coup, lattice_symmetry)
 if ~exist('lattice_symmetry','var'), lattice_symmetry = 1; end
 stepK0 = 0.001;
 
-fprintf('nr skewcorr: %03i\n', length(coup.scm_idx));
+fprintf('-  collecting info for optics response matrix calculation ...\n');
+fprintf('   (this routine is yet to be generalized for arbitrary segmented skew quadrupole models!)\n');
+fprintf('   qs:%03i\n', size(coup.scm_idx,1));
 
 % Test hysteresis
 hyster = 0.0;
@@ -23,8 +25,10 @@ end
 
 info = cell(1,len_scms*lattice_symmetry);
 
+% this routine has to be generalized for arbitrary skew quad segmented models !!!
+
 lnls_create_waitbar('Colecting Info for Optics Response Matrix Calculation',0.5,len_scms);
-K = getcellstruct(the_ring, 'PolynomA', coup.scm_idx(1:len_scms), 1, 2);
+K = getcellstruct(the_ring, 'PolynomA', coup.scm_idx(1:len_scms,1), 1, 2);
 the_ring_calc = the_ring;
 for i1=1:len_scms
     the_ring_calc = setcellstruct(the_ring_calc, 'PolynomA', coup.scm_idx(i1,:), K(i1) + stepK/2, 1, 2);

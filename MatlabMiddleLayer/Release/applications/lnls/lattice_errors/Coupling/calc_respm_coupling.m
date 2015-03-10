@@ -19,3 +19,7 @@ respm.M = M;
 respm.U = U;
 respm.V = V;
 respm.S = S;
+
+sv = diag(S);
+fprintf('   number of singular values: %03i\n', length(sv));
+fprintf('   singular values: %f,%f,%f ... %f,%f,%f\n', sv(1),sv(2),sv(3),sv(end-2),sv(end-1),sv(end));

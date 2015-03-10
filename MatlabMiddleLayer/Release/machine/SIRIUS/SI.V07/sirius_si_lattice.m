@@ -1,4 +1,4 @@
-function [r, lattice_title] = sirius_si_lattice(varargin)
+function [r, lattice_title, family_data] = sirius_si_lattice(varargin)
 % r = sirius_si_lattice       : retorna o modelo atual do anel;
 %
 % r = sirius_si_lattice(mode) : Ateh o momento, pode ser 'AC10'(default) or 'AC20'.
@@ -92,6 +92,7 @@ MB1 = marker('mb1', 'IdentityPass');
 B1S = rbend_sirius('b1', 0.828/2,  2.7553*deg2rad/2, 0, 1.4143*deg2rad/2,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
 B1  = [B1E,MB1,B1S];
 
+
 B2E = rbend_sirius('b2', 1.231/2, 4.0964*deg2rad/2, 1.4143*deg2rad/2, 0,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
 MB2 = marker('mb2', 'IdentityPass');
 B2S = rbend_sirius('b2', 1.231/2, 4.0964*deg2rad/2, 0, 1.4143*deg2rad/2,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
@@ -123,6 +124,8 @@ QF1  = quadrupole('qf1',  0.200, qf1_strength,  quad_pass_method);
 QF2  = quadrupole('qf2',  0.200, qf2_strength,  quad_pass_method);
 QF3  = quadrupole('qf3',  0.200, qf3_strength,  quad_pass_method);
 QF4  = quadrupole('qf4',  0.200, qf4_strength,  quad_pass_method);
+
+
 
 % -- sextupoles and slow correctors --         
 SDA = sextupole('sda', 0.150, sda_strength, sext_pass_method); %
@@ -292,10 +295,47 @@ THERING = set_vacuum_chamber(THERING);
 % defines girders
 THERING = set_girders(THERING);
 
+family_data = familydata(THERING);
+
 % pre-carrega passmethods de forma a evitar problema com bibliotecas recem-compiladas
 lnls_preload_passmethods;
 
 r = THERING;
+
+function data = familydata(the_ring)
+
+data.b1.nr_segs   = 2;
+data.b2.nr_segs   = 2;
+data.b3.nr_segs   = 2;
+data.bc.nr_segs   = 12;
+
+data.qfa.nr_segs  = 1;
+data.qda.nr_segs  = 1;
+data.qdb2.nr_segs = 1;
+data.qfb.nr_segs  = 1;
+data.qdb1.nr_segs = 1;
+data.qf1.nr_segs  = 1;
+data.qf2.nr_segs  = 1;
+data.qf3.nr_segs  = 1;
+data.qf4.nr_segs  = 1;
+
+data.sda.nr_segs = 1;
+data.sfa.nr_segs = 1;
+data.sdb.nr_segs = 1;
+data.sfb.nr_segs = 1;
+data.sd1.nr_segs = 1;
+data.sf1.nr_segs = 1;
+data.sd2.nr_segs = 1;
+data.sd3.nr_segs = 1;
+data.sf2.nr_segs = 1;
+data.sd6.nr_segs = 1;
+data.sf4.nr_segs = 1;
+data.sd5.nr_segs = 1;
+data.sd4.nr_segs = 1;
+data.sf3.nr_segs = 1;
+
+data.cf.nr_segs = 1;
+
 
 
 function the_ring = set_girders(the_ring)
@@ -331,3 +371,4 @@ the_ring = setcellstruct(the_ring, 'NumIntSteps', bends, bends_nis);
 the_ring = setcellstruct(the_ring, 'NumIntSteps', quads, 10);
 the_ring = setcellstruct(the_ring, 'NumIntSteps', sexts, 5);
 the_ring = setcellstruct(the_ring, 'NumIntSteps', kicks, 1);
+

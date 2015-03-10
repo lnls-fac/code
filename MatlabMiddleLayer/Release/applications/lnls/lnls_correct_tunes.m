@@ -1,4 +1,4 @@
-function [the_ring0, converged, tunes0, tunesi] = lnls_correct_tunes(the_ring, families, goal_tunes, max_iter, tolerancia)
+function [the_ring0, converged, tunesf, tunesi] = lnls_correct_tunes(the_ring, families, goal_tunes, max_iter, tolerancia)
 % [the_ring0, converged, tunes] = lnls_correct_tune(the_ring, families, goal_tune, max_iter, tolerancia)
 % 
 % Correct tunes with specified quadrupole families.
@@ -15,7 +15,7 @@ function [the_ring0, converged, tunes0, tunesi] = lnls_correct_tunes(the_ring, f
 %   the_ring0  : ring model with minimum distance from the desired solution
 %   converged  : true if the euclidian distance between tunes0 and
 %                 goal_tunes is lower than tolerancia;
-%   tunes0     : tunes of the model the_ring0;
+%   tunesf     : tunes of the model the_ring0;
 %   tunesi     : initial tunes, before adjust.
 
 
@@ -29,7 +29,7 @@ end
 res = sqrt((tunes-goal_tunes)*(tunes-goal_tunes)');
 
 the_ring0 = the_ring;
-tunes0 = tunes;
+tunesf = tunes;
 tunesi = tunes;
 
 calc_matrix = true;
@@ -75,7 +75,7 @@ while ii < max_iter && res > tolerancia
     if new_res < res
         the_ring0 = the_ring;
         res = new_res;
-        tunes0 = tunes;
+        tunesf = tunes;
         calc_matrix = false;
     else
         calc_matrix = true;

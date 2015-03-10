@@ -20,12 +20,12 @@ myy = zeros(len_bpms, len_vcms);
 
 for i=1:len_bpms
     for j=1:len_hcms
-        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i,:),hcms(j,:),the_ring{j});
+        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i,:),hcms(j,:),the_ring(hcms(j,:)));
         mxx(i,j) = cxx;
         myx(i,j) = cyx;
     end
     for j=1:len_vcms
-        [~, ~, cxy, cyy] = get_C(M,T,bpms(i,:),vcms(j,:),the_ring{j});
+        [~, ~, cxy, cyy] = get_C(M,T,bpms(i,:),vcms(j,:),the_ring(vcms(j,:)));
         mxy(i,j) = cxy;
         myy(i,j) = cyy;
     end
@@ -71,7 +71,7 @@ MR = [mxx, mxy; myx, myy];
 % M = [mxx, mxy; myx, myy];
 
 
-function [cxx, cyx, cxy, cyy] = get_C(M,T,i,j,element)
+function [cxx, cyx, cxy, cyy] = get_C(M,T,i,j,segmented_element)
 % cxy --> orbit at bpm x due to kick in corrector y
 
 R_j = T(:,:,j(end));
@@ -86,7 +86,8 @@ end
 D = diag(ones(1,size(M,1)));
 C = (D - M_i) \ R_ij;
 
-cxx = (element.Length/2) * C(1,1) + C(1,2);
-cyx = (element.Length/2) * C(3,1) + C(3,2);
-cxy = (element.Length/2) * C(1,3) + C(1,4);
-cyy = (element.Length/2) * C(3,3) + C(3,4);
+total_length = sum(getcellstruct(segmented_element, 'Length', 1:length(segmented_element)));
+cxx = (total_length/2) * C(1,1) + C(1,2);
+cyx = (total_length/2) * C(3,1) + C(3,2);
+cxy = (total_length/2) * C(1,3) + C(1,4);
+cyy = (total_length/2) * C(3,3) + C(3,4);

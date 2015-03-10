@@ -72,11 +72,11 @@ fprintf('   sextupole ramp: '); fprintf(' %4.2f', orbit.sext_ramp); fprintf('\n'
 if isnumeric(orbit.svs), svs = num2str(orbit.svs);else svs = orbit.svs;end
 fprintf('   selection of singular values: %4s\n',svs);
 fprintf('   maximum number of orbit correction iterations: %i\n',orbit.max_nr_iter);
-fprintf('   tolerance: %7.2e\n', orbit.tolerance);
+fprintf('   tolerance: %8.2e\n', orbit.tolerance);
 
 fprintf('\n');
 fprintf('    -----------------------------------------------------------------------------------------------  \n');
-fprintf('   |           codx [um]           |           cody [um]           |  kickx[urad]     kicky[urad]  | <nr_iter|nr_refactor>\n');
+fprintf('   |           codx [um]           |           cody [um]           |  kickx[urad]     kicky[urad]  | (nr_iter|nr_refactor)\n');
 fprintf('   |      all             bpm      |      all             bpm      |                               | [sextupole ramp]\n');
 fprintf('   | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) | ');
 fprintf('%7.5f ', orbit.sext_ramp); fprintf('\n');
@@ -133,10 +133,10 @@ for i=1:nr_machines
     fprintf('%03i| %5.1f   %5.1f | %5.1f   %5.1f | %5.1f   %5.1f | %5.1f   %5.1f |  %3.0f     %3.0f  |  %3.0f     %3.0f  | ', i, ...
         x_max_all,x_rms_all,x_max_bpm,x_rms_bpm,y_max_all,y_rms_all,y_max_bpm,y_rms_bpm, ...
         kickx_max,kickx_rms,kicky_max,kicky_rms);
-    fprintf('<%02i|%02i> ', [niter(:) ntimes(:)]'); fprintf('\n');
+    fprintf('(%02i|%02i) ', [niter(:) ntimes(:)]'); fprintf('\n');
     
 end
-fprintf('    ----------------------------------------------------------------------------------------------- \n');
+fprintf('--------------------------------------------------------------------------------------------------- \n');
 
  
 function [maxv,rmsv] = get_max_rms(v,f)

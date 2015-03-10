@@ -1,10 +1,10 @@
 function [Mxx,Mxy,Myx, Myy, Dispx, Dispy] = prepare_data_for_symm(the_ring, optics, M, Disp)
 
-len_bpms = length(optics.bpm_idx);
+len_bpms = size(optics.bpm_idx,1);
 if optics.simul_bpm_corr_err
     bpm_gains = getcellstruct(the_ring,'Gains',optics.bpm_idx);
-    hcm_gains = getcellstruct(the_ring,'Gain',optics.hcm_idx)';
-    vcm_gains = getcellstruct(the_ring,'Gain',optics.vcm_idx)';
+    hcm_gains = getcellstruct(the_ring,'Gain',optics.hcm_idx(:,1))';
+    vcm_gains = getcellstruct(the_ring,'Gain',optics.vcm_idx(:,1))';
     M = repmat([hcm_gains,vcm_gains],size(M,1),1).*M;
     for i=1:length(bpm_gains)
         M(i+[0,len_bpms],:) = bpm_gains{i}*M(i+[0,len_bpms],:);
@@ -12,7 +12,7 @@ if optics.simul_bpm_corr_err
     end
 end
 
-M = mat2cell(M,len_bpms*[1,1],[length(optics.hcm_idx), length(optics.vcm_idx)]);
+M = mat2cell(M,len_bpms*[1,1],[size(optics.hcm_idx,1), size(optics.vcm_idx,1)]);
 Mxx = M{1,1};
 Mxy = M{1,2};
 Myx = M{2,1};
