@@ -3,16 +3,12 @@ function r = calc_respm_cod(the_ring, bpm_idx, hcm_idx, vcm_idx, nper, print)
 if ~exist('print','var'), print=false; end
 if ~exist('nper','var'), nper=1;end
 
-if print, fprintf(['\nCalculating COD Response Matrix [' datestr(now) ']:\n']); end;
-
 nr_bpms = size(bpm_idx,1);
 nr_hcms = size(hcm_idx,1);
 nr_vcms = size(vcm_idx,1);
 
 if print
-    fprintf('nr bpms: %03i\n', nr_bpms);
-    fprintf('nr hcms: %03i\n', nr_hcms);
-    fprintf('nr vcms: %03i\n', nr_vcms);
+    fprintf('   bpms:%03i, hcms:%03i, vcms:%03i\n', nr_bpms, nr_hcms, nr_vcms);
 end
 
 Mxx = zeros(nr_bpms, nr_hcms);
@@ -59,4 +55,8 @@ r.respm.myy = Myy;
 r.respm.U = U;
 r.respm.V = V;
 r.respm.S = S;
+
+sv = diag(S);
+fprintf('   number of singular values: %03i\n', size(S,1));
+fprintf('   singular values: %f,%f,%f ... %f,%f,%f\n', sv(1),sv(2),sv(3),sv(end-2),sv(end-1),sv(end));
 

@@ -1,5 +1,8 @@
 function machine = lnls_latt_err_study()
 
+fprintf('\n')
+fprintf('Lattice Errors Run\n');
+fprintf('==================\n');
 
 % first step is to initialize global auxiliary structures
 name = 'CONFIG'; name_saved_machines = name;
@@ -30,10 +33,15 @@ finalizations()
 %% Initializations
     function initializations()
         
+        fprintf('\n<initializations> [%s]\n\n', datestr(now));
+        
         % seed for random number generator
-        RandStream.setGlobalStream(RandStream('mt19937ar','seed', 131071));
+        seed = 131071;
+        fprintf('-  initializing random number generator with seed = %i ...\n', seed);
+        RandStream.setGlobalStream(RandStream('mt19937ar','seed', seed));
         
         % sends copy of all output to a diary in a file
+        fprintf('-  creating diary file ...\n');
         diary([name, '_summary.txt']);
         
     end
@@ -49,12 +57,17 @@ finalizations()
 %% Definition of the nominal AT model
     function the_ring = create_nominal_model()
         
+        fprintf('\n<nominal model> [%s]\n\n', datestr(now));
+        
         % loads nominal ring as the default lattice for a particular
         % lattice version. It is assumed that sirius MML structure has been
         % loaded with 'sirius' command the appropriate lattice version.
+        fprintf('-  loading model ...\n');
+        fprintf('   file: %s\n', which('sirius_si_lattice'));
         the_ring = sirius_si_lattice();
         
         % sets cavity and radiation off for 4D trackings
+        fprintf('-  turning radiation and cavity off ...\n');
         the_ring = setcavity('off', the_ring);
         the_ring = setradiation('off', the_ring);
         
@@ -65,6 +78,8 @@ finalizations()
 
 %% Magnet Errors:
     function machine = create_apply_errors(the_ring)
+        
+        fprintf('\n<error generation and random machines creation> [%s]\n\n', datestr(now));
         
         % constants
         um = 1e-6; mrad = 0.001; percent = 0.01;
@@ -108,21 +123,26 @@ finalizations()
         config.girder.sigma_x     = 100 * um * 1;
         config.girder.sigma_y     = 100 * um * 1;
         config.girder.sigma_roll  = 0.20 * mrad * 1;
-            
+        
         % generates error vectors
         nr_machines   = 2;
         rndtype       = 'gaussian';
         cutoff_errors = 1;
+        fprintf('-  generating errors ...\n');
         errors        = lnls_latt_err_generate_errors(name, the_ring, config, nr_machines, cutoff_errors, rndtype);
         
         % applies errors to machines
-        fractional_delta = [1];
+        fractional_delta = 1;
+        fprintf('-  creating %i random machines and applying errors ...\n', nr_machines);
+        fprintf('-  finding closed-orbit distortions with sextupoles off ...\n\n');
         machine = lnls_latt_err_apply_errors(name, the_ring, errors, fractional_delta);
         
     end
 
 %% Cod Correction
     function machine = correct_orbit(machine)
+        
+        fprintf('\n<closed-orbit distortions correction> [%s]\n\n', datestr(now));
         
         % parameters for slow correction algorithms
         orbit.bpm_idx = sirius_si_bpm_indices(the_ring);
@@ -140,6 +160,7 @@ finalizations()
         % calcs nominal cod response matrix, if chosen
         use_respm_from_nominal_lattice = true; 
         if use_respm_from_nominal_lattice
+            fprintf('-  calculating orbit response matrix from nominal machine ...\n');
             lattice_symmetry = 10;  
             orbit.respm = calc_respm_cod(the_ring, orbit.bpm_idx, orbit.hcm_idx, orbit.vcm_idx, lattice_symmetry, true); 
             orbit.respm = orbit.respm.respm;
@@ -157,15 +178,12 @@ finalizations()
 %% Coupling Correction
     function machine = correct_coupling(machine)
         
-        labels = {'sda','sdb','sf1','sf4'};
-        knobs=[];
-        for i=1:length(labels)
-            knobs = [knobs, findcells(the_ring,'FamName',labels{i})];
-        end
-        coup.scm_idx       = sort(knobs);
-        coup.bpm_idx = sort(findcells(the_ring, 'FamName', 'bpm'));
-        coup.hcm_idx = sort(findcells(the_ring, 'FamName', 'hcm'));
-        coup.vcm_idx = sort(findcells(the_ring, 'FamName', 'vcm'));
+        fprintf('\n<coupling correction> [%s]\n\n', datestr(now));
+        
+        coup.scm_idx = sirius_si_qs_indices(the_ring);
+        coup.bpm_idx = sirius_si_bpm_indices(the_ring);
+        coup.hcm_idx = sirius_si_chs_indices(the_ring);
+        coup.vcm_idx = sirius_si_cvs_indices(the_ring);
         coup.svs           = 'all';
         coup.max_nr_iter   = 50;
         coup.tolerance     = 1e-5;
@@ -173,14 +191,14 @@ finalizations()
         
         % calcs coupling symmetrization matrix
         fname = [name '_info_coup.mat'];
-        nper = 10;
+        lattice_symmetry = 10;
         if ~exist(fname, 'file')
-            [respm, info] = calc_respm_coupling(the_ring, coup, nper);
+            [respm, info] = calc_respm_coupling(the_ring, coup, lattice_symmetry);
             coup.respm = respm;
             save(fname, 'info');
         else
             data = load(fname);
-            [respm, ~] = calc_respm_coupling(the_ring, coup, nper, data.info);
+            [respm, ~] = calc_respm_coupling(the_ring, coup, lattice_symmetry, data.info);
             coup.respm = respm;
         end
         machine = lnls_latt_err_correct_coupling(name, machine, coup);

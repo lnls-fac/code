@@ -10,7 +10,7 @@ function machine = lnls_latt_err_correct_cod(name, machine, orbit, goal_codx, go
 %   goal_codx: horizontal reference orbit to use in correction. May be a vector
 %      defining the orbit for each bpm. In this case the reference will be the
 %      same for all the machines. Or Can be a matrix with dimension
-%      nr_machines X nr_bpms, to define different orbits among the machines.
+%      nr_machinesines X nr_bpms, to define different orbits among the machines.
 %      If not passed a default of zero will be used;
 %   goal_cody: same as goal_codx but for the vertical plane.
 %   orbit    : structure with fields:
@@ -47,17 +47,17 @@ function machine = lnls_latt_err_correct_cod(name, machine, orbit, goal_codx, go
 %   machine : cell array of lattice models with the orbit corrected.
 %      
 
-nr_mach = length(machine);
+nr_machines = length(machine);
 
 if ~exist('goal_codx','var')
-    goal_codx = zeros(nr_mach,length(orbit.bpm_idx));
+    goal_codx = zeros(nr_machines,length(orbit.bpm_idx));
 elseif size(goal_codx,1) == 1
-    goal_codx = repmat(goal_codx,nr_mach,1);
+    goal_codx = repmat(goal_codx,nr_machines,1);
 end
 if ~exist('goal_cody','var')
-    goal_cody = zeros(nr_mach,length(orbit.bpm_idx));
+    goal_cody = zeros(nr_machines,length(orbit.bpm_idx));
 elseif size(goal_cody,1) == 1
-    goal_cody = repmat(goal_cody,nr_mach,1);
+    goal_cody = repmat(goal_cody,nr_machines,1);
 end
 
 if ~isfield(orbit,'sext_ramp'), orbit.sext_ramp = 1; end;
@@ -67,23 +67,27 @@ save([name,'_correct_cod_input.mat'], 'orbit', 'goal_codx', 'goal_cody');
 calc_respm = false;
 if ~isfield(orbit,'respm'), calc_respm = true; end
 
-fprintf(['\nCorrecting COD [' datestr(now) ']:\n']);
-fprintf('Sextupoles Ramp :');fprintf(' %4.2f ',orbit.sext_ramp);
+fprintf('-  correcting closed-orbit distortions\n');
+fprintf('   sextupole ramp: '); fprintf(' %4.2f', orbit.sext_ramp); fprintf('\n');
 if isnumeric(orbit.svs), svs = num2str(orbit.svs);else svs = orbit.svs;end
-fprintf('\nNumber Of Singular Values : %4s\n',svs);
-fprintf('Max Number of Orbit Correction iterations : %4d\n',orbit.max_nr_iter);
-fprintf('Tolerância : %7.2e\n\n', orbit.tolerance);
-fprintf('%3s |   codx[um]    |   cody[um]    | maxkick[urad] | nr_iters | nr_str_red\n', 'i');
-fprintf('    | (max)  (std)  | (max)  (std)  |   x      y    |          |\n');
+fprintf('   selection of singular values: %4s\n',svs);
+fprintf('   maximum number of orbit correction iterations: %i\n',orbit.max_nr_iter);
+fprintf('   tolerance: %7.2e\n', orbit.tolerance);
 
-
+fprintf('\n');
+fprintf('    -----------------------------------------------------------------------------------------------  \n');
+fprintf('   |           codx [um]           |           cody [um]           |  kickx[urad]     kicky[urad]  | <nr_iter|nr_refactor>\n');
+fprintf('   |      all             bpm      |      all             bpm      |                               | [sextupole ramp]\n');
+fprintf('   | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) | ');
+fprintf('%7.5f ', orbit.sext_ramp); fprintf('\n');
+fprintf('---|---------------------------------------------------------------|-------------------------------| \n');
 if orbit.correct2bba_orbit
     ind_bba = get_bba_ind(machine{1});
 end
 
 sext_idx = findcells(machine{1},'PolynomB');
 random_cod = zeros(2,length(orbit.bpm_idx));
-for i=1:nr_mach
+for i=1:nr_machines
     sext_str = getcellstruct(machine{i}, 'PolynomB', sext_idx, 1, 3);
     
     if orbit.simul_bpm_err
@@ -119,11 +123,23 @@ for i=1:nr_mach
             break;
         end
     end
-   
-    fprintf('%03i | %6.2f %6.2f | %6.2f %6.2f | %6.2f %6.2f |', i, ...
-        1e6*max(abs(codx)), 1e6*std(codx), 1e6*max(abs(cody)), 1e6*std(cody), ...
-        1e6*max(abs(hkck)), 1e6*max(abs(vkck)));
-    stri = sprintf(' %2d /', niter); fprintf('%9s |',stri(1:end-1));
-    stri = sprintf(' %2d /', ntimes); fprintf('%9s \n',stri(1:end-1));
- end
-fprintf('\n');
+     
+    [x_max_all,x_rms_all] = get_max_rms(codx,1e6);
+    [x_max_bpm,x_rms_bpm] = get_max_rms(codx(orbit.bpm_idx),1e6);
+    [y_max_all,y_rms_all] = get_max_rms(cody,1e6);
+    [y_max_bpm,y_rms_bpm] = get_max_rms(cody(orbit.bpm_idx),1e6);
+    [kickx_max,kickx_rms] = get_max_rms(hkck,1e6);
+    [kicky_max,kicky_rms] = get_max_rms(vkck,1e6);
+    fprintf('%03i| %5.1f   %5.1f | %5.1f   %5.1f | %5.1f   %5.1f | %5.1f   %5.1f |  %3.0f     %3.0f  |  %3.0f     %3.0f  | ', i, ...
+        x_max_all,x_rms_all,x_max_bpm,x_rms_bpm,y_max_all,y_rms_all,y_max_bpm,y_rms_bpm, ...
+        kickx_max,kickx_rms,kicky_max,kicky_rms);
+    fprintf('<%02i|%02i> ', [niter(:) ntimes(:)]'); fprintf('\n');
+    
+end
+fprintf('    ----------------------------------------------------------------------------------------------- \n');
+
+ 
+function [maxv,rmsv] = get_max_rms(v,f)
+    
+maxv = f*max(abs(v));
+rmsv = f*sqrt(sum(v.^2)/length(v));

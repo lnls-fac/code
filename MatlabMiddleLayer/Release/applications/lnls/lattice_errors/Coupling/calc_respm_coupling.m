@@ -1,8 +1,8 @@
-function [respm, info] = calc_respm_coupling(the_ring, coup, nper, info)
+function [respm, info] = calc_respm_coupling(the_ring, coup, lattice_symmetry, info)
 
-if ~exist('nper','var'), nper = 1; end
+if ~exist('lattice_symmetry','var'), lattice_symmetry = 1; end
 
-if ~exist('info','var'), info = collect_info_coup(the_ring, coup, nper);end
+if ~exist('info','var'), info = collect_info_coup(the_ring, coup, lattice_symmetry);end
 
 [~, Mxy, Myx, ~, ~, Dispy] = prepare_data_for_symm(the_ring, coup, info{1}.M, info{1}.Disp);
 v = calc_residue_coupling(Mxy, Myx, Dispy, coup.bpm_idx, coup.hcm_idx, coup.vcm_idx);

@@ -45,7 +45,6 @@ function errors = lnls_latt_err_generate_errors(name, the_ring, config, nr_mach,
 % lnls_latt_err_correct_coupling, lnls_latt_err_correct_optics,
 % lnls_latt_err_correct_tune_machines
 
-fprintf('\nGenerating Errors for %d machines ...\n',nr_mach);
 errors.errors_x      = zeros(nr_mach, length(the_ring));
 errors.errors_y      = zeros(nr_mach, length(the_ring));
 errors.errors_roll   = zeros(nr_mach, length(the_ring));
@@ -151,7 +150,7 @@ if isfield(config,'girder') && (config.girder.girder_error_flag)
         end
     end
 end
-fprintf('\n');
+
 
 
 function errors = get_fam_random_errors(errors, family, k, indcs, nrels, nrsgs, cutoff_errors, rndtype)

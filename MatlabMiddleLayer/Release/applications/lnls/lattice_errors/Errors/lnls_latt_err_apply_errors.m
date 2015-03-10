@@ -20,36 +20,41 @@ function machine = lnls_latt_err_apply_errors(name, machine, errors, increment)
 % lnls_latt_err_correct_coupling, lnls_latt_err_correct_optics,
 % lnls_latt_err_correct_tune_machines
 
-nr_mach = size(errors.errors_x, 1);
+nr_machines = size(errors.errors_x, 1);
 
 save([name,'_apply_errors_input.mat'], 'errors', 'increment');
 
 if ~iscell(machine{1})
-    machine = repmat({machine},nr_mach,1);
+    machine = repmat({machine},nr_machines,1);
 end
 
-if length(machine) ~= nr_mach
+if length(machine) ~= nr_machines
     warning('MATLAB:DifferentSizes',...
         'Incompatibility between errors and machine lengths.\n Using minimum of both.');
-    nr_mach = min([length(machine),nr_mach]);
+    nr_machines = min([length(machine),nr_machines]);
 end
 
 dim = get_dim(machine{1});
+bpm = sirius_si_bpm_indices(machine{1});
 
 sext_idx = findcells(machine{1}, 'PolynomB');
-fprintf('Applying Errors in %3d Machines...\n\n',nr_mach);
-fprintf(['Closed Orbit With Sextupoles OFF [' datestr(now) ']:\n\n']);
-fprintf('%3s|       codx[mm]       |       codx[mm]       \n', 'ind');
-fprintf('   |   (max)  (std)  (avg)  | (max)  (std)  (avg)  \n');
-for i=1:nr_mach
+fprintf('    --------------------------------------------------------------- \n');
+fprintf('   |           codx [mm]           |           cody [mm]           |\n');
+fprintf('   |      all             bpm      |      all             bpm      |\n');
+fprintf('   | (max)   (rms) | (max)   (rms) | (max)   (rms) | (max)   (rms) |\n');
+fprintf('---|---------------------------------------------------------------|\n');
+%fprintf('001| 13.41   14.32 | 13.41   14.32 | 13.41   14.32 | 13.41   14.32 |\n');
+for i=1:nr_machines
     machine{i}    = apply_errors_one_machine(machine{i}, errors, i, increment);
     the_ring = setcellstruct(machine{i}, 'PolynomB', sext_idx, 0, 1, 3);
     [codx, cody] = calc_cod(the_ring, dim);
-    fprintf('%03i| %6.2f %6.2f %6.2f | %6.2f %6.2f %6.2f \n', i, ...
-        1e3*max(abs(codx)), 1e3*std(codx), 1e3*mean(codx), ...
-        1e3*max(abs(cody)), 1e3*std(cody), 1e3*mean(cody));
+    [x_max_all,x_rms_all] = get_max_rms(codx,1e3);
+    [x_max_bpm,x_rms_bpm] = get_max_rms(codx(bpm),1e3);
+    [y_max_all,y_rms_all] = get_max_rms(cody,1e3);
+    [y_max_bpm,y_rms_bpm] = get_max_rms(cody(bpm),1e3);
+    fprintf('%03i| %5.2f   %5.2f | %5.2f   %5.2f | %5.2f   %5.2f | %5.2f   %5.2f |\n',i,x_max_all,x_rms_all,x_max_bpm,x_rms_bpm,y_max_all,y_rms_all,y_max_bpm,y_rms_bpm);
 end
-fprintf('\n');
+fprintf('    --------------------------------------------------------------- \n');
 
 
 function the_ring = apply_errors_one_machine(the_ring0, errors, machine, fraction)
@@ -84,3 +89,8 @@ err = fraction * errors.errors_e_kdip(machine,:);
 idx = find(err ~= 0)';
 the_ring  = lnls_set_excitation_Kdip(err(idx), idx, the_ring);
 
+
+
+function [maxv,rmsv] = get_max_rms(v,f)
+    maxv = f*max(abs(v));
+    rmsv = f*sqrt(sum(v.^2)/length(v));
