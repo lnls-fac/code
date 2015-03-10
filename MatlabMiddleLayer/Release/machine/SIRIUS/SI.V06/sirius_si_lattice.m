@@ -202,7 +202,7 @@ pmm      = marker('pmm','IdentityPass');
 
 %% LINES
 
-tm1a = [girder, d170, sda, d170, qda, d260, qfa, d130, mon, d130, sfa, d120, crhv, cv, ch, girder];              % high beta xxM1 girder
+tm1a = [girder, d170, sda, d170, qda, d260, qfa, d130, mon, d130, sfa, d120, crhv, cv, ch, girder];                  % high beta xxM1 girder
 tm2a = fliplr(tm1a);                                                                                                 % high beta xxM2 girder
 tida = [dia2, mida, dia1, mia, dia1, mida, dia2];                                                                    % high beta ID straight section
 tcav = [dia2, dia1, mia, cav, dia1, dia2];                                                                           % high beta RF cavity straight section 

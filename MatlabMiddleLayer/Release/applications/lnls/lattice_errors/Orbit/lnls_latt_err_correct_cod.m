@@ -1,4 +1,4 @@
-function machine = correct_cod(name, machine, orbit, goal_codx, goal_cody)
+function machine = lnls_latt_err_correct_cod(name, machine, orbit, goal_codx, goal_cody)
 
 nr_mach = length(machine);
 

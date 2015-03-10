@@ -8,3 +8,4 @@ idx = [idx findcells(the_ring, 'FamName', 'sd4')];
 idx = [idx findcells(the_ring, 'FamName', 'sd6')];
 idx = [idx findcells(the_ring, 'FamName', 'sfb')];
 idx = sort(idx);
+idx = reshape(idx, [], 1);

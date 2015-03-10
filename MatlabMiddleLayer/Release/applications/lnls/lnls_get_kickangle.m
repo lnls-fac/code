@@ -1,6 +1,6 @@
 function kicks = lnls_get_kickangle(ring, ind, plane)
 
-kicks = zeros(size(ind));
+kicks = zeros(1,size(ind,1));
 if ischar(plane) 
     if plane == 'x'
         pl = 1;
@@ -17,22 +17,23 @@ elseif isnumeric(plane)
     end
 end
 
-for ii=1:length(ind)
-    if strcmp(ring{ind(ii)}.PassMethod, 'CorrectorPass')
-        kicks(ii) = ring{ind(ii)}.KickAngle(pl);
-    elseif  strcmp(ring{ind(ii)}.PassMethod, 'ThinMPolePass')
+for ii=1:size(ind,1)
+    if strcmp(ring{ind(ii,1)}.PassMethod, 'CorrectorPass')
+        kicks(ii) = sum(ring{ind(ii,:)}.KickAngle(pl));
+    elseif  strcmp(ring{ind(ii,1)}.PassMethod, 'ThinMPolePass')
         if pl == 1
-            kicks(ii) = -ring{ind(ii)}.PolynomB(1);
+            kicks(ii) = -sum(getcellstruct(ring, 'PolynomB', ind(ii,:), 1, 1));
         else
-            kicks(ii) = ring{ind(ii)}.PolynomA(1);
+            kicks(ii) = +sum(getcellstruct(ring, 'PolynomA', ind(ii,:), 1, 1));
         end
-    elseif any(strcmp(ring{ind(ii)}.PassMethod, { ...
+    elseif any(strcmp(ring{ind(ii,1)}.PassMethod, { ...
             'BndMPoleSymplectic4Pass', 'BndMPoleSymplectic4RadPass', ...
             'StrMPoleSymplectic4Pass', 'StrMPoleSymplectic4RadPass'}))
+        len = getcellstruct(ring, 'Length', ind(ii,:));
         if pl == 1
-            kicks(ii) = -ring{ind(ii)}.PolynomB(1)*ring{ind(ii)}.Length;
+            kicks(ii) = -sum(getcellstruct(ring, 'PolynomB', ind(ii,:), 1, 1) .* len);
         else
-            kicks(ii) = ring{ind(ii)}.PolynomA(1)*ring{ind(ii)}.Length;
+            kicks(ii) = +sum(getcellstruct(ring, 'PolynomA', ind(ii,:), 1, 1) .* len);
         end
     else
         error('Element cannot be used as corrector.')

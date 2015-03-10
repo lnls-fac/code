@@ -1,4 +1,4 @@
-function errors = generate_errors(name, the_ring, config, nr_mach, cutoff, rndtype)
+function errors = lnls_latt_err_generate_errors(name, the_ring, config, nr_mach, cutoff, rndtype)
 % function errors = generate_errors(name, the_ring, config, nr_machines, cutoff_errors, rndtype)
 %
 % Generates random errors to be applied in the model by the function
@@ -54,7 +54,7 @@ errors.errors_pitch  = zeros(nr_mach, length(the_ring));
 errors.errors_e      = zeros(nr_mach, length(the_ring));
 errors.errors_e_kdip = zeros(nr_mach, length(the_ring));
 
-if ~exist('cutoff_errors','var'), cutoff = []; end
+if ~exist('cutoff','var'), cutoff = []; end
 if ~exist('rndtype','var'), rndtype = 'gaussian'; end;
 
 save([name,'_generate_errors_input.mat'],'config','nr_mach','cutoff','rndtype');

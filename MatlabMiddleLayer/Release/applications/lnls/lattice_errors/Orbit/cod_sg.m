@@ -1,7 +1,7 @@
 function [the_ring, hkicks, vkicks, codx, cody, iter, n_times] = cod_sg(orbit, the_ring, goal_codx, goal_cody)
 
-if ~exist('goal_codx','var'), goal_codx = zeros(size(orbit.bpm_idx)); end
-if ~exist('goal_cody','var'), goal_cody = zeros(size(orbit.bpm_idx)); end
+if ~exist('goal_codx','var'), goal_codx = zeros(size(orbit.bpm_idx,1)); end
+if ~exist('goal_cody','var'), goal_cody = zeros(size(orbit.bpm_idx,1)); end
 if ~isfield(orbit,'tolerance'), orbit.tolerance = 1e-5; end
 tol = abs(orbit.tolerance);
 
@@ -12,7 +12,7 @@ S = orbit.respm.S;
 U = orbit.respm.U;
 V = orbit.respm.V;
 
-corr_list = [orbit.hcm_idx, orbit.vcm_idx];
+corr_list = [orbit.hcm_idx(:); orbit.vcm_idx(:)];
 
 if ischar(orbit.svs) && strcmpi(orbit.svs, 'all')
     sing_vals = min(size(S));
@@ -41,8 +41,8 @@ for iter = 1:orbit.max_nr_iter
     delta_kick = factor*CM * [codx(orbit.bpm_idx)' - goal_codx(:);...
                               cody(orbit.bpm_idx)' - goal_cody(:)];
     % sets kicks
-    delt_hkicks = delta_kick(1:length(orbit.hcm_idx))';
-    delt_vkicks = factor*delta_kick((1+length(orbit.hcm_idx)):end)';
+    delt_hkicks = delta_kick(1:size(orbit.hcm_idx,1))';
+    delt_vkicks = delta_kick((1+size(orbit.hcm_idx,1)):end)';
     init_hkicks = lnls_get_kickangle(the_ring, orbit.hcm_idx, 'x');
     init_vkicks = lnls_get_kickangle(the_ring, orbit.vcm_idx, 'y');
     tota_hkicks = init_hkicks + delt_hkicks;

@@ -215,7 +215,7 @@ if ~isdeployed_local
     % LNLS general scripts (files not distributed with MML)
     Directory = fullfile(MMLROOT, 'applications', 'lnls');
     if exist(Directory, 'dir')
-        addpath(fullfile(MMLROOT, 'applications', 'lnls'), '-begin');
+        addpath(genpath(fullfile(MMLROOT, 'applications', 'lnls')), '-begin');
     end
     
     

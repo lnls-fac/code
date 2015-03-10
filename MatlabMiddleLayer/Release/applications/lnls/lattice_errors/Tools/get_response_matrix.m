@@ -9,9 +9,9 @@ else
     [M, T] = findm44(the_ring,0,1:length(the_ring)+1);
 end
 
-len_hcms = length(hcms);
-len_vcms = length(vcms);
-len_bpms = length(bpms);
+len_hcms = size(hcms,1);
+len_vcms = size(vcms,1);
+len_bpms = size(bpms,1);
 
 mxx = zeros(len_bpms, len_hcms);
 myx = zeros(len_bpms, len_hcms);
@@ -20,12 +20,12 @@ myy = zeros(len_bpms, len_vcms);
 
 for i=1:len_bpms
     for j=1:len_hcms
-        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i),hcms(j),the_ring{j});
+        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i,:),hcms(j,:),the_ring{j});
         mxx(i,j) = cxx;
         myx(i,j) = cyx;
     end
     for j=1:len_vcms
-        [~, ~, cxy, cyy] = get_C(M,T,bpms(i),vcms(j),the_ring{j});
+        [~, ~, cxy, cyy] = get_C(M,T,bpms(i,:),vcms(j,:),the_ring{j});
         mxy(i,j) = cxy;
         myy(i,j) = cyy;
     end
@@ -74,10 +74,10 @@ MR = [mxx, mxy; myx, myy];
 function [cxx, cyx, cxy, cyy] = get_C(M,T,i,j,element)
 % cxy --> orbit at bpm x due to kick in corrector y
 
-R_j = T(:,:,j);
-R_i = T(:,:,i);
+R_j = T(:,:,j(end));
+R_i = T(:,:,i(end));
 M_i = R_i * M / R_i;
-if (i>j)   
+if (i(end)>j(end))   
     R_ij = R_i/R_j;
 else
     R_ij = R_i * (T(:,:,end) / R_j);

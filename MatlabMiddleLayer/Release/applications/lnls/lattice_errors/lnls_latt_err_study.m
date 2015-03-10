@@ -107,25 +107,29 @@ finalizations()
         config.girder.correlated_errors = false;
         config.girder.sigma_x     = 100 * um * 1;
         config.girder.sigma_y     = 100 * um * 1;
-        config.girder.sigma_roll  =  0.20 * mrad * 1;
+        config.girder.sigma_roll  = 0.20 * mrad * 1;
             
-        % gera vetores com erros
-        nr_machines   = 20;
+        % generates error vectors
+        nr_machines   = 2;
+        rndtype       = 'gaussian';
         cutoff_errors = 1;
-        errors        = lnls_latt_err_generate_errors(name, the_ring, config, nr_machines, cutoff_errors);
+        errors        = lnls_latt_err_generate_errors(name, the_ring, config, nr_machines, cutoff_errors, rndtype);
         
+        % applies errors to machines
         fractional_delta = [1];
         machine = lnls_latt_err_apply_errors(name, the_ring, errors, fractional_delta);
+        
     end
 
 %% Cod Correction
     function machine = correct_orbit(machine)
+        
         % parameters for slow correction algorithms
+        orbit.bpm_idx = sirius_si_bpm_indices(the_ring);
+        orbit.hcm_idx = sirius_si_chs_indices(the_ring);
+        orbit.vcm_idx = sirius_si_cvs_indices(the_ring);
         
-        orbit.bpm_idx = sort(findcells(the_ring, 'FamName', 'bpm'));
-        orbit.hcm_idx = sort(findcells(the_ring, 'FamName', 'hcm'));
-        orbit.vcm_idx = sort(findcells(the_ring, 'FamName', 'vcm'));
-        
+        % parameters for SVD correction
         orbit.sext_ramp         = [0 1];
         orbit.svs               = 'all';
         orbit.max_nr_iter       = 50;
@@ -133,13 +137,21 @@ finalizations()
         orbit.correct2bba_orbit = false;
         orbit.simul_bpm_err     = false;
         
-        nper = 10;
-        % orbit.respm = calc_respm_cod(the_ring, orbit.bpm_idx, orbit.hcm_idx, orbit.vcm_idx, nper, true);
-        % orbit.respm = orbit.respm.respm;
+        % calcs nominal cod response matrix, if chosen
+        use_respm_from_nominal_lattice = true; 
+        if use_respm_from_nominal_lattice
+            lattice_symmetry = 10;  
+            orbit.respm = calc_respm_cod(the_ring, orbit.bpm_idx, orbit.hcm_idx, orbit.vcm_idx, lattice_symmetry, true); 
+            orbit.respm = orbit.respm.respm;
+        end 
+        
+        % loops over random machine, correcting COD...
         machine = lnls_latt_err_correct_cod(name, machine, orbit);
         
+        % saves results to file
         name_saved_machines = [name_saved_machines,'_machines_cod_corrected'];
         save([name_saved_machines '.mat'], 'machine');
+        
     end
 
 %% Coupling Correction
@@ -162,15 +174,15 @@ finalizations()
         % calcs coupling symmetrization matrix
         fname = [name '_info_coup.mat'];
         nper = 10;
-        % if ~exist(fname, 'file')
-        %     [respm, info] = calc_respm_coupling(the_ring, coup, nper);
-        %     coup.respm = respm;
-        %     save(fname, 'info');
-        % else
-        %     data = load(fname);
-        %     [respm, ~] = calc_respm_coupling(the_ring, coup, nper, data.info);
-        %     coup.respm = respm;
-        % end
+        if ~exist(fname, 'file')
+            [respm, info] = calc_respm_coupling(the_ring, coup, nper);
+            coup.respm = respm;
+            save(fname, 'info');
+        else
+            data = load(fname);
+            [respm, ~] = calc_respm_coupling(the_ring, coup, nper, data.info);
+            coup.respm = respm;
+        end
         machine = lnls_latt_err_correct_coupling(name, machine, coup);
         
         name_saved_machines = [name_saved_machines '_coup'];
