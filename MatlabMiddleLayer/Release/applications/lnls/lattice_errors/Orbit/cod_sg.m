@@ -1,7 +1,7 @@
 function [the_ring, hkicks, vkicks, codx, cody, iter, n_times] = cod_sg(orbit, the_ring, goal_codx, goal_cody)
 
-if ~exist('goal_codx','var'), goal_codx = zeros(size(orbit.bpm_idx,1)); end
-if ~exist('goal_cody','var'), goal_cody = zeros(size(orbit.bpm_idx,1)); end
+if ~exist('goal_codx','var'), goal_codx = zeros(1,size(orbit.bpm_idx,1)); end
+if ~exist('goal_cody','var'), goal_cody = zeros(1,size(orbit.bpm_idx,1)); end
 if ~isfield(orbit,'tolerance'), orbit.tolerance = 1e-5; end
 tol = abs(orbit.tolerance);
 
