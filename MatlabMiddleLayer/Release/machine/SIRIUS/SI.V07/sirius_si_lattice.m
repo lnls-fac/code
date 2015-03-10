@@ -334,8 +334,69 @@ data.sd5.nr_segs = 1;
 data.sd4.nr_segs = 1;
 data.sf3.nr_segs = 1;
 
-data.cf.nr_segs = 1;
+data.bpm.nr_segs = 1;
+data.cf.nr_segs  = 1;
+data.chf.nr_segs = 1;
+data.cvf.nr_segs = 1;
+data.qs.nr_segs  = 1;
+data.chs.nr_segs = 1;
+data.cvs.nr_segs = 1;
 
+fams = fields(data);
+for i=1:length(fams)
+    idx = sort(findcells(the_ring, 'FamName', fams{i}));
+    if ~isempty(idx)
+        idx = reshape(idx, data.(fams{i}).nr_segs, []);
+        data.(fams{i}).ATIndex = idx';
+    end
+end
+
+% chs - slow horizontal correctors
+idx = [];
+idx = [idx findcells(the_ring, 'FamName', 'sfa')];
+idx = [idx findcells(the_ring, 'FamName', 'sd1')];
+idx = [idx findcells(the_ring, 'FamName', 'sd2')];
+idx = [idx findcells(the_ring, 'FamName', 'sf2')];
+idx = [idx findcells(the_ring, 'FamName', 'sf3')];
+idx = [idx findcells(the_ring, 'FamName', 'sd5')];
+idx = [idx findcells(the_ring, 'FamName', 'sd6')];
+idx = [idx findcells(the_ring, 'FamName', 'sfb')];
+idx = sort(idx);
+data.chs.ATIndex = reshape(idx,data.chs.nr_segs,[]);
+data.chs.ATIndex = data.chs.ATIndex';
+
+% cvs - slow horizontal correctors
+idx = [];
+idx = [idx findcells(the_ring, 'FamName', 'sfa')];
+idx = [idx findcells(the_ring, 'FamName', 'sd1')];
+idx = [idx findcells(the_ring, 'FamName', 'sd3')];
+idx = [idx findcells(the_ring, 'FamName', 'sd4')];
+idx = [idx findcells(the_ring, 'FamName', 'sd6')];
+idx = [idx findcells(the_ring, 'FamName', 'sfb')];
+idx = sort(idx);
+data.cvs.ATIndex = reshape(idx,data.chs.nr_segs,[]);
+data.cvs.ATIndex = data.cvs.ATIndex';
+
+% chf - skew quad correctors
+idx = [];
+idx = [idx findcells(the_ring, 'FamName', 'cf')];
+idx = sort(idx);
+data.chf.ATIndex = reshape(idx,data.chf.nr_segs,[])';
+data.chf.ATIndex = data.chf.ATIndex';
+
+% cvf - skew quad correctors
+idx = [];
+idx = [idx findcells(the_ring, 'FamName', 'cf')];
+idx = sort(idx);
+data.cvf.ATIndex = reshape(idx,data.cvf.nr_segs,[])';
+data.cvf.ATIndex = data.cvf.ATIndex';
+
+% qs - skew quad correctors
+idx = [];
+idx = [idx findcells(the_ring, 'FamName', 'cf')];
+idx = sort(idx);
+data.qs.ATIndex = reshape(idx,data.qs.nr_segs,[])';
+data.qs.ATIndex = data.qs.ATIndex';
 
 
 function the_ring = set_girders(the_ring)

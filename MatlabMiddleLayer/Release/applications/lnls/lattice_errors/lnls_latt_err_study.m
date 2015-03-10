@@ -24,10 +24,10 @@ machine  = correct_coupling(machine, family_data);
 machine  = correct_tune(machine);
 
 % at last, multipole errors are applied
-machine  = create_apply_multipoles(machine);
+machine  = create_apply_multipoles(machine, family_data);
 
 % finalizations are done
-finalizations()
+finalizations();
 
 
 %% Initializations
@@ -77,7 +77,7 @@ finalizations()
     end
 
 %% Magnet Errors:
-    function machine = create_apply_errors(the_ring, family_segmentation)
+    function machine = create_apply_errors(the_ring, family_data)
         
         fprintf('\n<error generation and random machines creation> [%s]\n\n', datestr(now));
         
@@ -86,7 +86,6 @@ finalizations()
 
         % <quadrupoles> alignment, rotation and excitation errors
         config.fams.quads.labels     = {'qfa','qdb2','qfb','qdb1','qda','qf1','qf2','qf3','qf4'};
-        config.fams.quads.nrsegs     = [1,1,1,1,1,1,1,1,1]; % number of segments for each magnet in the corresponding family
         config.fams.quads.sigma_x    = 40 * um * 1;
         config.fams.quads.sigma_y    = 40 * um * 1;
         config.fams.quads.sigma_roll = 0.20 * mrad * 1;
@@ -94,7 +93,6 @@ finalizations()
         
         % <sextupoles> alignment, rotation and excitation errors
         config.fams.sexts.labels     = {'sda','sfa','sd1','sf1','sd2','sd3','sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb'};
-        config.fams.sexts.nrsegs     = [1,1,1,1,1,1,1,1,1,1,1,1,1,1]; % number of segments for each magnet in the corresponding family
         config.fams.sexts.sigma_x    = 40 * um * 1;
         config.fams.sexts.sigma_y    = 40 * um * 1;
         config.fams.sexts.sigma_roll = 0.20 * mrad * 1;
@@ -102,7 +100,6 @@ finalizations()
         
         % <electromagnetic dipoles> alignment, rotation and excitation errors
         config.fams.bends.labels       = {'b1','b2','b3'};
-        config.fams.bends.nrsegs       = [2,2,2]; % number of segments for each magnet in the corresponding family
         config.fams.bends.sigma_x      = 40 * um * 1;
         config.fams.bends.sigma_y      = 40 * um * 1;
         config.fams.bends.sigma_roll   = 0.20 * mrad * 1;
@@ -111,7 +108,6 @@ finalizations()
         
         % <permanent magnet dipoles> alignment, rotation and excitation errors
         config.fams.cbend.labels     = {'bc'};
-        config.fams.cbend.nrsegs     = 2;
         config.fams.cbend.sigma_y    = 40 * um * 1;
         config.fams.cbend.sigma_x    = 40 * um * 1;
         config.fams.cbend.sigma_roll = 0.20 * mrad * 1;
@@ -124,8 +120,19 @@ finalizations()
         config.girder.sigma_y     = 100 * um * 1;
         config.girder.sigma_roll  = 0.20 * mrad * 1;
         
+        % sets number of segmentations for each family
+        families = fieldnames(config.fams);
+        for i=1:length(families)
+            family = families{i};
+            labels = config.fams.(family).labels;
+            config.fams.(family).nrsegs = zeros(1,length(labels));
+            for j=1:length(labels)
+                config.fams.(family).nrsegs(j) = family_data.(labels{j}).nr_segs;
+            end
+        end
+        
         % generates error vectors
-        nr_machines   = 2;
+        nr_machines   = 1;
         rndtype       = 'gaussian';
         cutoff_errors = 1;
         fprintf('-  generating errors ...\n');
@@ -140,14 +147,14 @@ finalizations()
     end
 
 %% Cod Correction
-    function machine = correct_orbit(machine, family_segmentation)
+    function machine = correct_orbit(machine, family_data)
         
         fprintf('\n<closed-orbit distortions correction> [%s]\n\n', datestr(now));
         
         % parameters for slow correction algorithms
-        orbit.bpm_idx = family_segmentation.sirius_si_bpm_indices(the_ring);
-        orbit.hcm_idx = sirius_si_chs_indices(the_ring);
-        orbit.vcm_idx = sirius_si_cvs_indices(the_ring);
+        orbit.bpm_idx = family_data.bpm.ATIndex;
+        orbit.hcm_idx = family_data.chs.ATIndex;
+        orbit.vcm_idx = family_data.cvs.ATIndex;
         
         % parameters for SVD correction
         orbit.sext_ramp         = [0 1];
@@ -176,14 +183,14 @@ finalizations()
     end
 
 %% Coupling Correction
-    function machine = correct_coupling(machine)
+    function machine = correct_coupling(machine, family_data)
         
         fprintf('\n<coupling correction> [%s]\n\n', datestr(now));
-        
-        coup.scm_idx = sirius_si_qs_indices(the_ring);
-        coup.bpm_idx = sirius_si_bpm_indices(the_ring);
-        coup.hcm_idx = sirius_si_chs_indices(the_ring);
-        coup.vcm_idx = sirius_si_cvs_indices(the_ring);
+         
+        coup.scm_idx = family_data.qs.ATIndex;
+        coup.bpm_idx = family_data.bpm.ATIndex;
+        coup.hcm_idx = family_data.chs.ATIndex;
+        coup.vcm_idx = family_data.cvs.ATIndex;
         coup.svs           = 'all';
         coup.max_nr_iter   = 50;
         coup.tolerance     = 1e-5;
@@ -226,7 +233,7 @@ finalizations()
     end
 
 %% Multipoles insertion
-    function machine = create_apply_multipoles(machine)
+    function machine = create_apply_multipoles(machine, family_data)
         
         fprintf('\n<application of multipole errors> [%s]\n\n', datestr(now));
         
@@ -273,9 +280,19 @@ finalizations()
         multi.bends.main_vals = 1*ones(1,7)*4e-5;
         multi.bends.skew_vals = 1*ones(1,7)*1e-5;
         
+        % sets number of segmentations for each family
+        families = fieldnames(multi);
+        for i=1:length(families)
+            family = families{i};
+            labels = multi.(family).labels;
+            multi.(family).nrsegs = zeros(1,length(labels));
+            for j=1:length(labels)
+                multi.(family).nrsegs(j) = family_data.(labels{j}).nr_segs;
+            end
+        end
+        
         cutoff_errors = 2;
-        nr_machines = 20;
-        multi_errors  = lnls_latt_err_generate_multipole_errors(name, the_ring, multi, nr_machines, cutoff_errors);
+        multi_errors  = lnls_latt_err_generate_multipole_errors(name, the_ring, multi, length(machine), cutoff_errors);
         machine = lnls_latt_err_apply_multipole_errors(name, machine, multi_errors, multi);
         
         name_saved_machines = [name_saved_machines '_multi'];

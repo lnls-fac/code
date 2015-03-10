@@ -25,8 +25,8 @@ if any(logical(mod([len_bpm,len_hcm,len_vcm],1))),
     len_vcm = len_vcm*nper;
     nper = 1;
 else
-    hcm_idx = hcm_idx(1:len_hcm);
-    vcm_idx = vcm_idx(1:len_vcm);
+    hcm_idx = hcm_idx(1:len_hcm,:);
+    vcm_idx = vcm_idx(1:len_vcm,:);
 end
 
 M = get_response_matrix(the_ring, bpm_idx, hcm_idx, vcm_idx);
