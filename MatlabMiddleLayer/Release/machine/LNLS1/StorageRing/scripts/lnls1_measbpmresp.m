@@ -10,7 +10,8 @@ reading_interval = 0.5;
 
 if ~strcmpi(getmode('BEND'), 'Online'), switch2online; end
 if strcmpi(getmode('BEND'), 'Online')
-    lnls1_auto_orb_corr_off;  % turn auto orbit correction at OPR1 off
+    lnls1_slow_orbcorr_off;  
+    lnls1_fast_orbcorr_off;  
 end
 setbpmaverages(reading_interval,nr_points);
 

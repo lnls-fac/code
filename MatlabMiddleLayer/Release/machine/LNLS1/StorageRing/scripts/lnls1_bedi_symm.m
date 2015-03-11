@@ -14,7 +14,8 @@ dQF  = QF - QF0;
 dQD  = QD - QD0;
 dQFC = QFC - QFC0;
 switch2online;
-lnls1_auto_orb_corr_on;
+%lnls1_slow_orbcorr_on;
+lnls1_fast_orbcorr_on;
 
 nrpts = 20;
 for i=1:nrpts

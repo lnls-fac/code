@@ -1,5 +1,5 @@
-function lnls1_auto_orb_corr_off
-%Desliga correção automática de órbita no OPR1
+function lnls1_slow_orbcorr_off
+%Desliga correção automática lenta de órbita no OPR1
 %
 %History: 
 % 
@@ -9,5 +9,5 @@ if strcmpi(getmode('BEND'), 'online')
     msg.AORBCOR_ON = 0;
     lnls1_comm_write(msg);
 else
-    fprintf('lnls1_auto_orb_corr_off: simulation mode!\n');
+    fprintf('lnls1_slow_orbcorr_off: simulation mode!\n');
 end

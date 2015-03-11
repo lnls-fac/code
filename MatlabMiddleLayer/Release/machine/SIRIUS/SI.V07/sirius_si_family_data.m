@@ -37,7 +37,7 @@ data.cvf.nr_segs = 1;
 data.qs.nr_segs  = 1;
 data.chs.nr_segs = 1;
 data.cvs.nr_segs = 1;
-data.qn.nr_segs = 1;
+data.qn.nr_segs  = 1;
 
 fams = fields(data);
 for i=1:length(fams)
