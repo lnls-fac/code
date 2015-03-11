@@ -18,7 +18,7 @@ Indices = atindex(THERING);
 
 AO = getao;
 
-
+family_data = sirius_si_family_data(THERING);
 
 
 try
@@ -278,8 +278,7 @@ end
 try
     % chs
     AO.chs.AT.ATType = 'HCM';
-    idx = sirius_si_chs_indices(THERING);
-    AO.chs.AT.ATIndex = buildatindex(AO.chs.FamilyName, idx);
+    AO.chs.AT.ATIndex = family_data.chs.ATIndex;
     AO.chs.Position   = findspos(THERING, AO.chs.AT.ATIndex(:,1))';   
 catch
     warning('chs family not found in the model.');
@@ -287,9 +286,8 @@ end
 
 try
     % cvs
-    AO.chs.AT.ATType = 'VCM';
-    idx = sirius_si_cvs_indices(THERING);
-    AO.cvs.AT.ATIndex = buildatindex(AO.cvs.FamilyName, idx);
+    AO.cvs.AT.ATType = 'VCM';
+    AO.cvs.AT.ATIndex = family_data.chs.ATIndex;
     AO.cvs.Position   = findspos(THERING, AO.cvs.AT.ATIndex(:,1))';   
 catch
     warning('cvs family not found in the model.');
@@ -298,8 +296,7 @@ end
 try
     % chf
     AO.chf.AT.ATType = 'HCM';
-    idx = sirius_si_chf_indices(THERING);
-    AO.chf.AT.ATIndex = buildatindex(AO.chf.FamilyName, idx);
+    AO.chf.AT.ATIndex = family_data.chf.ATIndex;
     AO.chf.Position   = findspos(THERING, AO.chf.AT.ATIndex(:,1))';   
 catch
     warning('chf family not found in the model.');
@@ -308,8 +305,7 @@ end
 try
     % cvf
     AO.cvf.AT.ATType = 'VCM';
-    idx = sirius_si_cvf_indices(THERING);
-    AO.cvf.AT.ATIndex = buildatindex(AO.cvf.FamilyName, idx);
+    AO.cvf.AT.ATIndex = family_data.cvf.ATIndex;
     AO.cvf.Position   = findspos(THERING, AO.cvf.AT.ATIndex(:,1))';   
 catch
     warning('cvf family not found in the model.');
@@ -317,9 +313,8 @@ end
 
 try
     % qs
-    AO.qs.AT.ATType = 'VCM';
-    idx = sirius_si_qs_indices(THERING);
-    AO.qs.AT.ATIndex = buildatindex(AO.qs.FamilyName, idx);
+    AO.qs.AT.ATType = 'SKEW';
+    AO.qs.AT.ATIndex = family_data.qs.ATIndex;
     AO.qs.Position   = findspos(THERING, AO.qs.AT.ATIndex(:,1))';   
 catch
     warning('qs family not found in the model.');

@@ -9,13 +9,17 @@ name = 'CONFIG'; name_saved_machines = name;
 initializations();
 
 % next a nominal model is chosen for the study 
-[the_ring, family_data] = create_nominal_model();
+the_ring = create_nominal_model();
+family_data = sirius_si_family_data(the_ring);
 
 % application of errors to the nominal model
 machine  = create_apply_errors(the_ring, family_data);
 
 % orbit correction is performed
 machine  = correct_orbit(machine, family_data);
+
+% lattice symmetrization
+%machine = correct_optics(machine, family_data);
 
 % next, coupling correction
 machine  = correct_coupling(machine, family_data);
@@ -55,7 +59,7 @@ finalizations();
     end
 
 %% Definition of the nominal AT model
-    function [the_ring, family_data] = create_nominal_model()
+    function the_ring = create_nominal_model()
         
         fprintf('\n<nominal model> [%s]\n\n', datestr(now));
         
@@ -64,7 +68,7 @@ finalizations();
         % loaded with 'sirius' command the appropriate lattice version.
         fprintf('-  loading model ...\n');
         fprintf('   file: %s\n', which('sirius_si_lattice'));
-        [the_ring, ~, family_data] = sirius_si_lattice();
+        the_ring = sirius_si_lattice();
         
         % sets cavity and radiation off for 4D trackings
         fprintf('-  turning radiation and cavity off ...\n');
@@ -131,8 +135,19 @@ finalizations();
             end
         end
         
+        % <electromagnetic dipoles> alignment, rotation and excitation
+        % errors for each 
+        config.fams.bendblocks.labels       = {'b1','b2','b3'};
+        config.fams.bendblocks.nrsegs       = [1,1,1];
+        config.fams.bendblocks.sigma_x      = 40 * um * 1;
+        config.fams.bendblocks.sigma_y      = 40 * um * 1;
+        config.fams.bendblocks.sigma_roll   = 0.20 * mrad * 1;
+        config.fams.bendblocks.sigma_e      = 0.05 * percent * 0;
+        config.fams.bendblocks.sigma_e_kdip = 0.10 * percent * 0;  % quadrupole errors due to pole variations
+
+        
         % generates error vectors
-        nr_machines   = 20;
+        nr_machines   = 1;
         rndtype       = 'gaussian';
         cutoff_errors = 1;
         fprintf('-  generating errors ...\n');
@@ -180,6 +195,42 @@ finalizations();
         name_saved_machines = [name_saved_machines,'_machines_cod_corrected'];
         save([name_saved_machines '.mat'], 'machine');
         
+    end
+
+
+%% Symmetrization of the optics
+    function machine = correct_optics(machine, family_data)
+        
+        fprintf('\n<optics symmetrization> [%s]\n\n', datestr(now));
+        
+        optics.scm_idx = family_data.qs.ATIndex;
+        optics.bpm_idx = family_data.bpm.ATIndex;
+        optics.hcm_idx = family_data.chs.ATIndex;
+        optics.vcm_idx = family_data.cvs.ATIndex;
+        optics.kbs_idx = family_data.qn.ATIndex;
+        
+        optics.svs                = 156;
+        optics.max_nr_iter        = 50;
+        optics.tolerance          = 1e-5;
+        [~, optics.tune_goal]     = twissring(the_ring,0,1:length(the_ring)+1);
+        optics.simul_bpm_corr_err = false;
+        
+        % calcs optics symmetrization matrix
+        fname = [name '_info_optics.mat'];
+        lattice_symmetry = 10;
+        if ~exist(fname, 'file')
+            [respm, info] = calc_respm_optics(the_ring, optics, lattice_symmetry);
+            optics.respm = respm;
+            save(fname, 'info');
+        else
+            data = load(fname);
+            [respm, ~] = calc_respm_optics(the_ring, optics, lattice_symmetry, data.info);
+            optics.respm = respm;
+        end
+        machine = lnls_latt_err_correct_optics(name, machine, optics, the_ring);
+        
+        name_saved_machines = [name_saved_machines '_symm'];
+        save([name_saved_machines '.mat'], 'machine');
     end
 
 %% Coupling Correction
@@ -238,25 +289,14 @@ finalizations();
         fprintf('\n<application of multipole errors> [%s]\n\n', datestr(now));
         
         % QUADRUPOLES
-        % quadM multipoles from model3 fieldmap '2015-02-05 Quadrupolo_Anel_QM_Modelo 3_-12_12mm_-500_500mm_156.92A.txt'
-        multi.quadsM.labels = {'qfa','qfb','qdb2','qf1','qf2','qf3','qf4'};
+        multi.quadsM.labels = {'qdb1','qda', 'qfa','qfb','qdb2','qf1','qf2','qf3','qf4'};
         multi.quadsM.main_multipole = 2;% positive for normal negative for skew
         multi.quadsM.r0 = 11.7e-3;
         multi.quadsM.order     = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
         multi.quadsM.main_vals = 1*ones(1,8)*4e-5;
         multi.quadsM.skew_vals = 1*ones(1,8)*1e-5;
         
-        % quadC multipoles from model2 fielmap '2015-01-27 Quadrupolo_Anel_QC_Modelo 2_-12_12mm_-500_500mm.txt'
-        multi.quadsC.labels = {'qdb1','qda'};
-        multi.quadsC.main_multipole = 2;% positive for normal negative for skew
-        multi.quadsC.r0 = 11.7e-3;
-        multi.quadsC.order     = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
-        multi.quadsC.main_vals = 1*ones(1,8)*4e-5;
-        multi.quadsC.skew_vals = 1*ones(1,8)*1e-5;
-        
-        
         % SEXTUPOLES
-        % multipoles from model1 fieldmap 'Sextupolo_Anel_S_Modelo 1_-12_12mm_-500_500mm.txt'
         multi.sexts.labels = {'sda','sfa','sd1','sf1','sd2','sd3','sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb'};
         multi.sexts.main_multipole = 3;% positive for normal negative for skew
         multi.sexts.r0 = 11.7e-3;
@@ -265,10 +305,6 @@ finalizations();
         multi.sexts.skew_vals = 1*ones(1,8)*1e-5;
         
         % DIPOLES
-        %The default systematic multipoles for the dipoles were changed.
-        %Now we are using the values of a standard pole dipole which Ricardo
-        %optimized (2015/02/02) as base for comparison with the other alternative with
-        %incrusted coils in the poles for independent control of que gradient.
         multi.bends.labels = {'b1','b2','b3', 'bc'};
         multi.bends.main_multipole = 1;% positive for normal negative for skew
         multi.bends.r0 = 11.7e-3;

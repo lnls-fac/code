@@ -30,8 +30,8 @@ CM = -(V*iS*U');
 dim = get_dim(the_ring);
 
 [codx, cody] = calc_cod(the_ring, dim);
-best_fm = std([(codx(orbit.bpm_idx)-goal_codx)/scale_x, ...
-               (cody(orbit.bpm_idx)-goal_cody)/scale_y]);
+best_fm = sqrt(lnls_meansqr([(codx(orbit.bpm_idx)-goal_codx)/scale_x, ...
+               (cody(orbit.bpm_idx)-goal_cody)/scale_y]));
 best_corr = the_ring(corr_list);
 factor = 1;
 n_times = 0;
@@ -50,8 +50,8 @@ for iter = 1:orbit.max_nr_iter
     the_ring = lnls_set_kickangle(the_ring, tota_hkicks, orbit.hcm_idx, 'x');
     the_ring = lnls_set_kickangle(the_ring, tota_vkicks, orbit.vcm_idx, 'y');
     [codx, cody] = calc_cod(the_ring, dim);
-    fm = std([(codx(orbit.bpm_idx)-goal_codx)/scale_x, ...
-              (cody(orbit.bpm_idx)-goal_cody)/scale_y]);
+    fm = sqrt(lnls_meansqr([(codx(orbit.bpm_idx)-goal_codx)/scale_x, ...
+              (cody(orbit.bpm_idx)-goal_cody)/scale_y]));
     residue = abs(best_fm-fm)/best_fm;
     if (fm < best_fm)
         best_fm      = fm;

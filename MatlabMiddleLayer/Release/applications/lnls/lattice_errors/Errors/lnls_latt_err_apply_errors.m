@@ -35,7 +35,7 @@ if length(machine) ~= nr_machines
 end
 
 dim = get_dim(machine{1});
-[~,~,family_data] = sirius_si_lattice();
+family_data = sirius_si_family_data(machine{1});
 bpm = family_data.bpm.ATIndex;
 
 sext_idx = findcells(machine{1}, 'PolynomB');

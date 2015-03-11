@@ -50,8 +50,8 @@ for i2=1:nelem
         mis = miss{i3};
         mis_err = errs{i3};
         
-        goal_codx = zeros(size(res.cod_cor.bpm_idx));
-        goal_cody = zeros(size(res.cod_cor.bpm_idx));
+        goal_codx = zeros(1,size(res.cod_cor.bpm_idx,1));
+        goal_cody = zeros(1,size(res.cod_cor.bpm_idx,1));
         if strcmp(mis,'misx'), goal_codx(i2) = mis_err; else goal_cody(i2) = mis_err; end
         [the_ring_err, hkicks, vkicks, ~, ~] = cod_sg(res.cod_cor, the_ring, ...
                                                       goal_codx,goal_cody);

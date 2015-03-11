@@ -1,8 +1,8 @@
 function v = calc_residue_optics(Mxx, Myy, Dispx, tune, tune0, bpms, hcms, vcms, Tsym, Msym)
 
-nr_bpms = length(bpms);
-nr_hcms = length(hcms);
-nr_vcms = length(vcms);
+nr_bpms = size(bpms,1);
+nr_hcms = size(hcms,1);
+nr_vcms = size(vcms,1);
 
 % Total lenght of the residue vector is 219182
 TRANSWEIGHT = 1/(180*(160 + 120))      * 1e2; % order of centimeters
@@ -42,9 +42,9 @@ vcm_idx = logical(repmat([1,1,1,1,1,1],1,20));
 Mxx = Mxx(bpm_idx,hcm_idx);
 Myy = Myy(bpm_idx,vcm_idx);
 Dispx = Dispx(bpm_idx);
-bpm_idx = bpms(bpm_idx); lenB = length(bpm_idx);
-hcm_idx = hcms(hcm_idx); lenH = length(hcm_idx);
-vcm_idx = vcms(vcm_idx); lenV = length(vcm_idx);
+bpm_idx = bpms(bpm_idx,1); lenB = length(bpm_idx);
+hcm_idx = hcms(hcm_idx,1); lenH = length(hcm_idx);
+vcm_idx = vcms(vcm_idx,1); lenV = length(vcm_idx);
 for i1=Msym
     shift_bpm = sum(bpm_idx < i1);
     shift_hcm = sum(hcm_idx < i1);

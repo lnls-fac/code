@@ -61,10 +61,6 @@ r0            = 11.7/1000;
 monomials     = [ 4,       6,       8,       14];
 Bn_normal     = 1*[-6.7e-5, -1.3e-4, -2.1e-3, +1.0e-3];
 An_skew       = 1*[ 0.0,     0.0,     0.0,     0.0];
-% % original systematic multipoles
-% monomials     = [8,       14];
-% Bn_normal     = 1*[+4.0e-6, -1.0e-7];
-% An_skew       = 1*[+0.0e-0, +0.0e-0];
 main_monomial = {2, 'normal'}; 
 families      = findmemberof(model_name);
 new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);

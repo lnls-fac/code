@@ -67,8 +67,8 @@ for i1 = 1:nelem
         if isfield(res,'cod_cor')
             ibpm = findcells(the_ring(ind),'FamName','bpm');
             par = res.cod_cor;
-            goal_codx = zeros(size(par.bpm_idx));
-            goal_cody = zeros(size(par.bpm_idx));
+            goal_codx = zeros(1,size(par.bpm_idx,1));
+            goal_cody = zeros(1,size(par.bpm_idx,1));
             if bpm_on && ~isempty(ibpm)
                 if strcmp(mis,'misx')
                     for ii = ibpm, goal_codx(par.bpm_idx == ind(ii)) = mis_err; end
