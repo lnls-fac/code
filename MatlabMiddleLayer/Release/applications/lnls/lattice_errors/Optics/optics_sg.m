@@ -1,8 +1,10 @@
 function [the_ring, quadstr, init_fm,best_fm, iter, n_times] = optics_sg(the_ring, optics)
 
+% assumes uniform quadrupolar field in quadrupole models
+
 tol = abs(optics.tolerance);
 
-quad_lst = optics.kbs_idx;
+quad_lst = optics.kbs_idx(:);
 
 U = optics.respm.U;
 V = optics.respm.V;
@@ -31,7 +33,7 @@ n_times = 0;
 for iter = 1:optics.max_nr_iter
     % calcs kicks
     delta_kicks = factor*CM * best_optvec;
-    
+    delta_kicks = repmat(delta_kicks,size(optics.kbs_idx,2),1);
     % sets kicks
     tota_kicks = getcellstruct(the_ring, 'PolynomB', quad_lst, 1, 2);
     tota_kicks = tota_kicks + delta_kicks;
@@ -57,6 +59,8 @@ for iter = 1:optics.max_nr_iter
 end
 quadstr = getcellstruct(the_ring, 'PolynomB', quad_lst, 1, 2);
 quadstr = (quadstr-init_kicks).*getcellstruct(the_ring, 'Length', quad_lst);
+quadstr = sum(reshape(quadstr, size(optics.kbs_idx,1), []), 2)';
+
 
 
 function residue = calc_residue_for_optimization(the_ring, optics)

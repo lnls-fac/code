@@ -53,7 +53,7 @@ fprintf('mac | Max Kl |  chi2  | dtunes | Betbeat  | eta @ss | NIters | NRedStr\
 fprintf('    | [1/km] |        |  x1000 | rms[%%]   | Max[mm] |        |\n');
 fprintf('%s',repmat('-',1,69));
 
-indcs = optics.bpm_idx;
+indcs = optics.bpm_idx';
 indcs = indcs(logical(repmat([1,0,0,0,0,0,0,0,1],1,20)));
 [bx0,by0,tune0] = calcbetas(the_ring);
 for i=1:nr_machines

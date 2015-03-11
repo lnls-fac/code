@@ -2,7 +2,7 @@ function [the_ring, skewstr, init_fm,best_fm, iter, n_times] = coup_sg(the_ring,
 
 tol = abs(coup.tolerance);
 
-skew_lst = coup.scm_idx;
+skew_lst = coup.scm_idx(:);
 
 U = coup.respm.U;
 V = coup.respm.V;
@@ -30,6 +30,7 @@ n_times = 0;
 for iter = 1:coup.max_nr_iter
     % calcs kicks
     delta_kicks = factor*CM * best_coupvec;
+    delta_kicks = repmat(delta_kicks,size(coup.scm_idx,2),1);
     
     % sets kicks
     init_kicks = getcellstruct(the_ring, 'PolynomA', skew_lst, 1, 2);
@@ -56,6 +57,7 @@ for iter = 1:coup.max_nr_iter
 end
 skewstr = getcellstruct(the_ring, 'PolynomA', skew_lst, 1, 2);
 skewstr = skewstr.*getcellstruct(the_ring, 'Length', skew_lst);
+skewstr = sum(reshape(skewstr, size(coup.scm_idx,1), []), 2)';
 
 function residue = calc_residue_for_optimization(the_ring, coup)
 

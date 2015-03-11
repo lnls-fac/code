@@ -18,16 +18,28 @@ myx = zeros(len_bpms, len_hcms);
 mxy = zeros(len_bpms, len_vcms);
 myy = zeros(len_bpms, len_vcms);
 
+total_hcms = zeros(1,len_hcms);
+for j=1:len_hcms
+    for jj=1:size(hcms,2)
+        total_hcms(j) = total_hcms(j) + the_ring{hcms(j,jj)}.Length;
+    end
+end
+total_vcms = zeros(1,len_vcms);
+for j=1:len_vcms
+    for jj=1:size(vcms,2)
+        total_vcms(j) = total_vcms(j) + the_ring{vcms(j,jj)}.Length;
+    end
+end
+
+D = diag(ones(1,size(M,1)));
 for i=1:len_bpms
+    R_i = T(:,:,bpms(i,end));
+    DM_i = (D - R_i * M / R_i);
     for j=1:len_hcms
-        [cxx, cyx, ~, ~] = get_C(M,T,bpms(i,:),hcms(j,:),the_ring(hcms(j,:)));
-        mxx(i,j) = cxx;
-        myx(i,j) = cyx;
+        [mxx(i,j), myx(i,j), ~, ~] = get_C(T,DM_i, R_i, bpms(i,:),hcms(j,:),total_hcms(j));
     end
     for j=1:len_vcms
-        [~, ~, cxy, cyy] = get_C(M,T,bpms(i,:),vcms(j,:),the_ring(vcms(j,:)));
-        mxy(i,j) = cxy;
-        myy(i,j) = cyy;
+        [~, ~, mxy(i,j), myy(i,j)] = get_C(T,DM_i, R_i, bpms(i,:),vcms(j,:),total_vcms(j));
     end
 end
 
@@ -71,22 +83,18 @@ MR = [mxx, mxy; myx, myy];
 % M = [mxx, mxy; myx, myy];
 
 
-function [cxx, cyx, cxy, cyy] = get_C(M,T,i,j,segmented_element)
+function [cxx, cyx, cxy, cyy] = get_C(T,DM_i, R_i, i,j,total_length)
 % cxy --> orbit at bpm x due to kick in corrector y
 
-R_j = T(:,:,j(end));
-R_i = T(:,:,i(end));
-M_i = R_i * M / R_i;
+%R_j = T(:,:,j(end));
 if (i(end)>j(end))   
-    R_ij = R_i/R_j;
+    R_ij = R_i/T(:,:,j(end)); % R_i/R_j
 else
-    R_ij = R_i * (T(:,:,end) / R_j);
+    R_ij = R_i * (T(:,:,end) / T(:,:,j(end)));
 end
 %C = R_ij / (diag([1 1 1 1])-M44);
-D = diag(ones(1,size(M,1)));
-C = (D - M_i) \ R_ij;
+C = DM_i \ R_ij;
 
-total_length = sum(getcellstruct(segmented_element, 'Length', 1:length(segmented_element)));
 cxx = (total_length/2) * C(1,1) + C(1,2);
 cyx = (total_length/2) * C(3,1) + C(3,2);
 cxy = (total_length/2) * C(1,3) + C(1,4);
