@@ -11,9 +11,9 @@ function  [ChannelName, ErrorFlag] = lnls1_getname(Family, Field, DeviceList)
 %   OUTPUTS
 %   1. ChannelName = IOC channel name corresponding to the family and DeviceList
 %
-%História
+%Histï¿½ria
 %
-%2010-09-13: código fonte com comentários iniciais.
+%2010-09-13: cï¿½digo fonte com comentï¿½rios iniciais.
 
 
 if nargin == 0
@@ -182,8 +182,7 @@ switch Family
             'AQF09B'; 'AQD09B'; 'AQF10A'; 'AQF10B'; 'AQD11A'; 'AQF11A'; ...
             'AQF11B'; 'AQD11B'; 'AQF12A'; 'AQF12B'; 'AQD01A'; 'AQF01A'; ...
             ];
-        
-        
+          
     case 'A6SF'
         ChannelName = ['A6SF';'A6SF';'A6SF';'A6SF';'A6SF';'A6SF'];
     case 'A6SD01'
@@ -206,6 +205,41 @@ switch Family
         ChannelName = ['ASINT_H'; 'ASINT_V'; 'ASINT_S'];
     case 'RF'
         ChannelName = ['GRFF02'];
+        
+    case 'FOFB'
+        switch Field
+            case 'Setpoint'
+                ChannelName = ['AFOFB_MODO_SP';];
+            case 'Monitor'
+                ChannelName = ['AFOFB_MODO_AM';];
+            case 'ExcitationFlag'
+                ChannelName = ['AFOFB_CR_ON';];
+            case 'HorizontalGainSP'
+                ChannelName = ['AFOFB_GH_SP';];
+            case 'HorizontalGainAM'
+                ChannelName = ['AFOFB_GH_AM';];
+            case 'VerticalGainSP'
+                ChannelName = ['AFOFB_GV_SP';];
+            case 'VerticalGainAM'
+                ChannelName = ['AFOFB_GV_AM';];
+            case 'ReferenceOrbitSP'
+                ChannelName = ['AFOFB_OR_SP';];
+            case 'ReferenceOrbitAM'
+                ChannelName = ['AFOFB_OR_AM';];
+            case 'CorrectionMatrixSP'
+                ChannelName = ['AFOFB_MC_SP';];
+            case 'CorrectionMatrixAM'
+                ChannelName = ['AFOFB_MC_AM';];
+            case 'HorizontalOrbiThresholdSP'
+                ChannelName = ['AFOFB_LH_SP';];
+            case 'HorizontalOrbiThresholdAM'
+                ChannelName = ['AFOFB_LH_AM';];
+            case 'VerticalOrbiThresholdSP'
+                ChannelName = ['AFOFB_LV_SP';];
+            case 'VerticalOrbiThresholdAM'
+                ChannelName = ['AFOFB_LV_AM';];
+        end
+        
     case 'ID'
         ChannelName = ['AWG01GAP'; 'AON11GAP';];
     case 'AWG01'
