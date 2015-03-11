@@ -147,7 +147,11 @@ def multipoles_analysis(config):
     config.multipoles.calc_multipoles_integrals()
     #main_monomial = {'corrector':0, 'dipole':0, 'quadrupole':1, 'sextupole':2}[config.magnet_type]
     main_monomial = config.normalization_monomial
-    config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = main_monomial, r0 = config.multipoles_r0, is_skew = False)
+    normalization_is_skew = config.normalization_is_skew
+    if normalization_is_skew:
+        config.multipoles.calc_multipoles_integrals_relative(config.multipoles.skew_multipoles_integral, main_monomial = main_monomial, r0 = config.multipoles_r0, is_skew = True)
+    else:
+        config.multipoles.calc_multipoles_integrals_relative(config.multipoles.normal_multipoles_integral, main_monomial = main_monomial, r0 = config.multipoles_r0, is_skew = False)
 
     # saves multipoles to file
     config.multipoles.save('multipoles.txt')

@@ -24,7 +24,7 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 % ======================
 model_name    = 'q14';
 r0            = 11.7/1000;
-monomials     = [ 5,       9,       13,       17];
+monomials     =   [ 5,       9,       13,       17];
 Bn_normal     = 1*[-3.6e-4, +1.4e-3, -5.9e-04, +5.7e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
 main_monomial = {1, 'normal'}; 
@@ -35,7 +35,7 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 % ======================
 model_name    = 'q20';
 r0            = 11.7/1000;
-monomials     = [ 5,       9,       13,       17];
+monomials     =   [ 5,       9,       13,       17];
 Bn_normal     = 1*[-3.7e-4, +1.4e-3, -5.7e-04, +3.8e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
 main_monomial = {1, 'normal'}; 
@@ -46,7 +46,7 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 % ======================
 model_name    = 'q30';
 r0            = 11.7/1000;
-monomials     = [ 5,       9,       13,       17];
+monomials     =   [ 5,       9,       13,       17];
 Bn_normal     = 1*[-3.9e-4, +1.5e-3, -6.0e-04, +4.8e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
 main_monomial = {1, 'normal'}; 
@@ -58,14 +58,34 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 model_name    = 'SEXT';
 r0            = 11.7/1000;
 % systematic multipoles from '2015-02-03 Sextupolo_Anel_S_Modelo 1_-12_12mm_-500_500mm.txt'
-monomials     = [ 4,       6,       8,       14];
+monomials     =   [ 4,       6,       8,       14];
 Bn_normal     = 1*[-6.7e-5, -1.3e-4, -2.1e-3, +1.0e-3];
 An_skew       = 1*[ 0.0,     0.0,     0.0,     0.0];
-% % original systematic multipoles
-% monomials     = [8,       14];
-% Bn_normal     = 1*[+4.0e-6, -1.0e-7];
-% An_skew       = 1*[+0.0e-0, +0.0e-0];
 main_monomial = {2, 'normal'}; 
+families      = findmemberof(model_name);
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
+
+% CHS
+% ===
+model_name    = 'chs';
+r0            = 11.7/1000;
+% systematic multipoles from '2015-02-27 Sextupolo_Anel_S_CH_Modelo 1_-12_12mm_-500_500mm.txt'
+monomials     =   [ 4,       6,       8,       14];
+Bn_normal     = 1*[+2.8e-1, +2.8e-2, -3.9e-2, +1.1e-2];
+An_skew       = 1*[ 0.0,     0.0,     0.0,     0.0];
+main_monomial = {0, 'normal'}; 
+families      = findmemberof(model_name);
+new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
+
+% CVS
+% ===
+model_name    = 'cvs';
+r0            = 11.7/1000;
+% systematic multipoles from '2015-02-27 Sextupolo_Anel_S_CV_Modelo 1_-12_12mm_-500_500mm.txt'
+monomials     =   [ 4,       6,       8,       10     ];
+Bn_normal     = 1*[ 0.0,     0.0,     0.0,     0.0,   ];
+An_skew       = 1*[ -2.6e-1, -3.0e-3, +4.5e-2, -8.3e-3];
+main_monomial = {0, 'skew'}; 
 families      = findmemberof(model_name);
 new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, An_skew, main_monomial, r0);
 
