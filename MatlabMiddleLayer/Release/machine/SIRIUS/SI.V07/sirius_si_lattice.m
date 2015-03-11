@@ -153,6 +153,7 @@ RFC = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
 % -- lattice markers --
 START  = marker('start',  'IdentityPass');     % start of the model
+END    = marker('end',  'IdentityPass');     % start of the model
 MIA    = marker('mia', 'IdentityPass');        % center of long straight sections (even-numbered)
 MIB    = marker('mib', 'IdentityPass');        % center of short straight sections (odd-numbered)
 GIRDER = marker('girder', 'IdentityPass');     % marker used to delimitate girders. one marker at begin and another at end of girder.
@@ -165,7 +166,7 @@ M2A = [GIRDER,CF,L11,SFA,L12,BPM,L14,QFA,L24,QDA,L15,SDA,L19,GIRDER];           
 M1A = fliplr(M2A);                                                                  % high beta xxM1 girder
 IDA = [GIRDER,LIA,MIDA,L50,L50,MIA,L50,L50,MIDA,LIA,GIRDER];                        % high beta ID straight section
 CAV = [GIRDER,LIA,L50,L50,MIA,RFC,L50,L50,LIA,GIRDER];                              % high beta RF cavity straight section 
-INJ = [GIRDER,LIA,L50,L50,START,MIA,L50,L50,LIA,GIRDER];                            % high beta INJ straight section
+INJ = [GIRDER,LIA,L50,L50,END,START,MIA,L50,L50,LIA,GIRDER];                            % high beta INJ straight section
 M1B = [GIRDER,L19,SDB,L15,QDB1,L24,QFB,L14,BPM,L12,SFB,L11,CF,L13,QDB2,GIRDER];     % low beta xxM1 girder
 M2B = fliplr(M1B);                                                                  % low beta xxM2 girder
 IDB = [GIRDER,LIB,MIDB,L50,L50,MIB,L50,L50,MIDB,LIB,GIRDER];                        % low beta ID straight section
