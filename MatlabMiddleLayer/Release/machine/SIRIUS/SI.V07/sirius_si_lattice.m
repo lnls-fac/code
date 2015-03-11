@@ -318,22 +318,29 @@ idx = [1:gir(1)-1 gir(end):length(the_ring)];
 name_girder = sprintf('%03d',ii+1);
 the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
 
-function the_ring = set_num_integ_steps(the_ring0)
-
-the_ring = the_ring0;
+function the_ring = set_num_integ_steps(the_ring)
 
 bends = findcells(the_ring, 'BendingAngle');
 quads = setdiff(findcells(the_ring, 'K'), bends);
 sexts = setdiff(findcells(the_ring, 'PolynomB'), [bends quads]);
 kicks = findcells(the_ring, 'XGrid');
 
-dl = 0.035;
+% values determined by convergence study:
+len_dip  = 1e-3;
+len_quad = 5e-3;
+len_sext = 1e-2;
 
 bends_len = getcellstruct(the_ring, 'Length', bends);
-bends_nis = ceil(bends_len / dl);
-bends_nis = max([bends_nis'; 10 * ones(size(bends_nis'))]);
+bends_nis = ceil(bends_len / len_dip);
 the_ring = setcellstruct(the_ring, 'NumIntSteps', bends, bends_nis);
-the_ring = setcellstruct(the_ring, 'NumIntSteps', quads, 10);
-the_ring = setcellstruct(the_ring, 'NumIntSteps', sexts, 5);
+
+quads_len = getcellstruct(the_ring, 'Length', quads);
+quads_nis = ceil(quads_len / len_quad);
+the_ring = setcellstruct(the_ring, 'NumIntSteps', quads, quads_nis);
+
+sexts_len = getcellstruct(the_ring, 'Length', sexts);
+sexts_nis = ceil(sexts_len / len_sext);
+the_ring = setcellstruct(the_ring, 'NumIntSteps', sexts, sexts_nis);
+
 the_ring = setcellstruct(the_ring, 'NumIntSteps', kicks, 1);
 
