@@ -1,4 +1,4 @@
-function new_ring = lnls_set_multipoles(the_ring, Bn_norm, An_norm, main_monomial, r0, idx)
+function new_ring = lnls_add_multipoles(the_ring, Bn_norm, An_norm, main_monomial, r0, idx)
 
 new_ring = the_ring;
 len_idx = length(idx);

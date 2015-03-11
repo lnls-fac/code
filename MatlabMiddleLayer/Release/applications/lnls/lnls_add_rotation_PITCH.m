@@ -1,4 +1,4 @@
-function new_ring = lnls_set_rotation_PITCH(errors, indices, old_ring)
+function new_ring = lnls_add_rotation_PITCH(errors, indices, old_ring)
 
 new_ring = old_ring;
 
@@ -20,7 +20,7 @@ for i=1:size(indices,1)
 end
 
 
-% function new_ring = lnls_set_rotation_PITCH(errors, indices, old_ring)
+% function new_ring = lnls_add_rotation_PITCH(errors, indices, old_ring)
 % 
 % new_ring = old_ring;
 % 

@@ -49,7 +49,7 @@ for i=1:nr_mach
         Bn_norm(rms_monomials,:) = squeeze(errors_fam.Bn_norm(i,:,:));
         An_norm(rms_monomials,:) = squeeze(errors_fam.An_norm(i,:,:));
         
-        machine{i}  = lnls_set_multipoles(machine{i}, Bn_norm, An_norm, main_monomial, r0, idx);
+        machine{i}  = lnls_add_multipoles(machine{i}, Bn_norm, An_norm, main_monomial, r0, idx);
     end
 end
 

@@ -31,15 +31,15 @@ r.families = get_measured_data(r, {'A2QF01'});
 % calc_cod0 = calc_cod_from_families(r);
 %
 % idx = getfamilydata('A2QF01', 'AT', 'ATIndex');
-% r.the_ring = lnls_set_misalignmentX(-1e-6 * 50 * [1  1], idx, r.the_ring);
+% r.the_ring = lnls_add_misalignmentX(-1e-6 * 50 * [1  1], idx, r.the_ring);
 % calc_cod1 = calc_cod_from_families(r);
 %
 % idx = getfamilydata('A2QF03', 'AT', 'ATIndex');
-% r.the_ring = lnls_set_misalignmentX(-1e-6 * 50 * [1  1], idx, r.the_ring);
+% r.the_ring = lnls_add_misalignmentX(-1e-6 * 50 * [1  1], idx, r.the_ring);
 % calc_cod2 = calc_cod_from_families(r);
 %
 % idx = getfamilydata('A2QF01', 'AT', 'ATIndex');
-% r.the_ring = lnls_set_misalignmentX(-1e-6 * 50 * [1  1], idx, r.the_ring);
+% r.the_ring = lnls_add_misalignmentX(-1e-6 * 50 * [1  1], idx, r.the_ring);
 % calc_cod3 = calc_cod_from_families(r);
 %
 % figure; hold all; plot(calc_cod1.A2QF01.codx); plot(calc_cod3.A2QF01.codx - calc_cod2.A2QF01.codx);
@@ -143,7 +143,7 @@ r = r0;
 if r.change_dips
     dips = getfamilydata('BEND', 'AT', 'ATIndex');
     rndExc = delta_exc*2*(rand(size(dips,1),1) - 0.5);
-    r.the_ring = lnls_set_excitation(rndExc, dips, r.the_ring);
+    r.the_ring = lnls_add_excitation(rndExc, dips, r.the_ring);
 end
 
 
@@ -160,13 +160,13 @@ for i=1:2
     % changes PosX
     if (r.h_weight ~= 0)
         rndPos  = delta_pos*2*(rand(size(idx,1),1) - 0.5);
-        r.the_ring = lnls_set_misalignmentX(-rndPos, idx, r.the_ring);
+        r.the_ring = lnls_add_misalignmentX(-rndPos, idx, r.the_ring);
     end
     
     % changes PosY
     if (r.v_weight ~= 0)
         rndPos  = delta_pos*2*(rand(size(idx,1),1) - 0.5);
-        r.the_ring = lnls_set_misalignmentY(-rndPos, idx, r.the_ring);
+        r.the_ring = lnls_add_misalignmentY(-rndPos, idx, r.the_ring);
     end
     
     % changes K
@@ -237,21 +237,21 @@ setpv('HCM', -5.760, common2dev('ACH06' , 'HCM'), 'Hardware');
 the_ring = THERING;
 
 % idx = getfamilydata('A2QD01', 'AT', 'ATIndex');
-% the_ring = lnls_set_misalignmentX(-1e-6 * [-51.08 -58.70], idx, the_ring);
-% the_ring = lnls_set_misalignmentY(-1e-6 * [-20.24   0.17], idx, the_ring);
+% the_ring = lnls_add_misalignmentX(-1e-6 * [-51.08 -58.70], idx, the_ring);
+% the_ring = lnls_add_misalignmentY(-1e-6 * [-20.24   0.17], idx, the_ring);
 %
 % idx = getfamilydata('A2QD03', 'AT', 'ATIndex');
-% the_ring = lnls_set_misalignmentX(-1e-6 * [-76.3 -8.40], idx, the_ring);
-% the_ring = lnls_set_misalignmentY(-1e-6 * [-135.4 -164.1], idx, the_ring);
+% the_ring = lnls_add_misalignmentX(-1e-6 * [-76.3 -8.40], idx, the_ring);
+% the_ring = lnls_add_misalignmentY(-1e-6 * [-135.4 -164.1], idx, the_ring);
 
 % idx = getfamilydata('A2QF01', 'AT', 'ATIndex');
-% the_ring = lnls_set_misalignmentX(-1e-6 * 1 * [+67.22  -75.6], idx, the_ring);
-% the_ring = lnls_set_misalignmentY(-1e-6 * 1 * [-11.00  +25.2], idx, the_ring);
+% the_ring = lnls_add_misalignmentX(-1e-6 * 1 * [+67.22  -75.6], idx, the_ring);
+% the_ring = lnls_add_misalignmentY(-1e-6 * 1 * [-11.00  +25.2], idx, the_ring);
 
 %
 % idx = getfamilydata('A2QF03', 'AT', 'ATIndex');
-% the_ring = lnls_set_misalignmentX(-1e-6 * 1 * [ +11.84   +24.54], idx, the_ring);
-% the_ring = lnls_set_misalignmentY(-1e-6 * 1 * [-138.90  -242.84], idx, the_ring);
+% the_ring = lnls_add_misalignmentX(-1e-6 * 1 * [ +11.84   +24.54], idx, the_ring);
+% the_ring = lnls_add_misalignmentY(-1e-6 * 1 * [-138.90  -242.84], idx, the_ring);
 
 
 function res = calc_cod_from_families(r)

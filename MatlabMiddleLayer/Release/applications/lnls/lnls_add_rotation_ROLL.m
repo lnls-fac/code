@@ -1,4 +1,4 @@
-function new_ring = lnls_set_rotation_ROLL(errors, indices, old_ring)
+function new_ring = lnls_add_rotation_ROLL(errors, indices, old_ring)
 
 new_ring = old_ring;
 

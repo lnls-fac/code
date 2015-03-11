@@ -3,6 +3,7 @@ function the_ring = sirius_si_multipole_systematic_errors(the_ring)
 % multipole order convention: n=0(dipole), n=1(quadrupole), and so on. 
    
 fam_data = sirius_si_family_data(the_ring);
+
 % DIPOLES
 % =======
 % The default systematic multipoles for the dipoles were changed.
@@ -98,9 +99,9 @@ function the_ring = insert_multipoles(the_ring, fams, monoms, Bn_normal, Bn_skew
 % expands lists of multipoles
 new_monomials = monoms+1;    % converts to tracy convention of multipole order
 new_Bn_normal = zeros(max(new_monomials),1);
-new_An_skew   = zeros(max(new_monomials),1);
+new_Bn_skew   = zeros(max(new_monomials),1);
 new_Bn_normal(new_monomials,1) = Bn_normal;
-new_An_skew(new_monomials,1)   = Bn_skew;
+new_Bn_skew(new_monomials,1)   = Bn_skew;
 if strcmpi(main_monom{2}, 'normal')
     new_main_monomial = main_monom{1} + 1;
 else
@@ -111,7 +112,7 @@ end
 for i=1:length(fams)
     family  = fams{i};
     idx     = fam_data.(family).ATIndex;
-    the_ring = lnls_set_multipoles(the_ring, new_Bn_normal, new_An_skew, new_main_monomial, r0, idx);
+    the_ring = lnls_add_multipoles(the_ring, new_Bn_normal, new_Bn_skew, new_main_monomial, r0, idx);
 end
 
 

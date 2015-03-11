@@ -47,7 +47,7 @@ for i=1:length(families)
     
     r_tmp = r;
     for j=1:length(r.respm.(family).dorbx
-    r_tmp.the_ring = lnls_set_misalignmentX(+r.parms.delta_pos/2, quad_idx, r_tmp.the_ring0);
+    r_tmp.the_ring = lnls_add_misalignmentX(+r.parms.delta_pos/2, quad_idx, r_tmp.the_ring0);
     
 end
 
@@ -87,16 +87,16 @@ for i=1:length(families)
         quad_idx = idx(j,:);
         
         % horizontal
-        r.the_ring = lnls_set_misalignmentX(+r.parms.delta_pos/2, quad_idx, the_ring0);
+        r.the_ring = lnls_add_misalignmentX(+r.parms.delta_pos/2, quad_idx, the_ring0);
         rp = fit_calc_cod_from_magnets(r);
-        r.the_ring = lnls_set_misalignmentX(-r.parms.delta_pos/2, quad_idx, the_ring0);
+        r.the_ring = lnls_add_misalignmentX(-r.parms.delta_pos/2, quad_idx, the_ring0);
         rn = fit_calc_cod_from_magnets(r);
         codx = rp.calc_data.(family).codx - rn.calc_data.(family).codx;
         Mx(:,j) = codx / r.parms.delta_pos;
         % vertical
-        r.the_ring = lnls_set_misalignmentY(+r.parms.delta_pos/2, quad_idx, the_ring0);
+        r.the_ring = lnls_add_misalignmentY(+r.parms.delta_pos/2, quad_idx, the_ring0);
         rp = fit_calc_cod_from_magnets(r);
-        r.the_ring = lnls_set_misalignmentY(-r.parms.delta_pos/2, quad_idx, the_ring0);
+        r.the_ring = lnls_add_misalignmentY(-r.parms.delta_pos/2, quad_idx, the_ring0);
         rn = fit_calc_cod_from_magnets(r);
         cody = rp.calc_data.(family).cody - rn.calc_data.(family).cody;
         My(:,j) = cody / r.parms.delta_pos;

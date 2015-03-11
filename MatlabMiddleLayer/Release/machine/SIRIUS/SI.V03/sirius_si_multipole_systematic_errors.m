@@ -118,7 +118,7 @@ new_the_ring = the_ring;
 for i=1:length(families)
     family  = families{i};
     idx     = findcells(new_the_ring, 'FamName', family);
-    new_the_ring = lnls_set_multipoles(new_the_ring, new_Bn_normal, new_An_skew, new_main_monomial, r0, idx);
+    new_the_ring = lnls_add_multipoles(new_the_ring, new_Bn_normal, new_An_skew, new_main_monomial, r0, idx);
 end
 
 
