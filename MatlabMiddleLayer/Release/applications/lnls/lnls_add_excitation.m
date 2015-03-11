@@ -1,4 +1,4 @@
-function new_ring = lnls_set_excitation(errors, indices, old_ring)
+function new_ring = lnls_add_excitation(errors, indices, old_ring)
 
 % History
 %

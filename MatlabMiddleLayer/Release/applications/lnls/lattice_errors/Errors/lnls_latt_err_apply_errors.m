@@ -64,31 +64,31 @@ the_ring  = the_ring0;
 
 err = fraction * errors.errors_x(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_misalignmentX(err(idx), idx, the_ring);
+the_ring  = lnls_add_misalignmentX(err(idx), idx, the_ring);
 
 err = fraction * errors.errors_y(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_misalignmentY(err(idx), idx, the_ring);
+the_ring  = lnls_add_misalignmentY(err(idx), idx, the_ring);
 
 err = fraction * errors.errors_roll(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_rotation_ROLL(err(idx), idx, the_ring);
+the_ring  = lnls_add_rotation_ROLL(err(idx), idx, the_ring);
 
 err = fraction * errors.errors_yaw(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_rotation_YAW(err(idx), idx, the_ring);
+the_ring  = lnls_add_rotation_YAW(err(idx), idx, the_ring);
 
 err = fraction * errors.errors_pitch(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_rotation_PITCH(err(idx), idx, the_ring);
+the_ring  = lnls_add_rotation_PITCH(err(idx), idx, the_ring);
 
 err = fraction * errors.errors_e(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_excitation(err(idx), idx, the_ring);
+the_ring  = lnls_add_excitation(err(idx), idx, the_ring);
 
 err = fraction * errors.errors_e_kdip(machine,:);
 idx = find(err ~= 0)';
-the_ring  = lnls_set_excitation_Kdip(err(idx), idx, the_ring);
+the_ring  = lnls_add_excitation_Kdip(err(idx), idx, the_ring);
 
 
 

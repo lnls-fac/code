@@ -100,10 +100,10 @@ for nmaq=1:n_maquinas
     erroex = (-1+2*rand(1,length(idx))) * rms_ex;
     erroroll = (-1+2*rand(1,length(idx))) * rms_roll;
 
-    ltlb = lnls_set_misalignmentX(errox, idx, ltlb);
-    ltlb = lnls_set_misalignmentY(erroy, idx, ltlb);
-    ltlb = lnls_set_rotation_ROLL(erroroll, idx, ltlb);
-    ltlb = lnls_set_excitation(erroex, idx, ltlb);
+    ltlb = lnls_add_misalignmentX(errox, idx, ltlb);
+    ltlb = lnls_add_misalignmentY(erroy, idx, ltlb);
+    ltlb = lnls_add_rotation_ROLL(erroroll, idx, ltlb);
+    ltlb = lnls_add_excitation(erroex, idx, ltlb);
     
 % Orbit without correction
     % Error in lauching conditions
@@ -162,7 +162,7 @@ for nmaq=1:n_maquinas
     
 %erro de ripple, ajustados em cima da ?rbita corrigida
     erroex = (-1+2*rand(1,length(idx))) * 1/1000;
-    ltlb = lnls_set_excitation(erroex, idx, ltlb);
+    ltlb = lnls_add_excitation(erroex, idx, ltlb);
     t=twissline(ltlb,dp0,Twiss0,1:length(ltlb)+1);
     orb_ripple_fim(:,nmaq)=t(end).ClosedOrbit - orb_corr_fim(:,nmaq);
         

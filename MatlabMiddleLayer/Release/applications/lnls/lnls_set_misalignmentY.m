@@ -1,5 +1,5 @@
-function new_ring = lnls_set_misalignmentY(errors, indices, old_ring)
-%function new_ring = lnls_set_misalignmentY(errors, indices, old_ring)
+function new_ring = lnls_add_misalignmentY(errors, indices, old_ring)
+%function new_ring = lnls_add_misalignmentY(errors, indices, old_ring)
 
 new_ring = old_ring;
 

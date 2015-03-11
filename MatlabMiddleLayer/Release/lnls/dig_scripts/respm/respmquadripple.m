@@ -17,30 +17,30 @@ for i=1:n_elements
     
     % positive misalignment
     THERING = TR0;
-    THERING = lnls_set_misalignmentX(ones(size(idx)) * delta_mis/2, idx, THERING);
+    THERING = lnls_add_misalignmentX(ones(size(idx)) * delta_mis/2, idx, THERING);
     TR1 = THERING;
     
     THERING = TR1;
-    THERING = lnls_set_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_p = findorbit4(THERING, 0, orbit_points);
     
     THERING = TR1;
-    THERING = lnls_set_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_n = findorbit4(THERING, 0, orbit_points);
     
     dorbit_p = (orbit_p-orbit_n)'/(delta_exc *.2/59/ K);
     
     % negative misalignment
     THERING = TR0;
-    THERING = lnls_set_misalignmentX(-delta_mis/2, idx, THERING);
+    THERING = lnls_add_misalignmentX(-delta_mis/2, idx, THERING);
     TR1 = THERING;
     
     THERING = TR1;
-    THERING = lnls_set_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_p = findorbit4(THERING, 0, orbit_points);
     
     THERING = TR1;
-    THERING = lnls_set_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_n = findorbit4(THERING, 0, orbit_points);
     
     dorbit_n = (orbit_p-orbit_n)'/(delta_exc * K);
@@ -51,30 +51,30 @@ for i=1:n_elements
     
     % positive misalignment
     THERING = TR0;
-    THERING = lnls_set_misalignmentY(delta_mis/2, idx, THERING);
+    THERING = lnls_add_misalignmentY(delta_mis/2, idx, THERING);
     TR1 = THERING;
     
     THERING = TR1;
-    THERING = lnls_set_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_p = findorbit4(THERING, 0, orbit_points);
     
     THERING = TR1;
-    THERING = lnls_set_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_n = findorbit4(THERING, 0, orbit_points);
     
     dorbit_p = (orbit_p-orbit_n)'/(delta_exc * K);
     
     % negative misalignment
     THERING = TR0;
-    THERING = lnls_set_misalignmentY(-delta_mis/2, idx, THERING);
+    THERING = lnls_add_misalignmentY(-delta_mis/2, idx, THERING);
     TR1 = THERING;
     
     THERING = TR1;
-    THERING = lnls_set_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_p = findorbit4(THERING, 0, orbit_points);
     
     THERING = TR1;
-    THERING = lnls_set_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
+    THERING = lnls_add_excitation(-ones(size(idx)) * delta_exc/2, idx, THERING);
     orbit_n = findorbit4(THERING, 0, orbit_points);
     
     dorbit_n = (orbit_p-orbit_n)'/(delta_exc * K);
