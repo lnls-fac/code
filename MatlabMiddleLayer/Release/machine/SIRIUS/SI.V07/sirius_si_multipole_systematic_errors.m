@@ -24,6 +24,7 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 % ======================
 model_name    = 'q14';
 r0            = 11.7/1000;
+% systematic multipoles from '2015-01-27 Quadrupolo_Anel_QC_Modelo 2_-12_12mm_-500_500mm.txt'
 monomials     =   [ 5,       9,       13,       17];
 Bn_normal     = 1*[-3.6e-4, +1.4e-3, -5.9e-04, +5.7e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
@@ -35,6 +36,7 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 % ======================
 model_name    = 'q20';
 r0            = 11.7/1000;
+% systematic multipoles from '2015-02-10 Quadrupolo_Anel_QM_Modelo 3_-12_12mm_-500_500mm.txt'
 monomials     =   [ 5,       9,       13,       17];
 Bn_normal     = 1*[-3.7e-4, +1.4e-3, -5.7e-04, +3.8e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
@@ -46,6 +48,7 @@ new_the_ring = insert_multipoles(new_the_ring, families, monomials, Bn_normal, A
 % ======================
 model_name    = 'q30';
 r0            = 11.7/1000;
+% systematic multipoles from '2015-02-13 Quadrupolo_Anel_QL_Modelo 4_-12_12mm_-500_500mm.txt'
 monomials     =   [ 5,       9,       13,       17];
 Bn_normal     = 1*[-3.9e-4, +1.5e-3, -6.0e-04, +4.8e-5];
 An_skew       = 1*[ 0.0,     0.0,     0.0,      0.0];
