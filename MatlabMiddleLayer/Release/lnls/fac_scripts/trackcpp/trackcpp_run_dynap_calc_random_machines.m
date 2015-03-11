@@ -1,4 +1,4 @@
-function trackcpp_run_dynap_calc_random_machines
+function trackcpp_run_dynap_calc_random_machines(default_dir)
 
 % users selects submachine
 prompt = {'Submachine (bo/si)', 'dynap_xy (yes/no)', 'dynap_ex (yes/no)', 'dynap_ma (yes/no)'};
@@ -52,7 +52,9 @@ else
 end
 
 % selects input file with random machine
-default_dir = fullfile(lnls_get_root_folder(), 'data', 'sirius', answer{1}, 'beam_dynamics');
+if ~exist('default_dir','var')
+    default_dir = fullfile(lnls_get_root_folder(), 'data', 'sirius', answer{1}, 'beam_dynamics');
+end
 [inpfile,path,~] = uigetfile('*.mat','Select input file with random machines', fullfile(default_dir, '*.mat'));
 if isnumeric(inpfile), return; end
 machine_fname = fullfile(path, inpfile);
