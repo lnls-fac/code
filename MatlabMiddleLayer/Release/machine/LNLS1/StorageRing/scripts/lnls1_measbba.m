@@ -6,7 +6,7 @@ function bba = lnls1_measbba(varargin)
 %2013-10-09: mudada a estrutura de dados com info sobre bba a ser realizado (p/ ficar mais fÃ¡cil selecionar BPMs)
 %2012-10-11: adicionado delta_shunt_global = 3 para tentar melhorar a sensibilidade da medida.(Ximenes e Jefferson) 
 %2011-04-04: adicionada rotina que gera arquivo *.orb para uso no OPR1 (Fernando)
-%2010-09-13: comentarios iniciais no codigo (X.R.R.)
+%2010-09-13: comentarios iniciais no codigo (X.R.R.) 
 
 delta_shunt_global = 3;  % [A]
 
@@ -127,7 +127,8 @@ if ~isfield(bba, 'final_machineconfig')
     % ajustes iniciais
     setbpmaverages(bba.configs.bpms.pause, bba.configs.bpms.nr_measurements);
     fprintf('%s: desligando correï¿½ï¿½o de ï¿½rbita automï¿½tica\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
-    lnls1_auto_orb_corr_off;
+    lnls1_slow_orbcorr_off;
+    lnls1_fast_orbcorr_off;
     fprintf('%s: ligando shunts\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
     lnls1_quad_shunts_on;
     
@@ -161,7 +162,7 @@ if ~isfield(bba, 'final_machineconfig')
 
 end
 
-%% salva dados (Fiz alteracoes aqui e na funcao analysis_bba) - redundancia, caso aconteça algum erro no script de análise.
+%% salva dados (Fiz alteracoes aqui e na funcao analysis_bba) - redundancia, caso aconteca algum erro no script de analise.
 fprintf('\n%s: salvando dados\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
 [pathstr namef] = fileparts(default_filename);
 if ~exist(pathstr, 'dir')

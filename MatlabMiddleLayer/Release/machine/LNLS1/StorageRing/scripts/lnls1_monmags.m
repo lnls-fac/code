@@ -11,7 +11,8 @@ reading_interval = 0.0;
 
 if ~strcmpi(getmode('BEND'), 'Online'), switch2online; end
 
-lnls1_auto_orb_corr_off;
+lnls1_slow_orbcorr_off;
+lnls1_fast_orbcorr_off;
 setbpmaverages(reading_interval,nr_points);
 
 disp([get_date_str ': início da medida de flutuação das fontes']);

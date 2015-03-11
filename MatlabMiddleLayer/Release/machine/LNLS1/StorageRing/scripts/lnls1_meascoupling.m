@@ -29,7 +29,7 @@ function r = lnls1_meascoupling(nr_points)
 %
 % obs: a correção de órbita é ligada automaticamente antes da medida.
 
-lnls1_auto_orb_corr_on;
+lnls1_fast_orbcorr_on;
 
 fd = getfamilydata('TUNE');
 if strcmpi(fd.Monitor.Mode,'Online')

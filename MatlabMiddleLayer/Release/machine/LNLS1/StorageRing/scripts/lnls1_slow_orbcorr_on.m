@@ -1,4 +1,4 @@
-function lnls1_auto_orb_corr_on
+function lnls1_slow_orbcorr_on
 %Liga correção automática de órbita no OPR1
 %
 %History: 
@@ -9,5 +9,5 @@ if strcmpi(getmode('BEND'), 'online')
     msg.AORBCOR_ON = 1;
     lnls1_comm_write(msg);
 else
-    fprintf('lnls1_auto_orb_corr_on: simulation mode!\n');
+    fprintf('lnls1_slow_orbcorr_on: simulation mode!\n');
 end

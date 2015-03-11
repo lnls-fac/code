@@ -12,7 +12,8 @@ function lnls1_measdisp(varargin)
 disp([get_date_str ': início da medida de função de dispersão']);
 
 if strcmpi(getmode('BEND'), 'Online')
-    lnls1_auto_orb_corr_off;  % turn auto orbit correction at OPR1 off
+    lnls1_slow_orbcorr_off;  % turn auto orbit correction at OPR1 off
+    lnls1_fast_orbcorr_off;  % turn auto orbit correction at OPR1 off
     lnls1_grff02_set_on; % set RF Generator Tandem on machine experiment mode
 end
 
