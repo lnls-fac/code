@@ -32,13 +32,17 @@ function machine = lnls_latt_err_correct_coupling(name, machine, coup)
 % OUTPUT:
 %   machine : cell array of lattice models with the orbit corrected.
 
+coup.bpm_idx = sort(coup.bpm_idx);
+coup.hcm_idx = sort(coup.hcm_idx);
+coup.vcm_idx = sort(coup.vcm_idx);
+
 nr_machines = length(machine);
 
 calc_respm = false;
 if ~isfield(coup,'respm'), calc_respm = true; end
 
-save([name,'_correct_coup_input.mat'], 'coup');
-
+coup2 = rmfield(coup,'respm');
+save([name,'_correct_coup_input.mat'], 'coup2');
 
 %if isnumeric(coup.svs), svs = num2str(coup.svs);else svs = coup.svs;end
 fprintf('   maximum number of correction iterations: %i\n', coup.max_nr_iter);

@@ -47,6 +47,11 @@ function machine = lnls_latt_err_correct_cod(name, machine, orbit, goal_codx, go
 %   machine : cell array of lattice models with the orbit corrected.
 %      
 
+% making sure they are in order
+orbit.bpm_idx = sort(orbit.bpm_idx);
+orbit.hcm_idx = sort(orbit.hcm_idx);
+orbit.vcm_idx = sort(orbit.vcm_idx);
+
 nr_machines = length(machine);
 
 if ~exist('goal_codx','var')

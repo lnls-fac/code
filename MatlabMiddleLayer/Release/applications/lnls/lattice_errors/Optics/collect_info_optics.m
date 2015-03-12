@@ -26,14 +26,14 @@ info = cell(1,len_kbs*nper);
 % this script assumes uniform quadrupole modelling
 
 lnls_create_waitbar('Colecting Info for Optics Response Matrix Calculation',0.5,len_kbs);
-K = getcellstruct(the_ring, 'PolynomB', optics.kbs_idx(1:len_kbs), 1, 2);
+K = getcellstruct(the_ring, 'PolynomB', optics.kbs_idx(1:len_kbs,1), 1, 2);
 the_ring_calc = the_ring;
 for i1=1:len_kbs
-    the_ring_calc = setcellstruct(the_ring_calc, 'PolynomB', optics.kbs_idx(i1,:), K(i1) + stepK/2, 1, 2);
+    the_ring_calc = setcellstruct(the_ring_calc, 'PolynomB', optics.kbs_idx(i1,:), K(i1,1) + stepK/2, 1, 2);
     [Mp, Dispp, tunep] = get_matrix_disp(the_ring_calc, optics.bpm_idx, optics.hcm_idx, optics.vcm_idx);
-    the_ring_calc = setcellstruct(the_ring_calc, 'PolynomB', optics.kbs_idx(i1,:), K(i1) - stepK, 1, 2);
+    the_ring_calc = setcellstruct(the_ring_calc, 'PolynomB', optics.kbs_idx(i1,:), K(i1,1) - stepK, 1, 2);
     [Mn, Dispn, tunen] = get_matrix_disp(the_ring_calc, optics.bpm_idx, optics.hcm_idx, optics.vcm_idx);
-    the_ring_calc = setcellstruct(the_ring_calc, 'PolynomB', optics.kbs_idx(i1,:), K(i1) + stepK/2, 1, 2);
+    the_ring_calc = setcellstruct(the_ring_calc, 'PolynomB', optics.kbs_idx(i1,:), K(i1,1) + stepK/2, 1, 2);
     
     info{i1} = struct('M',(Mp-Mn)/stepK0,'Disp',(Dispp-Dispn)/stepK0, 'Tune',(tunep-tunen)/stepK0);
     lnls_update_waitbar(i1)
