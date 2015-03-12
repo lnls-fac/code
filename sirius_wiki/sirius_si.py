@@ -129,21 +129,21 @@ si_optics_transverse_coupling = 1.0    # [%]
 si_optics_damping_partition_number_vertical_dipole     = 1.0
 si_optics_damping_partition_number_vertical          = 1.0
 
-si_errors_alignment_dipole     = 40  #[μm]
-si_errors_alignment_quadrupole = 40  #[μm]
-si_errors_alignment_sextupole  = 40  #[μm]
-si_errors_roll_dipole      = 0.2 #[mrad]
-si_errors_roll_quadrupole  = 0.2 #[mrad]
-si_errors_roll_sextupole   = 0.2 #[mrad]
-si_errors_excitation_dipole     = 0.05 #[%]
-si_errors_excitation_quadrupole = 0.05 #[%]
-si_errors_excitation_sextupole  = 0.05 #[%]
-si_errors_ripple_dipole        =  20   # [ppm]
-si_errors_ripple_quadrupole    =  20   # [ppm]
-si_errors_ripple_sextupole     =  20   # [ppm]
-si_errors_vibration_dipole     =  6    # [nm]
-si_errors_vibration_quadrupole =  6    # [nm]
-si_errors_vibration_sextupole  =  6    # [nm]
+si_error_alignment_dipole     = 40  #[μm]
+si_error_alignment_quadrupole = 40  #[μm]
+si_error_alignment_sextupole  = 40  #[μm]
+si_error_roll_dipole      = 0.2 #[mrad]
+si_error_roll_quadrupole  = 0.2 #[mrad]
+si_error_roll_sextupole   = 0.2 #[mrad]
+si_error_excitation_dipole     = 0.05 #[%]
+si_error_excitation_quadrupole = 0.05 #[%]
+si_error_excitation_sextupole  = 0.05 #[%]
+si_error_ripple_dipole        =  20   # [ppm]
+si_error_ripple_quadrupole    =  20   # [ppm]
+si_error_ripple_sextupole     =  20   # [ppm]
+si_error_vibration_dipole     =  6    # [nm]
+si_error_vibration_quadrupole =  6    # [nm]
+si_error_vibration_sextupole  =  6    # [nm]
 
 parameter_list = [
   Parameter(name='SI lattice version',       group='FAC', is_derived=False, value=si_lattice_version, symbol='', units='', deps=[], obs=[], ),
@@ -361,19 +361,19 @@ parameter_list = [
   Parameter(name='SI optics radiation damping time vertical', group='FAC', is_derived=True, value='damping_time("SI beam energy", "SI optics radiation integral i2", "SI optics damping partition number vertical", "SI lattice circumference")', symbol=r'<math>\alpha_{\text{y, dip}}</math>', units='ms', deps=[], ),
   Parameter(name='SI optics radiation damping time longitudinal', group='FAC', is_derived=True, value='damping_time("SI beam energy", "SI optics radiation integral i2", "SI optics damping partition number longitudinal", "SI lattice circumference")', symbol=r'<math>\alpha_{\text{s, dip}}</math>', units='ms', deps=[], ),
 
-  Parameter(name='SI errors alignment dipole', group='FAC', is_derived=False, value=si_errors_alignment_dipole, symbol=r'<math>E_{xy,\text{dip}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors alignment quadrupole', group='FAC', is_derived=False, value=si_errors_alignment_quadrupole, symbol=r'<math>E_{xy,\text{quad}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors alignment sextupole', group='FAC', is_derived=False, value=si_errors_alignment_sextupole, symbol=r'<math>E_{xy,\text{sext}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors roll dipole', group='FAC', is_derived=False, value=si_errors_roll_dipole, symbol=r'<math>E_{\theta,\text{dip}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors roll quadrupole', group='FAC', is_derived=False, value=si_errors_roll_quadrupole, symbol=r'<math>E_{\theta,\text{quad}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors roll sextupole', group='FAC', is_derived=False, value=si_errors_roll_sextupole, symbol=r'<math>E_{\theta,\text{sext}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors excitation dipole', group='FAC', is_derived=False, value=si_errors_excitation_dipole, symbol=r'<math>E_{\text{exc,dip}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors excitation quadrupole', group='FAC', is_derived=False, value=si_errors_excitation_quadrupole, symbol=r'<math>E_{\text{exc,quad}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors excitation sextupole', group='FAC', is_derived=False, value=si_errors_excitation_sextupole, symbol=r'<math>E_{\text{exc,sext}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
-  Parameter(name='SI errors ripple dipole',     group='FAC', is_derived=False, value=si_errors_ripple_dipole, symbol=r'<math>E_\text{ripp, dip}</math>', units='ppm', deps=[], obs=[], ),
-  Parameter(name='SI errors ripple quadrupole', group='FAC', is_derived=False, value=si_errors_ripple_quadrupole, symbol=r'<math>E_\text{ripp, quad}</math>', units='ppm', deps=[], obs=[], ),
-  Parameter(name='SI errors ripple sextupole',  group='FAC', is_derived=False, value=si_errors_ripple_sextupole, symbol=r'<math>E_\text{ripp, sext}</math>', units='ppm', deps=[], obs=[], ),
-  Parameter(name='SI errors vibration dipole', group='FAC', is_derived=False, value=si_errors_vibration_dipole, symbol=r'<math>E_\text{vib, dip}</math>', units='nm', deps=[], obs=[], ),
-  Parameter(name='SI errors vibration quadrupole', group='FAC', is_derived=False, value=si_errors_vibration_quadrupole, symbol=r'<math>E_\text{vib, quad}</math>', units='nm', deps=[], obs=[], ),
-  Parameter(name='SI errors vibration sextupole', group='FAC', is_derived=False, value=si_errors_vibration_sextupole, symbol=r'<math>E_\text{vib, sext}</math>', units='nm', deps=[], obs=[], ),
+  Parameter(name='SI error alignment dipole', group='FAC', is_derived=False, value=si_error_alignment_dipole, symbol=r'<math>E_{xy,\text{dip}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error alignment quadrupole', group='FAC', is_derived=False, value=si_error_alignment_quadrupole, symbol=r'<math>E_{xy,\text{quad}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error alignment sextupole', group='FAC', is_derived=False, value=si_error_alignment_sextupole, symbol=r'<math>E_{xy,\text{sext}}</math>', units=unicode('μm', encoding='utf-8'), deps=[], obs=[r'Random transverse position error (standard deviation) for <math>x</math> and <math>y</math>.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error roll dipole', group='FAC', is_derived=False, value=si_error_roll_dipole, symbol=r'<math>E_{\theta,\text{dip}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error roll quadrupole', group='FAC', is_derived=False, value=si_error_roll_quadrupole, symbol=r'<math>E_{\theta,\text{quad}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error roll sextupole', group='FAC', is_derived=False, value=si_error_roll_sextupole, symbol=r'<math>E_{\theta,\text{sext}}</math>', units='mrad', deps=[], obs=[r'Random rotation error (standard deviation) around longitudinal axis.', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error excitation dipole', group='FAC', is_derived=False, value=si_error_excitation_dipole, symbol=r'<math>E_{\text{exc,dip}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error excitation quadrupole', group='FAC', is_derived=False, value=si_error_excitation_quadrupole, symbol=r'<math>E_{\text{exc,quad}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error excitation sextupole', group='FAC', is_derived=False, value=si_error_excitation_sextupole, symbol=r'<math>E_{\text{exc,sext}}</math>', units='%', deps=[], obs=[r'Static or low frequency random excitation error (standard deviation).', unicode('Simulations assume Gaussian distribution truncated at ±2σ.', encoding='utf-8')], ),
+  Parameter(name='SI error ripple dipole',     group='FAC', is_derived=False, value=si_error_ripple_dipole, symbol=r'<math>E_\text{ripp, dip}</math>', units='ppm', deps=[], obs=[], ),
+  Parameter(name='SI error ripple quadrupole', group='FAC', is_derived=False, value=si_error_ripple_quadrupole, symbol=r'<math>E_\text{ripp, quad}</math>', units='ppm', deps=[], obs=[], ),
+  Parameter(name='SI error ripple sextupole',  group='FAC', is_derived=False, value=si_error_ripple_sextupole, symbol=r'<math>E_\text{ripp, sext}</math>', units='ppm', deps=[], obs=[], ),
+  Parameter(name='SI error vibration dipole', group='FAC', is_derived=False, value=si_error_vibration_dipole, symbol=r'<math>E_\text{vib, dip}</math>', units='nm', deps=[], obs=[], ),
+  Parameter(name='SI error vibration quadrupole', group='FAC', is_derived=False, value=si_error_vibration_quadrupole, symbol=r'<math>E_\text{vib, quad}</math>', units='nm', deps=[], obs=[], ),
+  Parameter(name='SI error vibration sextupole', group='FAC', is_derived=False, value=si_error_vibration_sextupole, symbol=r'<math>E_\text{vib, sext}</math>', units='nm', deps=[], obs=[], ),
 ]
