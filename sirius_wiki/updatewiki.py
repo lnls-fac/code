@@ -6,9 +6,11 @@ import re
 import sys
 import pywikibot
 from parameter import Parameter
-import sirius_si
-import sirius_bo
 import sirius_li
+import sirius_tb
+import sirius_bo
+import sirius_ts
+import sirius_si
 
 
 def generate_parameter_page(parameter):
@@ -61,7 +63,7 @@ def print_help(argv):
 
 def process_input(regexp, list_flag):
 
-    parameters = sirius_si.parameter_list + sirius_bo.parameter_list + sirius_li.parameter_list
+    parameters = sirius_li.parameter_list + sirius_tb.parameter_list + sirius_bo.parameter_list + sirius_ts.parameter_list + sirius_si.parameter_list
 
     malformed_regexp = False
     for parameter in parameters:
