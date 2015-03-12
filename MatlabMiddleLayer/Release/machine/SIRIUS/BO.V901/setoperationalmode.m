@@ -105,8 +105,8 @@ end
 
 
 fprintf('   Middlelayer setup for operational mode: %s\n', AD.OperationalMode);
-ats = atsummary;
-setappdata(0, 'ATSUMMARY', ats);
+%ats = atsummary;
+%setappdata(0, 'ATSUMMARY', ats);
 
 function set_operationalmode_High
 

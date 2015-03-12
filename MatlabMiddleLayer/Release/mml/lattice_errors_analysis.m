@@ -154,7 +154,7 @@ finalizations();
 
         
         % generates error vectors
-        nr_machines   = 20;
+        nr_machines   = 1;
         rndtype       = 'gaussian';
         cutoff_errors = 1;
         fprintf('-  generating errors ...\n');
