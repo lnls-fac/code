@@ -40,39 +40,38 @@ if ~isfield(coup,'respm'), calc_respm = true; end
 save([name,'_correct_coup_input.mat'], 'coup');
 
 
-if isnumeric(coup.svs), svs = num2str(coup.svs);else svs = coup.svs;end
+%if isnumeric(coup.svs), svs = num2str(coup.svs);else svs = coup.svs;end
 fprintf('   maximum number of correction iterations: %i\n', coup.max_nr_iter);
 fprintf('   tolerance: %8.2e\n', coup.tolerance);
 
 fprintf('\n');
-fprintf('     ----------------------------------------------------------------- \n');
-fprintf('    | Max Kl |  chi2  | Tilt  |      Coup[%%]       | NIters | NRedStr |\n');
-fprintf('    | [1/km] |        | [deg] |  Ey/Ex  | Tracking |        |         |\n');
-fprintf('----------------------------------------------------------------------|\n');
+fprintf('     -------------------------------------------------------------------------- \n');
+fprintf('    | Max Kl |  chi2  | Tilt  |           Coup[%%]           | NIters | NRedStr |\n');
+fprintf('    | [1/km] |        | [deg] |  Ey/Ex  | Tracking | Dy[mm] |        |         |\n');
+fprintf('-------------------------------------------------------------------------------|\n');
 for i=1:nr_machines
-        R=0;
-        T = 0;
+        R=0; T=0; D=0;
         try
-            [T, ~, ~, ~, R, ~, ~, ~, ~] = calccoupling(machine{i});
+            [T, Eta, ~, ~, R, ~, ~, ~, ~] = calccoupling(machine{i});
+            D = 1000*sqrt(sum(Eta(3,:).^2)/size(Eta,2));
         end
         
         if calc_respm
             [respm, ~] = calc_respm_coupling(machine{i}, coup);
             coup.respm = respm;
         end
-        
         RTr = mean(lnls_calc_emittance_coupling(machine{i}));
         [machine{i}, skewstr, iniFM, bestFM, iter, n_times] = coup_sg(machine{i}, coup);
         RTr2 = mean(lnls_calc_emittance_coupling(machine{i}));
-        R2=0;
-        T2 = 0;
+        R2=0; T2=0; D2=0;
         try
-            [T2, ~, ~, ~, R2, ~, ~, ~, ~] = calccoupling(machine{i});
+            [T2, Eta2, ~, ~, R2, ~, ~, ~, ~] = calccoupling(machine{i});
+            D2 = 1000*sqrt(sum(Eta2(3,:).^2)/size(Eta2,2));
         end
         %fprintf('%03i| skewstr[1/m^2] %+6.4f(max) %6.4f(std) | coup %8.5f (std) | tilt[deg] %5.2f -> %5.2f (std), k[%%] %5.2f -> %5.2f (std)\n', i, max(abs(skewstr)), std(skewstr), best_fm, std(Tilt)*180/pi, std(Tilt2)*180/pi, 100*Ratio, 100*Ratio2);
-        fprintf('%03d | %6s | %6.3f | %5.2f | %7.3f | %7.3f  |  %4s  |  %4s   |\n',...
-            i, ' ', iniFM, std(T)*180/pi,  100*[R, RTr],' ',' ');  
-        fprintf('%3s | %6.2f | %6.3f | %5.2f | %7.4f | %7.4f  |  %4d  |  %4d   |\n',...
-            ' ', 1000*max(abs(skewstr)), bestFM, std(T2)*180/pi,  100*[R2, RTr2], iter, n_times);
-        fprintf('----------------------------------------------------------------------|\n');
+        fprintf('%03d | %6s | %6.3f | %5.2f | %7.3f | %7.3f  | %6.4f |  %4s  |  %4s   |\n',...
+            i, ' ', iniFM, std(T)*180/pi,  100*[R, RTr], D, ' ',' ');  
+        fprintf('%3s | %6.2f | %6.3f | %5.2f | %7.4f | %7.4f  | %6.4f |  %4d  |  %4d   |\n',...
+            ' ', 1000*max(abs(skewstr)), bestFM, std(T2)*180/pi,  100*[R2, RTr2], D2, iter, n_times);
+        fprintf('-------------------------------------------------------------------------------|\n');
 end

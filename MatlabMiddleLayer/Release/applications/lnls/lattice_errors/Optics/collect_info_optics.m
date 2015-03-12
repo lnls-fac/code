@@ -3,7 +3,7 @@ function info = collect_info_optics(the_ring, optics, nper)
 if ~exist('nper','var'), nper = 1; end
 stepK0 = 0.001;
 
-fprintf('nr quadcorr: %03i\n', length(optics.kbs_idx));
+fprintf('nr quadcorr: %03i\n', size(optics.kbs_idx,1));
 
 % Test hysteresis
 hyster = 0.0;

@@ -1063,9 +1063,6 @@ AO.FOFB.VerticalGainAM.ChannelNames  = lnls1_getname('FOFB', 'HorizontalGainAM',
 AO.FOFB.VerticalGainAM.Units = 'Hardware';
 AO.FOFB.VerticalGainAM.HWUnits = '';
 
-
-        
-
 %%%%%%%%%%%%%%%%%%%%%
 % Corrector Magnets %
 %%%%%%%%%%%%%%%%%%%%%

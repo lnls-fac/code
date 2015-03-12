@@ -10,6 +10,8 @@ initializations();
 
 % next a nominal model is chosen for the study 
 the_ring = create_nominal_model();
+
+% gets family data for the lattice
 family_data = sirius_si_family_data(the_ring);
 
 % application of errors to the nominal model
@@ -43,6 +45,11 @@ finalizations();
         seed = 131071;
         fprintf('-  initializing random number generator with seed = %i ...\n', seed);
         RandStream.setGlobalStream(RandStream('mt19937ar','seed', seed));
+        
+        % saves this file to working directory so that what has been done
+        % is registered
+        p = mfilename('fullpath');
+        copyfile([p '.m'], 'lattice_errors_analysis.m');
         
         % sends copy of all output to a diary in a file
         fprintf('-  creating diary file ...\n');
