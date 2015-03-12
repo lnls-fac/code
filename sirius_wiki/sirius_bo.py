@@ -156,21 +156,6 @@ bo_error_multipole_sextupole_random_skew_16_pole   = 1.0e-4
 bo_error_multipole_sextupole_random_skew_18_pole   = 1.0e-4
 bo_error_multipole_sextupole_random_skew_20_pole   = 1.0e-4
 
-"""
-    bo_optics_beam_size_horizontal_long_straight_section  = 7.009486798878925E+01 #[um]
-    bo_optics_beam_size_horizontal_short_straight_section = 2.084762622184360E+01 #[um]
-    bo_optics_beam_size_horizontal_dipole_bc              = 9.948943931676647E+00 #[um]
-    bo_optics_beam_size_vertical_long_straight_section    = 3.214983743415169E+00 #[um]
-    bo_optics_beam_size_vertical_short_straight_section   = 1.939167731203255E+00 #[um]
-    bo_optics_beam_size_vertical_dipole_bc                = 3.996725872734588E+00 #[um]
-    bo_optics_beam_divergence_horizontal_long_straight_section  = 3.915259575507898E+00 #[urad]
-    bo_optics_beam_divergence_horizontal_short_straight_section = 1.316409860763686E+01 #[urad]
-    bo_optics_beam_divergence_horizontal_dipole_bc              = 2.942299673538725E+01 #[urad]
-    bo_optics_beam_divergence_vertical_long_straight_section    = 8.536265817057522E-01 #[urad]
-    bo_optics_beam_divergence_vertical_short_straight_section   = 1.415244044631019E+00 #[urad]
-    bo_optics_beam_divergence_vertical_dipole_bc                = 6.866611249310436E-01 #[urad]
-"""
-
 parameter_list = [
     Parameter(name='BO lattice version', group='FAC', is_derived=False, value=bo_lattice_version, symbol='', units='', deps=[], obs=[], ),
     Parameter(name='BO lattice type', group='FAC', is_derived=False, value=bo_lattice_type, symbol='', units='', deps=[], obs=[], ),
