@@ -111,7 +111,8 @@ end
 % adds multipoles
 for i=1:length(fams)
     family  = fams{i};
-    idx     = fam_data.(family).ATIndex;
+    idx     = fam_data.(family).ATIndex';
+    idx     = idx(:);
     the_ring = lnls_add_multipoles(the_ring, new_Bn_normal, new_Bn_skew, new_main_monomial, r0, idx);
 end
 
