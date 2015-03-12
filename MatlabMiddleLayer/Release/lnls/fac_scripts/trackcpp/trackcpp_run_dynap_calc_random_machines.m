@@ -16,7 +16,7 @@ else
     accelerator_defaultanswer = {'3.00', '864', 'on', 'on', 'on'};
     dynap_xy_defaultanswer    = {'5000', '0', '90', '-0.012','+0.012','40','0','0.0042'}; % to be changed
     dynap_ex_defaultanswer    = {'3500', '0.001', '48', '-0.06','+0.06','45','-0.012','0'}; % to be changed
-    dynap_ma_defaultanswer    = {'2000', '0.02', '0.001', '0', '52', 'b1 b2 b3 bc qf1 qf2 qf3 qf4 mia mib sda sdb'};
+    dynap_ma_defaultanswer    = {'2000', '0.02', '0.001', '0', '52', 'calc_mom_accep'};
 end
 
 % user defines accelerator
