@@ -1,5 +1,10 @@
 function [respm, info] = calc_respm_optics(the_ring, optics, nper, info)
 
+optics.bpm_idx = sort(optics.bpm_idx);
+optics.hcm_idx = sort(optics.hcm_idx);
+optics.vcm_idx = sort(optics.vcm_idx);
+optics.kbs_idx = sort(optics.kbs_idx);
+
 if ~exist('nper','var'), nper = 1; end
 
 if ~exist('info','var'), info = collect_info_optics(the_ring, optics, nper);end

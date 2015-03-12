@@ -1,4 +1,8 @@
 function r = calc_respm_cod(the_ring, bpm_idx, hcm_idx, vcm_idx, nper, print)
+% making sure they are in order
+bpm_idx = sort(bpm_idx);
+hcm_idx = sort(hcm_idx);
+vcm_idx = sort(vcm_idx);
 
 if ~exist('print','var'), print=false; end
 if ~exist('nper','var'), nper=1;end

@@ -95,7 +95,7 @@ end
 %C = R_ij / (diag([1 1 1 1])-M44);
 C = DM_i \ R_ij;
 
-cxx = (total_length/2) * C(1,1) + C(1,2);
-cyx = (total_length/2) * C(3,1) + C(3,2);
-cxy = (total_length/2) * C(1,3) + C(1,4);
-cyy = (total_length/2) * C(3,3) + C(3,4);
+cxx = -(total_length/2) * C(1,1) + C(1,2);
+cyx = -(total_length/2) * C(3,1) + C(3,2);
+cxy = -(total_length/2) * C(1,3) + C(1,4);
+cyy = -(total_length/2) * C(3,3) + C(3,4);

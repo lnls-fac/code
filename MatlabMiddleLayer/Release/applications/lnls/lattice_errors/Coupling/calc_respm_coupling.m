@@ -1,5 +1,9 @@
 function [respm, info] = calc_respm_coupling(the_ring, coup, lattice_symmetry, info)
 
+coup.bpm_idx = sort(coup.bpm_idx);
+coup.hcm_idx = sort(coup.hcm_idx);
+coup.vcm_idx = sort(coup.vcm_idx);
+
 if ~exist('lattice_symmetry','var'), lattice_symmetry = 1; end
 
 if ~exist('info','var'), info = collect_info_coup(the_ring, coup, lattice_symmetry);end

@@ -36,12 +36,19 @@ function machine = lnls_latt_err_correct_optics(name, machine, optics, the_ring)
 % OUTPUT:
 %   machine : cell array of lattice models with the orbit corrected.
 
+optics.bpm_idx = sort(optics.bpm_idx);
+optics.hcm_idx = sort(optics.hcm_idx);
+optics.vcm_idx = sort(optics.vcm_idx);
+optics.kbs_idx = sort(optics.kbs_idx);
+
 nr_machines = length(machine);
 
 calc_respm = false;
 if ~isfield(optics,'respm'), calc_respm = true; end
 
-save([name,'_correct_optics_input.mat'], 'optics');
+optics2 = rmfield(optics,'respm');
+save([name,'_correct_optics_input.mat'], 'optics2');
+
 
 fprintf(['Correcting Optics [' datestr(now) ']:\n']);
 if isnumeric(optics.svs), svs = num2str(optics.svs);else svs = optics.svs;end

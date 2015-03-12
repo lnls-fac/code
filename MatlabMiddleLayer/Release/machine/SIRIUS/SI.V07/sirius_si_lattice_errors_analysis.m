@@ -167,9 +167,9 @@ finalizations();
         fprintf('\n<closed-orbit distortions correction> [%s]\n\n', datestr(now));
         
         % parameters for slow correction algorithms
-        orbit.bpm_idx = family_data.bpm.ATIndex;
-        orbit.hcm_idx = family_data.chs.ATIndex;
-        orbit.vcm_idx = family_data.cvs.ATIndex;
+        orbit.bpm_idx = sort(family_data.bpm.ATIndex)s;
+        orbit.hcm_idx = sort(family_data.chs.ATIndex);
+        orbit.vcm_idx = sort(family_data.cvs.ATIndex);
         
         % parameters for SVD correction
         orbit.sext_ramp         = [0 1];
@@ -203,11 +203,10 @@ finalizations();
         
         fprintf('\n<optics symmetrization> [%s]\n\n', datestr(now));
         
-        optics.scm_idx = family_data.qs.ATIndex;
-        optics.bpm_idx = family_data.bpm.ATIndex;
-        optics.hcm_idx = family_data.chs.ATIndex;
-        optics.vcm_idx = family_data.cvs.ATIndex;
-        optics.kbs_idx = family_data.qn.ATIndex;
+        optics.bpm_idx = sort(family_data.bpm.ATIndex);
+        optics.hcm_idx = sort(family_data.chs.ATIndex);
+        optics.vcm_idx = sort(family_data.cvs.ATIndex);
+        optics.kbs_idx = sort(family_data.qn.ATIndex);
         
         optics.svs                = 156;
         optics.max_nr_iter        = 50;
