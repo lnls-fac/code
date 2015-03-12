@@ -92,10 +92,7 @@ data.cvf.ATIndex = data.cvf.ATIndex';
 
 % qs - skew quad correctors
 idx = [];
-idx = [idx; data.('sda').ATIndex];
-idx = [idx; data.('sf1').ATIndex];
-idx = [idx; data.('sf4').ATIndex];
-idx = [idx; data.('sdb').ATIndex];
+idx = [idx; data.('cf').ATIndex];
 idx = sort(idx);
 data.qs.ATIndex = reshape(idx,data.qs.nr_segs,[]);
 data.qs.ATIndex = data.qs.ATIndex';
