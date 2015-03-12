@@ -20,17 +20,17 @@ class ParameterDefinitions(object):
     '''Booster to storage ring transport line parameters'''
 
     ts_beam_energy            = 3.0 # [GeV]
-    ts_beam_gamma_factor      = gamma(ts_beam_energy)
-    ts_beam_beta_factor       = beta(ts_beam_gamma_factor)
-    ts_beam_velocity          = velocity(ts_beam_beta_factor)
-    ts_beam_magnetic_rigidity = brho(ts_beam_energy, ts_beam_beta_factor)
+    ts_beam_gamma_factor      = gamma("TS beam energy")
+    ts_beam_beta_factor       = beta("TS beam gamma factor")
+    ts_beam_velocity          = velocity("TS beam beta factor")
+    ts_beam_magnetic_rigidity = brho("TS beam energy", "TS beam beta factor")
 
     ts_total_length = 27.88 # [m]
     ts_number_of_dipoles = 2
     ts_number_of_quadrupoles = 8
     ts_maximum_quadrupole_gradient = 25.0 # [T/m]
 
-    ts_hardedge_length_of_dipoles = bo_hardedge_length_of_dipoles # [m]
+    ts_hardedge_length_of_dipoles = 1.152 #[m]
     ts_hardedge_length_of_extraction_septum = 0.85 # [m]
     ts_hardedge_length_of_thick_injection_septum = 1.100 # [m]
     ts_hardedge_length_of_thin_injection_septum = 1.400 # [m]
@@ -45,10 +45,10 @@ class ParameterDefinitions(object):
     ts_thick_injection_septum_bending_radius = ts_hardedge_length_of_thick_injection_septum / deg2rad(ts_thick_injection_septum_deflection_angle)
     ts_thin_injection_septum_bending_radius = ts_hardedge_length_of_thin_injection_septum / deg2rad(ts_thin_injection_septum_deflection_angle)
 
-    ts_dipole_magnetic_field = ts_beam_magnetic_rigidity / ts_dipole_bending_radius
-    ts_extraction_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_extraction_septum_bending_radius
-    ts_thick_injection_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_thick_injection_septum_bending_radius
-    ts_thin_injection_septum_magnetic_field = ts_beam_magnetic_rigidity / ts_thin_injection_septum_bending_radius
+    ts_dipole_magnetic_field = "TS beam magnetic rigidity" / ts_dipole_bending_radius
+    ts_extraction_septum_magnetic_field = "TS beam magnetic rigidity" / ts_extraction_septum_bending_radius
+    ts_thick_injection_septum_magnetic_field = "TS beam magnetic rigidity" / ts_thick_injection_septum_bending_radius
+    ts_thin_injection_septum_magnetic_field = "TS beam magnetic rigidity" / ts_thin_injection_septum_bending_radius
 
     ts_dipole_sagitta = 18.1 # [mm]
     ts_extraction_septum_sagitta = 6.7 # [mm]
@@ -85,13 +85,13 @@ class ParameterDefinitions(object):
     ts_QC3_quadrupole_strength =  1.80 # [1/m^2]
     ts_QC4_quadrupole_strength = -1.32 # [1/m^2]
 
-    ts_QA1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QA1_quadrupole_strength
-    ts_QA2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QA2_quadrupole_strength
-    ts_QB1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QB1_quadrupole_strength
-    ts_QB2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QB2_quadrupole_strength
-    ts_QC1_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC1_quadrupole_strength
-    ts_QC2_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC2_quadrupole_strength
-    ts_QC3_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC3_quadrupole_strength
-    ts_QC4_quadrupole_gradient = ts_beam_magnetic_rigidity * ts_QC4_quadrupole_strength
+    ts_QA1_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QA1_quadrupole_strength
+    ts_QA2_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QA2_quadrupole_strength
+    ts_QB1_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QB1_quadrupole_strength
+    ts_QB2_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QB2_quadrupole_strength
+    ts_QC1_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QC1_quadrupole_strength
+    ts_QC2_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QC2_quadrupole_strength
+    ts_QC3_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QC3_quadrupole_strength
+    ts_QC4_quadrupole_gradient = "TS beam magnetic rigidity" * ts_QC4_quadrupole_strength
 
     """

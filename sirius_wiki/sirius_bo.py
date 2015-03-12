@@ -54,31 +54,6 @@ bo_error_excitation_dipole = 0.1 # [%]
 
 bo_optics_extraction_damping_partition_number_vertical = 1.0
 
-bo_magnet_quadrupole_qf_number = 50
-bo_magnet_quadrupole_qd_number = 25
-
-bo_magnet_quadrupole_short_hardedge_length = 0.2 # [m]
-bo_magnet_quadrupole_long_hardedge_length  = 0.2 # [m]
-bo_magnet_quadrupole_qf_hardedge_length = bo_magnet_quadrupole_long_hardedge_length # [m]
-bo_magnet_quadrupole_qd_hardedge_length = bo_magnet_quadrupole_short_hardedge_length # [m]
-
-bo_magnet_sextupole_sf_number = 25
-bo_magnet_sextupole_sd_number = 10
-bo_magnet_sextupole_sf_hardedge_length = 0.2 # [m]
-bo_magnet_sextupole_sd_hardedge_length = 0.2 # [m]
-
-bo_magnet_sextupole_sf_maximum_strength = 10.000 # [1/m^3]
-bo_magnet_sextupole_sd_maximum_strength = 10.000 # [1/m^3]
-
-bo_magnet_quadrupole_qf_maximum_strength = 2.025 # [1/m^2]
-bo_magnet_quadrupole_qd_maximum_strength = 0.250 # [1/m^2]
-
-bo_bpm_number = 50
-bo_magnet_ch_number = 25
-bo_magnet_cv_number = 25
-bo_magnet_ch_maximum_normalized_integrated_field = 0.35 # [mrad]
-bo_magnet_cv_maximum_normalized_integrated_field = 0.35 # [mrad]
-
 bo_error_alignment_quadrupole  = 100 # [μm]
 bo_error_rotation_quadrupole   = 0.5 # [mrad]
 bo_error_excitation_quadrupole = 0.2 # [%]
