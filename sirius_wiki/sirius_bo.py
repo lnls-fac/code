@@ -24,10 +24,31 @@ bo_rf_injection_peak_voltage              = 1.1 #[MV]
 bo_rf_extraction_peak_voltage             = 1.1 #[MV]
 
 bo_magnet_dipole_number                         = 50
-bo_magnet_dipole_deflection_angle               = 360.0/bo_magnet_dipole_number #[deg]
 bo_magnet_dipole_hardedge_length                = 1.152 #[m]
 bo_magnet_dipole_integrated_quadrupole_strength = -0.2484 #[1/m]
 bo_magnet_dipole_integrated_sextupole_strength  = -2.2685*1.152 #[1/m²]
+
+bo_magnet_quadrupole_qf_number = 50
+bo_magnet_quadrupole_qd_number = 25
+bo_magnet_quadrupole_short_hardedge_length = 0.2 # [m]
+bo_magnet_quadrupole_long_hardedge_length  = 0.2 # [m]
+bo_magnet_quadrupole_qf_hardedge_length = bo_magnet_quadrupole_long_hardedge_length # [m]
+bo_magnet_quadrupole_qd_hardedge_length = bo_magnet_quadrupole_short_hardedge_length # [m]
+
+bo_magnet_sextupole_sf_number = 25
+bo_magnet_sextupole_sd_number = 10
+bo_magnet_sextupole_sf_hardedge_length = 0.2 # [m]
+bo_magnet_sextupole_sd_hardedge_length = 0.2 # [m]
+bo_magnet_sextupole_sf_maximum_strength = 10.000 # [1/m^3]
+bo_magnet_sextupole_sd_maximum_strength = 10.000 # [1/m^3]
+bo_magnet_quadrupole_qf_maximum_strength = 2.025 # [1/m^2]
+bo_magnet_quadrupole_qd_maximum_strength = 0.250 # [1/m^2]
+
+bo_bpm_number = 50
+bo_magnet_ch_number = 25
+bo_magnet_cv_number = 25
+bo_magnet_ch_maximum_normalized_integrated_field = 0.35 # [mrad]
+bo_magnet_cv_maximum_normalized_integrated_field = 0.35 # [mrad]
 
 bo_optics_default_mode                    = 'M0'
 bo_optics_tune_horizontal                 =  19.20433
@@ -167,7 +188,7 @@ parameter_list = [
     Parameter(name='BO rf extraction wavelength', group='FAC', is_derived=True, value='rf_wavelength("BO rf extraction frequency")', symbol=r'<math>\lambda_\text{RF}</math>', units=u'm', deps=[], obs=[r'<math>\lambda_\text{RF} = \frac{c}{f_\text{RF}}</math>'], ),
 
     Parameter(name='BO magnet dipole number',                         group='FAC', is_derived=False, value=bo_magnet_dipole_number, symbol=r'<math>N_\text{dip}</math>', units='', deps=[], obs=[], ),
-    Parameter(name='BO magnet dipole deflection angle',               group='FAC', is_derived=False, value=bo_magnet_dipole_deflection_angle, symbol=r'<math>\theta_\text{dip}</math>', units=unicode('°',encoding='utf-8'), deps=[], obs=[], ),
+    Parameter(name='BO magnet dipole deflection angle',               group='FAC', is_derived=True, value='360.0/bo_magnet_dipole_number', symbol=r'<math>\theta_\text{dip}</math>', units=unicode('°',encoding='utf-8'), deps=[], obs=[], ),
     Parameter(name='BO magnet dipole hardedge length',                group='FAC', is_derived=False, value=bo_magnet_dipole_hardedge_length, symbol=r'<math>L_\text{dip}</math>', units='m', deps=[], obs=[], ),
     Parameter(name='BO magnet dipole extraction integrated field', group='FAC', is_derived=True, value='"BO beam extraction magnetic rigidity" * deg2rad("BO magnet dipole deflection angle")', symbol=r'(BL)_{ext}', units='T.m', deps=[], obs=[], ),
     Parameter(name='BO magnet dipole integrated quadrupole strength', group='FAC', is_derived=False, value=bo_magnet_dipole_integrated_quadrupole_strength, symbol=r'<math>(LK)_\text{dip}</math>', units='m<sup>-1</sup>', deps=[], obs=[],),

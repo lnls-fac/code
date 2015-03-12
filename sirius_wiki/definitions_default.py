@@ -25,40 +25,39 @@ class ParameterDefinitions(object):
     ts_beam_velocity          = velocity("TS beam beta factor")
     ts_beam_magnetic_rigidity = brho("TS beam energy", "TS beam beta factor")
 
-    ts_total_length = 27.88 # [m]
-    ts_number_of_dipoles = 2
-    ts_number_of_quadrupoles = 8
-    ts_maximum_quadrupole_gradient = 25.0 # [T/m]
+    ts_lattice_length = 27.88 # [m]
+    ts_magnet_dipole_number = 2
+    ts_magnet_quadrupole_number = 8
+    ts_magnet_quadrupole_maximum_gradient = 25.0 # [T/m]
 
-    ts_hardedge_length_of_dipoles = 1.152 #[m]
-    ts_hardedge_length_of_extraction_septum = 0.85 # [m]
-    ts_hardedge_length_of_thick_injection_septum = 1.100 # [m]
-    ts_hardedge_length_of_thin_injection_septum = 1.400 # [m]
+    ts_magnet_dipole_hardedge_length = 1.152 #[m]
+    ts_magnet_extraction_septum_hardedge_length = 0.85 # [m]
+    ts_magnet_thick_injection_septum_hardedge_length = 1.100 # [m]
+    ts_magnet_thin_injection_septum_hardedge_length = 1.400 # [m]
 
-    ts_dipole_deflection_angle = bo_dipole_deflection_angle # [°]
-    ts_extraction_septum_deflection_angle = -3.60 # [°]
-    ts_thick_injection_septum_deflection_angle = 6.2 # [°]
-    ts_thin_injection_septum_deflection_angle = 4.73 # [°]
+    ts_magnet_dipole_deflection_angle = 7.2 # [°]
+    ts_magnet_extraction_septum_deflection_angle = -3.60 # [°]
+    ts_magnet_thick_injection_septum_deflection_angle = 6.2 # [°]
+    ts_magnet_thin_injection_septum_deflection_angle = 4.73 # [°]
 
-    ts_dipole_bending_radius = ts_hardedge_length_of_dipoles / deg2rad(ts_dipole_deflection_angle)
-    ts_extraction_septum_bending_radius = ts_hardedge_length_of_extraction_septum / deg2rad(ts_extraction_septum_deflection_angle)
-    ts_thick_injection_septum_bending_radius = ts_hardedge_length_of_thick_injection_septum / deg2rad(ts_thick_injection_septum_deflection_angle)
-    ts_thin_injection_septum_bending_radius = ts_hardedge_length_of_thin_injection_septum / deg2rad(ts_thin_injection_septum_deflection_angle)
+    ts_magnet_dipole_bending_radius = "TS magnet dipole hardedge length"/deg2rad("TS magnet dipole deflection angle")
+    ts_magnet_extraction_septum_bending_radius = "TS magnet extraction septum hardedge length"/deg2rad("TS magnet extraction septum deflection angle")
+    ts_magnet_thick_injection_septum_bending_radius = "TS magnet thick injection septum hardedge length"/deg2rad("TS magnet thick injection septum deflection angle")
+    ts_magnet_thin_injection_septum_bending_radius = "TS magnet thin injection septum hardedge length"/deg2rad("TS magnet thin injection septum deflection angle")
 
-    ts_dipole_magnetic_field = "TS beam magnetic rigidity" / ts_dipole_bending_radius
-    ts_extraction_septum_magnetic_field = "TS beam magnetic rigidity" / ts_extraction_septum_bending_radius
-    ts_thick_injection_septum_magnetic_field = "TS beam magnetic rigidity" / ts_thick_injection_septum_bending_radius
-    ts_thin_injection_septum_magnetic_field = "TS beam magnetic rigidity" / ts_thin_injection_septum_bending_radius
+    ts_magnet_dipole_magnetic_field = "TS beam magnetic rigidity"/"TS magnet dipole bending radius"
+    ts_magnet_extraction_septum_magnetic_field = "TS beam magnetic rigidity"/"TS magnet extraction septum bending radius"
+    ts_magnet_thick_injection_septum_magnetic_field = "TS beam magnetic rigidity"/"TS magnet thick injection septum bending radius"
+    ts_magnet_thin_injection_septum_magnetic_field = "TS beam magnetic rigidity"/"TS magnet thin injection septum bending radius"
 
-    ts_dipole_sagitta = 18.1 # [mm]
-    ts_extraction_septum_sagitta = 6.7 # [mm]
-    ts_thick_injection_septum_sagitta = 14.9 # [mm]
-    ts_thin_injection_septum_sagitta = 14.4 # [mm]
+    ts_magnet_dipole_sagitta = 18.1 # [mm]
+    ts_magnet_extraction_septum_sagitta = 6.7 # [mm]
+    ts_magnet_thick_injection_septum_sagitta = 14.9 # [mm]
+    ts_magnet_thin_injection_septum_sagitta = 14.4 # [mm]
 
-    ts_number_of_dipoles = 2
-    ts_number_of_extraction_septa = 2
-    ts_number_of_thick_injection_septa = 1
-    ts_number_of_thin_injection_septa = 1
+    ts_magnet_extraction_septum_number = 2
+    ts_magnet_thick_injection_septum_number = 1
+    ts_magnet_thin_injection_septum_number = 1
 
     '''correction system'''
     ts_number_of_beam_position_monitors = 5
