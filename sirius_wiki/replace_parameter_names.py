@@ -187,8 +187,8 @@ if __name__ == '__main__':
             if searchobj:
                 print('(' + str(len(parameters_not_in_table)) + ') -- ' + page.title())
                 page.text = replace_parameters(page.text, parameters_not_in_table )
-                #page.save(bot_default_comment)
-                #print(page.text.encode('utf-8'))
+                # page.save(bot_default_comment)
+                print(page.text.encode('utf-8'))
 
     print('')
     print('-- parameters not found in the conversion table --')
