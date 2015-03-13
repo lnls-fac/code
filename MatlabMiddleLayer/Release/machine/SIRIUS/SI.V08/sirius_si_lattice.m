@@ -61,6 +61,8 @@ sext_pass_method = 'StrMPoleSymplectic4Pass';
 %% elements
 %  ========
 
+MOMACCEP = marker('calc_mom_accep', 'IdentityPass');     % marker to define points where momentum acceptance will be calculated
+
 % -- drifts --
 LIA = drift('lia', 2.4129, 'DriftPass');
 LIB = drift('lib', 2.0429, 'DriftPass');
@@ -90,18 +92,18 @@ deg2rad = pi/180.0;
 B1E = rbend_sirius('b1', 0.828/2,  2.7553*deg2rad/2, 1.4143*deg2rad/2, 0,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
 MB1 = marker('mb1', 'IdentityPass');
 B1S = rbend_sirius('b1', 0.828/2,  2.7553*deg2rad/2, 0, 1.4143*deg2rad/2,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
-B1  = [B1E,MB1,B1S];
+B1  = [MOMACCEP,B1E,MOMACCEP,MB1,B1S,MOMACCEP];
 
 
 B2E = rbend_sirius('b2', 1.231/3, 4.0964*deg2rad/3, 1.4143*deg2rad/2, 0,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
 B2M = rbend_sirius('b2', 1.231/3, 4.0964*deg2rad/3, 0, 0,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
 B2S = rbend_sirius('b2', 1.231/3, 4.0964*deg2rad/3, 0, 1.4143*deg2rad/2,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
-B2  = [B2E,B2M,B2S];
+B2  = [MOMACCEP,B2E,MOMACCEP,B2M,MOMACCEP,B2S,MOMACCEP];
 
 B3E = rbend_sirius('b3', 0.425/2, 1.4143*deg2rad/2, 1.4143*deg2rad/2, 0,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
 MB3 = marker('mb3', 'IdentityPass');
 B3S = rbend_sirius('b3', 0.425/2, 1.4143*deg2rad/2, 0, 1.4143*deg2rad/2,   0, 0, 0, [0 0 0], [0 -0.78 0], bend_pass_method);
-B3  = [B3E,MB3,B3S];
+B3  = [MOMACCEP,B3E,MOMACCEP,MB3,B3S,MOMACCEP];
 
 BC1 = rbend_sirius('bc', 0.01,  0.114*deg2rad, 0, 0,   0, 0, 0, [0 0 0], [0 -0.0001586 -28.62886], bend_pass_method);
 BC2 = rbend_sirius('bc', 0.01,  0.110*deg2rad, 0, 0,   0, 0, 0, [0 0 0], [0 -0.0032399 -27.61427], bend_pass_method);
@@ -110,9 +112,9 @@ BC4 = rbend_sirius('bc', 0.01,  0.078*deg2rad, 0, 0,   0, 0, 0, [0 0 0], [0 -0.0
 BC5 = rbend_sirius('bc', 0.01,  0.062*deg2rad, 0, 0,   0, 0, 0, [0 0 0], [0 -0.0145890 -8.797988], bend_pass_method);
 BC6 = rbend_sirius('bc', 0.08,  0.274*deg2rad, 0, 0,   0, 0, 0, [0 0 0], [0 -0.0055834 -4.294111], bend_pass_method);
 MC = marker('mc', 'IdentityPass');
-BCE = [BC6, BC5, BC4, BC3, BC2, BC1];
-BCS = [BC1, BC2, BC3, BC4, BC5, BC6];
-BC  = [BCE,MC,BCS];
+BCE = [MOMACCEP, BC6, BC5, BC4, BC3, BC2, BC1];
+BCS = [BC1, BC2, BC3, BC4, BC5, BC6, MOMACCEP];
+BC  = [BCE,MC, MOMACCEP,BCS];
 
 % -- quadrupoles --
 QFA  = quadrupole('qfa',  0.200, qfa_strength,  quad_pass_method);
@@ -164,12 +166,12 @@ MIDB   = marker('id_endb', 'IdentityPass');    % marker for the extremities of I
 
 M2A = [GIRDER,CF,L11,SFA,L12,BPM,L14,QFA,L24,QDA,L15,SDA,L19,GIRDER];               % high beta xxM2 girder                                                                                  
 M1A = fliplr(M2A);                                                                  % high beta xxM1 girder
-IDA = [GIRDER,LIA,MIDA,L50,L50,MIA,L50,L50,MIDA,LIA,GIRDER];                        % high beta ID straight section
-CAV = [GIRDER,LIA,L50,L50,MIA,RFC,L50,L50,LIA,GIRDER];                              % high beta RF cavity straight section 
-INJ = [GIRDER,LIA,L50,L50,END,START,MIA,L50,L50,LIA,GIRDER];                            % high beta INJ straight section
+IDA = [GIRDER,LIA,MIDA,L50,L50,MIA,MOMACCEP,L50,L50,MIDA,LIA,GIRDER];                        % high beta ID straight section
+CAV = [GIRDER,LIA,L50,L50,MIA,MOMACCEP,RFC,L50,L50,LIA,GIRDER];                              % high beta RF cavity straight section 
+INJ = [GIRDER,LIA,L50,L50,END,START,MIA,MOMACCEP,L50,L50,LIA,GIRDER];                            % high beta INJ straight section
 M1B = [GIRDER,L19,SDB,L15,QDB1,L24,QFB,L14,BPM,L12,SFB,L11,CF,L13,QDB2,GIRDER];     % low beta xxM1 girder
 M2B = fliplr(M1B);                                                                  % low beta xxM2 girder
-IDB = [GIRDER,LIB,MIDB,L50,L50,MIB,L50,L50,MIDB,LIB,GIRDER];                        % low beta ID straight section
+IDB = [GIRDER,LIB,MIDB,L50,L50,MIB,MOMACCEP,L50,L50,MIDB,LIB,GIRDER];                        % low beta ID straight section
 C3  = [LBC,BC,LBC];                                                                 % arc sector in between B3-B3
 C1A = [GIRDER,L61,SD1,L17,QF1,L14, BPM,L12,SF1,L23,QF2,L17,SD2,L21,BPM,L13,GIRDER]; % arc sector in between B1-B2 (high beta odd-numbered straight sections)
 C2A = [GIRDER,L46,SD3,L17,QF3,L23,SF2,L12,BPM,L14,QF4,L12,CF,L38,BPM,L13,GIRDER];   % arc sector in between B2-B3 (high beta odd-numbered straight sections)
@@ -320,27 +322,16 @@ the_ring = setcellstruct(the_ring,'Girder',idx,name_girder);
 
 function the_ring = set_num_integ_steps(the_ring)
 
-bends = findcells(the_ring, 'BendingAngle');
-quads = setdiff(findcells(the_ring, 'K'), bends);
-sexts = setdiff(findcells(the_ring, 'PolynomB'), [bends quads]);
+mags = findcells(the_ring, 'PolynomB');
 kicks = findcells(the_ring, 'XGrid');
 
-% values determined by convergence study:
-len_dip  = 1e-3;
-len_quad = 5e-3;
-len_sext = 1e-2;
+% value determined by convergence study:
+len = 1e-2;
 
-bends_len = getcellstruct(the_ring, 'Length', bends);
-bends_nis = ceil(bends_len / len_dip);
-the_ring = setcellstruct(the_ring, 'NumIntSteps', bends, bends_nis);
-
-quads_len = getcellstruct(the_ring, 'Length', quads);
-quads_nis = ceil(quads_len / len_quad);
-the_ring = setcellstruct(the_ring, 'NumIntSteps', quads, quads_nis);
-
-sexts_len = getcellstruct(the_ring, 'Length', sexts);
-sexts_nis = ceil(sexts_len / len_sext);
-the_ring = setcellstruct(the_ring, 'NumIntSteps', sexts, sexts_nis);
+mags_len = getcellstruct(the_ring, 'Length', mags);
+mags_nis = ceil(mags_len / len);
+the_ring = setcellstruct(the_ring, 'NumIntSteps', mags, mags_nis);
 
 the_ring = setcellstruct(the_ring, 'NumIntSteps', kicks, 1);
+
 

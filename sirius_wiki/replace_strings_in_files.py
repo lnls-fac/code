@@ -5,8 +5,8 @@ import re
 
 
 DEF_FILENAME = 'definitions_default.py'
-OLD_FILENAME = 'sirius_si.py'
-NEW_FILENAME = 'sirius_si_new.py'
+OLD_FILENAME = 'sirius_ts.py'
+NEW_FILENAME = 'sirius_ts_new.py'
 
 PRM_LINESTART = '# Parameter'
 
