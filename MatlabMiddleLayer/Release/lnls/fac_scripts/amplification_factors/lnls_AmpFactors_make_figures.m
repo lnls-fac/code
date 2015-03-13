@@ -125,6 +125,14 @@ ctrl.sumsqr = [];
         val_sys = get(ctrl.sys,'Value'); str_sys = get(ctrl.sys,'String');
         str_sys = str_sys{val_sys};
         
+        str_ele = '';
+        for i=1:length(ctrl.res)
+            if get(ctrl.res(i),'Value')
+                str_ele = [str_ele,'.',get(ctrl.res(i),'String')];
+            end
+        end
+        str_ele = str_ele(2:end);
+        
         val_err = get(ctrl.err,'Value');str_err = get(ctrl.err,'String');
         str_err = str_err{val_err};
         
@@ -151,7 +159,7 @@ ctrl.sumsqr = [];
         
         erro = [];
         pos = [];
-        mrk = {'','o','+','x','*'};
+        mrk = {'','o','+','x','*','s','d','^','v','>','<','p','h'};
         res_vals = get(ctrl.res,'Value');
         if iscell(res_vals),res_vals = cell2mat(res_vals)';end
         ind = logical(res_vals);
@@ -183,7 +191,8 @@ ctrl.sumsqr = [];
         erro = erro(I);
         
         % color = {'b','r','g','m','c'};
-        string = [str_conf, '.', str_sys, '.', str_err, '.', str_efct, '.', str_clc,'.',str_errVal];
+        string = [str_conf, '.', str_sys,'.',str_ele,'.', str_err, '.', ...
+                  str_efct, '.', str_clc,'.',str_errVal];
         plot(hax, pos, erro,'Color',cor, 'DisplayName',string,'LineWidth',2);
         
         sumsqr = sprintf('%9.4g',sqrt(res{val_conf}.(str_sys).symmetry*sum(erro.^2)));

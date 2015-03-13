@@ -18,8 +18,8 @@ function machine = lnls_latt_err_correct_tune_machines(tune, machine)
 %
 
 fprintf('-  goal tunes:');fprintf(' %9.6f ',tune.goal);
-fprintf('   families used for correction:');fprintf(' %s ',tune.families{:});
-fprintf('   maximum number of tune correction iterations: %4d\n',tune.max_iter);
+fprintf('\n   families used for correction:');fprintf(' %s ',tune.families{:});
+fprintf('\n   maximum number of tune correction iterations: %4d\n',tune.max_iter);
 fprintf('   tolerance: %8.2e\n\n', tune.tolerance);
 fprintf('\n');
 fprintf('    ------------------------------------------------------- \n');
