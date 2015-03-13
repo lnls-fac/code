@@ -19,15 +19,22 @@ if ~iscell(res)
     res = {res};
 end
 
+% The fact that we generate a distribution with cuttoff = 1, makes our rms
+% values of the errors smaller by the following amount:
+cutoff_corr = 0.54;
+
+
 % Create a figure and an axes for plots.
 figure('Position',[984, 200, 882, 636]);
-hax = axes('Units','pixels', 'Position',[100.8, 86.2, 741.2, 408.8]);
+hax = axes('Units','pixels', 'Position',[100.8, 86.2, 741.2, 408.8],'FontSize',16);
 
 
 % Popup to control the the effect on the ring of the selected error
 string = {'orbx','orby','corx','cory','coup','betx','bety'};
-uicontrol('Style','text','Position',[534.3 607 70 20],'String','Effect');
-ctrl.efct = uicontrol('Style', 'popup','String', string,'Position', [534.3 587 70 20]);
+efct_conv = [1e-6, 1e-6 , 1e-6 , 1e-6,pi/180, 1e-2 , 1e-2];
+efct_unit = {'\mum','\mum','\murad','\murad','%%','%%','%%'};
+uicontrol('Style','text','Position',[647 607 70 20],'String','Effect');
+ctrl.efct = uicontrol('Style', 'popup','String', string,'Position', [647 587 70 20]);
 
 % Popup to control the points where amplification factors were averaged
 string = {'empty'};
@@ -49,21 +56,26 @@ ctrl.config = uicontrol('Style', 'popup','String', string,...
 
 % Popup to control the type of error whose effect on the ring will be shown
 string = {'misx','misy','exci','roll'};
-uicontrol('Style','text','Position',[397 607 100 20],'String','Type of Error');
-ctrl.err = uicontrol('Style', 'popup', 'String', string,'Position', [397 587 100 20]);
+err_conv=[ 1e-6 , 1e-6 , 1e-2 , 1e-6];
+err_unit={ 'um' , 'um' ,  '%' ,'urad'};
+uicontrol('Style','text','Position',[401 607 69 20],'String','Error Type');
+ctrl.err = uicontrol('Style', 'popup', 'String', string,...
+                'Position', [405 587 63 20], 'Callback',{@fun_err});
+uicontrol('Style','text','Position',[478 607 55 20],'String','Value');
+ctrl.errVal = uicontrol('Style','edit','String','1.0','Position',[480 588 50 20]);
+uicontrol('Style','text','Position',[537 607 54 20],'String','Unit');
+ctrl.errUnit = uicontrol('Style','text','String',err_unit{1},'Position',[537 588 55 20]);
 
 % Checkbox to control the type of elements to which the errors were applied
 sys_names = fieldnames(res{1});
 res_names = fieldnames(res{1}.(sys_names{2}).results);
 uicontrol('Style','text','Position',[284.7 607 80 20],'String','Elements');
 ctrl.res = zeros(1,length(res_names));
-for i=1:length(res_names)
-    ctrl.res(i) = uicontrol('Style', 'checkbox','String', res_names{i},'Min',0,...
-        'Max',1, 'Position', [284.7 587-20*(i-1) 80 20]);
+for ii=1:length(res_names)
+    ctrl.res(ii) = uicontrol('Style', 'checkbox','String', res_names{ii},'Min',0,...
+        'Max',1, 'Position', [284.7 587-20*(ii-1) 80 20]);
 end
 
-uicontrol('Style','text','Position',[646.7 607 90 20],'String','Error Value');
-ctrl.errVal = uicontrol('Style','edit','String','1.0','Position',[646.7 587 90 20]);
 
 uicontrol('Style', 'pushbutton', 'String', 'Plot',...
     'Position', [579 544 50 20],'Callback', {@plot_curve,res});
@@ -76,10 +88,16 @@ uicontrol('Style', 'pushbutton', 'String', 'Figure',...
 
 
 ctrl.sumsqr = [];
-
+sumsqr = 0;
+uicontrol('Style','text','Position',[700 20 64 20],'String','Total:');
+ctrl.sumsqrT = uicontrol('Style','text','Position',[764 20 90 20],'String','0.0');
 
 
 %% CallBack definition
+    function fun_err(hObj,event)
+        set(ctrl.errUnit,'string',err_unit{get(ctrl.err,'Value')});
+    end
+
     function fun_config(hObj,event, res)
         
         val_conf = get(hObj,'Value');
@@ -171,7 +189,7 @@ ctrl.sumsqr = [];
             string = get(ctrl.res(i),'String');
             r = res{val_conf}.(str_sys).results.(string);
             if ind(i) && isfield(r,str_err) && isfield(r.(str_err),str_efct)
-                data = r.(str_err).(str_efct)*val_errVal;
+                data = r.(str_err).(str_efct)*val_errVal*err_conv(val_err)/efct_conv(val_efct)*cutoff_corr;
                 if any(size(data)==1)
                     erro = [erro, data];
                     pos  = [pos, r.pos];
@@ -190,13 +208,17 @@ ctrl.sumsqr = [];
         [pos I] = sort(pos);
         erro = erro(I);
         
+        sumsqri = sqrt(res{val_conf}.(str_sys).symmetry*sum(erro.^2));
+        sumsqr = sqrt(sumsqr^2 + sumsqri^2);
+        set(ctrl.sumsqrT,'String',sprintf('%9.4g',sumsqr));
+        sumsqri = sprintf('%9.4g',sumsqri);
+        ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+95*j 20 90 20],'String',sumsqri);
+        
         % color = {'b','r','g','m','c'};
         string = [str_conf, '.', str_sys,'.',str_ele,'.', str_err, '.', ...
-                  str_efct, '.', str_clc,'.',str_errVal];
+                  str_efct, '.', str_clc,'.',str_errVal,' --> ', sumsqri];
         plot(hax, pos, erro,'Color',cor, 'DisplayName',string,'LineWidth',2);
-        
-        sumsqr = sprintf('%9.4g',sqrt(res{val_conf}.(str_sys).symmetry*sum(erro.^2)));
-        ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+95*j 20 90 20],'String',sumsqr);
+        ylabel(hax,[upper(str_efct), ' [',efct_unit{val_efct},']'],'FontSize',16);
         
         if isempty(chil)
             maxy = max(erro);
@@ -211,11 +233,11 @@ ctrl.sumsqr = [];
         end
     end
 
-
     function clear_plot(hObj,event)
         hold(hax,'off');
         delete(ctrl.sumsqr(:));
         ctrl.sumsqr = [];
+        sumsqr = 0;
         cla(hax)
         
     end
@@ -229,7 +251,7 @@ ctrl.sumsqr = [];
         xlabel(ax,'Pos [m]','FontSize',16);
         val = get(ctrl.efct,'Value');string = get(ctrl.efct,'String');
         string = upper(string{val});
-        ylabel(ax,[string ' [\mum]'],'FontSize',16);
+        ylabel(ax,[string,  ' [',efct_unit{val},']'],'FontSize',16);
         chil = get(ax,'Children');
         pl = [];
         text = {};
