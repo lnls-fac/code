@@ -27,7 +27,7 @@ global THERING;
 % --- system parameters ---
 energy = 3e9;
 mode   = 'C';   % a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
-version = '03';
+version = '04';
 strengths = @set_magnet_strengths;
 harmonic_number = 864;
 
