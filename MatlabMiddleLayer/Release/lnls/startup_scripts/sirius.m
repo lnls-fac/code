@@ -10,7 +10,7 @@ function sirius(varargin)
 
 Disconnect = false;
 
-default_si_version = 'SI.V03';
+default_si_version = 'SI.V07';
 default_bo_version = 'BO.V901';
 default_tb_version = 'TB.V300';
 default_ts_version = 'TS.V300';
@@ -70,6 +70,6 @@ setpathsirius('SIRIUS', default_version, 'sirius_link');
 cd(cdir);
 clear cdir;
 
-addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','sirius','lattice_errors')));
+addpath(genpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','applications','lnls','lattice_errors')),'-begin');
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','tracy3'), '-begin');
 addpath(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','lnls','fac_scripts','trackcpp'), '-begin');

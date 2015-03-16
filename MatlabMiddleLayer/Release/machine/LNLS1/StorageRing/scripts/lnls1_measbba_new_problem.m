@@ -50,7 +50,8 @@ if ~isfield(bba, 'final_machineconfig')
     % ajustes iniciais
     setbpmaverages(bba.configs.bpms.pause, bba.configs.bpms.nr_measurements);
     fprintf('%s: desligando correção de órbita automática\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
-    lnls1_auto_orb_corr_off;
+    lnls1_slow_orbcorr_off;
+    lnls1_fast_orbcorr_off;
     fprintf('%s: ligando shunts\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));
     lnls1_quad_shunts_on;
     fprintf('%s: abrindo dispositivos de inserção\n', datestr(now, 'yyyy-mm-dd_HH-MM-SS'));

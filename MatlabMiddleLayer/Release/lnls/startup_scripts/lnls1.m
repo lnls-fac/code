@@ -41,7 +41,9 @@ cd(fullfile(root_folder, 'code', 'MatlabMiddleLayer','Release','mml'))
 % funcao drift da Financial Toolbox
 fname = fullfile(matlabroot, 'toolbox', 'finance', 'finsupport');
 if exist(fname, 'file')
+    warning('off','MATLAB:rmpath:DirNotFound')
     rmpath(fname);
+    warning('on','MATLAB:rmpath:DirNotFound')
 end
 
 setpathlnls('LNLS1', 'StorageRing', 'lnls1_link');

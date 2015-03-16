@@ -462,22 +462,22 @@ for i=1:(size(M,2)/2)
     
     % symmetric variation of horizontal beam offset
     dx  = r.parms.delta_pos/2;
-    r.the_ring = lnls_set_misalignmentX(-dx, idx, the_ring0);
+    r.the_ring = lnls_add_misalignmentX(-dx, idx, the_ring0);
     r = calc_cod_from_families(r); vp = build_cod_vector(r, 'calc');
     
     dx  = -r.parms.delta_pos/2;
-    r.the_ring = lnls_set_misalignmentX(-dx, idx, the_ring0);
+    r.the_ring = lnls_add_misalignmentX(-dx, idx, the_ring0);
     r = calc_cod_from_families(r); vn = build_cod_vector(r, 'calc');
     
     M(:,i) = (vp - vn)/r.parms.delta_pos;
     
     % symmetric variation of vertical beam offset
     dy  = r.parms.delta_pos/2;
-    r.the_ring = lnls_set_misalignmentY(-dy, idx, the_ring0);
+    r.the_ring = lnls_add_misalignmentY(-dy, idx, the_ring0);
     r = calc_cod_from_families(r); vp = build_cod_vector(r, 'calc');
     
     dy  = -r.parms.delta_pos/2;
-    r.the_ring = lnls_set_misalignmentY(-dy, idx, the_ring0);
+    r.the_ring = lnls_add_misalignmentY(-dy, idx, the_ring0);
     r = calc_cod_from_families(r); vn = build_cod_vector(r, 'calc');
     
     M(:,i+length(r.misallign.idx)) = (vp - vn)/r.parms.delta_pos;
@@ -519,8 +519,8 @@ for i=1:length(r.misallign.idx)
     idx = r.misallign.idx{i};
     dx_element  = orbx(i);
     dy_element  = orby(i);
-    r.the_ring = lnls_set_misalignmentX(-dx_element, idx, r.the_ring);
-    r.the_ring = lnls_set_misalignmentY(-dy_element, idx, r.the_ring);
+    r.the_ring = lnls_add_misalignmentX(-dx_element, idx, r.the_ring);
+    r.the_ring = lnls_add_misalignmentY(-dy_element, idx, r.the_ring);
 end
 
 

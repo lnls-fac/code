@@ -211,11 +211,11 @@ function ltlb = add_errors(orig_ltlb, r)
 
 ltlb = orig_ltlb;
 errors = lnls_generate_random_numbers(r.tolx, length(ltlb), 'gauss', 1, 0);
-ltlb = lnls_set_misalignmentX(errors, 1:length(ltlb), ltlb);
+ltlb = lnls_add_misalignmentX(errors, 1:length(ltlb), ltlb);
 errors = lnls_generate_random_numbers(r.toly, length(ltlb), 'gauss', 1, 0);
-ltlb = lnls_set_misalignmentY(errors, 1:length(ltlb), ltlb);
+ltlb = lnls_add_misalignmentY(errors, 1:length(ltlb), ltlb);
 errors = lnls_generate_random_numbers(r.tole, length(ltlb), 'gauss', 1, 0);
-ltlb = lnls_set_excitation(errors, 1:length(ltlb), ltlb);
+ltlb = lnls_add_excitation(errors, 1:length(ltlb), ltlb);
 ltlb{1}.x  = lnls_generate_random_numbers(r.sigmax, 1, 'gauss', 1, 0);
 ltlb{1}.xl = lnls_generate_random_numbers(r.sigmaxl, 1, 'gauss', 1, 0);
 ltlb{1}.y  = lnls_generate_random_numbers(r.sigmay, 1, 'gauss', 1, 0);

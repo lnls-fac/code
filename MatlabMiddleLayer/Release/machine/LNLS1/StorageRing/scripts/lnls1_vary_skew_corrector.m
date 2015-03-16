@@ -5,7 +5,7 @@ function r = lnls1_vary_skew_corrector
 %
 %2010-09-13: comentários iniciais no código.
 
-lnls1_auto_orb_corr_on;
+lnls1_fast_orbcorr_on;
 h = figure; 
 values = linspace(-10,10,21);
 values = linspace(-1,2,13);

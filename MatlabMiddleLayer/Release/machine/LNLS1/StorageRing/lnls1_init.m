@@ -956,6 +956,113 @@ AO.AON11.PhaseSP.Units = 'Hardware';
 AO.AON11.PhaseSP.HWUnits      = 'mm';
 
 
+%%%%%%%%
+% FOFB %
+%%%%%%%%
+
+AO.FOFB.FamilyName = 'FOFB';
+AO.FOFB.MemberOf   = {};
+AO.FOFB.DeviceList = [1 1];
+AO.FOFB.Status = ones(size(AO.FOFB.DeviceList,1),1);
+AO.FOFB.CommonNames = ['FOFB';];
+AO.FOFB.Setpoint.MemberOf = {'Save/Restore'};
+AO.FOFB.Setpoint.Mode = 'Simulator';
+AO.FOFB.Setpoint.DataType = 'Scalar';
+AO.FOFB.Setpoint.ChannelNames  = lnls1_getname('FOFB', 'Setpoint', AO.FOFB.DeviceList);
+AO.FOFB.Setpoint.Units = 'Hardware';
+AO.FOFB.Setpoint.HWUnits = '';
+AO.FOFB.Monitor.MemberOf = {};
+AO.FOFB.Monitor.Mode = 'Simulator';
+AO.FOFB.Monitor.DataType = 'Scalar';
+AO.FOFB.Monitor.ChannelNames  = lnls1_getname('FOFB', 'Monitor', AO.FOFB.DeviceList);
+AO.FOFB.Monitor.Units = 'Hardware';
+AO.FOFB.Monitor.HWUnits = '';
+
+AO.FOFB.ExcitationFlag.MemberOf = {'Save/Restore'};
+AO.FOFB.ExcitationFlag.Mode = 'Simulator';
+AO.FOFB.ExcitationFlag.DataType = 'Scalar';
+AO.FOFB.ExcitationFlag.ChannelNames  = lnls1_getname('FOFB', 'ExcitationFlag', AO.FOFB.DeviceList);
+AO.FOFB.ExcitationFlag.Units = 'Hardware';
+AO.FOFB.ExcitationFlag.HWUnits = '';
+
+AO.FOFB.CorrectionMatrixSP.MemberOf = {'Save/Restore'};
+AO.FOFB.CorrectionMatrixSP.Mode = 'Simulator';
+AO.FOFB.CorrectionMatrixSP.DataType = 'Scalar';
+AO.FOFB.CorrectionMatrixSP.ChannelNames  = lnls1_getname('FOFB', 'CorrectionMatrixSP', AO.FOFB.DeviceList);
+AO.FOFB.CorrectionMatrixSP.Units = 'Hardware';
+AO.FOFB.CorrectionMatrixSP.HWUnits = '';
+AO.FOFB.CorrectionMatrixAM.MemberOf = {};
+AO.FOFB.CorrectionMatrixAM.Mode = 'Simulator';
+AO.FOFB.CorrectionMatrixAM.DataType = 'Scalar';
+AO.FOFB.CorrectionMatrixAM.ChannelNames  = lnls1_getname('FOFB', 'CorrectionMatrixAM', AO.FOFB.DeviceList);
+AO.FOFB.CorrectionMatrixAM.Units = 'Hardware';
+AO.FOFB.CorrectionMatrixAM.HWUnits = '';
+
+AO.FOFB.ReferenceOrbitSP.MemberOf = {'Save/Restore'};
+AO.FOFB.ReferenceOrbitSP.Mode = 'Simulator';
+AO.FOFB.ReferenceOrbitSP.DataType = 'Scalar';
+AO.FOFB.ReferenceOrbitSP.ChannelNames  = lnls1_getname('FOFB', 'ReferenceOrbitSP', AO.FOFB.DeviceList);
+AO.FOFB.ReferenceOrbitSP.Units = 'Hardware';
+AO.FOFB.ReferenceOrbitSP.HWUnits = '';
+AO.FOFB.ReferenceOrbitAM.MemberOf = {};
+AO.FOFB.ReferenceOrbitAM.Mode = 'Simulator';
+AO.FOFB.ReferenceOrbitAM.DataType = 'Scalar';
+AO.FOFB.ReferenceOrbitAM.ChannelNames  = lnls1_getname('FOFB', 'ReferenceOrbitAM', AO.FOFB.DeviceList);
+AO.FOFB.ReferenceOrbitAM.Units = 'Hardware';
+AO.FOFB.ReferenceOrbitAM.HWUnits = '';
+
+AO.FOFB.HorizontalOrbiThresholdSP.MemberOf = {'Save/Restore'};
+AO.FOFB.HorizontalOrbiThresholdSP.Mode = 'Simulator';
+AO.FOFB.HorizontalOrbiThresholdSP.DataType = 'Scalar';
+AO.FOFB.HorizontalOrbiThresholdSP.ChannelNames  = lnls1_getname('FOFB', 'HorizontalOrbiThresholdSP', AO.FOFB.DeviceList);
+AO.FOFB.HorizontalOrbiThresholdSP.Units = 'Hardware';
+AO.FOFB.HorizontalOrbiThresholdSP.HWUnits = '';
+AO.FOFB.HorizontalOrbiThresholdAM.MemberOf = {};
+AO.FOFB.HorizontalOrbiThresholdAM.Mode = 'Simulator';
+AO.FOFB.HorizontalOrbiThresholdAM.DataType = 'Scalar';
+AO.FOFB.HorizontalOrbiThresholdAM.ChannelNames  = lnls1_getname('FOFB', 'HorizontalOrbiThresholdAM', AO.FOFB.DeviceList);
+AO.FOFB.HorizontalOrbiThresholdAM.Units = 'Hardware';
+AO.FOFB.HorizontalOrbiThresholdAM.HWUnits = '';
+
+AO.FOFB.VerticalOrbiThresholdSP.MemberOf = {'Save/Restore'};
+AO.FOFB.VerticalOrbiThresholdSP.Mode = 'Simulator';
+AO.FOFB.VerticalOrbiThresholdSP.DataType = 'Scalar';
+AO.FOFB.VerticalOrbiThresholdSP.ChannelNames  = lnls1_getname('FOFB', 'VerticalOrbiThresholdSP', AO.FOFB.DeviceList);
+AO.FOFB.VerticalOrbiThresholdSP.Units = 'Hardware';
+AO.FOFB.VerticalOrbiThresholdSP.HWUnits = '';
+AO.FOFB.VerticalOrbiThresholdAM.MemberOf = {};
+AO.FOFB.VerticalOrbiThresholdAM.Mode = 'Simulator';
+AO.FOFB.VerticalOrbiThresholdAM.DataType = 'Scalar';
+AO.FOFB.VerticalOrbiThresholdAM.ChannelNames  = lnls1_getname('FOFB', 'VerticalOrbiThresholdAM', AO.FOFB.DeviceList);
+AO.FOFB.VerticalOrbiThresholdAM.Units = 'Hardware';
+AO.FOFB.VerticalOrbiThresholdAM.HWUnits = '';
+
+AO.FOFB.HorizontalGainSP.MemberOf = {'Save/Restore'};
+AO.FOFB.HorizontalGainSP.Mode = 'Simulator';
+AO.FOFB.HorizontalGainSP.DataType = 'Scalar';
+AO.FOFB.HorizontalGainSP.ChannelNames  = lnls1_getname('FOFB', 'HorizontalGainSP', AO.FOFB.DeviceList);
+AO.FOFB.HorizontalGainSP.Units = 'Hardware';
+AO.FOFB.HorizontalGainSP.HWUnits = '';
+AO.FOFB.HorizontalGainAM.MemberOf = {};
+AO.FOFB.HorizontalGainAM.Mode = 'Simulator';
+AO.FOFB.HorizontalGainAM.DataType = 'Scalar';
+AO.FOFB.HorizontalGainAM.ChannelNames  = lnls1_getname('FOFB', 'HorizontalGainAM', AO.FOFB.DeviceList);
+AO.FOFB.HorizontalGainAM.Units = 'Hardware';
+AO.FOFB.HorizontalGainAM.HWUnits = '';
+
+AO.FOFB.VerticalGainSP.MemberOf = {'Save/Restore'};
+AO.FOFB.VerticalGainSP.Mode = 'Simulator';
+AO.FOFB.VerticalGainSP.DataType = 'Scalar';
+AO.FOFB.VerticalGainSP.ChannelNames  = lnls1_getname('FOFB', 'VerticalGainSP', AO.FOFB.DeviceList);
+AO.FOFB.VerticalGainSP.Units = 'Hardware';
+AO.FOFB.VerticalGainSP.HWUnits = '';
+AO.FOFB.VerticalGainAM.MemberOf = {};
+AO.FOFB.VerticalGainAM.Mode = 'Simulator';
+AO.FOFB.VerticalGainAM.DataType = 'Scalar';
+AO.FOFB.VerticalGainAM.ChannelNames  = lnls1_getname('FOFB', 'HorizontalGainAM', AO.FOFB.DeviceList);
+AO.FOFB.VerticalGainAM.Units = 'Hardware';
+AO.FOFB.VerticalGainAM.HWUnits = '';
+
 %%%%%%%%%%%%%%%%%%%%%
 % Corrector Magnets %
 %%%%%%%%%%%%%%%%%%%%%
@@ -1056,7 +1163,7 @@ AO.BPMx.Status      = ones(size(AO.BPMx.DeviceList,1),1);
 %AO.BPMx.Status([20 23])  = [0 0]; % AMP11A and AMP11B OFF
 AO.BPMx.Offset      = Orbit.OffsetOrbit(:,1);
 AO.BPMx.Golden      = Orbit.GoldenOrbit(:,1);
-AO.BPMx.Status(6)   = 0; % Desliga AMP03C   
+%AO.BPMx.Status(6)   = 0; % Desliga AMP03C   
 
 
 
@@ -1095,7 +1202,7 @@ AO.BPMy.Offset      = Orbit.OffsetOrbit(:,2);
 AO.BPMy.Golden      = Orbit.GoldenOrbit(:,2);
 AO.BPMy.Position    = [];
 AO.BPMy.CommonNames = AO.BPMx.CommonNames;
-AO.BPMy.Status(6)   = 0; % Desliga AMP03C   
+%AO.BPMy.Status(6)   = 0; % Desliga AMP03C   
 
 AO.BPMy.Monitor.MemberOf = {'BPMy'; 'Monitor';};
 AO.BPMy.Monitor.Mode = 'Simulator';
@@ -1168,6 +1275,7 @@ AO.TUNE.Monitor.HWUnits          = 'Tune';
 AO.TUNE.Monitor.PhysicsUnits     = 'Tune';
 AO.TUNE.Monitor.SpecialFunctionGet = @lnls1_gettune;
 AO.TUNE.Monitor.Golden = [0.27 0.17 NaN];
+
 
 
 

@@ -3,170 +3,133 @@
 import sys
 import math
 
+MAXNUMCOL = 80
+
+energy = 3.000;
+vac_chamber ='ax = 12.00, ay = 12.00;\n'
+
+mags = dict()
+#Markers
+atribs = dict()
+mags['mark'] = (atribs,'marker')
+mags['maxamp'] = (atribs,'marker')
+mags['rfca'] = (atribs,'marker')
+mags['malign'] = (atribs,'marker')
+mags['watch'] = (atribs,'marker')
+mags['sreffects'] = (atribs,'marker')
+#Correctors
+mags['vkick'] = (atribs,'v-corrector')
+mags['hkick'] = (atribs,'h-corrector')
+#Monitors
+mags['moni'] = (atribs,'monitor')
+#Drifts
+atribs = {'l': ('l = ',1)}
+mags['drift'] = (atribs,'drift')
+mags['drif'] = (atribs,'drift')
+#Quadrupoles
+atribs = {'l': ('l = ',1),
+      'k1':('k = ',1)}
+mags['kquad'] = (atribs,'quadrupole')
+mags['quad'] = (atribs,'quadrupole')
+#Sextupoles
+atribs = {'l': ('l = ',1),
+          'k2':('k = ',1/2),
+          'n_kicks':('n = ',1)}
+mags['ksext'] = (atribs,'sextupole')
+mags['sext'] = (atribs,'sextupole')
+
+#Dipoles and Combined Magnets
+atribs = {'l': ('l = ',1),
+          'angle':('t = ',180/math.pi),
+          'e1':('t1 = ',180/math.pi),
+          'e2':('t2 = ',180/math.pi),
+          'k1':('k = ',1),
+          'hgap':('gap = ',1)}
+mags['csbend'] = (atribs,'bending')
+
+atribs = {'l': ('l = ',1),
+          'angle':('t = ',180/math.pi),
+          'k2':('m = ',1/2),
+          'n_kicks':('n = ',1),
+          'e1':('t1 = ',180/math.pi),
+          'e2':('t2 = ',180/math.pi),
+          'k1':('k = ',1),
+          'hgap':('gap = ',1)}
+mags['csbend2'] = (atribs,'combined')
+
+
 def usage():
-    print('\nUsage: elegant2OPA fileName\n')
+    print('\nUsage: elegant2OPA fileName1 fileName2 ... fileNameN\n')
 
 
 def elegant2OPA(filename):
-    MAXNUMCOL = 80
-    
-    energy = 3.000;
-    vac_chamber ='ax = 12.00, ay = 12.00;\n'
-    vec = []
-    
-    atrib_obg = []
-    atrib_opc = []
-    atrib_opa = []
-    covertion = []
-    equivalen = ['mark','maxamp', 'rfca' ,'malign', 'watch','sreffects']
-    name      = 'marker'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg = []
-    atrib_opc = []
-    atrib_opa = []
-    covertion = []
-    equivalen = ['hkick']
-    name      = 'h-corrector'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg = []
-    atrib_opc = []
-    atrib_opa = []
-    covertion = []
-    equivalen = ['vkick']
-    name      = 'v-corrector'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg = []
-    atrib_opc = []
-    atrib_opa = []
-    covertion = []
-    equivalen = ['moni']
-    name      = 'monitor'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg = ['l']
-    atrib_opc = []
-    atrib_opa = ['l = ']
-    covertion = [1]
-    equivalen = ['drif']
-    name      = 'drift'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg = ['l', 'k1']
-    atrib_opc = []
-    atrib_opa = ['l = ', 'k = ']
-    covertion = [1,    1  ]
-    equivalen = ['kquad','quad']
-    name      = 'quadrupole'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg = ['l', 'k2', 'n_kicks']
-    atrib_opc = []
-    atrib_opa = ['l = ', 'k = ', 'n = ']
-    covertion = [1,    1/2,  1]
-    equivalen = ['ksext','sext']
-    name      = 'sextupole'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg  = ['l','angle','k2', 'n_kicks']
-    atrib_opc  = ['e1','e2','k1','hgap']
-    atrib_opa  = ['l = ','t = ','m = ','n = ','t1 = ','t2 = ','k = ','gap = ']
-    covertion  = [1,     180/math.pi, 1/2, 1, 180/math.pi, 180/math.pi, 1, 1]
-    equivalen = ['csbend']
-    name      = 'combined'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    atrib_obg  = ['l','angle','e1','e2','k1']
-    atrib_opc  = ['hgap']
-    atrib_opa  = ['l = ','t = ','t1 = ','t2 = ','k = ','gap = ']
-    covertion  = [1,     180/math.pi, 180/math.pi, 180/math.pi, 1, 1]
-    equivalen = ['csbend']
-    name      = 'bending'
-    vec += [[name,equivalen,atrib_obg,atrib_opc,atrib_opa,covertion]]
-    
-    
-    fin = open(filename)
-    filein = fin.read()
-    fin.close()
-    
     # primeiro eu uniformizo o arquivo de input
+    with open(filename) as fin:
+        filein = fin.read()
     filein = filein.lower().replace(' ','').replace('&\n','')
     
+    #Agora crio o arquivo de saida
+    with open(''.join(filename.rpartition('.')[0:2]) + 'opa',
+                    'w+',encoding='utf8',newline='\r\n') as fout:
+        fout.write('\nenergy = {0:12.7f};\n\n'.format(energy))
     
-    fileout = open(''.join(filename.rpartition('.')[0:2]) + 'opa','w+',encoding='utf8',newline='\r\n')
-    fileout.write('\nenergy = {0:12.7f};\n\n'.format(energy))
-    
-    for i in filein.splitlines(False):
-        # vejo se é comentário ou se está vazia
-        if i.startswith('!'):
-            fileout.write('{' + i[1:] + '}\n')
-        elif not len(i):
-            fileout.write('\n')
-        else: # caso contrário, começo a traduzir a linha
-            line = i.partition(':')
-            newline = '{0:8}:'.format(line[0])
-            if line[2].startswith('line'): # vejo se é a definicao de uma sequencia
-                table = line[2].replace('line=(',' ').strip(')').replace(',',', ')
-                if not table.count('*'):
-                    newline += table + ';\n'
-                else:
-                    try:
+        for i in filein.splitlines(False):
+            # vejo se é comentário ou se está vazia
+            if i.startswith('!'):
+                fout.write('{' + i[1:] + '}\n')
+            elif not len(i):
+                fileout.write('\n')
+            else: # caso contrário, começo a traduzir a linha
+                line = i.partition(':')
+                newline = '{0:8}:'.format(line[0])
+                if line[2].startswith('line'): # vejo se é a definicao de uma sequencia
+                    table = line[2].replace('line=(',' ').strip(')').replace(',',', ')
+                    if not table.count('*'):
+                        newline += table + ';\n'
+                    else:
                         try:
-                          numm = int(table.split('*')[0])
-                          newline += table.split('*')[1] + ', nper =' + str(numm) + ';\n'
+                            try:
+                              numm = int(table.split('*')[0])
+                              newline += table.split('*')[1] + ', nper =' + str(numm) + ';\n'
+                            except ValueError:
+                                newline += table.split('*')[0] + ', nper =' + table.split('*')[1] + ';\n'
                         except ValueError:
-                            newline += table.split('*')[0] + ', nper =' + table.split('*')[1] + ';\n'
-                    except ValueError:
-                        print('not implemented yet')# ainda não lido com multiplas expansões
+                            print('not implemented yet')# ainda não lido com multiplas expansões
+                            return
+                else: # se não é a definicao de sequencia então é definicao de elemento
+                    props = line[2].split(',')
+                    mag = props[0]
+                    props = { x.split('=')[0]:x.split('=')[1] for x in props[1:]}
+                    try:
+                        if mag == 'csbend' and props.get('k2') is not None:
+                            mag += '2'
+                        newline += mags[mag][1] + ', '
+                        for prop,value in props.items():
+                            if mags[mag][0].get(prop) is not None:
+                                newline += (mags[mag][0][prop][0] + 
+                                     '{0:8f}, '.format(float(value)*mags[mag][0][prop][1]))
+                        newline+= vac_chamber
+                    except ValueError as error:
+                        print('rpnl not implemented: ' + error)
+                        fout.flush()
                         return
-            else: # se não é a definicao de sequencia então é definicao de elemento
-                for tipo in range(0,len(vec)):
-                    break_again = False;
-                    # verifica se a linha começa com um dos nomes equivalentes
-                    if line[2].startswith(tuple(vec[tipo][1])):
-                        # verifica se todos os atributos obrigatórios estão presentes
-                        for obrig in vec[tipo][2]:
-                            conta = line[2].count(',' + obrig)
-                            if not conta: 
-                                fileout.flush()
-                                break_again = True
-                                break
-                        if break_again: continue
-                        # começa escrevendo o tipo de elemento
-                        newline += vec[tipo][0] + ', '
-                        trecho = line[2].split(',')[1:] # splito todos os atributos
-                        atributos = vec[tipo][2] + vec[tipo][3] # concateno atrib_obg e atrib_opc
-                        for atributo in range(0, len(atributos)):
-                            for partes in trecho: # para cada atributo definido em filein
-                                if partes.split('=')[0] ==  atributos[atributo]:
-                                    newline += vec[tipo][4][atributo] # traduzo para o opa
-                                    try: # e tento converter as unidades
-                                        parte_float = vec[tipo][5][atributo]
-                                        parte_float *= float(partes.split('=')[1])
-                                        newline += str(parte_float) + ', '
-                                    except ValueError as error:
-                                        print('rpnl not implemented: ' + error)
-                                        fileout.flush()
-                                        return
-                        newline += vac_chamber
-                        break
-            if len(newline) > MAXNUMCOL:
-                start = 0
-                end = newline.rfind(',',start,start + MAXNUMCOL) + 1
-                while True:
-                    newline = newline[:end] + '\n        ' + newline[end:]
-                    start = end
-                    if len(newline[start:]) <= MAXNUMCOL: break
+                    except KeyError as error:
+                        print('Element '+mag+' not identified. Skipping it.')
+                        continue
+                if len(newline) > MAXNUMCOL:
+                    start = 0
                     end = newline.rfind(',',start,start + MAXNUMCOL) + 1
-            fileout.write(newline)
-    
-    fileout.close()                    
-            
+                    while True:
+                        newline = newline[:end] + '\n        ' + newline[end:]
+                        start = end
+                        if len(newline[start:]) <= MAXNUMCOL: break
+                        end = newline.rfind(',',start,start + MAXNUMCOL) + 1
+                fout.write(newline)
+
 
 try:
-    elegant2OPA(filename=sys.argv[1])
+    for files in sys.argv[1:]:
+        elegant2OPA(filename=files)
 except IndexError:
     usage()
     

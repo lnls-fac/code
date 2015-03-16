@@ -17,22 +17,27 @@ elseif isnumeric(plane)
     end
 end
 
-for ii=1:length(ind)
-    if strcmp(new_ring{ind(ii)}.PassMethod, 'CorrectorPass')
-        new_ring{ind(ii)}.KickAngle(pl) =  kicks(ii);
-    elseif  strcmp(new_ring{ind(ii)}.PassMethod, 'ThinMPolePass')
+nrsegs = size(ind,2);
+
+for ii=1:size(ind,1)
+    if strcmp(new_ring{ind(ii,1)}.PassMethod, 'CorrectorPass')
+        new_ring = setcellstruct(new_ring, 'KickAngle', ind(ii,:), kicks(ii)/nrsegs, 1, pl);
+    elseif  strcmp(new_ring{ind(ii,1)}.PassMethod, 'ThinMPolePass')
         if pl == 1
-            new_ring{ind(ii)}.PolynomB(1) = - kicks(ii); %from angle to field
+            new_ring = setcellstruct(new_ring, 'PolynomB', ind(ii,:), -kicks(ii)/nrsegs, 1,1);
         else
-            new_ring{ind(ii)}.PolynomA(1) = kicks(ii);
+            new_ring = setcellstruct(new_ring, 'PolynomA', ind(ii,:), +kicks(ii)/nrsegs, 1,1);
         end
-    elseif any(strcmp(new_ring{ind(ii)}.PassMethod, { ...
+    elseif any(strcmp(new_ring{ind(ii,1)}.PassMethod, { ...
             'BndMPoleSymplectic4Pass', 'BndMPoleSymplectic4RadPass', ...
             'StrMPoleSymplectic4Pass', 'StrMPoleSymplectic4RadPass'}))
+        % in this case we chose to model corrector with uniform diolar
+        % field. This is equivalent to hard-edge model of the corrector.
+        lens = getcellstruct(new_ring, 'Length', ind(ii,:));
         if pl == 1
-            new_ring{ind(ii)}.PolynomB(1)= -kicks(ii)/new_ring{ind(ii)}.Length;
+            new_ring = setcellstruct(new_ring, 'PolynomB', ind(ii,:), -kicks(ii)/sum(lens), 1,1);
         else
-            new_ring{ind(ii)}.PolynomA(1)= kicks(ii)/new_ring{ind(ii)}.Length;
+            new_ring = setcellstruct(new_ring, 'PolynomA', ind(ii,:), +kicks(ii)/sum(lens), 1,1);
         end
     else
         error('Element cannot be used as corrector.')

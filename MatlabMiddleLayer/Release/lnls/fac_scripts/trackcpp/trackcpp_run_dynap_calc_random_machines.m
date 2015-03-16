@@ -1,22 +1,22 @@
-function trackcpp_run_dynap_calc_random_machines
+function trackcpp_run_dynap_calc_random_machines(default_dir)
 
 % users selects submachine
 prompt = {'Submachine (bo/si)', 'dynap_xy (yes/no)', 'dynap_ex (yes/no)', 'dynap_ma (yes/no)'};
-bo_defaultanswer = {'bo', 'yes', 'yes', 'yes'};
+bo_defaultanswer = {'si', 'yes', 'yes', 'yes'};
 answer = inputdlg(prompt,'Select submachine and trackcpp algorithms to run',1,bo_defaultanswer);
 if isempty(answer), return; end;
 if strcmpi(answer{1}, 'bo')
     % booster default parm values
     accelerator_defaultanswer = {'0.15', '828', 'on', 'on', 'on'};
-    dynap_xy_defaultanswer = {'5000', '0',     '100', '-0.018','+0.018','30','0','0.006'};
-    dynap_ex_defaultanswer = {'5000', '0.001', '80', '-0.03','+0.03','50','-0.018','0'};
-    dynap_ma_defaultanswer = {'2000', '0.01', '0.001', '0', '49.681', 'mqf mb bpm'};
+    dynap_xy_defaultanswer    = {'5000', '0',     '100', '-0.018','+0.018','30','0','0.006'};
+    dynap_ex_defaultanswer    = {'5000', '0.001', '80', '-0.03','+0.03','50','-0.018','0'};
+    dynap_ma_defaultanswer    = {'2000', '0.01', '0.001', '0', '49.681', 'mqf mb bpm'};
 else
     % storage ring default parm values
     accelerator_defaultanswer = {'3.00', '864', 'on', 'on', 'on'};
-    dynap_xy_defaultanswer = {'5000', '0', '90', '-0.012','+0.012','40','0','0.0042'}; % to be changed
-    dynap_ex_defaultanswer = {'3500', '0.001', '48', '-0.06','+0.06','45','-0.012','0'}; % to be changed
-    dynap_ma_defaultanswer = {'2000', '0.02', '0.001', '0', '52', 'b1 b2 b3 bc qf1 qf2 qf3 qf4 mia mib sfa sfb'};
+    dynap_xy_defaultanswer    = {'5000', '0', '90', '-0.012','+0.012','40','0','0.0042'}; % to be changed
+    dynap_ex_defaultanswer    = {'3500', '0.001', '48', '-0.06','+0.06','45','-0.012','0'}; % to be changed
+    dynap_ma_defaultanswer    = {'2000', '0.02', '0.001', '0', '52', 'calc_mom_accep'};
 end
 
 % user defines accelerator
@@ -52,7 +52,9 @@ else
 end
 
 % selects input file with random machine
-default_dir = fullfile(lnls_get_root_folder(), 'data', 'sirius', answer{1}, 'beam_dynamics');
+if ~exist('default_dir','var')
+    default_dir = fullfile(lnls_get_root_folder(), 'data', 'sirius', answer{1}, 'beam_dynamics');
+end
 [inpfile,path,~] = uigetfile('*.mat','Select input file with random machines', fullfile(default_dir, '*.mat'));
 if isnumeric(inpfile), return; end
 machine_fname = fullfile(path, inpfile);

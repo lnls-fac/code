@@ -104,16 +104,16 @@ for i=1:length(families)
     for j=1:size(idx,1)
        
         % horizontal
-        the_ring = lnls_set_misalignmentX(+r.parms.delta_pos/2, idx(j,:), r.the_ring);        
+        the_ring = lnls_add_misalignmentX(+r.parms.delta_pos/2, idx(j,:), r.the_ring);        
         do_p = get_dorb_dK(the_ring, r.flags, family, dK);
-        the_ring = lnls_set_misalignmentX(-r.parms.delta_pos/2, idx(j,:), r.the_ring);        
+        the_ring = lnls_add_misalignmentX(-r.parms.delta_pos/2, idx(j,:), r.the_ring);        
         do_n = get_dorb_dK(the_ring, r.flags, family, dK);
         r.meas_data.(family).RespMx(:,j) = (do_p(1,r.parms.bpms) - do_n(1,r.parms.bpms)) / r.parms.delta_pos;
         
         % vertical
-        the_ring = lnls_set_misalignmentY(+r.parms.delta_pos/2, idx(j,:), r.the_ring);        
+        the_ring = lnls_add_misalignmentY(+r.parms.delta_pos/2, idx(j,:), r.the_ring);        
         do_p = get_dorb_dK(the_ring, r.flags, family, dK);
-        the_ring = lnls_set_misalignmentY(-r.parms.delta_pos/2, idx(j,:), r.the_ring);        
+        the_ring = lnls_add_misalignmentY(-r.parms.delta_pos/2, idx(j,:), r.the_ring);        
         do_n = get_dorb_dK(the_ring, r.flags, family, dK);
         r.meas_data.(family).RespMy(:,j) = (do_p(3,r.parms.bpms) - do_n(3,r.parms.bpms)) / r.parms.delta_pos; 
     end
@@ -175,7 +175,7 @@ for i=1:length(families)
     iS = diag(ivs);
     r.meas_data.(family).orbx = (fd.Vx*iS*fd.Ux')*(fd.codx - fd.codx0);
     
-    the_ring = lnls_set_misalignmentX(r.meas_data.(family).orbx, idx, r.the_ring);        
+    the_ring = lnls_add_misalignmentX(r.meas_data.(family).orbx, idx, r.the_ring);        
     do = get_dorb_dK(the_ring, r.flags, family, dK);
     r.meas_data.(family).dcodx = do(1,r.parms.bpms)';
     r.meas_data.(family).codx_calc = r.meas_data.(family).codx0 + r.meas_data.(family).dcodx;
@@ -193,7 +193,7 @@ for i=1:length(families)
     iS = diag(ivs);
     r.meas_data.(family).orby = (fd.Vy*iS*fd.Uy')*(fd.cody - fd.cody0);
     
-    the_ring = lnls_set_misalignmentY(r.meas_data.(family).orby, idx, r.the_ring);        
+    the_ring = lnls_add_misalignmentY(r.meas_data.(family).orby, idx, r.the_ring);        
     do = get_dorb_dK(the_ring, r.flags, family, dK);
     r.meas_data.(family).dcody = do(3,r.parms.bpms)';
     r.meas_data.(family).cody_calc = r.meas_data.(family).cody0 + r.meas_data.(family).dcody;

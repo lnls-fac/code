@@ -52,6 +52,8 @@ public:
 	double				t_in[6],  t_out[6];
 	double				r_in[36], r_out[36];
 
+    const std::string& get_pass_method();
+    void set_pass_method(const std::string& pass_method_);
 
 
 	// default constructor (builds a drift-type element)

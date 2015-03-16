@@ -8,8 +8,8 @@ end
 nr_turns = 30;
 
 % calcs 4d closed orbit
-[~, the_ring] = setcavity('off', the_ring);
-[~,~,~,~,~,~,the_ring] = setradiation('off', the_ring);
+the_ring = setcavity('off', the_ring);
+the_ring = setradiation('off', the_ring);
 cod = [findorbit4(the_ring, 0); 0; 0];
 
 % calcs twiss

@@ -8,5 +8,5 @@ function lnls1_meastuneresp
 
 if ~strcmpi(getmode('BEND'), 'Online'), switch2online; end
 
-lnls1_auto_orb_corr_on;
+lnls1_fast_orbcorr_on;
 meastuneresp;

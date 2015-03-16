@@ -99,9 +99,10 @@ pause(r.pause_after_epu_setpoint);
 
 % corrige órbita
 fprintf([datestr(now, 'yyyy-mm-dd_HH-MM-SS') ': corrigindo órbita por %i segundos...\n'], r.orbit_correction_pause);
-lnls1_auto_orb_corr_on;
+lnls1_fast_orbcorr_on;
 pause(r.orbit_correction_pause);
-lnls1_auto_orb_corr_off;
+lnls1_fast_orbcorr_off;
+lnls1_slow_orbcorr_off;
 
 
 
@@ -190,7 +191,7 @@ for j=1:length(r.gaps)
         save_opr1(PathName, r.epu_table);
     end
 end
-lnls1_auto_orb_corr_on;
+lnls1_fast_orbcorr_on;
 setpv('AOH11A_SP',0);
 setpv('AOH11B_SP',0);
 setpv('AOV11A_SP',0);
