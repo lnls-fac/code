@@ -14,6 +14,8 @@ if nargin < 4
     npts = [];
 end
 
+nmarker = 1;
+
 if ischar(filenames)
     try
         fileid = fopen(filenames);
@@ -52,11 +54,11 @@ if ischar(filenames)
         ncols = fread(fileid, 1, 'uint32=>uint32', 'l');
 
         nblocks = remaining_bytes/4/(2+nrows*ncols);
-        data = zeros(nblocks*nrows, length(selected_bpm_readings) + 2*length(selected_corr) + 2, 'single');
+        data = zeros(nblocks*nrows, length(selected_bpm_readings) + 2*length(selected_corr) + nmarker + 2, 'single');
         for i=0:nblocks-1
             subdata = fread(fileid, ncols*nrows, 'single=>single', 'l');
             subdata = reshape(subdata, ncols, nrows)';
-            data_ = [subdata(:, [selected_bpm_readings (nbpm_readings+selected_corr) (nbpm_readings+ncorr+selected_corr)]) subdata(:, end-1:end)];
+            data_ = [subdata(:, [selected_bpm_readings (nbpm_readings+selected_corr) (nbpm_readings+ncorr+selected_corr)]) subdata(:, nbpm_readings+2*ncorr+1:end)];
             data((i*nrows+1):((i+1)*nrows), :) = data_;
             fread(fileid, 1, 'uint32=>uint32', 'l');
             fread(fileid, 1, 'uint32=>uint32', 'l');
@@ -65,8 +67,10 @@ if ischar(filenames)
         time_lo = typecast(data(:,end-1), 'uint32');
         time = bitor(bitshift(uint64(time_hi), 32), uint64(time_lo));
 
-        data = data(:,1:end-2);
-
+        marker = typecast(data(:,end-1-nmarker:end-2), 'uint32');
+        
+        data = data(:, 1:end-3);
+        
     catch err
         fclose(fileid);
         rethrow(err);
@@ -81,6 +85,7 @@ if ischar(filenames)
                'corr_names', {header_corr(1:nselected_corr/2)}, ...
                'corr_setpoints', data(:,1+nselected_bpm+nselected_corr/2:nselected_bpm+nselected_corr), ...
                'corr_setpoints_names', {header_corr(1+nselected_corr/2:nselected_corr)}, ...
+               'marker', marker, ...
                'period', period);
 
 elseif iscell(filenames)
@@ -92,6 +97,7 @@ elseif iscell(filenames)
             'corr_names', [], ...
             'corr_setpoints', [], ...
             'corr_setpoints_names', [], ...
+            'marker', [], ...
             'period', []);
     else
         fileid = fopen(filenames{1});
@@ -125,6 +131,7 @@ elseif iscell(filenames)
             'corr_names', [], ...
             'corr_setpoints', zeros(npts*length(filenames), nselected_corr, 'single'), ...
             'corr_setpoints_names', [], ...
+            'marker', [], ...
             'period', []);
     end
    
@@ -136,11 +143,13 @@ elseif iscell(filenames)
             fadata.bpm_readings   = [fadata.bpm_readings;   subfadata.bpm_readings];
             fadata.corr_readings  = [fadata.corr_readings;  subfadata.corr_readings];
             fadata.corr_setpoints = [fadata.corr_setpoints; subfadata.corr_setpoints];
+            fadata.marker         = [fadata.marker; subfadata.marker];
         else
             fadata.time((i-1)*npts+1:i*npts) = subfadata.time;
             fadata.bpm_readings((i-1)*npts+1:i*npts, :) = subfadata.bpm_readings;
             fadata.corr_readings((i-1)*npts+1:i*npts, :) = subfadata.corr_readings;
             fadata.corr_setpoints((i-1)*npts+1:i*npts, :) = subfadata.corr_setpoints;
+            fadata.marker((i-1)*npts+1:i*npts, :) = subfadata.marker;
         end
             
         fadata.bpm_names            = compare(fadata.bpm_names, subfadata.bpm_names);
