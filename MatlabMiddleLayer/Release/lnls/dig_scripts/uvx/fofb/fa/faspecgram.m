@@ -22,7 +22,7 @@ end
 % Preparation of data
 % ===================
 selected_readings = [selected_bpm selected_bpm+length(selected_bpm)];
-n_selected_readings = length(selected_readings);
+nselected_readings = length(selected_readings);
 
 % Convert BPM data from mm to um
 signals = double(1e3*data.bpm_readings);
@@ -55,7 +55,7 @@ for i = 1:nselected_readings/2
     set(gca, 'FontSize', 12);
     title(data.bpm_names{selected_readings(i)},'FontSize',12,'FontWeight','bold');
     ylabel('Time (s)','FontSize',12,'FontWeight','bold');
-    zlabel('Position (\mum)','FontSize',12,'FontWeight','bold');
+    zlabel('dB','FontSize',12,'FontWeight','bold');
 
     subplot(212)
     surf(freq, time_intervals_start, signals_fseries(:,:,i+nselected_readings/2)','EdgeColor','none','LineStyle','none','FaceLighting','phong');
@@ -64,8 +64,7 @@ for i = 1:nselected_readings/2
     set(gca, 'FontSize', 12);
     title(data.bpm_names{selected_readings(i)+nbpm},'FontSize',12,'FontWeight','bold');
     ylabel('Time (s)','FontSize',12,'FontWeight','bold');
-    zlabel('Position (\mum)','FontSize',12,'FontWeight','bold');
-
+    zlabel('dB','FontSize',12,'FontWeight','bold');
 
     xlabel('Frequency (Hz)','FontSize',12,'FontWeight','bold');
 

@@ -22,13 +22,12 @@ corr_after_step = zeros(length(ipos),1);
 corr_before_step_std = zeros(length(ipos),1);
 corr_after_step_std = zeros(length(ipos),1);
 
-
 for i=1:length(ipos)
     [orb_before_step(:,i), orb_before_step_std(:,i)] = levelmeanstd(fadata.bpm_readings, npts_level, ipos(i));
     [orb_after_step(:,i), orb_after_step_std(:,i)] = levelmeanstd(fadata.bpm_readings, npts_level, ineg2(i));
 
-    [corr_before_step(i), corr_before_step_std(i)] = levelmeanstd(fadata.corr_readings(:,i), npts_level, ipos(i));
-    [corr_after_step(i), corr_after_step_std(i)] = levelmeanstd(fadata.corr_readings(:,i), npts_level, ineg2(i));
+    [corr_before_step(i), corr_before_step_std(i)] = levelmeanstd(fadata.corr_setpoints(:,i), npts_level, ipos(i));
+    [corr_after_step(i), corr_after_step_std(i)] = levelmeanstd(fadata.corr_setpoints(:,i), npts_level, ineg2(i));
 end
 
 orb_std = mean([mean(orb_before_step_std,2) mean(orb_after_step_std,2)], 2);
