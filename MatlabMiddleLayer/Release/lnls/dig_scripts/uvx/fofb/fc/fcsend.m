@@ -1,12 +1,15 @@
 function [fcdata, expout] = fcsend(ip, fcn, expinfo, npts_packet, stopat)
 
+ncols = 50;
+nmarker = 1;
+
 if ischar(ip) || ~isfield(ip,'port')
     if ischar(ip)
-        ip_.address = ip;
+        conninfo.address = ip;
     end
-    ip_.port = 3604;
+    conninfo.port = 3604;
 else
-    ip_ = ip;
+    conninfo = ip;
 end
 
 if nargin < 4 || isempty(npts_packet)
@@ -22,7 +25,7 @@ end
 i=0;
 failure = false;
 
-conn = tcpip(ip_.address, ip_.port, 'OutputBufferSize', 10*npts_packet*(expinfo.ncols+1)*4);
+conn = tcpip(conninfo.address, conninfo.port, 'OutputBufferSize', 10*npts_packet*(ncols+nmarker+1)*4);
 fopen(conn);
 while i < stopat
     [packet, expinterval] = fcn(i, npts_packet, expinfo, fcdata);
