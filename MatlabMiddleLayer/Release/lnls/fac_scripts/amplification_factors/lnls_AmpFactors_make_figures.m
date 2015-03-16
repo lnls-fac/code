@@ -32,7 +32,7 @@ hax = axes('Units','pixels', 'Position',[100.8, 86.2, 741.2, 408.8],'FontSize',1
 % Popup to control the the effect on the ring of the selected error
 string = {'orbx','orby','corx','cory','coup','betx','bety'};
 efct_conv = [1e-6, 1e-6 , 1e-6 , 1e-6,pi/180, 1e-2 , 1e-2];
-efct_unit = {'\mum','\mum','\murad','\murad','%%','%%','%%'};
+efct_unit = {'\mum','\mum','\murad','\murad','%','%','%'};
 uicontrol('Style','text','Position',[647 607 70 20],'String','Effect');
 ctrl.efct = uicontrol('Style', 'popup','String', string,'Position', [647 587 70 20]);
 
@@ -265,5 +265,6 @@ ctrl.sumsqrT = uicontrol('Style','text','Position',[764 20 90 20],'String','0.0'
         if ~isempty(pl)
             legend(pl,'show',text,'Location','Best');
         end
+        title(ax, 'Title','FontSize',16);
     end
 end
