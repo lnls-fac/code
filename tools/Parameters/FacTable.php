@@ -59,9 +59,10 @@ class FacTable extends FacConnection {
     {
         $r = $this->read_all_with_name_from_table($name, 'parameter');
 
-        if ($r->num_rows == 0)
-            throw new FacException('parameter "' . $name . '" not found');
-        else {
+        if ($r->num_rows == 0) {
+            $link = '[[Parameter:' . $name . '|' . $name . ']]';
+            throw new FacException('parameter "' . $link . '" not found');
+        } else {
             $row = $r->fetch_assoc();
             return $this->get_text_fields($row);
         }
