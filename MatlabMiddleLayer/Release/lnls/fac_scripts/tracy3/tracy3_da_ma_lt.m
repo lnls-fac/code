@@ -1,7 +1,10 @@
 function tracy3_da_ma_lt(path)
 
 global THERING;
-
+if ~isappdata(0,'ATSUMMARY')
+    ats = atsummary(THERING);
+    setappdata(0,'ATSUMMARY',ats);
+end
 % users selects submachine
 prompt = {'Submachine (bo/si)', 'energy [GeV]', 'number of plots'};
 defaultanswer = {'si', '3.0', '2'};
