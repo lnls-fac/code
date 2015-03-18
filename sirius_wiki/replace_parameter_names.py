@@ -172,7 +172,7 @@ def strip_link_braces(link):
 
 if __name__ == '__main__':
 
-    REGEXP_title = 'Linac .*'
+    REGEXP_title = '.*'
     site = pywikibot.Site('en', 'siriuswiki')
 
     parameters_not_in_table = set()

@@ -153,7 +153,7 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
            'String', ['Twiss Functions - ' titulo]);
        
         %Grafico dispersao horizontal
-        subplot('position',[0.1 0.64 0.85 0.26],'FontSize',14);
+        subplot('position',[0.1 0.66 0.85 0.26],'FontSize',14);
         hold all;
         plot(twiss.pos(ini:fim),twiss.etax(ini:fim),'LineWidth',1.5,'Color',[0 1 0]);
         xlim(xlimit);
@@ -163,7 +163,7 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         box on;
 
         %Grafico rede magnetica
-        subplot('position',[0.1 0.51 0.85 0.12]);
+        subplot('position',[0.1 0.57 0.85 0.03]);
         if strcmp(maquina,'si')==1
             lnls_drawlattice(THERING,20,0,1);
             xlim(xlimit);
@@ -179,14 +179,14 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         end;
 
         %Grafico funcoes betatron
-        subplot('position',[0.1 0.12 0.85 0.38],'FontSize',14);
+        subplot('position',[0.1 0.12 0.85 0.42],'FontSize',14);
         hold all;
         xlim(xlimit);
         bx=plot(twiss.pos(ini:fim),twiss.betax(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
         by=plot(twiss.pos(ini:fim),twiss.betay(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
         xlabel('s [m]', 'FontSize',14);
         ylabel({'\beta [m]'},'FontSize',14);
-        legend([bx,by],'\beta_x','\beta_y','Location','northwest','boxoff'); 
+        legend([bx,by],'\beta_x','\beta_y','Location','northeast','boxoff'); 
         grid on;
         box on; 
     end;

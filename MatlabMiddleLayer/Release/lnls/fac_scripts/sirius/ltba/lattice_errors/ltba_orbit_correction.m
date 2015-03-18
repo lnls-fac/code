@@ -27,9 +27,8 @@ s=cat(1,t.SPos);
 beta=cat(1,t.beta);
 disp=[t.Dispersion];
 d=disp(1,:)';
-figure;plot(s,beta(:,1),'b',s,beta(:,2),'r',s,d(:,1),'g');
 
-ind_BPM = findcells(ltba, 'FamName', 'BPM');
+ind_BPM = findcells(ltba, 'FamName', 'bpm');
 ind_ch = findcells(ltba, 'FamName', 'hcm');
 ind_cv = findcells(ltba, 'FamName', 'vcm');
 
@@ -283,12 +282,12 @@ annotation('textbox', [0.3,0.88,0.1,0.1],...
            'FontSize',14,...
            'FontWeight','bold',...
            'LineStyle','none',...
-           'String', ['BTS Tansfer Line - ' tit]);
+           'String', ['BTS Tansfer Line Orbit Correction - ' tit]);
        
 %Plot before correction
 %subplot(5,1,[1,2],'FontSize',14);
 xlimit=[0 s(end)];
-subplot('position',[0.1 0.60 0.85 0.31],'FontSize',14);
+subplot('position',[0.1 0.58 0.85 0.33],'FontSize',14);
 hold all;
 for i=1:n_maquinas
     plot(s,1e3*abs(orbx(:,i)),'Color',[0.8 0.8 1]);   %horizontal
@@ -307,14 +306,14 @@ box on;
 
 %Plot lattice
 %subplot(5,1,3);
-subplot('position',[0.1 0.44 0.85 0.14]);
-lnls_drawlattice(ltba, 1, 0, 1, 1);
+subplot('position',[0.1 0.47 0.85 0.05]);
+lnls_drawlattice(ltba, 1, 0, 1, 1, 1);
 xlim(xlimit);
 axis off;
 
 %Plot after correction
 %subplot(5,1,[4,5],'FontSize',14);
-subplot('position',[0.1 0.12 0.85 0.31],'FontSize',14);
+subplot('position',[0.1 0.12 0.85 0.33],'FontSize',14);
 hold all;
 for i=1:n_maquinas
     plot(s,1e3*abs(orbcx(:,i)),'Color',[0.8 0.8 1]);
@@ -332,6 +331,9 @@ text(1,ylimit(1)+0.2*ylimit(2),'Y after correction', 'FontSize',14,'Color','r');
 grid on;
 box on;
 
+plot2svg('orbit.svg');
 
+%Plot Twiss functions
+sirius_plot_twiss('ts',1,1);
 
 
