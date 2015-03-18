@@ -91,8 +91,8 @@ function fac_format_value($format, $value)
     $s = strtolower(sprintf($format, $value));
     $p = strpos($s, 'e');
     if ($p !== false) {
-        $e = substr($s, $p, 2); # 'e' plus sign
-        $s = str_replace($e, '×10<sup>', $s) . '</sup>';
+        if ($s{$p+1} == '-') { $e = substr($s, $p, 1); } else  { $e = substr($s, $p, 2); }
+ 	    $s = str_replace($e, '×10<sup>', $s) . '</sup>';
     }
 
     return $s;
