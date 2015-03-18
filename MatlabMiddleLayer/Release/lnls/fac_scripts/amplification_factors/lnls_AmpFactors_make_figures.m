@@ -212,7 +212,7 @@ ctrl.sumsqrT = uicontrol('Style','text','Position',[764 20 90 20],'String','0.0'
         sumsqr = sqrt(sumsqr^2 + sumsqri^2);
         set(ctrl.sumsqrT,'String',sprintf('%9.4g',sumsqr));
         sumsqri = sprintf('%9.4g',sumsqri);
-        ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+95*j 20 90 20],'String',sumsqri);
+        ctrl.sumsqr(j+1) = uicontrol('Style','text','Position',[100+75*j 20 70 20],'String',sumsqri);
         
         % color = {'b','r','g','m','c'};
         string = [str_conf, '.', str_sys,'.',str_ele,'.', str_err, '.', ...
