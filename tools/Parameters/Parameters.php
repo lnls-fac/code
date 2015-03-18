@@ -184,9 +184,15 @@ function fac_dependents_parameter_render($input, array $args, Parser $parser,
 function fac_parameter_list_parameter_render($input, array $args,
     Parser $parser, PPFrame $frame)
 {
+    $prim_only = fac_get_arg_value('selection', $args);
+    if ($prim_only && (strtolower($prim_only) == 'primitive'))
+        $prim_only = true;
+    else
+        $prim_only = false;
+
     try {
         $prm = new FacParameterLister($input);
-        $list = $prm->get_list();
+        $list = $prm->get_list($prim_only);
         if ($list === false) {
             $error = 'Error: subsystem ' . $input . ' not found';
             $output = fac_get_error_message($error);

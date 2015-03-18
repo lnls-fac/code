@@ -283,10 +283,15 @@ class FacTable extends FacConnection {
         return $row['expression'];
     }
 
-    function get_parameter_list($subsystem)
+    function get_parameter_list($subsystem, $prim_only)
     {
+        if ($prim_only)
+            $sel = " AND is_derived=0";
+        else
+            $sel = "";
+
         $query = "SELECT name FROM parameter WHERE name LIKE '" .
-            $this->escape($subsystem) . "%';";
+            $this->escape($subsystem) . "%'" . $sel . ";";
         $r = $this->query($query);
 
         return $r->fetch_all();
