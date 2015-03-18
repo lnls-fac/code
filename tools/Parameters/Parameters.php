@@ -213,9 +213,9 @@ function fac_get_parameter_list_text($parameters)
 
     $text = "";
     foreach($parameters as $p)
-        $text .= "* " . $p . "\n";
+        $text .= "# " . $p . "\n";
 
-    $text .= "* " . $last;
+    $text .= "# " . $last;
 
     return $text;
 }
