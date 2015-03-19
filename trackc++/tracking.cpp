@@ -187,4 +187,3 @@ Pos<double> linalg_solve(const std::vector<Pos<double> >& M, const Pos<double>& 
 	gsl_permutation_free(p);
 	return X;
 }
-

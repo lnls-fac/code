@@ -16,7 +16,7 @@ function [r, lattice_title] = sirius_si_lattice(varargin)
 % 2013-10-02: adicionei o mode_version como parametro de input. (Fernando)
 % 2014-09-17: modificacao das corretoras para apenas uma par integrado de CV e CH rapidas e lentas no mesmo elemento. (Natalia) 
 % 2014-10-07: atualizados nomes de alguns elementos. (xrr)
-% 2015-03-04: testes com ideia de colocar corretores skew fora dos sextupolos e junto com corretoras rápidas
+% 2015-03-04: testes com ideia de colocar corretores skew fora dos sextupolos e junto com corretoras r??pidas
 
 global THERING;
 
@@ -299,7 +299,7 @@ THERING = set_vacuum_chamber(THERING);
 THERING = set_girders(THERING);
 
 % pre-carrega passmethods de forma a evitar problema com bibliotecas recem-compiladas
-%lnls_preload_passmethods;
+lnls_preload_passmethods;
 
 r = THERING;
 
