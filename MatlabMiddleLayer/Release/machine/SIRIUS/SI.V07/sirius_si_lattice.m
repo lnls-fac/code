@@ -155,7 +155,7 @@ RFC = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
 % -- lattice markers --
 START  = marker('start',  'IdentityPass');     % start of the model
-END    = marker('end',  'IdentityPass');     % start of the model
+END    = marker('end',  'IdentityPass');     % end of the model
 MIA    = marker('mia', 'IdentityPass');        % center of long straight sections (even-numbered)
 MIB    = marker('mib', 'IdentityPass');        % center of short straight sections (odd-numbered)
 GIRDER = marker('girder', 'IdentityPass');     % marker used to delimitate girders. one marker at begin and another at end of girder.

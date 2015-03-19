@@ -60,9 +60,10 @@ else
     
     ats = getappdata(0, 'ATSUMMARY');
     params.E     = energy * 1e9;
-    params.emit0 = ats.naturalEmittance;
-    params.sigE  = ats.naturalEnergySpread;
-    params.sigS  = 3.5e-3; % takes IBS into account
+    % Data given by Natalia
+    params.emit0 = 0.306e-9; %ats.naturalEmittance;
+    params.sigE  = 8.8e-4;   %ats.naturalEnergySpread;
+    params.sigS  = 2.7e-3;   %3.5e-3; % takes IBS into account
     params.K     = 0.01;
     params.I     = 100;
     params.nrBun = 864;
