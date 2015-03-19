@@ -39,9 +39,11 @@ data.chs.nr_segs = 1;
 data.cvs.nr_segs = 1;
 data.qn.nr_segs  = 1;
 
+
 fams = fields(data);
 for i=1:length(fams)
     data.(fams{i}).ATIndex = [];
+    data.(fams{i}).ATFamilies = fams{i};
 end
 for i=1:length(the_ring)
     Fam = the_ring{i}.FamName;
@@ -67,6 +69,7 @@ idx = [idx; data.('sfb').ATIndex];
 idx = sort(idx);
 data.chs.ATIndex = reshape(idx,data.chs.nr_segs,[]);
 data.chs.ATIndex = data.chs.ATIndex';
+data.chs.ATFamilies = {'sfa','sd1','sd2','sf2','sf3','sd5','sd6','sfb'};
 
 % cvs - slow horizontal correctors
 idx = [];
@@ -79,6 +82,7 @@ idx = [idx; data.('sfb').ATIndex];
 idx = sort(idx);
 data.cvs.ATIndex = reshape(idx,data.cvs.nr_segs,[]);
 data.cvs.ATIndex = data.cvs.ATIndex';
+data.cvs.ATFamilies = {'sfa','sd1','sd3','sd4','sd6','sfb'};
 
 % chf - fast horizontal correctors
 idx = [];
@@ -93,6 +97,7 @@ idx = [idx; data.('cf').ATIndex];
 idx = sort(idx);
 data.cvf.ATIndex = reshape(idx,data.cvf.nr_segs,[]);
 data.cvf.ATIndex = data.cvf.ATIndex';
+data.cvf.ATFamilies = {'cf'};
 
 % qs - skew quad correctors
 idx = [];
@@ -103,6 +108,7 @@ idx = [idx; data.('sdb').ATIndex];
 idx = sort(idx);
 data.qs.ATIndex = reshape(idx,data.qs.nr_segs,[]);
 data.qs.ATIndex = data.qs.ATIndex';
+data.qs.ATFamilies = {'sda','sf1','sf4','sdb'};
 
 % kbs - quadrupoles knobs for optics correction
 idx = [];
@@ -118,3 +124,4 @@ idx = [idx; data.('qdb2').ATIndex];
 idx = sort(idx);
 data.qn.ATIndex = reshape(idx,data.qn.nr_segs,[]);
 data.qn.ATIndex = data.qn.ATIndex';
+data.qn.ATFamilies = {'qfa','qda','qf1','qf2','qf3','qf4','qdb1','qfb','qdb2'};
