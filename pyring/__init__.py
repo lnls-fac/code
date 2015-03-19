@@ -1,7 +1,9 @@
-from elements import *
+from pyring.elements import *
 
 #import elements
-#import passmethods
+from pyring.passmethods import *
+from pyring.lattice import *
+
 #marker     = elements.marker
 #drift      = elements.drift
 #corrector  = elements.corrector
@@ -9,7 +11,3 @@ from elements import *
 #quadrupole = elements.quadrupole
 #sextupole  = elements.sextupole
 #rbend      = elements.rbend
-
-
-
-

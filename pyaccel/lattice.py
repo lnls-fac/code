@@ -1,17 +1,38 @@
 
+import collections
+import trackcpp as _trackcpp
+from . import elements
+
+Lattice = _trackcpp.CppElementVector
+
+def flatlat(elist):
+    """ takes a list-of-list-of-... elements and flattens it: a simple list of lattice elements."""
+    flat_elist = []
+    for element in elist:
+        try:
+            famname = element.fam_name
+            flat_elist.append(element)
+        except:
+            flat_elist.extend(flatlat(element))
+    return flat_elist
+
 def buildlat(elist):
-    """builds flat list of elements"""
-    the_ring = []
-    try:
-        for e in elist:
-            the_ring += buildlat(e)
-    except TypeError:
-        the_ring += [elist]
-    return the_ring
+    """builds lattice from a list of elements and lines"""
+    lattice = Lattice()
+    elist = flatlat(elist)
+    for e in elist:
+        lattice.append(e)
+    return lattice
+
+def shiftlat(lattice, start):
+    new_lattice = lattice[start:]
+    for i in range(start):
+        new_lattice.append(lattice[i])
+    return new_lattice
 
 def findspos(lattice, indices = None):
     """returns longitudinal position of the entrance for all lattice elements"""
-    
+
     ''' process input '''
     is_number = False
     if indices is None:
@@ -22,7 +43,7 @@ def findspos(lattice, indices = None):
         except:
             is_number = True
             indices = [indices]
-                    
+
     pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
@@ -31,12 +52,12 @@ def findspos(lattice, indices = None):
         return pos[i]
     else:
         return [pos[i] for i in indices]
-    
+
 def findcells(lattice, attribute_name, value=None):
     """returns a list with indices of elements that match criteria 'attribute_name=value'"""
     indices = []
     for i in range(len(lattice)):
-        if hasattr(lattice[i], attribute_name):    
+        if hasattr(lattice[i], attribute_name):
             if value == None:
                 if getattr(lattice[i], attribute_name) != None:
                     indices.append(i)
@@ -54,14 +75,14 @@ def getcellstruct(lattice, attribute_name, indices = None):
             indices[0]
         except:
             indices = [indices]
-    
+
     data = []
     for idx in indices:
         tdata = getattr(lattice[idx], attribute_name)
         data.append(tdata)
     return data
 
-def setcellstruct(lattice, attribute_name, indices, values):    
+def setcellstruct(lattice, attribute_name, indices, values):
     """ sets elements data and returns a new updated lattice """
     for idx in range(len(indices)):
         try:
@@ -72,7 +93,7 @@ def setcellstruct(lattice, attribute_name, indices, values):
 
 def finddict(lattice, attribute_name):
     """ returns a dict which correlates values of 'attribute_name' and a list of indices corresponding to matching elements """
-    latt_dict = {}  
+    latt_dict = {}
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):
             att_value = getattr(lattice[i], attribute_name)
