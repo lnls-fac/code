@@ -329,7 +329,7 @@ class RFCavity(Element):
     _attributes_to_print = ['fam_name', 'pass_method', 'length',
                             'frequency', 'voltage', 'hmax', 'vmax']
 
-    def __init__(self, fam_name, length, frequency, voltage):
+    def __init__(self, fam_name, length, voltage, frequency):
         """Create an RF cavity element.
 
         Keyword arguments:
