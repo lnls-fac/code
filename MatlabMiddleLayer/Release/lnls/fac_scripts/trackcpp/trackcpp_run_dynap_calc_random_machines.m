@@ -10,12 +10,12 @@ if strcmpi(answer{1}, 'bo')
     accelerator_defaultanswer = {'0.15', '828', 'on', 'on', 'on'};
     dynap_xy_defaultanswer    = {'5000', '0',     '100', '-0.018','+0.018','30','0','0.006'};
     dynap_ex_defaultanswer    = {'5000', '0.001', '80', '-0.03','+0.03','50','-0.018','0'};
-    dynap_ma_defaultanswer    = {'2000', '0.01', '0.001', '0', '49.681', 'mqf mb bpm'};
+    dynap_ma_defaultanswer    = {'5000', '0.01', '0.001', '0', '49.681', 'pb mb'};
 else
     % storage ring default parm values
     accelerator_defaultanswer = {'3.00', '864', 'on', 'on', 'on'};
-    dynap_xy_defaultanswer    = {'5000', '0', '90', '-0.012','+0.012','40','0','0.0042'}; % to be changed
-    dynap_ex_defaultanswer    = {'3500', '0.001', '48', '-0.06','+0.06','45','-0.012','0'}; % to be changed
+    dynap_xy_defaultanswer    = {'5000', '0', '120', '-0.012','+0.012','30','0','0.003'}; % to be changed
+    dynap_ex_defaultanswer    = {'3500', '0.001', '40', '-0.05','+0.05','55','-0.012','0'}; % to be changed
     dynap_ma_defaultanswer    = {'2000', '0.02', '0.001', '0', '52', 'calc_mom_accep'};
 end
 
@@ -102,22 +102,22 @@ for i=1:length(machine)
 end
 
 % submit jobs
-prompt = {'Description', 'possible hosts', 'extra input files'};
+prompt = {'Description', 'possible hosts', 'extra input files','Priority - XY','Priority - MA','Priority - EX'};
 comment = strrep(trackcpp_path, '/home/fac_files/data/','');
 comment = strrep(comment, '/beam_dynamics',''); 
 comment = strrep(comment, 'cod_matlab/../trackcpp','');
-defaultanswer = {comment, 'all', ''};
+defaultanswer = {comment, 'all', '','1','2','0'};
 answer = inputdlg(prompt,'Parameters for pyjob submission',1,defaultanswer);
 if isempty(answer), return; end;
 
 if ~isempty(dynap_xy_answer)
-    trackcpp_submit_jobs(['XY: ',answer{1}], trackcpp_path, 'input_xy.py', '../runjob_xy.sh', answer{2},'1');
+    trackcpp_submit_jobs(['XY: ',answer{1}],trackcpp_path,'input_xy.py','../runjob_xy.sh',answer{2},answer{3});
 end
 if ~isempty(dynap_ma_answer)
-    trackcpp_submit_jobs(['MA: ',answer{1}], trackcpp_path, 'input_ma.py', '../runjob_ma.sh', answer{2},'1');
+    trackcpp_submit_jobs(['MA: ',answer{1}],trackcpp_path,'input_ma.py','../runjob_ma.sh',answer{2},answer{4});
 end
 if ~isempty(dynap_ex_answer)
-    trackcpp_submit_jobs(['EX: ',answer{1}], trackcpp_path, 'input_ex.py', '../runjob_ex.sh', answer{2},'0');
+    trackcpp_submit_jobs(['EX: ',answer{1}],trackcpp_path,'input_ex.py','../runjob_ex.sh',answer{2},answer{5});
 end
 
 
