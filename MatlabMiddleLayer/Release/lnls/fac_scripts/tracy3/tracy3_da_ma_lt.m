@@ -31,6 +31,8 @@ if strcmpi(answer{1}, 'bo')
     if isempty(r)
         sirius('BO');
         the_ring = THERING;
+        ats = atsummary(THERING);
+        setappdata(0,'ATSUMMARY',ats);
     else
         the_ring = sirius_bo_lattice(energy);
     end
@@ -64,6 +66,8 @@ else
     if isempty(r)
         sirius('SI');
         the_ring = THERING;
+        ats = atsummary(THERING);
+        setappdata(0,'ATSUMMARY',ats);
     else
         the_ring = sirius_si_lattice(energy);
     end

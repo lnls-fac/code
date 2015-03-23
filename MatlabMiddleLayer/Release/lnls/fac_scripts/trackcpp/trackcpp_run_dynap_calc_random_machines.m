@@ -109,15 +109,19 @@ comment = strrep(comment, 'cod_matlab/../trackcpp','');
 defaultanswer = {comment, 'all', '','1','2','0'};
 answer = inputdlg(prompt,'Parameters for pyjob submission',1,defaultanswer);
 if isempty(answer), return; end;
+if ~isempty(answer{3}), answer{3} = [',',answer{3}]; end
 
 if ~isempty(dynap_xy_answer)
-    trackcpp_submit_jobs(['XY: ',answer{1}],trackcpp_path,'input_xy.py','../runjob_xy.sh',answer{2},answer{3});
+    trackcpp_submit_jobs(['XY: ',answer{1}],trackcpp_path,['input_xy.py',answer{3}],...
+                                '../runjob_xy.sh',answer{2},answer{4});
 end
 if ~isempty(dynap_ma_answer)
-    trackcpp_submit_jobs(['MA: ',answer{1}],trackcpp_path,'input_ma.py','../runjob_ma.sh',answer{2},answer{4});
+    trackcpp_submit_jobs(['MA: ',answer{1}],trackcpp_path,['input_ma.py',answer{3}],...
+                                '../runjob_ma.sh',answer{2},answer{5});
 end
 if ~isempty(dynap_ex_answer)
-    trackcpp_submit_jobs(['EX: ',answer{1}],trackcpp_path,'input_ex.py','../runjob_ex.sh',answer{2},answer{5});
+    trackcpp_submit_jobs(['EX: ',answer{1}],trackcpp_path,['input_ex.py',answer{3}],...
+                                '../runjob_ex.sh',answer{2},answer{6});
 end
 
 
