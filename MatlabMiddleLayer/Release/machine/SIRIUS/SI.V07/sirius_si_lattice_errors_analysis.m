@@ -10,24 +10,25 @@ initializations();
 
 % next a nominal model is chosen for the study 
 the_ring = create_nominal_model();
-
-% gets family data for the lattice
 family_data = sirius_si_family_data(the_ring);
 
 % application of errors to the nominal model
 machine  = create_apply_errors(the_ring, family_data);
 
+%application of bpm offset errors
+machine = create_apply_bpm_errors(machine, family_data);
+
 % orbit correction is performed
 machine  = correct_orbit(machine, family_data);
 
-% lattice symmetrization
-%machine = correct_optics(machine, family_data);
+% tune correction
+machine  = correct_tune(machine);
 
 % next, coupling correction
 machine  = correct_coupling(machine, family_data);
 
-% tune correction
-machine  = correct_tune(machine);
+% lattice symmetrization
+%machine = correct_optics(machine, family_data);
 
 % at last, multipole errors are applied
 machine  = create_apply_multipoles(machine, family_data);
@@ -99,37 +100,33 @@ finalizations();
         config.fams.quads.labels     = {'qfa','qdb2','qfb','qdb1','qda','qf1','qf2','qf3','qf4'};
         config.fams.quads.sigma_x    = 40 * um * 1;
         config.fams.quads.sigma_y    = 40 * um * 1;
-        config.fams.quads.sigma_roll = 0.20 * mrad * 1;
+        config.fams.quads.sigma_roll = 0.30 * mrad * 1;
         config.fams.quads.sigma_e    = 0.05 * percent * 1;
         
         % <sextupoles> alignment, rotation and excitation errors
         config.fams.sexts.labels     = {'sda','sfa','sd1','sf1','sd2','sd3','sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb'};
         config.fams.sexts.sigma_x    = 40 * um * 1;
         config.fams.sexts.sigma_y    = 40 * um * 1;
-        config.fams.sexts.sigma_roll = 0.20 * mrad * 1;
+        config.fams.sexts.sigma_roll = 0.30 * mrad * 1;
         config.fams.sexts.sigma_e    = 0.05 * percent * 1;
         
-        % <electromagnetic dipoles> alignment, rotation and excitation errors
-        config.fams.bends.labels       = {'b1','b2','b3'};
-        config.fams.bends.sigma_x      = 40 * um * 1;
-        config.fams.bends.sigma_y      = 40 * um * 1;
-        config.fams.bends.sigma_roll   = 0.20 * mrad * 1;
-        config.fams.bends.sigma_e      = 0.05 * percent * 1;
-        config.fams.bends.sigma_e_kdip = 0.10 * percent * 1;  % quadrupole errors due to pole variations
+        %ERRORS FOR DIPOLES B1 AND B2 ARE DEFINED IN GIRDERS AND IN THE
+        %MAGNET BLOCKS
         
-        % <permanent magnet dipoles> alignment, rotation and excitation errors
-        config.fams.cbend.labels     = {'bc'};
-        config.fams.cbend.sigma_y    = 40 * um * 1;
-        config.fams.cbend.sigma_x    = 40 * um * 1;
-        config.fams.cbend.sigma_roll = 0.20 * mrad * 1;
-        config.fams.cbend.sigma_e    = 0.05 * percent * 1;
+        % <dipoles with only one piece> alignment, rotation and excitation errors
+        config.fams.b3bc.labels     = {'b3','bc'};
+        config.fams.b3bc.sigma_y    = 40 * um * 1;
+        config.fams.b3bc.sigma_x    = 40 * um * 1;
+        config.fams.b3bc.sigma_roll = 0.30 * mrad * 1;
+        config.fams.b3bc.sigma_e    = 0.05 * percent * 1;
+        config.fams.b3bc.sigma_e_kdip = 0.10 * percent * 1;  % quadrupole errors due to pole variations
         
         % <girders> alignment and rotation
-        config.girder.girder_error_flag = false;
+        config.girder.girder_error_flag = true;
         config.girder.correlated_errors = false;
-        config.girder.sigma_x     = 100 * um * 1;
-        config.girder.sigma_y     = 100 * um * 1;
-        config.girder.sigma_roll  = 0.20 * mrad * 1;
+        config.girder.sigma_x     = 80 * um * 1;
+        config.girder.sigma_y     = 80 * um * 1;
+        config.girder.sigma_roll  = 0.30 * mrad * 1;
         
         % sets number of segmentations for each family
         families = fieldnames(config.fams);
@@ -142,15 +139,15 @@ finalizations();
             end
         end
         
-        % <electromagnetic dipoles> alignment, rotation and excitation
+        % <dipole pieces> alignment, rotation and excitation
         % errors for each 
-        config.fams.bendblocks.labels       = {'b1','b2','b3'};
-        config.fams.bendblocks.nrsegs       = [1,1,1];
+        config.fams.bendblocks.labels       = {'b1','b2'};
+        config.fams.bendblocks.nrsegs       = [1,1];
         config.fams.bendblocks.sigma_x      = 40 * um * 1;
         config.fams.bendblocks.sigma_y      = 40 * um * 1;
-        config.fams.bendblocks.sigma_roll   = 0.20 * mrad * 1;
-        config.fams.bendblocks.sigma_e      = 0.05 * percent * 0;
-        config.fams.bendblocks.sigma_e_kdip = 0.10 * percent * 0;  % quadrupole errors due to pole variations
+        config.fams.bendblocks.sigma_roll   = 0.30 * mrad * 1;
+        config.fams.bendblocks.sigma_e      = 0.05 * percent * 1;
+        config.fams.bendblocks.sigma_e_kdip = 0.10 * percent * 1;  % quadrupole errors due to pole variations
 
         
         % generates error vectors
@@ -167,6 +164,21 @@ finalizations();
         machine = lnls_latt_err_apply_errors(name, the_ring, errors, fractional_delta);
         
     end
+
+%% BPM and Correctors Errors
+    function machine = create_apply_bpm_errors(machine, family_data)
+        % BPM  anc Corr errors are treated differently from magnet errors:
+        % constants
+        um = 1e-6;
+        
+        control.bpm.idx = family_data.bpm.ATIndex;
+        control.bpm.sigma_offsetx   = 20 * um * 1; % BBA precision
+        control.bpm.sigma_offsety   = 20 * um * 1;
+        
+        cutoff_errors = 1;
+        machine = lnls_latt_err_generate_apply_bpmcorr_errors(name, machine, control, cutoff_errors);
+    end
+
 
 %% Cod Correction
     function machine = correct_orbit(machine, family_data)
@@ -298,25 +310,25 @@ finalizations();
         multi.quadsM.labels = {'qdb1','qda', 'qfa','qfb','qdb2','qf1','qf2','qf3','qf4'};
         multi.quadsM.main_multipole = 2;% positive for normal negative for skew
         multi.quadsM.r0 = 11.7e-3;
-        multi.quadsM.order     = [ 3   4   5   6   7   8   9   10]; % 1 for dipole
-        multi.quadsM.main_vals = 1*ones(1,8)*4e-5;
-        multi.quadsM.skew_vals = 1*ones(1,8)*1e-5;
+        multi.quadsM.order     = [ 3   4   5   6]; % 1 for dipole
+        multi.quadsM.main_vals = ones(1,4)*1.5e-4;
+        multi.quadsM.skew_vals = ones(1,4)*0.5e-4;
         
         % SEXTUPOLES
         multi.sexts.labels = {'sda','sfa','sd1','sf1','sd2','sd3','sf2','sf3','sd4','sd5','sf4','sd6','sdb','sfb'};
         multi.sexts.main_multipole = 3;% positive for normal negative for skew
         multi.sexts.r0 = 11.7e-3;
-        multi.sexts.order     = [4   5   6   7   8   9   10  11]; % 1 for dipole
-        multi.sexts.main_vals = 1*ones(1,8)*4e-5;
-        multi.sexts.skew_vals = 1*ones(1,8)*1e-5;
+        multi.sexts.order     = [4   5   6   7 ]; % 1 for dipole
+        multi.sexts.main_vals = ones(1,4)*1.5e-4;
+        multi.sexts.skew_vals = ones(1,4)*0.5e-4;
         
         % DIPOLES
         multi.bends.labels = {'b1','b2','b3', 'bc'};
         multi.bends.main_multipole = 1;% positive for normal negative for skew
         multi.bends.r0 = 11.7e-3;
-        multi.bends.order = [ 3   4   5   6   7   8   9 ]; % 1 for dipole
-        multi.bends.main_vals = 1*ones(1,7)*4e-5;
-        multi.bends.skew_vals = 1*ones(1,7)*1e-5;
+        multi.bends.order = [ 3   4   5   6]; % 1 for dipole
+        multi.bends.main_vals = ones(1,4)*1.5e-4;
+        multi.bends.skew_vals = ones(1,4)*0.5e-4;
         
         % sets number of segmentations for each family
         families = fieldnames(multi);

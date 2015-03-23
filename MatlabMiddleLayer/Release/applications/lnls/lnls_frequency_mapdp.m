@@ -5,7 +5,7 @@ if ~exist('scaling','var'), scaling = 'linear';end
 emax = abs(emax); xmax = abs(xmax);
 
 en = linspace(-emax,emax,ne_points);
-x = linspace(1e-8,xmax,nx_points);
+x = linspace(-xmax,1e-8,nx_points);
 nturns = 500;
 nt = nextpow2(nturns);
 nturns = 2^nt + 6 - mod(2^nt,6);
@@ -15,12 +15,12 @@ switch scaling
     case 'linear'
     case 'sqrt'
         n=2;
-        en = -emax^((n-1)/n) * abs(en).^(1/n);
-        x =  xmax^((n-1)/n) * abs(x).^(1/n);
+        en = sign(en).*emax^((n-1)/n) * abs(en).^(1/n);
+        x =  sign(x ).*xmax^((n-1)/n) * abs(x ).^(1/n);
     case 'log'
         n=1.0;
-        en = -emax*log(1 + (exp(n)-1) * abs(en)/emax)/n;
-        x =  xmax*log(1 + (exp(n)-1) * abs(x)/xmax)/n;
+        en = sign(en).*emax*log(1 + (exp(n)-1) * abs(en)/emax)/n;
+        x =  sign(x ).*xmax*log(1 + (exp(n)-1) * abs(x )/xmax)/n;
     otherwise
         error('Variable error: scaling must take ''linear'', ''sqrt'' or ''log'' values.');
 end
@@ -33,9 +33,9 @@ num_part = nx_points*ne_points;
 [EN,X] = meshgrid(en,x);
 
 Rin = zeros(6,num_part);
-Rin(1,:) = reshape(EN,1,[]);
+Rin(1,:) = reshape(X,1,[]);
 Rin(3,:) = 5e-4*ones(1,numel(EN));
-Rin(5,:) = reshape(X,1,[]);
+Rin(5,:) = reshape(EN,1,[]);
 
 Rout = ringpass(the_ring,Rin,nturns);
 

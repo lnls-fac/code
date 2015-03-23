@@ -15,12 +15,12 @@ switch scaling
     case 'linear'
     case 'sqrt'
         n=2;
-        x = -xmax^((n-1)/n) * abs(x).^(1/n);
-        y =  ymax^((n-1)/n) * abs(y).^(1/n);
+        x = sign(x).*xmax^((n-1)/n) * abs(x).^(1/n);
+        y = sign(y).*ymax^((n-1)/n) * abs(y).^(1/n);
     case 'log'
         n=1.0;
-        x = -xmax*log(1 + (exp(n)-1) * abs(x)/xmax)/n;
-        y =  ymax*log(1 + (exp(n)-1) * abs(y)/ymax)/n;
+        x = sign(x).*xmax*log(1 + (exp(n)-1) * abs(x)/xmax)/n;
+        y = sign(y).*ymax*log(1 + (exp(n)-1) * abs(y)/ymax)/n;
     otherwise
         error('Variable error: scaling must take ''linear'', ''sqrt'' or ''log'' values.');
 end

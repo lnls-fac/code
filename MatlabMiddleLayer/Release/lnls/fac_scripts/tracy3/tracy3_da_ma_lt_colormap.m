@@ -1,6 +1,10 @@
 function tracy3_da_ma_lt_colormap(path)
 
 global THERING;
+if ~isappdata(0,'ATSUMMARY')
+    ats = atsummary(THERING);
+    setappdata(0,'ATSUMMARY',ats);
+end
 
 % users selects submachine
 prompt = {'Submachine (bo/si)', 'energy [GeV]'};
@@ -18,6 +22,8 @@ if strcmpi(answer{1}, 'bo')
     if isempty(r)
         sirius('BO');
         the_ring = THERING;
+        ats = atsummary(THERING);
+        setappdata(0,'ATSUMMARY',ats);
     else
         the_ring = sirius_bo_lattice(energy);
     end
@@ -51,6 +57,8 @@ else
     if isempty(r)
         sirius('SI');
         the_ring = THERING;
+        ats = atsummary(THERING);
+        setappdata(0,'ATSUMMARY',ats);
     else
         the_ring = sirius_si_lattice(energy);
     end
@@ -90,8 +98,8 @@ twi = calctwiss(the_ring);
 size_font = 28;
 type_colormap = 'Jet';
 limx = 12;
-limy = 3.2;
-lime = 5.5;
+limy = 3.0;
+lime = 5.0;
 
 mostra = 0; % 0 = porcentagem de part perdidas
 % 1 = número medio de voltas
