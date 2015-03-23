@@ -172,11 +172,11 @@ global THERING;
 AD = getad;
 AD.Machine             = 'SIRIUS.V07';           % Will already be defined if setpathmml was used
 AD.SubMachine          = 'StorageRing';  % Will already be defined if setpathmml was used
-AD.OperationalMode     = 'V07.C04';
+AD.OperationalMode     = 'V07.C05';
 AD.Energy              = 3.0;
 AD.InjectionEnergy     = 3.0;
 AD.ModeName            = 'C';
-AD.ModeVersion         = '04';
+AD.ModeVersion         = '05';
 AD.OpsFileExtension    = '';
 
 sirius_si_lattice(AD.Energy, AD.ModeName, AD.ModeVersion);
