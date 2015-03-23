@@ -20,6 +20,8 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
     if strcmp(maquina,'si')==1
         [THERING titulo]=sirius_si_lattice;
         titulo=regexprep(titulo,'_','-');
+        %quebra rede em segmentos de 10 cm
+        THERING=lnls_refine_lattice(THERING,0.1);
         %Calcula parametros de twiss da rede
         twiss = calctwiss(THERING); 
         %Define inicio e fim para o grafico (1 periodo)
@@ -75,8 +77,7 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
     end;
     
     if tipo==0
-        figure1=figure(1);
-        set(figure1, 'Position', [1 1 1000 450]);
+        figure1=figure('Color',[1 1 1],'Position', [1 1 760 472]);
         axes('FontSize',14);
         xlabel({'s [m]'},'FontSize',14);
         ylabel({'\beta [m]'},'FontSize',14);
@@ -145,7 +146,7 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         xlimit=[0 twiss.pos(fim)];
     
         %Create Figure 
-        figure1 = figure('Color',[1 1 1]);  
+        figure1 = figure('Color',[1 1 1],'Position', [1 1 760 472]);  
         annotation('textbox', [0.3,0.88,0.1,0.1],...
            'FontSize',14,...
            'FontWeight','bold',...
@@ -186,7 +187,8 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         by=plot(twiss.pos(ini:fim),twiss.betay(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
         xlabel('s [m]', 'FontSize',14);
         ylabel({'\beta [m]'},'FontSize',14);
-        legend([bx,by],'\beta_x','\beta_y','Location','northeast','boxoff'); 
+        legend('\beta_x','\beta_y','Location','northeast');
+        %legend('boxoff');
         grid on;
         box on; 
     end;
