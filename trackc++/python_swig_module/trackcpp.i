@@ -18,6 +18,7 @@
 namespace std {
     %template(CppStringVector) vector<string>;
     %template(CppDoubleVector) vector<double>;
+    %template(CppDoublePVector) vector<double*>;
     %template(CppElementVector) vector<Element>;
     %template(CppDoublePosVector) vector< Pos<double> >;
 }

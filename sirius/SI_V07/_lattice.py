@@ -2,11 +2,9 @@
 
 import math
 import pyaccel
-from . import optics_mode_C04 as default_optics_mode
+from . import optics_mode_C04 as _default_optics_mode
 
-harmonic_number = 864
-
-def lattice():
+def create_lattice():
 
     # -- selection of optical mode --
     global default_optics_mode
@@ -18,7 +16,7 @@ def lattice():
     sextupole = pyaccel.elements.Sextupole
     rbend_sirius = pyaccel.elements.RBend
     rfcavity = pyaccel.elements.RFCavity
-    strengths = default_optics_mode.strengths
+    strengths = _default_optics_mode.strengths
 
     # -- drifts --
     LIA = drift('lia', 2.4129)
