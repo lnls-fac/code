@@ -1,11 +1,5 @@
 function tracy3_da_ma_lt(path, types)
 
-global THERING;
-if ~isappdata(0,'ATSUMMARY')
-    ats = atsummary(THERING);
-    setappdata(0,'ATSUMMARY',ats);
-end
-
 if ~exist('types','var'), types = {'xy','ex','ma'};end
 
 if ~iscell(types), types = {types}; end
@@ -61,14 +55,10 @@ else
     r = which('sirius_si_lattice.m');
     if isempty(r)
         sirius('SI');
-        the_ring = THERING;
-        ats = atsummary(THERING);
-        setappdata(0,'ATSUMMARY',ats);
-    else
-        the_ring = sirius_si_lattice(energy);
     end
     
-    ats = getappdata(0, 'ATSUMMARY');
+    the_ring = sirius_si_lattice(energy);
+    ats = atsummary(the_ring);
     params.E     = energy * 1e9;
     % Data given by Natalia
     params.emit0 = 0.306e-9; %ats.naturalEmittance;

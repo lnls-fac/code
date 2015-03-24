@@ -1,11 +1,5 @@
 function tracy3_da_ma_lt_colormap(path)
 
-global THERING;
-if ~isappdata(0,'ATSUMMARY')
-    ats = atsummary(THERING);
-    setappdata(0,'ATSUMMARY',ats);
-end
-
 % users selects submachine
 prompt = {'Submachine (bo/si)', 'energy [GeV]'};
 defaultanswer = {'si', '3.0'};
@@ -24,7 +18,7 @@ if strcmpi(answer{1}, 'bo')
     end
     
     the_ring = sirius_bo_lattice(energy);
-    ats = atsummary(THERING);
+    ats = atsummary(the_ring);
     if (energy == 0.15)
         % BOOSTER (equillibirum parameters from LINAC)
         params.E     = energy * 1e9;
@@ -52,14 +46,10 @@ else
     r = which('sirius_si_lattice.m');
     if isempty(r)
         sirius('SI');
-        the_ring = THERING;
-        ats = atsummary(THERING);
-        setappdata(0,'ATSUMMARY',ats);
-    else
-        the_ring = sirius_si_lattice(energy);
     end
     
-    ats = getappdata(0, 'ATSUMMARY');
+    the_ring = sirius_si_lattice(energy);
+    ats = atsummary(the_ring);
     params.E     = energy * 1e9;
     % Data given by Natalia
     params.emit0 = 0.306e-9; %ats.naturalEmittance;

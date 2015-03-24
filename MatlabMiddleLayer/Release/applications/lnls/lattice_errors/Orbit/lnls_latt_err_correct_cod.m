@@ -92,6 +92,8 @@ end
 
 sext_idx = findcells(machine{1},'PolynomB');
 random_cod = zeros(2,length(orbit.bpm_idx));
+ids_idx = findcells(machine{1}, 'PassMethod', 'LNLSThickEPUPass');
+
 for i=1:nr_machines
     sext_str = getcellstruct(machine{i}, 'PolynomB', sext_idx, 1, 3);
     
@@ -115,10 +117,15 @@ for i=1:nr_machines
     
     niter = zeros(1,length(orbit.sext_ramp));
     ntimes = niter;
+
+    machine{i} = turn_ids_off(machine{i}, ids_idx);
     for j=1:length(orbit.sext_ramp)
+        if (j == length(orbit.sext_ramp))
+            machine{i} = turn_ids_on(machine{i}, ids_idx);
+        end
         machine{i} = setcellstruct(machine{i},'PolynomB',sext_idx,orbit.sext_ramp(j)*sext_str, 1, 3);
         if calc_respm
-            orbit.respm = calc_respm_cod(machine{i}, orbit.bpm_idx, orbit.hcm_idx, orbit.vcm_idx);
+            orbit.respm = calc_respm_cod(machine{i}, orbit.bpm_idx, orbit.hcm_idx, orbit.vcm_idx, 1, false);
             orbit.respm = orbit.respm.respm;
         end
         [machine{i},hkck,vkck,codx,cody,niter(j),ntimes(j)] = cod_sg(orbit, machine{i}, gcodx, gcody);
@@ -142,6 +149,19 @@ for i=1:nr_machines
     
 end
 fprintf('--------------------------------------------------------------------------------------------------- \n');
+
+function the_ring = turn_ids_off(the_ring_original, idx)
+the_ring = the_ring_original;
+for i=idx
+    the_ring{i}.PassMethod = 'DriftPass';
+end
+
+function the_ring = turn_ids_on(the_ring_original, idx)
+the_ring = the_ring_original;
+for i=idx
+    the_ring{i}.PassMethod = 'LNLSThickEPUPass';
+end
+
 
  
 function [maxv,rmsv] = get_max_rms(v,f)

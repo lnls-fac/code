@@ -31,12 +31,14 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
     elseif strcmp(maquina,'bo')==1
         [THERING titulo]=sirius_bo_lattice;
         titulo=regexprep(titulo,'_','-');
+        %quebra rede em segmentos de 10 cm
+        THERING=lnls_refine_lattice(THERING,0.1);
         %Calcula parametros de twiss da rede
         twiss = calctwiss(THERING); 
         %Define inicio e fim para o grafico (5 periodos)
         mqf = findcells(THERING,'FamName','qf');
         ini=1;
-        fim=mqf(6);
+        fim=mqf(10);
     elseif strcmp(maquina,'tb')==1
         [THERING titulo Twiss0]=sirius_tb_lattice;
         titulo=regexprep(titulo,'_','-');
@@ -68,13 +70,11 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         disp=[twiss_ts.Dispersion];
         twiss.etax=disp(1,:)';
     else 
-        fprinf('Maquina nao reconhecida');
+        fprintf('Maquina nao reconhecida');
         %break;
     end;
     
-    if exist('tipo', 'var')==0
-        tipo = 1;
-    end;
+    if ~exist('tipo', 'var'), tipo = 1; end;
     
     if tipo==0
         figure1=figure('Color',[1 1 1],'Position', [1 1 760 472]);
@@ -156,10 +156,10 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         %Grafico dispersao horizontal
         subplot('position',[0.1 0.66 0.85 0.26],'FontSize',14);
         hold all;
-        plot(twiss.pos(ini:fim),twiss.etax(ini:fim),'LineWidth',1.5,'Color',[0 1 0]);
-        xlim(xlimit);
-        ylab=ylabel('\eta_x [m]', 'FontSize',14);
-        set(ylab, 'position', get(ylab,'position')+[0.6,0,0]);
+        plot(twiss.pos(ini:fim),100*twiss.etax(ini:fim),'LineWidth',1.5,'Color',[0 1 0]);
+        xlim(xlimit); ylim([-0.1, 105*max(twiss.etax)]);
+        ylabel('\eta_x [cm]', 'FontSize',14);
+%         set(ylab, 'position', get(ylab,'position')+[0.6,0,0]);
         grid on;
         box on;
 
@@ -188,19 +188,20 @@ function sirius_plot_twiss(maquina,tipo,save_fig)
         xlabel('s [m]', 'FontSize',14);
         ylabel({'\beta [m]'},'FontSize',14);
         legend('\beta_x','\beta_y','Location','northeast');
-        %legend('boxoff');
+        legend('boxoff');
         grid on;
         box on; 
     end;
     
+    if ~exist('save_fig','var'), save_fig = false;end
 
-    if exist('save_fig', 'var')
+    if save_fig
         %if strcmp(save_fig,'pdf')==1
         %    print('-dpdf',[maquina 'twiss.pdf']);
         %else
         %    print('-dpng',[maquina 'twiss.png']);
         plot2svg([maquina '_twiss.svg'],figure1);
-        
+        saveas(figure1, [maquina '_twiss']);
     end
    
 end
