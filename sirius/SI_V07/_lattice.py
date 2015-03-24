@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 
-import math
-import pyaccel
-from . import optics_mode_C04 as _default_optics_mode
+import math as _math
+import pyaccel as _pyaccel
+import mathphys.constants as _consts
+
+# -- default global parameters
+_energy = 3.0e9 # [eV]
+_harmonic_number = 864
+#from . import optics_mode_C04 as _default_optics_mode
+from . import optics_mode_C05 as _default_optics_mode
 
 def create_lattice():
 
@@ -10,12 +16,12 @@ def create_lattice():
     global default_optics_mode
 
     # -- shortcut symbols --
-    marker = pyaccel.elements.Marker
-    drift = pyaccel.elements.Drift
-    quadrupole = pyaccel.elements.Quadrupole
-    sextupole = pyaccel.elements.Sextupole
-    rbend_sirius = pyaccel.elements.RBend
-    rfcavity = pyaccel.elements.RFCavity
+    marker = _pyaccel.elements.Marker
+    drift = _pyaccel.elements.Drift
+    quadrupole = _pyaccel.elements.Quadrupole
+    sextupole = _pyaccel.elements.Sextupole
+    rbend_sirius = _pyaccel.elements.RBend
+    rfcavity = _pyaccel.elements.RFCavity
     strengths = _default_optics_mode.strengths
 
     # -- drifts --
@@ -53,7 +59,7 @@ def create_lattice():
 
 
     # -- dipoles --
-    deg2rad = math.pi/180.0
+    deg2rad = _math.pi/180.0
 
     B1E = rbend_sirius('b1', 0.828/2,  2.7553*deg2rad/2, 1.4143*deg2rad/2, 0,   0, 0, 0, [0, 0, 0], [0, -0.78, 0])
     MB1 = marker('mb1')
@@ -207,10 +213,22 @@ def create_lattice():
     S20 = [GIRDER_20M1, GIRDER_20S, GIRDER_20M2, B1, GIRDER_20C1, B2, GIRDER_20C2, B3, GIRDER_20C3, B3, GIRDER_20C4, B2, GIRDER_20C5, B1];
 
     anel = [S01,S02,S03,S04,S05,S06,S07,S08,S09,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20];
-    the_ring = pyaccel.lattice.buildlat(anel)
+    the_ring = _pyaccel.lattice.buildlat(anel)
 
     # -- shifts model to marker 'start'
-    idx = pyaccel.lattice.findcells(the_ring, 'fam_name', 'start')
-    the_ring = pyaccel.lattice.shiftlat(the_ring, idx[0])
+    idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'start')
+    the_ring = _pyaccel.lattice.shiftlat(the_ring, idx[0])
+
+    # -- sets rf frequency
+    sets_rf_frequency(the_ring)
 
     return the_ring
+
+def sets_rf_frequency(the_ring):
+
+    circumference = _pyaccel.lattice.findspos(the_ring, len(the_ring)+1)
+    rev_frequency = _consts.light_speed / circumference
+    rf_frequency  = _harmonic_number * rev_frequency
+    idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')
+    for i in idx:
+        the_ring[i].frequency = rf_frequency

@@ -297,7 +297,7 @@ Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem, const Accelerator&
 
     //double nv = elem.voltage / elem.energy;
 	double nv = elem.voltage / accelerator.energy;
-    if (elem.length == 0) {
+	if (elem.length == 0) {
 		T &de = pos.de, &dl = pos.dl;
 		de +=  -nv * sin(TWOPI*elem.frequency * dl/ light_speed);
     } else {
@@ -316,8 +316,8 @@ Status::type pm_cavity_pass(Pos<T> &pos, const Element &elem, const Accelerator&
 		rx += norml * px;
 		ry += norml * py;
 		dl += 0.5 * norml * pnorm * (px*px + py*py);
-    }
-    local_2_global(pos, elem);
+	}
+	local_2_global(pos, elem);
 
    	return Status::success;
 

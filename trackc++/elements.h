@@ -28,27 +28,27 @@ public:
 //		polynom_a(default_polynom), polynom_b(default_polynom),
 //		hmax(DBL_MAX), vmax(DBL_MAX)
 
-	std::string			fam_name;
-	int				pass_method = PassMethod::pm_drift_pass;
+	std::string		fam_name;
+	int						pass_method = PassMethod::pm_drift_pass;
 	double				length      = 0;
-	int				nr_steps    = 1;
+	int						nr_steps    = 1;
 	double				hkick       = 0;
 	double				vkick       = 0;
 	double				angle       = 0;
 	double				angle_in    = 0;
 	double				angle_out   = 0;
 	double				gap         = 0;
-	double                          fint_in     = 0;
-	double                          fint_out    = 0;
+	double				fint_in     = 0;
+	double				fint_out    = 0;
 	double				thin_KL     = 0;
 	double				thin_SL     = 0;
-	double                          frequency   = 0;
-	double                          voltage     = 0;
-	std::vector<double>             polynom_a   = default_polynom;
-	std::vector<double>             polynom_b   = default_polynom;
-	const Kicktable*                kicktable   = nullptr;
-	double                          hmax        = DBL_MAX;
-	double                          vmax        = DBL_MAX;
+	double				frequency   = 0;
+	double				voltage     = 0;
+	std::vector<double>	polynom_a   = default_polynom;
+	std::vector<double>	polynom_b   = default_polynom;
+	const Kicktable*		kicktable   = nullptr;
+	double				hmax = DBL_MAX;
+	double				vmax = DBL_MAX;
 	double				t_in[6],  t_out[6];
 	double				r_in[36], r_out[36];
 

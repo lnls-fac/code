@@ -70,6 +70,13 @@ Status::type read_flat_file_trackcpp(const std::string& filename, Accelerator& a
 			for(unsigned int i = 0; i<((unsigned int)PassMethod::pm_nr_pms); ++i) {
 				if (pass_method.compare(pm_dict[i]) == 0) {
 					e.pass_method = i;
+                    if (pass_method.compare("kicktable_pass") == 0) {
+                        Status::type status = add_kicktable(e.fam_name + ".txt", accelerator.kicktables, e.kicktable);
+				        if (status != Status::success) {
+                            return status;
+                        } else {
+                        }
+                    }
 					found_pm = true;
 					break;
 				}
