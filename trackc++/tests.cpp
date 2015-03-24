@@ -309,13 +309,13 @@ int cmd_tests(const std::vector<std::string>& args) {
 	//test_linepass(accelerator);
 	//test_ringpass(accelerator);
 	//test_linepass_tpsa(the_ring);
-	//test_findorbit6(accelerator);
+	test_findorbit6(accelerator);
 	//test_dynap_xy(the_ring);
 	//test_read_flat_file(accelerator);
 
 	//test_cmd_dynap_xy();
 	//test_cmd_dynap_ex();
-	test_cmd_dynap_ma();
+	//test_cmd_dynap_ma();
 	//test_cmd_track_linepass();
 	//test_kicktable(accelerator);
 

@@ -93,8 +93,8 @@ fams       = findmemberof(model_name);
 the_ring = insert_multipoles(the_ring, fams, monoms, Bn_normal, Bn_skew, main_monom, r0, fam_data);
 
 
-% CVS
-% ===
+% QS
+% ==
 model_name = 'qs';
 r0         = 11.7/1000;
 % systematic multipoles from '2015-02-27 Sextupolo_Anel_S_CV_Modelo 1_-12_12mm_-500_500mm.txt'

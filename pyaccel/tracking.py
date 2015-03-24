@@ -8,7 +8,7 @@ class TrackingException(Exception):
 
 
 def elementpass(element, pos, accelerator):
-    """Track particle(s) thouhg an element.
+    """Track particle(s) through an element.
 
     Accepts one or multiple particles. In the latter case, a list of particles
     or numpy 2D array (with particle as first index) should be given as input;
@@ -209,18 +209,18 @@ def ringpass(accelerator, pos, num_turns=1, trajectory=False, offset=0):
     return pos_out, turn_out, offset_out, plane_out
 
 
-def findorbit6(accelerator):
-    """Calculate 6D orbit.
+def findorbit6(accelerator, indices=None):
+    """Calculate 6D orbit closed-orbit.
 
-    Accepts one or multiple particles. In the latter case, a list of particles
-    or numpy 2D array (with particle as first index) should be given as input;
-    also, outputs get an additional dimension, with particle as first index.
+    Accepts an optional list of indices of ring elements where closed-orbit
+    coordinates are to be returned. If this argument is not passed closed-orbit
+    positions are returned at the start of every element.
 
     Keyword arguments:
     accelerator -- Accelerator object
 
     Returns:
-    orbit -- 6D position at each element
+    orbit -- 6D position at elements
 
     Raises TrackingException
     """
@@ -230,4 +230,11 @@ def findorbit6(accelerator):
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 
-    return orbit
+    if indices is None:
+        indices = range(len(orbit))
+
+    orbit_out = _numpy.zeros((6,len(indices)))
+    for i in range(len(indices)):
+        o = orbit[indices[i]]
+        orbit_out[:,i] = (o.rx,o.px,o.ry,o.py,o.de,o.dl)
+    return orbit_out
