@@ -2,6 +2,7 @@
 import collections
 import trackcpp as _trackcpp
 from . import elements
+import numpy as _numpy
 
 Lattice = _trackcpp.CppElementVector
 
@@ -49,9 +50,9 @@ def findspos(lattice, indices = None):
         pos[i] = pos[i-1] + lattice[i-1].length
     pos[-1] = pos[-2] + lattice[-1].length
     if is_number:
-        return pos[i]
+        return _numpy.array(pos[i])
     else:
-        return [pos[i] for i in indices]
+        return _numpy.array([pos[i] for i in indices])
 
 def findcells(lattice, attribute_name, value=None):
     """returns a list with indices of elements that match criteria 'attribute_name=value'"""

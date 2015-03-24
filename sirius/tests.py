@@ -4,17 +4,10 @@ import sirius.SI_V07 as sirius
 import pyaccel
 import matplotlib.pyplot as plt
 
-def plot_phase_space():
+def test_plot_phase_space():
 
     # creates accelerate and inits its lattice
-    accelerator = pyaccel.accelerator.Accelerator()
-    accelerator.lattice = sirius.create_lattice()
-
-    # global tracking parameters
-    accelerator.cavity_on = False
-    accelerator.radiation_on = False
-    accelerator.vchamber_on = False
-    accelerator.energy = 3.0e9 #[eV]
+    accelerator = sirius.create_accelerator(cavity_on=False,radiation_on=False,vchamber_on=True)
 
     # aux. parameters and symbols
     the_ring = accelerator.lattice
@@ -36,24 +29,19 @@ def plot_phase_space():
 
     plt.show()
 
-def find_orbit6():
+def test_findorbit6():
 
     # creates accelerate and inits its lattice
-    accelerator = pyaccel.accelerator.Accelerator()
-    accelerator.lattice = sirius.create_lattice()
+    accelerator = sirius.create_accelerator(cavity_on=True,radiation_on=True,vchamber_on=True)
 
-    # global tracking parameters
-    accelerator.cavity_on = True
-    accelerator.radiation_on = True
-    accelerator.vchamber_on = False
-    accelerator.energy = sirius.energy
-    accelerator.harmonic_number = sirius.harmonic_number
-
-    # finds orbit
+    # finds 6d closed-orbit
     orbit = pyaccel.tracking.findorbit6(accelerator)
+
+    # plots orbit at BPMs
+    bpms = pyaccel.lattice.findcells(accelerator.lattice, 'fam_name', 'bpm')
     pos = pyaccel.lattice.findspos(accelerator.lattice)
-    plt.plot(pos, orbit[0,:])
+    plt.plot(pos[bpms], orbit[0,bpms])
     plt.show()
 
-#plot_phase_space()
-find_orbit6()
+test_plot_phase_space()
+#test_findorbit6()

@@ -1,6 +1,6 @@
 # firstRun_000493.m
 
-label = 'C04'
+mode = 'C04'
 
 strengths = {
 

@@ -1,6 +1,6 @@
 # fr0869_000527.m
 
-label = 'C05'
+mode = 'C05'
 
 strengths = {
 
