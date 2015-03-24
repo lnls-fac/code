@@ -309,7 +309,7 @@ class FacEvaluator extends FacConnection {
     );
     static $valid_operators = array('+', '-', '*', '/');
     static $valid_functions = array(
-        'deg2rad', 'rad2deg',
+        'pi', 'deg2rad', 'rad2deg',
         'joule_2_ev', 'gamma', 'beta',
         'velocity', 'brho', 'critical_energy',
         'U0', 'sync_phase', 'rf_energy_acceptance',
