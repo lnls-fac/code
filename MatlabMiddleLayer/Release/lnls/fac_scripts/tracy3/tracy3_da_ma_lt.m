@@ -1,21 +1,17 @@
-function tracy3_da_ma_lt(path, types)
-
-if ~exist('types','var'), types = {'xy','ex','ma'};end
-
-if ~iscell(types), types = {types}; end
-xy = false; ma = false; ex = false;
-if any(strcmp('xy',types)), xy = true;end
-if any(strcmp('ex',types)), ex = true;end
-if any(strcmp('ma',types)), ma = true;end
-
+function tracy3_da_ma_lt(path)
 
 % users selects submachine
-prompt = {'Submachine (bo/si)', 'energy [GeV]', 'number of plots'};
-defaultanswer = {'si', '3.0', '2'};
+prompt = {'Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots'};
+defaultanswer = {'si', '3.0', '2','ma xy ex'};
 answer = inputdlg(prompt,'Select submachine, energy and nr of plots', 1, defaultanswer);
 if isempty(answer), return; end;
 energy = str2double(answer{2});
 n_calls = round(str2double(answer{3}));
+
+xy = false; ma = false; ex = false;
+if any(strfind(answer{4},'xy')), xy = true;end
+if any(strfind(answer{4},'ex')), ex = true;end
+if any(strfind(answer{4},'ma')), ma = true;end
 
 if strcmpi(answer{1}, 'bo')
     if ~exist('path','var')
@@ -96,9 +92,9 @@ twi = calctwiss(the_ring);
 color_vec = {'b','r','g','m','c','k','y'};
 esp_lin = 5;
 size_font = 24;
-limx = 15;
-limy = 5;
-lime = 6;
+limx = 12;
+limy = 3.5;
+lime = 5;
 scrsz = get(0,'ScreenSize');
 xi = scrsz(4)/6;
 yi = scrsz(4)/10;
@@ -277,4 +273,5 @@ end
 if ma
     legend(pllt(:,1),'show',cell_leg_text, 'Location','Best');
     title(falt,['MA - ' title_text{1}]);
+    lnls_drawlattice(the_ring,10, 0, true,0.2, false, falt);
 end
