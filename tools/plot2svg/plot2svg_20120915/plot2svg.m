@@ -873,7 +873,7 @@ if strcmp(get(ax,'Visible'),'on')
         if strcmp(get(ax,'TickDir'),'out')
             label_distance = -(0.02 + ticklength);
         else
-            label_distance = 0.00;%-0.02; %mudei aqui: Fernando;
+            label_distance = -0.005;%-0.02; %mudei aqui: Fernando;
         end
     else
         ticklength = both_ticklength(2);

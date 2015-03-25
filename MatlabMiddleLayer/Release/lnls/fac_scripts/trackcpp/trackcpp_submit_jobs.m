@@ -22,8 +22,19 @@ for ii = 1:nfolder
     if ~exist(inpfile,'file'), error('input file does not exist');end
     comm = [pyjob, ' --description ', sprintf('"rms%02d: ',ii), description,'"'];
     comm = [comm, ' --exec ', exec_scpt, ' --possibleHosts ', possible_hosts, ' --priority ', priority];
-    [~, res] = system('ls | grep flatfile');
-    comm = [comm, ' --inputFiles ', inpfile, ',',res];
+   
+    fnames = dir();
+    strf = [' --inputFiles ', inpfile];
+    for i=1:length(fnames)
+        if ~isempty(strfind(fnames(i).name, 'kicktable')) || ~isempty(strfind(fnames(i).name, 'flatfile'))
+            strf = [strf, ',', fnames(i).name];
+        end
+    end
+    comm = [comm, strf];
+    
+%     [~, res] = system('ls | grep "flatfile\|kicktable"');
+%     comm = [comm, ' --inputFiles ', inpfile, ',',res];
+    
     fh = fopen('tjoaieh.sh','w');
     fprintf(fh,SCRIPT,comm);
     fclose(fh);
