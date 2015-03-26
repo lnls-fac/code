@@ -46,9 +46,9 @@ nr_machines = length(machine);
 calc_respm = false;
 if ~isfield(optics,'respm'), calc_respm = true; end
 
-optics2 = rmfield(optics,'respm');
+optics2 = optics;
+if ~calc_respm, optics2 = rmfield(optics2,'respm'); end
 save([name,'_correct_optics_input.mat'], 'optics2');
-
 
 fprintf(['Correcting Optics [' datestr(now) ']:\n']);
 if isnumeric(optics.svs), svs = num2str(optics.svs);else svs = optics.svs;end

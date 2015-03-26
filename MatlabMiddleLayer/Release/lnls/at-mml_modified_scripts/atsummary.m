@@ -35,7 +35,8 @@ BendFamilies = unique(getcellstruct(the_ring, 'FamName', idx));
 the_ring = lnls_refine_lattice(the_ring, max_length, BendFamilies);
 
 % Structure to store info
-r.e0 = getenergy('Model');
+ind = findcells(the_ring,'Energy');
+r.e0 = the_ring{ind(1)}.Energy/1e9;
 r.circumference = findspos(the_ring, length(the_ring)+1);
 r.revTime = r.circumference / const.c;
 r.revFreq = const.c / r.circumference;

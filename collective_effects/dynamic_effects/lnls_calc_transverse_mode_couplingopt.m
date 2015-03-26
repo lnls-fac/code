@@ -1,5 +1,17 @@
-function delta = lnls_calc_transverse_mode_couplingopt(w,Z, n_rad, n_azi, sigma, I_b, ...
-    E, w0, nut, nus, eta, chrom, nb, mu)
+function delta = lnls_calc_transverse_mode_couplingopt(w, Z, params)
+
+n_rad = params.n_rad;
+n_azi = params.n_azi;
+sigma = params.sigma;
+I_b   = params.I_b;
+E     = params.E;
+w0    = params.w0;
+nus   = params.nus;
+nut   = params.nut;
+chrom = params.chrom;
+eta   = params.eta;
+nb    = params.nb;
+mu    = params.mu;
 
 c = 299792458;
 

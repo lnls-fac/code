@@ -52,7 +52,7 @@ if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,
     if strcmp(phase,'phase_2')
         budget{i}.quantity = 8; 
     end
-    budget{i}.betax = 4.1;
+    budget{i}.betax = 1.5;
     budget{i}.betay = 1.5;
   
     epb     = [1 1 1 1];
@@ -139,7 +139,7 @@ if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) || any(strcmp(select
         budget{i}.quantity = 8; 
     end
     budget{i}.betax = 16.9;
-    budget{i}.betay = 5;
+    budget{i}.betay = 4;
     
     epb     = [1 1 1];
     mub     = [1 1 1];

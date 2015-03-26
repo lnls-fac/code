@@ -2,6 +2,7 @@ function varargout = lnls_characterize_tmci(ringdata,budget,I,sigma,plane,n_azi,
 
 w = ringdata.w;
 
+
 %% Load parameters
 if strcmp(plane,'v')
     betas = 'betay';
@@ -39,9 +40,20 @@ fprintf('%-20s: %-20.4g\n\n','Damping Time [ms]', tau*1e3);
 fprintf('I [mA]: '); fprintf('%-5.3g ', I*1e3);fprintf('\n');
 fprintf('Stable? ');
 
+params.n_rad = n_rad;  
+params.n_azi = n_azi;  
+params.sigma = sigma;  
+params.I_b   = I_b;   
+params.E     = E;   
+params.w0    = w0;   
+params.nus   = nus;
+params.nut   = nut;
+params.chrom = chrom;
+params.eta   = eta;   
+params.nb    = nb;   
+params.mu    = mu; 
 
-delta =lnls_calc_transverse_mode_couplingopt(w, Zt, n_rad, n_azi, sigma, ...
-    I, E, w0, nut, nus, eta, chrom, nb, mu);
+delta =lnls_calc_transverse_mode_couplingopt(w, Zt, params);
 
 first = true;
 for i = 1:length(I)
@@ -71,8 +83,7 @@ fprintf('\n\n\n');
 figure1 = figure('OuterPosition',[66           0         929        1057]);
 
 % Create axes
-axes1 = axes('Parent',figure1,...
-    'Position',[0.0653377630121816 0.0481310156240588 0.878183831672204 0.424150434269331]);
+axes1 = axes('Parent',figure1,'Position',[0.065 0.048 0.878 0.424]);
 box(axes1,'on');
 hold(axes1,'all');
 % Create multiple lines using matrix input to plot
@@ -86,8 +97,7 @@ title({'Real Tune Shifts'});
 
 
 % Create axes
-axes2 = axes('Parent',figure1,...
-    'Position',[0.0697674418604649 0.563326916471794 0.558139534883721 0.405367231638418]);
+axes2 = axes('Parent',figure1,'Position',[0.070 0.563 0.558 0.405]);
 box(axes2,'on');
 hold(axes2,'all');
 % Create multiple lines using matrix input to plot
@@ -125,11 +135,8 @@ string = [string , {sprintf('Chromaticity:  %3.2f', chrom)},{' '}];
 string = [string , {sprintf('Number of azimutal modes:  %d',n_azi)}];
 string = [string , {sprintf('Number of radial modes:    %d',n_rad)}];
 
-annotation(figure1,'textbox',...
-    [0.672203765227021 0.567164179104478 0.264673311184935 0.399786780383795],...
-    'String',string,...
-    'FontSize',14,...
-    'FitBoxToText','off');
+annotation(figure1,'textbox',[0.672 0.567 0.265 0.400],...
+    'String',string,'FontSize',14,'FitBoxToText','off');
 
 if save
     saveas(figure1,['tmci_' plane '_' ringdata.stage '.fig']);
