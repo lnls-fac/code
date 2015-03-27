@@ -38,9 +38,9 @@ DispNames = getcellstruct(budget,'name',1:length(budget));
 labelx = 'bla';
 labely = 'blo';
 
-% create_figures(w, Zl, escalax, escalay, labelx, labely, DispNames, save, name);
-% 
-% create_figures(w, Zh, escalax, escalay, labelx, labely, DispNames, save, name);
+create_figures(w, Zl, escalax, escalay, labelx, labely, DispNames, save, name);
+
+create_figures(w, Zh, escalax, escalay, labelx, labely, DispNames, save, name);
 
 create_figures(w, Zv, escalax, escalay, labelx, labely, DispNames, save, name);
 
@@ -56,9 +56,13 @@ end
 w = repmat(w,size(Z,1),1);
 indp = ones(size(Z));
 indn = [];
+IZpos = imag(-Z);
+IZneg = imag(Z);
 if strcmp(scaley,'log')
     indn = imag(-Z) < 0;
     indp = imag(-Z) > 0;
+    IZpos(indn) = 0;
+    IZneg(indp) = 0;
 end
 
 
@@ -84,23 +88,23 @@ ylim(axes1,[min(abs(real(Z(:)))); max(abs(real(Z(:))))]);
 axes2 = axes('Parent',f1,'Position',[0.088 0.536 0.885 0.432],...
     'FontSize',16,'YScale',scaley,'YMinorTick','on',...
                   'XScale',scalex,'XMinorTick','on',...
-    'XTickLabel',{'','','','','','','','',''});
+    'XTickLabel',{''});
 box(axes2,'on');hold(axes2,'all');grid(axes2,'on');
 
 plot1 = zeros(1,size(Z,1));
 for i=1:size(Z,1)
-    plot1(i) = plot(w(i,indp(i,:)),-imag(Z(i,indp(i,:))),'Parent',axes2,'LineWidth',2);
-    set(plot1(i),'DisplayName',DispNames{i});
+    plot1(i) = plot(w(i,:),IZpos(i,:),'Parent',axes2,'LineWidth',2,...
+                    'DisplayName',DispNames{i});
 end
 legend(axes2,'show','Location','Best');
 for i=1:size(Z,1)
-plot(w(i,indn(i,:)),imag(Z(i,indn(i,:))),'Parent',axes2,'LineWidth',2,...
+plot(w(i,:),IZneg(i,:),'Parent',axes2,'LineWidth',2,...
     'Color',get(plot1(i),'Color'),'LineStyle','--');
 end
 ylabel(['-Im(',labely,') [\Omega]'],'FontSize',16);
 xlim(axes2,[min([w(indp);w(indn)]), max([w(indp);w(indn)])]);
-ylim(axes2,[min([imag(-Z(indp)); imag(Z(indn))]), ...
-            max([imag(-Z(indp)); imag(Z(indn))])]);
+ylim(axes2,[min([IZpos(indp); IZneg(indn)]), ...
+            max([IZpos(indp); IZneg(indn)])]);
 
 if save
     if ~exist('name','var')
