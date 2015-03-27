@@ -173,6 +173,7 @@ class FacParameterWriter extends FacParameter {
     {
         $table = new FacTable();
         $table->rename_parameter($this->parameter, $new_name);
+        $table->rename_dependencies($this->parameter, $new_name);
 
         return $table->commit();
     }
