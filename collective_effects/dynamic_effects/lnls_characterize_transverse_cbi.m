@@ -1,5 +1,5 @@
 % function lnls_characterize_transverse_cbi(ringdata, budget,plane, n_azi, n_rad, chrom, save)
-function lnls_characterize_transverse_cbi(ringdata, budget,plane, azi_modes, chrom, save)
+function deltaw = lnls_characterize_transverse_cbi(ringdata, budget,plane, azi_modes, chrom, save)
 % n_rad = 4;
 % n_azi = 6;
 w = ringdata.w;
@@ -200,25 +200,27 @@ retune_shift = [];
 imidx = [];
 reidx = [];
 n_uns_modes = [];
-for i=chrom
+deltaw = zeros(length(azi_modes),nb,length(chrom));
+for i=1:length(chrom)
     g_rate = [];
     ig_rate = [];
     tu_shift = [];
     itu_shift = [];
     n_uns_mode = [];
-    fprintf('%-5.3g:  ',i);
-    for m=azi_modes
-        deltaw = lnls_calc_transverse_cbi(w,Zt, sigma, nb, w0, nus, nut, i, eta, m, E, I_tot);
-        [gmax igmax] = max(imag(deltaw));
-        if i==0 && m==0;
-            deltaw0 = deltaw;
+    fprintf('%-5.3g:  ',chrom(i));
+    for m=1:length(azi_modes)
+        deltaw(m,:,i) = lnls_calc_transverse_cbi(w,Zt, sigma, nb, w0, nus,...
+              nut, chrom(i), eta, azi_modes(m), E, I_tot);
+        [gmax igmax] = max(imag(deltaw(m,:,i)));
+        if chrom(i)==0 && azi_modes(m)==0;
+            deltaw0 = deltaw(m,:,i);
         end
         g_rate = [g_rate, gmax];
         ig_rate = [ig_rate, igmax];
-        [tumax itumax] = max(abs(real(deltaw)));
-        tu_shift = [tu_shift, real(deltaw(itumax))];
+        [tumax itumax] = max(abs(real(deltaw(m,:,i))));
+        tu_shift = [tu_shift, real(deltaw(m,itumax,i))];
         itu_shift = [itu_shift, itumax];
-        n = imag(deltaw) > 1/tau ;
+        n = imag(deltaw(m,:,i)) > 1/tau ;
         n = sum(n);
         n_uns_mode = [n_uns_mode, n];
         fprintf('%-5d ',n);
@@ -233,121 +235,63 @@ end
 fprintf('\n\n');
 rel_tuneshift = retune_shift'/w0/nus;
 rel_tuneshift0  = real(deltaw0)/w0/nus;
-rel_growth    = imtune_shift'*tau;
-rel_growth0   = imag(deltaw0)*tau;
+rel_growth    = imtune_shift';
+rel_growth0   = imag(deltaw0);
 
 
 %% Plot Results
 
-% Create figure
-scrsz = get(0,'ScreenSize');
-figure1 = figure('OuterPosition',[scrsz(1)+100 scrsz(2)+40 scrsz(3)*0.9 scrsz(4)*0.9]);
+f1 = figure('Position',[1 1 850 528]);
 
-h = 0.27;
-v = 0.39;
-hs = 0.055;
-vs = 0.09;
+axes1 = axes('Parent',f1,'Position',[0.12 0.103 0.850 0.415], 'FontSize',16);
+box(axes1,'on'); hold(axes1,'all'); grid(axes1,'on');
 
-% Create subplot
-subplot11 = subplot(2,3,1,'Parent',figure1,'FontSize',16,'Position',[hs (2*vs+v) h v]);
-box(subplot11,'on');
-hold(subplot11,'all');
-% Create multiple lines using matrix input to plot
-plot11 = plot(subplot11, chrom,rel_tuneshift);
+plot(chrom,rel_tuneshift,'Parent',axes1,'LineWidth',2);
+xlabel({'Norm. Chromaticity'},'FontSize',16);
+ylabel({'Re(\Omega - \nu_{\beta})/\nu_s'},'FontSize',16);
+xlim([min(chrom), max(chrom)]);
+
+
+axes2 = axes('Parent',f1,'Position',[0.12 0.518 0.850 0.415],...
+             'FontSize',16, 'XTickLabel',{''});
+box(axes2,'on');hold(axes2,'all');grid(axes2,'on');
+plot2 = plot(axes2, chrom,rel_growth,'LineWidth',2);
+plot(axes2, chrom,repmat(1/tau,size(chrom)),'LineWidth',2,...
+     'LineStyle','--','Color','k','DisplayName','1/\tau_d');
 for i=1:length(azi_modes)
     leg = sprintf('m = %d',azi_modes(i));
-    set(plot11(i),'DisplayName',leg);
+    set(plot2(i),'DisplayName',leg);
 end
-% Create xlabel
-xlabel({'Chromaticity'},'FontSize',16);
-% Create ylabel
-ylabel({'Re(\Omega - \nu_b)/\nu_s'},'FontSize',16);
-% Create title
-title({'Tune Shift of the most shifted coupled bunch mode'},'FontSize',16);
-% Create legend
-legend11 = legend('show');
-set(legend11,...
-    'Position',[0.529848800834203 0.116465863453815 0.0848540145985393 0.12]);
+legend(axes2,'show','Location','Best');
+ylabel({'1/\tau [Hz]'},'FontSize',16);
+xlim([min(chrom), max(chrom)]);
 
 
+f2 = figure('Position',[1 1 850 528]);
 
-% Create subplot
-subplot21 = subplot(2,3,4,'Parent',figure1,'FontSize',16,'Position',[hs vs*2/3 h v]);
-box(subplot21,'on');
-hold(subplot21,'all');
-% Create multiple lines using matrix input to plot
-plot21 = plot(subplot21, (1:nb)-1,rel_tuneshift0);
-xlim([0 (nb-1)]);
-% Create xlabel
+axes3 = axes('Parent',f2,'Position',[0.12 0.103 0.850 0.415], 'FontSize',16);
+box(axes3,'on'); hold(axes3,'all'); grid(axes3,'on');
+
+plot((1:nb)-1,rel_tuneshift0,'Parent',axes3,'LineWidth',2);
 xlabel({'Coupled Bunch Mode'},'FontSize',16);
-% Create ylabel
-ylabel({'Re(\Omega - \nu_b)/\nu_s'},'FontSize',16);
-% Create title
-title({'Tune shifts @ zero chromaticity and m=0'},'FontSize',16);
-
-
-% Create subplot
-subplot13 = subplot(2,3,3,'Parent',figure1,'FontSize',16,'Position',[(3*hs+2*h) (2*vs+v) h v]);
-box(subplot13,'on');
-hold(subplot13,'all');
-% Create multiple lines using matrix input to plot
-plot(subplot13, chrom,rel_growth);
-% Create xlabel
-xlabel({'Chromaticity'},'FontSize',16);
-% Create ylabel
-ylabel({'\tau_{damp}/\tau_g'},'FontSize',16);
-% Create title
-title({'Growth Rates of the most unstable coupled bunch mode'},'FontSize',16);
-% Create legend
-
-% Create subplot
-subplot23 = subplot(2,3,6,'Parent',figure1,'FontSize',16,'Position',[(3*hs+2*h) vs*2/3 h v]);
-box(subplot23,'on');
-hold(subplot23,'all');
-% Create multiple lines using matrix input to plot
-plot23 = plot(subplot23, (1:nb)-1,rel_growth0);
+ylabel({'Re(\Omega - \nu_{\beta})/\nu_s'},'FontSize',16);
 xlim([0 (nb-1)]);
-% Create xlabel
-xlabel({'Coupled Bunch Mode'},'FontSize',16);
-% Create ylabel
-ylabel({'\tau_{damp}/\tau_g'},'FontSize',16);
-% Create title
-title({'Growth rates @ zero chromaticity and m=0'},'FontSize',16);
 
-% Create subplot
-subplot12 = subplot(2,3,2,'Parent',figure1,'FontSize',16,'Position',[(2*hs+h) (2*vs+v) h v]);
-box(subplot12,'on');
-hold(subplot12,'all');
-% Create multiple lines using matrix input to plot
-plot12 = plot(subplot12, chrom,n_uns_modes');
-% Create xlabel
-xlabel({'Chromaticity'},'FontSize',16);
-% Create ylabel
-ylabel({'#'},'FontSize',16);
-% Create title
-title({'Number of Unstable Coupled Bunch Modes'},'FontSize',16);
 
-% Create textbox
+axes4 = axes('Parent',f2,'Position',[0.12 0.518 0.850 0.415],...
+             'FontSize',16, 'XTickLabel',{''});
+box(axes4,'on');hold(axes4,'all');grid(axes4,'on');
+plot(axes4, (1:nb)-1,rel_growth0,'LineWidth',2,'DisplayName','Chrom=0, m=0');
+plot(axes4, (1:nb)-1,repmat(1/tau,1,nb),'LineWidth',2,...
+     'LineStyle','--','Color','k','DisplayName','1/\tau_d');
+legend(axes4,'show','Location','Best');
+ylabel({'1/\tau_{damp} [Hz]'},'FontSize',16);
+xlim([0 (nb-1)]);
 
-if strcmp(plane,'v')
-    string = [{'Plane: Vertical'}, {' '}]; 
-else
-    string = [{'Plane: Horizontal'}, {' '}]; 
-end
-string = [string , {'Impedances used:'}];
-for i=imped
-    string = [string, {sprintf('- %s', budget{i}.name)}];
-end
-string = [string , {' '}, {'Stage of the Machine:'}, {ringdata.stage}];
-
-annotation(figure1,'textbox',...
-    [(hs*3/2+h) vs h*3/5 v],...
-    'String',string,...
-    'FontSize',16,...
-    'FitBoxToText','off');
 
 if save
-    saveas(figure1,['transverse_cbi_' plane '_' ringdata.stage '.fig']);
+    saveas(f1,['cbi_',plane,'_chrom_', ringdata.stage '.fig']);
+    saveas(f2,['cbi_',plane,'_mode_',  ringdata.stage '.fig']);
 end
 
 
