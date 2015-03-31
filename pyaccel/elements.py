@@ -157,6 +157,7 @@ def _process_polynoms(pa, pb):
 
 
 class PolynomA(object):
+
     def __get__(self, obj, objtype):
         return _numpy.array(obj._e.polynom_a)
 
@@ -165,6 +166,7 @@ class PolynomA(object):
 
 
 class PolynomB(object):
+
     def __get__(self, obj, objtype):
         return _numpy.array(obj._e.polynom_b)
 
@@ -173,6 +175,7 @@ class PolynomB(object):
 
 
 class Kicktable(object):
+
     def __init__(self, filename="", kicktable=None):
         if kicktable is not None:
             self._kicktable = kicktable

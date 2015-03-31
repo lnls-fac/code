@@ -1,5 +1,5 @@
 
 from . import elements
 # from . import accelerator
-# from . import lattice
+from . import lattice
 # from . import tracking
