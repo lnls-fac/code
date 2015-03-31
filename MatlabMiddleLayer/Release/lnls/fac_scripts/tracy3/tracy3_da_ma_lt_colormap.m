@@ -1,11 +1,13 @@
 function tracy3_da_ma_lt_colormap(path)
 
 % users selects submachine
-prompt = {'Submachine (bo/si)', 'energy [GeV]'};
-defaultanswer = {'si', '3.0'};
+prompt = {'Submachine (bo/si)', 'energy [GeV]', 'Plot Loss Rate? (y/n)'};
+defaultanswer = {'si', '3.0','n'};
 answer = inputdlg(prompt,'Select submachine, energy and nr of plots', 1, defaultanswer);
 if isempty(answer), return; end;
 energy = str2double(answer{2});
+plot_LR = false;
+if strncmpi(answer{3},'y',1), plot_LR = true; end
 
 if strcmpi(answer{1}, 'bo')
     
@@ -105,7 +107,7 @@ end
 [~, result] = system(['ls ' path '| grep rms | wc -l']);
 n_pastas = str2double(result);
 
-lifetime = []; accep = []; Accep = [];
+lifetime = []; accep = []; Accep = []; LossRate = [];
 for i=1:n_pastas
     % -- FMAP --
     pathname = fullfile(path, ['rms', num2str(i, '%02i')]);
@@ -149,6 +151,7 @@ for i=1:n_pastas
     % não estou usando alguns outputs
     LT = lnls_tau_touschek_inverso(params,Accep,twi);
     lifetime(i) = 1/LT.AveRate/60/60; % em horas
+    LossRate(i,:) = LT.Rate;
     
     
     if i == 1, idx_daxy = zeros(size(ind));end;
@@ -185,7 +188,7 @@ aveLT = mean(lifetime);
 stdLT = std(lifetime);
 
 %% make the figures
-f1 = figure('Position',[163, 212, 1596, 553],'Color',[1 1 1]);
+f1 = figure('Position',[1, 1, 1596, 553],'Color',[1 1 1]);
 ax1 = axes('Parent',f1,'Position',[0.06 0.17 0.38 0.80],'FontSize',size_font);
 xlim(ax1,[-limx limx]);   ylim(ax1,[0 limy]);
 box(ax1,'on');            hold(ax1,'all');
@@ -210,7 +213,7 @@ annotation(f1,'textbox', [0.54 0.21 0.11 0.08],'String',{'y = 1 mm'},...
 annotation(f1,'textbox',[0.35 0.83 0.06 0.08],'String',{'\delta = 0'},...
     'FontSize',28,'FitBoxToText','off','LineStyle','none','Color',[1 1 1]);
 
-f2=figure('Position',[163, 212, 1296, 553]);
+f2=figure('Position',[1, 1, 1296, 553]);
 falt = axes('Parent',f2,'YGrid','on','XGrid','on','yTickLabel',{'-5','-2.5','0','2.5','5'},...
     'YTick',[-5 -2.5 0 2.5 5],'Position',[0.10 0.17 0.84 0.80],'FontSize',size_font);
 box(falt,'on'); hold(falt,'all');
@@ -219,6 +222,7 @@ ylabel('\delta [%]','FontSize',size_font);
 plot(falt,spos,squeeze(accep(:,1,:))*100,'Color',[0.6 0.6 1.0]);
 plot(falt,spos,squeeze(accep(:,2,:))*100,'Color',[0.6 0.6 1.0]);
 plot(falt,spos,aveAccep,'LineWidth',3,'Color',[0,0,1]);
+if plot_LR, plot(falt,LT.Pos,2.5*LossRate/max(LossRate(:)),'Color',[0,0,0]); end
 lnls_drawlattice(the_ring,10, 0, true,0.2);
 xlim([0, 52]); ylim([-5.3, 5.3]);
 
@@ -233,7 +237,7 @@ annotation(f2,'textbox',[0.41 0.33 0.21 0.19],'String',string(1:3),...
     'FontSize',20,'FitBoxToText','off','LineStyle','none','Color',[0 0 0]);
 annotation(f2,'textbox',[0.44 0.61 0.17 0.21],'String',string(4:6),...
     'FontSize',20,'FitBoxToText','off','LineStyle','none','Color',[0 0 0]);
-annotation(f2,'textbox',[0.66 0.63 0.23 0.075],'String',string(7),...
+annotation(f2,'textbox',[0.66 0.44 0.23 0.075],'String',string(7),...
     'FontSize',20,'FitBoxToText','off','LineStyle','none','Color',[0 0 0]);
 % /home/fac_files/data/sirius/si/beam_dynamics/calcs/v03/study.new.optics/moga/default/firstRun_results/FR001436/multi.cod.tune.coup.physap/trackcpp
 

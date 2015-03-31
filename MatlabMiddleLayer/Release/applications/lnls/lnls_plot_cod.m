@@ -1,4 +1,4 @@
-function lnls_plot_cod(fname)
+function lnls_plot_cod(default_path)
 
 
 prompt = {'Submachine (bo/si)', 'COD unit (um/mm)', 'symmetry', 'plot title'};
@@ -12,15 +12,15 @@ plot_title = answer{4};
 size_font = 16;
 
 % selects file with random machines and loads it
-%fname = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
-if ~exist('fname','var') || ~exist(fname, 'file')
+if ~exist('default_path','var')
     default_path = fullfile(lnls_get_root_folder(), 'data','sirius',submachine);
-    [FileName,PathName,~] = uigetfile('*.mat','select matlab file with random machines', default_path);
-    if isnumeric(FileName)
-        return
-    end
-    fname = fullfile(PathName, FileName);
 end
+[FileName,PathName,~] = uigetfile('*.mat','select matlab file with random machines', default_path);
+if isnumeric(FileName)
+    return
+end
+fname = fullfile(PathName, FileName);
+
 r = load(fname); machine = r.machine;
 
 % selects section of the lattice for the plot.
