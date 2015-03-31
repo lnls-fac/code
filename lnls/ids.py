@@ -56,7 +56,6 @@ def read_kicktable(fname):
 def select_kicktable_file():
 
     default_folder = _os.path.join(_app.folder_mml_sirius_ids,'id_modelling')
-    print(default_folder)
     opt = {'initialdir':default_folder, 'title':'select kicktable file', 'defaultextension':'.txt', 'filetypes':[('text files', '*.txt')]}
     _Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
     fname = _askopenfilename(**opt) # show an "Open" dialog box and return the path to the selected file
@@ -102,24 +101,31 @@ def plot_kicktable(fname=None, energy = 3.0, print_flag=True, savefigs_flag=True
         print('posy[mm] : {0} ... {1}'.format(1000*id_posy[0], 1000*id_posy[-1]))
 
     brho,_,_,_ = _mathphys.beam_optics.Beam.calc_brho(energy = energy)
+    _os.path.basename(fname)
+
     # kickx
-    plot_idx = [len(id_posy)/2, len(id_posy)/4, 0]
+    plot_idx = [int(len(id_posy)/2), int(len(id_posy)/4), 0]
+    print(plot_idx)
     for i in plot_idx:
         _plt.plot(1000*_np.array(id_posx), (1e6/brho**2)*id_kickx[i,:])
     _plt.xlabel('posx [mm]'), _plt.ylabel('kickx [um]')
+    _plt.grid(), _plt.suptitle('Insertion Device Horizontal Kick')
     if savefigs_flag:
-        pass
+        _plt.savefig('kickx.svg')
     if display_flag:
         _plt.show()
+    _plt.clf()
+
     # kicky
-    plot_idx = [len(id_posx)/2, len(id_posx)/4, 0]
+    plot_idx = [int(len(id_posx)/2), int(len(id_posx)/4), 0]
     for i in plot_idx:
         _plt.plot(1000*_np.array(id_posy), (1e6/brho**2)*id_kicky[:,i])
     _plt.xlabel('posy [mm]'), _plt.ylabel('kicky [um]')
+    _plt.grid(), _plt.suptitle('Insertion Device Vertical Kick')
     if savefigs_flag:
-        pass
+        _plt.savefig('kicky.svg')
     if display_flag:
         _plt.show()
-
+    _plt.clf()
 
     return (id_length, id_posx, id_posy, id_kickx, id_kicky)

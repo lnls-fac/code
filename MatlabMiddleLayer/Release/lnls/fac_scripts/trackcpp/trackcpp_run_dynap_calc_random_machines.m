@@ -99,6 +99,7 @@ for i=1:length(machine)
         create_pytrack_input_ma(inputfilename, flatfilename, acc_answer, dynap_ma_answer);
     end
     lnls_at2flatfile(machine{i}, fullfile(rmsdir, flatfilename));
+    lnls_twiss_save2file(machine{i}, fullfile(rmsdir, 'twiss.txt')); % saves twiss into file (used to calculate IBS)
 end
 
 % submit jobs
