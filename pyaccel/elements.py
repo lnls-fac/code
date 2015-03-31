@@ -12,16 +12,219 @@ _coord_matrix = _ctypes.c_double*_DIMS[0]*_DIMS[1]
 pass_methods = _trackcpp.pm_dict
 
 
+def marker(fam_name):
+    """Create a marker element.
+
+    Keyword arguments:
+    fam_name -- family name
+    """
+    e = _trackcpp.marker_wrapper(fam_name)
+    return Element(element=e)
+
+
+def bpm(fam_name):
+    """Create a beam position monitor element.
+
+    Keyword arguments:
+    fam_name -- family name
+    """
+    e = _trackcpp.bpm_wrapper(fam_name)
+    return Element(element=e)
+
+
+def drift(fam_name, length):
+    """Create a drift element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    """
+    e = _trackcpp.drift_wrapper(fam_name, length)
+    return Element(element=e)
+
+
+def hcorrector(fam_name, hkick, length=0.0):
+    """Create a horizontal corrector element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    hkick -- horizontal kick [rad]
+    """
+    e = _trackcpp.hcorrector_wrapper(fam_name, length, hkick)
+    return Element(element=e)
+
+
+def vcorrector(fam_name, vkick, length=0.0):
+    """Create a vertical corrector element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    vkick -- vertical kick [rad]
+    """
+    e = _trackcpp.vcorrector_wrapper(fam_name, length, hkick)
+    return Element(element=e)
+
+
+def corrector(fam_name, hkick, vkick, length=0.0):
+    """Create a corrector element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    hkick -- horizontal kick [rad]
+    vkick -- vertical kick [rad]
+    """
+    e = _trackcpp.corrector_wrapper(fam_name, length, hkick, vkick)
+    return Element(element=e)
+
+
+def rbend(fam_name, length, angle, angle_in=0.0, angle_out=0.0,
+        gap=0.0, fint_in=0.0, fint_out=0.0, polynom_a=None,
+        polynom_b=None, K=None, S=None):
+    """Create a rectangular dipole element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    angle -- [rad]
+    angle_in -- [rad]
+    angle_out -- [rad]
+    K -- [m^-2]
+    S -- [m^-3]
+    """
+    polynom_a, polynom_b = _process_polynoms(polynom_a, polynom_b)
+    if K is None: K = polynom_b[1]
+    if S is None: S = polynom_b[2]
+    e = _trackcpp.rbend_wrapper(fam_name, length, angle, angle_in,
+            angle_out, gap, fint_in, fint_out, polynom_a, polynom_b,
+            K, S)
+    return Element(element=e)
+
+
+def quadrupole(fam_name, length, K, num_steps=10):
+    """Create a quadrupole element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    K -- [m^-2]
+    num_steps -- number of steps (default 10)
+    """
+    e = _trackcpp.quadrupole_wrapper(fam_name, length, K, num_steps)
+    return Element(element=e)
+
+
+def sextupole(fam_name, length, S, num_steps=5):
+    """Create a sextupole element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    S -- [m^-3]
+    num_steps -- number of steps (default 5)
+    """
+    e = _trackcpp.sextupole_wrapper(fam_name, length, S, num_steps)
+    return Element(element=e)
+
+
+def rfcavity(fam_name, length, voltage, frequency):
+    """Create an RF cavity element.
+
+    Keyword arguments:
+    fam_name -- family name
+    length -- [m]
+    voltage -- [V]
+    frequency -- [Hz]
+    """
+    e = _trackcpp.rfcavity_wrapper(fam_name, length, frequency, voltage)
+    return Element(element=e)
+
+
+def _process_polynoms(pa, pb):
+    # Make sure pa and pb have same size and are initialized
+    if pa is None:
+        pa = [0,0,0]
+    if pb is None:
+        pb = [0,0,0]
+    n = max([3, len(pa), len(pb)])
+    for i in range(len(pa), n):
+        pa.append(0.0)
+    for i in range(len(pb), n):
+        pb.append(0.0)
+    return pa, pb
+
+
+class PolynomA(object):
+    def __get__(self, obj, objtype):
+        return _numpy.array(obj._e.polynom_a)
+
+    def __set__(self, obj, value):
+        obj._e.polynom_a[:] = value[:]
+
+
+class PolynomB(object):
+    def __get__(self, obj, objtype):
+        return _numpy.array(obj._e.polynom_b)
+
+    def __set__(self, obj, value):
+        obj._e.polynom_b[:] = value[:]
+
+
+class Kicktable(object):
+    def __init__(self, filename="", kicktable=None):
+        if kicktable is not None:
+            self._kicktable = kicktable
+        else:
+            self._kicktable = _trackcpp.Kicktable(filename)
+
+    @property
+    def filename(self):
+        return self._kicktable.filename
+
+    @property
+    def length(self):
+        return self._kicktable.length
+
+    @property
+    def x_min(self):
+        return self._kicktable.x_min
+
+    @property
+    def x_max(self):
+        return self._kicktable.x_max
+
+    @property
+    def y_min(self):
+        return self._kicktable.y_min
+
+    @property
+    def y_max(self):
+        return self._kicktable.y_max
+
+    @property
+    def num_pts_x(self):
+        return self._kicktable.x_nrpts
+
+    @property
+    def num_pts_y(self):
+        return self._kicktable.y_nrpts
+
+
 class Element(object):
 
     t_valid_types = (list, _numpy.ndarray)
     r_valid_types = (_numpy.ndarray)
 
+    polynom_a = PolynomA()
+    polynom_b = PolynomB()
+
     def __init__(self, fam_name="", length=0.0, element=None):
-        if element is None:
-            self._e = _trackcpp.Element(fam_name, length)
-        else:
+        if element is not None:
             self._e = element
+        else:
+            self._e = _trackcpp.Element(fam_name, length)
 
     @property
     def fam_name(self):
@@ -42,7 +245,7 @@ class Element(object):
                 raise ValueError("pass method '" + value + "' not found")
             else:
                 self._e.pass_method = pass_methods.index(value)
-        elif isinstance(self, int):
+        elif isinstance(value, int):
             if not (0 <= value < len(pass_methods)):
                 raise IndexError("pass method index out of range")
             else:
@@ -163,29 +366,14 @@ class Element(object):
         self._e.voltage = value
 
     @property
-    def polynom_a(self):
-        return _numpy.array(self._e.polynom_a)
+    def kicktable(self):
+        return Kicktable(self._e.kicktable)
 
-    @polynom_a.setter
-    def polynom_a(self, value):
-        self._check_type_is_list_like(value)
-        self._e.polynom_a.clear()
-        for x in value:
-            self._e.polynom_a.append(x)
-
-    @property
-    def polynom_b(self):
-        return _numpy.array(self._e.polynom_b)
-
-    @polynom_b.setter
-    def polynom_b(self, value):
-        self._check_type_is_list_like(value)
-        self._e.polynom_b.clear()
-        for x in value:
-            self._e.polynom_b.append(x)
-
-    '''IMPLEMENT'''
-    # const Kicktable* kicktable;
+    @kicktable.setter
+    def kicktable(self, value):
+        if not isinstance(value, Kicktable):
+            raise TypeError('value must be of Kicktable type')
+        self._e.kicktable = kicktable._kicktable
 
     @property
     def hmax(self):
@@ -206,7 +394,6 @@ class Element(object):
     @property
     def t_in(self):
         return self._get_coord_vector(self._e.t_in)
-        # return self._get_vector_from_c_array(self._e.t_in, _NUM_COORDS)
 
     @t_in.setter
     def t_in(self, value):
@@ -217,7 +404,6 @@ class Element(object):
     @property
     def t_out(self):
         return self._get_coord_vector(self._e.t_out)
-        # return self._get_vector_from_c_array(self._e.t_out, _NUM_COORDS)
 
     @t_out.setter
     def t_out(self, value):
@@ -228,7 +414,6 @@ class Element(object):
     @property
     def r_in(self):
         return self._get_coord_matrix(self._e.r_in)
-        # return self._get_matrix_from_c_array(self._e.r_in, _DIMS)
 
     @r_in.setter
     def r_in(self, value):
@@ -239,7 +424,6 @@ class Element(object):
     @property
     def r_out(self):
         return self._get_coord_matrix(self._e.r_out)
-        # return self._get_matrix_from_c_array(self._e.r_out, _DIMS)
 
     @r_out.setter
     def r_out(self, value):
@@ -247,28 +431,11 @@ class Element(object):
         self._check_size(value, _DIMS)
         self._set_c_array_from_matrix(self._e.r_out, _DIMS, value)
 
-    # def _get_vector_from_c_array(self, array, size):
-    #     r = []
-    #     for i in range(size):
-    #         r.append(_trackcpp.c_array_get(array, i))
-    #
-    #     return _numpy.array(r)
-
     def _set_c_array_from_vector(self, array, size, values):
         if not (size == len(values)):
             raise ValueError("array and vector must have same size")
         for i in range(size):
             _trackcpp.c_array_set(array, i, values[i])
-
-    # def _get_matrix_from_c_array(self, array, shape):
-    #     rows, cols = shape
-    #     r = []
-    #     for i in range(rows):
-    #         r.append([])
-    #         for j in range(cols):
-    #             r[-1].append(_trackcpp.c_array_get(array, i*cols + j))
-    #
-    #     return _numpy.array(r)
 
     def _set_c_array_from_matrix(self, array, shape, values):
         if not (shape == values.shape):
