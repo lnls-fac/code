@@ -10,12 +10,12 @@ def create_lattice():
     global default_optics_mode
 
     # -- shortcut symbols --
-    marker = pyaccel.elements.Marker
-    drift = pyaccel.elements.Drift
-    quadrupole = pyaccel.elements.Quadrupole
-    sextupole = pyaccel.elements.Sextupole
-    rbend_sirius = pyaccel.elements.RBend
-    rfcavity = pyaccel.elements.RFCavity
+    marker = pyaccel.elements.marker
+    drift = pyaccel.elements.drift
+    quadrupole = pyaccel.elements.quadrupole
+    sextupole = pyaccel.elements.sextupole
+    rbend_sirius = pyaccel.elements.rbend
+    rfcavity = pyaccel.elements.rfcavity
     strengths = _default_optics_mode.strengths
 
     # -- drifts --

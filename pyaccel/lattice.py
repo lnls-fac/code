@@ -10,8 +10,10 @@ _TYPE_ERROR_MSG = 'values must be (list) of Element'
 
 class Lattice(object):
 
-    def __init__(self, elements=None):
-        if elements is not None:
+    def __init__(self, elements=None, lattice=None):
+        if lattice is not None:
+            self._lattice = lattice
+        elif elements is not None:
             trackcpp_elements = []
             for element in elements:
                 trackcpp_elements.append(element._e)
@@ -118,7 +120,7 @@ def findcells(lattice, attribute_name, value=None):
     return indices
 
 
-def getcellstruct(lattice, attribute_name, indices = None):
+def getcellstruct(lattice, attribute_name, indices=None):
     """ returns a list with requested lattice data """
     if indices is None:
         indices = range(len(lattice))

@@ -5,8 +5,8 @@ import pyaccel
 import matplotlib.pyplot as plt
 
 # creates accelerate and inits its lattice
-accelerator = pyaccel.accelerator.Accelerator()
-accelerator.lattice = sirius.create_lattice()
+accelerator = pyaccel.accelerator.Accelerator([])
+accelerator.lattice = pyaccel.lattice.Lattice(sirius.create_lattice())
 
 # global tracking parameters
 accelerator.cavity_on = False

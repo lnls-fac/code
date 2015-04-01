@@ -368,15 +368,15 @@ class Element(object):
     def voltage(self, value):
         self._e.voltage = value
 
-    @property
-    def kicktable(self):
-        return Kicktable(self._e.kicktable)
-
-    @kicktable.setter
-    def kicktable(self, value):
-        if not isinstance(value, Kicktable):
-            raise TypeError('value must be of Kicktable type')
-        self._e.kicktable = kicktable._kicktable
+    # @property
+    # def kicktable(self):
+    #     return Kicktable(self._e.kicktable)
+    #
+    # @kicktable.setter
+    # def kicktable(self, value):
+    #     if not isinstance(value, Kicktable):
+    #         raise TypeError('value must be of Kicktable type')
+    #     self._e.kicktable = kicktable._kicktable
 
     @property
     def hmax(self):
