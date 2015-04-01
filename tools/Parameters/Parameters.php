@@ -411,11 +411,20 @@ function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason,
         return true; # not a parameter page
 
     try {
-        $prm = new FacParameterEraser($name);
-        $prm->erase();
+        $prm_reader = new FacParameterReader($name);
+        $deps = $prm_reader->read_dependents();
+        if (count($deps) > 0) {
+            $list = implode(', ', $deps);
+            $msg = 'Cannot erase parameter with dependents (' . $list . ')';
+            $error = fac_get_coloured_text($msg);
+            return false;
+        }
+
+        $prm_eraser = new FacParameterEraser($name);
+        $prm_eraser->erase();
         return true;
     } catch(FacException $e) {
-        $error = fac_get_error_message($e->getMessage());
+        $error = fac_get_coloured_text($e->getMessage());
         return false;
     }
 }
