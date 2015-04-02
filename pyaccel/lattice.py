@@ -15,7 +15,7 @@ class Lattice(object):
             if isinstance(elements, _trackcpp.CppElementVector):
                 self._lattice = lattice
             elif isinstance(elements, list):
-                self._lattice = _ElementVector(trackcpp_elements)
+                self._lattice = _ElementVector(elements)
             else:
                 raise TypeError(_TYPE_ERROR_MSG)
         else:
