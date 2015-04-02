@@ -1,4 +1,4 @@
-function fcexpfofbrfreq(marker, amplitude, bw, M)
+function [fcdata, expout, timestamp] = fcexpfofbrfreq(marker, amplitude, bw, M)
 
 Ts = 320e-6;
 
@@ -37,4 +37,4 @@ expinfo.period = 10000;
 
 expinfo.marker = marker;
 
-fcexp(expinfo);
+[fcdata, expout, timestamp] = fcexp(expinfo);
