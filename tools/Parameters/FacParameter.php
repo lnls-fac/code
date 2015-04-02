@@ -173,6 +173,7 @@ class FacParameterWriter extends FacParameter {
     {
         $table = new FacTable();
         $table->rename_parameter($this->parameter, $new_name);
+        $table->rename_dependencies($this->parameter, $new_name);
 
         return $table->commit();
     }
@@ -221,13 +222,13 @@ class FacParameterLister {
         $this->subsystem = $subsystem;
     }
 
-    function get_list()
+    function get_list($prim_only=false)
     {
         if (!in_array($this->subsystem, self::$valid_subsystems))
             return false;
 
         $table = new FacTable();
-        $parameters = $table->get_parameter_list($this->subsystem);
+        $parameters = $table->get_parameter_list($this->subsystem, $prim_only);
 
         $list = array();
         foreach ($parameters as $p)

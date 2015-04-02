@@ -7,7 +7,7 @@ class FacException extends Exception { }
 
 class FacConnection {
     # Move to external file with appropriate permissions
-    const server_address = '10.0.21.71';
+    const server_address = '10.0.21.132';
     const user = 'prm_editor';
     const password = 'prm0';
     const database = 'parameters';
@@ -59,9 +59,10 @@ class FacTable extends FacConnection {
     {
         $r = $this->read_all_with_name_from_table($name, 'parameter');
 
-        if ($r->num_rows == 0)
-            throw new FacException('parameter "' . $name . '" not found');
-        else {
+        if ($r->num_rows == 0) {
+            $link = '[[Parameter:' . $name . '|' . $name . ']]';
+            throw new FacException('parameter "' . $link . '" not found');
+        } else {
             $row = $r->fetch_assoc();
             return $this->get_text_fields($row);
         }
@@ -245,6 +246,29 @@ class FacTable extends FacConnection {
         return true;
     }
 
+    function rename_dependencies($name, $new_name)
+    {
+        fac_write('debug', "\n* entering rename_dependencies *");
+        $tables = array('dependency', 'expression');
+        foreach ($tables as $table) {
+            $value_col = $table;
+            $query = "SELECT * FROM " . $table . " WHERE " . $value_col . " LIKE '%" . $name . "%';";
+            $result = $this->query($query);
+            fac_write('debug', 'after query');
+            $items = $result->fetch_all();
+            fac_write('debug', 'fetched');
+            foreach ($items as $item) {
+                fac_write('debug', 'item 1 is ' . $item[1]);
+                $new_value = str_replace($name,$new_name,$item[1]);
+                fac_write('debug', 'new value is ' . $new_value);
+                $query = "UPDATE " . $table . " SET " . $value_col . "='" . $new_value . "' WHERE name='" . $item[0] . 
+                         "' AND " . $value_col . "='" . $item[1] . "';";
+                fac_write('debug', 'update query: ' . $query);
+                $this->query($query);
+            }
+        }
+    }
+
     function erase_parameter($parameter)
     {
         return $this->erase('parameter', $parameter);
@@ -282,10 +306,15 @@ class FacTable extends FacConnection {
         return $row['expression'];
     }
 
-    function get_parameter_list($subsystem)
+    function get_parameter_list($subsystem, $prim_only)
     {
+        if ($prim_only)
+            $sel = " AND is_derived=0";
+        else
+            $sel = "";
+
         $query = "SELECT name FROM parameter WHERE name LIKE '" .
-            $this->escape($subsystem) . "%';";
+            $this->escape($subsystem) . "%'" . $sel . ";";
         $r = $this->query($query);
 
         return $r->fetch_all();
@@ -303,7 +332,7 @@ class FacEvaluator extends FacConnection {
     );
     static $valid_operators = array('+', '-', '*', '/');
     static $valid_functions = array(
-        'deg2rad', 'rad2deg',
+        'pi', 'deg2rad', 'rad2deg',
         'joule_2_ev', 'gamma', 'beta',
         'velocity', 'brho', 'critical_energy',
         'U0', 'sync_phase', 'rf_energy_acceptance',
@@ -548,6 +577,13 @@ class FacSet {
     {
         return count($this->elements);
     }
+}
+
+function fac_write($filename, $text)
+{
+    $f = fopen('/tmp/' . $filename . '.txt', 'a');
+    fwrite($f, $text . "\n");
+    fclose($f);
 }
 
 ?>

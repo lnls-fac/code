@@ -1,21 +1,28 @@
-function plot_impedances(w, budget, escalax, escalay, mult_beta, save, name)
+function plot_impedances(w, budget, mult_beta, escalax, escalay, save, name)
+% function plot_impedances(w, budget, mult_beta, escalax, escalay, save, name)
 % Funcao que plota impedancias:
-% plot_impedances(w, budget, escalax, escalay, mult_beta, save)
 %
 % Inputs:
-% - budget eh uma array de celulas, sendo que cada celula contem uma estrutura
-%   com os seguintes campos obrigatorios:
-%       name = nome do elemento ao qual a impedancia pertence
-%       Zl = impedancia longitudinal [Ohm]
-%       Zv = impedancia vertical [Ohm/m]
-%       Zh = impedancia horizontal [Ohm/m]
-%       w  = frequencia angular [rad/s]
-%       quantity = n??mero desse elemento no anel
-%       betax = beta horizontal media nas posicoes desses elementos
-%       betay = beta vertical media nas posicoes desses elementos
-% - escalax = escolha se a escala x sera logaritmica, 'log', ou 'linear'
-% - escalay = escolha se a escala y sera logaritmica, 'log', ou 'linear'
-% - mult_beta = escolha se deve-se plotar Zt ou betat*Zt. true ou false
+%   escalax   : define se escala x sera logaritmica, 'log', ou 'linear'.  Default = 'log';
+%   escalay   : define se escala y sera logaritmica, 'log', ou 'linear'.  Default = 'log';
+%   mult_beta : plotar Zt ou betat*Zt. true ou false.  Default = true;
+%   save      : salvar ou não os gráficos. Default = false;
+%   name      : name of the file to save the plots.
+%   budget: array de celulas, sendo que cada celula contem uma estrutura
+%           com os seguintes campos obrigatorios:
+%       name     : nome do elemento ao qual a impedancia pertence
+%       Zl       : impedancia longitudinal [Ohm]
+%       Zv       : impedancia vertical [Ohm/m]
+%       Zh       : impedancia horizontal [Ohm/m]
+%       w        : frequencia angular [rad/s]
+%       quantity : numero desse elemento no anel
+%       betax    : beta horizontal media nas posicoes desses elementos
+%       betay    : beta vertical media nas posicoes desses elementos
+
+if ~exist('escalax','var'),   escalax = 'log';  end
+if ~exist('escalay','var'),   escalay = 'log';  end
+if ~exist('mult_beta','var'), mult_beta = true; end
+if ~exist('save','var'),      save = false; name=''; end
 
 Zh = zeros(length(budget),length(w));
 Zv = Zh;
@@ -26,176 +33,113 @@ if mult_beta
         Zv(i,:) = budget{i}.Zv*budget{i}.quantity*budget{i}.betay;
         Zl(i,:) = budget{i}.Zl*budget{i}.quantity;
     end
+    labelh = '\beta_x Z_{x}';
+    labelv = '\beta_y Z_{y}';
 else
     for i=1:length(budget)
         Zh(i,:) = budget{i}.Zh*budget{i}.quantity;
         Zv(i,:) = budget{i}.Zv*budget{i}.quantity;
         Zl(i,:) = budget{i}.Zl*budget{i}.quantity;
     end
+    labelh = 'Z_{x}';
+    labelv = 'Z_{y}';
 end
 
-if strcmp(escalax,'log')
+DispNames = getcellstruct(budget,'name',1:length(budget));
+labelx = '\omega [rad/s]';
+
+labelL = 'Z_{||}';
+create_figures(w, Zl, escalax, escalay, labelx, labelL, DispNames, save,['l_' name]);
+create_figures(w, Zh, escalax, escalay, labelx, labelh, DispNames, save,['x_' name]);
+create_figures(w, Zv, escalax, escalay, labelx, labelv, DispNames, save,['y_' name]);
+
+
+
+function create_figures(w, Z, scalex, scaley, labelx, labely, DispNames, save, name)
+
+units = '\Omega';
+if strcmp(scaley,'linear'),
+    maxZ = max(max(abs(Z)));
+    if maxZ > 1e6,     Z = Z/1e6; units = 'M\Omega';
+    elseif maxZ > 1e3, Z = Z/1e3; units = 'k\Omega'; end
+end
+
+if strcmp(scalex,'log')
     indx = w > 0 ;
-    w  =  w(:,indx);
-    Zv = Zv(:,indx);
-    Zh = Zh(:,indx);
-    Zl = Zl(:,indx);
+    w = w(:,indx);
+    Z = Z(:,indx);
 end
-% if strcmp(escalay,'log')
-%     indl = imag(-Zl) > 0;
-%     indv = imag(-Zv) > 0;
-%     indh = imag(-Zh) > 0;
-%     ind = ~any(~(indl & indv & indh));
-%     w  =  w(:,ind);
-%     Zv = Zv(:,ind);
-%     Zh = Zh(:,ind);
-%     Zl = Zl(:,ind);
-% end
+w = repmat(w,size(Z,1),1);
+indp = true(size(Z));
+indn = [];
+IZpos = imag(-Z);
+IZneg = [];
+if strcmp(scaley,'log')
+    indn = imag(-Z) < 0;
+    indp = imag(-Z) > 0;
+    IZpos(indn) = 0;
+    IZneg = imag(Z);
+    IZneg(indp) = 0;
+end
 
+colors = {[0, 0, 1],...
+          [0, 0.5, 0],...
+          [1, 0, 0],...
+          [0, 0.75, 0.75],...
+          [0.75, 0, 0.75],...
+          [0.75, 0.75, 0],...
+          [0.25, 0.25, 0.25],...
+          [1, 0.69, 0.39]};
+lc = length(colors);
 
 % Create figure
-scrsz = get(0,'ScreenSize');
-figure1 = figure('OuterPosition',[scrsz(1)+100 scrsz(2)+40 scrsz(3)*0.9 scrsz(4)*0.9]);
-
-h = 0.27;
-v = 0.39;
-hs = 0.055;
-vs = 0.095;
+f1 = figure('Position',[1,1,1100,680]);
 
 
-%% Horizontal Plane
-% Create subplot
-subplot11 = subplot(2,3,1,'Parent',figure1,'XScale',escalax,...
-    'YScale',escalay,'XMinorTick','on','FontSize',16,'Position',[hs (2*vs+v) h v]);
-% Uncomment the following line to preserve the Y-limits of the axes
-% ylim(subplot1,[-3000000 3000000]);
-box(subplot11,'on');
-hold(subplot11,'all');
-% Create multiple lines using matrix input to semilogx
-semilogx11 = semilogx(w,-imag(Zh),'Parent',subplot11);
-for i=1:length(budget)
-    set(semilogx11(i),'DisplayName',budget{i}.name);
+% Real Axes
+axes1 = axes('Parent',f1,'Position',[0.088 0.103 0.885 0.432],...
+    'FontSize',16, 'YScale',scaley,'YMinorTick','on',...
+                   'XScale',scalex,'XMinorTick','on');
+box(axes1,'on'); hold(axes1,'all'); grid(axes1,'on');
+plot1 = zeros(1,size(Z,1));
+for i=1:size(Z,1)
+    plot1(i) = plot(w(i,:),abs(real(Z(i,:))),'Parent',axes1,...
+                 'LineWidth',2,'Color',colors{mod(i-1,lc)+1});
 end
-% Create xlabel
-xlabel('\omega [rad/s]','FontSize',16);
-% Create ylabel
-if mult_beta
-    ylabel('-Im(\beta_x Z_{x}) [\Omega]','FontSize',16);
-else
-    ylabel('-Im(Z_{x}) [\Omega/m]','FontSize',16);
+xlabel(labelx,'FontSize',16);
+ylabel(['Re(',labely,') [',units,']'],'FontSize',16);
+xlim(axes1,[min(w(:));            max(w(:))]);
+ylim(axes1,[min(abs(real(Z(:)))); max(abs(real(Z(:))))]);
+
+
+
+% Imaginary Axes
+axes2 = axes('Parent',f1,'Position',[0.088 0.536 0.885 0.432],...
+    'FontSize',16,'YScale',scaley,'YMinorTick','on',...
+                  'XScale',scalex,'XMinorTick','on',...
+    'XTickLabel',{''});
+box(axes2,'on');hold(axes2,'all');grid(axes2,'on');
+
+for i=1:size(Z,1)
+    plot(w(i,:),IZpos(i,:),'Parent',axes2,'LineWidth',2,...
+                    'DisplayName',DispNames{i}, 'Color',get(plot1(i),'Color'));
 end
-
-
-% Create subplot
-subplot21 = subplot(2,3,4,'Parent',figure1,'XScale',escalax,...
-    'YScale',escalay,'XMinorTick','on','FontSize',16,'Position',[hs vs h v]);
-% Uncomment the following line to preserve the Y-limits of the axes
-% ylim(subplot1,[-3000000 3000000]);
-box(subplot21,'on');
-hold(subplot21,'all');
-% Create multiple lines using matrix input to semilogx
-semilogx21 = semilogx(w,real(Zh),'Parent',subplot21);
-for i=1:length(budget)
-    set(semilogx21(i),'DisplayName',budget{i}.name);
+legend(axes2,'show','Location','Best');
+if strcmp(scaley,'log')
+    for i=1:size(Z,1)
+        plot(w(i,:),IZneg(i,:),'Parent',axes2,'LineWidth',2,...
+            'Color',get(plot1(i),'Color'),'LineStyle','--');
+    end
 end
-% Create xlabel
-xlabel('\omega [rad/s]','FontSize',16);
-% Create ylabel
-if mult_beta
-    ylabel('Re(\beta_x Z_{x}) [\Omega]','FontSize',16);
-else
-    ylabel('Re(Z_{x}) [\Omega/m]','FontSize',16);
-end
-
-
-%% Vertical Plane
-% Create subplot
-subplot12 = subplot(2,3,2,'Parent',figure1,'XScale',escalax,...
-    'YScale',escalay,'XMinorTick','on','FontSize',16,'Position',[(2*hs+h) (2*vs+v) h v]);
-% Uncomment the following line to preserve the Y-limits of the axes
-% ylim(subplot1,[-3000000 3000000]);
-box(subplot12,'on');
-hold(subplot12,'all');
-% Create multiple lines using matrix input to semilogx
-semilogx12 = semilogx(w,-imag(Zv),'Parent',subplot12);
-for i=1:length(budget)
-    set(semilogx12(i),'DisplayName',budget{i}.name);
-end
-% Create xlabel
-xlabel('\omega [rad/s]','FontSize',16);
-% Create ylabel
-if mult_beta
-    ylabel('-Im(\beta_y Z_{y}) [\Omega]','FontSize',16);
-else
-    ylabel('-Im(Z_{y}) [\Omega/m]','FontSize',16);
-end
-
-% Create subplot
-subplot22 = subplot(2,3,5,'Parent',figure1,'XScale',escalax,...
-    'YScale',escalay,'XMinorTick','on','FontSize',16,'Position',[(2*hs+h) vs h v]);
-% Uncomment the following line to preserve the Y-limits of the axes
-% ylim(subplot1,[-3000000 3000000]);
-box(subplot22,'on');
-hold(subplot22,'all');
-% Create multiple lines using matrix input to semilogx
-semilogx22 = semilogx(w,real(Zv),'Parent',subplot22);
-for i=1:length(budget)
-    set(semilogx22(i),'DisplayName',budget{i}.name);
-end
-% Create xlabel
-xlabel('\omega [rad/s]','FontSize',16);
-% Create ylabel
-
-if mult_beta
-    ylabel('Re(\beta_y Z_{y}) [\Omega]','FontSize',16);
-else
-    ylabel('Re(Z_{y}) [\Omega/m]','FontSize',16);
-end
-
-
-%% Longitudinal Plane
-% Create subplot
-subplot13 = subplot(2,3,3,'Parent',figure1,'XScale',escalax,...
-    'YScale',escalay,'XMinorTick','on','FontSize',16,'Position',[(3*hs+2*h) (2*vs+v) h v]);
-% Uncomment the following line to preserve the Y-limits of the axes
-% ylim(subplot1,[-3000000 3000000]);
-box(subplot13,'on');
-hold(subplot13,'all');
-% Create multiple lines using matrix input to semilogx
-semilogx13 = semilogx(w,-imag(Zl),'Parent',subplot13);
-for i=1:length(budget)
-    set(semilogx13(i),'DisplayName',budget{i}.name);
-end
-% Create xlabel
-xlabel('\omega [rad/s]','FontSize',16);
-% Create ylabel
-ylabel('-Im(Z_{L}) [\Omega]','FontSize',16);
-
-
-% Create subplot
-subplot23 = subplot(2,3,6,'Parent',figure1,'XScale',escalax,...
-    'YScale',escalay,'XMinorTick','on','FontSize',16,'Position',[(3*hs+2*h) vs h v]);
-% Uncomment the following line to preserve the Y-limits of the axes
-% ylim(subplot1,[-3000000 3000000]);
-box(subplot23,'on');
-hold(subplot23,'all');
-% Create multiple lines using matrix input to semilogx
-semilogx23 = semilogx(w,real(Zl),'Parent',subplot23);
-for i=1:length(budget)
-    set(semilogx23(i),'DisplayName',budget{i}.name);
-end
-% Create xlabel
-xlabel('\omega [rad/s]','FontSize',16);
-% Create ylabel
-ylabel('Re(Z_{L}) [\Omega]','FontSize',16);
-% Create legend
-legend1 = legend(subplot23,'show');
-
+ylabel(['-Im(',labely,') [',units,']'],'FontSize',16);
+xlim(axes2,[min([w(indp);w(indn)]), max([w(indp);w(indn)])]);
+ylim(axes2,[min([IZpos(indp); IZneg(indn)]), ...
+            max([IZpos(indp); IZneg(indn)])]);
 
 if save
     if ~exist('name','var')
         name = 'no_name';
     end
-    saveas(figure1,['impedance_' name '.fig']);
+    saveas(f1,['Z', name, '.fig']);
 end
 

@@ -21,20 +21,6 @@ Status::type track_findm66    (const Accelerator& accelerator, const std::vector
 Pos<double>  linalg_solve     (const std::vector<Pos<double> >& M, const Pos<double>& b);
 
 
-// linepass
-// --------
-// tracks particles along a beam transport line
-//
-// inputs:
-//		line:	 		Element vector representing the beam transport line
-//		orig_pos:		Pos vector representing initial positions of particles
-//		element_offset:	equivalent to shifting the lattice so that '*element_offset' is the index for the first element
-//		trajectory:		flag indicating that trajectory is to be recorded at entrance of all elements
-//						(otherwise only the coordinates at the exit of last element is recorded)
-// outputs:
-//		pos:			Pos vector of particles' final coordinates (or trajetory)
-//		element_offset:	in case of problems with passmethods, '*element_offset' is the index of the corresponding element
-//		RETURN:			status do tracking (see 'auxiliary.h')
 
 template <typename T>
 Status::type track_elementpass (
@@ -79,6 +65,21 @@ Status::type track_elementpass (
 	return status;
 
 }
+
+// linepass
+// --------
+// tracks particles along a beam transport line
+//
+// inputs:
+//		line:	 		Element vector representing the beam transport line
+//		orig_pos:		Pos vector representing initial positions of particles
+//		element_offset:	equivalent to shifting the lattice so that '*element_offset' is the index for the first element
+//		trajectory:		flag indicating that trajectory is to be recorded at entrance of all elements
+//						(otherwise only the coordinates at the exit of last element is recorded)
+// outputs:
+//		pos:			Pos vector of particles' final coordinates (or trajetory)
+//		element_offset:	in case of problems with passmethods, '*element_offset' is the index of the corresponding element
+//		RETURN:			status do tracking (see 'auxiliary.h')
 
 template <typename T>
 Status::type track_linepass (

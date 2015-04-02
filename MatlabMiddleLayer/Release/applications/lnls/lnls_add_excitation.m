@@ -14,10 +14,10 @@ for i=1:size(indices,1)
             rho = new_ring{idx}.Length / new_ring{idx}.BendingAngle;
             erro_ori = new_ring{idx}.PolynomB(1);
             new_ring{idx}.PolynomB(1) = erro_ori + errors(i) / rho;    % Ler 'BndMPoleSymplectic4Pass.c'!
-            for k=2:length(new_ring{idx}.PolynomA)
-                new_ring{idx}.PolynomA(k) = (1 + errors(i)) * new_ring{idx}.PolynomA(k);
-                new_ring{idx}.PolynomB(k) = (1 + errors(i)) * new_ring{idx}.PolynomB(k);
-            end
+%             for k=2:length(new_ring{idx}.PolynomA)
+%                 new_ring{idx}.PolynomA(k) = (1 + errors(i)) * new_ring{idx}.PolynomA(k);
+%                 new_ring{idx}.PolynomB(k) = (1 + errors(i)) * new_ring{idx}.PolynomB(k);
+%             end
         elseif (isfield(new_ring{idx}, 'KickAngle'))
             new_ring{idx}.KickAngle = (1 + errors(i)) * new_ring{idx}.KickAngle;
         elseif (isfield(new_ring{idx}, 'PolynomB'))

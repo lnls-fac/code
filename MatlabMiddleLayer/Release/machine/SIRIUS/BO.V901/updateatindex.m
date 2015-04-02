@@ -85,18 +85,18 @@ end
 
 try
     % HCM
-    AO.hcm.AT.ATType = 'hcm';
-    AO.hcm.AT.ATIndex = buildatindex(AO.hcm.FamilyName, Indices.hcm);
-    AO.hcm.Position = findspos(THERING, AO.hcm.AT.ATIndex(:,1))';   
+    AO.ch.AT.ATType = 'ch';
+    AO.ch.AT.ATIndex = buildatindex(AO.ch.FamilyName, Indices.ch);
+    AO.ch.Position = findspos(THERING, AO.ch.AT.ATIndex(:,1))';   
 catch
     warning('HCM family not found in the model.');
 end
 
 try
     % VCM
-    AO.vcm.AT.ATType = 'vcm';
-    AO.vcm.AT.ATIndex = buildatindex(AO.vcm.FamilyName, Indices.vcm);
-    AO.vcm.Position = findspos(THERING, AO.vcm.AT.ATIndex(:,1))';   
+    AO.cv.AT.ATType = 'cv';
+    AO.cv.AT.ATIndex = buildatindex(AO.cv.FamilyName, Indices.cv);
+    AO.cv.Position = findspos(THERING, AO.cv.AT.ATIndex(:,1))';   
 catch
     warning('VCM family not found in the model.');
 end

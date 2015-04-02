@@ -141,55 +141,55 @@ AO.sf.Setpoint.Tolerance     = 0.05;
 AO.sf.Setpoint.DeltaRespMat  = 0.1; 
 
 % HCM
-AO.hcm.FamilyName  = 'hcm';
-AO.hcm.MemberOf    = {'PlotFamily'; 'COR'; 'hcm'; 'Magnet'};
-AO.hcm.DeviceList  = getDeviceList(5,5);
-AO.hcm.ElementList = (1:size(AO.hcm.DeviceList,1))';
-AO.hcm.Status      = ones(size(AO.hcm.DeviceList,1),1);
-AO.hcm.Position    = [];
+AO.ch.FamilyName  = 'ch';
+AO.ch.MemberOf    = {'PlotFamily'; 'COR'; 'ch'; 'Magnet'};
+AO.ch.DeviceList  = getDeviceList(5,5);
+AO.ch.ElementList = (1:size(AO.ch.DeviceList,1))';
+AO.ch.Status      = ones(size(AO.ch.DeviceList,1),1);
+AO.ch.Position    = [];
 
-AO.hcm.Monitor.MemberOf = {'Horizontal'; 'COR'; 'hcm'; 'Magnet';};
-AO.hcm.Monitor.Mode = 'Simulator';
-AO.hcm.Monitor.DataType = 'Scalar';
-AO.hcm.Monitor.Units        = 'Physics';
-AO.hcm.Monitor.HWUnits      = 'Ampere';
-AO.hcm.Monitor.PhysicsUnits = 'Radian';
+AO.ch.Monitor.MemberOf = {'Horizontal'; 'COR'; 'ch'; 'Magnet';};
+AO.ch.Monitor.Mode = 'Simulator';
+AO.ch.Monitor.DataType = 'Scalar';
+AO.ch.Monitor.Units        = 'Physics';
+AO.ch.Monitor.HWUnits      = 'Ampere';
+AO.ch.Monitor.PhysicsUnits = 'Radian';
 
-AO.hcm.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'hcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
-AO.hcm.Setpoint.Mode = 'Simulator';
-AO.hcm.Setpoint.DataType = 'Scalar';
-AO.hcm.Setpoint.Units        = 'Physics';
-AO.hcm.Setpoint.HWUnits      = 'Ampere';
-AO.hcm.Setpoint.PhysicsUnits = 'Radian';
-AO.hcm.Setpoint.Range        = [-10 10];
-AO.hcm.Setpoint.Tolerance    = 0.00001;
-AO.hcm.Setpoint.DeltaRespMat = 0.0005; 
+AO.ch.Setpoint.MemberOf = {'MachineConfig'; 'Horizontal'; 'COR'; 'ch'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.ch.Setpoint.Mode = 'Simulator';
+AO.ch.Setpoint.DataType = 'Scalar';
+AO.ch.Setpoint.Units        = 'Physics';
+AO.ch.Setpoint.HWUnits      = 'Ampere';
+AO.ch.Setpoint.PhysicsUnits = 'Radian';
+AO.ch.Setpoint.Range        = [-10 10];
+AO.ch.Setpoint.Tolerance    = 0.00001;
+AO.ch.Setpoint.DeltaRespMat = 0.0005; 
 
 
 % VCM
-AO.vcm.FamilyName  = 'vcm';
-AO.vcm.MemberOf    = {'PlotFamily'; 'COR'; 'vcm'; 'Magnet'};
-AO.vcm.DeviceList  = getDeviceList(5,5);
-AO.vcm.ElementList = (1:size(AO.vcm.DeviceList,1))';
-AO.vcm.Status      = ones(size(AO.vcm.DeviceList,1),1);
-AO.vcm.Position    = [];
+AO.cv.FamilyName  = 'cv';
+AO.cv.MemberOf    = {'PlotFamily'; 'COR'; 'cv'; 'Magnet'};
+AO.cv.DeviceList  = getDeviceList(5,5);
+AO.cv.ElementList = (1:size(AO.cv.DeviceList,1))';
+AO.cv.Status      = ones(size(AO.cv.DeviceList,1),1);
+AO.cv.Position    = [];
 
-AO.vcm.Monitor.MemberOf = {'Vertical'; 'COR'; 'vcm'; 'Magnet';};
-AO.vcm.Monitor.Mode = 'Simulator';
-AO.vcm.Monitor.DataType = 'Scalar';
-AO.vcm.Monitor.Units        = 'Physics';
-AO.vcm.Monitor.HWUnits      = 'Ampere';
-AO.vcm.Monitor.PhysicsUnits = 'Radian';
+AO.cv.Monitor.MemberOf = {'Vertical'; 'COR'; 'cv'; 'Magnet';};
+AO.cv.Monitor.Mode = 'Simulator';
+AO.cv.Monitor.DataType = 'Scalar';
+AO.cv.Monitor.Units        = 'Physics';
+AO.cv.Monitor.HWUnits      = 'Ampere';
+AO.cv.Monitor.PhysicsUnits = 'Radian';
 
-AO.vcm.Setpoint.MemberOf = {'MachineConfig'; 'Vertical'; 'COR'; 'vcm'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
-AO.vcm.Setpoint.Mode = 'Simulator';
-AO.vcm.Setpoint.DataType = 'Scalar';
-AO.vcm.Setpoint.Units        = 'Physics';
-AO.vcm.Setpoint.HWUnits      = 'Ampere';
-AO.vcm.Setpoint.PhysicsUnits = 'Radian';
-AO.vcm.Setpoint.Range        = [-10 10];
-AO.vcm.Setpoint.Tolerance    = 0.00001;
-AO.vcm.Setpoint.DeltaRespMat = 0.0005; 
+AO.cv.Setpoint.MemberOf = {'MachineConfig'; 'Vertical'; 'COR'; 'cv'; 'Magnet'; 'Setpoint'; 'measbpmresp';};
+AO.cv.Setpoint.Mode = 'Simulator';
+AO.cv.Setpoint.DataType = 'Scalar';
+AO.cv.Setpoint.Units        = 'Physics';
+AO.cv.Setpoint.HWUnits      = 'Ampere';
+AO.cv.Setpoint.PhysicsUnits = 'Radian';
+AO.cv.Setpoint.Range        = [-10 10];
+AO.cv.Setpoint.Tolerance    = 0.00001;
+AO.cv.Setpoint.DeltaRespMat = 0.0005; 
 
 % BPMx
 AO.bpmx.FamilyName  = 'bpmx';

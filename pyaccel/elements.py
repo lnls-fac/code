@@ -20,10 +20,10 @@ del(_r_temp)
 pass_methods = _trackcpp.pm_dict
 
 
-class Vector(_t_class):
+class _Vector(_t_class):
 
     #def __repr__(self):
-    #    return self._get_str('Vector(', ')')
+    #    return self._get_str('_Vector(', ')')
 
     def __str__(self):
         return self._get_str()
@@ -38,7 +38,7 @@ class Vector(_t_class):
         return prefix + '[' + ', '.join(vector) + ']' + suffix
 
 
-class TVector(Vector):
+class _TVector(_Vector):
     pass
 
 
@@ -66,7 +66,7 @@ class RMatrix(list):
 def _get_translation_vector(pointer):
     address = int(pointer)
     array = _p_translation_vector.from_address(address)
-    array.__class__ = TVector
+    array.__class__ = _TVector
     return array
 
 
@@ -77,7 +77,7 @@ def _get_rotation_matrix(pointer):
     matrix = RMatrix()
     for i in range(_R_SIZE[0]):
         row = p.from_address(address+i*_R_SIZE[1]*double_size)
-        row.__class__ = Vector
+        row.__class__ = _Vector
         matrix.append(row)
     return matrix
 
@@ -91,7 +91,7 @@ class Element(_trackcpp.Element):
             'hmax',
             'vmax'
     ]
-    
+
     _array_names = ['t_in', 't_out']
     _matrix_names = ['r_in', 'r_out']
 
@@ -131,9 +131,9 @@ class Element(_trackcpp.Element):
     def _process_polynoms(polynom_a, polynom_b):
         # makes sure polynom_a and polynom_b have same size and are initialized
         pa, pb = polynom_a, polynom_b
-        if pa is None: 
+        if pa is None:
             pa = [0,0,0]
-        if pb is None: 
+        if pb is None:
             pb = [0,0,0]
         n = max([3, len(pa), len(pb)])
         for i in range(len(pa),n): pa.append(0.0)
@@ -159,15 +159,15 @@ class Element(_trackcpp.Element):
             raise TypeError('pass method must be int or str')
 
     pass_method = property(_get_pass_method, _set_pass_method)
-            
+
 
 class Marker(Element):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'hmax', 'vmax']
-    
+
     def __init__(self, fam_name):
         """Create a marker element.
-        
+
         Keyword arguments:
         fam_name -- family name
         """
@@ -178,7 +178,7 @@ class Marker(Element):
 class Bpm(Marker):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hmax', 'vmax']
-    
+
     def __init__(self, fam_name):
         """Create a beam position monitor element.
 
@@ -191,7 +191,7 @@ class Bpm(Marker):
 class Drift(Element):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hmax', 'vmax']
- 
+
     def __init__(self, fam_name, length):
         """Create a drift element.
 
@@ -201,7 +201,7 @@ class Drift(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_drift(self)
-       
+
 
 
 class Corrector(Element):
@@ -219,12 +219,12 @@ class Corrector(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_corrector(self, hkick, vkick)
-        
+
 
 class HCorrector(Corrector):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'hkick', 'hmax', 'vmax']
-    
+
     def __init__(self, fam_name, hkick, length = 0.0):
         """Create a horizontal corrector element.
 
@@ -239,7 +239,7 @@ class HCorrector(Corrector):
 class VCorrector(Corrector):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'vkick', 'hmax', 'vmax']
-    
+
     def __init__(self, fam_name, vkick, length = 0.0):
         """Create a vertical corrector element.
 
@@ -254,9 +254,9 @@ class VCorrector(Corrector):
 class Quadrupole(Element):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'nr_steps',
-                            'polynom_a', 'polynom_b', 'hmax', 'vmax', 
+                            'polynom_a', 'polynom_b', 'hmax', 'vmax',
                             'r_in', 'r_out', 't_in', 't_out']
-    
+
     def __init__(self, fam_name, length, K, nr_steps=10):
         """Create a quadrupole element.
 
@@ -268,15 +268,15 @@ class Quadrupole(Element):
         """
         super().__init__(fam_name, length)
         _trackcpp.initialize_quadrupole(self, K, nr_steps)
-        
+
 
 
 class Sextupole(Element):
 
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'nr_steps',
-                            'polynom_a', 'polynom_b', 'hmax', 'vmax', 
+                            'polynom_a', 'polynom_b', 'hmax', 'vmax',
                             'r_in', 'r_out', 't_in', 't_out']
-    
+
     def __init__(self, fam_name, length, S, nr_steps=5):
         """Create a sextupole element.
 
@@ -295,10 +295,10 @@ class RBend(Element):
     _attributes_to_print = ['fam_name', 'pass_method', 'length', 'nr_steps',
                             'angle', 'angle_in', 'angle_out',
                             'gap', 'fint_in', 'fint_out',
-                            'polynom_a', 'polynom_b', 'hmax', 'vmax', 
+                            'polynom_a', 'polynom_b', 'hmax', 'vmax',
                             'r_in', 'r_out', 't_in', 't_out']
-    def __init__(self, 
-                 fam_name, length, 
+    def __init__(self,
+                 fam_name, length,
                  angle, angle_in=0.0, angle_out=0.0,
                  gap=0.0, fint_in=0.0, fint_out=0.0,
                  polynom_a=None, polynom_b=None,
@@ -318,18 +318,18 @@ class RBend(Element):
         polynom_a, polynom_b = super()._process_polynoms(polynom_a, polynom_b)
         if K is None: K = polynom_b[1]
         if S is None: S = polynom_b[2]
-        _trackcpp.initialize_rbend(self, 
-                                   angle, angle_in, angle_out, 
+        _trackcpp.initialize_rbend(self,
+                                   angle, angle_in, angle_out,
                                    gap, fint_in, fint_out,
                                    polynom_a, polynom_b, K, S)
 
 
 class RFCavity(Element):
 
-    _attributes_to_print = ['fam_name', 'pass_method', 'length', 
+    _attributes_to_print = ['fam_name', 'pass_method', 'length',
                             'frequency', 'voltage', 'hmax', 'vmax']
-    
-    def __init__(self, fam_name, length, frequency, voltage):
+
+    def __init__(self, fam_name, length, voltage, frequency):
         """Create an RF cavity element.
 
         Keyword arguments:

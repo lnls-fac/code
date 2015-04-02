@@ -1,4 +1,4 @@
-function lnls_plot_betabeat(default_path, config_fname, mach_fname)
+function lnls_plot_betabeat(default_path, the_ring_fname, mach_fname)
 
 prompt = {'Submachine (bo/si)', 'symmetry', 'plot title'};
 defaultanswer = {'si', '10', 'V03-C03'};
@@ -12,10 +12,10 @@ size_font = 16;
 if ~exist('default_path','var'),
     default_path = fullfile(lnls_get_root_folder(), 'data','sirius',submachine);
 end
-if ~exist('config_fname','var') || ~exist(config_fname, 'file')
-    [FileName,PathName,~] = uigetfile('*.mat','Select mat file with configs', default_path);
+if ~exist('config_fname','var') || ~exist(the_ring_fname, 'file')
+    [FileName,PathName,~] = uigetfile('*.mat','Select mat file with the nominal ring used', default_path);
     if isnumeric(FileName), return; end
-    config_fname = fullfile(PathName, FileName);
+    the_ring_fname = fullfile(PathName, FileName);
     default_path = PathName;
 end
 if ~exist('mach_fname','var') || ~exist(mach_fname, 'file')
@@ -25,7 +25,7 @@ if ~exist('mach_fname','var') || ~exist(mach_fname, 'file')
 end
 
 % carrega dados de arquivos
-data = load(config_fname); the_ring  = data.r.params.the_ring;
+data = load(the_ring_fname); the_ring  = data.the_ring;
 data = load(mach_fname); mach  = data.machine;
 
 

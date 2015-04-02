@@ -1,8 +1,8 @@
-function lnls_plot_cod(fname)
+function lnls_plot_cod(default_path)
 
 
 prompt = {'Submachine (bo/si)', 'COD unit (um/mm)', 'symmetry', 'plot title'};
-defaultanswer = {'si', 'um', '10', 'V03-C03'};
+defaultanswer = {'si', 'um', '10', 'V07.C05'};
 answer = inputdlg(prompt,'Select submachine and trackcpp algorithms to run',1,defaultanswer);
 if isempty(answer), return; end;
 submachine = answer{1};
@@ -12,15 +12,15 @@ plot_title = answer{4};
 size_font = 16;
 
 % selects file with random machines and loads it
-%fname = '/home/fac_files/data/sirius/bo/beam_dynamics/oficial/v900/multi.cod.physap/cod_matlab/CONFIG_machines_cod_corrected_multi.mat';
-if ~exist('fname','var') || ~exist(fname, 'file')
+if ~exist('default_path','var')
     default_path = fullfile(lnls_get_root_folder(), 'data','sirius',submachine);
-    [FileName,PathName,~] = uigetfile('*.mat','select matlab file with random machines', default_path);
-    if isnumeric(FileName)
-        return
-    end
-    fname = fullfile(PathName, FileName);
 end
+[FileName,PathName,~] = uigetfile('*.mat','select matlab file with random machines', default_path);
+if isnumeric(FileName)
+    return
+end
+fname = fullfile(PathName, FileName);
+
 r = load(fname); machine = r.machine;
 
 % selects section of the lattice for the plot.
@@ -37,9 +37,17 @@ codrx = zeros(length(machine), length(machine{1}));
 codry = zeros(length(machine), length(machine{1}));
 codpx = zeros(length(machine), length(machine{1}));
 codpy = zeros(length(machine), length(machine{1}));
-hcms = findcells(machine{1}, 'FamName', 'hcm');
-vcms = findcells(machine{1}, 'FamName', 'vcm');
-bpms = findcells(machine{1}, 'FamName', 'bpm');
+
+try
+    fam_data = sirius_si_family_data(machine{1});
+    ch = 'chs';cv = 'cvs';
+catch
+    fam_data = sirius_bo_family_data(machine{1});
+    ch = 'ch';cv = 'cv';
+end
+hcms = fam_data.(ch).ATIndex;
+vcms = fam_data.(cv).ATIndex;
+bpms = fam_data.bpm.ATIndex;
 kickx = zeros(length(machine), length(hcms));
 kicky = zeros(length(machine), length(vcms));
 fprintf('Individual Machine Statistics: \n\n');
@@ -51,8 +59,8 @@ for i=1:length(machine)
     codry(i,:) = factor * orb(3,:);
     codpx(i,:) = orb(2,:);
     codpy(i,:) = orb(4,:);
-    kickx(i,:) = getcellstruct(machine{i}, 'KickAngle', hcms, 1, 1);
-    kicky(i,:) = getcellstruct(machine{i}, 'KickAngle', vcms, 1, 2);
+    kickx(i,:) = lnls_get_kickangle(machine{i}, hcms,'x');
+    kicky(i,:) = lnls_get_kickangle(machine{i}, vcms,'y');
     fprintf('%03i | %6.2f %6.2f | %6.2f %6.2f | %6.2f %6.2f \n', i, ...
         max(abs(codrx(i,:))), std(codrx(i,:)), ...
         max(abs(codry(i,:))), std(codry(i,:)), ...

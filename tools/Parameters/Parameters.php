@@ -91,8 +91,8 @@ function fac_format_value($format, $value)
     $s = strtolower(sprintf($format, $value));
     $p = strpos($s, 'e');
     if ($p !== false) {
-        $e = substr($s, $p, 2); # 'e' plus sign
-        $s = str_replace($e, '×10<sup>', $s) . '</sup>';
+        if ($s{$p+1} == '-') { $e = substr($s, $p, 1); } else  { $e = substr($s, $p, 2); }
+ 	    $s = str_replace($e, '×10<sup>', $s) . '</sup>';
     }
 
     return $s;
@@ -184,9 +184,15 @@ function fac_dependents_parameter_render($input, array $args, Parser $parser,
 function fac_parameter_list_parameter_render($input, array $args,
     Parser $parser, PPFrame $frame)
 {
+    $prim_only = fac_get_arg_value('selection', $args);
+    if ($prim_only && (strtolower($prim_only) == 'primitive'))
+        $prim_only = true;
+    else
+        $prim_only = false;
+
     try {
         $prm = new FacParameterLister($input);
-        $list = $prm->get_list();
+        $list = $prm->get_list($prim_only);
         if ($list === false) {
             $error = 'Error: subsystem ' . $input . ' not found';
             $output = fac_get_error_message($error);
@@ -207,9 +213,9 @@ function fac_get_parameter_list_text($parameters)
 
     $text = "";
     foreach($parameters as $p)
-        $text .= "* " . $p . "\n";
+        $text .= "# " . $p . "\n";
 
-    $text .= "* " . $last;
+    $text .= "# " . $last;
 
     return $text;
 }
@@ -405,11 +411,20 @@ function fac_article_delete(WikiPage &$wikiPage, User &$user, &$reason,
         return true; # not a parameter page
 
     try {
-        $prm = new FacParameterEraser($name);
-        $prm->erase();
+        $prm_reader = new FacParameterReader($name);
+        $deps = $prm_reader->read_dependents();
+        if (count($deps) > 0) {
+            $list = implode(', ', $deps);
+            $msg = 'Cannot erase parameter with dependents (' . $list . ')';
+            $error = fac_get_coloured_text($msg);
+            return false;
+        }
+
+        $prm_eraser = new FacParameterEraser($name);
+        $prm_eraser->erase();
         return true;
     } catch(FacException $e) {
-        $error = fac_get_error_message($e->getMessage());
+        $error = fac_get_coloured_text($e->getMessage());
         return false;
     }
 }

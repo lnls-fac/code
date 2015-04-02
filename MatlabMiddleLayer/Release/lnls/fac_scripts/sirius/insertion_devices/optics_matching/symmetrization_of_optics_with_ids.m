@@ -69,6 +69,7 @@ fprintf('tunes: %9.6f %9.6f\n', twiss0.tunes(1), twiss0.tunes(2));
 
 % inserts IDs and does initial symmetrization
 the_ring = insert_ids_set(the_ring0, ids, 1.0);
+the_ring = restore_lattice_ordering(the_ring); save('the_ring_withids_notsymm.mat', 'the_ring');
 the_ring = locally_symmetrize_ids(the_ring, twiss0, ids, fitting_tol_symm, max_nr_iters);
 
 

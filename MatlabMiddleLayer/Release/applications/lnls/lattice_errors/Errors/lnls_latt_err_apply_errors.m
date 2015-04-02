@@ -35,9 +35,9 @@ if length(machine) ~= nr_machines
 end
 
 dim = get_dim(machine{1});
-family_data = sirius_si_family_data(machine{1});
-bpm = family_data.bpm.ATIndex;
+bpm = findcells(machine{1},'FamName','bpm');
 
+ids_idx = findcells(machine{1}, 'PassMethod', 'LNLSThickEPUPass');
 sext_idx = findcells(machine{1}, 'PolynomB');
 fprintf('    --------------------------------------------------------------- \n');
 fprintf('   |           codx [mm]           |           cody [mm]           |\n');
@@ -48,6 +48,7 @@ fprintf('---|---------------------------------------------------------------|\n'
 for i=1:nr_machines
     machine{i}    = apply_errors_one_machine(machine{i}, errors, i, increment);
     the_ring = setcellstruct(machine{i}, 'PolynomB', sext_idx, 0, 1, 3);
+    the_ring = turn_ids_off(the_ring, ids_idx);
     [codx, cody] = calc_cod(the_ring, dim);
     [x_max_all,x_rms_all] = get_max_rms(codx,1e3);
     [x_max_bpm,x_rms_bpm] = get_max_rms(codx(bpm),1e3);
@@ -57,6 +58,11 @@ for i=1:nr_machines
 end
 fprintf('------------------------------------------------------------------- \n');
 
+function the_ring = turn_ids_off(the_ring_original, idx)
+the_ring = the_ring_original;
+for i=idx
+    the_ring{i}.PassMethod = 'DriftPass';
+end
 
 function the_ring = apply_errors_one_machine(the_ring0, errors, machine, fraction)
 

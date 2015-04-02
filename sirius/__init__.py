@@ -1,2 +1,1 @@
-import bo
-from sirius.system import *
+from . import SI_V07

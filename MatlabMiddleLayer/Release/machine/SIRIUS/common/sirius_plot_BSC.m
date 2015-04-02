@@ -24,6 +24,8 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
     if strcmp(maquina,'si')==1
         [THERING titulo]=sirius_si_lattice;
         titulo=regexprep(titulo,'_','-');
+        %quebra rede em segmentos de 10 cm
+        THERING=lnls_refine_lattice(THERING,0.1);
         %Calcula parametros de twiss da rede
         twiss = calctwiss(THERING); 
         %Define inicio e fim para o grafico (1 periodo)
@@ -62,7 +64,7 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
         disp=[twiss_tb.Dispersion];
         twiss.etax=disp(1,2:length(disp))';
         % Define desvio de energia
-        if exist('e_spread', 'var')==0
+        if ~exist('e_spread', 'var')
             e_spread=0;
         end;
     elseif strcmp(maquina,'ts')==1
@@ -82,7 +84,7 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
         disp=[twiss_ts.Dispersion];
         twiss.etax=disp(1,2:length(disp))';
         % Define desvio de energia
-        if exist('e_spread', 'var')==0
+        if ~exist('e_spread', 'var')
             e_spread=0;
         end;
     else 
@@ -90,7 +92,7 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
         %break;
     end;
     
-    if exist('tipo', 'var')==0
+    if ~exist('tipo', 'var')
         tipo = 1;
     end;
     
@@ -108,8 +110,7 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
     
     
     if tipo==0
-        figure1=figure(1);
-        set(figure1, 'Position', [1 1 1000 450]);
+        figure1=figure('Color',[1 1 1],'Position', [1 1 760 472]);
         axes('FontSize',14);
         xlabel({'s [m]'},'FontSize',14);
         ylabel({'Beam stay clear [mm]'},'FontSize',14);
@@ -150,7 +151,7 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
         xlimit=[0 twiss.pos(fim)];
     
         %Create Figure 
-        figure1 = figure('Color',[1 1 1]);  
+        figure1 = figure('Color',[1 1 1],'Position', [1 1 760 472]);  
         annotation('textbox', [0.3,0.88,0.1,0.1],...
            'FontSize',14,...
            'FontWeight','bold',...
@@ -160,15 +161,15 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
         %Grafico dispersao horizontal
         subplot('position',[0.1 0.59 0.85 0.32],'FontSize',14);
         hold all;
-        plot(twiss.pos(ini:fim),HBSC(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
-        xlim(xlimit);
-        ylab=ylabel('Horizontal BSC [mm]', 'FontSize',14);
+        plot(twiss.pos(ini:fim),HBSC(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
+        xlim(xlimit); ylim([0,1.1*max(HBSC)]);
+        ylabel('Horizontal BSC [mm]', 'FontSize',14);
         %set(ylab, 'position', get(ylab,'position')+[0.6,0,0]);
         grid on;
         box on;
 
         %Grafico rede magnetica
-        subplot('position',[0.1 0.45 0.85 0.12]);
+        subplot('position',[0.1 0.48 0.85 0.03]);
         if strcmp(maquina,'si')==1
             lnls_drawlattice(THERING,20,0,1);
             xlim(xlimit);
@@ -186,21 +187,23 @@ function sirius_plot_BSC(maquina,tipo,save_fig,e_spread)
         %Grafico funcoes betatron
         subplot('position',[0.1 0.12 0.85 0.32],'FontSize',14);
         hold all;
-        xlim(xlimit);
-        plot(twiss.pos(ini:fim),VBSC(ini:fim),'LineWidth',1.5,'Color',[0 0 0.8]);
+        xlim(xlimit); ylim([0,1.1*max(VBSC)]);
+        plot(twiss.pos(ini:fim),VBSC(ini:fim),'LineWidth',1.5,'Color',[1 0 0]);
         xlabel('s [m]', 'FontSize',14);
         ylabel({'Vertical BSC [mm]'},'FontSize',14);
         grid on;
         box on; 
     end;
     
-
-    if exist('save_fig', 'var')
+    if ~exist('save_fig','var'), save_fig = false; end
+    
+    if save_fig
         %if strcmp(save_fig,'pdf')==1
         %    print('-dpdf',[maquina '_BSC.pdf']);
         %else
         %    print('-dpng',[maquina '_BSC.png']);
         plot2svg([maquina '_BSC.svg'],figure1);
+        saveas(figure1, [maquina '_BSC']);
     end
    
 end

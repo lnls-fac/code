@@ -72,7 +72,7 @@ for i=1:length(lattice)
     end
     if isfield(lattice{i}, 'PxGrid')
         [pathstr, ~, ~] = fileparts(filename);
-        kicktable_filename = fullfile(pathstr, [lattice{i}.fam_name, '_kicktable.txt']);
+        kicktable_filename = fullfile(pathstr, [lattice{i}.FamName, '.txt']);
         save_kicktable_file(lattice{i}, kicktable_filename);
     end
     fprintf(fp, '\r\n');
@@ -91,7 +91,7 @@ elseif strcmpi(element.PassMethod, 'DriftPass')
 elseif strcmpi(element.PassMethod, 'CorrectorPass')
     passmethod = 'corrector_pass';
 elseif strcmpi(element.PassMethod, 'LNLSThickEPUPass')
-    passmethod = 'kickmap_pass';    
+    passmethod = 'kicktable_pass';    
 elseif any(strcmpi(element.PassMethod, {'BndMPoleSymplectic4Pass','BndMPoleSymplectic4RadPass'}))
     passmethod = 'bnd_mpole_symplectic4_pass';
 elseif any(strcmpi(element.PassMethod, {'StrMPoleSymplectic4Pass','StrMPoleSymplectic4RadPass'}))

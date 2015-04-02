@@ -1,11 +1,11 @@
 import collections
-import passmethods
+import pyring.passmethods as passmethods
 import copy
 
 
 def findspos(lattice, indices = None):
     """ returns longitudinal position of the entrance for all lattice elements """
-    
+
     ''' process input '''
     is_number = False
     if indices is None:
@@ -16,7 +16,7 @@ def findspos(lattice, indices = None):
         except:
             is_number = True
             indices = [indices]
-                    
+
     pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
@@ -25,12 +25,12 @@ def findspos(lattice, indices = None):
         return pos[i]
     else:
         return [pos[i] for i in indices]
-    
+
 def findcells(lattice, attribute_name, value = None):
     """ returns a list with indices of elements that match criteria 'attribute_name=value' """
     indices = []
     for i in range(len(lattice)):
-        if hasattr(lattice[i], attribute_name):    
+        if hasattr(lattice[i], attribute_name):
             if value == None:
                 if getattr(lattice[i], attribute_name) != None:
                     indices.append(i)
@@ -48,14 +48,14 @@ def getcellstruct(lattice, attribute_name, indices = None):
             indices[0]
         except:
             indices = [indices]
-    
+
     data = []
     for idx in indices:
         tdata = getattr(lattice[idx], attribute_name)
         data.append(tdata)
     return data
 
-def setcellstruct(lattice, attribute_name, indices, values):    
+def setcellstruct(lattice, attribute_name, indices, values):
     """ sets elements data and returns a new updated lattice """
     for idx in range(len(indices)):
         try:
@@ -66,7 +66,7 @@ def setcellstruct(lattice, attribute_name, indices, values):
 
 def finddict(lattice, attribute_name):
     """ returns a dict which correlates values of 'attribute_name' and a list of indices corresponding to matching elements """
-    latt_dict = {}  
+    latt_dict = {}
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):
             att_value = getattr(lattice[i], attribute_name)
@@ -90,7 +90,7 @@ def setcavity(lattice, state):
     for idx in indices:
         lattice[idx].pass_method = pass_method
     return lattice
-        
+
 def setradiation(lattice, state):
     """ turns ratiative effects on or off """
     return lattice
@@ -106,12 +106,12 @@ def flatten(lattice):
                 yield line
         else:
             yield element
-            
+
 def printlattice(lattice):
     """ prints elements info of a lattice """
     for i in range(len(lattice)):
         print ('Element#  : ' + str(i) + '\n' + str(lattice[i]))
-        
+
 def unique(lattice, famname = None):
     idx = findcells(lattice, 'fam_name', famname)
     new_lattice = [element for element in lattice]
@@ -119,7 +119,3 @@ def unique(lattice, famname = None):
         if i in idx:
             new_lattice[i] = copy.deepcopy(lattice[i])
     return new_lattice
-    
-        
-        
-        

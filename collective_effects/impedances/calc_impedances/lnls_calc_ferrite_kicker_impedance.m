@@ -87,9 +87,9 @@ epb     = [1 1                9.3            1      12   1];
 mub     = [1 1                 1             1       1   1];
 ange    = [0 0                 0             0       0   0];
 angm    = [0 0                 0             0       0   0];
-sigmadc = [0 1.8e6             1             1       1  5.9e7];
+sigmadc = [0 5.9e7             1             1       1  5.9e7];
 tau     = [0 0                 0             0       0   0]*27e-15;
-b1       = [(b-7.5e-3), (b-7.5e-3+2e-6), (b-1.5e-3), b , d];
+b1       = [(b - 2.0e-3 - 2e-6), (b - 2.0e-3), (b-1.0e-3), b , d];
 
 for j = 1: length(epb)
     epr1(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);

@@ -16,7 +16,7 @@ function [r, lattice_title] = sirius_si_lattice(varargin)
 % 2013-10-02: adicionei o mode_version como parametro de input. (Fernando)
 % 2014-09-17: modificacao das corretoras para apenas uma par integrado de CV e CH rapidas e lentas no mesmo elemento. (Natalia) 
 % 2014-10-07: atualizados nomes de alguns elementos. (xrr)
-% 2015-03-04: testes com ideia de colocar corretores skew fora dos sextupolos e junto com corretoras rápidas
+% 2015-03-04: testes com ideia de colocar corretores skew fora dos sextupolos e junto com corretoras r??pidas
 
 global THERING;
 
@@ -27,7 +27,7 @@ global THERING;
 % --- system parameters ---
 energy = 3e9;
 mode   = 'C';   % a = ac20, b = ac10(beta=4m), c = ac10(beta=1.5m)
-version = '04';
+version = '05';
 strengths = @set_magnet_strengths;
 harmonic_number = 864;
 
@@ -155,7 +155,7 @@ RFC = rfcavity('cav', 0, 2.5e6, 500e6, harmonic_number, 'CavityPass');
 
 % -- lattice markers --
 START  = marker('start',  'IdentityPass');     % start of the model
-END    = marker('end',  'IdentityPass');     % start of the model
+END    = marker('end',  'IdentityPass');     % end of the model
 MIA    = marker('mia', 'IdentityPass');        % center of long straight sections (even-numbered)
 MIB    = marker('mib', 'IdentityPass');        % center of short straight sections (odd-numbered)
 GIRDER = marker('girder', 'IdentityPass');     % marker used to delimitate girders. one marker at begin and another at end of girder.
@@ -299,7 +299,7 @@ THERING = set_vacuum_chamber(THERING);
 THERING = set_girders(THERING);
 
 % pre-carrega passmethods de forma a evitar problema com bibliotecas recem-compiladas
-%lnls_preload_passmethods;
+lnls_preload_passmethods;
 
 r = THERING;
 

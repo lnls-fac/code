@@ -92,8 +92,8 @@ ksip = (2*sqrt(C1)/gamma .* d_accp).^2;
 ksin = (2*sqrt(C1)/gamma .* d_accn).^2;
 
 % Interpola d_touschek
-Dp = interp1(x_tabela,y_tabela,ksip);
-Dn = interp1(x_tabela,y_tabela,ksin);
+Dp = interp1(x_tabela,y_tabela,ksip,'linear',NaN);
+Dn = interp1(x_tabela,y_tabela,ksin,'linear',NaN);
 
 % Tempo de vida touschek inverso
 Ratep = (r0^2*c/8/pi)*N/gamma^2 ./ d_accp.^3 .* Dp ./ V;

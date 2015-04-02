@@ -61,6 +61,8 @@ r.respm.V = V;
 r.respm.S = S;
 
 sv = diag(S);
-fprintf('   number of singular values: %03i\n', size(S,1));
-fprintf('   singular values: %f,%f,%f ... %f,%f,%f\n', sv(1),sv(2),sv(3),sv(end-2),sv(end-1),sv(end));
+if print
+    fprintf('   number of singular values: %03i\n', size(S,1));
+    fprintf('   singular values: %f,%f,%f ... %f,%f,%f\n', sv(1),sv(2),sv(3),sv(end-2),sv(end-1),sv(end));
+end
 
