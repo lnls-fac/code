@@ -23,7 +23,6 @@ class Beam:
         r += '\n{0:<10s} {1:f} T.m'.format('brho:', self.brho)
         return r
 
-<<<<<<< HEAD
 
 def calc_U0(beam_energy, I2):
     """Calculate U0 [keV] from beam energy [GeV] and I2 [1/m]"""
@@ -84,12 +83,12 @@ def calc_natural_bunch_length(energy, circumference, sigmae, U0, mcf, h, Vrf, hc
         Qs = 0.0
         sigmal = sigmae * circumference * _math.sqrt(mcf*(energy*1e9)/(2*_math.pi*h*((Vrf*1e6)**2-(U0*1e3)**2)**0.5))
     return sigmal, Qs
-=======
+
 def calc_brho(energy = None, gamma = None, beta = None, velocity = None):
-    electron_rest_energy_GeV = mathphys.units.joule_2_eV(mathphys.constants.electron_rest_energy) / 1e9
+    electron_rest_energy_GeV = _mp.units.joule_2_eV(_mp.constants.electron_rest_energy) / 1e9
     gamma    = energy/electron_rest_energy_GeV
-    beta     = math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
-    velocity = mathphys.constants.light_speed * beta
-    brho     = beta * (energy * 1e9) / mathphys.constants.light_speed
+    beta     = _math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
+    velocity = _mp.constants.light_speed * beta
+    brho     = beta * (energy * 1e9) / _mp.constants.light_speed
     return brho, velocity, beta, gamma
->>>>>>> 6206871280f5e0da39d73b8acd85d2861583873c
+
