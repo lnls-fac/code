@@ -86,7 +86,11 @@ for i = 1:length(the_ring),
         %         end
         r.integrals(6) = r.integrals(6) + the_ring{i}.PolynomB(2)^2*dispersion^2*the_ring{i}.Length;
     end
+    if isfield(the_ring{i}, 'Period')
+        
+    end
 end
+
 
 % Damping numbers
 % Use Robinson's Theorem

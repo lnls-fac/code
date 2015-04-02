@@ -1,9 +1,9 @@
 function NEWRING = lnls_refine_lattice(RING, max_length, varargin)
 % REFINELATTICE - gera nova rede com elementos de comprimentos menores.
 %
-% Histórico:
+% Histï¿½rico:
 %
-% 2010-10-27: versão inicial do código (Ximenes R. Resende)
+% 2010-10-27: versï¿½o inicial do cï¿½digo (Ximenes R. Resende)
 
 NEWRING = struct([]);
 if nargin>2, families = varargin{1}; else families = {}; end;
@@ -21,6 +21,12 @@ for i=1:length(RING)
     elem = RING{i};
     elem.Length = RING{i}.Length / nrsplits;
     
+    % for ID Kicktables
+    if isfield(RING{i}, 'PxGrid')
+        elem.PxGrid = elem.PxGrid / ntsplits;
+        elem.PyGrid = elem.PyGrid / ntsplits;
+    end
+        
     if isfield(RING{i}, 'BendingAngle')
         
         elem1 = elem;
@@ -43,7 +49,6 @@ for i=1:length(RING)
             NEWRING{end+1} = elem2;
         end
         NEWRING{end+1} = elem3;
-        
     else
         for j=1:nrsplits
             NEWRING{end+1} = elem;
