@@ -1,8 +1,8 @@
 import pyaccel as _pyaccel
 from . import _lattice
 
-_default_radiation_on = False
-_default_cavity_on    = False
+_default_radiation_on = True
+_default_cavity_on    = True
 _default_vchamber_on  = False
 _version              = 'SI_V07'
 

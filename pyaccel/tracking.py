@@ -36,12 +36,9 @@ def elementpass(element, pos, accelerator):
 
     for p in pos:
         x = _trackcpp.DoublePos()
-        x.rx = p[0]
-        x.px = p[1]
-        x.ry = p[2]
-        x.py = p[3]
-        x.dl = p[4]
-        x.de = p[5]
+        x.rx, x.px = p[0], p[1]
+        x.ry, x.py = p[2], p[3]
+        x.dl, x.de = p[4], p[5]
 
         r = _trackcpp.double_track_elementpass(element, x, accelerator)
         if r > 0:
@@ -89,19 +86,14 @@ def linepass(accelerator, pos, trajectory=False, offset=0):
     args = _trackcpp.LinePassArgs()
     args.trajectory = trajectory
 
-    pos_out = []
-    offset_out = []
-    plane_out = []
+    pos_out, offset_out, plane_out = [], [], []
 
     for p in pos:
         args.element_offset = offset
         x0 = _trackcpp.DoublePos()
-        x0.rx = p[0]
-        x0.px = p[1]
-        x0.ry = p[2]
-        x0.py = p[3]
-        x0.dl = p[4]
-        x0.de = p[5]
+        x0.rx, x0.px = p[0], p[1]
+        x0.ry, x0.py = p[2], p[3]
+        x0.dl, x0.de = p[4], p[5]
 
         x = _trackcpp.CppDoublePosVector()
         r = _trackcpp.track_linepass_wrapper(accelerator, x0, x, args)
@@ -130,7 +122,7 @@ def linepass(accelerator, pos, trajectory=False, offset=0):
     return pos_out, offset_out, plane_out
 
 
-def ringpass(accelerator, pos, num_turns=1, trajectory=False, offset=0):
+def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
     """Track particle(s) along a ring.
 
     Accepts one or multiple particles. In the latter case, a list of particles
@@ -162,7 +154,7 @@ def ringpass(accelerator, pos, num_turns=1, trajectory=False, offset=0):
         multiple = True
 
     args = _trackcpp.RingPassArgs()
-    args.nr_turns = num_turns
+    args.nr_turns = nr_turns
     args.trajectory = trajectory
 
     pos_out = []
