@@ -2,63 +2,155 @@
 import trackcpp as _trackcpp
 import pyaccel.lattice
 
+class AcceleratorException(Exception):
+    pass
 
 class Accelerator(object):
 
-    def __init__(self, lattice, energy=0.0, harmonic_number=0):
-        if isinstance(lattice, list):
-            lattice = pyaccel.lattice.Lattice(lattice)
-        self._a = _trackcpp.Accelerator()
-        self._a.lattice = lattice._lattice
-        self.energy = energy
-        self.harmonic_number = harmonic_number
+    def __init__(self, **kwargs):
+
+        if 'accelerator' in kwargs:
+            a = kwargs['accelerator']
+            if isinstance(a,_trackcpp.Accelerator):
+                self._accelerator = a
+            else:
+                self._accelerator = kwargs['accelerator']._accelerator
+        else:
+            self._accelerator = _trackcpp.Accelerator()
+            self._accelerator.cavity_on = False
+            self._accelerator.radiation_on = False
+            self._accelerator.vchamber_on = False
+            self._accelerator.harmonic_number = 0
+
+        if 'elements' in kwargs:
+            elements = kwargs['elements']
+            if isinstance(elements, _trackcpp.CppElementVector):
+                self._accelerator.lattice = elements
+            elif isinstance(elements, list):
+                self._accelerator.lattice = _trackcpp.CppElementVector(elements)
+            else:
+                raise TypeError('values must be list of Element')
+
+        if 'energy' in kwargs:
+            self._accelerator.energy = kwargs['energy']
+        if 'harmonic_number' in kwargs:
+            self._accelerator.harmonic_number = kwargs['harmonic_number']
+        if 'radiation_on' in kwargs:
+            self._accelerator.radiation_on = kwargs['radiation_on']
+        if 'cavity_on' in kwargs:
+            self._accelerator.cavity_on = kwargs['cavity_on']
+        if 'vchamber_on' in kwargs:
+            self._accelerator.vchamber_on = kwargs['vchamber_on']
+
+    def __getitem__(self, index):
+
+        if isinstance(index,int):
+            return pyaccel.elements.Element(element=self._accelerator.lattice[index])
+        elif isinstance(index, (list,tuple)):
+            lattice = _trackcpp.CppElementVector()
+            for i in index:
+                lattice.append(self._accelerator.lattice[i])
+        elif isinstance(index, slice):
+            lattice = self._accelerator.lattice[index]
+        else:
+            raise TypeError('invalid index')
+        a = Accelerator(
+                elements=lattice,
+                energy=self._accelerator.energy,
+                harmonic_number=self._accelerator.harmonic_number,
+                cavity_on=self._accelerator.cavity_on,
+                radiation_on=self._accelerator.radiation_on,
+                vchamber_on=self._accelerator.vchamber_on)
+        return a
+
+    def __setitem__(self, index, value):
+
+        if isinstance(index,int):
+            self._accelerator.lattice[index] = value._e
+        elif isinstance(index, (list, tuple)):
+            if isinstance(value, (list,tuple)):
+                for i in range(len(value)):
+                    v = value[i]
+                    if not isinstance(v, pyaccel.elements.Element):
+                        raise TypeError('invalid value')
+                    self._accelerator.lattice[index[i]] = v._e
+            else:
+                if not isinstance(value, pyaccel.elements.Element):
+                    raise TypeError('invalid value')
+                for i in range(len(value)):
+                    self._accelerator.lattice[index[i]] = value._e
+        elif isinstance(index, slice):
+            start, stop, step = index.indices(len(self._accelerator.lattice))
+            iterator = range(start, stop, step)
+            if isinstance(value, (list, tuple)):
+                for i in iterator:
+                    print(i,self._accelerator.lattice[i],value[i])
+                    self._accelerator.lattice[i] = value[i]._e
+            else:
+                for i in iterator:
+                    self._accelerator.lattice[i] = value._e
+
+
+        #
+        #
+        # if isinstance(value, list):
+        #     elements = []
+        #     for v in value:
+        #         if not isinstance(v, pyaccel.elements.Element):
+        #             raise TypeError(_TYPE_ERROR_MSG)
+        #         elements.append(v._e)
+        #     self._lattice[index] = elements
+        # elif isinstance(value, pyaccel.elements.Element):
+        #     self._lattice[index] = value._e
+        # else:
+        #     raise TypeError(_TYPE_ERROR_MSG)
+
+    def __len__(self):
+        return len(self._accelerator.lattice)
+
+    def append(self, value):
+        if not isinstance(value, pyaccel.elements.Element):
+            raise TypeError('value must be Element')
+        self._accelerator.lattice.append(value._e)
 
     @property
     def energy(self):
-        return self._a.energy
+        return self._accelerator.energy
 
     @energy.setter
     def energy(self, value):
-        self._a.energy = value
+        self._accelerator.energy = value
 
     @property
     def harmonic_number(self):
-        return self._a.harmonic_number
+        return self._accelerator.harmonic_number
 
     @harmonic_number.setter
     def harmonic_number(self, value):
-        return self._a.harmonic_number
+        return self._accelerator.harmonic_number
 
     @property
     def cavity_on(self):
-        return self._a.cavity_on
+        return self._accelerator.cavity_on
 
     @cavity_on.setter
     def cavity_on(self, value):
-        self._a.cavity_on = value
+        if self._accelerator.harmonic_number < 1:
+            raise AcceleratorException('invalid harmonic number')
+        self._accelerator.cavity_on = value
 
     @property
     def radiation_on(self):
-        return self._a.radiation_on
+        return self._accelerator.radiation_on
 
     @radiation_on.setter
     def radiation_on(self, value):
-        self._a.radiation_on = value
+        self._accelerator.radiation_on = value
 
     @property
     def vchamber_on(self):
-        return self._a.vchamber_on
+        return self._accelerator.vchamber_on
 
     @vchamber_on.setter
     def vchamber_on(self, value):
-        self._a.vchamber_on = value
-
-    @property
-    def lattice(self):
-        return pyaccel.lattice.Lattice(lattice=self._a.lattice)
-
-    @lattice.setter
-    def lattice(self, value):
-        if not isinstance(value, pyaccel.lattice.Lattice):
-            raise TypeError('value must be Lattice')
-        self._a.lattice = value._lattice
+        self._accelerator.vchamber_on = value

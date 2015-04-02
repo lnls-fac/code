@@ -5,19 +5,19 @@ import pyaccel.elements
 
 
 _ElementVector = _trackcpp.CppElementVector
-_TYPE_ERROR_MSG = 'values must be (list) of Element'
+_TYPE_ERROR_MSG = 'values must be list of Element'
 
 
 class Lattice(object):
 
-    def __init__(self, elements=None, lattice=None):
-        if lattice is not None:
-            self._lattice = lattice
-        elif elements is not None:
-            trackcpp_elements = []
-            for element in elements:
-                trackcpp_elements.append(element._e)
-            self._lattice = _ElementVector(trackcpp_elements)
+    def __init__(self, elements=None):
+        if elements is not None:
+            if isinstance(elements, _trackcpp.CppElementVector):
+                self._lattice = lattice
+            elif isinstance(elements, list):
+                self._lattice = _ElementVector(trackcpp_elements)
+            else:
+                raise TypeError(_TYPE_ERROR_MSG)
         else:
             self._lattice = _ElementVector()
 

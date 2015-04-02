@@ -468,3 +468,8 @@ class Element(object):
         address = int(pointer)
         c_array = _coord_matrix.from_address(address)
         return _numpy.ctypeslib.as_array(c_array)
+
+    def __str__(self):
+        r = ''
+        r += 'fam_name: {0}'.format(self.fam_name)
+        return r
