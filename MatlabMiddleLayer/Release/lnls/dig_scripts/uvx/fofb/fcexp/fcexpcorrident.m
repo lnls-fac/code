@@ -1,4 +1,4 @@
-function fcexpcorrident(marker, amplitude, bw, period, selected_corr)
+function [fcdata, expout, timestamp] = fcexpcorrident(marker, amplitude, bw, period, selected_corr)
 
 Ts = 320e-6;
 ncorr = 42;
@@ -41,4 +41,4 @@ expinfo.period = period;
 
 expinfo.marker = uint32(marker);
 
-fcexp(expinfo);
+[fcdata, expout, timestamp] = fcexp(expinfo);
