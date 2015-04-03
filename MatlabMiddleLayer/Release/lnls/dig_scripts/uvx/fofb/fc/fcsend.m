@@ -59,6 +59,9 @@ while i < stopat
                 i=i+1;
                 pause(0.001);
                 break
+            else
+                hi = fread(conn, 1, 'uint32');
+                lo = fread(conn, 1, 'uint32');
             end
         catch err
             failure = true;
