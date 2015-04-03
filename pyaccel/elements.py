@@ -43,7 +43,7 @@ def drift(fam_name, length):
     return Element(element=e)
 
 
-def hcorrector(fam_name, hkick, length=0.0):
+def hcorrector(fam_name,  length=0.0, hkick=0.0):
     """Create a horizontal corrector element.
 
     Keyword arguments:
@@ -55,7 +55,7 @@ def hcorrector(fam_name, hkick, length=0.0):
     return Element(element=e)
 
 
-def vcorrector(fam_name, vkick, length=0.0):
+def vcorrector(fam_name, length=0.0, vkick=0.0):
     """Create a vertical corrector element.
 
     Keyword arguments:
@@ -67,7 +67,7 @@ def vcorrector(fam_name, vkick, length=0.0):
     return Element(element=e)
 
 
-def corrector(fam_name, hkick, vkick, length=0.0):
+def corrector(fam_name,  length=0.0, hkick=0.0, vkick=0.0):
     """Create a corrector element.
 
     Keyword arguments:
@@ -103,34 +103,34 @@ def rbend(fam_name, length, angle, angle_in=0.0, angle_out=0.0,
     return Element(element=e)
 
 
-def quadrupole(fam_name, length, K, num_steps=10):
+def quadrupole(fam_name, length, K, nr_steps=10):
     """Create a quadrupole element.
 
     Keyword arguments:
     fam_name -- family name
     length -- [m]
     K -- [m^-2]
-    num_steps -- number of steps (default 10)
+    nr_steps -- number of steps (default 10)
     """
-    e = _trackcpp.quadrupole_wrapper(fam_name, length, K, num_steps)
+    e = _trackcpp.quadrupole_wrapper(fam_name, length, K, nr_steps)
     return Element(element=e)
 
 
-def sextupole(fam_name, length, S, num_steps=5):
+def sextupole(fam_name, length, S, nr_steps=5):
     """Create a sextupole element.
 
     Keyword arguments:
     fam_name -- family name
     length -- [m]
-    S -- [m^-3]
-    num_steps -- number of steps (default 5)
+    S -- (1/2!)(d^2By/dx^2)/(Brho)[m^-3]
+    nr_steps -- number of steps (default 5)
     """
-    e = _trackcpp.sextupole_wrapper(fam_name, length, S, num_steps)
+    e = _trackcpp.sextupole_wrapper(fam_name, length, S, nr_steps)
     return Element(element=e)
 
 
 def rfcavity(fam_name, length, voltage, frequency):
-    """Create an RF cavity element.
+    """Create a RF cavity element.
 
     Keyword arguments:
     fam_name -- family name
@@ -145,9 +145,9 @@ def rfcavity(fam_name, length, voltage, frequency):
 def _process_polynoms(pa, pb):
     # Make sure pa and pb have same size and are initialized
     if pa is None:
-        pa = [0,0,0]
+        pa = [0.0,0.0,0.0]
     if pb is None:
-        pb = [0,0,0]
+        pb = [0.0,0.0,0.0]
     n = max([3, len(pa), len(pb)])
     for i in range(len(pa), n):
         pa.append(0.0)
@@ -212,7 +212,7 @@ class Kicktable(object):
 
     @property
     def num_pts_y(self):
-        return self._kicktable.y_nrpts
+        return self._kicktable.y_nrptspyaccel.accelerator.Accelerator()
 
 
 class Element(object):
@@ -261,15 +261,12 @@ class Element(object):
         return self._e.length
 
     @length.setter
-    def length(self, value):
-        self._e.length = value
-
     @property
-    def num_steps(self):
+    def nr_steps(self):
         return self._e.nr_steps
 
-    @num_steps.setter
-    def num_steps(self, value):
+    @nr_steps.setter
+    def nr_steps(self, value):
         self._e.nr_steps = value
 
     @property
@@ -466,10 +463,15 @@ class Element(object):
 
     def _get_coord_matrix(self, pointer):
         address = int(pointer)
+
+    @gap.setter
+    def gap(self, value):
         c_array = _coord_matrix.from_address(address)
         return _numpy.ctypeslib.as_array(c_array)
 
     def __str__(self):
         r = ''
-        r += 'fam_name: {0}'.format(self.fam_name)
+        r += 'fam_name   : {0}'.format(self.fam_name)
+        r += 'length     : {0} m'.format(self.length)
+        r += 'pass_method: {0}'.format(self.pass_method)
         return r

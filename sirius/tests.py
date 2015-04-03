@@ -5,9 +5,8 @@ import pyaccel
 import matplotlib.pyplot as plt
 
 # creates accelerate and inits its lattice
-accelerator = pyaccel.accelerator.Accelerator()
-# the_ring = sirius.create_lattice()
-# print(the_ring[0])
+the_ring = sirius.create_accelerator()
+
 accelerator.lattice = pyaccel.lattice.Lattice(elements=sirius.create_lattice())
 #
 # # global tracking parameters

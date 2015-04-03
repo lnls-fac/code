@@ -90,21 +90,6 @@ class Accelerator(object):
                 for i in iterator:
                     self._accelerator.lattice[i] = value._e
 
-
-        #
-        #
-        # if isinstance(value, list):
-        #     elements = []
-        #     for v in value:
-        #         if not isinstance(v, pyaccel.elements.Element):
-        #             raise TypeError(_TYPE_ERROR_MSG)
-        #         elements.append(v._e)
-        #     self._lattice[index] = elements
-        # elif isinstance(value, pyaccel.elements.Element):
-        #     self._lattice[index] = value._e
-        # else:
-        #     raise TypeError(_TYPE_ERROR_MSG)
-
     def __len__(self):
         return len(self._accelerator.lattice)
 
