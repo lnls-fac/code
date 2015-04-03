@@ -1,12 +1,16 @@
-deltarf = 1e3;
-gap_vel = 300;
-phase_vel = 300;
+deltarf = 1e-3; % MHz
+gap_vel = 60;
+phase_vel = 30;
 
 aon11_gaps = [repmat(22,5,1); repmat(26,5,1); repmat(29,5,1); repmat(33, 5,1)];
 aon11_phases = repmat([-25; -15; -10; -5; 0; 5; 10; 15; 25], 4,1);
-    
+
+switch2online;
+
 aon11_gap0 = getpv('AON11GAP_SP');
 aon11_phase0 = getpv('AON11FASE_SP');
+aon11_gapv0 = getpv('AON11VGAP_SP');
+aon11_phasev0 = getpv('AON11VFASE_SP');
 
 setpv('AON11VGAP_SP', gap_vel);
 setpv('AON11VFASE_SP', phase_vel);
@@ -39,16 +43,18 @@ for i=1:length(aon11_gaps)
     pause(1);
     frf = getrf;
     setrf(frf-deltarf/2);
-    pause(2);
+    pause(4);
     setrf(frf+deltarf/2);
-    pause(2);
+    pause(4);
     setrf(frf);
-    pause(1);
+    pause(2);
     
     nu(i,:) = gettune;
 end
 
 lnls1_fast_orbcorr_disable_excitation;
 
-data_header = {'AON11_GAP','AON11_FASE','TUNEX','TUNEY'};
-data = [aon11_gaps aon11_phases nu];
+getpv('AON11GAP_SP', aon11_gap0);
+getpv('AON11FASE_SP', aon11_phase0);
+getpv('AON11VGAP_SP', aon11_gapv0);
+getpv('AON11VFASE_SP', aon11_phasev0);
