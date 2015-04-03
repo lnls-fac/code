@@ -9,12 +9,12 @@ E = 3;
 
 i=1;
 %% Resistive wall form cilindrical vaccum chamber;
-if (any(strcmp(select,'rw_with_coating')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'Wall With Coating';
+if (any(strcmp(select,'rw_with_neg')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
+    budget{i}.name = 'Wall with NEG';
     budget{i}.type = 'rw';
     budget{i}.quantity = 1;
-    budget{i}.betax = 7;
-    budget{i}.betay = 11;
+    budget{i}.betax = 7.2;
+    budget{i}.betay = 11.0;
     epb     = [1 1 1 1];
     mub     = [1 1 1 1];
     ange    = [0 0 0 0];
@@ -23,14 +23,6 @@ if (any(strcmp(select,'rw_with_coating')) || any(strcmp(select,'all')) || any(st
     tau     = [0 0 1 0]*27e-15;
     b       = [12.000 12.001 13.000]*1e-3;
     L       = 480;
-    budget{i}.mub = mub;
-    budget{i}.ange = ange;
-    budget{i}.angm = angm;
-    budget{i}.tau   = tau;
-    budget{i}.sigmadc = sigmadc;
-    budget{i}.epb = epb;
-    budget{i}.b = b;
-    budget{i}.L = L;
     for j = 1: length(epb)
         epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
@@ -39,20 +31,19 @@ if (any(strcmp(select,'rw_with_coating')) || any(strcmp(select,'all')) || any(st
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'log';
     i=i+1;
 end
 
 
 %% Resistive wall from in-vaccum ondulators;
-if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'IVUs @ low betax';
+if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) );%|| any(strcmp(select,'ring')))
+    budget{i}.name = 'IVUs (low betax)';
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
     if strcmp(phase,'phase_2')
         budget{i}.quantity = 8; 
     end
-    budget{i}.betax = 4.1;
+    budget{i}.betax = 1.5;
     budget{i}.betay = 1.5;
   
     epb     = [1 1 1 1];
@@ -63,15 +54,6 @@ if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,
     tau     = [0 1 0 0]*27e-15;
     b       = [4.5 4.65 4.7]/2*1e-3;
     L       = 2.0;
-    budget{i}.mub = mub;
-    budget{i}.ange = ange;
-    budget{i}.angm = angm;
-    budget{i}.tau   = tau;
-    budget{i}.sigmadc = sigmadc;
-    budget{i}.epb = epb;
-    budget{i}.b = b;
-    budget{i}.L = L;
-    
     for j = 1: length(epb)
         epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
@@ -83,20 +65,19 @@ if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'log';
     i=i+1;
 end
 
 
-if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'IVUs @ high betax';
+if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) );%|| any(strcmp(select,'ring')))
+    budget{i}.name = 'IVUs (high betax)';
     budget{i}.type = 'rw';
     budget{i}.quantity = 2;
     if strcmp(phase,'phase_2')
         budget{i}.quantity = 4; 
     end
-    budget{i}.betax = 16.9;
-    budget{i}.betay = 5.0;
+    budget{i}.betax = 17.7;
+    budget{i}.betay = 3.6;
     epb     = [1 1 1 1];
     mub     = [1 1 1 100];
     ange    = [0 0 0 0];
@@ -105,15 +86,6 @@ if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,
     tau     = [0 1 0 0]*27e-15;
     b       = [7.8 7.95 8]/2*1e-3;
     L       = 2.0;
-    budget{i}.mub = mub;
-    budget{i}.ange = ange;
-    budget{i}.angm = angm;
-    budget{i}.tau   = tau;
-    budget{i}.sigmadc = sigmadc;
-    budget{i}.epb = epb;
-    budget{i}.b = b;
-    budget{i}.L = L;
-    
     for j = 1: length(epb)
         epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
@@ -125,21 +97,20 @@ if (any(strcmp(select,'iuv')) || any(strcmp(select,'all')) || any(strcmp(select,
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'log';
     i=i+1;
 end
 
 
 %% Resistive wall from smallgap vacuum chambers;
-if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
+if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) );%|| any(strcmp(select,'ring')))
     budget{i}.name = 'EPUs';
     budget{i}.type = 'rw';
     budget{i}.quantity = 4;
     if strcmp(phase,'phase_2')
         budget{i}.quantity = 8; 
     end
-    budget{i}.betax = 16.9;
-    budget{i}.betay = 5;
+    budget{i}.betax = 17.8;
+    budget{i}.betay = 4.0;
     
     epb     = [1 1 1];
     mub     = [1 1 1];
@@ -149,15 +120,6 @@ if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) || any(strcmp(select
     tau     = [0 1 0 ]*27e-15;
     b       = [12 14]/2*1e-3;
     L       = 2.7;
-    budget{i}.mub = mub;
-    budget{i}.ange = ange;
-    budget{i}.angm = angm;
-    budget{i}.tau   = tau;
-    budget{i}.sigmadc = sigmadc;
-    budget{i}.epb = epb;
-    budget{i}.b = b;
-    budget{i}.L = L;
-    
     for j = 1: length(epb)
         epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
@@ -169,7 +131,6 @@ if (any(strcmp(select,'epus')) || any(strcmp(select,'all')) || any(strcmp(select
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'log';
     i=i+1;
 end
 
@@ -189,7 +150,6 @@ if (any(strcmp(select,'fast_corr')) || any(strcmp(select,'all')) || any(strcmp(s
     tau     = [0 0 0 0]*27e-15;
     b       = [12.000 12.001 12.3]*1e-3;
     L       = 0.1;
-    
     for j = 1: length(epb)
         epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
         mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
@@ -198,21 +158,20 @@ if (any(strcmp(select,'fast_corr')) || any(strcmp(select,'all')) || any(strcmp(s
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'log';
     i=i+1;
 end
 %% Ferrite Kickers for injection
 if (any(strcmp(select,'kicker')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
-    budget{i}.name = 'Ferrite Kickers';
+    budget{i}.name = 'Ferrite Kicker';
     budget{i}.type = 'misto';
-    budget{i}.quantity = 4;
-    budget{i}.betax = 17;
-    budget{i}.betay = 4;
+    budget{i}.quantity = 1;
+    budget{i}.betax = 18;
+    budget{i}.betay = 6;
 % Valores que peguei com o Fabio.
     a = 63/2*1e-3;
-    b = (10+7.5)*1e-3;
+    b = (4.5+2.0)*1e-3;
     d = b + 20e-3;
-    L = 0.6;
+    L = 0.5;
     % Ferrite CMD5005
     epl = 12;
     rho = 1e6;
@@ -233,7 +192,40 @@ if (any(strcmp(select,'kicker')) || any(strcmp(select,'all')) || any(strcmp(sele
     budget{i}.Zv = Zvw;
     budget{i}.Zh = Zhw;
     budget{i}.Zl = Zlw;
-    budget{i}.escala = 'log';
+    i=i+1;
+end
+
+%% pmm 2um coating copper + NEG
+if (any(strcmp(select,'pmm')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
+    budget{i}.name = 'PMM';
+    budget{i}.type = 'rw';
+    budget{i}.quantity = 1;
+    budget{i}.betax = 18;
+    budget{i}.betay = 7;
+    
+    epb     = [1   1    1    9.3   1];
+    mub     = [1   1    1     1    1];
+    ange    = [0   0    0     0    0];
+    angm    = [0   0    0     0    0];
+    sigmadc = [0  4e6  5.9e7  1    1]; % Copper Sheet
+    tau     = [0   0    1     0    0]*27e-15;
+    
+    coat    = 2e-3;
+    neg     = 1e-3;
+    b       = [(4.5-coat-neg) (4.5-coat) 4.5 5.5]*1e-3;
+    L       = 0.5;
+    
+    for j = 1: length(epb)
+        epr(j,:) = epb(j)*(1-1i.*sign(w).*tan(ange(j))) + sigmadc(j)./(1+1i*w*tau(j))./(1i*w*ep0);
+        mur(j,:) = mub(j)*(1-1i.*sign(w).*tan(angm(j)));
+    end
+    
+    [Zl Zv Zh] = lnls_calc_impedance_multilayer_round_pipe(w, epr, mur, b, L, E);
+    Zv = pi^2/12*Zv;
+    Zh = pi^2/24*Zh;
+    budget{i}.Zv = Zv;
+    budget{i}.Zh = Zh;
+    budget{i}.Zl = Zl;
     i=i+1;
 end
 
@@ -251,7 +243,6 @@ if (any(strcmp(select,'coherent_synchrotron_radiation')))
     budget{i}.Zv = Zl*0;
     budget{i}.Zh = Zl*0;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'log';
     i=i+1;
 end
 
@@ -291,7 +282,6 @@ if (any(strcmp(select,'bpm')) || any(strcmp(select,'all')))%|| strcmp(select,'ri
     budget{i}.Zv = Zl*0;
     budget{i}.Zh = Zl*0;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'linear';
     i=i+1;
 end
 
@@ -328,7 +318,6 @@ if (any(strcmp(select,'masks')) || any(strcmp(select,'all')))%|| strcmp(select,'
     budget{i}.Zv = Zlint*0;
     budget{i}.Zh = Zxint;
     budget{i}.Zl = Zlint;
-    budget{i}.escala = 'linear';
     i=i+1;
 end
 
@@ -368,7 +357,6 @@ if (any(strcmp(select,'taper_cv')) || any(strcmp(select,'all')))%|| strcmp(selec
     budget{i}.Zv = Zy; % simetria cilindrica
     budget{i}.Zh = Zy;
     budget{i}.Zl = Zl;
-    budget{i}.escala = 'linear';
     i=i+1;
 end
 
@@ -398,38 +386,35 @@ end
 %     budget{i}.Zl = Zl;
 %     
 %     budget{i}.w = w;
-%     budget{i}.escala = 'linear';
 %     i=i+1;
 % end
 if (any(strcmp(select,'broad_band')) || any(strcmp(select,'all')) || any(strcmp(select,'ring')))
     budget{i}.name = 'Broad Band';
     budget{i}.type = 'geo';
     budget{i}.quantity = 1;
-    budget{i}.betax = 6.8;
+    budget{i}.betax = 7.0;
     budget{i}.betay = 11;  
-    Zovern = 0.2;
-    if strcmp(phase,'phase_2')
+    if strcmp(phase,'phase_1')
+        Zovern = 0.2;
+    elseif strcmp(phase,'phase_2')
         Zovern = 0.4; 
+    else
+        Zovern = 0.15;
     end
     fr  = 2.4* 299792458/12e-3/2/pi; % 2.4 c/b/2/pi;
-    budget{i}.Rsl = Zovern*fr/0.578e6; % = 3.6*518.25/354.0*1e3;
-    budget{i}.wrl = fr*2*pi;
-    budget{i}.Ql =  1;
-    budget{i}.Rsx =  budget{i}.Rsl/12e-3;%0.42e6/2; % = 13.5*1e6*518.25/845/20;
-    budget{i}.wrx =  fr*2*pi;
-    budget{i}.Qx =   1;                        
-    budget{i}.Rsy =  budget{i}.Rsl/12e-3;%0.42e6/2; % = 13.5*1e6*518.25/845/20;
-    budget{i}.wry =  fr*2*pi;              
-    budget{i}.Qy =   1;                        
-    Zv = lnls_calc_impedance_transverse_resonator(budget{i}.Rsy, budget{i}.Qy, budget{i}.wry, w);
-    Zh = lnls_calc_impedance_transverse_resonator(budget{i}.Rsx, budget{i}.Qx, budget{i}.wrx, w);
-    Zl = lnls_calc_impedance_longitudinal_resonator(budget{i}.Rsl, budget{i}.Ql, budget{i}.wrl, w);
+    Rsl = Zovern*fr/0.578e6; % = 3.6*518.25/354.0*1e3;
+    wrl = fr*2*pi;     Ql =  1;
+    Rsx = Rsl/12e-3;%0.42e6/2; % = 13.5*1e6*518.25/845/20;
+    wrx = fr*2*pi;     Qx =   1;                        
+    Rsy = Rsl/12e-3;%0.42e6/2; % = 13.5*1e6*518.25/845/20;
+    wry = fr*2*pi;     Qy =   1;                        
+    Zv = lnls_calc_impedance_transverse_resonator(Rsy, Qy, wry, w);
+    Zh = lnls_calc_impedance_transverse_resonator(Rsx, Qx, wrx, w);
+    Zl = lnls_calc_impedance_longitudinal_resonator(Rsl, Ql, wrl, w);
     
     budget{i}.Zv = Zv;
     budget{i}.Zh = Zh;
     budget{i}.Zl = Zl;
-    
-    budget{i}.escala = 'linear';
     i=i+1;
 end
 

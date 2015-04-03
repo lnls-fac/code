@@ -1,21 +1,17 @@
-function tracy3_da_ma_lt(path, types)
-
-if ~exist('types','var'), types = {'xy','ex','ma'};end
-
-if ~iscell(types), types = {types}; end
-xy = false; ma = false; ex = false;
-if any(strcmp('xy',types)), xy = true;end
-if any(strcmp('ex',types)), ex = true;end
-if any(strcmp('ma',types)), ma = true;end
-
+function tracy3_da_ma_lt(path)
 
 % users selects submachine
-prompt = {'Submachine (bo/si)', 'energy [GeV]', 'number of plots'};
-defaultanswer = {'si', '3.0', '2'};
+prompt = {'Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots'};
+defaultanswer = {'si', '3.0', '2','ma xy ex'};
 answer = inputdlg(prompt,'Select submachine, energy and nr of plots', 1, defaultanswer);
 if isempty(answer), return; end;
 energy = str2double(answer{2});
 n_calls = round(str2double(answer{3}));
+
+xy = false; ma = false; ex = false;
+if any(strfind(answer{4},'xy')), xy = true;end
+if any(strfind(answer{4},'ex')), ex = true;end
+if any(strfind(answer{4},'ma')), ma = true;end
 
 if strcmpi(answer{1}, 'bo')
     if ~exist('path','var')
@@ -96,14 +92,9 @@ twi = calctwiss(the_ring);
 color_vec = {'b','r','g','m','c','k','y'};
 esp_lin = 5;
 size_font = 24;
-limx = 15;
-limy = 5;
-lime = 6;
-scrsz = get(0,'ScreenSize');
-xi = scrsz(4)/6;
-yi = scrsz(4)/10;
-xf = xi + scrsz(4)*(2/3);
-yf = yi + scrsz(4)*(2/3);
+limx = 12;
+limy = 3.5;
+lime = 5;
 
 % if ~exist('var_plane','var')
 var_plane = 'x'; %determinaçao da abertura dinâmica por varreduda no plano x
@@ -195,12 +186,12 @@ while i < n_calls
         
         if xy
             if i == 1
-                f=figure('OuterPosition',[xi yi xf yf]);
+                f=figure('Position',[1,1,896,750]);
                 fa = axes('Parent',f,'YGrid','on','XGrid','on','FontSize',size_font);
                 box(fa,'on');
                 hold(fa,'all');
                 xlabel('x [mm]','FontSize',size_font);
-                ylabel('z [mm]','FontSize',size_font);
+                ylabel('y [mm]','FontSize',size_font);
                 xlim(fa,[-limx limx]);
                 ylim(fa,[0 limy]);
             end
@@ -216,11 +207,11 @@ while i < n_calls
         
         if ex
             if i == 1
-                fdp=figure('OuterPosition',[xi yi xf yf]);
+                fdp=figure('Position',[1,1,896,750]);
                 fdpa = axes('Parent',fdp,'YGrid','on','XGrid','on','FontSize',size_font);
                 box(fdpa,'on');
                 hold(fdpa,'all');
-                xlabel('dp [%]','FontSize',size_font);
+                xlabel('\delta [%]','FontSize',size_font);
                 ylabel('x [mm]','FontSize',size_font);
                 xlim(fdpa,[-lime lime]);
                 ylim(fdpa,[-limx,0]);
@@ -242,19 +233,25 @@ while i < n_calls
             if rms_mode; fprintf(' Desvio Padrão:       %10.5f h \n',rmsLT); end;
             
             if i == 1
-                flt=figure('OuterPosition',[xi yi xf yf]);
-                falt = axes('Parent',flt,'YGrid','on','XGrid','on','FontSize',size_font);
+                flt=figure('Position',[1, 1, 1296, 553]);
+                falt = axes('Parent',flt,'YGrid','on','FontSize',size_font,...
+                            'Position',[0.10 0.17 0.84 0.80],'XGrid','on',...
+                            'yTickLabel',{'-5','-2.5','0','2.5','5'},...
+                            'YTick',[-5 -2.5 0 2.5 5]);
                 box(falt,'on');
                 hold(falt,'all');
-                xlim([0, 52])
+                xlim(falt, [0, 52]);
+                ylim(falt, [-lime-0.2,lime+0.2]);
                 xlabel('Pos [m]','FontSize',size_font);
-                ylabel('Momentum Acceptance [%]','FontSize',size_font);
+                ylabel('\delta [%]','FontSize',size_font);
             end
             pllt(i,:) = plot(falt,spos,aveAccep, 'Marker','.','LineWidth',...
                 esp_lin,'Color',color, 'LineStyle','-');
             if rms_mode;
-                plot(falt,spos,aveAccep + rmsAccep, 'Marker','.','Color', color,'LineWidth',2,'LineStyle','--');
-                plot(falt,spos,aveAccep - rmsAccep, 'Marker','.','Color', color,'LineWidth',2,'LineStyle','--');
+                plot(falt,spos,aveAccep + rmsAccep, 'Marker','.','Color',...
+                     color,'LineWidth',2,'LineStyle','--');
+                plot(falt,spos,aveAccep - rmsAccep, 'Marker','.','Color',...
+                      color,'LineWidth',2,'LineStyle','--');
             end
         end
         
@@ -277,4 +274,5 @@ end
 if ma
     legend(pllt(:,1),'show',cell_leg_text, 'Location','Best');
     title(falt,['MA - ' title_text{1}]);
+    lnls_drawlattice(the_ring,10, 0, true,0.2, false, falt);
 end

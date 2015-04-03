@@ -1,33 +1,34 @@
-function varargout = lnls_characterize_tmci(ringdata,budget,I,sigma,plane,n_azi,n_rad,chrom,nb,mu, save)
+function varargout = lnls_characterize_tmci(ringdata, budget, params, save)
+
+plane = params.plane;
+n_azi = params.n_azi;
+n_rad = params.n_rad;
+I     = params.I;
+chrom = params.chrom;
 
 w = ringdata.w;
-
 %% Load parameters
 if strcmp(plane,'v')
-    betas = 'betay';
-    Zts    = 'Zv';
+    betas = 'betay'; Zts    = 'Zv';
     tau  = ringdata.tauy;
     nut = ringdata.nuty;
     label = 'Vertical';
 else
-    betas = 'betax';
-    Zts    = 'Zh';
+    betas = 'betax'; Zts    = 'Zh';
     tau  = ringdata.taux;
     nut = ringdata.nutx;
     label = 'Horizontal';
 end
 
-imped  = 1:length(budget);
 Zt = zeros(size(w));
-for i=imped
+for i=1:length(budget)
     Zt   = Zt + budget{i}.quantity*budget{i}.(Zts)*budget{i}.(betas);
 end
 
-stage    = ringdata.stage;
-w0 = ringdata.w0;       % revolution angular frequency [Hz]
-nus = ringdata.nus;     % synchrotron tune
-eta = ringdata.eta;     % momentum compaction factor
-E = ringdata.E;         % energy [GeV];
+w0    = ringdata.w0;      % revolution angular frequency [Hz]
+nus   = ringdata.nus;     % synchrotron tune
+eta   = ringdata.eta;     % momentum compaction factor
+E     = ringdata.E;       % energy [GeV];
 
 %% Calcula Transeverse mode Coupling
 fprintf('Calculation of %s Mode Coupling Instability\n', label);
@@ -39,9 +40,13 @@ fprintf('%-20s: %-20.4g\n\n','Damping Time [ms]', tau*1e3);
 fprintf('I [mA]: '); fprintf('%-5.3g ', I*1e3);fprintf('\n');
 fprintf('Stable? ');
 
+params.E     = E;   
+params.w0    = w0;   
+params.nus   = nus;
+params.nut   = nut;
+params.eta   = eta;   
 
-delta =lnls_calc_transverse_mode_couplingopt(w, Zt, n_rad, n_azi, sigma, ...
-    I, E, w0, nut, nus, eta, chrom, nb, mu);
+delta =lnls_calc_transverse_mode_couplingopt(w, Zt, params);
 
 first = true;
 for i = 1:length(I)
@@ -57,6 +62,7 @@ for i = 1:length(I)
 end
 fprintf('\n\n\n');
 
+varargout{2} = delta;
 %% Plot Results
 
 % [real_delta ind] = sort(real(delta));
@@ -67,70 +73,24 @@ fprintf('\n\n\n');
 [imag_delta, ~] = sort(imag(delta));
 
 
-% Create figure
-figure1 = figure('OuterPosition',[66           0         929        1057]);
+f1 = figure('Position',[1 1 850 528]);
 
-% Create axes
-axes1 = axes('Parent',figure1,...
-    'Position',[0.0653377630121816 0.0481310156240588 0.878183831672204 0.424150434269331]);
-box(axes1,'on');
-hold(axes1,'all');
-% Create multiple lines using matrix input to plot
-plot1 = plot(axes1, I*1e3, real_delta);
-% Create xlabel
-xlabel({'Current per bunch [mA]'},'FontSize',12);
-% Create ylabel
-ylabel({'Re(\Omega - \omega_\beta)/\omega_s'},'FontSize',12);
-% Create title
-title({'Real Tune Shifts'});
+axes1 = axes('Parent',f1,'Position',[0.12 0.103 0.850 0.415], 'FontSize',16);
+box(axes1,'on'); hold(axes1,'all'); grid(axes1,'on');
+plot(I*1e3, real_delta,'Parent',axes1,'LineWidth',2,'Color','b');
+xlabel({'Current per bunch [mA]'},'FontSize',16)
+ylabel({'Re(\Omega - \omega_\beta)/\omega_s'},'FontSize',16);
+xlim([min(I), max(I)]*1e3);
 
 
-% Create axes
-axes2 = axes('Parent',figure1,...
-    'Position',[0.0697674418604649 0.563326916471794 0.558139534883721 0.405367231638418]);
-box(axes2,'on');
-hold(axes2,'all');
-% Create multiple lines using matrix input to plot
-plot2 = plot(axes2, I*1e3, imag_delta*nus*w0*tau);
-% Create xlabel
-xlabel({'Current per bunch [mA]'},'FontSize',12);
-% Create ylabel
-ylabel({'\tau_{damp}/\tau_g'},'FontSize',12);
-% Create title
-title({'Growth Rates'});
+axes2 = axes('Parent',f1,'Position',[0.12 0.518 0.850 0.415],...
+             'FontSize',16, 'XTickLabel',{''});
+box(axes2,'on');hold(axes2,'all');grid(axes2,'on');
+plot(axes2, I*1e3, imag_delta*nus*w0*tau,'LineWidth',2,'Color','b');
+ylabel({'\tau_{damp}/\tau_g'},'FontSize',16);
+xlim([min(I), max(I)]*1e3);
 
-
-% Create textbox
-string = {};
-if strcmp(plane,'v'), 
-    string = [string, {'Plane: Vertical'},{' '}]; 
-else
-    string = [string, {'Plane: Horizontal'},{' '}];
-end;
-string = [string , {'Impedances used:'}];
-for i=imped
-    string = [string, {sprintf('- %s', budget{i}.name)}];
-end
-string = [string ,{' '}, {'Stage of the Machine:'}, {stage},{' '}];
-% string = [string ,{' '},{' '}];
-string = [string , {sprintf('Chromaticity:  %3.2f', chrom)},{' '}];
-% if nb==1
-%     string = [string , {'Mode of Operation:  Single Bunch'},{' '}];
-% else
-%     string = [string ,         {'Mode of Operation:  Multi-Bunch'}];
-%     string = [string , {sprintf('     # of bunches:  %d',nb)}];
-%     string = [string , {sprintf('     coupled mode:  %d',mu)}];
-% end
-% string = [string ,{' '},{' '}];
-string = [string , {sprintf('Number of azimutal modes:  %d',n_azi)}];
-string = [string , {sprintf('Number of radial modes:    %d',n_rad)}];
-
-annotation(figure1,'textbox',...
-    [0.672203765227021 0.567164179104478 0.264673311184935 0.399786780383795],...
-    'String',string,...
-    'FontSize',14,...
-    'FitBoxToText','off');
 
 if save
-    saveas(figure1,['tmci_' plane '_' ringdata.stage '.fig']);
+    saveas(f1,['tmci_' plane '_' ringdata.stage '.fig']);
 end

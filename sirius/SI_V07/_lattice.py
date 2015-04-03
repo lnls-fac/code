@@ -226,7 +226,7 @@ def create_lattice():
 
 def sets_rf_frequency(the_ring):
 
-    circumference = _pyaccel.lattice.findspos(the_ring, len(the_ring)+1)
+    circumference = _pyaccel.lattice.lengthlatt(the_ring)
     rev_frequency = _consts.light_speed / circumference
     rf_frequency  = _harmonic_number * rev_frequency
     idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')

@@ -7,7 +7,7 @@ import numpy as _numpy
 Lattice = _trackcpp.CppElementVector
 
 def flatlat(elist):
-    """ takes a list-of-list-of-... elements and flattens it: a simple list of lattice elements."""
+    """ takes a list-of-list-of-... elements and flattens it: a simple list of lattice elements """
     flat_elist = []
     for element in elist:
         try:
@@ -18,7 +18,7 @@ def flatlat(elist):
     return flat_elist
 
 def buildlat(elist):
-    """builds lattice from a list of elements and lines"""
+    """ builds lattice from a list of elements and lines """
     lattice = Lattice()
     elist = flatlat(elist)
     for e in elist:
@@ -26,13 +26,14 @@ def buildlat(elist):
     return lattice
 
 def shiftlat(lattice, start):
+    """ shift periodically the lattic so that it starts at element whose index is 'start' """
     new_lattice = lattice[start:]
     for i in range(start):
         new_lattice.append(lattice[i])
     return new_lattice
 
 def findspos(lattice, indices = None):
-    """returns longitudinal position of the entrance for all lattice elements"""
+    """ returns longitudinal position of the entrance for all lattice elements """
 
     ''' process input '''
     is_number = False
@@ -43,19 +44,22 @@ def findspos(lattice, indices = None):
             indices[0]
         except:
             is_number = True
-            indices = [indices]
 
     pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
     pos[-1] = pos[-2] + lattice[-1].length
     if is_number:
-        return _numpy.array(pos[i])
+        return pos[indices]
     else:
         return _numpy.array([pos[i] for i in indices])
 
+def lengthlatt(lattice):
+    """ returns the length of the lattice """
+    return findspos(lattice,len(lattice))
+
 def findcells(lattice, attribute_name, value=None):
-    """returns a list with indices of elements that match criteria 'attribute_name=value'"""
+    """ returns a list with indices of elements that match criteria 'attribute_name=value' """
     indices = []
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):
@@ -67,7 +71,7 @@ def findcells(lattice, attribute_name, value=None):
                     indices.append(i)
     return indices
 
-def getcellstruct(lattice, attribute_name, indices = None):
+def getcellstruct(lattice, attribute_name, indices = None, m=None, n=None):
     """ returns a list with requested lattice data """
     if indices is None:
         indices = range(len(lattice))
@@ -80,7 +84,16 @@ def getcellstruct(lattice, attribute_name, indices = None):
     data = []
     for idx in indices:
         tdata = getattr(lattice[idx], attribute_name)
-        data.append(tdata)
+        if n is None:
+            if m is None:
+                data.append(tdata)
+            else:
+                data.append(tdata[m])
+        else:
+            if m is None:
+                data.append(tdata)
+            else:
+                data.append(tdata[m][n])
     return data
 
 def setcellstruct(lattice, attribute_name, indices, values):

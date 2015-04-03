@@ -13,7 +13,7 @@ function [Accp,ind] = lnls_calc_touschek_amp(the_ring)
 
 twi = calctwiss(the_ring,1:length(the_ring));
 ind = findcells(the_ring,'VChamber');
-cham = getcellstruct(the_ring,'VChamber',ind);
+cham = getcellstruct(the_ring,'VChamber',ind,1,1);
 
 a = -(twi.etaxl./twi.etax.*twi.betax + twi.alphax);
 

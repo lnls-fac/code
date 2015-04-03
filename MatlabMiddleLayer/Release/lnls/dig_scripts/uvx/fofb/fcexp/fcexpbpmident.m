@@ -1,10 +1,10 @@
-function [fcdata, expout, timestamp] = fcexpcorrident(marker, amplitude, bw, period, selected_corr)
+function [fcdata, expout, timestamp] = fcexpbpmident(marker, amplitude, bw, period, profiles)
 
 Ts = 320e-6;
 ncorr = 42;
 
 if nargin < 1 || isempty(marker)
-    marker = uint32(2);
+    marker = uint32(3);
 end
 
 if nargin < 2 || isempty(amplitude)
@@ -16,20 +16,14 @@ if nargin < 3 || isempty(bw)
 end
 
 if nargin < 4 || isempty(period)
-    period = 45;
+    period = 189;
 end
 
 if nargin < 5 || isempty(selected_corr)
-    selected_corr = 1:ncorr;
+    profiles = [ones(1,18) zeros(1,24); zeros(1,18) ones(1,24)];
 end
 
-profiles = zeros(length(selected_corr), ncorr);
-
-for i=1:length(selected_corr)
-    profiles(i, selected_corr(i)) = 1;
-end
-
-expinfo.excitation = 'prbs';
+expinfo.excitation = 'prbs2d';
 expinfo.amplitude = amplitude;
 expinfo.band = [0 2*Ts*bw];
 

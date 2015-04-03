@@ -35,7 +35,8 @@ BendFamilies = unique(getcellstruct(the_ring, 'FamName', idx));
 the_ring = lnls_refine_lattice(the_ring, max_length, BendFamilies);
 
 % Structure to store info
-r.e0 = getenergy('Model');
+ind = findcells(the_ring,'Energy');
+r.e0 = the_ring{ind(1)}.Energy/1e9;
 r.circumference = findspos(the_ring, length(the_ring)+1);
 r.revTime = r.circumference / const.c;
 r.revFreq = const.c / r.circumference;
@@ -85,7 +86,11 @@ for i = 1:length(the_ring),
         %         end
         r.integrals(6) = r.integrals(6) + the_ring{i}.PolynomB(2)^2*dispersion^2*the_ring{i}.Length;
     end
+    if isfield(the_ring{i}, 'Period')
+        
+    end
 end
+
 
 % Damping numbers
 % Use Robinson's Theorem
