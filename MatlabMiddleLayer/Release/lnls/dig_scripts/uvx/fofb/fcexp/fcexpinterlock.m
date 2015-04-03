@@ -1,4 +1,4 @@
-function fcexpinterlock(marker, amplitude, movement, relspeed)
+function [fcdata, expout, timestamp] = fcexpinterlock(marker, amplitude, movement, relspeed)
 
 Ts = 320e-6;
 nbpm_readings = 50;
@@ -48,4 +48,4 @@ expinfo.profiles = profiles;
 
 expinfo.marker = uint32(marker);
 
-fcexp(expinfo);
+[fcdata, expout, timestamp] = fcexp(expinfo);

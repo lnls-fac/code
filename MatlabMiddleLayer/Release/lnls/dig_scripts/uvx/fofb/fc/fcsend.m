@@ -1,4 +1,4 @@
-function [fcdata, expout] = fcsend(ip, fcn, expinfo, npts_packet, stopat)
+function [fcdata, expout, timestamp] = fcsend(ip, fcn, expinfo, npts_packet, stopat)
 
 ncols = 50;
 nmarker = 1;
@@ -24,6 +24,7 @@ end
 
 i=0;
 failure = false;
+timestamp = 0;
 
 conn = tcpip(conninfo.address, conninfo.port, 'OutputBufferSize', 10*npts_packet*(ncols+nmarker+1)*4);
 fopen(conn);
@@ -44,6 +45,11 @@ while i < stopat
     while true
         try
             if fread(conn, 1, 'uint8')
+                hi = fread(conn, 1, 'uint32');
+                lo = fread(conn, 1, 'uint32');
+                if i == 0
+                    timestamp = bitsll(uint64(hi), 32) + uint64(lo);
+                end
                 packet = [packet repmat(typecast(fcmode, 'single'), npts_packet, 1)];
                 subdata = packet';
                 subdatainfo = whos('subdata');
@@ -53,6 +59,9 @@ while i < stopat
                 i=i+1;
                 pause(0.001);
                 break
+            else
+                hi = fread(conn, 1, 'uint32');
+                lo = fread(conn, 1, 'uint32');
             end
         catch err
             failure = true;

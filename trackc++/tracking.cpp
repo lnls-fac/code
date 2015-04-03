@@ -21,7 +21,9 @@
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 
-Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
+Status::type track_findm66 (const Accelerator& accelerator,
+														const std::vector<Pos<double> >& closed_orbit,
+														std::vector<double*> m66) {
 
 	Status::type status  = Status::success;
 	const std::vector<Element>& lattice = accelerator.lattice;

@@ -1,4 +1,4 @@
-function fcexprespm(marker, amplitude)
+function [fcdata, expout, timestamp] = fcexprespm(marker, amplitude)
 
 if nargin < 1 || isempty(marker)
     marker = uint32(1);
@@ -24,4 +24,4 @@ expinfo.profiles = diag(corr_steps);
 
 expinfo.marker = uint32(marker);
 
-fcexp(expinfo);
+[fcdata, expout, timestamp] = fcexp(expinfo);

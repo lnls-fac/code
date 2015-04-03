@@ -1,23 +1,19 @@
-import math
-import mathphys
+import math as _math
+import mathphys as _mp
 
 class Beam:
-    
+
     def __init__(self, energy, current = 0):
-        
+
         self.energy = energy
         self.current = current
         self.brho, self.velocity, self.beta, self.gamma = Beam.calc_brho(self.energy)
-                                                        
+
     @staticmethod
     def calc_brho(energy = None, gamma = None, beta = None, velocity = None):
-        electron_rest_energy_GeV = mathphys.units.joule_2_eV(mathphys.constants.electron_rest_energy) / 1e9
-        gamma    = energy/electron_rest_energy_GeV
-        beta     = math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
-        velocity = mathphys.constants.light_speed * beta 
-        brho     = beta * (energy * 1e9) / mathphys.constants.light_speed
-        return brho, velocity, beta, gamma
-    
+        return calc_brho(energy)
+
+
     def __str__(self):
         r = ''
         r += '{0:<10s} {1:f} GeV'.format('energy:', self.energy)
@@ -26,5 +22,74 @@ class Beam:
         r += '\n{0:<10s} {1:.0f} - {2:f} m/s'.format('velocity:', consts.light_speed, consts.light_speed - self.velocity)
         r += '\n{0:<10s} {1:f} T.m'.format('brho:', self.brho)
         return r
-    
-    
+
+<<<<<<< HEAD
+
+def calc_U0(beam_energy, I2):
+    """Calculate U0 [keV] from beam energy [GeV] and I2 [1/m]"""
+    U0 = _mp.constants.rad_cgamma/(2*_math.pi)*(beam_energy)**4*I2*1e+6
+    return U0
+
+def calc_overvoltage(Vrf, U0):
+    """Calculate cavity overvoltage factor from
+       U0:  energy loss per turn [keV]
+       Vrf: rf total voltage  [MV] """
+    q = Vrf*1e3/U0
+    return q
+
+def calc_rf_acceptance(U0, mcf, h, q, energy):
+    """Calculate RF energy acceptance from:
+       U0:     energy loss per turn [keV]
+       mcf:    momentum compaction factor
+       h:      harmonic_number
+       energy: beam energy [GeV] """
+    eRF = _math.sqrt(2*U0/(_math.pi*mcf*h*(energy*1e6))*(_math.sqrt(q**2-1)-_math.acos(1/q)))
+    return eRF
+
+def calc_number_of_electrons(energy, current, circumference):
+    """Calculate numbe of electrons from
+       energy:        beam energy [GeV]
+       current:       beam current [mA]
+       circumference: ring circumference [m]"""
+    brho, velocity, beta, gamma = Beam.calc_brho(energy)
+    mA = 1e-3 / _mp.constants.elementary_charge * circumference / velocity
+    Np = current * mA
+    return Np
+
+def calc_natural_energy_spread(energy, I2, I3, I4):
+    """Calculate energy dispersion from
+       energy: beam energy [GeV]
+       I2:     second radiation integral [1/m]
+       I3:     third radiation integral [1/m²]
+       I4:     fouth radiation integral [1/m]"""
+
+    brho, velocity, beta, gamma = Beam.calc_brho(energy)
+    sigmae = _math.sqrt(_mp.constants.Cq * gamma**2 * I3/(2*I2+I4))
+    return sigmae
+
+def calc_natural_bunch_length(energy, circumference, sigmae, U0, mcf, h, Vrf, hcavity = False):
+    """Calculate natural bunch length [m] from
+       energy:        beam energy [GeV]
+       circumference: ring circumference [m]
+       sigmae:        natural energy spread
+       U0:            energy loss per turn [keV]
+       mcf:           momentum compaction factor
+       h:             harmonic number
+       Vrf:           total rf voltage [MV]
+       hcavity:       flag indicating that a 3rd order harmonic cavity is present"""
+    if hcavity:
+        Qs = _math.sqrt(mcf*h*_math.sqrt((Vrf/1e6)**2-(U0/1e3)**2)/(2*_math.pi*(energy/1e9)))
+        sigmal = 0.432343807*(mcf*h*_math.pi*sigmae/Qs)**0.5 * circumference/(2*_math.pi*h)
+    else:
+        Qs = 0.0
+        sigmal = sigmae * circumference * _math.sqrt(mcf*(energy*1e9)/(2*_math.pi*h*((Vrf*1e6)**2-(U0*1e3)**2)**0.5))
+    return sigmal, Qs
+=======
+def calc_brho(energy = None, gamma = None, beta = None, velocity = None):
+    electron_rest_energy_GeV = mathphys.units.joule_2_eV(mathphys.constants.electron_rest_energy) / 1e9
+    gamma    = energy/electron_rest_energy_GeV
+    beta     = math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
+    velocity = mathphys.constants.light_speed * beta
+    brho     = beta * (energy * 1e9) / mathphys.constants.light_speed
+    return brho, velocity, beta, gamma
+>>>>>>> 6206871280f5e0da39d73b8acd85d2861583873c

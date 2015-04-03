@@ -1,4 +1,4 @@
-function [fcdata, expout] = fcexp(expinfo)
+function [fcdata, expout, timestamp] = fcexp(expinfo)
 
 fclog_filename = '\\stnls02.lnls.br\CorrecaoOrbita\fc\fcsend_log.txt';
 ip = '10.0.5.31';
@@ -13,4 +13,10 @@ if ~isempty(fclog_filename)
     fclog(fclog_filename, expinfo, npts_packet, stopat);
 end
 
-[fcdata, expout] = fcsend(ip, @fcident, expinfo, npts_packet, stopat);
+[fcdata, expout, timestamp] = fcsend(ip, @fcident, expinfo, npts_packet, stopat);
+
+fileid = fopen(fclog_filename, 'a+');
+fprintf(fileid, ['[' fatimestr(now) '] ']);
+fprintf(fileid, '%d', timestamp);
+fprintf(fileid, '\n');
+fclose(fileid);
