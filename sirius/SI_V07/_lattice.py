@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import math
-import pyaccel
+import math as _math
+import pyaccel as _pyaccel
 from . import optics_mode_C04 as _default_optics_mode
 
 def create_lattice():
@@ -10,12 +10,12 @@ def create_lattice():
     global default_optics_mode
 
     # -- shortcut symbols --
-    marker = pyaccel.elements.marker
-    drift = pyaccel.elements.drift
-    quadrupole = pyaccel.elements.quadrupole
-    sextupole = pyaccel.elements.sextupole
-    rbend_sirius = pyaccel.elements.rbend
-    rfcavity = pyaccel.elements.rfcavity
+    marker = _pyaccel.elements.marker
+    drift = _pyaccel.elements.drift
+    quadrupole = _pyaccel.elements.quadrupole
+    sextupole = _pyaccel.elements.sextupole
+    rbend_sirius = _pyaccel.elements.rbend
+    rfcavity = _pyaccel.elements.rfcavity
     strengths = _default_optics_mode.strengths
 
     # -- drifts --
@@ -53,7 +53,7 @@ def create_lattice():
 
 
     # -- dipoles --
-    deg2rad = math.pi/180.0
+    deg2rad = _math.pi/180.0
 
     B1E = rbend_sirius('b1', 0.828/2,  2.7553*deg2rad/2, 1.4143*deg2rad/2, 0,   0, 0, 0, [0, 0, 0], [0, -0.78, 0])
     MB1 = marker('mb1')
@@ -207,10 +207,10 @@ def create_lattice():
     S20 = [GIRDER_20M1, GIRDER_20S, GIRDER_20M2, B1, GIRDER_20C1, B2, GIRDER_20C2, B3, GIRDER_20C3, B3, GIRDER_20C4, B2, GIRDER_20C5, B1];
 
     anel = [S01,S02,S03,S04,S05,S06,S07,S08,S09,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20];
-    the_ring = pyaccel.lattice.buildlat(anel)
+    the_ring = _pyaccel.lattice.buildlat(anel)
 
     # -- shifts model to marker 'start'
-    idx = pyaccel.lattice.findcells(the_ring, 'fam_name', 'start')
-    the_ring = pyaccel.lattice.shiftlat(the_ring, idx[0])
+    idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'start')
+    the_ring = _pyaccel.lattice.shiftlat(the_ring, idx[0])
 
     return the_ring

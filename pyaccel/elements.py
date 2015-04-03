@@ -473,5 +473,5 @@ class Element(object):
         r = ''
         r += 'fam_name   : {0}'.format(self.fam_name)
         r += 'length     : {0} m'.format(self.length)
-        r += 'pass_method: {0}'.format(self.pass_method)
+        r += 'pass_method: {0}'.format(self._e.pass_method)
         return r
