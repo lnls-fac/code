@@ -1,4 +1,5 @@
 from . import _lattice
+
 create_lattice = _lattice.create_lattice
 
 # -- default accelerator values for SI_V07 --

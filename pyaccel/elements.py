@@ -472,6 +472,6 @@ class Element(object):
     def __str__(self):
         r = ''
         r += 'fam_name   : {0}'.format(self.fam_name)
-        r += 'length     : {0} m'.format(self.length)
-        r += 'pass_method: {0}'.format(self._e.pass_method)
+        r += '\nlength     : {0} m'.format(self.length)
+        r += '\npass_method: {0}'.format(self.pass_method)
         return r
