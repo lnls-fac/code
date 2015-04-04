@@ -261,6 +261,9 @@ class Element(object):
         return self._e.length
 
     @length.setter
+    def length(self, value):
+        self._e.length = value
+
     @property
     def nr_steps(self):
         return self._e.nr_steps
@@ -470,8 +473,26 @@ class Element(object):
         return _numpy.ctypeslib.as_array(c_array)
 
     def __str__(self):
-        r = ''
-        r += 'fam_name   : {0}'.format(self.fam_name)
-        r += '\nlength     : {0} m'.format(self.length)
-        r += '\npass_method: {0}'.format(self.pass_method)
+        fmtstr = '\n{0:<11s}: {1} {2}'
+        r  =   ''
+        r += fmtstr[1:].format('fam_name', self.fam_name, '')
+        if self.length != 0:
+            r += fmtstr.format('length', self.length, 'm')
+        r += fmtstr.format('pass_method', self.pass_method, '')
+        if self.nr_steps != 1:
+            r += fmtstr.format('nr_steps', self.nr_steps, '')
+        if self.angle != 0:
+            r += fmtstr.format('angle', self.angle, 'rad')
+        if self.angle_in != 0:
+            r += fmtstr.format('angle_in', self.angle_in, 'rad')
+        if not all([v == 0 for v in self.polynom_a]):
+            r += fmtstr.format('polynom_a', self.polynom_a, '1/m¹,1/m²,1/m³,...')
+        if not all([v == 0 for v in self.polynom_b]):
+            r += fmtstr.format('polynom_b', self.polynom_b, '1/m¹,1/m²,1/m³,...')
+        if self.hkick != 0:
+            r += fmtstr.format('hkick', self.hkick, 'rad')
+        if self.vkick != 0:
+            r += fmtstr.format('vkick', self.vkick, 'rad')
+        #if self.hkick <> 0:
+        #    r
         return r

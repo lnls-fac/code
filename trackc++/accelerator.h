@@ -7,13 +7,13 @@
 
 struct Accelerator {
 
-	double                  energy;              // [GeV]
-	bool                    cavity_on;
-	bool                    radiation_on;
-	bool                    vchamber_on;
-	int                     harmonic_number;
-	std::vector<Element>    lattice;
-	std::vector<Kicktable*> kicktables;
+  double                  energy;              // [eV]
+  bool                    cavity_on;
+  bool                    radiation_on;
+  bool                    vchamber_on;
+  int                     harmonic_number;
+  std::vector<Element>    lattice;
+  std::vector<Kicktable*> kicktables;
 
 };
 

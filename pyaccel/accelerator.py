@@ -27,7 +27,9 @@ class Accelerator(object):
             if isinstance(elements, _trackcpp.CppElementVector):
                 self._accelerator.lattice = elements
             elif isinstance(elements, list):
-                self._accelerator.lattice = _trackcpp.CppElementVector(elements)
+                for e in elements:
+                    self._accelerator.lattice.append(e._e)
+                #self._accelerator.lattice = _trackcpp.CppElementVector(elements)
             else:
                 raise TypeError('values must be list of Element')
 
