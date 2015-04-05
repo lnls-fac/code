@@ -1,57 +1,58 @@
 
 import numpy as _numpy
 import trackcpp as _trackcpp
+import pyaccel.accelerator
 import pyaccel.elements
 
 
-_ElementVector = _trackcpp.CppElementVector
-_TYPE_ERROR_MSG = 'values must be list of Element'
+#_ElementVector = _trackcpp.CppElementVector
+#_TYPE_ERROR_MSG = 'values must be list of Element'
 
 
-class Lattice(object):
-
-    def __init__(self, elements=None):
-        if elements is not None:
-            if isinstance(elements, _trackcpp.CppElementVector):
-                self._lattice = lattice
-            elif isinstance(elements, list):
-                self._lattice = _ElementVector(elements)
-            else:
-                raise TypeError(_TYPE_ERROR_MSG)
-        else:
-            self._lattice = _ElementVector()
-
-    def __getitem__(self, index):
-        r = self._lattice[index]
-        if isinstance(r, _ElementVector):
-            out = []
-            for e in r:
-                out.append(pyaccel.elements.Element(element=e))
-        else:
-            out = pyaccel.elements.Element(element=r)
-
-        return out
-
-    def __setitem__(self, index, value):
-        if isinstance(value, list):
-            elements = []
-            for v in value:
-                if not isinstance(v, pyaccel.elements.Element):
-                    raise TypeError(_TYPE_ERROR_MSG)
-                elements.append(v._e)
-            self._lattice[index] = elements
-        elif isinstance(value, pyaccel.elements.Element):
-            self._lattice[index] = value._e
-        else:
-            raise TypeError(_TYPE_ERROR_MSG)
-
-    def __len__(self):
-        return len(self._lattice)
-
-    def append(self, value):
-        if not isinstance(value, pyaccel.elements.Element):
-            raise TypeError(_TYPE_ERROR_MSG)
-        self._lattice.append(value._e)
+# class Lattice(object):
+#
+#     def __init__(self, elements=None):
+#         if elements is not None:
+#             if isinstance(elements, _trackcpp.CppElementVector):
+#                 self._lattice = lattice
+#             elif isinstance(elements, list):
+#                 self._lattice = _ElementVector(elements)
+#             else:
+#                 raise TypeError(_TYPE_ERROR_MSG)
+#         else:
+#             self._lattice = _ElementVector()
+#):
+#     def __getitem__(self, index):
+#         r = self._lattice[index]
+#         if isinstance(r, _ElementVector):
+#             out = []
+#             for e in r:
+#                 out.append(pyaccel.elements.Element(element=e))
+#         else:
+#             out = pyaccel.elements.Element(element=r)
+#
+#         return out
+#
+#     def __setitem__(self, index, value):
+#         if isinstance(value, list):
+#             elements = []
+#             for v in value:
+#                 if not isinstance(v, pyaccel.elements.Element):
+#                     raise TypeError(_TYPE_ERROR_MSG)
+#                 elements.append(v._e)
+#             self._lattice[index] = elements
+#         elif isinstance(value, pyaccel.elements.Element):
+#             self._lattice[index] = value._e
+#         else:
+#             raise TypeError(_TYPE_ERROR_MSG)
+#
+#     def __len__(self):
+#         return len(self._lattice)
+#
+#     def append(self, value_ElementVector = _trackcpp.CppElementVector
+#         if not isinstance(value, pyaccel.elements.Element):
+#             raise TypeError(_TYPE_ERROR_MSG)
+#         self._lattice.append(value._e)
 
 
 def flatlat(elist):
@@ -68,10 +69,10 @@ def flatlat(elist):
 
 def buildlat(elist):
     """builds lattice from a list of elements and lines"""
-    lattice = Lattice()
+    lattice = _trackcpp.CppElementVector()
     elist = flatlat(elist)
     for e in elist:
-        lattice.append(e)
+        lattice.append(e._e)
     return lattice
 
 
@@ -85,7 +86,6 @@ def shiftlat(lattice, start):
 def findspos(lattice, indices = None):
     """returns longitudinal position of the entrance for all lattice elements"""
 
-    ''' process input '''
     is_number = False
     if indices is None:
         indices = range(len(lattice))
@@ -94,14 +94,13 @@ def findspos(lattice, indices = None):
             indices[0]
         except:
             is_number = True
-            indices = [indices]
-
+            
     pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length
     pos[-1] = pos[-2] + lattice[-1].length
     if is_number:
-        return _numpy.array(pos[i])
+        return pos[indices]
     else:
         return _numpy.array([pos[i] for i in indices])
 

@@ -4,6 +4,8 @@ import math as _math
 import pyaccel as _pyaccel
 from . import optics_mode_C04 as _default_optics_mode
 
+_lattice_symmetry = 10
+
 def create_lattice():
 
     # -- selection of optical mode --

@@ -104,7 +104,7 @@ def linepass(accelerator, pos, trajectory=False, offset=0):
         x0.de = p[5]
 
         x = _trackcpp.CppDoublePosVector()
-        r = _trackcpp.track_linepass_wrapper(accelerator._a, x0, x, args)
+        r = _trackcpp.track_linepass_wrapper(accelerator._accelerator, x0, x, args)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
 
@@ -181,7 +181,7 @@ def ringpass(accelerator, pos, num_turns=1, trajectory=False, offset=0):
         x0.de = p[5]
 
         x = _trackcpp.CppDoublePosVector()
-        r = _trackcpp.track_ringpass_wrapper(accelerator._a, x0, x, args)
+        r = _trackcpp.track_ringpass_wrapper(accelerator._accelerator, x0, x, args)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
 
@@ -226,7 +226,7 @@ def findorbit6(accelerator):
     """
 
     orbit = _trackcpp.CppDoublePosVector()
-    r = _trackcpp.track_findorbit6(accelerator._a, orbit)
+    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 

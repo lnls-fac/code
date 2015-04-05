@@ -472,6 +472,9 @@ class Element(object):
         c_array = _coord_matrix.from_address(address)
         return _numpy.ctypeslib.as_array(c_array)
 
+    def __repr__(self):
+        return 'fam_name : ' + self.fam_name
+
     def __str__(self):
         fmtstr = '\n{0:<11s}: {1} {2}'
         r  =   ''

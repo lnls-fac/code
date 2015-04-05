@@ -7,6 +7,8 @@ class AcceleratorException(Exception):
 
 class Accelerator(object):
 
+    __isfrozen = False # this is used to prevent creation of new attributes
+
     def __init__(self, **kwargs):
 
         if 'accelerator' in kwargs:
@@ -27,7 +29,10 @@ class Accelerator(object):
             if isinstance(elements, _trackcpp.CppElementVector):
                 self._accelerator.lattice = elements
             elif isinstance(elements, list):
-                for e in elements:
+                for i in range(len(elements)):
+                    e = elements[i]
+                    print(i)
+                    #print(e)
                     self._accelerator.lattice.append(e._e)
                 #self._accelerator.lattice = _trackcpp.CppElementVector(elements)
             else:
@@ -43,6 +48,13 @@ class Accelerator(object):
             self._accelerator.cavity_on = kwargs['cavity_on']
         if 'vchamber_on' in kwargs:
             self._accelerator.vchamber_on = kwargs['vchamber_on']
+
+        self.__isfrozen = True
+
+    def __setattr__(self, key, value):
+        if self.__isfrozen and not hasattr(self, key):
+            raise AcceleratorException( "%r is a frozen class" % self )
+        object.__setattr__(self, key, value)
 
     def __getitem__(self, index):
 
@@ -95,6 +107,20 @@ class Accelerator(object):
     def __len__(self):
         return len(self._accelerator.lattice)
 
+    def __str__(self):
+        r = ''
+        r +=   'energy         : ' + str(self._accelerator.energy) + ' eV'
+        r += '\nharmonic_number: ' + str(self._accelerator.harmonic_number)
+        r += '\ncavity_on      : ' + str(self._accelerator.cavity_on)
+        r += '\nradiation_on   : ' + str(self._accelerator.radiation_on)
+        r += '\nvchamber_on    : ' + str(self._accelerator.vchamber_on)
+        r += '\nlattice length : ' + str(len(self._accelerator.lattice))
+        return r
+
+    def length(self):
+        lens = [e.length for e in self._accelerator.lattice]
+        return sum(lens)
+
     def append(self, value):
         if not isinstance(value, pyaccel.elements.Element):
             raise TypeError('value must be Element')
@@ -114,7 +140,9 @@ class Accelerator(object):
 
     @harmonic_number.setter
     def harmonic_number(self, value):
-        return self._accelerator.harmonic_number
+        if not isinstance(value, int) or value < 1:
+            raise AcceleratorException('harmonic number has to be a positive integer')
+        self._accelerator.harmonic_number = value
 
     @property
     def cavity_on(self):
