@@ -1,4 +1,5 @@
 #include "trackc++.h"
+#include "auxiliary.h"
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_permutation.h>
 #include <gsl/gsl_linalg.h>
@@ -78,6 +79,7 @@ Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Po
 	return status;
 
 }
+
 
 Status::type track_findorbit6(
 		const Accelerator& accelerator,

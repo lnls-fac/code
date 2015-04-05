@@ -12,6 +12,7 @@ the_ring.cavity_on = True
 the_ring.radiation_on = True
 the_ring.vchamber_on = False
 
+
 # aux. parameters and symbols
 # the_ring = the_ring.lattice
 num_turns, trajectory, offset = 4*512, True, 0

@@ -1,6 +1,7 @@
 
 import trackcpp as _trackcpp
 import pyaccel.lattice
+import mathphys as _mp
 
 class AcceleratorException(Exception):
     pass
@@ -48,6 +49,8 @@ class Accelerator(object):
             self._accelerator.cavity_on = kwargs['cavity_on']
         if 'vchamber_on' in kwargs:
             self._accelerator.vchamber_on = kwargs['vchamber_on']
+
+        self._brho, self._velocity, self._beta, self._gamma, self._accelerator.energy = _mp.beam_optics.beam_rigidity(energy = self.energy)
 
         self.__isfrozen = True
 
@@ -117,14 +120,15 @@ class Accelerator(object):
         r += '\nlattice length : ' + str(len(self._accelerator.lattice))
         return r
 
-    def length(self):
-        lens = [e.length for e in self._accelerator.lattice]
-        return sum(lens)
-
     def append(self, value):
         if not isinstance(value, pyaccel.elements.Element):
             raise TypeError('value must be Element')
         self._accelerator.lattice.append(value._e)
+
+    @property
+    def length(self):
+        lens = [e.length for e in self._accelerator.lattice]
+        return sum(lens)
 
     @property
     def energy(self):
@@ -132,7 +136,49 @@ class Accelerator(object):
 
     @energy.setter
     def energy(self, value):
-        self._accelerator.energy = value
+        self._brho, self._velocity, self._beta, \
+        self._gamma, self._accelerator.energy = \
+            _mp.beam_optics.beam_rigidity(energy = value)
+
+    @property
+    def gamma_factor(self):
+        return self._gamma
+
+    @gamma_factor.setter
+    def gamma_factor(self, value):
+        self._brho, self._velocity, self._beta, \
+        self._gamma, self._accelerator.energy = \
+            _mp.beam_optics.beam_rigidity(gamma = value)
+
+    @property
+    def beta_factor(self):
+        return self._beta
+
+    @beta_factor.setter
+    def beta_factor(self, value):
+        self._brho, self._velocity, self._beta, \
+        self._gamma, self._accelerator.energy = \
+            _mp.beam_optics.beam_rigidity(beta = value)
+
+    @property
+    def velocity(self):
+        return self._velocity
+
+    @velocity.setter
+    def velocity(self, value):
+        self._brho, self._velocity, self._beta, \
+        self._gamma, self._accelerator.energy = \
+            _mp.beam_optics.beam_rigidity(velocity = value)
+
+    @property
+    def brho(self):
+        return self._brho
+
+    @brho.setter
+    def brho(self, value):
+        self._brho, self._velocity, self._beta, \
+        self._gamma, self._accelerator.energy = \
+            _mp.beam_optics.beam_rigidity(brho = value)
 
     @property
     def harmonic_number(self):
