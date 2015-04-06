@@ -21,6 +21,7 @@ namespace std {
     %template(CppDoublePVector) vector<double*>;
     %template(CppElementVector) vector<Element>;
     %template(CppDoublePosVector) vector< Pos<double> >;
+    %template(CppDoubleMatrix) vector< vector<double> >;
 }
 
 %inline %{
@@ -43,4 +44,4 @@ void c_array_set(double* v, int i, double x) {
 %include "elementswrapper.h"
 
 %template(DoublePos) Pos<double>;
-%template(double_track_elementpass) track_elementpass<double>;
+//%template(double_track_elementpass) track_elementpass<double>;

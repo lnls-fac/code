@@ -4,34 +4,28 @@
 #include <gsl/gsl_permutation.h>
 #include <gsl/gsl_linalg.h>
 
+
 // track_findm66
 // -------------
 // returns a vector with 6-d transfer matrices, one for each element
 //
 // inputs:
-//		line:	 		Element vector representing the beam transport line
+//		accelerator: strucrure representing the accelerator
 //		closed_orbit:	Pos vector representing calculated closed orbit.
 //
 // outputs:
-//		m66:			vector of (double*)-type elements. Each elements if a pointer
-//						to a flat c array with 36 elements representing the transfer element of
-//						that element. The matrix is is row-format: (drx_f/drx_i, drx_f/dpx_i, ..., dl_f/de_i, dl_f/dl_i)
-//						===========
-//						ATTENTION: !!! Memory for each matrix is supposed to be previously allocated !!!
-//						===========
+//		m66:		vector of Matrix6 elements. Each elements represents the transfer
+//						element of that element. The matrix is is row-format:
+//						(drx_f/drx_i, drx_f/dpx_i, ..., dl_f/de_i, dl_f/dl_i)
 //		RETURN:			status do tracking (see 'auxiliary.h')
 
 
-Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Pos<double> >& closed_orbit, std::vector<double*> m66) {
+Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Pos<double> >& closed_orbit, std::vector<Matrix>& m66) {
 
 	Status::type status  = Status::success;
 	const std::vector<Element>& lattice = accelerator.lattice;
 
-	// checks consistency of data
-	if (m66.size() != lattice.size()) {
-		status = Status::inconsistent_dimensions;
-		return status;
-	}
+	m66.clear();
 
 	for(unsigned int i=0; i<lattice.size(); ++i) {
 
@@ -43,43 +37,39 @@ Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Po
 		// track through element
 		if ((status = track_elementpass (lattice[i], tpsa, accelerator)) != Status::success) return status;
 
-		// minimum  check to see if memory of allocated for each transfer matrix
-		if (m66[i] == NULL) {
-			status = Status::uninitialized_memory;
-			return status;
-		}
+		Matrix m;
 
-		// RX
-		*(m66[i] + 0*6+0) = tpsa.rx.c[1];*(m66[i] + 0*6+1) = tpsa.rx.c[2];
-		*(m66[i] + 0*6+2) = tpsa.rx.c[3];*(m66[i] + 0*6+3) = tpsa.rx.c[4];
-		*(m66[i] + 0*6+4) = tpsa.rx.c[5];*(m66[i] + 0*6+5) = tpsa.rx.c[6];
-		// PX
-		*(m66[i] + 1*6+0) = tpsa.px.c[1];*(m66[i] + 1*6+1) = tpsa.px.c[2];
-		*(m66[i] + 1*6+2) = tpsa.px.c[3];*(m66[i] + 1*6+3) = tpsa.px.c[4];
-		*(m66[i] + 1*6+4) = tpsa.px.c[5];*(m66[i] + 1*6+5) = tpsa.px.c[6];
-		// RY
-		*(m66[i] + 2*6+0) = tpsa.ry.c[1];*(m66[i] + 2*6+1) = tpsa.ry.c[2];
-		*(m66[i] + 2*6+2) = tpsa.ry.c[3];*(m66[i] + 2*6+3) = tpsa.ry.c[4];
-		*(m66[i] + 2*6+4) = tpsa.ry.c[5];*(m66[i] + 2*6+5) = tpsa.ry.c[6];
-		// PY
-		*(m66[i] + 3*6+0) = tpsa.py.c[1];*(m66[i] + 3*6+1) = tpsa.py.c[2];
-		*(m66[i] + 3*6+2) = tpsa.py.c[3];*(m66[i] + 3*6+3) = tpsa.py.c[4];
-		*(m66[i] + 3*6+4) = tpsa.py.c[5];*(m66[i] + 3*6+5) = tpsa.py.c[6];
-		// DE
-		*(m66[i] + 4*6+0) = tpsa.de.c[1];*(m66[i] + 4*6+1) = tpsa.de.c[2];
-		*(m66[i] + 4*6+2) = tpsa.de.c[3];*(m66[i] + 4*6+3) = tpsa.de.c[4];
-		*(m66[i] + 4*6+4) = tpsa.de.c[5];*(m66[i] + 4*6+5) = tpsa.de.c[6];
-		// DL
-		*(m66[i] + 5*6+0) = tpsa.dl.c[1];*(m66[i] + 5*6+1) = tpsa.dl.c[2];
-		*(m66[i] + 5*6+2) = tpsa.dl.c[3];*(m66[i] + 5*6+3) = tpsa.dl.c[4];
-		*(m66[i] + 5*6+4) = tpsa.dl.c[5];*(m66[i] + 5*6+5) = tpsa.dl.c[6];
+		m[0][0] = tpsa.rx.c[1]; m[0][1] = tpsa.rx.c[2];
+		m[0][2] = tpsa.rx.c[3]; m[0][3] = tpsa.rx.c[4];
+		m[0][4] = tpsa.rx.c[5]; m[0][5] = tpsa.rx.c[6];
+
+		m[1][0] = tpsa.px.c[1]; m[1][1] = tpsa.px.c[2];
+		m[1][2] = tpsa.px.c[3]; m[1][3] = tpsa.px.c[4];
+		m[1][4] = tpsa.px.c[5]; m[1][5] = tpsa.px.c[6];
+
+		m[2][0] = tpsa.ry.c[1]; m[2][1] = tpsa.ry.c[2];
+		m[2][2] = tpsa.ry.c[3]; m[2][3] = tpsa.ry.c[4];
+		m[2][4] = tpsa.ry.c[5]; m[2][5] = tpsa.ry.c[6];
+
+		m[3][0] = tpsa.py.c[1]; m[3][1] = tpsa.py.c[2];
+		m[3][2] = tpsa.py.c[3]; m[3][3] = tpsa.py.c[4];
+		m[3][4] = tpsa.py.c[5]; m[3][5] = tpsa.py.c[6];
+
+		m[4][0] = tpsa.de.c[1]; m[4][1] = tpsa.de.c[2];
+		m[4][2] = tpsa.de.c[3]; m[4][3] = tpsa.de.c[4];
+		m[4][4] = tpsa.de.c[5]; m[4][5] = tpsa.de.c[6];
+
+		m[5][0] = tpsa.dl.c[1]; m[5][1] = tpsa.dl.c[2];
+		m[5][2] = tpsa.dl.c[3]; m[5][3] = tpsa.dl.c[4];
+		m[5][4] = tpsa.dl.c[5]; m[5][5] = tpsa.dl.c[6];
+
+		m66.push_back(m);
 
 	}
 
 	return status;
 
 }
-
 
 Status::type track_findorbit6(
 		const Accelerator& accelerator,
