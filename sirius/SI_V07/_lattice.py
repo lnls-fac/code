@@ -3,7 +3,7 @@
 import math as _math
 import pyaccel as _pyaccel
 import mathphys as _mp
-from . import optics_mode_C04 as _default_optics_mode
+from . import optics_mode_C05 as _default_optics_mode
 
 _lattice_symmetry = 10
 _harmonic_number  = 864

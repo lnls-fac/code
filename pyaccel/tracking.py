@@ -255,6 +255,8 @@ def findm66(accelerator):
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 
+
+    orbit = _trackcpp.CppDoublePosVector()
     m66 = _trackcpp.CppDoubleMatrixVector()
     r = _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
     if r > 0:

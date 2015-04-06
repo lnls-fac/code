@@ -16,7 +16,7 @@
 #include <limits>
 #include <cmath>
 
-Status::type track_findm66     (const Accelerator& accelerator, const std::vector<Pos<double> >& closed_orbit, std::vector<Matrix>& m66);
+Status::type track_findm66     (const Accelerator& accelerator, std::vector<Pos<double> >& closed_orbit, std::vector<Matrix>& m66);
 Status::type track_findorbit6  (const Accelerator& accelerator, std::vector<Pos<double> >& close_orbit);
 Pos<double>  linalg_solve      (const std::vector<Pos<double> >& M, const Pos<double>& b);
 
