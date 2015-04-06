@@ -7,7 +7,7 @@ if ischar(varargin{1}) && strcmpi(varargin{1}, 'init')
     expinfo = varargin{3};
     expout = [];
     
-    if strcmpi(expinfo.excitation, 'prbs') || strcmpi(expinfo.excitation, 'sine')
+    if strcmpi(expinfo.excitation, 'prbs') || strcmpi(expinfo.excitation, 'prbs2d') || strcmpi(expinfo.excitation, 'sine')
         nperiods = floor(expinfo.duration*npts_packet/expinfo.period);
     end
     
@@ -21,6 +21,15 @@ if ischar(varargin{1}) && strcmpi(varargin{1}, 'init')
         [fcdata, expout.freqs] = idinput([expinfo.period 1 nperiods], 'sine', expinfo.band, [-1 1], expinfo.sinedata);
     elseif strcmpi(expinfo.excitation, 'prbs')
         fcdata = idinput([expinfo.period 1 nperiods], expinfo.excitation, expinfo.band, [-1 1]);
+    elseif strcmpi(expinfo.excitation, 'prbs2d')
+        maxx=0;
+        for i=1:size(expinfo.profiles,1)
+            x = length(find(expinfo.profiles(i,:) ~= 0));
+            if x > maxx
+                maxx = x;
+            end
+        end
+        fcdata = idinput([expinfo.period maxx nperiods], 'prbs', expinfo.band, [-1 1]);
     end
     fcdata = [fcdata; zeros(npts_packet*expinfo.duration - size(fcdata,1), size(fcdata,2))];
     
@@ -50,7 +59,15 @@ else
         cols = 1:size(profile,2);
         
         % Apply amplitude scaling and profile
-        packet = expinfo.amplitude*fcdata(indices)*profile;
+        if strcmpi(expinfo.excitation, 'prbs2d')
+            ix = find(expinfo.profiles(profile_number,:) ~= 0);
+            fcdata_ = zeros(length(indices), size(expinfo.profiles,2));
+            fcdata_(:, ix) = fcdata(indices,1:length(ix));
+            packet = expinfo.amplitude*fcdata_.*repmat(profile,npts_packet,1);
+        else
+            fcdata_ = fcdata(indices);
+            packet = expinfo.amplitude*fcdata_*profile;
+        end
         
         % Zero-padding
         packet = [packet zeros(npts_packet, ncols-size(packet,2))];
