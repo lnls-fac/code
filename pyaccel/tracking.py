@@ -40,7 +40,7 @@ def elementpass(element, pos, accelerator):
         x.ry, x.py = p[2], p[3]
         x.dl, x.de = p[4], p[5]
 
-        r = _trackcpp.double_track_elementpass(element, x, accelerator)
+        r = _trackcpp.double_track_elementpass(element._e, x, accelerator._a)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
 
@@ -96,7 +96,7 @@ def linepass(accelerator, pos, trajectory=False, offset=0):
         x0.dl, x0.de = p[4], p[5]
 
         x = _trackcpp.CppDoublePosVector()
-        r = _trackcpp.track_linepass_wrapper(accelerator, x0, x, args)
+        r = _trackcpp.track_linepass_wrapper(accelerator._accelerator, x0, x, args)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
 
@@ -173,7 +173,7 @@ def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
         x0.de = p[5]
 
         x = _trackcpp.CppDoublePosVector()
-        r = _trackcpp.track_ringpass_wrapper(accelerator, x0, x, args)
+        r = _trackcpp.track_ringpass_wrapper(accelerator._accelerator, x0, x, args)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
 
@@ -200,6 +200,13 @@ def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
 
     return pos_out, turn_out, offset_out, plane_out
 
+def set4dtracking(accelerator):
+    accelerator.cavity_on = False
+    accelerator.radiation_on = False
+
+def set6dtracking(accelerator):
+    accelerator.cavity_on = True
+    accelerator.radiation_on = True
 
 def findorbit6(accelerator, indices=None):
     """Calculate 6D orbit closed-orbit.
@@ -218,15 +225,40 @@ def findorbit6(accelerator, indices=None):
     """
 
     orbit = _trackcpp.CppDoublePosVector()
-    r = _trackcpp.track_findorbit6(accelerator, orbit)
+    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 
-    if indices is None:
-        indices = range(len(orbit))
+    orbit_out = _numpy.zeros((6, len(orbit)))
+    for i in range(len(orbit)):
+        orbit_out[:, i] = [
+            orbit[i].rx, orbit[i].px,
+            orbit[i].ry, orbit[i].py,
+            orbit[i].dl, orbit[i].de
+        ]
 
-    orbit_out = _numpy.zeros((6,len(indices)))
-    for i in range(len(indices)):
-        o = orbit[indices[i]]
-        orbit_out[:,i] = (o.rx,o.px,o.ry,o.py,o.de,o.dl)
     return orbit_out
+
+
+def findm66(accelerator):
+
+    orbit = _trackcpp.CppDoublePosVector()
+    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
+    if r > 0:
+        raise TrackingException(_trackcpp.string_error_messages[r])
+
+
+    orbit = _trackcpp.CppDoublePosVector()
+    m66 = _trackcpp.CppDoubleMatrixVector()
+    r = _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
+    if r > 0:
+        raise TrackingException(_trackcpp.string_error_messages[r])
+    m66_out = []
+    for i in range(len(m66)):
+        m = _numpy.zeros((6,6))
+        for r in range(6):
+            for c in range(6):
+                m[r,c] = m66[i][r][c]
+        m66_out.append(m)
+
+    return m66_out

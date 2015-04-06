@@ -110,7 +110,7 @@ std::string get_timestamp();
 typedef double Vector4[4];
 typedef double Vector6[6];
 typedef double Matrix4[4][4];
-typedef double Matrix6[6][6];
+typedef std::vector<std::vector<double> > Matrix;
 
 #undef sqr
 

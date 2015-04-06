@@ -113,37 +113,28 @@ int test_findorbit6(const Accelerator& accelerator) {
 	return 0;
 }
 
-#include <cstdio>
-int test_findm66(const Accelerator& accelerator) {
-
-	const std::vector<Element>& the_ring = accelerator.lattice;
-
-	std::vector<double*> m66;
-
-	std::vector<Pos<double> > cod;
-	for(unsigned int i=0; i<the_ring.size(); ++i) {
-		cod.push_back(Pos<double>());
-		double *m = new double [36];
-		m66.push_back(m);
-	}
-
-	track_findm66 (accelerator, cod, m66);
-
-	for(unsigned int i=0; i<the_ring.size(); ++i) {
-		std::cout << "element#     : " << i+1 << std::endl;
-		std::cout << the_ring[i];
-		for(unsigned int r=0; r<6; ++r) {
-			for(unsigned int c=0; c<6; ++c) {
-				printf("%+10.4E ", (m66[i])[6*r+c]);
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-	}
-
-	return 0;
-
-}
+// #include <cstdio>
+// int test_findm66(const Accelerator& accelerator) {
+//
+// 	const std::vector<Element>& the_ring = accelerator.lattice;
+//
+// 	std::vector<Matrix> m66;
+//
+// 	track_findm66 (accelerator, cod, m66);
+//
+// 	for(unsigned int i=0; i<the_ring.size(); ++i) {
+// 		std::cout << "element#     : " << i+1 << std::endl;
+// 		std::cout << the_ring[i];
+// 		for(unsigned int r=0; r<6; ++r) {
+// 			for(unsigned int c=0; c<6; ++c) {
+// 				printf("%+10.4E ", m66[i][r][c]);
+// 			}
+// 			std::cout << std::endl;
+// 		}
+// 		std::cout << std::endl;
+// 	}
+// 	return 0;
+// }
 
 int test_dynap_xy(const Accelerator& accelerator) {
 

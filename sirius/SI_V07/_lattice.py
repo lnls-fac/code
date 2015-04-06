@@ -2,13 +2,11 @@
 
 import math as _math
 import pyaccel as _pyaccel
-import mathphys.constants as _consts
-
-# -- default global parameters
-_energy = 3.0e9 # [eV]
-_harmonic_number = 864
-#from . import optics_mode_C04 as _default_optics_mode
+import mathphys as _mp
 from . import optics_mode_C05 as _default_optics_mode
+
+_lattice_symmetry = 10
+_harmonic_number  = 864
 
 def create_lattice():
 
@@ -16,12 +14,12 @@ def create_lattice():
     global default_optics_mode
 
     # -- shortcut symbols --
-    marker = _pyaccel.elements.Marker
-    drift = _pyaccel.elements.Drift
-    quadrupole = _pyaccel.elements.Quadrupole
-    sextupole = _pyaccel.elements.Sextupole
-    rbend_sirius = _pyaccel.elements.RBend
-    rfcavity = _pyaccel.elements.RFCavity
+    marker = _pyaccel.elements.marker
+    drift = _pyaccel.elements.drift
+    quadrupole = _pyaccel.elements.quadrupole
+    sextupole = _pyaccel.elements.sextupole
+    rbend_sirius = _pyaccel.elements.rbend
+    rfcavity = _pyaccel.elements.rfcavity
     strengths = _default_optics_mode.strengths
 
     # -- drifts --
@@ -220,14 +218,14 @@ def create_lattice():
     the_ring = _pyaccel.lattice.shiftlat(the_ring, idx[0])
 
     # -- sets rf frequency
-    sets_rf_frequency(the_ring)
+    set_rf_frequency(the_ring)
 
     return the_ring
 
-def sets_rf_frequency(the_ring):
+def set_rf_frequency(the_ring):
 
-    circumference = _pyaccel.lattice.lengthlatt(the_ring)
-    rev_frequency = _consts.light_speed / circumference
+    circumference = _pyaccel.lattice.lengthlat(the_ring)
+    rev_frequency = _mp.constants.light_speed / circumference
     rf_frequency  = _harmonic_number * rev_frequency
     idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')
     for i in idx:

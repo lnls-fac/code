@@ -14,7 +14,9 @@ TRACKCPPOBJS = elements.o \
 			   tracking.o \
 			   passmethods.o \
 			   lattice.o \
-			   flat_file.o
+			   flat_file.o \
+               optics.o
+
 OBJECTS = $(TRACKCPPOBJS) $(INTERFACEOBJS)
 CPPFLAGS = -std=c++11 -fPIC $(OPT_FLAG)
 LIBS = -lgsl -lblas

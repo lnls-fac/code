@@ -100,7 +100,7 @@ def plot_kicktable(fname=None, energy = 3.0, print_flag=True, savefigs_flag=True
         print('posx[mm] : {0} ... {1}'.format(1000*id_posx[0], 1000*id_posx[-1]))
         print('posy[mm] : {0} ... {1}'.format(1000*id_posy[0], 1000*id_posy[-1]))
 
-    brho,_,_,_ = _mathphys.beam_optics.Beam.calc_brho(energy = energy)
+    brho,_,_,_,_ = _mathphys.beam_optics.beam_rigidity(energy = energy * 1e9)
     _os.path.basename(fname)
 
     # kickx
