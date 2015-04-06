@@ -1,108 +1,132 @@
-function [ave_bun, rms_bun] = single_bunch_tracking(ring, bunch, wake)
-const = lnls_constants;
-q0 = - const.q0;
-c = const.c;
+function [ave_bun, rms_bun, ave_kickx, fdbkx] = single_bunch_tracking(ring, bunch, wake)
 
-
-
-
-part = zeros(4,nb,np(1));
-ave_bun = zeros(4,nb,nr);
-rms_bun = zeros(4,nb,nr);
+ave_bun   = zeros(4,ring.nturns);
+rms_bun   = zeros(4,ring.nturns);
+ave_kickx = zeros(1,ring.nturns);
+fdbkx     = zeros(1,ring.nturns);
 
 RandStream.setGlobalStream(RandStream('mt19937ar','seed', 190488));
 %definicao dos pacotes
-
-
 %generate the longitudinal phase space;
-sigmaep = lnls_generate_random_numbers(sigmae, n_part, 'norm', cutoff, 0);
-sigmasp = lnls_generate_random_numbers(sigmas, n_part, 'norm', cutoff, 0);
+cutoff = 9;
+en  = lnls_generate_random_numbers(bunch.espread, bunch.num_part, 'norm', cutoff, 0);
+
+tau = bunch.tau;
+pot = bunch.potential;
+ipot = zeros(size(pot));
+idist = zeros(size(pot));
+ipot(1) = 0;for i=2:length(pot),ipot(i) = ipot(i-1) + (pot(i)+pot(i-1))/2*(tau(i)-tau(i-1));end
+ind = tau <= 0;
+ipot = ipot - ipot(sum(ind));
+dist = exp(1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
+idist(1) = 0;for i=2:length(dist),idist(i) = idist(i-1) + (dist(i)+dist(i-1))/2*(tau(i)-tau(i-1));end
+idist = idist/idist(end);
+ind = idist==max(idist) | idist==min(idist);
+
+tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
+
+betx = ring.beta;
+alpx = ring.alpha;
+etax = ring.eta;
+etxp = ring.etap;
+tune = ring.tune;
+chrom= ring.dtunedp;
+tu_sh= ring.dtunedj;
 
 % generate transverse phase space;
-emitx = lnls_generate_random_numbers(emitx, n_part,'exponential',cutoff^2,0);
-phasx = 2*pi*rand(1, n_part);
-emity = lnls_generate_random_numbers(emity, n_part,'exponential',cutoff^2,0);
-phasy = 2*pi*rand(1, n_part);
-x  = sqrt(emitx*betx).*cos(phasx) + etax*sigmaep;
-xp = -sqrt(emitx/betx).*(alpx*cos(phasx) + sin(phasx)) + etpx*sigmaep;
-y  = sqrt(emity*bety).*cos(phasy) + etay*sigmaep;
-yp = -sqrt(emity/bety).*(alpy*cos(phasy) + sin(phasy)) + etpy*sigmaep;
+emitx = lnls_generate_random_numbers(bunch.emit, bunch.num_part,'exponential',cutoff^2,0);
+phasx = 2*pi*rand(1, bunch.num_part);
+x  =  sqrt(emitx*betx).*cos(phasx)                     + etax*en;
+xp = -sqrt(emitx/betx).*(alpx*cos(phasx) + sin(phasx)) + etxp*en;
 
-Rin = [x;xp;y;yp;sigmaep;sigmasp];
-
-part(:,:,:) = randn(4,np(1));
-part(1,:,:) = part(1,:)*7e-4;
-part(2,:,:) = part(2,:)*3.8e-3/c;
-part(3,:,:) = part(3,:)*1e-9;
-part(4,:,:) = part(4,:)*1e-9;
-part_old = part;
-ave_bun(:,:,1) = mean(part,3);
-rms_bun(:,:,1) = rms(part,3);
-
-
-for ii=2:nr;
-    part(1,:,:) = part_old(1,:,:) + (2*pi*nus).^2/params.alpha/params.T0.*part_old(2,:,:);
-    part(2,:,:) = part_old(2,:,:) - params.alpha*params.T0.*part(1,:,:);
-    nut  =  params.nut0*(1 + params.chrom*part_old(1,:,:));
-    part(3,:,:) = part_old(3,:,:).*cos(2*pi*nut) + params.beta*part_old(4,:,:).*sin(2*pi*nut);
-    part(4,:,:) = -1/params.beta*part_old(3,:,:).*sin(2*pi*nut) + part_old(4,:,:).*cos(2*pi*nut);
+figure;
+ax = axes;
+plot(ax,tau,x,'.');
+for ii=1:ring.nturns;
+    phi  =  2*pi*(tune + chrom*en + tu_sh*((x-etax*en).^2/betx + ...
+                 ((xp-etxp*en).^2 + alpx/betx*(x-etax*en).^2)*betx));
+    
+    [x, xp] = transverse_tracking(x,xp,en,phi,betx,alpx,etax,etxp);
+    en  = en  - interp1(bunch.tau, bunch.potential, tau)/ring.E;
+    tau = tau - ring.rev_time.*(en*ring.mom_comp);
+    
+    kickx = kickx_from_wake(x, tau, wake, ii, ring.E, bunch.I_b, ring.rev_time);
+    ave_kickx(ii) = mean(kickx);
+    kickt = kickt_from_wake(tau, wake, ii, ring.E, bunch.I_b, ring.rev_time);
+    fdbkx(ii) = bbb_feedback(ave_bun(1,:),wake,ii,kickx)/betx;
+    xp = xp + kickx/betx + fdbkx(ii)/betx;
+    en = en + kickt;
+    ave_bun(:,ii) = mean([x;xp;en;tau],2);
+    rms_bun(:,ii) =  rms([x;xp;en;tau],2);
     if mod(ii,100)==0
         fprintf('%d\n',ii);
     end
-    ave_bun(:,:,ii) = mean(part,3);
-    rms_bun(:,:,ii) = rms(part,3);
-    part(4,:,:) = part(4,:,:) + kick_impedance(part([2,3],:,:), ave_bun([2,3],:,:), ii, params, 0, 0);
-    part_old = part;
-end
-
-figure; plot(squeeze(ave_bun(3,1,:)));
-
-
-
-function kick = kick_impedance(part, ave_bun, turn, param, wake, tau)
-el_ch = 1.602e-19;
-c = 299792458;
-
-kick = zeros(size(part(1,:,:)));
-
-Y = el_ch*param.Ne./param.np/param.E;
-
-% definicao da impedancia: está mais rápido que a interpolacao
-Zovern = 0.2;
-fr  = 2.4* c/12e-3/2/pi; % 2.4 c/b/2/pi;
-beta_imp = 11;
-Rs = Zovern*fr/0.578e6/12e-3;
-Q = 1;
-wr = fr*2*pi;
-Ql = sqrt(Q^2 - 1/4); wrl = wr*Ql/Q;
-
-b = 12e-3;
-sigma = 5.9e7;
-Z0 = c*4*pi*1e-7;
-a = 3/sqrt(2*pi)/4;
-p = 2.7;
-s0 = (2*b^2/Z0/sigma)^(1/3);
-L = 4800;
-W0 = c*Z0/4/pi * 2*s0*L/b^4;
-
-for ii=1:param.nb
-    difft = bsxfun(@minus,squeeze(part(1,ii,:))',squeeze(part(1,ii,:)));
-    kik = beta_imp*wr*Rs/Ql*sin(wrl*difft).*exp(-wr*difft/2/Q);
-%     kik = beta_imp*W0*(8/3*exp(-difft*c/s0).*sin(difft*c*sqrt(3)/s0-pi/6) ...
-%     + 1/sqrt(2*pi)*1./(a^p + (difft*c/(4*s0)).^p).^(1/p));
-    ind = difft < 0;
-    kik(ind) = 0;
-    desl = squeeze(part(2,ii,:)); desl = desl(:)';
-    kick(1,ii,:) = Y(ii).*(desl*kik)/param.beta;
-    
-%     difft = ave_bun(1,:,(turn-config.ntrack):turn) - ave_bun(1,ii,turn);
-    
+    if mod(ii,10)==0
+        curx = get(ax,'XLim');
+        cury = get(ax,'YLim');
+        nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
+        nexty = [min([x,  cury(1)]), max([x,  cury(2)])];
+        plot(ax,tau,x,'.');
+        xlim(nextx);
+        ylim(nexty);
+        drawnow;
+    end
 end
 
 
-% for ii=1:param.nb
-%     difft = bsxfun(@minus,squeeze(part(1,ii,:))',squeeze(part(1,ii,:)));
-%     kik = interp1(tau,wake,difft,'linear',0);
-%     desl = squeeze(part(2,ii,:)); desl = desl(:)';
-%     kick(1,ii,:) = Y(ii).*(desl*kik)/param.beta;
+function [x_new, xp_new] = transverse_tracking(x,xp,en,phix,betx,alpx,etax,etxp)
+
+x_new  =         (x-etax*en).*cos(phix) + betx*(xp-etxp*en).*sin(phix) + etax*en;
+xp_new = -1/betx*(x-etax*en).*sin(phix) +      (xp-etxp*en).*cos(phix) + etxp*en;
+
+
+function kick = kickx_from_wake(x, tau, wake, volta, E, I_b, T0)
+
+kick = zeros(size(x));
+np   = length(tau);
+
+difft = bsxfun(@minus,tau',tau);
+if wake.sing.dipo.sim
+    kik = interp1(wake.sing.dipo.tau,wake.sing.dipo.wake,difft,'linear',0);
+    kick = kick + T0*I_b/E/np*(x*kik);
+end
+if wake.sing.quad.sim
+    kik = interp1(wake.sing.quad.tau,wake.sing.quad.wake,difft,'linear',0);
+    kick = kick + T0*I_b/E/np*(sum(kik).*x);
+end
+if wake.mult.trans.sim
+    kick = kick + wake.mult.trans.wake(volta);
+end
+
+function kick = bbb_feedback(x_m,wake,ii,kickx)
+
+kick = 0;
+if ii<wake.sing.feedback.npoints || ~wake.sing.feedback.sim, return; end
+
+npoints = wake.sing.feedback.npoints;
+phase   = wake.sing.feedback.phase;
+freq    = wake.sing.feedback.freq;
+gain    = wake.sing.feedback.gain;
+
+samp  = 1:npoints;
+fil = cos(2*pi*freq*samp + phase).*sin(2*pi*samp/(2*npoints))./(samp*pi);
+kick = gain*(x_m((ii-npoints+1):ii)*fil');
+
+
+% if wake.sing.feedback.sim
+%     kick = -repmat(mean(kickx),size(x));
 % end
+
+function kick = kickt_from_wake(tau, wake, volta, E, I_b, T0)
+
+kick = zeros(size(tau));
+np   = length(tau);
+
+if wake.sing.long.sim
+    difft = bsxfun(@minus,tau',tau);
+    kik = interp1(wake.sing.long.tau,wake.sing.long.wake,difft,'linear',0);
+    kick = kick + T0*I_b/E/np*sum(kik);
+end
+if wake.mult.long.sim
+    kick = kick + wake.mult.long.wake(volta);
+end
