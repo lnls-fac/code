@@ -215,4 +215,9 @@ def create_lattice():
     idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'start')
     the_ring = _pyaccel.lattice.shiftlat(the_ring, idx[0])
 
+    # -- sets rfrequency according to lattice length
+    idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')
+    for i in idx:
+        
+
     return the_ring

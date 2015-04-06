@@ -239,3 +239,23 @@ def findorbit6(accelerator):
         ]
 
     return orbit_out
+
+
+def findm66(accelerator):
+
+    orbit = _trackcpp.CppDoublePosVector()
+    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
+    if r > 0:
+        raise TrackingException(_trackcpp.string_error_messages[r])
+
+    m66 = _trackcpp.CppDoubleMatrixVector()
+    _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
+    m66_out = []
+    for i in range(len(m66)):
+        m = _numpy.zeros((6,6))
+        for r in range(6):
+            for c in range(6):
+                m[r,c] = m66[i][r][c]
+        m66_out.append(m)
+
+    return m66_out
