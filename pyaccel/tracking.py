@@ -208,6 +208,13 @@ def ringpass(accelerator, pos, num_turns=1, trajectory=False, offset=0):
 
     return pos_out, turn_out, offset_out, plane_out
 
+def set4dtracking(accelerator):
+    accelerator.cavity_on = False
+    accelerator.radiation_on = False
+
+def set6dtracking(accelerator):
+    accelerator.cavity_on = True
+    accelerator.radiation_on = True
 
 def findorbit6(accelerator):
     """Calculate 6D orbit.
@@ -230,7 +237,7 @@ def findorbit6(accelerator):
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 
-    orbit_out = _numpy.zeros((6, len(x)))
+    orbit_out = _numpy.zeros((6, len(orbit)))
     for i in range(len(orbit)):
         orbit_out[:, i] = [
             orbit[i].rx, orbit[i].px,
@@ -249,7 +256,9 @@ def findm66(accelerator):
         raise TrackingException(_trackcpp.string_error_messages[r])
 
     m66 = _trackcpp.CppDoubleMatrixVector()
-    _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
+    r = _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
+    if r > 0:
+        raise TrackingException(_trackcpp.string_error_messages[r])
     m66_out = []
     for i in range(len(m66)):
         m = _numpy.zeros((6,6))

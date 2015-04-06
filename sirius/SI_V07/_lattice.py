@@ -2,9 +2,11 @@
 
 import math as _math
 import pyaccel as _pyaccel
+import mathphys as _mp
 from . import optics_mode_C04 as _default_optics_mode
 
 _lattice_symmetry = 10
+_harmonic_number  = 864
 
 def create_lattice():
 
@@ -215,9 +217,17 @@ def create_lattice():
     idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'start')
     the_ring = _pyaccel.lattice.shiftlat(the_ring, idx[0])
 
-    # -- sets rfrequency according to lattice length
-    idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')
-    for i in idx:
-        
+    # -- sets rf frequency
+    sets_rf_frequency(the_ring)
 
     return the_ring
+
+
+def sets_rf_frequency(the_ring):
+
+    circumference = _pyaccel.lattice.lengthlat(the_ring)
+    rev_frequency = _mp.constants.light_speed / circumference
+    rf_frequency  = _harmonic_number * rev_frequency
+    idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')
+    for i in idx:
+        the_ring[i].frequency = rf_frequency

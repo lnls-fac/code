@@ -5,6 +5,7 @@ import pyaccel.accelerator
 import pyaccel.elements
 
 
+
 #_ElementVector = _trackcpp.CppElementVector
 #_TYPE_ERROR_MSG = 'values must be list of Element'
 
@@ -83,6 +84,10 @@ def shiftlat(lattice, start):
     return new_lattice
 
 
+def lengthlat(lattice):
+    len = [e.length for e in lattice]
+    return sum(len)
+
 def findspos(lattice, indices = None):
     """returns longitudinal position of the entrance for all lattice elements"""
 
@@ -94,7 +99,7 @@ def findspos(lattice, indices = None):
             indices[0]
         except:
             is_number = True
-            
+
     pos = (len(lattice)+1) * [0.0]
     for i in range(1,len(lattice)+1):
         pos[i] = pos[i-1] + lattice[i-1].length

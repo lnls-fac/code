@@ -27,17 +27,19 @@ Status::type track_findm66 (const Accelerator& accelerator, const std::vector<Po
 
 	m66.clear();
 
-	for(unsigned int i=0; i<lattice.size(); ++i) {
+	std::vector<double> row0 = {0,0,0,0,0,0};
 
-		Pos<Tpsa<6,1> > tpsa;
-		tpsa.rx = Tpsa<6,1>(closed_orbit[i].rx, 0); tpsa.px = Tpsa<6,1>(closed_orbit[i].px, 1);
-		tpsa.ry = Tpsa<6,1>(closed_orbit[i].ry, 2); tpsa.py = Tpsa<6,1>(closed_orbit[i].py, 3);
-		tpsa.de = Tpsa<6,1>(closed_orbit[i].de, 4); tpsa.dl = Tpsa<6,1>(closed_orbit[i].dl, 5);
+	Pos<Tpsa<6,1> > tpsa;
+	tpsa.rx = Tpsa<6,1>(closed_orbit[0].rx, 0); tpsa.px = Tpsa<6,1>(closed_orbit[0].px, 1);
+	tpsa.ry = Tpsa<6,1>(closed_orbit[0].ry, 2); tpsa.py = Tpsa<6,1>(closed_orbit[0].py, 3);
+	tpsa.de = Tpsa<6,1>(closed_orbit[0].de, 4); tpsa.dl = Tpsa<6,1>(closed_orbit[0].dl, 5);
+
+	for(unsigned int i=0; i<lattice.size(); ++i) {
 
 		// track through element
 		if ((status = track_elementpass (lattice[i], tpsa, accelerator)) != Status::success) return status;
 
-		Matrix m;
+		Matrix m = {row0,row0,row0,row0,row0,row0};
 
 		m[0][0] = tpsa.rx.c[1]; m[0][1] = tpsa.rx.c[2];
 		m[0][2] = tpsa.rx.c[3]; m[0][3] = tpsa.rx.c[4];
