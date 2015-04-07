@@ -156,22 +156,19 @@ def _process_polynoms(pa, pb):
     return pa, pb
 
 
-class PolynomA(object):
+class Polynom(_numpy.ndarray):
 
-    def __get__(self, obj, objtype):
-        return _numpy.array(obj._e.polynom_a)
+    def __new__(cls, polynom):
+        shape = (len(polynom),)
+        array = _numpy.ndarray.__new__(cls, shape=shape)
+        array[:] = polynom[:]
+        array._polynom = polynom
+        return array
 
-    def __set__(self, obj, value):
-        obj._e.polynom_a[:] = value[:]
-
-
-class PolynomB(object):
-
-    def __get__(self, obj, objtype):
-        return _numpy.array(obj._e.polynom_b)
-
-    def __set__(self, obj, value):
-        obj._e.polynom_b[:] = value[:]
+    def __setitem__(self, index, value):
+        if hasattr(self, '_polynom'):
+            self._polynom[index] = value
+        super().__setitem__(index, value)
 
 
 class Kicktable(object):
@@ -219,9 +216,6 @@ class Element(object):
 
     t_valid_types = (list, _numpy.ndarray)
     r_valid_types = (_numpy.ndarray)
-
-    polynom_a = PolynomA()
-    polynom_b = PolynomB()
 
     def __init__(self, fam_name="", length=0.0, element=None):
         if element is not None:
@@ -395,6 +389,24 @@ class Element(object):
         self._e.vmax = value
 
     @property
+    def polynom_a(self):
+        p = Polynom(self._e.polynom_a)
+        return p
+
+    @polynom_a.setter
+    def polynom_a(self, value):
+        self._e.polynom_a[:] = value[:]
+
+    @property
+    def polynom_b(self):
+        p = Polynom(self._e.polynom_b)
+        return p
+
+    @polynom_b.setter
+    def polynom_b(self, value):
+        self._e.polynom_b[:] = value[:]
+
+    @property
     def t_in(self):
         return self._get_coord_vector(self._e.t_in)
 
@@ -473,7 +485,7 @@ class Element(object):
         return _numpy.ctypeslib.as_array(c_array)
 
     def __repr__(self):
-        return 'fam_name : ' + self.fam_name
+        return 'fam_name: ' + self.fam_name
 
     def __str__(self):
         fmtstr = '\n{0:<11s}: {1} {2}'
