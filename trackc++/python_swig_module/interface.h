@@ -30,9 +30,4 @@ Status::type track_ringpass_wrapper (
         std::vector< Pos<double> >& pos,
         RingPassArgs& args);
 
-Status::type track_findm66_wrapper (
-        const Accelerator& accelerator,
-        const std::vector<Pos<double> >& closed_orbit,
-        std::vector<double*>& m66);
-
 #endif // INTERFACE_H

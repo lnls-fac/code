@@ -1,4 +1,4 @@
-import lattice as _lattice
+import pyaccel.lattice as _lattice
 import mathphys as _mp
 
 class OpticsException(Exception):
@@ -15,33 +15,6 @@ def get_rfrequency(lattice):
         except:
             pass
     raise OpticsException('No cavity element in the lattice')
-
-
-def get_harmonic_number(accelerator):
-    return accelerator.harmonic_number
-
-def get_circumference(lattice):
-    try:
-        lattice = lattice.lattice
-    except:
-        pass
-    return _lattice.lengthlatt(lattice)
-
-def get_gamma_factor(accelerator):
-    _,_,_,gamma = _mp.beam_optics.calc_brho(energy = accelerator.energy / 1e9)
-    return gamma
-
-def get_beta_factor(accelerator):
-    _,_,beta,_ = _mp.beam_optics.calc_brho(energy = accelerator.energy / 1e9)
-    return beta
-
-def get_beam_velocity(accelerator):
-    _,velocity,_,_ = _mp.beam_optics.calc_brho(energy = accelerator.energy / 1e9)
-    return velocity
-
-def get_brho(accelerator):
-    brho,_,_,_ = _mp.beam_optics.calc_brho(energy = accelerator.energy / 1e9)
-    return brho
 
 def get_revolution_period(accelerator):
     _,velocity,_,_ = _mp.beam_optics.calc_brho(energy = accelerator.energy / 1e9)
