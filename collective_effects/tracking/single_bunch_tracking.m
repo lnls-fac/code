@@ -54,10 +54,10 @@ for ii=1:ring.nturns;
     ave_kickx(ii) = mean(kickx);
     kickt = kickt_from_wake(tau, wake, ii, ring.E, bunch.I_b, ring.rev_time);
     fdbkx(ii) = bbb_feedback(ave_bun(1,:),wake,ii,kickx)/betx;
-    xp = xp + kickx/betx + fdbkx(ii)/betx;
+    xp = xp + kickx/betx + fdbkx(ii);
     en = en + kickt;
     ave_bun(:,ii) = mean([x;xp;en;tau],2);
-    rms_bun(:,ii) =  rms([x;xp;en;tau],2);
+    rms_bun(:,ii) =  std([x;xp;en;tau],0,2);
     if mod(ii,100)==0
         fprintf('%d\n',ii);
     end
@@ -87,8 +87,20 @@ np   = length(tau);
 
 difft = bsxfun(@minus,tau',tau);
 if wake.sing.dipo.sim
-    kik = interp1(wake.sing.dipo.tau,wake.sing.dipo.wake,difft,'linear',0);
-    kick = kick + T0*I_b/E/np*(x*kik);
+    %     kik = interp1(wake.sing.dipo.tau,wake.sing.dipo.wake,difft,'linear',0);
+    %     kick = kick + T0*I_b/E/np*(x*kik);
+    Zovern = 0.2;
+    radius = 12e-3;
+    fr  = 2.4* c/(radius*2*pi);
+    Rs = Zovern*fr*ring.rev_time;
+    Q = 1;
+    wr = fr*2*pi;
+    Ql = sqrt(Q^2 - 1/4);
+    wrl = wr * Ql / Q;
+    for i=1:length(tau),
+        
+        beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(-wr*tau/(2*Q));
+    end
 end
 if wake.sing.quad.sim
     kik = interp1(wake.sing.quad.tau,wake.sing.quad.wake,difft,'linear',0);

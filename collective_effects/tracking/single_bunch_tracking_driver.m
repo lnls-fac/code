@@ -2,7 +2,7 @@ const = lnls_constants;
 c = const.c;
 el_ch = const.q0;
 % ring data
-ring.nturns   = 3000;
+ring.nturns   = 2000;
 ring.rev_time = 518.396/c;
 ring.E        = 3e9;
 ring.mom_comp = 1.7e-4;
@@ -12,11 +12,11 @@ ring.eta      = 0.0;
 ring.etap     = 0;
 ring.har_num  = 864;
 ring.tune     = 13.117;
-ring.dtunedp  = 0.0;
-ring.dtunedj  = 0;
+ring.dtunedp  = 1.5;
+ring.dtunedj  = 000000;
 
-bunch.num_part = 800;
-bunch.I_b      = 2.1e-3;
+bunch.num_part = 400;
+bunch.I_b      = 1.7e-3;
 
 tau = (-1000:1000)*1e-12;
 V = 3.0e6;
@@ -68,11 +68,11 @@ wake.sing.quad.sim  = false;
 wake.sing.quad.tau  = tau;
 wake.sing.quad.wake = beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(-wr*tau/(2*Q));
 
-wake.sing.feedback.sim = true;
+wake.sing.feedback.sim = false;
 wake.sing.feedback.npoints = 8;
 wake.sing.feedback.freq   = 0.11;
 wake.sing.feedback.phase  = 3/4*pi;
-wake.sing.feedback.gain   = 10;
+wake.sing.feedback.gain   = 1;
 
 wake.mult.trans.sim  = false;
 wake.mult.trans.wake = zeros(1,ring.nturns);
