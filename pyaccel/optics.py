@@ -1,4 +1,4 @@
-import lattice as _lattice
+import pyaccel.lattice as _lattice
 import mathphys as _mp
 
 class OpticsException(Exception):
