@@ -118,3 +118,10 @@ def finddict(lattice, attribute_name):
             else:
                 latt_dict[att_value] = [i]
     return latt_dict
+
+
+def get_rf_frequency(lattice):
+    """ Returns the frequency of the first RF cavity in the lattice """
+    for e in lattice:
+        if e.frequency != 0:
+            return e.frequency
