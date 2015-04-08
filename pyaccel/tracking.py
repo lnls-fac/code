@@ -1,56 +1,68 @@
-
 import numpy as _numpy
 import trackcpp as _trackcpp
+import pyaccel.accelerator
 
 
 class TrackingException(Exception):
     pass
 
+def elementpass(element, pos, **kwargs):
 
-def elementpass(element, pos, accelerator):
     """Track particle(s) through an element.
 
     Accepts one or multiple particles. In the latter case, a list of particles
-    or numpy 2D array (with particle as first index) should be given as input;
-    also, outputs get an additional dimension, with particle as first index.
+    or numpy 2D array (with particle as second index) should be given as input;
+    also, outputs get an additional dimension, with particle as second index.
 
     Keyword arguments:
-    element     -- Element object
-    pos         -- initial 6D position or list of positions
-    accelerator -- Accelerator object
+    element         -- Element object
+    pos             -- initial 6D position or list of positions
+    energy          -- energy of the beam [eV]
+    harmonic_number -- harmonic number of the lattice
+    cavity_on       -- cavity on state (True/False)
+    radiation_on    -- radiation on state (True/False)
+    vchamber_on     -- vacuum chamber on state (True/False)
 
     Returns:
     pos -- 6D position at each element
 
     Raises TrackingException
     """
+    print(kwargs)
 
-    if (type(pos) == list and type(pos[0]) != list or
-            type(pos) == _numpy.ndarray and pos.ndim == 1):
+    # checks if all necessary arguments have been passed
+    keys_needed = ['energy','harmonic_number','cavity_on','radiation_on','vchamber_on']
+    for key in keys_needed:
+        if key not in kwargs:
+            raise TrackingException("missing '" + key + "' argument'")
+
+    # creates accelerator for tracking
+    accelerator = pyaccel.accelerator.Accelerator(**kwargs)
+
+    # checks if 'pos' is a single position or many positions
+    if not isinstance(pos, (list,tuple)) or (type(pos) == _numpy.ndarray and pos.ndim == 1):
         pos = [pos]
-        multiple = False
+        multiple_pos = False
     else:
-        multiple = True
+        multiple_pos = True
 
+    # tracks through the list of pos
     pos_out = []
-
     for p in pos:
-        x = _trackcpp.DoublePos()
+        x = _trackcpp.CppDoublePos()
         x.rx, x.px = p[0], p[1]
         x.ry, x.py = p[2], p[3]
         x.dl, x.de = p[4], p[5]
-
         r = _trackcpp.double_track_elementpass(element._e, x, accelerator._a)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
-
         pos_out.append(_numpy.array([x.rx, x.px, x.ry, x.py, x.dl, x.de]))
 
+    # returns tracking data
     if not multiple:
         pos_out = pos_out[0]
     else:
         pos_out = _numpy.array(pos_out)
-
     return pos_out
 
 
