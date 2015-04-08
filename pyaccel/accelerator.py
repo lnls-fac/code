@@ -129,7 +129,7 @@ class Accelerator(object):
     def length(self):
         lens = [e.length for e in self._accelerator.lattice]
         return sum(lens)
-
+    
     @property
     def energy(self):
         return self._accelerator.energy

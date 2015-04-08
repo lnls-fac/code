@@ -227,44 +227,41 @@ def findorbit6(accelerator, indices=None):
     Raises TrackingException
     """
 
-    orbit = _trackcpp.CppDoublePosVector()
-    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
+    closed_orbit = _trackcpp.CppDoublePosVector()
+    r = _trackcpp.track_findorbit6(accelerator._accelerator, closed_orbit)
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 
-    orbit_out = _numpy.zeros((6, len(orbit)))
-    for i in range(len(orbit)):
-        orbit_out[:, i] = [
-            orbit[i].rx, orbit[i].px,
-            orbit[i].ry, orbit[i].py,
-            orbit[i].dl, orbit[i].de
-        ]
-
-    return orbit_out
+    closed_orbit = _CppDoublePosVector2Numpy(closed_orbit, indices)
+    return closed_orbit
 
 
-def findm66(accelerator):
+def findm66(accelerator, closed_orbit = None):
     """Calculate accumulated 6D transfer matrices.
 
     Keyword arguments:
     accelerator -- Accelerator object
+    closed_orbit -- closed-orbit around which transfer matrices are to be calculated
 
     Returns:
     matrices -- array of matrices along accelerator elements
 
     Raises TrackingException
     """
+    if closed_orbit is None:
+        closed_orbit = _trackcpp.CppDoublePosVector()
+        r = _trackcpp.track_findorbit6(accelerator._accelerator, closed_orbit)
+        if r > 0:
+            raise TrackingException(_trackcpp.string_error_messages[r])
+    else:
+        if closed_orbit.shape[1] != len(accelerator):
+            closed_orbit = _trackcpp.CppDoublePosVector()
 
-    orbit = _trackcpp.CppDoublePosVector()
-    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
-    if r > 0:
-        raise TrackingException(_trackcpp.string_error_messages[r])
-
-    orbit = _trackcpp.CppDoublePosVector()
     m66 = _trackcpp.CppDoubleMatrixVector()
-    r = _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
+    r = _trackcpp.track_findm66(accelerator._accelerator, closed_orbit, m66)
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
+
     m66_out = []
     for i in range(len(m66)):
         m = _numpy.zeros((6,6))
@@ -274,3 +271,26 @@ def findm66(accelerator):
         m66_out.append(m)
 
     return m66_out
+
+def _CppDoublePosVector2Numpy(orbit, indices = None):
+    if indices is None:
+        indices = range(len(orbit))
+    elif isinstance(indices,int):
+        indices = [indices]
+    orbit_out = _numpy.zeros((6, len(indices)))
+    for i in range(len(indices)):
+        orbit_out[:, i] = [
+            orbit[indices[i]].rx, orbit[indices[i]].px,
+            orbit[indices[i]].ry, orbit[indices[i]].py,
+            orbit[indices[i]].dl, orbit[indices[i]].de
+        ]
+    return orbit_out
+
+def _Numpy2CppDoublePosVector(orbit):
+    orbit_out = _trackcpp.CppDoublePosVector()
+    for i in range(orbit.shape[1]):
+        orbit_out.push_back(_trackcpp.CppDoublePos(
+            orbit[0,i], orbit[1,i],
+            orbit[2,i], orbit[3,i],
+            orbit[4,i], orbit[5,i]))
+    return orbit_out
