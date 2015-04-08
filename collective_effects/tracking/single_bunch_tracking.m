@@ -10,20 +10,7 @@ RandStream.setGlobalStream(RandStream('mt19937ar','seed', 190488));
 %generate the longitudinal phase space;
 cutoff = 9;
 en  = lnls_generate_random_numbers(bunch.espread, bunch.num_part, 'norm', cutoff, 0);
-
-tau = bunch.tau;
-pot = bunch.potential;
-ipot = zeros(size(pot));
-idist = zeros(size(pot));
-ipot(1) = 0;for i=2:length(pot),ipot(i) = ipot(i-1) + (pot(i)+pot(i-1))/2*(tau(i)-tau(i-1));end
-ind = tau <= 0;
-ipot = ipot - ipot(sum(ind));
-dist = exp(1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
-idist(1) = 0;for i=2:length(dist),idist(i) = idist(i-1) + (dist(i)+dist(i-1))/2*(tau(i)-tau(i-1));end
-idist = idist/idist(end);
-ind = idist==max(idist) | idist==min(idist);
-
-tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
+tau = generate_longitudinal_bunch(bunch, ring);
 
 betx = ring.beta;
 alpx = ring.alpha;
@@ -41,23 +28,41 @@ xp = -sqrt(emitx/betx).*(alpx*cos(phasx) + sin(phasx)) + etxp*en;
 
 figure;
 ax = axes;
-plot(ax,tau,x,'.');
+plot(ax,tau,en,'.');
 for ii=1:ring.nturns;
+    % First do single particle tracking:
+    % define one phase advance per particle
     phi  =  2*pi*(tune + chrom*en + tu_sh*((x-etax*en).^2/betx + ...
                  ((xp-etxp*en).^2 + alpx/betx*(x-etax*en).^2)*betx));
     
     [x, xp] = transverse_tracking(x,xp,en,phi,betx,alpx,etax,etxp);
+    % The longitudinal time evolution equations are not in the differential
+    % form. Thus, any longitudinal potential can be taken into account
     en  = en  - interp1(bunch.tau, bunch.potential, tau)/ring.E;
     tau = tau - ring.rev_time.*(en*ring.mom_comp);
     
-    kickx = kickx_from_wake(x, tau, wake, ii, ring.E, bunch.I_b, ring.rev_time);
+    
+    % Now comes the impedance kicks:
+    [kickt, kickx] = kick_from_wake(x, tau, wake);
+    kickt  = kickt * (ring.rev_time  / ring.E) * (bunch.I_b / bunch.num_part);
+    kickx  = kickx * (ring.rev_time  / ring.E) * (bunch.I_b / bunch.num_part);
+    
     ave_kickx(ii) = mean(kickx);
-    kickt = kickt_from_wake(tau, wake, ii, ring.E, bunch.I_b, ring.rev_time);
-    fdbkx(ii) = bbb_feedback(ave_bun(1,:),wake,ii,kickx)/betx;
+   
+    % Now we try to simulate a bunch by bunch feedback system acting on the
+    % bunch centroid:
+    fdbkx(ii) = bbb_feedback(ave_bun(1,:),wake,ii);
+    
+    % The impedance kick must be divided by beta, because the betatron
+    % function were already taken into account in the wake field definition
     xp = xp + kickx/betx + fdbkx(ii);
     en = en + kickt;
+    
+    % At last the first and second moments of the beam are recorded:
     ave_bun(:,ii) = mean([x;xp;en;tau],2);
     rms_bun(:,ii) =  std([x;xp;en;tau],0,2);
+    
+    
     if mod(ii,100)==0
         fprintf('%d\n',ii);
     end
@@ -65,80 +70,154 @@ for ii=1:ring.nturns;
         curx = get(ax,'XLim');
         cury = get(ax,'YLim');
         nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
-        nexty = [min([x,  cury(1)]), max([x,  cury(2)])];
-        plot(ax,tau,x,'.');
+        nexty = [min([en,  cury(1)]), max([en,  cury(2)])];
+        plot(ax,tau,en,'.');
         xlim(nextx);
         ylim(nexty);
         drawnow;
     end
 end
 
+function tau = generate_longitudinal_bunch(bunch, ring)
+
+% To generate the longitudinal bunch, we use the longitudinal potential
+% defined in the input
+tau = bunch.tau;
+pot = bunch.potential;
+
+
+ipot = zeros(size(pot));
+idist = zeros(size(pot));
+
+% Integrate the potential to get the potential well
+ipot(1) = 0;
+for i=2:length(pot),
+    ipot(i) = ipot(i-1) + (pot(i)+pot(i-1))/2*(tau(i)-tau(i-1));
+end
+ind = tau <= 0;
+ipot = ipot - ipot(sum(ind));
+
+% Using the potential well, get the distribution function
+dist = exp(1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
+idist(1) = 0;
+% and integrate it:
+for i=2:length(dist),
+    idist(i) = idist(i-1) + (dist(i)+dist(i-1))/2*(tau(i)-tau(i-1));
+end
+idist = idist/idist(end);
+ind = idist==max(idist) | idist==min(idist);
+
+% At last, use the integrated longitudinal distribution to generate
+% particles with longitudinal position which follows the equilibrium
+% distribution
+tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
+
 
 function [x_new, xp_new] = transverse_tracking(x,xp,en,phix,betx,alpx,etax,etxp)
 
+% The transverse single particle kick is just an one turn matrix at some
+% position in the ring, with a tune dependent of particle energy and
+% transverse action:
 x_new  =         (x-etax*en).*cos(phix) + betx*(xp-etxp*en).*sin(phix) + etax*en;
 xp_new = -1/betx*(x-etax*en).*sin(phix) +      (xp-etxp*en).*cos(phix) + etxp*en;
 
 
-function kick = kickx_from_wake(x, tau, wake, volta, E, I_b, T0)
+function [kickt, kickx] = kick_from_wake(x, tau, wake)
 
-kick = zeros(size(x));
-np   = length(tau);
+kickx  = zeros(size(x));
+kickt = zeros(size(tau));
+% Remember that tau is the position ahead of the synchronous particle.
+% Thus, a positive tau, passes through the impedance before a negative tau.
 
-difft = bsxfun(@minus,tau',tau);
-if wake.sing.dipo.sim
-    %     kik = interp1(wake.sing.dipo.tau,wake.sing.dipo.wake,difft,'linear',0);
-    %     kick = kick + T0*I_b/E/np*(x*kik);
-    Zovern = 0.2;
-    radius = 12e-3;
-    fr  = 2.4* c/(radius*2*pi);
-    Rs = Zovern*fr*ring.rev_time;
-    Q = 1;
-    wr = fr*2*pi;
-    Ql = sqrt(Q^2 - 1/4);
-    wrl = wr * Ql / Q;
-    for i=1:length(tau),
-        
-        beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(-wr*tau/(2*Q));
+if wake.dipo.sim && isfield(wake.dipo,'wake')
+    difft = bsxfun(@minus,tau',tau);
+    kik = interp1(wake.dipo.tau,wake.dipo.wake,difft,'linear',0);
+    kickx = kickx + (x*kik);
+end
+if wake.dipo.sim && isfield(wake.dipo,'wr')
+    wr = wake.dipo.wr;
+    Rs = wake.dipo.Rs;
+    Q  = wake.dipo.Q;
+    betax = wake.dipo.beta;
+    Ql = sqrt(Q.^2 - 1/4);
+    wrl = wr .* Ql ./ Q;
+    
+    [sortedTau, I] = sort(tau,'descend');
+    W_pot = zeros(size(wr));
+    for i=1:length(sortedTau),
+        for ii=1:length(wr)
+            kickx(I(i)) = kickx(I(i)) + betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
+                   imag(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii)))));
+            W_pot(ii) = W_pot(ii) + exp( sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))))*x(I(i));
+        end
     end
 end
-if wake.sing.quad.sim
-    kik = interp1(wake.sing.quad.tau,wake.sing.quad.wake,difft,'linear',0);
-    kick = kick + T0*I_b/E/np*(sum(kik).*x);
+
+
+if  wake.quad.sim && isfield(wake.quad,'wake')
+    if ~exist('difft','var'), difft = bsxfun(@minus,tau',tau); end
+    kik = interp1(wake.quad.tau,wake.quad.wake,difft,'linear',0);
+    kickx = kickx + (sum(kik).*x);
 end
-if wake.mult.trans.sim
-    kick = kick + wake.mult.trans.wake(volta);
+if wake.quad.sim && isfield(wake.quad,'wr')
+    wr = wake.quad.wr;
+    Rs = wake.quad.Rs;
+    Q  = wake.quad.Q;
+    betax = wake.quad.beta;
+    
+    Ql = sqrt(Q.^2 - 1/4);
+    wrl = wr .* Ql ./ Q;
+    
+    if ~exist('sortedTau','var'), [sortedTau, I] = sort(tau,'descend');end
+    W_pot = zeros(size(wr));
+    for i=1:length(sortedTau),
+        for ii=1:length(wr)
+            kickx(I(i)) = kickx(I(i)) + x(I(i)) * betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
+                   imag(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii)))));
+            W_pot(ii) = W_pot(ii) + exp( sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))));
+        end
+    end
 end
 
-function kick = bbb_feedback(x_m,wake,ii,kickx)
+
+if wake.long.sim && isfield(wake.long,'wake')
+    if ~exist('difft','var'), difft = bsxfun(@minus,tau',tau); end
+    kik = interp1(wake.long.tau,wake.long.wake,difft,'linear',0);
+    kickt = kickt + sum(kik);
+end
+if wake.long.sim && isfield(wake.long,'wr')
+    wr = wake.long.wr;
+    Rs = wake.long.Rs;
+    Q  = wake.long.Q;
+    
+    Ql = sqrt(Q.^2 - 1/4);
+    wrl = wr .* Ql ./ Q;
+    
+    if ~exist('sortedTau','var'), [sortedTau, I] = sort(tau,'descend'); end
+    W_pot = zeros(size(wr));
+    for i=1:length(sortedTau),
+        for ii=1:length(wr)
+            kickt(I(i)) = kickt(I(i)) + wr(ii)*Rs(ii)/Q(ii)*( ...
+                   real(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))))) + ... 
+         -1/(2*Ql)*imag(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))))));
+            W_pot(ii) = W_pot(ii) + exp( sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))));
+        end
+    end
+end
+
+
+function kick = bbb_feedback(x_m,wake,ii)
 
 kick = 0;
-if ii<wake.sing.feedback.npoints || ~wake.sing.feedback.sim, return; end
+if ii<wake.feedback.npoints || ~wake.feedback.sim, return; end
 
-npoints = wake.sing.feedback.npoints;
-phase   = wake.sing.feedback.phase;
-freq    = wake.sing.feedback.freq;
-gain    = wake.sing.feedback.gain;
+npoints = wake.feedback.npoints;
+phase   = wake.feedback.phase;
+freq    = wake.feedback.freq;
+gain    = wake.feedback.gain;
 
 samp  = 1:npoints;
 fil = cos(2*pi*freq*samp + phase).*sin(2*pi*samp/(2*npoints))./(samp*pi);
 kick = gain*(x_m((ii-npoints+1):ii)*fil');
 
 
-% if wake.sing.feedback.sim
-%     kick = -repmat(mean(kickx),size(x));
-% end
-
-function kick = kickt_from_wake(tau, wake, volta, E, I_b, T0)
-
-kick = zeros(size(tau));
-np   = length(tau);
-
-if wake.sing.long.sim
-    difft = bsxfun(@minus,tau',tau);
-    kik = interp1(wake.sing.long.tau,wake.sing.long.wake,difft,'linear',0);
-    kick = kick + T0*I_b/E/np*sum(kik);
-end
-if wake.mult.long.sim
-    kick = kick + wake.mult.long.wake(volta);
-end
