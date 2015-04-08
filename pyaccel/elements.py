@@ -1,5 +1,6 @@
 
 import ctypes as _ctypes
+import warnings as _warnings
 import numpy as _numpy
 import trackcpp as _trackcpp
 
@@ -478,6 +479,8 @@ class Element(object):
 
     def _get_coord_matrix(self, pointer):
         address = int(pointer)
+        c_array = _coord_matrix.from_address(address)
+        return _numpy.ctypeslib.as_array(c_array)
 
     @gap.setter
     def gap(self, value):
@@ -511,3 +514,6 @@ class Element(object):
         #if self.hkick <> 0:
         #    r
         return r
+
+
+_warnings.filterwarnings("ignore", "Item size computed from the PEP 3118 buffer format string does not match the actual item size.")
