@@ -200,13 +200,16 @@ def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
 
     return pos_out, turn_out, offset_out, plane_out
 
+
 def set4dtracking(accelerator):
     accelerator.cavity_on = False
     accelerator.radiation_on = False
 
+
 def set6dtracking(accelerator):
     accelerator.cavity_on = True
     accelerator.radiation_on = True
+
 
 def findorbit6(accelerator, indices=None):
     """Calculate 6D orbit closed-orbit.
@@ -234,7 +237,17 @@ def findorbit6(accelerator, indices=None):
 
 
 def findm66(accelerator, closed_orbit = None):
+    """Calculate accumulated 6D transfer matrices.
 
+    Keyword arguments:
+    accelerator -- Accelerator object
+    closed_orbit -- closed-orbit around which transfer matrices are to be calculated
+
+    Returns:
+    matrices -- array of matrices along accelerator elements
+
+    Raises TrackingException
+    """
     if closed_orbit is None:
         closed_orbit = _trackcpp.CppDoublePosVector()
         r = _trackcpp.track_findorbit6(accelerator._accelerator, closed_orbit)
