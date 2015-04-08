@@ -1,56 +1,68 @@
-
 import numpy as _numpy
 import trackcpp as _trackcpp
+import pyaccel.accelerator
 
 
 class TrackingException(Exception):
     pass
 
+def elementpass(element, pos, **kwargs):
 
-def elementpass(element, pos, accelerator):
     """Track particle(s) through an element.
 
     Accepts one or multiple particles. In the latter case, a list of particles
-    or numpy 2D array (with particle as first index) should be given as input;
-    also, outputs get an additional dimension, with particle as first index.
+    or numpy 2D array (with particle as second index) should be given as input;
+    also, outputs get an additional dimension, with particle as second index.
 
     Keyword arguments:
-    element     -- Element object
-    pos         -- initial 6D position or list of positions
-    accelerator -- Accelerator object
+    element         -- Element object
+    pos             -- initial 6D position or list of positions
+    energy          -- energy of the beam [eV]
+    harmonic_number -- harmonic number of the lattice
+    cavity_on       -- cavity on state (True/False)
+    radiation_on    -- radiation on state (True/False)
+    vchamber_on     -- vacuum chamber on state (True/False)
 
     Returns:
     pos -- 6D position at each element
 
     Raises TrackingException
     """
+    print(kwargs)
 
-    if (type(pos) == list and type(pos[0]) != list or
-            type(pos) == _numpy.ndarray and pos.ndim == 1):
+    # checks if all necessary arguments have been passed
+    keys_needed = ['energy','harmonic_number','cavity_on','radiation_on','vchamber_on']
+    for key in keys_needed:
+        if key not in kwargs:
+            raise TrackingException("missing '" + key + "' argument'")
+
+    # creates accelerator for tracking
+    accelerator = pyaccel.accelerator.Accelerator(**kwargs)
+
+    # checks if 'pos' is a single position or many positions
+    if not isinstance(pos, (list,tuple)) or (type(pos) == _numpy.ndarray and pos.ndim == 1):
         pos = [pos]
-        multiple = False
+        multiple_pos = False
     else:
-        multiple = True
+        multiple_pos = True
 
+    # tracks through the list of pos
     pos_out = []
-
     for p in pos:
-        x = _trackcpp.DoublePos()
+        x = _trackcpp.CppDoublePos()
         x.rx, x.px = p[0], p[1]
         x.ry, x.py = p[2], p[3]
         x.dl, x.de = p[4], p[5]
-
         r = _trackcpp.double_track_elementpass(element._e, x, accelerator._a)
         if r > 0:
             raise TrackingException(_trackcpp.string_error_messages[r])
-
         pos_out.append(_numpy.array([x.rx, x.px, x.ry, x.py, x.dl, x.de]))
 
+    # returns tracking data
     if not multiple:
         pos_out = pos_out[0]
     else:
         pos_out = _numpy.array(pos_out)
-
     return pos_out
 
 
@@ -227,44 +239,41 @@ def findorbit6(accelerator, indices=None):
     Raises TrackingException
     """
 
-    orbit = _trackcpp.CppDoublePosVector()
-    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
+    closed_orbit = _trackcpp.CppDoublePosVector()
+    r = _trackcpp.track_findorbit6(accelerator._accelerator, closed_orbit)
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
 
-    orbit_out = _numpy.zeros((6, len(orbit)))
-    for i in range(len(orbit)):
-        orbit_out[:, i] = [
-            orbit[i].rx, orbit[i].px,
-            orbit[i].ry, orbit[i].py,
-            orbit[i].dl, orbit[i].de
-        ]
-
-    return orbit_out
+    closed_orbit = _CppDoublePosVector2Numpy(closed_orbit, indices)
+    return closed_orbit
 
 
-def findm66(accelerator):
+def findm66(accelerator, closed_orbit = None):
     """Calculate accumulated 6D transfer matrices.
 
     Keyword arguments:
     accelerator -- Accelerator object
+    closed_orbit -- closed-orbit around which transfer matrices are to be calculated
 
     Returns:
     matrices -- array of matrices along accelerator elements
 
     Raises TrackingException
     """
+    if closed_orbit is None:
+        closed_orbit = _trackcpp.CppDoublePosVector()
+        r = _trackcpp.track_findorbit6(accelerator._accelerator, closed_orbit)
+        if r > 0:
+            raise TrackingException(_trackcpp.string_error_messages[r])
+    else:
+        if closed_orbit.shape[1] != len(accelerator):
+            closed_orbit = _trackcpp.CppDoublePosVector()
 
-    orbit = _trackcpp.CppDoublePosVector()
-    r = _trackcpp.track_findorbit6(accelerator._accelerator, orbit)
-    if r > 0:
-        raise TrackingException(_trackcpp.string_error_messages[r])
-
-    orbit = _trackcpp.CppDoublePosVector()
     m66 = _trackcpp.CppDoubleMatrixVector()
-    r = _trackcpp.track_findm66(accelerator._accelerator, orbit, m66)
+    r = _trackcpp.track_findm66(accelerator._accelerator, closed_orbit, m66)
     if r > 0:
         raise TrackingException(_trackcpp.string_error_messages[r])
+
     m66_out = []
     for i in range(len(m66)):
         m = _numpy.zeros((6,6))
@@ -274,3 +283,26 @@ def findm66(accelerator):
         m66_out.append(m)
 
     return m66_out
+
+def _CppDoublePosVector2Numpy(orbit, indices = None):
+    if indices is None:
+        indices = range(len(orbit))
+    elif isinstance(indices,int):
+        indices = [indices]
+    orbit_out = _numpy.zeros((6, len(indices)))
+    for i in range(len(indices)):
+        orbit_out[:, i] = [
+            orbit[indices[i]].rx, orbit[indices[i]].px,
+            orbit[indices[i]].ry, orbit[indices[i]].py,
+            orbit[indices[i]].dl, orbit[indices[i]].de
+        ]
+    return orbit_out
+
+def _Numpy2CppDoublePosVector(orbit):
+    orbit_out = _trackcpp.CppDoublePosVector()
+    for i in range(orbit.shape[1]):
+        orbit_out.push_back(_trackcpp.CppDoublePos(
+            orbit[0,i], orbit[1,i],
+            orbit[2,i], orbit[3,i],
+            orbit[4,i], orbit[5,i]))
+    return orbit_out

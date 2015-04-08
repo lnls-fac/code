@@ -77,6 +77,7 @@ def finddict(lattice, attribute_name):
     return latt_dict
 
 
+
 def setcavity(lattice, state):
     """ sets state of cavities: on or off """
     state = state.upper()
