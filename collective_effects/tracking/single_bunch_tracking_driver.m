@@ -12,17 +12,17 @@ ring.eta      = 0.0;
 ring.etap     = 0;
 ring.har_num  = 864;
 ring.tune     = 13.117;
-ring.dtunedp  = 0.0;
-ring.dtunedj  = 000000;
+ring.dtunedp  = 1.2;
+ring.dtunedj  = 2000000;
 
-bunch.num_part = 800;
-bunch.I_b      = 2.7e-3;
+bunch.num_part = 10000;
+bunch.I_b      = 2.0e-3;
 
 tau = (-1000:1000)*1e-12;
 V = 3.0e6;
 wrf = 2*pi*ring.har_num/ring.rev_time;
 phi0 = 171.24/180*pi;
-Vl = 1.0e6*1;
+Vl = 1.0e6*0;
 wl = wrf*3;
 phil = 0.30/180*pi;
 bunch.potential= V*(sin(wrf*tau-phi0)+sin(phi0)) + Vl*(sin(wl*tau-phil)+sin(phil));
@@ -54,6 +54,7 @@ clear wake;
 wake.long.sim  = true;
 % wake.long.tau  = tau;
 % wake.long.wake = wr*Rs/Q*(cos(wrl*tau) - 1/(2*Ql)*sin(wrl*tau)).*exp(-wr*tau/(2*Q));
+% wake.long.wake(1) = wake.long.wake(1)/2;
 wake.long.wr   = wr;
 wake.long.Rs   = Rs;
 wake.long.Q    = Q;
@@ -61,7 +62,7 @@ wake.long.Q    = Q;
 beta_imp = 11;
 Rs = Zovern*fr*ring.rev_time/radius;
 
-wake.dipo.sim  = false;
+wake.dipo.sim  = true;
 % wake.dipo.tau  = tau;
 % wake.dipo.wake = beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(-wr*tau/(2*Q));
 wake.dipo.wr   = wr;
@@ -84,6 +85,6 @@ wake.feedback.sim = false;
 wake.feedback.npoints = 8;
 wake.feedback.freq   = 0.11;
 wake.feedback.phase  = 3/4*pi;
-wake.feedback.gain   = 1;
+wake.feedback.gain   = 0.1;
 
 [ave_bun,rms_bun, ave_kickx, fdbkx] = single_bunch_tracking(ring, bunch, wake);
