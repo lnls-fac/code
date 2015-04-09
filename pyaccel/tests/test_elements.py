@@ -211,6 +211,70 @@ class TestCreationFunctions(unittest.TestCase):
         self.assertAlmostEqual(c.hkick, hkick)
         self.assertAlmostEqual(c.vkick, vkick)
 
+    def test_rbend(self):
+        name = 'Bend'
+        length = 1.2345
+        angle = 5.412
+        angle_in = 1.0
+        angle_out = 2.0
+        fint_in = 0.1
+        fint_out = 0.2
+        K = 1.1
+        S = 2.2
+        b = pyaccel.elements.rbend(
+                fam_name=name,
+                length=length,
+                angle=angle,
+                angle_in=angle_in,
+                angle_out=angle_out,
+                fint_in=fint_in,
+                fint_out=fint_out,
+                K=K,
+                S=S
+        )
+        self.assertEqual(b.fam_name, name)
+        self.assertAlmostEqual(b.length, length)
+        self.assertAlmostEqual(b.angle, angle)
+        self.assertAlmostEqual(b.angle_in, angle_in)
+        self.assertAlmostEqual(b.angle_out, angle_out)
+        self.assertAlmostEqual(b.fint_in, fint_in)
+        self.assertAlmostEqual(b.fint_out, fint_out)
+        self.assertAlmostEqual(b.polynom_b[1], K)
+        self.assertAlmostEqual(b.polynom_b[2], S)
+
+    def test_quadrupole(self):
+        name = 'Quadrupole'
+        length = 1.2345
+        K = 1.1
+        nr_steps = 20
+        q = pyaccel.elements.quadrupole(name, length, K, nr_steps)
+        self.assertEqual(q.fam_name, name)
+        self.assertAlmostEqual(q.length, length)
+        self.assertAlmostEqual(q.polynom_b[1], K)
+        self.assertEqual(q.nr_steps, nr_steps)
+
+    def test_sextupole(self):
+        name = 'Sextupole'
+        length = 1.2345
+        S = 1.1
+        nr_steps = 15
+        s = pyaccel.elements.sextupole(name, length, S, nr_steps)
+        self.assertEqual(s.fam_name, name)
+        self.assertAlmostEqual(s.length, length)
+        self.assertAlmostEqual(s.polynom_b[2], S)
+        self.assertEqual(s.nr_steps, nr_steps)
+
+    def test_rfcavity(self):
+        name = 'RF'
+        length = 1.2
+        voltage = 2.5e6
+        frequency = 500e6
+        c = pyaccel.elements.rfcavity(name, length, voltage, frequency)
+        self.assertEqual(c.fam_name, name)
+        self.assertAlmostEqual(c.length, length)
+        self.assertAlmostEqual(c.voltage, voltage)
+        self.assertAlmostEqual(c.frequency, frequency)
+
 
 def element_suite():
     suite = unittest.TestLoader().loadTestsFromTestCase(TestElement)
