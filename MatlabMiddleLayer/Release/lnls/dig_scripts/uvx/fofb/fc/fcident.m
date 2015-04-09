@@ -7,8 +7,18 @@ if ischar(varargin{1}) && strcmpi(varargin{1}, 'init')
     expinfo = varargin{3};
     expout = [];
     
-    if strcmpi(expinfo.excitation, 'prbs') || strcmpi(expinfo.excitation, 'prbs2d') || strcmpi(expinfo.excitation, 'sine')
+    if strcmpi(expinfo.excitation, 'prbs') || strcmpi(expinfo.excitation, 'prbs2d') || strcmpi(expinfo.excitation, 'multisine')
         nperiods = floor(expinfo.duration*npts_packet/expinfo.period);
+    end
+
+    if strcmpi(expinfo.excitation(end-1:end), '2d')
+        maxnonzero = 0;
+        for i=1:size(expinfo.profiles,1)
+            nonzero = length(find(expinfo.profiles(i,:) ~= 0));
+            if nonzero > maxnonzero
+                maxnonzero = nonzero;
+            end
+        end
     end
     
     if strcmpi(expinfo.excitation, 'step')
@@ -17,19 +27,18 @@ if ischar(varargin{1}) && strcmpi(varargin{1}, 'init')
     elseif strcmpi(expinfo.excitation, 'ramp')
         ramp_duration = expinfo.duration/2;
         fcdata = [repmat(linspace(0,1,npts_packet*floor(ramp_duration))', 1, 1); repmat(linspace(1,0,npts_packet*floor(ramp_duration))', 1, 1);];
-    elseif strcmpi(expinfo.excitation, 'sine')
+    elseif strcmpi(expinfo.excitation, 'multisine')
         [fcdata, expout.freqs] = idinput([expinfo.period 1 nperiods], 'sine', expinfo.band, [-1 1], expinfo.sinedata);
     elseif strcmpi(expinfo.excitation, 'prbs')
-        fcdata = idinput([expinfo.period 1 nperiods], expinfo.excitation, expinfo.band, [-1 1]);
+        fcdata = idinput([expinfo.period 1 nperiods], 'prbs', expinfo.band, [-1 1]);
     elseif strcmpi(expinfo.excitation, 'prbs2d')
-        maxx=0;
-        for i=1:size(expinfo.profiles,1)
-            x = length(find(expinfo.profiles(i,:) ~= 0));
-            if x > maxx
-                maxx = x;
-            end
-        end
-        fcdata = idinput([expinfo.period maxx nperiods], 'prbs', expinfo.band, [-1 1]);
+        fcdata = idinput([expinfo.period maxnonzero nperiods], 'prbs', expinfo.band, [-1 1]);
+    elseif strcmpi(expinfo.excitation, 'sine2d')
+        freqs = expinfo.freqs(:)';
+        nfreqs = length(expinfo.freqs);
+        phases = zeros(1,nfreqs); %linspace(0,1,nfreqs+1)*pi; phases = phases(1:end-1);
+        npts = expinfo.duration*npts_packet;
+        fcdata = sin(pi*repmat(freqs, npts, 1).*repmat((0:npts-1)', 1, nfreqs) + repmat(phases, npts, 1));
     end
     fcdata = [fcdata; zeros(npts_packet*expinfo.duration - size(fcdata,1), size(fcdata,2))];
     
@@ -59,8 +68,8 @@ else
         cols = 1:size(profile,2);
         
         % Apply amplitude scaling and profile
-        if strcmpi(expinfo.excitation, 'prbs2d')
-            ix = find(expinfo.profiles(profile_number,:) ~= 0);
+        if strcmpi(expinfo.excitation(end-1:end), '2d')
+            ix = find(profile ~= 0);
             fcdata_ = zeros(length(indices), size(expinfo.profiles,2));
             fcdata_(:, ix) = fcdata(indices,1:length(ix));
             packet = expinfo.amplitude*fcdata_.*repmat(profile,npts_packet,1);
