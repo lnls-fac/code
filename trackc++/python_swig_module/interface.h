@@ -30,4 +30,9 @@ Status::type track_ringpass_wrapper (
         std::vector< Pos<double> >& pos,
         RingPassArgs& args);
 
+Status::type track_elementpass_wrapper (
+        const Element& el,
+        Pos<double> &orig_pos,
+        const Accelerator& accelerator);
+
 #endif // INTERFACE_H

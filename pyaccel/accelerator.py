@@ -117,7 +117,8 @@ class Accelerator(object):
         r += '\ncavity_on      : ' + str(self._accelerator.cavity_on)
         r += '\nradiation_on   : ' + str(self._accelerator.radiation_on)
         r += '\nvchamber_on    : ' + str(self._accelerator.vchamber_on)
-        r += '\nlattice length : ' + str(len(self._accelerator.lattice))
+        r += '\nlattice size   : ' + str(len(self._accelerator.lattice))
+        r += '\nlattice length : ' + str(self.length) + ' m'
         return r
 
     def append(self, value):
@@ -129,7 +130,7 @@ class Accelerator(object):
     def length(self):
         lens = [e.length for e in self._accelerator.lattice]
         return sum(lens)
-    
+
     @property
     def energy(self):
         return self._accelerator.energy

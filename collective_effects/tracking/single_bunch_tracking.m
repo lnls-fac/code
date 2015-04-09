@@ -26,9 +26,13 @@ phasx = 2*pi*rand(1, bunch.num_part);
 x  =  sqrt(emitx*betx).*cos(phasx)                     + etax*en;
 xp = -sqrt(emitx/betx).*(alpx*cos(phasx) + sin(phasx)) + etxp*en;
 
-figure;
-ax = axes;
-plot(ax,tau,en,'.');
+
+% ind = abs(tau) < 3e-11 & abs(x) < 50e-6;
+% figure;
+% ax = axes;
+% plot(ax,tau(ind),x(ind),'b.', 'MarkerSize',1);hold(ax,'on');
+% plot(ax,tau(~ind),x(~ind),'b.', 'MarkerSize',1);
+% hold(ax,'off'); drawnow;
 for ii=1:ring.nturns;
     % First do single particle tracking:
     % define one phase advance per particle
@@ -37,8 +41,11 @@ for ii=1:ring.nturns;
     
     [x, xp] = transverse_tracking(x,xp,en,phi,betx,alpx,etax,etxp);
     % The longitudinal time evolution equations are not in the differential
-    % form. Thus, any longitudinal potential can be taken into account
-    en  = en  - interp1(bunch.tau, bunch.potential, tau)/ring.E;
+    % form. Thus, any longitudinal potential can be taken into account.
+    % I don't have to normalize the potential by the charge, because the
+    % energy is already in electronVolts
+    en  = en  + interp1(bunch.tau, bunch.potential, tau)/ring.E;
+    % Remember, positive tau means particle ahead of synchronous particle.
     tau = tau - ring.rev_time.*(en*ring.mom_comp);
     
     
@@ -63,19 +70,21 @@ for ii=1:ring.nturns;
     rms_bun(:,ii) =  std([x;xp;en;tau],0,2);
     
     
-    if mod(ii,100)==0
+    if mod(ii,1000)==0
         fprintf('%d\n',ii);
     end
-    if mod(ii,10)==0
-        curx = get(ax,'XLim');
-        cury = get(ax,'YLim');
-        nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
-        nexty = [min([en,  cury(1)]), max([en,  cury(2)])];
-        plot(ax,tau,en,'.');
-        xlim(nextx);
-        ylim(nexty);
-        drawnow;
-    end
+%     if mod(ii,10)==0
+%         curx = get(ax,'XLim');
+%         cury = get(ax,'YLim');
+%         nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
+%         nexty = [min([x,  cury(1)]), max([x,  cury(2)])];
+%         plot(ax,tau(ind),x(ind),'b.', 'MarkerSize',1); hold on;
+%         plot(ax,tau(~ind),x(~ind),'b.', 'MarkerSize',1);
+%         hold(ax,'off');
+%         xlim(nextx);
+%         ylim(nexty);
+%         drawnow;
+%     end
 end
 
 function tau = generate_longitudinal_bunch(bunch, ring)
@@ -98,18 +107,23 @@ ind = tau <= 0;
 ipot = ipot - ipot(sum(ind));
 
 % Using the potential well, get the distribution function
-dist = exp(1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
+dist = exp(-1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
+
+% Now we take into account the potential well distortion:
+
+
+
 idist(1) = 0;
 % and integrate it:
 for i=2:length(dist),
     idist(i) = idist(i-1) + (dist(i)+dist(i-1))/2*(tau(i)-tau(i-1));
 end
 idist = idist/idist(end);
-ind = idist==max(idist) | idist==min(idist);
 
 % At last, use the integrated longitudinal distribution to generate
 % particles with longitudinal position which follows the equilibrium
 % distribution
+ind = idist==max(idist) | idist==min(idist);
 tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
 
 
@@ -127,12 +141,12 @@ function [kickt, kickx] = kick_from_wake(x, tau, wake)
 kickx  = zeros(size(x));
 kickt = zeros(size(tau));
 % Remember that tau is the position ahead of the synchronous particle.
-% Thus, a positive tau, passes through the impedance before a negative tau.
+% Thus, a positive tau passes through the impedance before a negative tau.
 
 if wake.dipo.sim && isfield(wake.dipo,'wake')
-    difft = bsxfun(@minus,tau',tau);
+    difft = bsxfun(@minus,tau,tau');
     kik = interp1(wake.dipo.tau,wake.dipo.wake,difft,'linear',0);
-    kickx = kickx + (x*kik);
+    kickx = kickx - (x*kik);
 end
 if wake.dipo.sim && isfield(wake.dipo,'wr')
     wr = wake.dipo.wr;
@@ -146,18 +160,18 @@ if wake.dipo.sim && isfield(wake.dipo,'wr')
     W_pot = zeros(size(wr));
     for i=1:length(sortedTau),
         for ii=1:length(wr)
-            kickx(I(i)) = kickx(I(i)) + betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
-                   imag(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii)))));
-            W_pot(ii) = W_pot(ii) + exp( sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))))*x(I(i));
+            kickx(I(i)) = kickx(I(i)) - betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
+                   imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii)))));
+            W_pot(ii) = W_pot(ii) + exp(-sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))*x(I(i));
         end
     end
 end
 
 
 if  wake.quad.sim && isfield(wake.quad,'wake')
-    if ~exist('difft','var'), difft = bsxfun(@minus,tau',tau); end
+    if ~exist('difft','var'), difft = bsxfun(@minus,tau,tau'); end
     kik = interp1(wake.quad.tau,wake.quad.wake,difft,'linear',0);
-    kickx = kickx + (sum(kik).*x);
+    kickx = kickx - (sum(kik).*x);
 end
 if wake.quad.sim && isfield(wake.quad,'wr')
     wr = wake.quad.wr;
@@ -172,18 +186,18 @@ if wake.quad.sim && isfield(wake.quad,'wr')
     W_pot = zeros(size(wr));
     for i=1:length(sortedTau),
         for ii=1:length(wr)
-            kickx(I(i)) = kickx(I(i)) + x(I(i)) * betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
-                   imag(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii)))));
-            W_pot(ii) = W_pot(ii) + exp( sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))));
+            kickx(I(i)) = kickx(I(i)) - x(I(i)) * betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
+                   imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii)))));
+            W_pot(ii) = W_pot(ii) + exp(-sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))));
         end
     end
 end
 
 
 if wake.long.sim && isfield(wake.long,'wake')
-    if ~exist('difft','var'), difft = bsxfun(@minus,tau',tau); end
+    if ~exist('difft','var'), difft = bsxfun(@minus,tau,tau'); end
     kik = interp1(wake.long.tau,wake.long.wake,difft,'linear',0);
-    kickt = kickt + sum(kik);
+    kickt = kickt - sum(kik);
 end
 if wake.long.sim && isfield(wake.long,'wr')
     wr = wake.long.wr;
@@ -197,10 +211,10 @@ if wake.long.sim && isfield(wake.long,'wr')
     W_pot = zeros(size(wr));
     for i=1:length(sortedTau),
         for ii=1:length(wr)
-            kickt(I(i)) = kickt(I(i)) + wr(ii)*Rs(ii)/Q(ii)*( ...
-                   real(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))))) + ... 
-         -1/(2*Ql)*imag(W_pot(ii) * exp(-sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))))));
-            W_pot(ii) = W_pot(ii) + exp( sortedTau(i)*(1i*wrl(ii)-wr(ii)/(2*Q(ii))));
+            kickt(I(i)) = kickt(I(i)) - wr(ii)*Rs(ii)/Q(ii)*(1/2 + ...
+                   real(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))) + ... 
+          1/(2*Ql)*imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))));
+            W_pot(ii) = W_pot(ii) + exp(-sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))));
         end
     end
 end

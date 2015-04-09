@@ -100,9 +100,9 @@ def beam_rigidity(**kwargs):
     if 'velocity' in kwargs:
         kwargs['beta'] = kwargs['velocity'] / _mp.constants.light_speed
     if 'beta' in kwargs:
-        kwargs['gamma'] = 1.0/_math.sqrt(1.0 - kwargs['beta']**2)
+        kwargs['gamma'] = 1.0/_math.sqrt((1.0 + kwargs['beta'])*(1.0 - kwargs['beta']))
     if 'gamma' in kwargs:
-        kwargs['energy'] = kwargs['gamma'] * electron_rest_energy_GeV
+        kwargs['energy'] = kwargs['gamma'] * electron_rest_energy_eV
 
     energy = kwargs['energy']
     gamma = kwargs['gamma'] if 'gamma' in kwargs else energy/electron_rest_energy_eV
