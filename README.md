@@ -20,7 +20,7 @@ Main projects in this repository:
 - Matlab FAC scripts (UVX/Sirius)
     . magnet_modelling
     . lattice_errors
-    . insertion_devices
+    . insertion_devices
     . epu lib (radia-subset-like matlab implementation)
     . non_linear_beam_stay_clear
     . collective_effects matlab scripts (UVX/Sirius)
