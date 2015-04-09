@@ -9,8 +9,13 @@ RandStream.setGlobalStream(RandStream('mt19937ar','seed', 190488));
 %definicao dos pacotes
 %generate the longitudinal phase space;
 cutoff = 9;
-en  = lnls_generate_random_numbers(bunch.espread, bunch.num_part, 'norm', cutoff, 0);
-tau = generate_longitudinal_bunch(bunch, ring);
+[tau, espread] = generate_longitudinal_bunch(bunch, ring, wake);
+
+if abs(bunch.espread-espread)/bunch.espread > eps
+    fprintf('Microwave Intability regime: energy spread = %7.4g\n',espread);
+end
+
+en  = lnls_generate_random_numbers(espread, bunch.num_part, 'norm', cutoff, 0);
 
 betx = ring.beta;
 alpx = ring.alpha;
@@ -27,12 +32,12 @@ x  =  sqrt(emitx*betx).*cos(phasx)                     + etax*en;
 xp = -sqrt(emitx/betx).*(alpx*cos(phasx) + sin(phasx)) + etxp*en;
 
 
-% ind = abs(tau) < 3e-11 & abs(x) < 50e-6;
-% figure;
-% ax = axes;
-% plot(ax,tau(ind),x(ind),'b.', 'MarkerSize',1);hold(ax,'on');
-% plot(ax,tau(~ind),x(~ind),'b.', 'MarkerSize',1);
-% hold(ax,'off'); drawnow;
+ind = abs(tau) < 3e-11 & abs(en) < 7.6e-4;
+figure;
+ax = axes;
+plot(ax,tau(ind),en(ind),'b.', 'MarkerSize',1);hold(ax,'on');
+plot(ax,tau(~ind),en(~ind),'b.', 'MarkerSize',1);
+hold(ax,'off'); drawnow;
 for ii=1:ring.nturns;
     % First do single particle tracking:
     % define one phase advance per particle
@@ -73,59 +78,19 @@ for ii=1:ring.nturns;
     if mod(ii,1000)==0
         fprintf('%d\n',ii);
     end
-%     if mod(ii,10)==0
-%         curx = get(ax,'XLim');
-%         cury = get(ax,'YLim');
-%         nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
-%         nexty = [min([x,  cury(1)]), max([x,  cury(2)])];
-%         plot(ax,tau(ind),x(ind),'b.', 'MarkerSize',1); hold on;
-%         plot(ax,tau(~ind),x(~ind),'b.', 'MarkerSize',1);
-%         hold(ax,'off');
-%         xlim(nextx);
-%         ylim(nexty);
-%         drawnow;
-%     end
+    if mod(ii,10)==0
+        curx = get(ax,'XLim');
+        cury = get(ax,'YLim');
+        nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
+        nexty = [min([en,  cury(1)]), max([en,  cury(2)])];
+        plot(ax,tau(ind),en(ind),'b.', 'MarkerSize',1); hold on;
+        plot(ax,tau(~ind),en(~ind),'b.', 'MarkerSize',1);
+        hold(ax,'off');
+        xlim(nextx);
+        ylim(nexty);
+        drawnow;
+    end
 end
-
-function tau = generate_longitudinal_bunch(bunch, ring)
-
-% To generate the longitudinal bunch, we use the longitudinal potential
-% defined in the input
-tau = bunch.tau;
-pot = bunch.potential;
-
-
-ipot = zeros(size(pot));
-idist = zeros(size(pot));
-
-% Integrate the potential to get the potential well
-ipot(1) = 0;
-for i=2:length(pot),
-    ipot(i) = ipot(i-1) + (pot(i)+pot(i-1))/2*(tau(i)-tau(i-1));
-end
-ind = tau <= 0;
-ipot = ipot - ipot(sum(ind));
-
-% Using the potential well, get the distribution function
-dist = exp(-1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
-
-% Now we take into account the potential well distortion:
-
-
-
-idist(1) = 0;
-% and integrate it:
-for i=2:length(dist),
-    idist(i) = idist(i-1) + (dist(i)+dist(i-1))/2*(tau(i)-tau(i-1));
-end
-idist = idist/idist(end);
-
-% At last, use the integrated longitudinal distribution to generate
-% particles with longitudinal position which follows the equilibrium
-% distribution
-ind = idist==max(idist) | idist==min(idist);
-tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
-
 
 function [x_new, xp_new] = transverse_tracking(x,xp,en,phix,betx,alpx,etax,etxp)
 
