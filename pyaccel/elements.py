@@ -64,7 +64,7 @@ def vcorrector(fam_name, length=0.0, vkick=0.0):
     length -- [m]
     vkick -- vertical kick [rad]
     """
-    e = _trackcpp.vcorrector_wrapper(fam_name, length, hkick)
+    e = _trackcpp.vcorrector_wrapper(fam_name, length, vkick)
     return Element(element=e)
 
 
