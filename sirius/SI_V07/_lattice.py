@@ -5,6 +5,7 @@ import pyaccel as _pyaccel
 import mathphys as _mp
 from . import optics_mode_C04 as _optics_mode_C04
 from . import optics_mode_C05 as _optics_mode_C05
+from . import _accelerator
 
 _default_optics_mode = _optics_mode_C05
 _lattice_symmetry = 10
@@ -231,8 +232,9 @@ def create_lattice():
 
 def set_rf_frequency(the_ring):
 
+    _, beam_velocity, _, _, _ = _mp.beam_optics.beam_rigidity(energy=_accelerator._energy)
     circumference = _pyaccel.lattice.lengthlat(the_ring)
-    rev_frequency = _mp.constants.light_speed / circumference
+    rev_frequency = beam_velocity / circumference
     rf_frequency  = _harmonic_number * rev_frequency
     idx = _pyaccel.lattice.findcells(the_ring, 'fam_name', 'cav')
     for i in idx:
@@ -247,7 +249,7 @@ def set_num_integ_steps(the_ring):
         if the_ring[i].angle:
             nr_steps = int(_math.ceil(the_ring[i].length/len_bends))
             the_ring[i].nr_steps = nr_steps
-        elif the_ring[i].polynom_b[1]:
+        elif the_ring[i].polynom_b[1] or the_ring[i].fam_name == 'cf':
             nr_steps = int(_math.ceil(the_ring[i].length/len_quads))
             the_ring[i].nr_steps = nr_steps
         elif the_ring[i].polynom_b[2]:

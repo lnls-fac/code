@@ -271,7 +271,7 @@ def create_lattice():
     return the_ring
 
 def set_rf_frequency(the_ring):
-    
+
     beam_velocity = 299792453.6510123 #[m/s]
     circumference = _pyaccel.lattice.lengthlat(the_ring)
     rev_frequency = beam_velocity / circumference
