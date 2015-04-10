@@ -25,9 +25,14 @@ def elementpass(element, particles, **kwargs):
     vchamber_on     -- vacuum chamber on state (True/False)
 
     Returns:
-    particles_out   -- a numpy array with tracked 6D position(s) of the particle(s)
-
-    Raises TrackingException
+    particles_out   -- a numpy array with tracked 6D position(s) of the
+                       particle(s)
+    lost_flag       -- indicates whether any pasrticle has been lost
+                       (True/False)
+    lost_plane      -- list of integers indicating on what plane the partciles
+                       were lost: 'None' if particle survived, 1 if particle is
+                       lost in the horizontal direction and 2 if it is lost in
+                       the vetical direction.
     """
 
     # checks if all necessary arguments have been passed
@@ -44,12 +49,12 @@ def elementpass(element, particles, **kwargs):
 
     # tracks through the list of pos
     particles_out = _numpy.zeros(particles.shape)
+    particles_out.fill(float('nan'))
+    
     for i in range(particles.shape[1]):
         p_in = _Numpy2CppDoublePos(particles[:,i])
         r = _trackcpp.track_elementpass_wrapper(element._e,
                                                 p_in, accelerator._accelerator)
-        if r > 0:
-            raise TrackingException(_trackcpp.string_error_messages[r])
         particles_out[:,i] = (p_in.rx, p_in.px, p_in.ry, p_in.py, p_in.dl, p_in.de)
 
     # returns tracking data

@@ -59,6 +59,7 @@ def findspos(lattice, indices = None):
         return _numpy.array([pos[i] for i in indices])
 
 def findcells(lattice, attribute_name, value=None):
+
     """ returns a list with indices of elements that match criteria 'attribute_name=value' """
     indices = []
     for i in range(len(lattice)):
@@ -67,7 +68,7 @@ def findcells(lattice, attribute_name, value=None):
                 if getattr(lattice[i], attribute_name) != None:
                     indices.append(i)
             else:
-                if getattr(lattice[i], attribute_name) == value:
+                if _is_equal(getattr(lattice[i], attribute_name), value):
                     indices.append(i)
     return indices
 
@@ -125,3 +126,43 @@ def get_rf_frequency(lattice):
     for e in lattice:
         if e.frequency != 0:
             return e.frequency
+
+def _is_equal(a,b):
+
+    # checks for strings
+    if isinstance(a,str):
+        if isinstance(b,str):
+            return a == b
+        else:
+            return False
+    else:
+        if isinstance(b,str):
+            return False
+    try:
+        a[0]
+        # 'a' is an iterable
+        try:
+            b[0]
+            # 'b' is an iterable
+            if len(a) != len(b):
+                # 'a' and 'b' are iterbales but with different lengths
+                return False
+            else:
+                # 'a' and 'b' are iterables with the same length
+                for i in range(len(a)):
+                    if not _is_equal(a[i],b[i]):
+                        return False
+                # corresponding elemnts in a nd b iterables are the same.
+                return True
+        except:
+            # 'a' is iterable but 'b' is not
+            return False
+    except:
+        # 'a' is not iterable
+        try:
+            b[0]
+            # 'a' is not iterable bu 'b' is.
+            return False
+        except:
+            # neither 'a' nor 'b' are iterables
+            return a == b
