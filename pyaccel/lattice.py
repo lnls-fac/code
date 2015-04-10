@@ -26,7 +26,7 @@ def buildlat(elist):
 
 
 def shiftlat(lattice, start):
-    """ shift periodically the lattic so that it starts at element whose index is 'start' """
+    """ shift periodically the lattice so that it starts at element whose index is 'start' """
     new_lattice = lattice[start:]
     for i in range(start):
         new_lattice.append(lattice[i])

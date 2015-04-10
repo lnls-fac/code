@@ -502,6 +502,8 @@ class Element(object):
             r += fmtstr.format('angle', self.angle, 'rad')
         if self.angle_in != 0:
             r += fmtstr.format('angle_in', self.angle_in, 'rad')
+        if self.angle_out != 0:
+            r += fmtstr.format('angle_out', self.angle_in, 'rad')
         if not all([v == 0 for v in self.polynom_a]):
             r += fmtstr.format('polynom_a', self.polynom_a, '1/m¹,1/m²,1/m³,...')
         if not all([v == 0 for v in self.polynom_b]):
@@ -510,8 +512,6 @@ class Element(object):
             r += fmtstr.format('hkick', self.hkick, 'rad')
         if self.vkick != 0:
             r += fmtstr.format('vkick', self.vkick, 'rad')
-        #if self.hkick <> 0:
-        #    r
         return r
 
 
