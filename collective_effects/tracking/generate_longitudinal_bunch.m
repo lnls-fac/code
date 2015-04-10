@@ -34,13 +34,17 @@ idist = zeros(size(pot));
 % Now we iterate to get the equilibrium distribution
 espread = bunch.espread;
 converged = false;
+% figure; axes;
 while ~converged
     Totalpot = pot;
-    figure; axes; hold('all');
+%     cla;
+%     hold('all');
+%     xlim([-2,2]*1e-10);ylim([-0.1,2.5]*1e-5);
     
     distr_old = get_distribution_from_potential(tau, Totalpot, ring, espread);
     
     residue_old = trapz(tau,distr_old.^2);
+    count = 0;
     while ~converged
         %Include the potential well from wake:
         Totalpot = pot + conv(distr_old,wakeF,'same');
@@ -50,16 +54,20 @@ while ~converged
         
         residue = trapz(tau,(distr-distr_old).^2);
         if residue < residue_old
-            distr_old = distr;
-            residue_old = residue;
-            if residue < 1e-6
+            if residue < 1e-20
                 converged = true;
             end
         else
-            espread = espread*1.02;
-            break;
+            count = count +1;
+            if count > 10
+                espread = espread*1.02;
+                break;
+            end
         end
+        distr_old = distr;
+        residue_old = residue;
     end
+%     break;
 end
 
 idist(1) = 0;
@@ -89,7 +97,7 @@ function distr = get_distribution_from_potential(tau, pot, ring, espread)
     ipot = ipot - ipot(ind);
     
     % Using the potential well, get the distribution function
-    distr = exp(-1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*espread^2)));
+    distr = exp(-1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(espread^2)));
     distr = distr/trapz(distr);
     
-    plot(tau,ipot);
+%     plot(tau,ipot);

@@ -2,12 +2,11 @@ const = lnls_constants;
 c = const.c;
 el_ch = const.q0;
 % ring data
-ring.nturns   = 10000;
+ring.nturns   = 5000;
 ring.rev_time = 518.396/c;
 ring.E        = 3e9;
 ring.mom_comp = 1.7e-4;
 ring.beta     = 11;
-ring.alpha    = 0;
 ring.eta      = 0.0;
 ring.etap     = 0;
 ring.har_num  = 864;
@@ -15,8 +14,8 @@ ring.tune     = 13.117;
 ring.dtunedp  = 0.0;
 ring.dtunedj  = 000000;
 
-bunch.num_part = 50000;
-bunch.I_b      = 0.4e-3;
+bunch.num_part = 10000;
+bunch.I_b      = 4.0e-3;
 
 tau = (-1000:1000)*1e-12;
 V = 3.0e6;
@@ -52,7 +51,7 @@ wrl = wr .* Ql ./ Q;
 
 tau = -(0:1000)*1e-12;
 clear wake;
-wake.long.sim  = true;
+wake.long.sim  = false;
 % wake.long.tau  = tau;
 % wake.long.wake = wr*Rs/Q*(cos(wrl*tau) + 1/(2*Ql)*sin(wrl*tau)).*exp(wr*tau/(2*Q));
 % wake.long.wake(1) = wake.long.wake(1)/2;
@@ -63,7 +62,7 @@ wake.long.Q    = Q;
 beta_imp = 11;
 Rs = Zovern*fr*ring.rev_time/radius;
 
-wake.dipo.sim  = false;
+wake.dipo.sim  = true;
 % wake.dipo.tau  = tau;
 % wake.dipo.wake = beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(wr*tau/(2*Q));
 wake.dipo.wr   = wr;
