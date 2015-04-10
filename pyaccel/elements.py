@@ -363,6 +363,10 @@ class Element(object):
     def voltage(self, value):
         self._e.voltage = value
 
+    @property
+    def kicktable(self):
+        return self._e.kicktable
+
     # @property
     # def kicktable(self):
     #     return Kicktable(self._e.kicktable)
