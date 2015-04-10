@@ -18,7 +18,7 @@ class TestTracking(unittest.TestCase):
     def test_linepass(self):
         the_ring = self.the_ring
         particles = [0,0,0,0,0,0]
-        r = pyaccel.tracking.linepass(accelerator=the_ring,
+        particles_out, lost_flag,  = pyaccel.tracking.linepass(accelerator=the_ring,
                                       particles=particles,
                                       indices=None)
 
