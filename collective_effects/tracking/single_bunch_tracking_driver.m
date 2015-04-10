@@ -2,12 +2,11 @@ const = lnls_constants;
 c = const.c;
 el_ch = const.q0;
 % ring data
-ring.nturns   = 10000;
+ring.nturns   = 5000;
 ring.rev_time = 518.396/c;
 ring.E        = 3e9;
 ring.mom_comp = 1.7e-4;
 ring.beta     = 11;
-ring.alpha    = 0;
 ring.eta      = 0.0;
 ring.etap     = 0;
 ring.har_num  = 864;
@@ -15,8 +14,8 @@ ring.tune     = 13.117;
 ring.dtunedp  = 0.0;
 ring.dtunedj  = 000000;
 
-bunch.num_part = 400;
-bunch.I_b      = 0.2e-3;
+bunch.num_part = 10000;
+bunch.I_b      = 4.0e-3;
 
 tau = (-1000:1000)*1e-12;
 V = 3.0e6;
@@ -90,26 +89,26 @@ wake.feedback.gain   = 0.1;
 
 [ave_bun,rms_bun, ave_kickx, fdbkx] = single_bunch_tracking(ring, bunch, wake);
 
-I_b = linspace(0.05,2.0,30)*1e-3;
-fft_ave = zeros(30,ring.nturns);
-rmsx    = zeros(30,ring.nturns);
-for i=1:30
-    bunch.I_b = I_b(i);
-    [ave_bun,rms_bun, ave_kickx, fdbkx] = single_bunch_tracking(ring, bunch, wake);
-    fft_ave(i,:) = 2*abs(fft(ave_bun(1,:)));
-    rmsx(i,:) = rms_bun(1,:);
-    fprintf('%d : %5.3f mA\n',i,I_b(i)*1e3);
-end
-n = ring.nturns;
-tune = (0:n/2)/n;
-ind = tune > 0.11 & tune < 0.125;
-[I,T] = meshgrid(I_b,tune);
-
-pfft = fft_ave(:,1:n/2+1)';
-pfft = pfft./repmat(max(pfft),n/2+1,1);
-figure;  surface(I(ind,:),T(ind,:),pfft(ind,:),'LineStyle','none');
-xlim([min(I_b),max(I_b)]);ylim([min(tune(ind)),max(tune(ind))]);
-
-[I,N] = meshgrid(1:n,I_b);
-figure; surface(N,I,log(rmsx/min(min(rmsx))),'LineStyle','none');
-xlim([1,n]);ylim([min(I_b),max(I_b)]);
+% I_b = linspace(0.05,2.0,30)*1e-3;
+% fft_ave = zeros(30,ring.nturns);
+% rmsx    = zeros(30,ring.nturns);
+% for i=1:30
+%     bunch.I_b = I_b(i);
+%     [ave_bun,rms_bun, ave_kickx, fdbkx] = single_bunch_tracking(ring, bunch, wake);
+%     fft_ave(i,:) = 2*abs(fft(ave_bun(1,:)));
+%     rmsx(i,:) = rms_bun(1,:);
+%     fprintf('%d : %5.3f mA\n',i,I_b(i)*1e3);
+% end
+% n = ring.nturns;
+% tune = (0:n/2)/n;
+% ind = tune > 0.11 & tune < 0.125;
+% [I,T] = meshgrid(I_b,tune);
+% 
+% pfft = fft_ave(:,1:n/2+1)';
+% pfft = pfft./repmat(max(pfft),n/2+1,1);
+% figure;  surface(I(ind,:),T(ind,:),pfft(ind,:),'LineStyle','none');
+% xlim([min(I_b),max(I_b)]);ylim([min(tune(ind)),max(tune(ind))]);
+% 
+% [I,N] = meshgrid(1:n,I_b);
+% figure; surface(N,I,log(rmsx/min(min(rmsx))),'LineStyle','none');
+% xlim([1,n]);ylim([min(I_b),max(I_b)]);

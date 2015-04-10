@@ -216,7 +216,7 @@ class Kicktable(object):
 class Element(object):
 
     t_valid_types = (list, _numpy.ndarray)
-    r_valid_types = (_numpy.ndarray)
+    r_valid_types = (_numpy.ndarray, )
 
     def __init__(self, fam_name="", length=0.0, element=None):
         if element is not None:
@@ -434,7 +434,7 @@ class Element(object):
     @r_in.setter
     def r_in(self, value):
         self._check_type(value, Element.r_valid_types)
-        self._check_size(value, _DIMS)
+        self._check_shape(value, _DIMS)
         self._set_c_array_from_matrix(self._e.r_in, _DIMS, value)
 
     @property
@@ -444,7 +444,7 @@ class Element(object):
     @r_out.setter
     def r_out(self, value):
         self._check_type(value, Element.r_valid_types)
-        self._check_size(value, _DIMS)
+        self._check_shape(value, _DIMS)
         self._set_c_array_from_matrix(self._e.r_out, _DIMS, value)
 
     def _set_c_array_from_vector(self, array, size, values):
@@ -472,6 +472,10 @@ class Element(object):
         if not len(value) == size:
             raise ValueError("size must be " + str(size))
 
+    def _check_shape(self, value, shape):
+        if not value.shape == shape:
+            raise ValueError("shape must be " + str(shape))
+
     def _get_coord_vector(self, pointer):
         address = int(pointer)
         c_array = _coord_vector.from_address(address)
@@ -479,11 +483,6 @@ class Element(object):
 
     def _get_coord_matrix(self, pointer):
         address = int(pointer)
-        c_array = _coord_matrix.from_address(address)
-        return _numpy.ctypeslib.as_array(c_array)
-
-    @gap.setter
-    def gap(self, value):
         c_array = _coord_matrix.from_address(address)
         return _numpy.ctypeslib.as_array(c_array)
 

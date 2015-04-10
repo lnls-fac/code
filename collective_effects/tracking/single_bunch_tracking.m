@@ -9,11 +9,15 @@ RandStream.setGlobalStream(RandStream('mt19937ar','seed', 190488));
 %definicao dos pacotes
 %generate the longitudinal phase space;
 cutoff = 9;
-en  = lnls_generate_random_numbers(bunch.espread, bunch.num_part, 'norm', cutoff, 0);
-tau = generate_longitudinal_bunch(bunch, ring);
+[tau, espread] = generate_longitudinal_bunch(bunch, ring, wake);
+
+if abs(bunch.espread-espread)/bunch.espread > eps
+    fprintf('Microwave Intability regime: energy spread = %7.4g\n',espread);
+end
+
+en  = lnls_generate_random_numbers(espread, bunch.num_part, 'norm', cutoff, 0);
 
 betx = ring.beta;
-alpx = ring.alpha;
 etax = ring.eta;
 etxp = ring.etap;
 tune = ring.tune;
@@ -23,23 +27,21 @@ tu_sh= ring.dtunedj;
 % generate transverse phase space;
 emitx = lnls_generate_random_numbers(bunch.emit, bunch.num_part,'exponential',cutoff^2,0);
 phasx = 2*pi*rand(1, bunch.num_part);
-x  =  sqrt(emitx*betx).*cos(phasx)                     + etax*en;
-xp = -sqrt(emitx/betx).*(alpx*cos(phasx) + sin(phasx)) + etxp*en;
+x  =  sqrt(emitx*betx).*cos(phasx) + etax*en;
+xp = -sqrt(emitx/betx).*sin(phasx) + etxp*en;
 
+pl_en = true;
+pl_x  = true;
 
-% ind = abs(tau) < 3e-11 & abs(x) < 50e-6;
-% figure;
-% ax = axes;
-% plot(ax,tau(ind),x(ind),'b.', 'MarkerSize',1);hold(ax,'on');
-% plot(ax,tau(~ind),x(~ind),'b.', 'MarkerSize',1);
-% hold(ax,'off'); drawnow;
+if pl_en, figure; ax_en = axes; plot(ax_en,tau,en,'b.', 'MarkerSize',1); end
+if pl_x,  figure; ax_x  = axes; plot(ax_x ,tau,x, 'b.', 'MarkerSize',1); end
+drawnow;
 for ii=1:ring.nturns;
     % First do single particle tracking:
     % define one phase advance per particle
-    phi  =  2*pi*(tune + chrom*en + tu_sh*((x-etax*en).^2/betx + ...
-                 ((xp-etxp*en).^2 + alpx/betx*(x-etax*en).^2)*betx));
+    phi  =  2*pi*(tune + chrom*en + tu_sh*((x-etax*en).^2/betx + (xp-etxp*en).^2 * betx));
     
-    [x, xp] = transverse_tracking(x,xp,en,phi,betx,alpx,etax,etxp);
+    [x, xp] = transverse_tracking(x,xp,en,phi,betx,etax,etxp);
     % The longitudinal time evolution equations are not in the differential
     % form. Thus, any longitudinal potential can be taken into account.
     % I don't have to normalize the potential by the charge, because the
@@ -50,7 +52,9 @@ for ii=1:ring.nturns;
     
     
     % Now comes the impedance kicks:
-    [kickt, kickx] = kick_from_wake(x, tau, wake);
+    % For the transverse kick x/beta is passed because the value of the
+    % beta at the impedance location will be used inside this function.
+    [kickt, kickx] = kick_from_wake(x/betx, tau, wake);
     kickt  = kickt * (ring.rev_time  / ring.E) * (bunch.I_b / bunch.num_part);
     kickx  = kickx * (ring.rev_time  / ring.E) * (bunch.I_b / bunch.num_part);
     
@@ -60,9 +64,8 @@ for ii=1:ring.nturns;
     % bunch centroid:
     fdbkx(ii) = bbb_feedback(ave_bun(1,:),wake,ii);
     
-    % The impedance kick must be divided by beta, because the betatron
-    % function were already taken into account in the wake field definition
-    xp = xp + kickx/betx + fdbkx(ii);
+    % Apply the impedance kicks:
+    xp = xp + kickx + fdbkx(ii);
     en = en + kickt;
     
     % At last the first and second moments of the beam are recorded:
@@ -73,61 +76,26 @@ for ii=1:ring.nturns;
     if mod(ii,1000)==0
         fprintf('%d\n',ii);
     end
-%     if mod(ii,10)==0
-%         curx = get(ax,'XLim');
-%         cury = get(ax,'YLim');
-%         nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
-%         nexty = [min([x,  cury(1)]), max([x,  cury(2)])];
-%         plot(ax,tau(ind),x(ind),'b.', 'MarkerSize',1); hold on;
-%         plot(ax,tau(~ind),x(~ind),'b.', 'MarkerSize',1);
-%         hold(ax,'off');
-%         xlim(nextx);
-%         ylim(nexty);
-%         drawnow;
-%     end
+    if mod(ii,10)==0
+        if pl_x
+            curx = get(ax_x,'XLim'); cury = get(ax_x,'YLim');
+            nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
+            nexty = [min([x,  cury(1)]), max([x,  cury(2)])];
+            xlim(ax_x,nextx); ylim(ax_x,nexty);
+            plot(ax_x,tau,x,'b.', 'MarkerSize',1);
+        end
+        if pl_en
+            curx = get(ax_en,'XLim'); cury = get(ax_en,'YLim');
+            nextx = [min([tau,curx(1)]), max([tau,curx(2)])];
+            nexty = [min([en, cury(1)]), max([en, cury(2)])];
+            xlim(ax_en,nextx); ylim(ax_en,nexty);
+            plot(ax_en,tau,en,'b.', 'MarkerSize',1);
+        end
+        drawnow;
+    end
 end
 
-function tau = generate_longitudinal_bunch(bunch, ring)
-
-% To generate the longitudinal bunch, we use the longitudinal potential
-% defined in the input
-tau = bunch.tau;
-pot = bunch.potential;
-
-
-ipot = zeros(size(pot));
-idist = zeros(size(pot));
-
-% Integrate the potential to get the potential well
-ipot(1) = 0;
-for i=2:length(pot),
-    ipot(i) = ipot(i-1) + (pot(i)+pot(i-1))/2*(tau(i)-tau(i-1));
-end
-ind = tau <= 0;
-ipot = ipot - ipot(sum(ind));
-
-% Using the potential well, get the distribution function
-dist = exp(-1/(ring.mom_comp*ring.rev_time*ring.E)*(ipot/(2*bunch.espread^2)));
-
-% Now we take into account the potential well distortion:
-
-
-
-idist(1) = 0;
-% and integrate it:
-for i=2:length(dist),
-    idist(i) = idist(i-1) + (dist(i)+dist(i-1))/2*(tau(i)-tau(i-1));
-end
-idist = idist/idist(end);
-
-% At last, use the integrated longitudinal distribution to generate
-% particles with longitudinal position which follows the equilibrium
-% distribution
-ind = idist==max(idist) | idist==min(idist);
-tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
-
-
-function [x_new, xp_new] = transverse_tracking(x,xp,en,phix,betx,alpx,etax,etxp)
+function [x_new, xp_new] = transverse_tracking(x,xp,en,phix,betx,etax,etxp)
 
 % The transverse single particle kick is just an one turn matrix at some
 % position in the ring, with a tune dependent of particle energy and
@@ -160,9 +128,15 @@ if wake.dipo.sim && isfield(wake.dipo,'wr')
     W_pot = zeros(size(wr));
     for i=1:length(sortedTau),
         for ii=1:length(wr)
-            kickx(I(i)) = kickx(I(i)) - betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
+            kickx(I(i)) = kickx(I(i)) - wr(ii)*Rs(ii)/Ql(ii)*...
                    imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii)))));
-            W_pot(ii) = W_pot(ii) + exp(-sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))*x(I(i));
+%             % This is the longitudinal kick given by the transverse wake:
+%             % Chao's book, p. 212
+%             kickt(I(i)) = kickt(I(i)) - betax(ii) * x(I(i)) * wr(ii)*Rs(ii)/Q(ii)*( ...
+%                    real(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))) + ... 
+%           1/(2*Ql)*imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))));
+               
+            W_pot(ii) = W_pot(ii) + exp(-sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))*betax(ii)*x(I(i));
         end
     end
 end
@@ -188,6 +162,12 @@ if wake.quad.sim && isfield(wake.quad,'wr')
         for ii=1:length(wr)
             kickx(I(i)) = kickx(I(i)) - x(I(i)) * betax(ii)*wr(ii)*Rs(ii)/Ql(ii)*...
                    imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii)))));
+%             % This is the longitudinal kick given by the transverse wake:
+%             % Not in Chao's book, but easily derived
+%             kickt(I(i)) = kickt(I(i)) - (x(I(i))*betax(ii))^2 * wr(ii)*Rs(ii)/Q(ii)*(...
+%                    real(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))) + ... 
+%           1/(2*Ql)*imag(W_pot(ii) * exp( sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))))));
+               
             W_pot(ii) = W_pot(ii) + exp(-sortedTau(i)*(1i*wrl(ii)+wr(ii)/(2*Q(ii))));
         end
     end
@@ -218,6 +198,7 @@ if wake.long.sim && isfield(wake.long,'wr')
         end
     end
 end
+
 
 
 function kick = bbb_feedback(x_m,wake,ii)
