@@ -278,7 +278,6 @@ def findm66(accelerator, closed_orbit = None):
 
     return m66_out
 
-
 def _Numpy2CppDoublePos(p_in):
     p_out = _trackcpp.CppDoublePos()
     p_out.rx, p_out.px = float(p_in[0]), float(p_in[1])
@@ -294,6 +293,7 @@ def _CppDoublePosVector2Numpy(orbit, indices = None):
         indices = range(len(orbit))
     elif isinstance(indices,int):
         indices = [indices]
+
     orbit_out = _numpy.zeros((6, len(indices)))
     for i in range(len(indices)):
         orbit_out[:, i] = [
