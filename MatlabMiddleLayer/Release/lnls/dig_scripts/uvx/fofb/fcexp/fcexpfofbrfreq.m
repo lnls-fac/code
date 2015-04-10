@@ -24,7 +24,7 @@ if nargin < 4 || isempty(M)
     M = u*s*v';
 end
 
-expinfo.excitation = 'sine';
+expinfo.excitation = 'multisine';
 expinfo.amplitude = amplitude;
 expinfo.band = [0 2*Ts*bw];
 expinfo.sineinfo = [100, 10, 1];
