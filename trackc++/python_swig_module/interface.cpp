@@ -1,6 +1,14 @@
 
 #include "interface.h"
 
+Status::type track_elementpass_wrapper (
+         const Element& el,
+         Pos<double> &orig_pos,
+         const Accelerator& accelerator) {
+         return track_elementpass (el,
+                                   orig_pos,
+                                   accelerator);
+}
 
 Status::type track_linepass_wrapper(
         const Accelerator &accelerator,
@@ -28,15 +36,4 @@ Status::type track_ringpass_wrapper (
                           args.element_offset,
                           args.lost_plane,
                           args.trajectory);
-}
-
-
-Status::type track_elementpass_wrapper (
-		     const Element& el,
-		     Pos<double> &orig_pos,
-		     const Accelerator& accelerator) {
-    return track_elementpass (
-    		     el,
-    		     orig_pos,
-    		     accelerator);
 }

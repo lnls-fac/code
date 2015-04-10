@@ -9,14 +9,24 @@
 
 struct LinePassArgs {
     unsigned int element_offset;
-    Plane::type lost_plane;
-    bool trajectory;
+    Plane::type  lost_plane;
+    bool         trajectory;
 };
 
 struct RingPassArgs : public LinePassArgs {
+
     unsigned int nr_turns;
     unsigned int lost_turn;
+    unsigned int element_offset;
+    Plane::type  lost_plane;
+    unsigned int trajectory;
+
 };
+
+Status::type track_elementpass_wrapper (
+        const Element& el,
+        Pos<double> &orig_pos,
+        const Accelerator& accelerator);
 
 Status::type track_linepass_wrapper (
         const Accelerator& accelerator,
@@ -30,9 +40,5 @@ Status::type track_ringpass_wrapper (
         std::vector< Pos<double> >& pos,
         RingPassArgs& args);
 
-Status::type track_elementpass_wrapper (
-        const Element& el,
-        Pos<double> &orig_pos,
-        const Accelerator& accelerator);
 
 #endif // INTERFACE_H

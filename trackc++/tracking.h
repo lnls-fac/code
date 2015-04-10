@@ -176,9 +176,9 @@ Status::type track_ringpass (
 		bool trajectory) {
 
 	Status::type status  = Status::success;
+	std::vector<Pos<T> > final_pos;
 
 	for(lost_turn=0; lost_turn<nr_turns; ++lost_turn) {
-		std::vector<Pos<T> > final_pos;
 		if ((status = track_linepass (accelerator, orig_pos, final_pos, element_offset, lost_plane, false)) != Status::success) {
 			return status;
 		}
