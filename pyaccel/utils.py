@@ -6,5 +6,7 @@ def interactive(obj):
         {
             'module': obj.__module__,
             'name': obj.__name__
-        })
+        }
+    )
+
     return obj

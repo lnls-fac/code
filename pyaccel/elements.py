@@ -6,6 +6,7 @@ import trackcpp as _trackcpp
 from pyaccel.utils import interactive
 
 
+_DBL_MAX = _trackcpp.get_double_max()
 _NUM_COORDS = 6
 _DIMS = (_NUM_COORDS, _NUM_COORDS)
 _coord_vector = _ctypes.c_double*_NUM_COORDS
@@ -183,12 +184,14 @@ class Polynom(_numpy.ndarray):
         super().__setitem__(index, value)
 
 
+@interactive
 class Kicktable(object):
 
-    def __init__(self, filename="", kicktable=None):
-        if kicktable is not None:
-            self._kicktable = kicktable
+    def __init__(self, **kwargs):
+        if 'kicktable' in kwargs:
+            self._kicktable = kwargs['kicktable']
         else:
+            filename = kwargs.get('filename', "")
             self._kicktable = _trackcpp.Kicktable(filename)
 
     @property
@@ -216,23 +219,25 @@ class Kicktable(object):
         return self._kicktable.y_max
 
     @property
-    def num_pts_x(self):
+    def x_nrpts(self):
         return self._kicktable.x_nrpts
 
     @property
-    def num_pts_y(self):
-        return self._kicktable.y_nrptspyaccel.accelerator.Accelerator()
+    def y_nrpts(self):
+        return self._kicktable.y_nrpts
 
 
 class Element(object):
 
-    t_valid_types = (list, _numpy.ndarray)
-    r_valid_types = (_numpy.ndarray, )
+    _t_valid_types = (list, _numpy.ndarray)
+    _r_valid_types = (_numpy.ndarray, )
 
-    def __init__(self, fam_name="", length=0.0, element=None):
-        if element is not None:
-            self._e = element
+    def __init__(self, **kwargs):
+        if 'element' in kwargs:
+            self._e = kwargs['element']
         else:
+            fam_name = kwargs.get('fam_name', "")
+            length = kwargs.get('length', 0.0)
             self._e = _trackcpp.Element(fam_name, length)
 
     @property
@@ -348,7 +353,7 @@ class Element(object):
 
     @thin_KL.setter
     def thin_KL(self, value):
-        self._e._thin_KL = value
+        self._e.thin_KL = value
 
     @property
     def thin_SL(self):
@@ -356,7 +361,7 @@ class Element(object):
 
     @thin_SL.setter
     def thin_SL(self, value):
-        self._e._thin_SL = value
+        self._e.thin_SL = value
 
     @property
     def frequency(self):
@@ -376,17 +381,16 @@ class Element(object):
 
     @property
     def kicktable(self):
-        return self._e.kicktable
+        if self._e.kicktable is not None:
+            return Kicktable(kicktable=self._e.kicktable)
+        else:
+            return None
 
-    # @property
-    # def kicktable(self):
-    #     return Kicktable(self._e.kicktable)
-    #
-    # @kicktable.setter
-    # def kicktable(self, value):
-    #     if not isinstance(value, Kicktable):
-    #         raise TypeError('value must be of Kicktable type')
-    #     self._e.kicktable = kicktable._kicktable
+    @kicktable.setter
+    def kicktable(self, value):
+        if not isinstance(value, Kicktable):
+            raise TypeError('value must be of Kicktable type')
+        self._e.kicktable = value._kicktable
 
     @property
     def hmax(self):
@@ -428,7 +432,7 @@ class Element(object):
 
     @t_in.setter
     def t_in(self, value):
-        self._check_type(value, Element.t_valid_types)
+        self._check_type(value, Element._t_valid_types)
         self._check_size(value, _NUM_COORDS)
         self._set_c_array_from_vector(self._e.t_in, _NUM_COORDS, value)
 
@@ -438,7 +442,7 @@ class Element(object):
 
     @t_out.setter
     def t_out(self, value):
-        self._check_type(value, Element.t_valid_types)
+        self._check_type(value, Element._t_valid_types)
         self._check_size(value, _NUM_COORDS)
         self._set_c_array_from_vector(self.e._t_out, _NUM_COORDS, value)
 
@@ -448,7 +452,7 @@ class Element(object):
 
     @r_in.setter
     def r_in(self, value):
-        self._check_type(value, Element.r_valid_types)
+        self._check_type(value, Element._r_valid_types)
         self._check_shape(value, _DIMS)
         self._set_c_array_from_matrix(self._e.r_in, _DIMS, value)
 
@@ -458,7 +462,7 @@ class Element(object):
 
     @r_out.setter
     def r_out(self, value):
-        self._check_type(value, Element.r_valid_types)
+        self._check_type(value, Element._r_valid_types)
         self._check_shape(value, _DIMS)
         self._set_c_array_from_matrix(self._e.r_out, _DIMS, value)
 
@@ -518,11 +522,21 @@ class Element(object):
         if self.angle_in != 0:
             r += fmtstr.format('angle_in', self.angle_in, 'rad')
         if self.angle_out != 0:
-            r += fmtstr.format('angle_out', self.angle_in, 'rad')
+            r += fmtstr.format('angle_out', self.angle_out, 'rad')
+        if self.gap != 0:
+            r += fmtstr.format('gap', self.gap, 'm')
+        if self.fint_in != 0:
+            r += fmtstr.format('fint_in', self.fint_in, '')
+        if self.fint_out != 0:
+            r += fmtstr.format('fint_out', self.fint_out, '')
+        if self.thin_KL != 0:
+            r += fmtstr.format('thin_KL', self.thin_KL, '1/m')
+        if self.thin_SL != 0:
+            r += fmtstr.format('thin_SL', self.thin_SL, '1/m²')
         if not all([v == 0 for v in self.polynom_a]):
-            r += fmtstr.format('polynom_a', self.polynom_a, '1/m¹,1/m²,1/m³,...')
+            r += fmtstr.format('polynom_a', self.polynom_a, '1/m¹, 1/m², 1/m³, ...')
         if not all([v == 0 for v in self.polynom_b]):
-            r += fmtstr.format('polynom_b', self.polynom_b, '1/m¹,1/m²,1/m³,...')
+            r += fmtstr.format('polynom_b', self.polynom_b, '1/m¹, 1/m², 1/m³, ...')
         if self.hkick != 0:
             r += fmtstr.format('hkick', self.hkick, 'rad')
         if self.vkick != 0:
@@ -531,6 +545,21 @@ class Element(object):
             r += fmtstr.format('frequency', self.frequency, 'Hz')
         if self.voltage != 0:
             r += fmtstr.format('voltage', self.voltage, 'V')
+        if self.hmax < _DBL_MAX:
+            r += fmtstr.format('hmax', self.hmax, 'm')
+        if self.vmax < _DBL_MAX:
+            r += fmtstr.format('vmax', self.vmax, 'm')
+        if self.kicktable is not None:
+            r += fmtstr.format('kicktable', self.kicktable.filename, '')
+        if not (self.t_in == _numpy.zeros(_NUM_COORDS)).all():
+            r += fmtstr.format('t_in', self.t_in, 'm')
+        if not (self.t_out == _numpy.zeros(_NUM_COORDS)).all():
+            r += fmtstr.format('t_out', self.t_out, 'm')
+        if not (self.r_in == _numpy.eye(_NUM_COORDS)).all():
+            r += fmtstr.format('r_in', '6x6 matrix', '')
+        if not (self.r_out == _numpy.eye(_NUM_COORDS)).all():
+            r += fmtstr.format('r_out', '6x6 matrix', '')
+
         return r
 
 

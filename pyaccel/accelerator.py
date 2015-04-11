@@ -4,6 +4,7 @@ import pyaccel.lattice
 import mathphys as _mp
 from pyaccel.utils import interactive
 
+
 class AcceleratorException(Exception):
     pass
 
@@ -35,10 +36,7 @@ class Accelerator(object):
             elif isinstance(elements, list):
                 for i in range(len(elements)):
                     e = elements[i]
-                    print(i)
-                    #print(e)
                     self._accelerator.lattice.append(e._e)
-                #self._accelerator.lattice = _trackcpp.CppElementVector(elements)
             else:
                 raise TypeError('values must be list of Element')
 
@@ -131,11 +129,13 @@ class Accelerator(object):
 
     @property
     def length(self):
+        """Lattice length in m"""
         lens = [e.length for e in self._accelerator.lattice]
         return sum(lens)
 
     @property
     def energy(self):
+        """Beam energy in eV"""
         return self._accelerator.energy
 
     @energy.setter
@@ -166,6 +166,7 @@ class Accelerator(object):
 
     @property
     def velocity(self):
+        """Beam velocity in m/s"""
         return self._velocity
 
     @velocity.setter

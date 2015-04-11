@@ -37,5 +37,5 @@ for f in _pyaccel.utils.interactive_list:
     globals()[name] = getattr(module, name)
     __all__.append(name)
 
-print('Names defined in pyaccel.interactive:')
-print(', '.join(__all__))
+print('Names defined in pyaccel.interactive: ' + ', '.join(__all__) + '.\n')
+print('Function create_accelerator from ' + _sirius_si.__name__ + '.')
