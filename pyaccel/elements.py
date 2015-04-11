@@ -497,9 +497,9 @@ class Element(object):
         fmtstr = '\n{0:<11s}: {1} {2}'
         r  =   ''
         r += fmtstr[1:].format('fam_name', self.fam_name, '')
+        r += fmtstr.format('pass_method', self.pass_method, '')
         if self.length != 0:
             r += fmtstr.format('length', self.length, 'm')
-        r += fmtstr.format('pass_method', self.pass_method, '')
         if self.nr_steps != 1:
             r += fmtstr.format('nr_steps', self.nr_steps, '')
         if self.angle != 0:
@@ -516,6 +516,10 @@ class Element(object):
             r += fmtstr.format('hkick', self.hkick, 'rad')
         if self.vkick != 0:
             r += fmtstr.format('vkick', self.vkick, 'rad')
+        if self.frequency != 0:
+            r += fmtstr.format('frequency', self.frequency, 'Hz')
+        if self.voltage != 0:
+            r += fmtstr.format('frequency', self.voltage, 'V')
         return r
 
 

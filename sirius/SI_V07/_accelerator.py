@@ -1,7 +1,6 @@
 import pyaccel as _pyaccel
 from . import _lattice
 
-_energy = 3.0e9 # [eV]
 _default_cavity_on = False
 _default_radiation_on = False
 _default_vchamber_on = False
@@ -10,7 +9,7 @@ def create_accelerator():
 
     accelerator = _pyaccel.accelerator.Accelerator(
         elements=_lattice.create_lattice(),
-        energy=_energy,
+        energy=_lattice._energy,
         harmonic_number=_lattice._harmonic_number,
         cavity_on=_default_cavity_on,
         radiation_on=_default_radiation_on,
