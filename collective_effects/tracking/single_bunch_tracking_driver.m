@@ -2,7 +2,7 @@ const = lnls_constants;
 c = const.c;
 el_ch = const.q0;
 % ring data
-ring.nturns   = 5000;
+ring.nturns   = 10000;
 ring.rev_time = 518.396/c;
 ring.E        = 3e9;
 ring.mom_comp = 1.7e-4;
@@ -12,16 +12,16 @@ ring.etap     = 0;
 ring.har_num  = 864;
 ring.tune     = 13.117;
 ring.dtunedp  = 0.0;
-ring.dtunedj  = 000000;
+ring.dtunedj  = 200000;
 
 bunch.num_part = 10000;
-bunch.I_b      = 4.0e-3;
+bunch.I_b      = 3.0e-3;
 
 tau = (-1000:1000)*1e-12;
 V = 3.0e6;
 wrf = 2*pi*ring.har_num/ring.rev_time;
 phi0 = 171.24/180*pi;
-Vl = 1.0e6*0;
+Vl = 1.0e6*1;
 wl = wrf*3;
 phil = 0.30/180*pi;
 bunch.potential= V*(sin(phi0-wrf*tau)-sin(phi0)) + Vl*(sin(phil-wl*tau)-sin(phil));
@@ -51,28 +51,29 @@ wrl = wr .* Ql ./ Q;
 
 tau = -(0:1000)*1e-12;
 clear wake;
-wake.long.sim  = false;
-% wake.long.tau  = tau;
-% wake.long.wake = wr*Rs/Q*(cos(wrl*tau) + 1/(2*Ql)*sin(wrl*tau)).*exp(wr*tau/(2*Q));
-% wake.long.wake(1) = wake.long.wake(1)/2;
-wake.long.wr   = wr;
-wake.long.Rs   = Rs;
-wake.long.Q    = Q;
+wake.long.sim  = true;
+wake.long.track = false;
+wake.long.tau  = tau;
+wake.long.wake = wr*Rs/Q*(cos(wrl*tau) + 1/(2*Ql)*sin(wrl*tau)).*exp(wr*tau/(2*Q));
+wake.long.wake(1) = wake.long.wake(1)/2;
+% wake.long.wr   = wr;
+% wake.long.Rs   = Rs;
+% wake.long.Q    = Q;
 
 beta_imp = 11;
 Rs = Zovern*fr*ring.rev_time/radius;
 
-wake.dipo.sim  = true;
-% wake.dipo.tau  = tau;
-% wake.dipo.wake = beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(wr*tau/(2*Q));
-wake.dipo.wr   = wr;
-wake.dipo.Rs   = Rs;
-wake.dipo.Q    = Q;
+wake.dipo.track  = true;
+wake.dipo.tau  = tau;
+wake.dipo.wake = beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(wr*tau/(2*Q));
+% wake.dipo.wr   = wr;
+% wake.dipo.Rs   = Rs;
+% wake.dipo.Q    = Q;
 wake.dipo.beta = beta_imp;
 
 
 Rs = -Rs;
-wake.quad.sim  = false;
+wake.quad.track  = false;
 % wake.quad.tau  = tau;
 % wake.quad.wake = beta_imp*wr*Rs/Ql*sin(wrl*tau).*exp(wr*tau/(2*Q));
 wake.quad.wr   = wr;
@@ -81,7 +82,7 @@ wake.quad.Q    = Q;
 wake.quad.beta = beta_imp;
 
 
-wake.feedback.sim = true;
+wake.feedback.track = false;
 wake.feedback.npoints = 8;
 wake.feedback.freq   = 0.11;
 wake.feedback.phase  = 3/4*pi;
