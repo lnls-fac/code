@@ -36,7 +36,7 @@ class Twiss:
         r += 'etayl       : ' + '{0:+10.3e}'.format(self.etayl) + '\n'
         return r
 
-def gettwiss(twiss_list, attributes_list):
+def gettwiss(twiss_list, attribute_list):
     """Build a matrix with Twiss data from a list of Twiss objects.
 
     Accepts a list of Twiss objects and returns a matrix with Twiss data, one line for
@@ -49,14 +49,14 @@ def gettwiss(twiss_list, attributes_list):
     Returns:
      -- Matrix with Twiss data
     """
-    values = _np.zeros((len(attributes),len(twiss_list)))
+    values = _np.zeros((len(attribute_list),len(twiss_list)))
     for i in range(len(twiss_list)):
-        for j in range(len(attributes_list)):
-            values[j,i] = getattr(twiss_list[i], attributes_list[j])
+        for j in range(len(attribute_list)):
+            values[j,i] = getattr(twiss_list[i], attribute_list[j])
     return values
 
 def twiss (accelerator = None,
-           refpts = None,
+           indices = None,
            transfer_matrices = None,
            closed_orbit = None,
            twiss_in = None):
@@ -64,13 +64,13 @@ def twiss (accelerator = None,
     """ returns uncoupled Twiss parameters """
 
     ''' process arguments '''
-    if refpts is None:
-        refpts = range(len(accelerator))
+    if indices is None:
+        indices = range(len(accelerator))
 
     try:
-        refpts[0]
+        indices[0]
     except:
-        refpts = [refpts]
+        indices = [indices]
 
     if transfer_matrices is None:
         transfer_matrices = _tracking.findm66(accelerator = accelerator, closed_orbit = closed_orbit)
@@ -96,7 +96,7 @@ def twiss (accelerator = None,
     t.etax = _np.linalg.solve(_np.eye(2,2) - mx, Dx)
     t.etay = _np.linalg.solve(_np.eye(2,2) - my, Dy)
 
-    if 0 in refpts:
+    if 0 in indices:
         tw = [t]
     else:
         tw = []
@@ -122,7 +122,7 @@ def twiss (accelerator = None,
         n.etax = Dx + _np.dot(mx, t.etax)
         n.etay = Dy + _np.dot(my, t.etay)
 
-        if i in refpts:
+        if i in indices:
             tw.append(n)
         t = _copy.deepcopy(n)
 

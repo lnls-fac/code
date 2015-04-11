@@ -1,22 +1,62 @@
-#!/usr/bin/env python3
-
 import math as _math
 import pyaccel as _pyaccel
 import mathphys as _mp
-from . import optics_mode_C04 as _optics_mode_C04
-from . import optics_mode_C05 as _optics_mode_C05
-from . import _accelerator
 
-_default_optics_mode = _optics_mode_C05
-_lattice_symmetry = 10
 _harmonic_number  = 864
+
+def create_accelerator():
+
+    _energy = 3.0e9 # [eV]
+    _default_cavity_on = False
+    _default_radiation_on = False
+    _default_vchamber_on = False
+
+    accelerator = _pyaccel.accelerator.Accelerator(
+    elements=create_lattice(),
+    energy=_energy,
+    harmonic_number=_harmonic_number,
+    cavity_on=_default_cavity_on,
+    radiation_on=_default_radiation_on,
+    vchamber_on=_default_vchamber_on)
+
+    return accelerator
 
 def create_lattice():
 
-    # -- selection of optics mode --
-    global _default_optics_mode
-    _default_optics_mode = _optics_mode_C05
 
+    _strengths_C05 = {
+
+        #  QUADRUPOLOS
+        #  ===========
+
+        'qfa' :  4.500939083585109,
+        'qda' : -2.948507308101822,
+        'qdb2': -2.607851320364556,
+        'qfb' :  4.468536646332483,
+        'qdb1': -3.602260332930565,
+        'qf1' :  3.107153201659299,
+        'qf2' :  4.091315394710002,
+        'qf3' :  3.586569278001512,
+        'qf4' :  3.709349513079713,
+
+        #  SEXTUPOLOS
+        #  ===========
+        'sda' : -46.758679575198470,
+        'sfa' :  26.6622074299220,
+        'sdb' : -49.571445128975940,
+        'sfb' :  66.18257437452495,
+        'sd1' : -174.15370941085680,
+        'sf1' :  197.37251360249565,
+        'sd2' : -93.85881072190855,
+        'sd3' : -125.64988560404710,
+        'sf2' :  142.15121115328305,
+        'sd6' : -133.2016966347285,
+        'sf4' :  229.65804021532680,
+        'sd5' : -123.19826994348845,
+        'sd4' : -173.79053483404260,
+        'sf3' :  215.66183452267105,
+
+    }
 
     # -- shortcut symbols --
     marker = _pyaccel.elements.marker
@@ -25,7 +65,7 @@ def create_lattice():
     sextupole = _pyaccel.elements.sextupole
     rbend_sirius = _pyaccel.elements.rbend
     rfcavity = _pyaccel.elements.rfcavity
-    strengths = _default_optics_mode.strengths
+    strengths = _strengths_C05
 
     # -- drifts --
     LIA = drift('lia', 2.4129)
@@ -232,7 +272,7 @@ def create_lattice():
 
 def set_rf_frequency(the_ring):
 
-    _, beam_velocity, _, _, _ = _mp.beam_optics.beam_rigidity(energy=_accelerator._energy)
+    beam_velocity = 299792453.6510123 #[m/s]
     circumference = _pyaccel.lattice.lengthlat(the_ring)
     rev_frequency = beam_velocity / circumference
     rf_frequency  = _harmonic_number * rev_frequency
@@ -249,7 +289,7 @@ def set_num_integ_steps(the_ring):
         if the_ring[i].angle:
             nr_steps = int(_math.ceil(the_ring[i].length/len_bends))
             the_ring[i].nr_steps = nr_steps
-        elif the_ring[i].polynom_b[1] or the_ring[i].fam_name == 'cf':
+        elif the_ring[i].polynom_b[1]:
             nr_steps = int(_math.ceil(the_ring[i].length/len_quads))
             the_ring[i].nr_steps = nr_steps
         elif the_ring[i].polynom_b[2]:
