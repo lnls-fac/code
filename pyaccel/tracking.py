@@ -4,6 +4,9 @@ import pyaccel.accelerator
 from pyaccel.utils import interactive
 
 
+lost_planes = (None, 'x', 'y', 'z')
+
+
 class TrackingException(Exception):
     pass
 
@@ -175,10 +178,8 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
             lost_element.append(args.element_offset)
         else:
             lost_element.append(None)
-        if args.lost_plane:
-            lost_plane.append(args.lost_plane)
-        else:
-            lost_plane.append(None)
+
+        lost_plane.append(lost_planes[args.lost_plane])
 
     if len(lost_element) == 1 and not return_ndarray:
         if len(particles_out.shape) == 3:
@@ -250,14 +251,13 @@ def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
             lost_turn.append(args.lost_turn)
         else:
             lost_turn.append(None)
+
         if args.element_offset < len(accelerator):
             lost_element.append(args.element_offset)
         else:
             lost_element.append(None)
-        if args.lost_plane:
-            lost_plane.append(args.lost_plane)
-        else:
-            lost_plane.append(None)
+
+        lost_plane.append(lost_planes[args.lost_plane])
 
     if len(lost_element) == 1 and not return_ndarray:
         pos_out = pos_out[:,0]
