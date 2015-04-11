@@ -2,10 +2,13 @@
 import trackcpp as _trackcpp
 import pyaccel.lattice
 import mathphys as _mp
+from pyaccel.utils import interactive
 
 class AcceleratorException(Exception):
     pass
 
+
+@interactive
 class Accelerator(object):
 
     __isfrozen = False # this is used to prevent creation of new attributes

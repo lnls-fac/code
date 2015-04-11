@@ -3,9 +3,12 @@ import numpy as _numpy
 import trackcpp as _trackcpp
 import pyaccel.accelerator
 import pyaccel.elements
+from pyaccel.utils import interactive
 
+
+@interactive
 def flatlat(elist):
-    """ takes a list-of-list-of-... elements and flattens it: a simple list of lattice elements """
+    """Take a list-of-list-of-... elements and flattens it: a simple list of lattice elements"""
     flat_elist = []
     for element in elist:
         try:
@@ -16,8 +19,9 @@ def flatlat(elist):
     return flat_elist
 
 
+@interactive
 def buildlat(elist):
-    """builds lattice from a list of elements and lines"""
+    """Build lattice from a list of elements and lines"""
     lattice = _trackcpp.CppElementVector()
     elist = flatlat(elist)
     for e in elist:
@@ -25,20 +29,24 @@ def buildlat(elist):
     return lattice
 
 
+@interactive
 def shiftlat(lattice, start):
-    """ shift periodically the lattice so that it starts at element whose index is 'start' """
+    """Shift periodically the lattice so that it starts at element whose index is 'start'"""
     new_lattice = lattice[start:]
     for i in range(start):
         new_lattice.append(lattice[i])
     return new_lattice
 
 
+@interactive
 def lengthlat(lattice):
     len = [e.length for e in lattice]
     return sum(len)
 
+
+@interactive
 def findspos(lattice, indices = None):
-    """ returns longitudinal position of the entrance for all lattice elements """
+    """Return longitudinal position of the entrance for all lattice elements"""
 
     is_number = False
     if indices is None:
@@ -58,9 +66,10 @@ def findspos(lattice, indices = None):
     else:
         return _numpy.array([pos[i] for i in indices])
 
-def findcells(lattice, attribute_name, value=None):
 
-    """ returns a list with indices of elements that match criteria 'attribute_name=value' """
+@interactive
+def findcells(lattice, attribute_name, value=None):
+    """Returns a list with indices of elements that match criteria 'attribute_name=value'"""
     indices = []
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):
@@ -72,8 +81,10 @@ def findcells(lattice, attribute_name, value=None):
                     indices.append(i)
     return indices
 
+
+@interactive
 def getcellstruct(lattice, attribute_name, indices = None, m=None, n=None):
-    """ returns a list with requested lattice data """
+    """Return a list with requested lattice data"""
     if indices is None:
         indices = range(len(lattice))
     else:
@@ -98,8 +109,9 @@ def getcellstruct(lattice, attribute_name, indices = None, m=None, n=None):
     return data
 
 
+@interactive
 def setcellstruct(lattice, attribute_name, indices, values):
-    """ sets elements data and returns a new updated lattice """
+    """Set elements data and returns a new updated lattice"""
     for idx in range(len(indices)):
         if isinstance(values, (tuple, list)):
             setattr(lattice[indices[idx]], attribute_name, values[idx])
@@ -107,9 +119,9 @@ def setcellstruct(lattice, attribute_name, indices, values):
             setattr(lattice[indices[idx]], attribute_name, values)
     return lattice
 
-
+@interactive
 def finddict(lattice, attribute_name):
-    """ returns a dict which correlates values of 'attribute_name' and a list of indices corresponding to matching elements """
+    """Return a dict which correlates values of 'attribute_name' and a list of indices corresponding to matching elements"""
     latt_dict = {}
     for i in range(len(lattice)):
         if hasattr(lattice[i], attribute_name):
@@ -121,11 +133,13 @@ def finddict(lattice, attribute_name):
     return latt_dict
 
 
+@interactive
 def get_rf_frequency(lattice):
-    """ Returns the frequency of the first RF cavity in the lattice """
+    """Return the frequency of the first RF cavity in the lattice"""
     for e in lattice:
         if e.frequency != 0:
             return e.frequency
+
 
 def _is_equal(a,b):
 
