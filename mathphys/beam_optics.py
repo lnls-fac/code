@@ -11,7 +11,7 @@ class Beam:
 
     @staticmethod
     def calc_brho(energy = None, gamma = None, beta = None, velocity = None):
-        electron_rest_energy_GeV = mathphys.units.joule_2_eV(mathphys.constants.electron_rest_energy) / 1e9
+        electron_rest_energy_GeV = mathphys.units.joule_2_eV * (mathphys.constants.electron_rest_energy / 1e9)
         gamma    = energy/electron_rest_energy_GeV
         beta     = math.sqrt(((gamma-1.0)/gamma)*((gamma+1.0)/gamma))
         velocity = mathphys.constants.light_speed * beta
@@ -89,7 +89,7 @@ def calc_natural_bunch_length(energy, circumference, sigmae, U0, mcf, h, Vrf, hc
 
 def beam_rigidity(**kwargs):
 
-    electron_rest_energy_eV = _mp.units.joule_2_eV(_mp.constants.electron_rest_energy)
+    electron_rest_energy_eV = _mp.units.joule_2_eV * _mp.constants.electron_rest_energy
 
     if len(kwargs) != 1:
         raise Exception('beam rigidity accepts only one argument')
