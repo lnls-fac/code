@@ -519,7 +519,7 @@ class Element(object):
         if self.frequency != 0:
             r += fmtstr.format('frequency', self.frequency, 'Hz')
         if self.voltage != 0:
-            r += fmtstr.format('frequency', self.voltage, 'V')
+            r += fmtstr.format('voltage', self.voltage, 'V')
         return r
 
 
