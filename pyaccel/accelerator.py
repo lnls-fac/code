@@ -130,8 +130,7 @@ class Accelerator(object):
     @property
     def length(self):
         """Lattice length in m"""
-        lens = [e.length for e in self._accelerator.lattice]
-        return sum(lens)
+        return pyaccel.lattice.lengthlat(self._accelerator.lattice)
 
     @property
     def energy(self):

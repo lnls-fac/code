@@ -40,14 +40,13 @@ def shiftlat(lattice, start):
 
 @interactive
 def lengthlat(lattice):
-    len = [e.length for e in lattice]
-    return sum(len)
+    length = [e.length for e in lattice]
+    return sum(length)
 
 
 @interactive
 def findspos(lattice, indices = None):
     """Return longitudinal position of the entrance for all lattice elements"""
-
     is_number = False
     if indices is None:
         indices = range(len(lattice))
@@ -119,6 +118,7 @@ def setcellstruct(lattice, attribute_name, indices, values):
             setattr(lattice[indices[idx]], attribute_name, values)
     return lattice
 
+
 @interactive
 def finddict(lattice, attribute_name):
     """Return a dict which correlates values of 'attribute_name' and a list of indices corresponding to matching elements"""
@@ -133,16 +133,7 @@ def finddict(lattice, attribute_name):
     return latt_dict
 
 
-@interactive
-def get_rf_frequency(lattice):
-    """Return the frequency of the first RF cavity in the lattice"""
-    for e in lattice:
-        if e.frequency != 0:
-            return e.frequency
-
-
 def _is_equal(a,b):
-
     # checks for strings
     if isinstance(a,str):
         if isinstance(b,str):
