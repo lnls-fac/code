@@ -194,11 +194,11 @@ def dipole_segmented_model():
 
     b = [];
     for i=1:size(b_model,1)
-        b.append(rbend('b', b_model[i,1], b_model[i,2], 0, 0, 0, 0, 0, zeros(size(b_model(i,3:end))), b_model(i,3:end), bend_pass_method))
+        b.append(rbend('b', length=b_model[i,0], angle=b_model[i,1], polynom_b=b_model[i,2:]))
     end
-    pb = marker('pb', 'IdentityPass');
-    mb = marker('mb', 'IdentityPass');
-    bd = [pb, fliplr(b) , mb, b, pb];
-    b_length_segmented = 2*sum(b_model(:,1));
+    pb = marker('pb')
+    mb = marker('mb')
+    bd = [pb, fliplr(b), mb, b, pb];
+    b_length_segmented = 2*sum(b_model[:,0])
 
     return (bd, b_length_segmented, b_model)
