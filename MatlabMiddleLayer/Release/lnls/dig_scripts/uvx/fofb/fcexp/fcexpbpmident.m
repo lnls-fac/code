@@ -20,14 +20,15 @@ if nargin < 4 || isempty(period)
 end
 
 if nargin < 5 || isempty(selected_corr)
-    profiles = [ones(1,18) zeros(1,24); zeros(1,18) ones(1,24)];
+    corr_steps = uvxcorrsteps;
+    profiles = [corr_steps(1:18) zeros(1,24); zeros(1,18) corr_steps(19:42)];
 end
 
 expinfo.excitation = 'prbs2d';
 expinfo.amplitude = amplitude;
 expinfo.band = [0 2*Ts*bw];
 
-expinfo.duration = 100;
+expinfo.duration = 1000;
 expinfo.pauselength = 10;
 expinfo.mode = 'corr_sum';
 expinfo.profiles = profiles;
