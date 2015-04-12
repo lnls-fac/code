@@ -98,7 +98,7 @@ def getcellstruct(lattice, attribute_name, indices = None, m=None, n=None):
     return data
 
 
-def setcellstruct(lattice, attribute_name, indices, values):
+def setcellstruct(lattice, attribute_name, indices, values, m=None, n=None):
     """ sets elements data and returns a new updated lattice """
     for idx in range(len(indices)):
         if isinstance(values, (tuple, list)):
