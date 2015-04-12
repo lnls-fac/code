@@ -32,6 +32,9 @@ double c_array_get(double* v, int i) {
 void c_array_set(double* v, int i, double x) {
     v[i] = x;
 }
+double get_double_max() {
+    return DBL_MAX;
+}
 %}
 
 %include "elements.i"
