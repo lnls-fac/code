@@ -45,23 +45,25 @@ while i < stopat
     while true
         try
             if fread(conn, 1, 'uint8')
-                hi = fread(conn, 1, 'uint32');
-                lo = fread(conn, 1, 'uint32');
+                % FIXME
+                %hi = fread(conn, 1, 'uint32');
+                %lo = fread(conn, 1, 'uint32');
+                hi=0; lo=0;
                 if i == 0
                     timestamp = bitsll(uint64(hi), 32) + uint64(lo);
                 end
-                packet = [packet repmat(typecast(fcmode, 'single'), npts_packet, 1)];
-                subdata = packet';
+                packet_ = [packet repmat(typecast(fcmode, 'single'), npts_packet, 1)];
+                subdata = packet_';
                 subdatainfo = whos('subdata');
                 fwrite(conn, subdatainfo.bytes+8, 'uint32');
-                fwrite(conn, uint32(size(packet)), 'uint32');
+                fwrite(conn, uint32(size(packet_)), 'uint32');
                 fwrite(conn, subdata(1:end), 'single');
                 i=i+1;
                 pause(0.001);
                 break
             else
-                hi = fread(conn, 1, 'uint32');
-                lo = fread(conn, 1, 'uint32');
+                %hi = fread(conn, 1, 'uint32');
+                %lo = fread(conn, 1, 'uint32');
             end
         catch err
             failure = true;
