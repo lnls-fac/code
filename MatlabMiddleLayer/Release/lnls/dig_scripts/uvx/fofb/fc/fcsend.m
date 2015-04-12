@@ -45,8 +45,10 @@ while i < stopat
     while true
         try
             if fread(conn, 1, 'uint8')
-                hi = fread(conn, 1, 'uint32');
-                lo = fread(conn, 1, 'uint32');
+                % FIXME
+                %hi = fread(conn, 1, 'uint32');
+                %lo = fread(conn, 1, 'uint32');
+                hi=0; lo=0;
                 if i == 0
                     timestamp = bitsll(uint64(hi), 32) + uint64(lo);
                 end
@@ -60,8 +62,8 @@ while i < stopat
                 pause(0.001);
                 break
             else
-                hi = fread(conn, 1, 'uint32');
-                lo = fread(conn, 1, 'uint32');
+                %hi = fread(conn, 1, 'uint32');
+                %lo = fread(conn, 1, 'uint32');
             end
         catch err
             failure = true;
