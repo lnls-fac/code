@@ -52,11 +52,11 @@ while i < stopat
                 if i == 0
                     timestamp = bitsll(uint64(hi), 32) + uint64(lo);
                 end
-                packet = [packet repmat(typecast(fcmode, 'single'), npts_packet, 1)];
-                subdata = packet';
+                packet_ = [packet repmat(typecast(fcmode, 'single'), npts_packet, 1)];
+                subdata = packet_';
                 subdatainfo = whos('subdata');
                 fwrite(conn, subdatainfo.bytes+8, 'uint32');
-                fwrite(conn, uint32(size(packet)), 'uint32');
+                fwrite(conn, uint32(size(packet_)), 'uint32');
                 fwrite(conn, subdata(1:end), 'single');
                 i=i+1;
                 pause(0.001);
