@@ -5,7 +5,7 @@ create_accelerator = _accelerator.create_accelerator
 
 # -- default accelerator values for SI_V07 --
 
-energy = _accelerator._energy
+energy = _lattice._energy
 harmonic_number = _lattice._harmonic_number
 default_cavity_on = _accelerator._default_cavity_on
 default_radiation_on = _accelerator._default_cavity_on

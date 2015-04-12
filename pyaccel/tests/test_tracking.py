@@ -16,22 +16,10 @@ class TestTracking(unittest.TestCase):
         pass
 
     def test_linepass(self):
-
-        # simplest tracking of one particle, pos at the end of line
-        particles = [0.001,0,0,0,0,0]
+        the_ring = self.the_ring
+        particles = [0,0,0,0,0,0]
         particles_out, lost_flag, lost_element, lost_plane = \
-            pyaccel.tracking.linepass(accelerator=self.the_ring,
-                                      particles=particles,
-                                      indices=None)
-        self.assertAlmostEqual(sum(particles_out), 0.00063339906961478495, places=15)
-        self.assertFalse(lost_flag)
-        self.assertIsNone(lost_element)
-        self.assertIsNone(lost_plane)
-
-        # tracking of two particles (list), pos at the end of line
-        particles = [[0.001,0,0,0,0,0], [0.020,0,0,0,0,0]]
-        particles_out, lost_flag, lost_element, lost_plane = \
-            pyaccel.tracking.linepass(accelerator=self.the_ring,
+            pyaccel.tracking.linepass(accelerator=the_ring,
                                       particles=particles,
                                       indices=None)
         p1, p2 = particles_out[:,0], particles_out[:,1]

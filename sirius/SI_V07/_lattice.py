@@ -5,11 +5,11 @@ import pyaccel as _pyaccel
 import mathphys as _mp
 from . import optics_mode_C04 as _optics_mode_C04
 from . import optics_mode_C05 as _optics_mode_C05
-from . import _accelerator
 
 _default_optics_mode = _optics_mode_C05
 _lattice_symmetry = 10
 _harmonic_number  = 864
+_energy = 3e9 #[eV]
 
 def create_lattice():
 
@@ -232,7 +232,7 @@ def create_lattice():
 
 def set_rf_frequency(the_ring):
 
-    _, beam_velocity, _, _, _ = _mp.beam_optics.beam_rigidity(energy=_accelerator._energy)
+    _, beam_velocity, _, _, _ = _mp.beam_optics.beam_rigidity(energy=_energy)
     circumference = _pyaccel.lattice.lengthlat(the_ring)
     rev_frequency = beam_velocity / circumference
     rf_frequency  = _harmonic_number * rev_frequency

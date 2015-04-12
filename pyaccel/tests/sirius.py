@@ -3,21 +3,20 @@ import pyaccel as _pyaccel
 import mathphys as _mp
 
 _harmonic_number  = 864
+_energy = 3.0e9 # [eV]
+_default_cavity_on = False
+_default_radiation_on = False
+_default_vchamber_on = False
 
 def create_accelerator():
 
-    _energy = 3.0e9 # [eV]
-    _default_cavity_on = False
-    _default_radiation_on = False
-    _default_vchamber_on = False
-
     accelerator = _pyaccel.accelerator.Accelerator(
-    elements=create_lattice(),
-    energy=_energy,
-    harmonic_number=_harmonic_number,
-    cavity_on=_default_cavity_on,
-    radiation_on=_default_radiation_on,
-    vchamber_on=_default_vchamber_on)
+            elements=create_lattice(),
+            energy=_energy,
+            harmonic_number=_harmonic_number,
+            cavity_on=_default_cavity_on,
+            radiation_on=_default_radiation_on,
+            vchamber_on=_default_vchamber_on)
 
     return accelerator
 

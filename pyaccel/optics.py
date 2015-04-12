@@ -1,9 +1,11 @@
-import pyaccel.lattice as _lattice
-import pyaccel.tracking as _tracking
-import mathphys as _mp
+
+import copy as _copy
 import math as _math
 import numpy as _np
-import copy as _copy
+import mathphys as _mp
+import pyaccel.lattice as _lattice
+import pyaccel.tracking as _tracking
+from pyaccel.utils import interactive
 
 class OpticsException(Exception):
     pass
@@ -36,6 +38,8 @@ class Twiss:
         r += 'etayl       : ' + '{0:+10.3e}'.format(self.etayl) + '\n'
         return r
 
+
+@interactive
 def gettwiss(twiss_list, attribute_list):
     """Build a matrix with Twiss data from a list of Twiss objects.
 
@@ -47,7 +51,7 @@ def gettwiss(twiss_list, attribute_list):
     attributes_list -- List of strings with Twiss attributes to be stored in twiss matrix
 
     Returns:
-     -- Matrix with Twiss data
+    m -- Matrix with Twiss data
     """
     values = _np.zeros((len(attribute_list),len(twiss_list)))
     for i in range(len(twiss_list)):
@@ -55,13 +59,15 @@ def gettwiss(twiss_list, attribute_list):
             values[j,i] = getattr(twiss_list[i], attribute_list[j])
     return values
 
-def twiss (accelerator = None,
-           indices = None,
-           transfer_matrices = None,
-           closed_orbit = None,
-           twiss_in = None):
 
-    """ returns uncoupled Twiss parameters """
+@interactive
+def calctwiss(
+        accelerator=None,
+        indices=None,
+        transfer_matrices=None,
+        closed_orbit=None,
+        twiss_in=None):
+    """Return uncoupled Twiss parameters."""
 
     ''' process arguments '''
     if indices is None:
@@ -133,37 +139,47 @@ def twiss (accelerator = None,
 
     return tw
 
-def get_rfrequency(lattice):
-    try:
-        lattice = lattice.lattice
-    except:
-        pass
-    for element in lattice:
-        try:
-            return element.frequency
-        except:
-            pass
-    raise OpticsException('No cavity element in the lattice')
 
-def get_revolution_period(accelerator):
-    _,velocity,_,_ = _mp.beam_optics.calc_brho(energy = accelerator.energy / 1e9)
-    circumference = _lattice.lengthlatt(accelerator.lattice)
-    return circumference/velocity
+@interactive
+def getrffrequency(accelerator):
+    """Return the frequency of the first RF cavity in the lattice"""
+    for e in accelerator:
+        if e.frequency != 0:
+            return e.frequency
+    else:
+        raise OpticsException('no cavity element in the lattice')
 
-def get_revolution_frequency(accelerator):
+
+@interactive
+def getrevolutionperiod(accelerator):
+    return accelerator.length/accelerator.velocity
+
+
+@interactive
+def getrevolutionfrequency(accelerator):
     return 1.0 / get_revolution_period(accelerator)
 
-def get_fractunes(lattice):
+
+@interactive
+def getfractunes(lattice):
     raise OpticsException('not implemented')
 
-def get_tunes(lattice):
+
+@interactive
+def gettunes(lattice):
     raise OpticsException('not implemented')
 
-def get_chromaticities(lattice):
+
+@interactive
+def getchromaticities(lattice):
     raise OpticsException('not implemented')
 
-def get_mcf(lattice):
+
+@interactive
+def getmcf(lattice):
     raise OpticsException('not implemented')
 
-def get_radiation_integrals(accelerator):
+
+@interactive
+def getradiationintegrals(accelerator):
     raise OpticsException('not implemented')
