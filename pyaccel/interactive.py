@@ -1,72 +1,41 @@
 
+"""Interactive pyaccel module
+
+Use this module to define variables and functions to be globally available when
+using
+
+    'from pyaccel.interactive import *'
+
+Names starting with an underscore ('_') will not be exported. In addition to
+the objects defined here, all objects in pyaccel with the '@interactive'
+decorator will also be available. In order to use this decorator in a pyaccel
+module, import it from pyaccel.utils with
+
+    'from pyaccel.utils import interactive'
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
-import pyaccel.elements
-import pyaccel.accelerator
-import pyaccel.lattice
-import pyaccel.tracking
-import pyaccel.optics
-import sirius.SI_V07 as sirius_si
+import pyaccel as _pyaccel
+import sirius.SI_V07 as _sirius_si
 
 
-marker = pyaccel.elements.marker
-bpm = pyaccel.elements.bpm
-drift = pyaccel.elements.drift
-hcorrector = pyaccel.elements.hcorrector
-vcorrector = pyaccel.elements.vcorrector
-corrector = pyaccel.elements.corrector
-rbend = pyaccel.elements.rbend
-quadrupole = pyaccel.elements.quadrupole
-sextupole = pyaccel.elements.sextupole
-rfcavity = pyaccel.elements.rfcavity
+create_accelerator = _sirius_si.create_accelerator
 
-accelerator = pyaccel.accelerator.Accelerator
+rx = 0
+px = 1
+ry = 2
+py = 3
+dl = 4
+de = 5
 
-lengthlat = pyaccel.lattice.lengthlat
-findspos = pyaccel.lattice.findspos
-findcells = pyaccel.lattice.findcells
-getcellstruct = pyaccel.lattice.getcellstruct
-setcellstruct = pyaccel.lattice.setcellstruct
-finddict = pyaccel.lattice.finddict
-get_rf_frequency = pyaccel.lattice.get_rf_frequency
+__all__ = [name for name in dir() if not name.startswith('_')]
 
-elementpass = pyaccel.tracking.elementpass
-linepass = pyaccel.tracking.linepass
-ringpass = pyaccel.tracking.ringpass
-set4dtracking = pyaccel.tracking.set4dtracking
-set6dtracking = pyaccel.tracking.set6dtracking
-findorbit6 = pyaccel.tracking.findorbit6
-findm66 = pyaccel.tracking.findm66
+for f in _pyaccel.utils.interactive_list:
+    name = f['name']
+    module = getattr(_pyaccel, f['module'].split('.')[1])
+    globals()[name] = getattr(module, name)
+    __all__.append(name)
 
-create_accelerator = sirius_si.create_accelerator
-
-__all__ = [
-        'np',
-        'plt',
-        'marker',
-        'bpm',
-        'drift',
-        'hcorrector',
-        'vcorrector',
-        'corrector',
-        'rbend',
-        'quadrupole',
-        'sextupole',
-        'rfcavity',
-        'accelerator',
-        'lengthlat',
-        'findspos',
-        'findcells',
-        'getcellstruct',
-        'setcellstruct',
-        'finddict',
-        'get_rf_frequency',
-        'elementpass',
-        'linepass',
-        'ringpass',
-        'set4dtracking',
-        'set6dtracking',
-        'findorbit6',
-        'findm66',
-        'create_accelerator'
-]
+print('Names defined in pyaccel.interactive: ' + ', '.join(__all__) + '.\n')
+print('Function create_accelerator from ' + _sirius_si.__name__ + '.')
