@@ -100,9 +100,20 @@ def getcellstruct(lattice, attribute_name, indices = None, m=None, n=None):
 
 def setcellstruct(lattice, attribute_name, indices, values):
     """ sets elements data and returns a new updated lattice """
+    try:
+        indices[0]
+    except:
+        indices = [indices]
+        
     for idx in range(len(indices)):
         if isinstance(values, (tuple, list)):
-            setattr(lattice[indices[idx]], attribute_name, values[idx])
+            try:
+                isinstance(values[0],(tuple,list,_numpy.ndarray))
+                if len(values) == 1:
+                    values=[values[0]]*len(indices)
+                setattr(lattice[indices[idx]], attribute_name, values[idx])
+            except:
+                setattr(lattice[indices[idx]], attribute_name, values[idx])
         else:
             setattr(lattice[indices[idx]], attribute_name, values)
     return lattice
