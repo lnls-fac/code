@@ -106,7 +106,6 @@ Status::type track_linepass (
 		const Element& element = line[element_offset];  // syntactic-sugar for read-only access to element object parameters
 
 		// stores trajectory at entrance of each element
-		//if (trajectory) pos.push_back(orig_pos);
 		if (trajectory) pos[i] = orig_pos;
 
 		Status::type status = track_elementpass (element, orig_pos, accelerator);

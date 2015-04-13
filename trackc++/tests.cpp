@@ -267,22 +267,76 @@ int test_read_flat_file(Accelerator& accelerator) {
 
 }
 
+int test_simple_drift() {
+
+	Accelerator accelerator;
+
+	accelerator.energy = 3e9; // [ev]
+	accelerator.harmonic_number = 864;
+	accelerator.radiation_on = false;
+	accelerator.cavity_on = false;
+	accelerator.vchamber_on = false;
+
+	Element ds = Element::drift("ds", 1.0);
+
+	accelerator.lattice.push_back(ds);
+
+	Pos<double> pos(0.001,0.002,0.003,0.004,0.005,0.006);
+	track_elementpass (ds, pos, accelerator);
+
+	fprintf(stdout, "test_simple_drift\n");
+	fprintf(stdout, "rx: %+.16f\n", pos.rx);
+	fprintf(stdout, "px: %+.16f\n", pos.px);
+	fprintf(stdout, "ry: %+.16f\n", pos.ry);
+	fprintf(stdout, "py: %+.16f\n", pos.py);
+	fprintf(stdout, "de: %+.16f\n", pos.de);
+	fprintf(stdout, "dl: %+.16f\n", pos.dl);
+
+}
+
+int test_simple_quadrupole() {
+
+	Accelerator accelerator;
+
+	accelerator.energy = 3e9; // [ev]
+	accelerator.harmonic_number = 864;
+	accelerator.radiation_on = false;
+	accelerator.cavity_on = false;
+	accelerator.vchamber_on = false;
+
+	Element ds = Element::quadrupole("qs", 1.0, 2.0);
+
+	accelerator.lattice.push_back(ds);
+
+	Pos<double> pos(0.001,0.002,0.003,0.004,0.005,0.006);
+	track_elementpass (ds, pos, accelerator);
+
+	fprintf(stdout, "test_simple_quadrupole\n");
+	fprintf(stdout, "rx: %+.16f\n", pos.rx);
+	fprintf(stdout, "px: %+.16f\n", pos.px);
+	fprintf(stdout, "ry: %+.16f\n", pos.ry);
+	fprintf(stdout, "py: %+.16f\n", pos.py);
+	fprintf(stdout, "de: %+.16f\n", pos.de);
+	fprintf(stdout, "dl: %+.16f\n", pos.dl);
+
+}
+
 int cmd_tests(const std::vector<std::string>& args) {
 
 
-	Accelerator accelerator;
+	//Accelerator accelerator;
 	//sirius_v500(accelerator.lattice);
-	latt_read_flat_file("/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
+	//latt_read_flat_file("/home/ximenes/pytrack/sirius_v500_ac10_5_bare_in.txt", accelerator);
 	//Status::type status = latt_read_flat_file("/home/fac_files/code/python/trackc++/pytrack/flat_file_ff.txt", accelerator);
 	//if (status != Status::success) {
 	//	return EXIT_FAILURE;
 	//}
 	//accelerator.lattice[15].nr_steps = 1;
-	accelerator.energy = 3e9; // [ev]
-	accelerator.harmonic_number = 864;
-	accelerator.radiation_on = true;
-	accelerator.cavity_on = true;
-	accelerator.vchamber_on = false;
+	// accelerator.energy = 3e9; // [ev]
+	// accelerator.harmonic_number = 864;
+	// accelerator.radiation_on = true;
+	// accelerator.cavity_on = true;
+	// accelerator.vchamber_on = false;
 	//accelerator.radiation_on = false;
 	//accelerator.cavity_on = false;
 
@@ -300,7 +354,7 @@ int cmd_tests(const std::vector<std::string>& args) {
 	//test_linepass(accelerator);
 	//test_ringpass(accelerator);
 	//test_linepass_tpsa(the_ring);
-	test_findorbit6(accelerator);
+	//test_findorbit6(accelerator);
 	//test_dynap_xy(the_ring);
 	//test_read_flat_file(accelerator);
 
@@ -309,7 +363,8 @@ int cmd_tests(const std::vector<std::string>& args) {
 	//test_cmd_dynap_ma();
 	//test_cmd_track_linepass();
 	//test_kicktable(accelerator);
-
+	test_simple_drift();
+	test_simple_quadrupole();
 
 	return 0;
 
