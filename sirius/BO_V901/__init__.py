@@ -3,7 +3,7 @@ from . import _accelerator
 
 create_accelerator = _accelerator.create_accelerator
 
-# -- default accelerator values for SI_V07 --
+# -- default accelerator values for BO_V901 --
 
 energy = _lattice._energy
 harmonic_number = _lattice._harmonic_number

@@ -1,4 +1,4 @@
-function [tau, espread] = generate_longitudinal_bunch(bunch, ring, wake)
+function [tau, espread, Totalpot] = generate_longitudinal_bunch(bunch, ring, wake)
 
 % To generate the longitudinal bunch, we use the longitudinal potential
 % defined in the input
@@ -29,8 +29,6 @@ if wake.long.sim && isfield(wake.long,'wr')
     wakeF = wakeF * ring.rev_time*bunch.I_b;
 end
 
-idist = zeros(size(pot));
-
 % Now we iterate to get the equilibrium distribution
 espread = bunch.espread;
 converged = false;
@@ -46,7 +44,7 @@ while ~converged
     residue_old = trapz(tau,distr_old.^2);
     count = 0;
     while ~converged
-        %Include the potential well from wake:
+        %Include the potential from wake:
         Totalpot = pot + conv(distr_old,wakeF,'same');
         
         % Integrate the potential to get the potential well
@@ -70,11 +68,8 @@ while ~converged
 %     break;
 end
 
-idist(1) = 0;
-% and integrate it:
-for ii=2:length(distr),
-    idist(ii) = idist(ii-1) + (distr(ii)+distr(ii-1))/2*(tau(ii)-tau(ii-1));
-end
+% Get the integrated distribution:
+idist = cumtrapz(tau,distr);
 idist = idist/idist(end);
 
 % At last, use the integrated longitudinal distribution to generate
@@ -84,15 +79,10 @@ ind = idist==max(idist) | idist==min(idist);
 tau = interp1(idist(~ind),tau(~ind),rand(1,bunch.num_part));
 
 
-function distr = get_distribution_from_potential(tau, pot, ring, espread)
+function [distr, ipot] = get_distribution_from_potential(tau, pot, ring, espread)
     
-    ipot = zeros(size(pot));
-
     % Integrate the potential to get the potential well
-    ipot(1) = 0;
-    for ii=2:length(pot),
-        ipot(ii) = ipot(ii-1) + (pot(ii)+pot(ii-1))/2*(tau(ii)-tau(ii-1));
-    end
+    ipot = cumtrapz(tau,pot);
     [~,ind] = min(ipot);
     ipot = ipot - ipot(ind);
     

@@ -1,11 +1,17 @@
 import numpy as _numpy
 import trackcpp as _trackcpp
 import pyaccel.accelerator
+from pyaccel.utils import interactive
+
+
+lost_planes = (None, 'x', 'y', 'z')
 
 
 class TrackingException(Exception):
     pass
 
+
+@interactive
 def elementpass(element, particles, **kwargs):
 
     """Track particle(s) through an element.
@@ -27,12 +33,8 @@ def elementpass(element, particles, **kwargs):
     Returns:
     particles_out   -- a numpy array with tracked 6D position(s) of the
                        particle(s)
-    lost_flag       -- indicates whether any pasrticle has been lost
-                       (True/False)
-    lost_plane      -- list of integers indicating on what plane the partciles
-                       were lost: 'None' if particle survived, 1 if particle is
-                       lost in the horizontal direction and 2 if it is lost in
-                       the vetical direction.
+
+    Raises TrackingException
     """
 
     # checks if all necessary arguments have been passed
@@ -50,20 +52,22 @@ def elementpass(element, particles, **kwargs):
     # tracks through the list of pos
     particles_out = _numpy.zeros(particles.shape)
     particles_out.fill(float('nan'))
-    
+
     for i in range(particles.shape[1]):
         p_in = _Numpy2CppDoublePos(particles[:,i])
-        r = _trackcpp.track_elementpass_wrapper(element._e,
-                                                p_in, accelerator._accelerator)
-        particles_out[:,i] = (p_in.rx, p_in.px, p_in.ry, p_in.py, p_in.dl, p_in.de)
+        if _trackcpp.track_elementpass_wrapper(element._e,p_in, accelerator._accelerator):
+            raise TrackingException
+        particles_out[:,i] = \
+            (p_in.rx, p_in.px, p_in.ry, p_in.py, p_in.dl, p_in.de)
 
     # returns tracking data
     if particles_out.shape[1] == 1 and not return_ndarray:
-        return particles_out[:,0]
-    else:
-        return particles_out
+        particles_out = particles_out[:,0]
+
+    return particles_out
 
 
+@interactive
 def linepass(accelerator, particles, indices=None, element_offset=0):
     """Track particle(s) along a line.
 
@@ -171,10 +175,8 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
             lost_element.append(args.element_offset)
         else:
             lost_element.append(None)
-        if args.lost_plane:
-            lost_plane.append(args.lost_plane)
-        else:
-            lost_plane.append(None)
+
+        lost_plane.append(lost_planes[args.lost_plane])
 
     if len(lost_element) == 1 and not return_ndarray:
         if len(particles_out.shape) == 3:
@@ -187,6 +189,7 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
     return particles_out, lost_flag, lost_element, lost_plane
 
 
+@interactive
 def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
     """Track particle(s) along a ring.
 
@@ -245,14 +248,13 @@ def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
             lost_turn.append(args.lost_turn)
         else:
             lost_turn.append(None)
+
         if args.element_offset < len(accelerator):
             lost_element.append(args.element_offset)
         else:
             lost_element.append(None)
-        if args.lost_plane:
-            lost_plane.append(args.lost_plane)
-        else:
-            lost_plane.append(None)
+
+        lost_plane.append(lost_planes[args.lost_plane])
 
     if len(lost_element) == 1 and not return_ndarray:
         pos_out = pos_out[:,0]
@@ -262,16 +264,20 @@ def ringpass(accelerator, pos, nr_turns=1, trajectory=False, offset=0):
 
     return pos_out, lost_flag, lost_turn, lost_element, lost_plane
 
+
+@interactive
 def set4dtracking(accelerator):
     accelerator.cavity_on = False
     accelerator.radiation_on = False
 
 
+@interactive
 def set6dtracking(accelerator):
     accelerator.cavity_on = True
     accelerator.radiation_on = True
 
 
+@interactive
 def findorbit6(accelerator, indices=None):
     """Calculate 6D orbit closed-orbit.
 
@@ -297,6 +303,7 @@ def findorbit6(accelerator, indices=None):
     return closed_orbit
 
 
+@interactive
 def findm66(accelerator, closed_orbit = None):
     """Calculate accumulatep_in = _trackcpp.DoublePos()
         p_in.rx,p_in.px,p_in.ry,p_in.py,p_in.dl,p_in.de = pos[:,i]

@@ -1,4 +1,4 @@
-function lnls1_slow_orbcorr_on
+function lnls1_fast_orbcorr_on
 %Liga correção automática de órbita no OPR1
 %
 %History: 
@@ -6,7 +6,7 @@ function lnls1_slow_orbcorr_on
 %2010-09-13: comentários iniciais no código.
 
 if strcmpi(getmode('BEND'), 'online')
-    msg.AFOFB_MODO = 2;
+    msg.AFOFB_MODO_SP = 2;
     lnls1_comm_write(msg);
 else
     fprintf('lnls1_fast_orbcorr_on: simulation mode!\n');

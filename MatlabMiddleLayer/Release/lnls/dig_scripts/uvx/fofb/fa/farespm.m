@@ -1,5 +1,9 @@
 function [M, corr_steps, orb_std, corr_std] = farespm(fadata, npts_level)
 
+%FIXME
+fadata.bpm_readings = [fadata.bpm_readings; fadata.bpm_readings(1,:)];
+fadata.corr_setpoints = [fadata.corr_setpoints; fadata.corr_setpoints(1,:)];
+
 steps = diff(fadata.corr_setpoints,1,1);
 posedge = find(steps > 0);
 negedge = find(steps < 0);
