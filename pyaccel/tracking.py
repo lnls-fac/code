@@ -58,7 +58,7 @@ def elementpass(element, particles, **kwargs):
         if _trackcpp.track_elementpass_wrapper(element._e,p_in, accelerator._accelerator):
             raise TrackingException
         particles_out[:,i] = \
-            (p_in.rx, p_in.px, p_in.ry, p_in.py, p_in.dl, p_in.de)
+            (p_in.rx, p_in.px, p_in.ry, p_in.py, p_in.de, p_in.dl)
 
     # returns tracking data
     if particles_out.shape[1] == 1 and not return_ndarray:
@@ -81,7 +81,7 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
     accelerator -- Accelerator object
     particles   -- initial 6D particle(s) position(s).
                    Few examples
-                        ex.1: pos = [rx,px,ry,py,dl,de]
+                        ex.1: pos = [rx,px,ry,py,de,dl]
                         ex.2: pos = [[0.001,0,0,0,0,0],[0.002,0,0,0,0,0]]
                         ex.3: pos = numpy.zeros((6,Np))
     indices     -- list of indices corresponding to accelerator elements at
@@ -92,7 +92,7 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
 
     Returns: (pos_out, lost_flag, lost_element, lost_plane)
     particles_out --
-         6D position for each particle at each element exit. The
+         6D position for each particle at entrance of each element . The
          structure of 'pos_out' depends on inputs 'pos' and 'indices'.
          If 'indices' is 'None' then only tracked positions at the end
          of the line are returned. There are still two possibilities
@@ -114,8 +114,8 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
                                      [px3, px4],
                                      [ry3, ry4],
                                      [py3, py4],
-                                     [dl3, dl4],
-                                     [de3, de4]])
+                                     [de3, de4],
+                                     [dl3, dl4]])
          Now, if 'indices' is not 'None' then 'pos_out' can be either
          (3) a numpy matrix, when 'pos' is a single particle defined as
          a python list. The first index of 'pos_out' runs through the
@@ -165,11 +165,16 @@ def linepass(accelerator, particles, indices=None, element_offset=0):
         if _trackcpp.track_linepass_wrapper(accelerator._accelerator, p_in, p_out, args):
             lost_flag = True
 
+        for k in range(20):
+            print(str(k+1), p_out[k].rx)
+
         if indices is None:
             particles_out[:,i] = _CppDoublePos2Numpy(p_out[0])
         else:
             for j in range(len(indices)):
-                particles_out[j,:,i] = _CppDoublePos2Numpy(p_out[1+indices[j]])
+                #pp = p_out[1+indices[j]]
+                #print(pp.rx)
+                particles_out[j,:,i] = _CppDoublePos2Numpy(p_out[indices[j]])
 
         if args.element_offset:
             lost_element.append(args.element_offset)
@@ -339,11 +344,11 @@ def _Numpy2CppDoublePos(p_in):
     p_out = _trackcpp.CppDoublePos()
     p_out.rx, p_out.px = float(p_in[0]), float(p_in[1])
     p_out.ry, p_out.py = float(p_in[2]), float(p_in[3])
-    p_out.dl, p_out.de = float(p_in[4]), float(p_in[5])
+    p_out.de, p_out.dl = float(p_in[4]), float(p_in[5])
     return p_out
 
 def _CppDoublePos2Numpy(p_in):
-    return (p_in.rx,p_in.px,p_in.ry,p_in.py,p_in.dl,p_in.de)
+    return (p_in.rx,p_in.px,p_in.ry,p_in.py,p_in.de,p_in.dl)
 
 def _CppDoublePosVector2Numpy(orbit, indices = None):
     if indices is None:
@@ -356,7 +361,7 @@ def _CppDoublePosVector2Numpy(orbit, indices = None):
         orbit_out[:, i] = [
             orbit[indices[i]].rx, orbit[indices[i]].px,
             orbit[indices[i]].ry, orbit[indices[i]].py,
-            orbit[indices[i]].dl, orbit[indices[i]].de
+            orbit[indices[i]].de, orbit[indices[i]].dl
         ]
     return orbit_out
 
